@@ -2274,7 +2274,7 @@ ns1blankspace.financial.payroll =
 							
 							$('#ns1blankspaceMainPays').html(aHTML.join(''));
 						
-							$('#ns1blankspacePayrollPayColumn1').html(ns1blankspace.xhtml.loadingSmall);
+							$('#ns1blankspacePayrollPayColumn1').html(ns1blankspace.xhtml.loading);
 
 							if (ns1blankspace.objectContextData.status == "1")
 							{
@@ -2412,7 +2412,7 @@ ns1blankspace.financial.payroll =
 							var oSearch = new AdvancedSearch();
 							oSearch.method = 'FINANCIAL_PAYROLL_PAY_RECORD_SEARCH';
 							oSearch.addFilter('id', 'EQUAL_TO', iPay)
-							oSearch.addField('grosssalary,calculations,netsalary,deductions,superannuation,calculations,taxbeforerebate,payrecord.employee.contactperson');
+							oSearch.addField('grosssalary,calculations,netsalary,deductions,superannuation,calculations,taxbeforerebate,notes,payrecord.employee.contactperson');
 							oSearch.rows = 1;
 							oSearch.getResults(function(data) {ns1blankspace.financial.payroll.pays(oParam, data)})	
 						}
@@ -2424,12 +2424,12 @@ ns1blankspace.financial.payroll =
 							ns1blankspace.financial.payroll.pays(oParam);
 
 							var aHTML = [];
-						
-							aHTML.push('<table class="ns1blankspaceColumn2" style="padding-right:10px;">');
 							
 							if (oResponse.data.rows.length != 0)
 							{
 								var oRow = oResponse.data.rows[0];
+
+								aHTML.push('<table class="ns1blankspaceColumn2" style="padding-right:10px;">');
 
 								aHTML.push('<tr><td class="ns1blankspaceRow ns1blankspaceCaption">Gross</td>' +
 												'<td class="ns1blankspaceRow" style="text-align:right;">' +
@@ -2450,23 +2450,69 @@ ns1blankspace.financial.payroll =
 												'<td class="ns1blankspaceRow" style="text-align:right;">' +
 												oRow["netsalary"] +
 												'</td></tr>');
-												
-								aHTML.push('<tr><td class="ns1blankspaceRow ns1blankspaceCaption">Deductions</td>' +
-												'<td class="ns1blankspaceRow" style="text-align:right;">' +
-												oRow["deductions"] +
-												'</td></tr>');								
 
+								aHTML.push('<tr><td colspan=2 class="ns1blankspaceCaption">' +
+												 'Note</td></tr>');
+
+								aHTML.push('<tr><td colspan=2 id="ns1blankspaceFinancialPayrollPayNoteContainer" style="display:table-cell; text-align:right;" class="ns1blankspaceRow">' +
+												'<textarea rows="10" cols="35" id="ns1blankspaceFinancialPayrollPayNote" class="ns1blankspaceTextMulti"'+
+												' style="width:100%;">' + oRow["notes"] + '</textarea>' +
+												'<span id="ns1blankspaceFinancialPayrollPayNoteSave" class="ns1blankspaceAction">Save</span>' +
+												'</td></tr>');	
+											
 								var sCalcs = (oRow["calculations"]!=''?(oRow["calculations"]).replace(/\r\n/g, "<br />"):'None.');
 
-								aHTML.push('<tr><td colspan=2 class="ns1blankspaceCaption">Calculations</td></tr>' +
-												'<tr><td style="padding-left:3px;" colspan=2 class="ns1blankspaceNothing">' +
-												sCalcs +
-												'</td></tr>');							
+								aHTML.push('<tr><td colspan=2 class="ns1blankspaceSubNote ns1blankspaceRowSelect" id="ns1blankspaceFinancialPayrollShowCalcs">Show Calculations</td></tr>');
+
+								aHTML.push('<tr><td colspan=2 id="ns1blankspaceFinancialPayrollCalcsContainer" style="display:none;" class="ns1blankspaceSub">' +
+												sCalcs + '</td></tr>');
+
+								aHTML.push('</table>');																
 							}
 								
-							aHTML.push('</table>');
-						
 							$('#ns1blankspacePayrollPayRunColumn1').html(aHTML.join(''));
+
+							$('#ns1blankspaceFinancialPayrollPayNoteSave').button(
+							{
+								label: "Save Note"
+							})
+							.click(function()
+							{
+								var oData =
+								{
+									id: ns1blankspace.objectContextData.pay.id,
+									notes: $('#ns1blankspaceFinancialPayrollPayNote').val()
+								}
+
+								$.ajax(
+								{
+									type: 'POST',
+									url: ns1blankspace.util.endpointURI('FINANCIAL_PAYROLL_PAY_RECORD_MANAGE'),
+									data: oData,
+									dataType: 'json',
+									success: function(data)
+									{
+										if (data.status == 'OK')
+										{
+											ns1blankspace.status.message('Note saved.');
+										}
+										else
+										{
+											ns1blankspace.status.message('Note could not be sent.');
+										}	
+									}
+								});	
+
+							})
+							.css('font-size', '0.725em;');
+
+							$('#ns1blankspaceFinancialPayrollPayNote').focus();
+
+							$('#ns1blankspaceFinancialPayrollShowCalcs').click(function ()
+							{
+								$('#ns1blankspaceFinancialPayrollCalcsContainer').show();
+								$('#ns1blankspaceFinancialPayrollShowCalcs').hide();
+							});
 						}
 					}
 

@@ -150,7 +150,7 @@ ns1blankspace.setup.user =
 										
 										var oSearch = new AdvancedSearch();
 										oSearch.method = 'SETUP_USER_SEARCH';
-										oSearch.addField('username,contactpersontext,lastlogon,disabled,disabledreason,unrestrictedaccess');
+										oSearch.addField('username,contactpersontext,lastlogon,disabled,disabledreason,unrestrictedaccess,authentificationlevel,authentificationdelivery');
 										oSearch.addFilter('id', 'EQUAL_TO', ns1blankspace.objectContext);
 										oSearch.getResults(function(data) {ns1blankspace.setup.user.show(data)});
 									}
@@ -515,6 +515,27 @@ ns1blankspace.setup.user =
 											'</td></tr>');
 						}
 
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
+										'Authentication' +
+										'</td></tr>' +
+										'<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceRadio">' +
+										'<input type="radio" id="radioAuthentificationLevel1" name="radioAuthentificationLevel" value="1"/>Standard<br />' +
+										'<input type="radio" id="radioAuthentificationLevel2" name="radioAuthentificationLevel" value="2"/>With Token<br />' +
+										'<input type="radio" id="radioAuthentificationLevel3" name="radioAuthentificationLevel" value="3"/>With 2nd Factor Token' +
+										'</td></tr>');
+
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
+										'2nd Factor Token Type' +
+										'</td></tr>' +
+										'<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceRadio">' +
+										'<input type="radio" id="radioAuthentificationDelivery1" name="radioAuthentificationDelivery" value="1"/>Email<br />' +
+										'<input type="radio" id="radioAuthentificationDelivery2" name="radioAuthentificationDelivery" value="2"/>SMS' +
+										'</td></tr>');
+
 						aHTML.push('</table>');					
 						
 						$('#ns1blankspaceDetailsColumn1').html(aHTML.join(''));
@@ -570,11 +591,15 @@ ns1blankspace.setup.user =
 						{
 							$('#ns1blankspaceDetailsUserName').val(ns1blankspace.objectContextData.username);
 							$('[name="radioDisabled"][value="' + ns1blankspace.objectContextData.disabled + '"]').attr('checked', true);
+							$('[name="radioAuthentificationLevel"][value="' + ns1blankspace.objectContextData.authentificationlevel  + '"]').attr('checked', true);
+							$('[name="radioAuthentificationDelivery"][value="' + ns1blankspace.objectContextData.authentificationdelivery + '"]').attr('checked', true);
 							$('#ns1blankspaceDetailsDisabledReason').val(ns1blankspace.objectContextData.disabledreason);
 						}
 						else
 						{
 							$('[name="radioDisabled"][value="N"]').attr('checked', true);
+							$('[name="radioAuthentificationLevel"][value="1"]').attr('checked', true);
+							$('[name="radioAuthentificationDelivery"][value="1"]').attr('checked', true);
 						}
 					}	
 				},
@@ -1075,6 +1100,8 @@ ns1blankspace.setup.user =
 										sData += '&username=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsUserName').val());
 										sData += '&disabled=' + $('input[name="radioDisabled"]:checked').val();
 										sData += '&disabledreason=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsDisabledReason').val());
+										sData += '&authentificationlevel=' + $('input[name="radioAuthentificationLevel"]:checked').val();
+										sData += '&authentificationdelivery=' + $('input[name="radioAuthentificationDelivery"]:checked').val();
 									};
 
 									if ($('#ns1blankspaceMainAccess').html() != '')

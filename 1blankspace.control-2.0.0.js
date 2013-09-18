@@ -18,6 +18,7 @@ ns1blankspace.option.autoSetupSwitch = true;
 ns1blankspace.option.passwordhash = true;
 ns1blankspace.option.formFactor.size.value = ns1blankspace.option.formFactor.size.options.medium;
 ns1blankspace.option.classic = true;
+ns1blankspace.option.loadControl = false;
 
 ns1blankspace.data.object = {person: 32, business: 12, opportunity: 35};
 ns1blankspace.data.attachmentTypes = [];
@@ -862,7 +863,7 @@ ns1blankspace.control =
 							iSiteID = mydigitalstructureSiteId;
 						}
 
-						if (iSiteID !== undefined)
+						if (iSiteID !== undefined && ns1blankspace.option.loadControl)
 						{
 							$.ajax(
 							{
@@ -1641,8 +1642,8 @@ ns1blankspace.control =
 										aHTML.push('<table style="width: 232px; font-size: 0.875em;" id="ns1blankspaceControlUser" class="ns1blankspaceViewControlContainer">');
 											
 										aHTML.push('<tr>' +
-														'<td id="ns1blankspaceUserLogOff" class="ns1blankspaceViewControl">' +
-														'Log Off</td></tr>');
+														'<td id="ns1blankspaceUserLogOnOff" class="ns1blankspaceViewControl">' +
+														ns1blankspace.xhtml.loadingSmall + '</td></tr>');
 
 										aHTML.push('<tr>' +
 														'<td id="ns1blankspaceControlUserChangeTheme" class="ns1blankspaceViewControl">' +
@@ -1663,7 +1664,27 @@ ns1blankspace.control =
 
 						bind:		function ()
 									{
-										$('#ns1blankspaceUserLogOff').click(function(event)
+										$.ajax(
+										{
+											type: 'GET',
+											url: ns1blankspace.util.endpointURI('CORE_GET_USER_DETAILS'),
+											dataType: 'json',
+											cache: false,
+											global: false,
+											success: function(data) 
+											{
+												if (data.status === 'ER')
+												{
+													$('#ns1blankspaceUserLogOnOff').html('Log On');	
+												}
+												else
+												{
+													$('#ns1blankspaceUserLogOnOff').html('Log Off');	
+												}
+											}
+										});		
+
+										$('#ns1blankspaceUserLogOnOff').click(function(event)
 										{
 											ns1blankspace.logOff();
 										})
