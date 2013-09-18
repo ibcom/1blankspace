@@ -1414,10 +1414,10 @@ ns1blankspace.logon =
 
 					aHTML.push('<tr class="ns1blankspaceLogonTokenContainer" style="display:none;">' +
 									'<td class="ns1blankspaceLogonCaption">' +
-									'Token</td>');
+									'Code</td>');
 
 					aHTML.push('<td class="ns1blankspaceLogonSub" style="padding-right:2px;">' +
-									'<span id="ns1blankspacePasswordTokenSend" style="cursor: pointer;">resend</span>' +
+									'<span id="ns1blankspacePasswordTokenSend" style="cursor: pointer;">&nbsp;</span>' +
 									'</td></tr>');
 
 					aHTML.push('<tr class="ns1blankspaceLogonTokenContainer" style="display:none;"><td class="ns1blankspaceLogonText" colspan=2 style="padding-bottom: 15px;">' +
@@ -1433,11 +1433,11 @@ ns1blankspace.logon =
 								'&nbsp;' +
 								'</td></tr>');
 
-					if (sMessage != '')
-					{
-						aHTML.push('<tr><td class="ns1blankspaceSub" colspan=2 style="padding-top: 15px;">' +
+					//if (sMessage != '')
+					//{
+						aHTML.push('<tr><td id="ns1blankspaceLogonMessage" class="ns1blankspaceSub" colspan=2 style="padding-top: 15px;">' +
 									sMessage + '</td></tr>');
-					}	
+					//}	
 
 					aHTML.push('</table>');					
 					
@@ -1488,14 +1488,14 @@ ns1blankspace.logon =
 					})
 					.click(function() 
 					{
-						ns1blankspace.logon.send();
+						ns1blankspace.logon.init();
 					});	
 
 					$('#ns1blankspaceLogonLogonName').keypress(function(e)
 					{
 					    if (e.which === 13)
 					    {
-					        ns1blankspace.logon.send();
+					        ns1blankspace.logon.init();
 					    }
 					});
 
@@ -1503,7 +1503,7 @@ ns1blankspace.logon =
 					{
 					    if (e.which === 13)
 					    {
-					        ns1blankspace.logon.send();
+					        ns1blankspace.logon.init();
 					    }
 					});
 
@@ -1521,15 +1521,8 @@ ns1blankspace.logon =
 						logon: $('#ns1blankspaceLogonLogonName').val()
 					}	
 
-					if (ns1blankspace.option.passwordhash)
-					{
-						oData.passwordhash = ns1blankspace.util.hash({value: $('#ns1blankspaceLogonLogonName').val()
+					oData.passwordhash = ns1blankspace.util.hash({value: $('#ns1blankspaceLogonLogonName').val()
 							  + $('#ns1blankspaceLogonPassword').val()})
-					}
-					else
-					{
-						oData.password = $('#ns1blankspaceLogonPassword').val();
-					}
 					
 					$('#ns1blankspaceLogonStatus').html(ns1blankspace.xhtml.loading);
 					
@@ -1542,9 +1535,12 @@ ns1blankspace.logon =
 						dataType: 'json',
 						success: function (data)
 						{
-							//if (data.AuthenticationLevel == 3)
-							if (true)
+							ns1blankspace.authenticationLevel = data.authentificationlevel;
+
+							if (ns1blankspace.authenticationLevel == '3')
 							{	
+								$('#ns1blankspaceLogonMessage').html('A logon code is being sent to you...')
+
 								var oData = 
 								{
 									method: 'LOGON_SEND_PIN',
@@ -1553,9 +1549,6 @@ ns1blankspace.logon =
 
 								oData.passwordhash = ns1blankspace.util.hash({value: $('#ns1blankspaceLogonLogonName').val()
 							 							 + $('#ns1blankspaceLogonPassword').val() + ns1blankspace.logonToken});
-
-								oData.passwordhash = ns1blankspace.util.hash({value: $('#ns1blankspaceLogonLogonName').val()
-							 							 + $('#ns1blankspaceLogonPassword').val()});
 
 								$.ajax(
 								{
@@ -1568,12 +1561,14 @@ ns1blankspace.logon =
 									{
 										if (data.status == 'OK')
 										{	
-											$('tr.ns1blankspaceLogonTokenContainer').show(2000);
-											$('#ns1blankspaceLogonStatus').html('A logon token as been ' + (data.AuthentificationDelivery==1?'email':'SMS') + 'ed to you.');
+											$('tr.ns1blankspaceLogonTokenContainer').show();
+											$('#ns1blankspaceLogonPasswordToken').focus();
+											$('#ns1blankspaceLogonStatus').html('');
+											$('#ns1blankspaceLogonMessage').html('Please enter the code sent to you via ' + (data.AuthentificationDelivery==1?'email':'SMS') + ', and then press Logon again.');
 										}
 										else
 										{
-											$('#ns1blankspaceLogonStatus').html('There is an issue with your user account.');
+											$('#ns1blankspaceLogonStatus').html('There is an issue with your user account (' + data.error.errornotes + ').');
 											$('#ns1blankspaceContainer').effect("shake", { times:2 }, 100);
 										}	
 									}
@@ -1581,7 +1576,7 @@ ns1blankspace.logon =
 							}
 							else
 							{	
-								ns1blankspace.logon.send({authenticationLevel: data.AuthenticationLevel});
+								ns1blankspace.logon.send();
 							}	
 						}	
 					})
@@ -1589,7 +1584,7 @@ ns1blankspace.logon =
 
 	send: 		function (oParam)
 				{
-					var iAuthenticationLevel = ns1blankspace.util.getParam(oParam, 'authenticationLevel', {"default": 1}).value;
+					var iAuthenticationLevel = ns1blankspace.authenticationLevel;
 
 					var oData = 
 					{
