@@ -105,6 +105,7 @@ ns1blankspace.counter = {};
 ns1blankspace.user = {};
 ns1blankspace.data = {search: []};
 ns1blankspace.debug = {};
+ns1blankspace.authenticationLevel = 1;
 
 ns1blankspace.selector = 'body';
 
@@ -585,7 +586,7 @@ ns1blankspace.app =
 									oParam.message = 'You do not have any access rights to this space.';		
 								}
 
-								ns1blankspace.logonKey = data.LogonToken;
+								ns1blankspace.logonKey = data.logonkey;
 								ns1blankspace.logon.show(oParam);
 							}
 							else
@@ -1549,11 +1550,11 @@ ns1blankspace.logon =
 							dataType: 'json',
 							success: function (data)
 							{
-								ns1blankspace.authenticationLevel = data.AuthenticationLevel;
+								ns1blankspace.authenticationLevel = data.authenticationlevel;
 
 								if (ns1blankspace.authenticationLevel == '3')
 								{	
-									$('#ns1blankspaceLogonMessage').html('A logon code is being sent to you via ' + (data.AuthenticationDelivery==1?'email':'SMS') + '.')
+									$('#ns1blankspaceLogonMessage').html('A logon code is being sent to you via ' + (data.authenticationdelivery==1?'email':'SMS') + '.')
 
 									var oData = 
 									{
@@ -1578,7 +1579,7 @@ ns1blankspace.logon =
 												$('tr.ns1blankspacePasswordCodeContainer').show();
 												$('#ns1blankspaceLogonPasswordCode').focus();
 												$('#ns1blankspaceLogonStatus').html('');
-												$('#ns1blankspaceLogonMessage').html('Please enter the code sent to you via ' + (data.AuthenticationDelivery==1?'email':'SMS') + ', and then press Logon again.');
+												$('#ns1blankspaceLogonMessage').html('Please enter the code sent to you via ' + (data.authenticationdelivery==1?'email':'SMS') + ', and then press Logon again.');
 												ns1blankspace.logonInitialised = true;
 											}
 											else
@@ -1914,6 +1915,8 @@ ns1blankspace.logOff = function ()
 						{
 							if (!ns1blankspace.debug.enabled)
 							{
+								ns1blankspace.logonInitialised = false;
+								ns1blankspace.logonKey = '';
 								ns1blankspace.extend.structure = undefined;
 								ns1blankspace.financial.data = undefined;
 								ns1blankspace.app.init();
