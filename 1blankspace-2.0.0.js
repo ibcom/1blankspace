@@ -1577,10 +1577,10 @@ ns1blankspace.logon =
 											if (data.status == 'OK')
 											{	
 												$('tr.ns1blankspacePasswordCodeContainer').show();
-												$('#ns1blankspaceLogonPasswordCode').focus();
 												$('#ns1blankspaceLogonStatus').html('');
 												$('#ns1blankspaceLogonMessage').html('Please enter the code sent to you via ' + (data.authenticationdelivery==1?'email':'SMS') + ', and then press Logon again.');
 												ns1blankspace.logonInitialised = true;
+												$('#ns1blankspaceLogonPasswordCode').focus();
 											}
 											else
 											{
@@ -2104,7 +2104,7 @@ ns1blankspace.history.view =
 										url: ns1blankspace.util.endpointURI('CORE_PROFILE_MANAGE'),
 										data: sData,
 										dataType: 'text'
-									})
+									});
 								}		
 							}	
 							

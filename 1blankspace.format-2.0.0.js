@@ -598,7 +598,6 @@ ns1blankspace.format.editor =
 
 					if (ns1blankspace.option.richTextEditing)
 					{
-					
 						if (bDynamicTags) {sAdditional = 'dynamicTags,'}
 
 						tinyMCE.init(

@@ -732,10 +732,116 @@ ns1blankspace.financial.invoice =
 	email: 		{
 					init: 		function (oParam)
 								{
-									ns1blankspace.status.working('Emailing...');
-									oParam = ns1blankspace.util.setParam(oParam, 'onComplete', ns1blankspace.financial.invoice.email.send);
+									var iMode = ns1blankspace.util.getParam(oParam, 'mode', {"default": 1}).value;
+
+									//1=Show 
+									//2=Just Send
+
+									var iFormat = ns1blankspace.util.getParam(oParam, 'format', {"default": 1}).value;
+
+									//1=HTML
+									//2=PDF
+
+									if (iMode == 1)
+									{
+										oParam = ns1blankspace.util.setParam(oParam, 'onComplete', ns1blankspace.financial.invoice.email.show);
+									}
+									else
+									{
+										ns1blankspace.status.working('Emailing...');
+										oParam = ns1blankspace.util.setParam(oParam, 'onComplete', ns1blankspace.financial.invoice.email.send);
+									}
+
 									ns1blankspace.util.initTemplate(oParam);
 								},
+
+					show: 		function (oParam)
+								{
+									ns1blankspace.format.editor.init();
+
+									var aHTML = [];
+
+									aHTML.push('<table class="ns1blankspace">');
+						
+									aHTML.push('<tr><td>')
+
+										aHTML.push('<table class="ns1blankspace" style="width:100%;">');
+
+										aHTML.push('<tr><td class="ns1blankspaceCaption">' +
+														'To</td>' +
+														'<td class="ns1blankspaceCaption">' +
+														'From</td></tr>' +
+														'<tr class="ns1blankspace">' +
+														'<td class="ns1blankspaceText">' +
+														'<input id="ns1blankspaceEmailTo" class="ns1blankspaceText">' +
+														'</td><td class="ns1blankspaceText">' +
+														'<input id="ns1blankspaceEmailFrom" class="ns1blankspaceText">' +
+														'</td></tr>');
+
+										aHTML.push('</table>');											
+
+									aHTML.push('</td></tr>')
+
+									aHTML.push('<tr class="ns1blankspace">' +
+													'<td class="ns1blankspaceText">' +
+													'<input id="ns1blankspaceEmailSubject" class="ns1blankspaceText" style="width:75%;">' +
+													' <div style="font-size:0.875em; color:#999999; float:right; margin-top:6px;"><input type="checkbox">Attach PDF</div>' +
+													'</td></tr>');	
+
+									ns1blankspace.counter.editor = ns1blankspace.counter.editor + 1;		
+
+									aHTML.push('<tr class="ns1blankspaceTextMulti">' +
+													'<td class="ns1blankspaceTextMulti">' +
+													'<textarea rows="30" cols="50" id="ns1blankspaceEditText' +
+														ns1blankspace.counter.editor + '" editorcount="' + ns1blankspace.counter.editor + '" class="ns1blankspaceTextMulti"></textarea>' +
+													'</td></tr>');
+
+									aHTML.push('</table>');					
+						
+									$('#ns1blankspaceSummaryColumn1').html(aHTML.join(''));
+
+									tinyMCE.execCommand('mceAddControl', false, 'ns1blankspaceEditText' + ns1blankspace.counter.editor);
+
+									var aHTML = [];
+									
+									aHTML.push('<table class="ns1blankspaceColumn2">' +
+													'<tr><td><span id="ns1blankspaceEmailSend" class="ns1blankspaceAction">' +
+													'Send</span></td></tr>' +
+													'<tr><td><span id="ns1blankspaceEmailCancel" class="ns1blankspaceAction">' +
+													'Cancel</span></td></tr>' +
+													'</table>');					
+									
+									$('#ns1blankspaceSummaryColumn2').html(aHTML.join(''));
+									
+									$('#ns1blankspaceEmailSend').button(
+									{
+										text: "Send"
+									})
+									.click(function()
+									{
+										//ns1blankspace.financial.item.save(oParam)
+									})
+									.css('width', '65px');
+
+									$('#ns1blankspaceEmailCancel').button(
+									{
+										text: "Cancel"
+									})
+									.click(function()
+									{
+
+									})
+									.css('width', '65px');
+
+									$('#ns1blankspaceEmailFrom').val(ns1blankspace.user.email);
+									$('#ns1blankspaceEmailTo').val(ns1blankspace.objectContextData['invoice.contactpersonsentto.email']);
+									$('#ns1blankspaceEmailSubject').val('Invoice ' + ns1blankspace.objectContextData['reference']);
+
+									if (ns1blankspace.objectContextData['invoice.contactpersonsentto.email'] == '')
+									{
+										$('#ns1blankspaceEmailTo').focus();
+									}
+								},	
 
 					send:		function (oParam, oResponse)
 								{
