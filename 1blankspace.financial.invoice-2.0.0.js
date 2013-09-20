@@ -732,28 +732,56 @@ ns1blankspace.financial.invoice =
 	email: 		{
 					init: 		function (oParam)
 								{
+									ns1blankspace.status.working('Creating...');
+									oParam = ns1blankspace.util.setParam(oParam, 'onComplete', ns1blankspace.financial.invoice.email.render);
+									ns1blankspace.util.initTemplate(oParam);
+								},
+
+					render: 	function (oParam, oResponse)
+								{
 									var iMode = ns1blankspace.util.getParam(oParam, 'mode', {"default": 1}).value;
 
-									//1=Show 
-									//2=Just Send
+									//1=Show, 2=Just Send
 
 									var iFormat = ns1blankspace.util.getParam(oParam, 'format', {"default": 1}).value;
 
-									//1=HTML
-									//2=PDF
+									//1=HTML, 2=PDF
 
-									if (iMode == 1)
+									if (oResponse == undefined)
 									{
-										oParam = ns1blankspace.util.setParam(oParam, 'onComplete', ns1blankspace.financial.invoice.email.show);
-									}
+										var oSearch = new AdvancedSearch();
+										oSearch.method = 'FINANCIAL_ITEM_SEARCH';
+										oSearch.addField('financialaccounttext,tax,issuedamount,amount,description,object');
+										oSearch.addFilter('object', 'EQUAL_TO', 5);
+										oSearch.addFilter('objectcontext', 'EQUAL_TO', ns1blankspace.objectContext);
+										oSearch.sort('id', 'asc');
+										oSearch.getResults(function(data)
+										{
+											ns1blankspace.financial.invoice.email.render(oParam, data);
+										});
+									}	
 									else
 									{
-										ns1blankspace.status.working('Emailing...');
-										oParam = ns1blankspace.util.setParam(oParam, 'onComplete', ns1blankspace.financial.invoice.email.send);
-									}
+										ns1blankspace.objectContextData.xhtml = ns1blankspace.format.render(
+										{
+											object: 5,
+											xhtmlTemplate: ns1blankspace.xhtml.templates['invoice'],
+											objectData: ns1blankspace.objectContextData,
+											objectOtherData: oResponse.data.rows
+										});
 
-									ns1blankspace.util.initTemplate(oParam);
-								},
+										ns1blankspace.status.clear();
+
+										if (iMode == 1)
+										{
+											ns1blankspace.financial.invoice.email.show(oParam);
+										}
+										else
+										{
+											ns1blankspace.financial.invoice.email.send(oParam);
+										}
+									}		
+								},		
 
 					show: 		function (oParam)
 								{
@@ -761,18 +789,18 @@ ns1blankspace.financial.invoice =
 
 									var aHTML = [];
 
-									aHTML.push('<table class="ns1blankspace">');
+									aHTML.push('<table class="ns1blankspace" cellspacing=0 cellpadding=0>');
 						
 									aHTML.push('<tr><td>')
 
-										aHTML.push('<table class="ns1blankspace" style="width:100%;">');
+										aHTML.push('<table class="ns1blankspace" style="width:100%;" cellspacing=0 cellpadding=0>');
 
 										aHTML.push('<tr><td class="ns1blankspaceCaption">' +
 														'To</td>' +
 														'<td class="ns1blankspaceCaption">' +
 														'From</td></tr>' +
-														'<tr class="ns1blankspace">' +
-														'<td class="ns1blankspaceText">' +
+														'<tr>' +
+														'<td class="ns1blankspaceText" style="padding-right:15px; padding-left:0px;">' +
 														'<input id="ns1blankspaceEmailTo" class="ns1blankspaceText">' +
 														'</td><td class="ns1blankspaceText">' +
 														'<input id="ns1blankspaceEmailFrom" class="ns1blankspaceText">' +
@@ -784,15 +812,15 @@ ns1blankspace.financial.invoice =
 
 									aHTML.push('<tr class="ns1blankspace">' +
 													'<td class="ns1blankspaceText">' +
-													'<input id="ns1blankspaceEmailSubject" class="ns1blankspaceText" style="width:75%;">' +
-													' <div style="font-size:0.875em; color:#999999; float:right; margin-top:6px;"><input type="checkbox">Attach PDF</div>' +
+													'<input id="ns1blankspaceEmailSubject" class="ns1blankspaceText" style="width:80%;">' +
+													' <div style="font-size:0.875em; color:#999999; float:right; margin-top:6px;"><input type="checkbox" id="ns1blankspaceEmailAttachPDF">Attach a PDF</div>' +
 													'</td></tr>');	
 
 									ns1blankspace.counter.editor = ns1blankspace.counter.editor + 1;		
 
 									aHTML.push('<tr class="ns1blankspaceTextMulti">' +
 													'<td class="ns1blankspaceTextMulti">' +
-													'<textarea rows="30" cols="50" id="ns1blankspaceEditText' +
+													'<textarea rows="30" cols="50" id="ns1blankspaceMessageText' +
 														ns1blankspace.counter.editor + '" editorcount="' + ns1blankspace.counter.editor + '" class="ns1blankspaceTextMulti"></textarea>' +
 													'</td></tr>');
 
@@ -800,7 +828,11 @@ ns1blankspace.financial.invoice =
 						
 									$('#ns1blankspaceSummaryColumn1').html(aHTML.join(''));
 
-									tinyMCE.execCommand('mceAddControl', false, 'ns1blankspaceEditText' + ns1blankspace.counter.editor);
+									var sMessage = ns1blankspace.objectContextData.xhtml;
+
+									$('#ns1blankspaceMessageText' + ns1blankspace.counter.editor).val(sMessage);
+
+									tinyMCE.execCommand('mceAddControl', false, 'ns1blankspaceMessageText' + ns1blankspace.counter.editor);
 
 									var aHTML = [];
 									
@@ -819,7 +851,19 @@ ns1blankspace.financial.invoice =
 									})
 									.click(function()
 									{
-										//ns1blankspace.financial.item.save(oParam)
+										if ($('#ns1blankspaceEmailAttachPDF:checked').length == 0)
+										{
+											ns1blankspace.financial.invoice.email.send(oParam)
+										}
+										else
+										{
+											oParam = ns1blankspace.util.setParam(oParam, 'onComplete', ns1blankspace.financial.invoice.email.send);
+											oParam = ns1blankspace.util.setParam(oParam, 'xhtmlContent', ns1blankspace.objectContextData.xhtml);
+											oParam = ns1blankspace.util.setParam(oParam, 'filename', ns1blankspace.objectContextData.reference + '.pdf');
+											oParam = ns1blankspace.util.setParam(oParam, 'open', false);
+
+											ns1blankspace.pdf.create(oParam);
+										}	
 									})
 									.css('width', '65px');
 
@@ -829,13 +873,13 @@ ns1blankspace.financial.invoice =
 									})
 									.click(function()
 									{
-
+										ns1blankspace.financial.invoice.summary.show();
 									})
 									.css('width', '65px');
 
 									$('#ns1blankspaceEmailFrom').val(ns1blankspace.user.email);
 									$('#ns1blankspaceEmailTo').val(ns1blankspace.objectContextData['invoice.contactpersonsentto.email']);
-									$('#ns1blankspaceEmailSubject').val('Invoice ' + ns1blankspace.objectContextData['reference']);
+									$('#ns1blankspaceEmailSubject').val(ns1blankspace.user.contactBusinessText + ' Invoice ' + ns1blankspace.objectContextData['reference']);
 
 									if (ns1blankspace.objectContextData['invoice.contactpersonsentto.email'] == '')
 									{
@@ -845,7 +889,28 @@ ns1blankspace.financial.invoice =
 
 					send:		function (oParam, oResponse)
 								{
-									var sTo = ns1blankspace.objectContextData['invoice.contactpersonsentto.email'];
+									var iMode = ns1blankspace.util.getParam(oParam, 'mode', {"default": 1}).value;
+
+									//1=Show, 2=Just Send
+
+									var iFormat = ns1blankspace.util.getParam(oParam, 'format', {"default": 1}).value;
+
+									//1=HTML, 2=PDF
+
+									var iAttachmentLink = ns1blankspace.util.getParam(oParam, 'attachmentLink').value;
+
+									if (iMode == 1)
+									{
+										var sTo = $('#ns1blankspaceEmailTo').val();
+										var sSubject = $('#ns1blankspaceEmailSubject').val();
+										var sMessage = tinyMCE.get('ns1blankspaceMessageText' + ns1blankspace.counter.editor).getContent();
+									}	
+									else
+									{	
+										var sTo = ns1blankspace.objectContextData['invoice.contactpersonsentto.email'];
+										var sSubject = ns1blankspace.objectContextData.reference;
+										var sMessage = ns1blankspace.objectContextData.xhtml;
+									}	
 
 									if (sTo == '')
 									{
@@ -853,78 +918,64 @@ ns1blankspace.financial.invoice =
 									}
 									else
 									{	
-										if (oResponse == undefined)
+										ns1blankspace.status.working('Emailing...');
+
+										if (ns1blankspace.objectContextData.xhtml == '')
 										{
-											var oSearch = new AdvancedSearch();
-											oSearch.method = 'FINANCIAL_ITEM_SEARCH';
-											oSearch.addField('financialaccounttext,tax,issuedamount,amount,description,object');
-											oSearch.addFilter('object', 'EQUAL_TO', 5);
-											oSearch.addFilter('objectcontext', 'EQUAL_TO', ns1blankspace.objectContext);
-											oSearch.sort('id', 'asc');
-											oSearch.getResults(function(data)
-											{
-												ns1blankspace.financial.invoice.email.send(oParam, data);
-											});
+											ns1blankspace.status.error('Nothing to email');
 										}	
 										else
 										{
-											ns1blankspace.objectContextData.xhtml = ns1blankspace.format.render(
+											var oData = 
 											{
+												subject: sSubject,
+												message: sMessage,
+												id: ns1blankspace.objectContextData.contactpersonsentto,
+												to: sTo,
 												object: 5,
-												xhtmlTemplate: ns1blankspace.xhtml.templates['invoice'],
-												objectData: ns1blankspace.objectContextData,
-												objectOtherData: oResponse.data.rows
-											});
-
-											if (ns1blankspace.objectContextData.xhtml == '')
-											{
-												ns1blankspace.status.error('Nothing to email');
-											}	
-											else
-											{
-												var oData = 
-												{
-													subject: ns1blankspace.objectContextData.reference,
-													message: ns1blankspace.objectContextData.xhtml,
-													id: ns1blankspace.objectContextData.contactpersonsentto,
-													to: sTo,
-													object: 5,
-													objectContext: ns1blankspace.objectContext
-												}
-
-												//ns1blankspace.util.endpointURI('MESSAGING_EMAIL_SEND')
-
-												$.ajax(
-												{
-													type: 'POST',
-													url: '/ondemand/messaging/?method=MESSAGING_EMAIL_SEND',
-													data: oData,
-													dataType: 'json',
-													global: false,
-													success: function (data)
-													{
-														if (data.status == 'OK')
-														{
-															$.ajax(
-															{
-																type: 'POST',
-																url: ns1blankspace.util.endpointURI('FINANCIAL_INVOICE_MANAGE'),
-																data: 'sent=Y&id=' + ns1blankspace.objectContext,
-																dataType: 'json',
-																global: false,
-																success: function (data)
-																{
-																	ns1blankspace.status.message('Emailed');
-																}
-															});
-														}
-														else
-														{
-															ns1blankspace.status.error('Could not send email')
-														}
-													}
-												});
+												objectContext: ns1blankspace.objectContext
 											}
+
+											if (iAttachmentLink !== undefined)
+											{
+												oData.attachmentobject = 5;
+												oData.attachmentobjectContext = ns1blankspace.objectContext;
+												oData.attachmentLink = iAttachmentLink
+											}	
+
+											//ns1blankspace.util.endpointURI('MESSAGING_EMAIL_SEND')
+
+											$.ajax(
+											{
+												type: 'POST',
+												url: '/ondemand/messaging/?method=MESSAGING_EMAIL_SEND',
+												data: oData,
+												dataType: 'json',
+												global: false,
+												success: function (data)
+												{
+													if (data.status == 'OK')
+													{
+														$.ajax(
+														{
+															type: 'POST',
+															url: ns1blankspace.util.endpointURI('FINANCIAL_INVOICE_MANAGE'),
+															data: 'sent=Y&id=' + ns1blankspace.objectContext,
+															dataType: 'json',
+															global: false,
+															success: function (data)
+															{
+																ns1blankspace.status.message('Emailed');
+																ns1blankspace.financial.invoice.summary.show();
+															}
+														});
+													}
+													else
+													{
+														ns1blankspace.status.error('Could not send email')
+													}
+												}
+											});
 										}
 									}	
 								}		

@@ -193,7 +193,7 @@ a:hover
 
 .ui-icon-paperclip
 {
-	background-position: -96px -224px;;
+	background-position: -96px -224px;
 }
 
 .ns1blankspaceViewImage
@@ -626,7 +626,7 @@ td.ns1blankspaceRoot
 input.ns1blankspaceLogon
 {
 	height: 23px;
-	width: 234px;;
+	width: 234px;
 	font-size: 1em;
 	padding-left: 5px;
 }
@@ -1113,7 +1113,7 @@ textarea.ns1blankspaceTextMultiSmall
 }
 
 #ns1blankspaceViewDeveloperSpaceLarge
-{ns1blankspaceMessageContainer
+{
 	background: url(/jscripts/images/1blankspace.icons.65-2.0.0.png) -390px 0px;
 }
 

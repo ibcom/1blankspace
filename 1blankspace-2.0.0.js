@@ -5186,6 +5186,7 @@ ns1blankspace.pdf =
 					var sFileName = ns1blankspace.objectContextData.id + '.pdf'
 					var sXHTMLContent = '';
 					var bOpen = false;
+					var fOnComplete;
 
 					if (oParam)
 					{
@@ -5195,8 +5196,13 @@ ns1blankspace.pdf =
 						if (oParam.xhtmlContent) {sXHTMLContent = oParam.xhtmlContent}
 						if (oParam.open) {bOpen = oParam.open}
 						if (oParam.xhtmlElementID) {sXHTMLElementID = oParam.xhtmlElementID}
+						if (oParam.onComplete) {fOnComplete = oParam.onComplete}
 					}
 
+					sXHTMLContent = sXHTMLContent.replace(/https/g,'http');
+					sXHTMLContent = sXHTMLContent.replace(/app.alt-enter.com/g,'[[host]]');
+					sXHTMLContent = sXHTMLContent.replace(/app.1blankspace.com/g,'[[host]]');
+													
 					if (sReturn === undefined)
 					{
 						$('#' + sXHTMLElementID).button(
@@ -5222,32 +5228,41 @@ ns1blankspace.pdf =
 					{
 						var aReturn = sReturn.split('|');
 
-						if (aReturn[1])
-						{
-							if (bOpen)
+						if (fOnComplete === undefined)
+						{	
+							if (aReturn[1])
 							{
-								window.open('/download/' + aReturn[1])	
+								if (bOpen)
+								{
+									window.open('/download/' + aReturn[1])	
+								}
+								
+								$('#' + sXHTMLElementID).button(
+								{
+									label: 'Open'
+								})
+								.click(function(event)
+								{
+									window.open('/download/' + aReturn[1])
+								});
 							}
-							
-							$('#' + sXHTMLElementID).button(
+							else
 							{
-								label: 'Open'
-							})
-							.click(function(event)
-							{
-								window.open('/download/' + aReturn[1])
-							});
+								$('#' + sXHTMLElementID).button(
+								{
+									label: 'Error'
+								})
+								.click(function(event)
+								{
+									window.alert('An error occured while creating the PDF.');
+								});
+							}
 						}
 						else
 						{
-							$('#' + sXHTMLElementID).button(
-							{
-								label: 'Error'
-							})
-							.click(function(event)
-							{
-								window.alert('An error occured while creating the PDF.');
-							});
+							oParam.attachmentLink = aReturn[1];
+							delete oParam.onComplete;
+							fOnComplete(oParam);
 						}	
 					}	
 
