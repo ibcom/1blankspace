@@ -73,7 +73,7 @@
 		{"title":"AUDIT_ITEM_SEARCH", "advancedSearch":"false", "rpc":"false"},
 		{"title":"AUDIT_ITEM_TYPE_MANAGE", "advancedSearch":"false", "rpc":"false"},
 		{"title":"AUDIT_ITEM_TYPE_SEARCH", "advancedSearch":"false", "rpc":"true"},
-		{"title":"AUDIT_MANAGE", "advancedSearch":"false", "rpc":"false"},
+		{"title":"AUDIT_MANAGE", "advancedSearch":"false", "rpc":"true"},
 		{"title":"AUDIT_PROCESSING_STATUS_HISTORY_SEARCH", "advancedSearch":"false", "rpc":"false"},
 		{"title":"AUDIT_SEARCH", "advancedSearch":"false", "rpc":"true"},
 		{"title":"AUDIT_STATUS_HISTORY_SEARCH", "advancedSearch":"false", "rpc":"true"},
