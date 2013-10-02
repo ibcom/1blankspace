@@ -667,7 +667,7 @@
 		{"title":"SETUP_SUPPORT_ISSUE_PROCESSING_TYPE_SEARCH", "advancedSearch":"false", "rpc":"true"},
 		{"title":"SETUP_SUPPORT_ISSUE_SEVERITY_SEARCH", "advancedSearch":"false", "rpc":"true"},
 		{"title":"SETUP_SUPPORT_ISSUE_STATUS_MANAGE", "advancedSearch":"false", "rpc":"true"},
-		{"title":"SETUP_SUPPORT_ISSUE_STATUS_SEARCH", "advancedSearch":"false", "rpc":"true"},
+		{"title":"SETUP_SUPPORT_ISSUE_STATUS_SEARCH", "advancedSearch":"true", "rpc":"true"},
 		{"title":"SETUP_SUPPORT_ISSUE_TYPE_SEARCH", "advancedSearch":"false", "rpc":"true"},
 		{"title":"SETUP_SURVEY_OBJECT_LINK", "advancedSearch":"false", "rpc":"false"},
 		{"title":"SETUP_URL_MANAGE", "advancedSearch":"false", "rpc":"false"},
