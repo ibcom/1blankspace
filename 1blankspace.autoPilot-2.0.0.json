@@ -5,12 +5,13 @@
 		flightPlan: 
 		[
 			{
-				title: "ogon'
-				method: ns1blankspace.logon(
-						{
+				title: "Log on",
+				method: ns1blankspace.logon,
+				param:	{
 							logonName: 'test@test',
 							logonPassword: 'test'
-						})
+						});
+				capture: 'xhtml'
 			},
 			{
 				title: "New Contact",
@@ -21,6 +22,7 @@
 					$('#ns1blankspaceDetailsSurname').val('Smith');
 					ns1blankspace.contactPerson.save();
 				},	
+				capture: 'http(ajax)',
 				expect: {status: 'OK'},
 				onError:
 			}
