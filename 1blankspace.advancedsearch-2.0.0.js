@@ -267,6 +267,17 @@ function getResults(aoParm1, aoParm2) {
 	//but problem is that the category is locked in before the xml is passed
 	if (this.categoryId != '') sURL += '&categoryid=' + this.categoryId;
 	
+	if (ns1blankspace !== undefined)
+	{
+		if (ns1blankspace.user !== undefined)
+		{
+			if (ns1blankspace.user.site !== undefined && sEndpoint.toLowerCase() == 'site')
+			{
+				sURL += '&site=' + ns1blankspace.user.site;
+			}	
+		}	
+	}
+
 	//contentType: 'text/xml',
 	$.ajax(
 	{
