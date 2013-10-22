@@ -344,7 +344,8 @@ ns1blankspace.setup.financial =
 						{
 							var oSearch = new AdvancedSearch();
 							oSearch.method = 'FINANCIAL_BANK_ACCOUNT_SEARCH';
-							oSearch.addField('title,lastreconciledamount,lastreconcileddate,notes,status,statustext,accountname,bsb,accountnumber,financialaccount');
+							oSearch.addField('title,lastreconciledamount,lastreconcileddate,notes,status,statustext,accountname,bsb,accountnumber,' +
+												'defaultpaymentaccount,defaultreceiptaccount,financialaccount');
 							oSearch.sort('title', 'asc');
 							oSearch.rows = ns1blankspace.option.defaultRows;
 							oSearch.getResults(function(data) {ns1blankspace.setup.financial.bankAccounts(oParam, data)});
@@ -514,6 +515,24 @@ ns1blankspace.setup.financial =
 										'<input type="radio" id="radioStatus1" name="radioStatus" value="1"/>Active' +
 										'<br /><input type="radio" id="radioStatus2" name="radioStatus" value="2"/>Non-Active' +
 										'</td></tr>');
+
+						aHTML.push('<tr><td class="ns1blankspaceCaption">' +
+										'Default Payment Account' +
+										'</td></tr>' +
+										'<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceRadio">' +
+										'<input type="radio" id="radioDefaultPaymentY" name="radioDefaultPayment" value="Y"/>Yes' +
+										'<br /><input type="radio" id="radioDefaultPaymentN" name="radioDefaultPayment" value="N"/>No' +
+										'</td></tr>');
+
+						aHTML.push('<tr><td class="ns1blankspaceCaption">' +
+										'Default Receipt Account' +
+										'</td></tr>' +
+										'<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceRadio">' +
+										'<input type="radio" id="radioDefaultReceiptY" name="radioDefaultReceipt" value="Y"/>Yes' +
+										'<br /><input type="radio" id="radioDefaultReceiptN" name="radioDefaultReceipt" value="N"/>No' +
+										'</td></tr>');
 						
 						aHTML.push('</table>');					
 						
@@ -551,7 +570,9 @@ ns1blankspace.setup.financial =
 								bsb: $('#ns1blankspaceBankAccountBSB').val(),
 								accountnumber: $('#ns1blankspaceBankAccountNumber').val(),
 								financialaccount: $('#ns1blankspaceBankAccountFinancialAccount').attr("data-id"),
-								status: $('input[name="radioStatus"]:checked').val()
+								status: $('input[name="radioStatus"]:checked').val(),
+								defaultpaymentaccount: $('input[name="radioDefaultPayment"]:checked').val(),
+								defaultreceiptaccount: $('input[name="radioDefaultReceipt"]:checked').val()
 							}	
 
 							$.ajax(
@@ -585,7 +606,7 @@ ns1blankspace.setup.financial =
 
 							var oSearch = new AdvancedSearch();
 							oSearch.method = 'FINANCIAL_BANK_ACCOUNT_SEARCH';
-							oSearch.addField('title,financialaccount,financialaccounttext,status,accountname,bsb,accountnumber');
+							oSearch.addField('title,financialaccount,financialaccounttext,status,accountname,bsb,accountnumber,defaultpaymentaccount,defaultreceiptaccount');
 							oSearch.addFilter('id', 'EQUAL_TO', sID);
 							oSearch.getResults(function(data) {
 									$.extend(true, oParam, {step: 3});
@@ -609,6 +630,8 @@ ns1blankspace.setup.financial =
 						$('#ns1blankspaceBankAccountFinancialAccount').val(oObjectContext.financialaccounttext)
 						$('#ns1blankspaceBankAccountFinancialAccount').attr('data-id', oObjectContext.financialaccount);
 						$('[name="radioStatus"][value="' + oObjectContext.status + '"]').attr('checked', true);
+						$('[name="radioDefaultPayment"][value="' + oObjectContext.defaultpaymentaccount + '"]').attr('checked', true);
+						$('[name="radioDefaultReceipt"][value="' + oObjectContext.defaultreceiptaccount + '"]').attr('checked', true);
 
 						ns1blankspace.status.message('');
 					}
