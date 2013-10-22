@@ -470,7 +470,7 @@ ns1blankspace.document =
 										'</td></tr>' +
 										'<tr class="ns1blankspace">' +
 										'<td class="ns1blankspaceTextMulti">' +
-										'<textarea rows="10" cols="35" id="ns1blankspaceMainDetailsSummary" class="inputns1blankspaceMainTextMulti" style="width:100%;"></textarea>' +
+										'<textarea rows="10" cols="35" id="ns1blankspaceDetailsSummary" class="ns1blankspaceMainTextMulti" style="width:100%;"></textarea>' +
 										'</td></tr>');
 
 						aHTML.push('</table>');					
