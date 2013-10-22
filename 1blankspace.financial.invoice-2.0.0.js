@@ -1154,7 +1154,7 @@ ns1blankspace.financial.invoice =
 						}
 						else
 						{
-							$('[name="radioSent"][value="N"]').prop('checked', true);
+							$('[name="radioSent"][value="' + ns1blankspace.financial.data.settings.defaultinvoicesentvalue + '"]').prop('checked', true);
 							$('[name="radioFrequency"][value="9"]').prop('checked', true);
 							$('#ns1blankspaceDetailsSentDate').val(Date.today().toString("dd MMM yyyy"));
 						}

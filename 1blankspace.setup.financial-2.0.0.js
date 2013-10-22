@@ -298,8 +298,16 @@ ns1blankspace.setup.financial =
 										'</td></tr>' +
 										'</tr>');
 
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
+										'Default Invoice Status' +
+										'</td></tr>' +
+										'<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceRadio">' +
+										'<input type="radio" id="radioDefaultInvoiceSentValueY" name="radioDefaultInvoiceSentValue" value="Y"/>Mark as sent' +
+										'<br /><input type="radio" id="radioDefaultInvoiceSentValue2" name="radioDefaultInvoiceSentValue" value="N"/>Leave as unsent' +
+										'</td></tr>');	
 
-						
 																		
 						aHTML.push('</table>');					
 						
@@ -309,6 +317,7 @@ ns1blankspace.setup.financial =
 						{
 							$('[name="radioTaxationMethod"][value="' + ns1blankspace.objectContextData.taxreportcalculationmethod + '"]').attr('checked', true);	
 							$('#ns1blankspaceGeneralAccountingYear').val(ns1blankspace.objectContextData.endoffinancialyear);
+							$('[name="radioDefaultInvoiceSentValue"][value="' + ns1blankspace.objectContextData.defaultinvoicesentvalue + '"]').attr('checked', true);
 						}
 
 					}	
@@ -2100,6 +2109,7 @@ ns1blankspace.setup.financial =
 									{
 										sData += '&taxreportcalculationmethod=' + ns1blankspace.util.fs($('input[name="radioTaxationMethod"]:checked').val());
 										sData += '&endoffinancialyear=' + ns1blankspace.util.fs($('input[name="inputns1blankspaceGeneralAccountingYear"]:checked').val());
+										sData += '&defaultinvoicesentvalue=' + ns1blankspace.util.fs($('input[name="radioDefaultInvoiceSentValue"]:checked').val());
 									};
 									
 									if ($('#ns1blankspaceMainTax').html() != '')
