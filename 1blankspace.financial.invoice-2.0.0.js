@@ -694,8 +694,8 @@ ns1blankspace.financial.invoice =
 												{
 													var sHTML = $('#ns1blankspaceSummaryColumn1').html();
 
-													sHTML = sHTML.replace(/app.alt-enter.com/g,'[[host]]');
-													sHTML = sHTML.replace(/https/g,'http');
+													//sHTML = sHTML.replace(/app.alt-enter.com/g,'[[host]]');
+													//sHTML = sHTML.replace(/https/g,'http');
 
 													ns1blankspace.pdf.create({
 															xhtmlContent: sHTML,
