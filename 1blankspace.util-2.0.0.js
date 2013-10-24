@@ -1,6 +1,6 @@
-if (ns1blankspace === undefined)
+if (typeof ns1blankspace === 'undefined')
 {
-	ns1blankspace = {};
+	var ns1blankspace = {};
 }
 
 ns1blankspace.util =
