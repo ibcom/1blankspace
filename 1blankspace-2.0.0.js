@@ -1654,7 +1654,9 @@ ns1blankspace.logon =
 							$.cookie('mydigitalstucturelogonname', $('#ns1blankspaceLogonLogonName').val(), {expires:30});
 						}
 						
-						if (oResponse.passwordStatus === "EXPIRED")
+						var sStatus = (oResponse.passwordStatus!==undefined?oResponse.passwordStatus:oResponse.PasswordStatus);
+
+						if (sStatus === "EXPIRED")
 						{
 							ns1blankspace.logon.changePassword.show(); 
 						}
