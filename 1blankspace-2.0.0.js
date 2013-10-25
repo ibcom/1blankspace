@@ -5502,40 +5502,43 @@ ns1blankspace.extend =
 						if (oParam.object != undefined) {iObject = oParam.object}
 					}
 
-					var aHTMLTR = [];
-					var aHTMLDIV = [];
-
-					$($.grep(ns1blankspace.extend.structure, function (a) {return a.object == iObject;})).each(function()
-					{	
-						var sTitle = this.title;
-						if (sTitle == undefined) {sTitle = this.categorytext}
-
-						aHTMLTR.push('<tr><td id="ns1blankspaceControl-' + this.category + '" class="ns1blankspaceControl">' +
-											sTitle + '</td></tr>');
-
-						aHTMLDIV.push('<div id="ns1blankspaceMain' + this.category + '" class="ns1blankspaceControlMain"></div>');
-					});
-
-					var aHTML = [];
-
-					if (aHTMLTR.length > 0)
-					{	
-						aHTML.push('<table class="ns1blankspaceControl">');
-						aHTML.push(aHTMLTR.join(''));
-						aHTML.push('</table>');
-					}
-					
-					$('table.ns1blankspaceControl :last').append(aHTML.join(''));	
-					$('#ns1blankspaceMain').append(aHTMLDIV.join(''));
-
-					$($.grep(ns1blankspace.extend.structure, function (a) {return a.object == iObject;})).each(function()
+					if (ns1blankspace.extend.structure !== undefined)
 					{
-						$('#ns1blankspaceControl-' + this.category).click(function(event)
-						{
-							ns1blankspace.show({selector: '#ns1blankspaceMain' + (this.id).split('-')[1]});
-							ns1blankspace.extend.show({category: (this.id).split('-')[1]});
+						var aHTMLTR = [];
+						var aHTMLDIV = [];
+
+						$($.grep(ns1blankspace.extend.structure, function (a) {return a.object == iObject;})).each(function()
+						{	
+							var sTitle = this.title;
+							if (sTitle == undefined) {sTitle = this.categorytext}
+
+							aHTMLTR.push('<tr><td id="ns1blankspaceControl-' + this.category + '" class="ns1blankspaceControl">' +
+												sTitle + '</td></tr>');
+
+							aHTMLDIV.push('<div id="ns1blankspaceMain' + this.category + '" class="ns1blankspaceControlMain"></div>');
 						});
-					});	
+
+						var aHTML = [];
+
+						if (aHTMLTR.length > 0)
+						{	
+							aHTML.push('<table class="ns1blankspaceControl">');
+							aHTML.push(aHTMLTR.join(''));
+							aHTML.push('</table>');
+						}
+						
+						$('table.ns1blankspaceControl :last').append(aHTML.join(''));	
+						$('#ns1blankspaceMain').append(aHTMLDIV.join(''));
+
+						$($.grep(ns1blankspace.extend.structure, function (a) {return a.object == iObject;})).each(function()
+						{
+							$('#ns1blankspaceControl-' + this.category).click(function(event)
+							{
+								ns1blankspace.show({selector: '#ns1blankspaceMain' + (this.id).split('-')[1]});
+								ns1blankspace.extend.show({category: (this.id).split('-')[1]});
+							});
+						});
+					}	
 				},
 
 	show: 		function (oParam)
