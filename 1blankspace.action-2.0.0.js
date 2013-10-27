@@ -588,7 +588,8 @@ ns1blankspace.action =
 										'<td class="ns1blankspaceSelect">' +
 										'<input id="ns1blankspaceDetailsActionBy" class="ns1blankspaceSelect"' +
 												' data-method="CORE_USER_SEARCH"' +
-												' data-columns="firstname-space-surname">' +
+												' data-columns="firstname-space-surname"' +
+												' data-search="quicksearch">' +
 										'</td></tr>');	
 						
 						aHTML.push('<tr class="ns1blankspaceCaption">' +

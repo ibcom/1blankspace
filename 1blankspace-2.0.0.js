@@ -2898,31 +2898,39 @@ ns1blankspace.search =
 								}
 								else
 								{
-									var sData = 'rows=100';
-
-									if (iSource === ns1blankspace.data.searchSource.text)
-									{	
-										sData = '&' + aColumns[0] + '=' + ns1blankspace.util.fs(sSearchText);
-									}	
-									
+									var oData = {"rows": "100"};
+									var sSearch = $('#' + sXHTMLInputElementID).attr("data-search");
+						
 									if (sXHTMLParentInputElementID != undefined)
 									{
-										var sParentColumnID = $('#' + sXHTMLInputElementID).attr("data-parent-search-id")
-										var sParentColumnText = $('#' + sXHTMLInputElementID).attr("data-parent-search-text")
+										var sParentColumnID = $('#' + sXHTMLInputElementID).attr("data-parent-search-id");
+										var sParentColumnText = $('#' + sXHTMLInputElementID).attr("data-parent-search-text");
 										var sParentContextID = $('#' + sXHTMLParentInputElementID).attr("data-id");
 										var sParentContextText = $('#' + sXHTMLParentInputElementID).val();
-										
+
 										if (sParentColumnID != undefined && (sParentContextID != undefined && sParentContextID != ''))
 										{
-											sData = '&' + sParentColumnID + '=' + sParentContextID;
+											oData[sParentColumnID] = sParentContextID;
 										}
 									}
+
+									if (iSource === ns1blankspace.data.searchSource.text)
+									{
+										if (sSearch != undefined)
+										{
+											oData[sSearch] = sSearchText;
+										}
+										else
+										{	
+											oData[aColumns[0]] = sSearchText;
+										}
+									}	
 
 									$.ajax(
 									{
 										type: 'GET',
 										url: ns1blankspace.util.endpointURI(sMethod),
-										data: sData,
+										data: oData,
 										dataType: 'json',
 										success: function(data){ns1blankspace.search.show(oParam, data)}
 									});
@@ -5649,30 +5657,33 @@ ns1blankspace.extend =
 
 					var sData = '';
 
-					$($.grep(ns1blankspace.extend.structure, function (a) {return a.object == iObject;})).each(function(i,v)
-					{				
-						if ($('#ns1blankspaceMain' + v.category).html() != '')
-						{
-							var oCategory = $.grep(ns1blankspace.extend.structure, function (a) {return a.category == v.category;})
-
-							if (oCategory.length != 0)
+					if (ns1blankspace.extend.structure !== undefined)
+					{
+						$($.grep(ns1blankspace.extend.structure, function (a) {return a.object == iObject;})).each(function(i,v)
+						{				
+							if ($('#ns1blankspaceMain' + v.category).html() != '')
 							{
-								oCategory = oCategory[0];
+								var oCategory = $.grep(ns1blankspace.extend.structure, function (a) {return a.category == v.category;})
 
-								$(oCategory.elements).each(function(j,k)
-								{	
-									if (this.datatype == 2)
-									{
-										sData += '&se' + k.id + '=' + ns1blankspace.util.fs($('#ns1blankspaceStructure_' + k.id).attr('data-id'));
-									}
-									else
+								if (oCategory.length != 0)
+								{
+									oCategory = oCategory[0];
+
+									$(oCategory.elements).each(function(j,k)
 									{	
-										sData += '&se' + k.id + '=' + ns1blankspace.util.fs($('#ns1blankspaceStructure_' + k.id).val());
-									}	
-								});	
-							}	
-						}		
-					});
+										if (this.datatype == 2)
+										{
+											sData += '&se' + k.id + '=' + ns1blankspace.util.fs($('#ns1blankspaceStructure_' + k.id).attr('data-id'));
+										}
+										else
+										{	
+											sData += '&se' + k.id + '=' + ns1blankspace.util.fs($('#ns1blankspaceStructure_' + k.id).val());
+										}	
+									});	
+								}	
+							}		
+						});
+					}	
 
 					return sData;
 
