@@ -864,7 +864,7 @@ ns1blankspace.supportIssue =
 	alert: 		{
 					show: 		function (oParam)
 								{
-									//Send alert?
+									//Send alert ?
 								},
 
 					send: 		function (oParam, oResponse)
