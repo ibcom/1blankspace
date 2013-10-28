@@ -364,6 +364,13 @@ ns1blankspace.supportIssue =
 						aHTML.push('<tr><td id="ns1blankspaceControlDetails" class="ns1blankspaceControl">' +
 										'Details</td></tr>');
 
+	
+						if (ns1blankspace.supportIssue.data.mode.value == ns1blankspace.supportIssue.data.mode.options.forMe)
+						{
+							aHTML.push('<tr><td id="ns1blankspaceControlSolution" class="ns1blankspaceControl">' +
+										'Solution</td></tr>');
+						}	
+
 						aHTML.push('</table>');
 
 						aHTML.push('<table class="ns1blankspaceControl">');
@@ -380,6 +387,7 @@ ns1blankspace.supportIssue =
 
 					aHTML.push('<div id="ns1blankspaceMainSummary" class="ns1blankspaceControlMain"></div>');
 					aHTML.push('<div id="ns1blankspaceMainDetails" class="ns1blankspaceControlMain"></div>');
+					aHTML.push('<div id="ns1blankspaceMainSolution" class="ns1blankspaceControlMain"></div>');					
 					aHTML.push('<div id="ns1blankspaceMainAttachments" class="ns1blankspaceControlMain"></div>');
 							
 					$('#ns1blankspaceMain').html(aHTML.join(''));
@@ -394,6 +402,12 @@ ns1blankspace.supportIssue =
 					{
 						ns1blankspace.show({selector: '#ns1blankspaceMainDetails'});
 						ns1blankspace.supportIssue.details();
+					});
+
+					$('#ns1blankspaceControlSolution').click(function(event)
+					{
+						ns1blankspace.show({selector: '#ns1blankspaceMainSolution'});
+						ns1blankspace.supportIssue.solution();
 					});
 
 					$('#ns1blankspaceControlAttachments').click(function(event)
@@ -631,15 +645,80 @@ ns1blankspace.supportIssue =
 					}	
 				},
 
-	new2:		function ()
+	solution: 	function ()
 				{
-					ns1blankspace.objectContextData = undefined;
-					ns1blankspace.objectContext = -1;
-					ns1blankspace.supportIssue.layout();
-					ns1blankspace.show({selector: '#ns1blankspaceMainDetails'});
-					$('#ns1blankspaceViewportControlAction').button({disabled: false});
-					$('#ns1blankspaceViewportControlActionOptions').button({disabled: true});
-					ns1blankspace.supportIssue.details();	
+					var aHTML = [];
+
+					if ($('#ns1blankspaceMainSolution').attr('data-loading') == '1')
+					{
+						$('#ns1blankspaceMainSolution').attr('data-loading', '');
+						
+						aHTML.push('<table class="ns1blankspaceContainer">' +
+										'<tr class="ns1blankspaceContainer">' +
+										'<td id="ns1blankspaceSolutionColumn1" class="ns1blankspaceColumn1"></td>' +
+										'<td id="ns1blankspaceSolutionColumn2" class="ns1blankspaceColumn2"></td>' +
+										'</tr>' + 
+										'</table>');					
+						
+						$('#ns1blankspaceMainSolution').html(aHTML.join(''));
+						
+						var aHTML = [];
+						
+						aHTML.push('<table class="ns1blankspace">');
+
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
+										'Solution (shared with user)' +
+										'</td></tr>' +
+										'<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceRadio">' +
+										'<textarea id="ns1blankspaceSolutionSolution" style="width: 100%;" rows="10" cols="35" class="ns1blankspaceTextMulti"></textarea>' +
+										'</td></tr>');
+
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
+										'Internal technical notes' +
+										'</td></tr>' +
+										'<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceRadio">' +
+										'<textarea id="ns1blankspaceSolutionTechnicalNotes" style="width: 100%;" rows="10" cols="35" class="ns1blankspaceTextMulti"></textarea>' +
+										'</td></tr>');	
+
+						aHTML.push('</table>');					
+
+						$('#ns1blankspaceSolutionColumn1').html(aHTML.join(''));
+
+						var aHTML = [];
+						
+						aHTML.push('<table class="ns1blankspaceMain">');
+
+						aHTML.push('<tr><td class="ns1blankspaceCaption">' +
+										'Processing Type' +
+										'</td></tr>' +
+										'<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceRadio">' +
+										'<input type="radio" id="radioProcessingType5" name="radioProcessingType" value="5"/>Not sure' +
+										'<br /><input type="radio" id="radioProcessingType2" name="radioProcessingType" value="2"/>Internet issue' +
+										'<br /><input type="radio" id="radioProcessingType3" name="radioProcessingType" value="3"/>Fault' +
+										'<br /><input type="radio" id="radioProcessingType3" name="radioProcessingType" value="4"/>Suggestion' +
+										'</td></tr>')
+
+						aHTML.push('</table>');					
+
+						$('#ns1blankspaceSolutionColumn2').html(aHTML.join(''));
+
+						if (ns1blankspace.objectContextData != undefined)
+						{
+							$('#ns1blankspaceSolutionSolution').val(ns1blankspace.objectContextData.solution);
+							$('#ns1blankspaceSolutionTechnicalNotes').val(ns1blankspace.objectContextData.technicalnotes);
+							$('[name="radioProcessingType"][value="' + ns1blankspace.objectContextData.processingtype + '"]').attr('checked', true);
+						}
+						else
+						{
+							$('[name="radioProcessingType"][value="5"]').attr('checked', true);
+						}
+
+					}	
 				},
 
 	save: 		{
@@ -647,34 +726,38 @@ ns1blankspace.supportIssue =
 								{
 									ns1blankspace.status.working();
 									
+									var oData = {}
+
 									if (ns1blankspace.objectContext != -1)
 									{
-										var sData = 'id=' + ns1blankspace.objectContext;
+										oData.id = ns1blankspace.objectContext;
 									} 
-									else
-									{
-										var sData = 'id='
-									}
-
+							
 									if ($('#ns1blankspaceMainDetails').html() != '')
 									{
-										sData += '&title=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsTitle').val());
-										sData += '&description=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsDescription').val());
-										sData += '&name=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsName').val());
-										sData += '&email=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsEmail').val());
-										sData += '&phone=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsPhone').val());
-										sData += '&user=' + ns1blankspace.util.fs($('input[name="radioUser"]:checked').val());
-										sData += '&type=' + ns1blankspace.util.fs($('input[name="radioType"]:checked').val());
-										sData += '&severity=' + ns1blankspace.util.fs($('input[name="radioSeverity"]:checked').val());
+										oData.title = $('#ns1blankspaceDetailsTitle').val();
+										oData.description = $('#ns1blankspaceDetailsDescription').val();
+										oData.name = $('#ns1blankspaceDetailsName').val();
+										oData.email = $('#ns1blankspaceDetailsEmail').val();
+										oData.phone =$('#ns1blankspaceDetailsPhone').val();
+										oData.user = $('input[name="radioUser"]:checked').val();
+										oData.type = $('input[name="radioType"]:checked').val();
+										oData.severity = $('input[name="radioSeverity"]:checked').val();
 									}
 
-									if (sData != '')
+									if ($('#ns1blankspaceMainSolution').html() != '')
+									{
+										oData.solution = $('#ns1blankspaceSolutionSolution').val();
+										oData.technicalnotes = $('#ns1blankspaceSolutionTechnicalNotes').val();
+									}	
+
+									if (!ns1blankspace.util.isEmpty(oData))
 									{									
 										$.ajax(
 										{
 											type: 'POST',
 											url: ns1blankspace.util.endpointURI('SUPPORT_ISSUE_MANAGE'),
-											data: sData,
+											data: oData,
 											dataType: 'json',
 											success: ns1blankspace.supportIssue.save.process
 										});
