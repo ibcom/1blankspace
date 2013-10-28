@@ -859,5 +859,47 @@ ns1blankspace.supportIssue =
 						$('#' + sXHTMLElementNameID).val(oResponse.firstname + ' ' + oResponse.surname);
 						$('#' + sXHTMLElementEmailID).val(oResponse.email);
 					}	
-				}
+				},
+
+	alert: 		{
+					show: 		function (oParam)
+								{
+									//Send alert?
+								},
+
+					send: 		function (oParam, oResponse)
+								{
+									if (oResponse === undefined)
+									{	
+										var oData = 
+										{
+											subject: 'Support Issues ' + ns1blankspace.objectContext.reference,
+										}
+
+										if (ns1blankspace.supportIssue.data.mode.value == ns1blankspace.supportIssue.data.mode.options.byMe)
+										{
+											//USER
+											oData.message = '';
+										}
+										else
+										{
+											//SUPPORT
+											oData.message = '';
+										}	
+
+										$.ajax(
+										{
+											type: 'POST',
+											url: ns1blankspace.util.endpointURI('MESSAGING_EMAIL_SEND'),
+											data: oData,
+											dataType: 'json',
+											success: ns1blankspace.supportIssue.alert.send
+										});
+									}
+									else
+									{
+										ns1blankspace.status.message('Alert sent')
+									}	
+								}			
+				}			
 }					
