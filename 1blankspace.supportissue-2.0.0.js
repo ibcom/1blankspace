@@ -873,7 +873,7 @@ ns1blankspace.supportIssue =
 									{	
 										var oData = 
 										{
-											subject: 'Support Issues ' + ns1blankspace.objectContext.reference,
+											subject: 'Support Issue ' + ns1blankspace.objectContext.reference,
 										}
 
 										if (ns1blankspace.supportIssue.data.mode.value == ns1blankspace.supportIssue.data.mode.options.byMe)
