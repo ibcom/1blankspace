@@ -335,7 +335,7 @@
 		{"title":"MESSAGING_EMAIL_DRAFT_SEARCH", "advancedSearch":"false", "rpc":"false"},
 		{"title":"MESSAGING_EMAIL_IMAP_MANAGE", "advancedSearch":"false", "rpc":"false"},
 		{"title":"MESSAGING_EMAIL_SEARCH", "advancedSearch":"false", "rpc":"false"},
-		{"title":"MESSAGING_EMAIL_SEND", "advancedSearch":"false", "rpc":"true"},
+		{"title":"MESSAGING_EMAIL_SEND", "advancedSearch":"false", "rpc":"false"},
 		{"title":"MESSAGING_SMS_SEND", "advancedSearch":"false", "rpc":"false"},
 		{"title":"NETWORK_ENCRYPT_HMAC_SHA256", "advancedSearch":"false", "rpc":"false"},
 		{"title":"NETWORK_OAUTH_METHOD", "advancedSearch":"false", "rpc":"false"},

@@ -20,20 +20,53 @@ ns1blankspace.supportIssue =
 
 	init: 		function (oParam)
 				{
+					if (oParam === undefined) {oParam = {}}
+
 					ns1blankspace.app.reset();
+
+					ns1blankspace.supportIssue.getUsers();
 
 					ns1blankspace.object = -8;
 					ns1blankspace.objectName = 'supportIssue';
 					ns1blankspace.objectContextData = undefined;
 					ns1blankspace.objectContext = -1;
 					ns1blankspace.viewName = 'Support Issues';
+
 					if (ns1blankspace.supportIssue.data.mode.value === undefined)
 					{
 						ns1blankspace.supportIssue.data.mode.value = ns1blankspace.util.getParam(oParam, 'mode', {"default": 1}).value;
 					}	
 							
+					oParam.bind = ns1blankspace.supportIssue.bind;
+					oParam.xhtml = '<table id="ns1blankspaceOptions" class="ns1blankspaceViewControlContainer">' +	
+											'<tr class="ns1blankspaceOptions">' +
+											'<td id="ns1blankspaceControlActionOptionsRemove" class="ns1blankspaceViewControl">' +
+											'Delete' +
+											'</td></tr>' +
+											'<tr class="ns1blankspaceOptions">' +
+											'<td id="ns1blankspaceControlActionOptionsAlert" class="ns1blankspaceViewControl">' +
+											'Send Email Alert' +
+											'</td></tr>' +
+											'</table>';
+							
 					ns1blankspace.app.set(oParam);
 				},
+
+	bind: 		function (oParam)
+				{
+					$('#ns1blankspaceControlActionOptionsRemove')
+					.click(function() 
+					{
+						ns1blankspace.app.options.remove(oParam)
+					});
+
+					$('#ns1blankspaceControlActionOptionsAlert')
+					.click(function() 
+					{
+						$(ns1blankspace.xhtml.container).hide();
+						ns1blankspace.supportIssue.alert.send(oParam);
+					});
+				},			
 
 	home: 		function (oParam, oResponse)
 				{
@@ -717,7 +750,6 @@ ns1blankspace.supportIssue =
 						{
 							$('[name="radioProcessingType"][value="5"]').attr('checked', true);
 						}
-
 					}	
 				},
 
@@ -759,7 +791,7 @@ ns1blankspace.supportIssue =
 											url: ns1blankspace.util.endpointURI('SUPPORT_ISSUE_MANAGE'),
 											data: oData,
 											dataType: 'json',
-											success: ns1blankspace.supportIssue.save.process
+											success: function (data) {ns1blankspace.supportIssue.save.process(data, oData)}
 										});
 										
 									}
@@ -770,15 +802,31 @@ ns1blankspace.supportIssue =
 										
 								},
 
-					process:	function (oResponse)
+					process:	function (oResponse, oData)
 								{
 									if (oResponse.status == 'OK')
 									{
-										ns1blankspaceStatus('Saved');
-										if (ns1blankspace.objectContext == -1) {var bNew = true}
+										if (oData.solution === undefined)
+										{
+											if (ns1blankspace.objectContextData !== undefined) {oData.solution = ns1blankspace.objectContextData.solution}
+										}	
+
+										ns1blankspace.supportIssue.alert.show(
+										{
+											issueText: (oData.description===undefined ?ns1blankspace.objectContextData.description :oData.description),
+											solutionText: oData.solution
+										});
+
+										ns1blankspace.status.message('Saved');
+
+										var bNew = (ns1blankspace.objectContext == -1)
 										ns1blankspace.objectContext = oResponse.id;	
-										
-										if (bNew) {ns1blankspaceSupportIssueSearch('-' + ns1blankspace.objectContext)}
+										ns1blankspace.inputDetected =  false;
+
+										if (bNew)
+										{
+											ns1blankspace.supportIssue.search.send('-' + ns1blankspace.objectContext)
+										}
 									}
 									else
 									{
@@ -823,11 +871,14 @@ ns1blankspace.supportIssue =
 							$.each(oResponse.data.rows, function()
 							{
 								aHTML.push('<input type="radio" id="radioUser' + this.id + '"' +
-													' name="radioUser" value="' + this.id + '">' +
+													' name="radioUser" value="' + this.id + '"' +
+													' data-email="' + this.email + '">' +
 													this.contactfirstname + ' ' + this.contactsurname + '<br />');
 							});
 
 						}
+
+						ns1blankspace.supportIssue.data.users = oResponse.data.rows;
 
 						$('#' + sXHTMLElementID).html(aHTML.join(''));
 					}	
@@ -871,30 +922,57 @@ ns1blankspace.supportIssue =
 								{
 									if (oResponse === undefined)
 									{	
-										var oData = 
+										var sIssueText = ns1blankspace.util.getParam(oParam, 'issueText').value;
+										var sSolutionText = ns1blankspace.util.getParam(oParam, 'solutionText').value;
+										var sLinkUser = window.location.href + '#/supportIssue/';
+										var sLinkSupport = sLinkUser;
+
+										if ($('#ns1blankspaceClassicLink:checked').length == 0)
 										{
-											subject: 'Support Issue ' + ns1blankspace.objectContext.reference,
+											sLinkUser = 'https://secure.mydigitalspacelive.com/support/issueproperties.asp?select=';
 										}
 
-										if (ns1blankspace.supportIssue.data.mode.value == ns1blankspace.supportIssue.data.mode.options.byMe)
-										{
-											//USER
-											oData.message = '';
+										//noreply@mydigitalstucture.com
+
+										var aUser = $.grep(ns1blankspace.supportIssue.data.users, function (a) {return a.id == ns1blankspace.objectContextData.user});
+
+										if (aUser.length > 0)
+										{	
+											var oData = 
+											{
+												fromemail: 'mark.byers@ibcom.biz',
+												subject: 'Support Issue ' + ns1blankspace.objectContext.reference,
+												to: aUser[0].email
+											}
+
+											var aMessage = [];
+
+											if (ns1blankspace.supportIssue.data.mode.value == ns1blankspace.supportIssue.data.mode.options.byMe)
+											{
+												//USER TO SUPPORT
+												aMessage.push('New Issue', sIssueText, '<a href="' + sLinkSupport + ns1blankspace.objectContext +'">View Issue</a>');
+											}
+											else
+											{
+												//SUPPORT SUPPORT TO USER
+												aMessage.push(sIssueText, sSolutionText, '<a href="' + sLinkUser + ns1blankspace.objectContext +'">View Issue</a>');
+											}	
+
+											oData.message = aMessage.join('<br /><br />');
+
+											$.ajax(
+											{
+												type: 'POST',
+												url: ns1blankspace.util.endpointURI('MESSAGING_EMAIL_SEND'),
+												data: oData,
+												dataType: 'json',
+												success: ns1blankspace.supportIssue.alert.send
+											});
 										}
 										else
 										{
-											//SUPPORT
-											oData.message = '';
+											ns1blankspace.status.error('No one to email')
 										}	
-
-										$.ajax(
-										{
-											type: 'POST',
-											url: ns1blankspace.util.endpointURI('MESSAGING_EMAIL_SEND'),
-											data: oData,
-											dataType: 'json',
-											success: ns1blankspace.supportIssue.alert.send
-										});
 									}
 									else
 									{
