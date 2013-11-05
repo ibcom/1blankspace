@@ -660,8 +660,7 @@ ns1blankspace.financial.invoice =
 										{
 											if (ns1blankspace.financial.summaryUseTemplate || bUseTemplate)
 											{
-												aHTML.push('<tr><td>' +
-																'<span id="ns1blankspaceSummaryCreatePDF" class="ns1blankspaceAction" style="width:75px;">' +
+												aHTML.push('<tr><td><span id="ns1blankspaceSummaryCreatePDF" class="ns1blankspaceAction" style="width:75px;">' +
 																'PDF</span></td></tr>');
 											}
 											else

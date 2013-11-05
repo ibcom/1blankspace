@@ -546,6 +546,11 @@ ns1blankspace.app =
 							$(this).removeClass('ns1blankspaceHighlight');
 						});
 
+						$('.ns1blankspaceTextMulti').live('keyup', function() 
+						{
+							ns1blankspace.inputDetected = true;
+						});
+
 						if (window.location.hash === '#PASSWORDEXPIRED')
 						{
 							ns1blankspace.logon.changePassword.show();

@@ -38,6 +38,7 @@ ns1blankspace.supportIssue =
 					}	
 							
 					oParam.bind = ns1blankspace.supportIssue.bind;
+
 					oParam.xhtml = '<table id="ns1blankspaceOptions" class="ns1blankspaceViewControlContainer">' +	
 											'<tr class="ns1blankspaceOptions">' +
 											'<td id="ns1blankspaceControlActionOptionsRemove" class="ns1blankspaceViewControl">' +
@@ -64,7 +65,7 @@ ns1blankspace.supportIssue =
 					.click(function() 
 					{
 						$(ns1blankspace.xhtml.container).hide();
-						ns1blankspace.supportIssue.alert.send(oParam);
+						ns1blankspace.supportIssue.alert.init(oParam);
 					});
 				},			
 
@@ -400,8 +401,15 @@ ns1blankspace.supportIssue =
 	
 						if (ns1blankspace.supportIssue.data.mode.value == ns1blankspace.supportIssue.data.mode.options.forMe)
 						{
+							aHTML.push('</table>');
+
+							aHTML.push('<table class="ns1blankspaceControl">');
+
 							aHTML.push('<tr><td id="ns1blankspaceControlSolution" class="ns1blankspaceControl">' +
 										'Solution</td></tr>');
+
+							aHTML.push('<tr><td id="ns1blankspaceControlAlert" class="ns1blankspaceControl">' +
+										'Alerts</td></tr>');
 						}	
 
 						aHTML.push('</table>');
@@ -420,7 +428,8 @@ ns1blankspace.supportIssue =
 
 					aHTML.push('<div id="ns1blankspaceMainSummary" class="ns1blankspaceControlMain"></div>');
 					aHTML.push('<div id="ns1blankspaceMainDetails" class="ns1blankspaceControlMain"></div>');
-					aHTML.push('<div id="ns1blankspaceMainSolution" class="ns1blankspaceControlMain"></div>');					
+					aHTML.push('<div id="ns1blankspaceMainSolution" class="ns1blankspaceControlMain"></div>');
+					aHTML.push('<div id="ns1blankspaceMainAlert" class="ns1blankspaceControlMain"></div>');					
 					aHTML.push('<div id="ns1blankspaceMainAttachments" class="ns1blankspaceControlMain"></div>');
 							
 					$('#ns1blankspaceMain').html(aHTML.join(''));
@@ -442,6 +451,12 @@ ns1blankspace.supportIssue =
 						ns1blankspace.show({selector: '#ns1blankspaceMainSolution'});
 						ns1blankspace.supportIssue.solution();
 					});
+
+					$('#ns1blankspaceControlAlert').click(function(event)
+					{
+						ns1blankspace.supportIssue.alert.init();
+					});
+
 
 					$('#ns1blankspaceControlAttachments').click(function(event)
 					{
@@ -480,6 +495,8 @@ ns1blankspace.supportIssue =
 						});
 						
 						ns1blankspace.history.control({functionDefault: 'ns1blankspace.supportIssue.summary()'});
+
+						ns1blankspace.util.onComplete(oParam);
 					}	
 				},	
 
@@ -806,27 +823,17 @@ ns1blankspace.supportIssue =
 								{
 									if (oResponse.status == 'OK')
 									{
-										if (oData.solution === undefined)
-										{
-											if (ns1blankspace.objectContextData !== undefined) {oData.solution = ns1blankspace.objectContextData.solution}
-										}	
-
-										ns1blankspace.supportIssue.alert.show(
-										{
-											issueText: (oData.description===undefined ?ns1blankspace.objectContextData.description :oData.description),
-											solutionText: oData.solution
-										});
-
 										ns1blankspace.status.message('Saved');
 
 										var bNew = (ns1blankspace.objectContext == -1)
 										ns1blankspace.objectContext = oResponse.id;	
-										ns1blankspace.inputDetected =  false;
+										ns1blankspace.inputDetected = false;
 
-										if (bNew)
+										ns1blankspace.supportIssue.init(
 										{
-											ns1blankspace.supportIssue.search.send('-' + ns1blankspace.objectContext)
-										}
+											id: ns1blankspace.objectContext,
+											onComplete: ns1blankspace.supportIssue.alert.init
+										});
 									}
 									else
 									{
@@ -913,9 +920,75 @@ ns1blankspace.supportIssue =
 				},
 
 	alert: 		{
+					init: 		function (oParam)
+								{
+									ns1blankspace.show({selector: '#ns1blankspaceMainAlert'});
+
+									if (ns1blankspace.inputDetected)
+									{
+										$('#ns1blankspaceMainAlert').html('<span class="ns1blankspaceSub">You need to save the issue<br />before sending the alert.</span>');
+									}
+									else
+									{
+										ns1blankspace.supportIssue.alert.show(oParam);
+									}
+								},
+
 					show: 		function (oParam)
 								{
-									//Send alert ?
+									if (oParam === undefined) {oParam = {}}
+
+									if (ns1blankspace.supportIssue.data.mode.value == ns1blankspace.supportIssue.data.mode.options.byMe)
+									{
+										ns1blankspace.supportIssue.alert.send(oParam)
+									}
+									else
+									{
+										$('#ns1blankspaceMainAlert').html('<table class="ns1blankspaceMain">' +
+													'<tr class="ns1blankspaceRow">' +
+													'<td id="ns1blankspaceAlert1" class="ns1blankspaceColumn1" style="width:300px;"></td>' +
+													'<td id="ns1blankspaceAlert2" class="ns1blankspaceColumn2" ></td>' +
+													'</tr>' +
+													'</table>');				
+
+										var aHTML = [];
+
+										aHTML.push('<table class="ns1blankspaceColumn">');
+																		
+										aHTML.push('<tr><td class="ns1blankspaceSub">Send an email alert about this update to ' + ns1blankspace.objectContextData.usercontactemail + '?</td></tr>');
+
+										aHTML.push('<tr><td class="ns1blankspaceRadio" style="padding-top:15px;">' +
+													'<input type="checkbox" id="ns1blankspaceAlertClassic">Use "classic" back link</div>' +
+															'</span></td></tr>');
+
+										aHTML.push('</table>');
+
+										$('#ns1blankspaceAlert1').html(aHTML.join(''));
+
+										var aHTML = [];
+
+										aHTML.push('<table class="ns1blankspaceColumn2">');
+																		
+										aHTML.push('<tr><td>' +
+														'<span id="ns1blankspaceAlertSend" class="ns1blankspaceAction" style="width:75px;">' +
+														'Send</span></td></tr>');
+
+										aHTML.push('</table>');
+
+										$('#ns1blankspaceAlert2').html(aHTML.join(''));
+
+										$('#ns1blankspaceAlertSend').button(
+										{
+											label: 'Send'
+										})
+										.click(function(event)
+										{
+											oParam.classic = ($('#ns1blankspaceAlertClassic:checked').length == 0);
+											oParam.onComplete = ns1blankspace.supportIssue.init;
+											ns1blankspace.supportIssue.alert.send(oParam);
+											$('#ns1blankspaceMainAlert').html('Sending alert.');
+										});
+									}	
 								},
 
 					send: 		function (oParam, oResponse)
@@ -924,10 +997,11 @@ ns1blankspace.supportIssue =
 									{	
 										var sIssueText = ns1blankspace.util.getParam(oParam, 'issueText').value;
 										var sSolutionText = ns1blankspace.util.getParam(oParam, 'solutionText').value;
+										var bClassic = ns1blankspace.util.getParam(oParam, 'classic', {"default": false}).value;
 										var sLinkUser = window.location.href + '#/supportIssue/';
 										var sLinkSupport = sLinkUser;
 
-										if ($('#ns1blankspaceClassicLink:checked').length == 0)
+										if (bClassic)
 										{
 											sLinkUser = 'https://secure.mydigitalspacelive.com/support/issueproperties.asp?select=';
 										}
@@ -938,6 +1012,9 @@ ns1blankspace.supportIssue =
 
 										if (aUser.length > 0)
 										{	
+											if (sIssueText == undefined) {sIssueText = ns1blankspace.objectContextData.description}
+											if (sSolutionText == undefined) {sSolutionText = ns1blankspace.objectContextData.solution}
+
 											var oData = 
 											{
 												fromemail: 'mark.byers@ibcom.biz',
@@ -950,7 +1027,7 @@ ns1blankspace.supportIssue =
 											if (ns1blankspace.supportIssue.data.mode.value == ns1blankspace.supportIssue.data.mode.options.byMe)
 											{
 												//USER TO SUPPORT
-												aMessage.push('New Issue', sIssueText, '<a href="' + sLinkSupport + ns1blankspace.objectContext +'">View Issue</a>');
+												aMessage.push(sIssueText, '<a href="' + sLinkSupport + ns1blankspace.objectContext +'">View Issue</a>');
 											}
 											else
 											{
@@ -966,17 +1043,18 @@ ns1blankspace.supportIssue =
 												url: ns1blankspace.util.endpointURI('MESSAGING_EMAIL_SEND'),
 												data: oData,
 												dataType: 'json',
-												success: ns1blankspace.supportIssue.alert.send
+												success: function (data) {ns1blankspace.supportIssue.alert.send(oParam, data)}
 											});
 										}
 										else
 										{
-											ns1blankspace.status.error('No one to email')
+											ns1blankspace.status.error('No one to email');
 										}	
 									}
 									else
 									{
-										ns1blankspace.status.message('Alert sent')
+										ns1blankspace.status.message('Alert sent');
+										ns1blankspace.util.onComplete(oParam);
 									}	
 								}			
 				}			
