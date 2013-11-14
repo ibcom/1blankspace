@@ -639,48 +639,82 @@ ns1blankspace.app =
 					{
 						var oResponse = ns1blankspace.util.getParam(oParam, 'user').value;
 
-						var sHash = window.location.hash;
+						if (ns1blankspace.option.destination == undefined)
+						{
+							ns1blankspace.option.destination = window.location.hash;
+						}
+
+						var sHash = ns1blankspace.option.destination;
+						sHash = sHash.split('?')[0];
 						var sDestination;
 
-						var sNS;
+						var sNS = 'ns1blankspace';
 						// Pattern: #/contactBusiness/123/summary/123
+						//			#/~/nsFreshcare-admin.user/contactBusiness:1330495,role:Grower
 
 						if (sHash.substr(0, 2) == '#/')
 						{	
 							var aHash = sHash.split('/');
-
+						
 							if (aHash.length > 1)
-							{	
-								ns1blankspace.option.returnToLast = true;
-								
-								sNS = aHash[1];
-							}
-								
-							if (aHash.length == 2)
-							{		
-								sDestination = 'ns1blankspace.' + sNS + '.init({showHome: true});';
+							{
+								if (aHash[1] == '~')
+								{
+									ns1blankspace.option.destination = sHash.replace('~/', '');
+								}
+								else
+								{				
+									ns1blankspace.option.returnToLast = true;
+
+									var sSubNS;
+									var aHashNS = aHash[1].split('-');
+
+									if (aHashNS.length == 1)
+									{
+										sSubNS = aHashNS[0];
+									}	
+									else
+									{
+										sNS = aHashNS[0];
+										sSubNS = aHashNS[1];
+									}
+
+									if (aHash.length == 2)
+									{		
+										sDestination = sNS + '.' + sSubNS + '.init({showHome: true});';
+									}	
+
+									if (aHash.length == 3)
+									{
+										if (aHash[2].indexOf(':') > -1)
+										{
+											sDestination = sNS + '.' + sSubNS + '.init({' + aHash[2] + '})';
+										}	
+										else
+										{
+											sDestination = sNS + '.' + sSubNS + '.init({id:' + aHash[2] + '})';
+										}
+									}
+
+									if (aHash.length > 3)
+									{
+										var sDefaultParam = '';
+										if (aHash.length > 4) {sDefaultParam = '{id: ' + aHash[4] + '}'}
+
+										var sDefault = 'ns1blankspace.' + sNS + '.' + aHash[3];
+
+										sDestination = 'ns1blankspace.' + sNS + '.init({id: ' + aHash[2] + ', default: "' + sDefault + '", defaultParam: "' + sDefaultParam + '"})';
+									}
+
+									ns1blankspace.history.view(
+									{
+										newDestination: sDestination,
+										move: false
+									});
+
+									ns1blankspace.option.destination = undefined;
+								}	
 							}	
-
-							if (aHash.length == 3)
-							{
-								sDestination = 'ns1blankspace.' + sNS + '.init({id:' + aHash[2] + '})';
-							}
-
-							if (aHash.length > 3)
-							{
-								var sDefaultParam = '';
-								if (aHash.length > 4) {sDefaultParam = '{id: ' + aHash[4] + '}'}
-
-								var sDefault = 'ns1blankspace.' + sNS + '.' + aHash[3];
-
-								sDestination = 'ns1blankspace.' + sNS + '.init({id: ' + aHash[2] + ', default: "' + sDefault + '", defaultParam: "' + sDefaultParam + '"})';
-							}
-
-							ns1blankspace.history.view(
-							{
-								newDestination: sDestination,
-								move: false
-							});
 
 							window.location.hash = '';
 						}	
