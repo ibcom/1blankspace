@@ -1,4 +1,3 @@
-
 /*!
  * Copyright 2010, ibCom Pty Ltd ATF ibCom Unit Trust & contributors
  * Licensed under the MIT license.
