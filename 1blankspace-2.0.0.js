@@ -701,9 +701,9 @@ ns1blankspace.app =
 										var sDefaultParam = '';
 										if (aHash.length > 4) {sDefaultParam = '{id: ' + aHash[4] + '}'}
 
-										var sDefault = 'ns1blankspace.' + sNS + '.' + aHash[3];
+										var sDefault = sNS + '.' + sSubNS + '.' + aHash[3];
 
-										sDestination = 'ns1blankspace.' + sNS + '.init({id: ' + aHash[2] + ', default: "' + sDefault + '", defaultParam: "' + sDefaultParam + '"})';
+										sDestination = sNS + '.' + sSubNS + '.init({id: ' + aHash[2] + ', default: "' + sDefault + '", defaultParam: "' + sDefaultParam + '"})';
 									}
 
 									ns1blankspace.history.view(
@@ -721,92 +721,109 @@ ns1blankspace.app =
 
 						var aHTML = [];
 
-						ns1blankspace.user.id = oResponse.user;
-						ns1blankspace.user.unrestricted = (oResponse.unrestrictedaccess == 'Y' || oResponse.unrestrictedaccess === undefined ? true : false);
-						ns1blankspace.user.space = oResponse.space;
-						ns1blankspace.user.spaceText = oResponse.spacename
-						ns1blankspace.user.logonName = oResponse.userlogonname;
-						ns1blankspace.user.contactPerson = oResponse.contactperson;
-						ns1blankspace.user.contactBusiness = oResponse.contactbusiness;
-						ns1blankspace.user.contactBusinessText = oResponse.contactbusinesstext;
-						ns1blankspace.user.commonName = oResponse.firstname + ' ' + oResponse.surname;
-						ns1blankspace.user.email = oResponse.email;
-						ns1blankspace.user.systemAdmin = oResponse.systemadmin;
-						ns1blankspace.user.roles = oResponse.roles.rows;
-						ns1blankspace.user.site = oResponse.site;
-
-						ns1blankspace.spaceText = oResponse.spacename;
-						ns1blankspace.space = oResponse.space;
-						
-						ns1blankspace.unloadWarning = true;
-
-						ns1blankspace.setupShow = ns1blankspace.user.systemAdmin;
-
-						ns1blankspace.control.init();
-												
-						$('#ns1blankspaceSpaceText').html(ns1blankspace.spaceText);
-						$('#ns1blankspaceLogonName').html(ns1blankspace.user.logonName);
-
-						if (ns1blankspace.xhtml.viewContainer !== undefined)
+						if (oResponse !== undefined)
 						{
-							aHTML.push(ns1blankspace.xhtml.viewContainer);
-						}	
-						else
-						{	
-							aHTML.push('<div id="ns1blankspaceViewControlHomeContainer">' +
-											'<span id="ns1blankspaceViewControlHome">&nbsp;</span>' +
-											'<span id="ns1blankspaceViewControlHomeOptions">&nbsp;</span>' +
-											'</div>');
-											
-							aHTML.push('<div id="ns1blankspaceViewControlHistoryContainer">' +
-											'<span id="ns1blankspaceViewControlBack" >&nbsp;</span>' +
-											'<span id="ns1blankspaceViewControlRefresh">&nbsp;</span>' +
-											'<span id="ns1blankspaceViewControlForward">&nbsp;</span>' +
-											'</div>');				
-									
-							aHTML.push('<div id="ns1blankspaceViewControlViewContainer">' +
-											'<span id="ns1blankspaceViewControlView">&nbsp;</span>' +
-											'</div>');
-											
-							aHTML.push('<div id="ns1blankspaceViewControlSearchContainer">' +
-											'<input id="ns1blankspaceViewControlSearch">' +
-											'</div>');
-											
-							aHTML.push('<div id="ns1blankspaceViewControlSearchStatus"></div>');
-											
-							aHTML.push('<div id="ns1blankspaceViewControlNewContainer">' +
-											'<span id="ns1blankspaceViewControlNew">New</span>' +
-											'</div>');
-											
-							aHTML.push('<div id="ns1blankspaceViewControlActionContainer">' +
-											'<span id="ns1blankspaceViewControlAction" ></span>' +
-											'<span id="ns1blankspaceViewControlActionOptions">&nbsp;</span>' +
-											'</div>');
+							ns1blankspace.user.id = oResponse.user;
+							ns1blankspace.user.unrestricted = (oResponse.unrestrictedaccess == 'Y' || oResponse.unrestrictedaccess === undefined ? true : false);
+							ns1blankspace.user.space = oResponse.space;
+							ns1blankspace.user.spaceText = oResponse.spacename
+							ns1blankspace.user.logonName = oResponse.userlogonname;
+							ns1blankspace.user.contactPerson = oResponse.contactperson;
+							ns1blankspace.user.contactBusiness = oResponse.contactbusiness;
+							ns1blankspace.user.contactBusinessText = oResponse.contactbusinesstext;
+							ns1blankspace.user.commonName = oResponse.firstname + ' ' + oResponse.surname;
+							ns1blankspace.user.email = oResponse.email;
+							ns1blankspace.user.systemAdmin = oResponse.systemadmin;
+							ns1blankspace.user.roles = oResponse.roles.rows;
+							ns1blankspace.user.site = oResponse.site;
+
+							ns1blankspace.spaceText = oResponse.spacename;
+							ns1blankspace.space = oResponse.space;
 							
-							aHTML.push('<div id="ns1blankspaceViewControlActionStatus">&nbsp;</div>');
-							
-							if (ns1blankspace.setupShow) 
+							ns1blankspace.unloadWarning = true;
+
+							ns1blankspace.setupShow = ns1blankspace.user.systemAdmin;
+
+							ns1blankspace.control.init();
+													
+							$('#ns1blankspaceSpaceText').html(ns1blankspace.spaceText);
+							$('#ns1blankspaceLogonName').html(ns1blankspace.user.logonName);
+
+							if (ns1blankspace.xhtml.viewContainer !== undefined)
 							{
-								aHTML.push('<div id="ns1blankspaceViewControlSetupContainer">' +
-												'<input type="checkbox" id="ns1blankspaceViewControlSetup"/>' +
-												'<label for="ns1blankspaceViewControlSetup">&nbsp;</label>' +
+								aHTML.push(ns1blankspace.xhtml.viewContainer);
+							}	
+							else
+							{	
+								aHTML.push('<div id="ns1blankspaceViewControlHomeContainer">' +
+												'<span id="ns1blankspaceViewControlHome">&nbsp;</span>' +
+												'<span id="ns1blankspaceViewControlHomeOptions">&nbsp;</span>' +
 												'</div>');
-							}				
+												
+								aHTML.push('<div id="ns1blankspaceViewControlHistoryContainer">' +
+												'<span id="ns1blankspaceViewControlBack" >&nbsp;</span>' +
+												'<span id="ns1blankspaceViewControlRefresh">&nbsp;</span>' +
+												'<span id="ns1blankspaceViewControlForward">&nbsp;</span>' +
+												'</div>');				
+										
+								aHTML.push('<div id="ns1blankspaceViewControlViewContainer">' +
+												'<span id="ns1blankspaceViewControlView">&nbsp;</span>' +
+												'</div>');
+												
+								aHTML.push('<div id="ns1blankspaceViewControlSearchContainer">' +
+												'<input id="ns1blankspaceViewControlSearch">' +
+												'</div>');
+												
+								aHTML.push('<div id="ns1blankspaceViewControlSearchStatus"></div>');
+												
+								aHTML.push('<div id="ns1blankspaceViewControlNewContainer">' +
+												'<span id="ns1blankspaceViewControlNew">New</span>' +
+												'</div>');
+												
+								aHTML.push('<div id="ns1blankspaceViewControlActionContainer">' +
+												'<span id="ns1blankspaceViewControlAction" ></span>' +
+												'<span id="ns1blankspaceViewControlActionOptions">&nbsp;</span>' +
+												'</div>');
+								
+								aHTML.push('<div id="ns1blankspaceViewControlActionStatus">&nbsp;</div>');
+								
+								if (ns1blankspace.setupShow) 
+								{
+									aHTML.push('<div id="ns1blankspaceViewControlSetupContainer">' +
+													'<input type="checkbox" id="ns1blankspaceViewControlSetup"/>' +
+													'<label for="ns1blankspaceViewControlSetup">&nbsp;</label>' +
+													'</div>');
+								}				
+								
+								aHTML.push('<div id="ns1blankspaceViewControlHelpContainer">' + 
+												'<span id="ns1blankspaceViewControlHelp">&nbsp;</span>' +
+												'</div>');
+							}	
 							
-							aHTML.push('<div id="ns1blankspaceViewControlHelpContainer">' + 
-											'<span id="ns1blankspaceViewControlHelp">&nbsp;</span>' +
-											'</div>');
-						}	
-						
-						$('#ns1blankspaceViewControl').html(aHTML.join(''));
+							$('#ns1blankspaceViewControl').html(aHTML.join(''));
 
-						if (!ns1blankspace.setupShow) 
-						{
-							$('#ns1blankspaceViewControlActionStatus')
-								.css('width', '215px');
+							if (!ns1blankspace.setupShow) 
+							{
+								$('#ns1blankspaceViewControlActionStatus')
+									.css('width', '215px');
+							}
+
+							ns1blankspace.app.bind(oParam);
 						}
 
-						ns1blankspace.app.bind(oParam);
+						if (ns1blankspace.history.sendOnLogon)
+						{
+							$.ajax(ns1blankspace.history.sendOnLogon);
+						}					
+
+						if (ns1blankspace.option.returnToLast) 
+						{
+							ns1blankspace.history.view({instruction: 8})
+						}
+						else
+						{
+							ns1blankspace.app.showWhenLoaded('home');
+						}	
 					}	
 				},
 					
@@ -977,20 +994,6 @@ ns1blankspace.app =
 					{
 						$('#ns1blankspaceViewControlBrowse').remove();
 					}
-							
-					if (ns1blankspace.history.sendOnLogon)
-					{
-						$.ajax(ns1blankspace.history.sendOnLogon);
-					}					
-
-					if (ns1blankspace.option.returnToLast) 
-					{
-						ns1blankspace.history.view({instruction: 8})
-					}
-					else
-					{
-						ns1blankspace.app.showWhenLoaded('home');
-					}	
 				},
 
 	scriptLoaded:
