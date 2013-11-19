@@ -4327,7 +4327,8 @@ ns1blankspace.search.address =
 					var iMinimumLength = 1;
 					var iSource = ns1blankspace.data.searchSource.text;
 					
-					if (oParam) {
+					if (oParam) 
+					{
 						if (oParam.minimumLength) {iMinimumLength = oParam.minimumLength;}
 						if (oParam.source) {iSource = oParam.sourcel}
 						if (oParam.selected != undefined) {bSelected = oParam.selected;}
@@ -4339,59 +4340,76 @@ ns1blankspace.search.address =
 					{
 						var sElementReplaceID;
 						var bUpdateHTML = false;
+						var bUpperCase = ($('#' + ns1blankspace.xhtml.divID).attr('data-suburbcase') === 'upper');
 
-						$('#' + ns1blankspace.xhtml.divID).val($('#' + sXHTMLElementID).attr("data-suburb"));
+						$('#' + ns1blankspace.xhtml.divID).val(((bUpperCase) ? $('#' + sXHTMLElementID).attr("data-suburb").toUpperCase() : $('#' + sXHTMLElementID).attr("data-suburb")));
 						$('#' + ns1blankspace.xhtml.divID).attr('data-id', sXHTMLElementID);
 
-						if ($('#' + ns1blankspace.xhtml.divID).attr('data-stateElementID')) {
+						if ($('#' + ns1blankspace.xhtml.divID).attr('data-stateelementid')) 
+						{
 							sElementReplaceID = $('#' + ns1blankspace.xhtml.divID).attr('data-stateElementID');
 						}
-						else {
+						else 
+						{
 							sElementReplaceID = ns1blankspace.xhtml.divID.replace('Suburb', 'State');
 						}
-						if ($('#' + ns1blankspace.xhtml.divID).attr('data-stateUpdateHTML') || $('#' + ns1blankspace.xhtml.divID).attr('data-stateUpdateHTML') == 'true') {
+						if ($('#' + ns1blankspace.xhtml.divID).attr('data-stateupdatehtml') || $('#' + ns1blankspace.xhtml.divID).attr('data-stateUpdateHTML') == 'true') 
+						{
 							$('#' + sElementReplaceID).html($('#' + sXHTMLElementID).attr("data-state"));
 						}
-						else {
+						else 
+						{
 							$('#' + sElementReplaceID).val($('#' + sXHTMLElementID).attr("data-state"));
 						}
 
-						if ($('#' + ns1blankspace.xhtml.divID).attr('data-postcodeElementID')) {
+						if ($('#' + ns1blankspace.xhtml.divID).attr('data-postcodeelementid')) 
+						{
 							sElementReplaceID = $('#' + ns1blankspace.xhtml.divID).attr('data-postcodeElementID');
 						}
-						else {
+						else 
+						{
 							sElementReplaceID = ns1blankspace.xhtml.divID.replace('Suburb', 'PostCode');
 						}
-						if ($('#' + ns1blankspace.xhtml.divID).attr('data-postcodeUpdateHTML') || $('#' + ns1blankspace.xhtml.divID).attr('data-postcodeUpdateHTML') == 'true') {
+						if ($('#' + ns1blankspace.xhtml.divID).attr('data-postcodeupdatehtml') || $('#' + ns1blankspace.xhtml.divID).attr('data-postcodeUpdateHTML') == 'true') 
+						{
 							$('#' + sElementReplaceID).html($('#' + sXHTMLElementID).attr("data-postcode"));
 						}
-						else {
+						else 
+						{
 							$('#' + sElementReplaceID).val($('#' + sXHTMLElementID).attr("data-postcode"));
 						}
 
-						if ($('#' + ns1blankspace.xhtml.divID).attr('data-countryElementID')) {
+						if ($('#' + ns1blankspace.xhtml.divID).attr('data-countryelementid')) 
+						{
 							sElementReplaceID = $('#' + ns1blankspace.xhtml.divID).attr('data-countryElementID');
 						}
-						else {
+						else 
+						{
 							sElementReplaceID = ns1blankspace.xhtml.divID.replace('Suburb', 'Country');
 						}
-						if ($('#' + ns1blankspace.xhtml.divID).attr('data-countryUpdateHTML') || $('#' + ns1blankspace.xhtml.divID).attr('data-countryUpdateHTML') == 'true') {
+						if ($('#' + ns1blankspace.xhtml.divID).attr('data-countryupdatehtml') || $('#' + ns1blankspace.xhtml.divID).attr('data-countryUpdateHTML') == 'true') 
+						{
 							$('#' + sElementReplaceID).html('Australia');
 						}
-						else {
+						else 
+						{
 							$('#' + sElementReplaceID).val('Australia');
 						}
 
 						$(ns1blankspace.xhtml.container).hide();
+						if (oParam.onComplete) 
+						{
+							ns1blankspace.util.onComplete(oParam);
+						}
 					}
 					else
 					{
-						ns1blankspace.status.working();
 						ns1blankspace.container.position({xhtmlElementID: sXHTMLElementID});
 						sSearchText = $('#' + ns1blankspace.xhtml.divID).val();
 
 						if (sSearchText.length >= iMinimumLength || iSource === ns1blankspace.data.searchSource.all)
 						{
+							ns1blankspace.status.working();
 							$.ajax(
 							{
 								type: 'POST',
@@ -4412,16 +4430,19 @@ ns1blankspace.search.address =
 					var	iMaximumColumns = 1;
 					var sXHTMLElementID;
 							
-					if (oParam) {
+					if (oParam) 
+					{
 						if (oParam.xhtmlElementID) {sXHTMLElementID = oParam.xhtmlElementID;}
 					}
 
 					ns1blankspace.status.message('');
 
-					if (oResponse.data.rows.length === 0) {
+					if (oResponse.data.rows.length === 0) 
+					{
 						$(ns1blankspace.xhtml.container).hide();
 					}
-					else {
+					else 
+					{
 						
 						aHTML.push('<table class="ns1blankspaceSearchMedium" style="width:' +
 										$('#' + sXHTMLElementID).width() + 'px;">');
@@ -4432,8 +4453,8 @@ ns1blankspace.search.address =
 										
 							aHTML.push('<td class="ns1blankspaceSearch"' +
 											' id="ns1blankspaceAddressSearchSuburb-' + 
-												this.suburb.replace(/ /g,'') + '-' + 
-												this.state.replace(/ /g,'') + '-' + 
+												this.suburb.replace(/ /g,'') + 
+												this.state.replace(/ /g,'') + 
 												this.postcode.replace(/ /g,'') + '"' +
 											' data-suburb="' + this.suburb + '"' + 
 											' data-state="' + this.state + '"' + 
@@ -4442,8 +4463,8 @@ ns1blankspace.search.address =
 													
 							aHTML.push('<td class="ns1blankspaceSearch"' + 
 											' id="ns1blankspaceAddressSearchState' + 
-												this.suburb.replace(/ /g,'') + '-' + 
-												this.state.replace(/ /g,'') + '-' + 
+												this.suburb.replace(/ /g,'') + 
+												this.state.replace(/ /g,'') + 
 												this.postcode.replace(/ /g,'') + '"' +
 											' data-suburb="' + this.suburb + '"' + 
 											' data-state="' + this.state + '"' + 
@@ -4452,8 +4473,8 @@ ns1blankspace.search.address =
 							
 							aHTML.push('<td class="ns1blankspaceSearch"' +
 											' id="ns1blankspaceAddressSearchPostCode' + 
-												this.suburb.replace(/ /g,'') + '-' + 
-												this.state.replace(/ /g,'') + '-' + 
+												this.suburb.replace(/ /g,'') + 
+												this.state.replace(/ /g,'') + 
 												this.postcode.replace(/ /g,'') + '"' +
 											' data-suburb="' + this.suburb + '"' + 
 											' data-state="' + this.state + '"' + 
@@ -4470,12 +4491,19 @@ ns1blankspace.search.address =
 						
 						$('td.ns1blankspaceSearch').click(function(event)
 						{
+							ns1blankspace.data.searchClicked = true;
+							var oParam = {selected: true, 
+										  onComplete: ((ns1blankspace.xhtml.action && ns1blankspace.xhtml.action != '') ? ns1blankspace.xhtml.action : undefined),
+										  xhtmlInputElementID: sXHTMLElementID
+										}
+							ns1blankspace.xhtml.action = '';
 							$(ns1blankspace.xhtml.container).hide(200);
-							ns1blankspace.search.address.show(event.target.id, {selected: true});
+							ns1blankspace.search.address.show(event.target.id, oParam);
 						});
 					}				
 				}
 }				
+
 
 ns1blankspace.search.email =
 {
@@ -4629,7 +4657,7 @@ ns1blankspace.search.email =
 							{
 								html: aHTML.join(''),
 								more: (oResponse.morerows === 'true')
-							})	
+							});;	
 						);
 					
 						$(ns1blankspace.xhtml.container).show(ns1blankspace.option.showSpeedOptions);
@@ -4650,7 +4678,7 @@ ns1blankspace.search.email =
 							xhtmlElementID: sElementID,
 							type: 'JSON',
 							functionRow: ns1blankspace.search.email.row
-						}))	
+						}));
 					}	
 							
 				},
