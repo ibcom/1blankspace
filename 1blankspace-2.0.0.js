@@ -4657,7 +4657,7 @@ ns1blankspace.search.email =
 							{
 								html: aHTML.join(''),
 								more: (oResponse.morerows === 'true')
-							});;	
+							})
 						);
 					
 						$(ns1blankspace.xhtml.container).show(ns1blankspace.option.showSpeedOptions);
