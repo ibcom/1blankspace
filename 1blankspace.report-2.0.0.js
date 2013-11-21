@@ -1349,11 +1349,11 @@ ns1blankspace.report =
 											{
 												$.each(oSearchParameters.filters, function()
 												{
+													// Changed includeEval so no longer need to eval() 
 													var bInclude = true;
 													if (this.includeEval != undefined)
 													{
-														if (!eval(this.includeEval))
-														{bInclude = false}
+														bInclude = this.includeEval((this.includeParameters != undefined) ? this.includeParameters : {});
 													}
 													
 													if (bInclude)
@@ -1875,16 +1875,31 @@ ns1blankspace.report =
 				},
 
 	fieldIncluded: 
-				function (sFieldList)
+				function (oParam)
 				{
-					var aFields = sFieldList.split('-');
+					// Checks if a field (or fields) is included in the report. Hyphen separated list
+					// Formats for oParam.fields can be either the entire field name (ie: 'contactperson.contactbusiness.tradename') or
+					// a wildcard (ie: contactperson.contactbusiness.*)
+
+					var sFieldList = '';
+					var aFields = [];
 					var bIncluded = false;
+					var aFieldsIncluded = $.map($("input.ns1blankspaceReportInclude:checked"), function(a) {return $(a).attr('data-name')});
+
+					if (oParam) 
+					{
+						if (oParam.fields) {sFieldList = oParam.fields}
+					}
+					aFields = sFieldList.split('-');
 					
+					// Loop through list of fields to check and see if included. Account for wildcards
 					$.each(aFields, function()
 					{
-						var sField = this.replace(/\./g,'_');
-						if ($('#ns1blankspaceReportCheck_include-' + sField).attr('checked'))
-						{
+						var sFieldToSearch = (this.indexOf('*') > -1) ? this.substr(0, this.length - 1) : this;
+						if ($.grep(aFieldsIncluded, function(a) 
+													{ return a.substr(0, sFieldToSearch.length) === sFieldToSearch}
+							).length > 0)
+						{	
 							bIncluded = true;
 							return false;
 						}
