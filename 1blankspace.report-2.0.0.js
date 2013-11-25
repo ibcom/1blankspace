@@ -839,25 +839,33 @@ ns1blankspace.report =
 									if (iSelectAttributes >= 0)
 									{	
 										bSelect = true;
-										if (ns1blankspace.report.selectAttributes[iSelectAttributes].addClass != undefined) {
-												sMoreAttributes += ' data-selectClass="' + ns1blankspace.report.selectAttributes[iSelectAttributes].addClass + '"';	
-										}
-										if (ns1blankspace.report.selectAttributes[iSelectAttributes].onDemandColumns != undefined) {
-												sMoreAttributes += ' data-columns="' + ns1blankspace.report.selectAttributes[iSelectAttributes].onDemandColumns + '"';	
-										}
+										if (ns1blankspace.report.selectAttributes[iSelectAttributes].addClass) 
+										{	sMoreAttributes += ' data-selectClass="' + ns1blankspace.report.selectAttributes[iSelectAttributes].addClass + '"';}
 
-										if (sMoreAttributes != "") {
-												sMoreAttributes += ' style="width:200px"';}
+										if (ns1blankspace.report.selectAttributes[iSelectAttributes].columns)
+										{	sMoreAttributes += ' data-columns="' + ns1blankspace.report.selectAttributes[iSelectAttributes].columns + '"';	}
+
+										if (ns1blankspace.report.selectAttributes[iSelectAttributes].click)
+										{	sMoreAttributes += ' data-click="' + ns1blankspace.report.selectAttributes[iSelectAttributes].click + '"';	}
+
+										if (ns1blankspace.report.selectAttributes[iSelectAttributes].methodFilter)
+										{	sMoreAttributes += ' data-methodFilter="' + ns1blankspace.report.selectAttributes[iSelectAttributes].methodFilter + '"';	}
+
+										if (sMoreAttributes != "") 
+										{	sMoreAttributes += ' style="width:200px"';}
 									}
 									else
 									{	
 										if (iSelectableIndex != -1)
 										{
-											if (aSelectableParameters[iSelectableIndex].onDemandColumns != undefined) 
-											{	sMoreAttributes += ' data-columns="' + aSelectableParameters[iSelectableIndex].onDemandColumns + '"'; }
+											if (aSelectableParameters[iSelectableIndex].columns != undefined) 
+											{	sMoreAttributes += ' data-columns="' + aSelectableParameters[iSelectableIndex].columns + '"'; }
 
-											if (aSelectableParameters[iSelectableIndex].onDemandClick != undefined) 
-											{	sMoreAttributes += ' data-onDemandClick="' + aSelectableParameters[iSelectableIndex].onDemandClick + '"'; }
+											if (aSelectableParameters[iSelectableIndex].click != undefined) 
+											{	sMoreAttributes += ' data-click="' + aSelectableParameters[iSelectableIndex].click + '"'; }
+											
+											if (aSelectableParameters[iSelectableIndex].methodFilter != undefined) 
+											{	sMoreAttributes += ' data-methodFilter="' + aSelectableParameters[iSelectableIndex].methodFilter + '"'; }
 											
 											if (aSelectableParameters[iSelectableIndex].searchmethod != undefined)
 											{	
@@ -1098,8 +1106,6 @@ ns1blankspace.report =
 							
 							$('#' + sXHTMLElementID).html(sHTML);
 							$('#' + sXHTMLElementID).attr('data-code', $('#' + sID).attr('data-code'));
-							//$('#' + sXHTMLElementID).attr('data-dataType', sDataType);
-							//$('#' + sXHTMLElementID).attr('data-inputType', sInputType);
 							$('#' + sXHTMLElementID).attr('data-inputCount', $('#' + sID).attr('data-inputcount'));
 							
 							$(ns1blankspace.xhtml.container).hide();
@@ -1111,7 +1117,8 @@ ns1blankspace.report =
 							var sInputType = $('#' + sXHTMLElementID).attr('data-inputType');
 							var sSelectClass = $('#' + sXHTMLElementID).attr('data-selectClass');
 							var sOnDemandColumns = $('#' + sXHTMLElementID).attr('data-columns');
-							var sOnDemandClick = $('#' + sXHTMLElementID).attr('data-onDemandClick');
+							var sOnDemandClick = $('#' + sXHTMLElementID).attr('data-click');
+							var sOnDemandFilter = $('#' + sXHTMLElementID).attr('data-methodFilter');
 							var sSearchRelatedField = $('#' + sXHTMLElementID).attr('data-searchrelatedfield');
 								
 							ns1blankspace.report.setInput(
@@ -1126,6 +1133,7 @@ ns1blankspace.report =
 								onDemandColumns: sOnDemandColumns,
 								comparisonID: sID,
 								onDemandClick: sOnDemandClick,
+								onDemandFilter: sOnDemandFilter,
 								searchrelatedfield: sSearchRelatedField
 							});
 							
@@ -1149,6 +1157,7 @@ ns1blankspace.report =
 					var sComparisonID;
 					var sOnDemandClick;
 					var sSearchRelatedField;
+					var sOnDemandFilter;
 					
 					if (oParam != undefined)
 					{
@@ -1162,6 +1171,7 @@ ns1blankspace.report =
 						if (oParam.onDemandColumns != undefined) {sOnDemandColumns = oParam.onDemandColumns}		
 						if (oParam.comparisonID != undefined) {sComparisonID = oParam.comparisonID}		
 						if (oParam.onDemandClick != undefined) {sOnDemandClick = oParam.onDemandClick}		
+						if (oParam.onDemandFilter != undefined) {sOnDemandFilter = oParam.onDemandFilter}		
 						if (oParam.searchmethod != undefined) {sSearchMethod = oParam.searchmethod}		
 						if (oParam.searchendpoint != undefined) {sSearchEndPoint = oParam.searchendpoint}		
 						if (oParam.searchrelatedfield != undefined) {sSearchRelatedField = oParam.searchrelatedfield}		
@@ -1222,6 +1232,16 @@ ns1blankspace.report =
 										{	aHTML.push('ns1blankspaceSelect')}
 										
 										aHTML.push('"');
+
+										if (sOnDemandClick != undefined)
+										{
+											aHTML.push(' data-click="' + sOnDemandClick + '"')
+										}
+										
+										if (sOnDemandFilter != undefined)
+										{
+											aHTML.push(' data-methodFilter="' + sOnDemandFilter + '"')
+										}
 										
 										if (sOnDemandColumns != undefined)
 										{	aHTML.push(' data-columns="' + sOnDemandColumns + '"')	}
