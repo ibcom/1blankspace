@@ -389,7 +389,8 @@ ns1blankspace.views =
 		endpoint: "ACTION",
 		show: true,
 		group: 2,
-		type: 1
+		type: 1,
+		subNote: '& calendar'
 	},
 	{
 		title: "Documents",
@@ -441,7 +442,8 @@ ns1blankspace.views =
 		endpoint: "FINANCIAL",
 		show: true,
 		group: 5,
-		type: 1
+		type: 1,
+		subNote: 'P&L, Debtors..'
 	},
 	{
 		title: "Bank Accounts",
@@ -450,7 +452,8 @@ ns1blankspace.views =
 		endpoint: "FINANCIAL_BANK_ACCOUNT",
 		show: true,
 		group: 5,
-		type: 1
+		type: 1,
+		subNote: 'Reconcile..'
 	},
 	{
 		title: "Invoices",
@@ -790,6 +793,34 @@ ns1blankspace.views =
 	}
 ]
 
+ns1blankspace.viewGroups =
+[
+	{
+		id: 1,
+		name: 'Contact'
+	},
+	{
+		id: 2,
+		name: 'Project'
+	},
+	{
+		id: 3,
+		name: 'Document'
+	},
+	{
+		id: 4,
+		name: 'Product'
+	},
+	{
+		id: 5,
+		name: 'Financial'
+	},
+	{
+		id: 6,
+		name: ''
+	}
+]
+
 ns1blankspace.control = 
 {
 	init: 		function (oParam, oResponse)
@@ -942,348 +973,58 @@ ns1blankspace.control =
 	views:		{					
 					show: 			function ()
 									{
-										var aHTML = [];
-										var oViewport;
-
 										if (ns1blankspace.xhtml.viewControl == undefined)
 										{
+											var aHTML = [];
+											
 											aHTML.push('<table class="ns1blankspaceViewControlContainer">');
 											aHTML.push('<tr class="ns1blankspaceViewControl">');
 
-											var aHTMLViewport = [];
-
-											var oViewport = $.grep(ns1blankspace.views, function (a) {return a.title == 'People';})[0];
-											if (oViewport ? oViewport.show : false)
-											{		
-												aHTMLViewport.push('<tr class="ns1blankspaceViewControl">' +
-																		'<td class="ns1blankspaceViewControl">' +
-																		'<span id="ns1blankspaceViewControl_contactPerson" class="ns1blankspaceViewControl">' + 
-																		'People</span></td></tr>');
-											}			
-
-											var oViewport = $.grep(ns1blankspace.views, function (a) {return a.title == 'Businesses';})[0];	
-											if (oViewport ? oViewport.show : false)
-											{	
-												aHTMLViewport.push('<tr class="ns1blankspaceViewControl">' +
-																		'<td class="ns1blankspaceViewControl">' +
-																		'<span id="ns1blankspaceViewControl_contactBusiness" class="ns1blankspaceViewControl">' + 
-																		'Businesses</span></td></tr>');
-											}	
-
-											var oViewport = $.grep(ns1blankspace.views, function (a) {return a.title == 'Opportunities';})[0];	
-											if (oViewport ? oViewport.show : false)
-											{	
-													aHTMLViewport.push('<tr class="ns1blankspaceViewControl">' +	
-																			'<td class="ns1blankspaceViewControl">' +
-																			'<span id="ns1blankspaceViewControl_opportunity" class="ns1blankspaceViewControl">' + 
-																			'Opportunities</span></td></tr>');	
-											}
-											
-											var oViewport = $.grep(ns1blankspace.views, function (a) {return a.title == 'Email';})[0];		
-											if (oViewport ? oViewport.show : false)
-											{	
-												aHTMLViewport.push('<tr class="ns1blankspaceViewControl">' +	
-																		'<td class="ns1blankspaceViewControl">' +
-																		'<span id="ns1blankspaceViewControl_messaging_imap" class="ns1blankspaceViewControl">' + 
-																		'Email</span></td></tr>');
-											}
-											
-											var oViewport = $.grep(ns1blankspace.views, function (a) {return a.title == 'Conversations';})[0];	
-											if (oViewport ? oViewport.show : false)
+											$.each(ns1blankspace.viewGroups, function(i, v)
 											{
-												aHTMLViewport.push('<tr class="ns1blankspaceViewControl">' +	
-																		'<td class="ns1blankspaceViewControl">' +
-																		'<span id="ns1blankspaceViewControl_messaging_conversation" class="ns1blankspaceViewControl">' + 
-																		'Conversations</span></td></tr>');	
-											}
-										
-											if (aHTMLViewport.length > 0)
-											{
-												aHTML.push('<td class="ns1blankspaceViewControlColumn">');
-												aHTML.push('<table class="ns1blankspaceViewControlColumn">');
+												var oViewGroup = $.grep(ns1blankspace.views, function (a) {return a.group == v.id && a.show == true && a.type == 1;});
 
-												aHTML.push('<tr><td>' +
-																'<div id="ns1blankspaceViewContact" class="ns1blankspaceViewImage"></div>' +
-																'</td></tr>');	
-											
-												aHTML.push(aHTMLViewport.join(''))
+												if (oViewGroup.length > 0)
+												{
+													oViewGroup.sort(ns1blankspace.util.sortBy('order'))
 
-												aHTML.push('</table>');
-												aHTML.push('</td>');
-											}	
+													aHTML.push('<td class="ns1blankspaceViewControlColumn">');
+													aHTML.push('<table class="ns1blankspaceViewControlColumn">');
 
-											var aHTMLViewport = [];
+													aHTML.push('<tr><td><div id="ns1blankspaceView' + v.name + '" class="ns1blankspaceViewImage"></div>' +
+																	'</td></tr>');	
 
-											var oViewport = $.grep(ns1blankspace.views, function (a) {return a.title == 'Projects';})[0];
-											if (oViewport ? oViewport.show : false)
-											{		
-												aHTMLViewport.push('<tr class="ns1blankspaceViewControl">' +
-																		'<td class="ns1blankspaceViewControl">' +
-																		'<span id="ns1blankspaceViewControl_project" class="ns1blankspaceViewControl">' + 
-																		'Projects</span></td></tr>');
-											}		
+													$.each(oViewGroup, function(j, k)
+													{
+														aHTML.push('<tr class="ns1blankspaceViewControl">' +
+																	'<td class="ns1blankspaceViewControl">' +
+																	'<span id="ns1blankspaceViewControl_' + (k.parentnamespace!==undefined?k.parentnamespace + '_':'') + k.namespace +
+																	'" class="ns1blankspaceViewControl">' + k.title + '</span>');
 
-											var oViewport = $.grep(ns1blankspace.views, function (a) {return a.title == 'Project Tasks';})[0];
-											if (oViewport ? oViewport.show : false)
-											{		
-												aHTMLViewport.push('<tr class="ns1blankspaceViewControl">' +
-																		'<td class="ns1blankspaceViewControl">' +
-																		'<span id="ns1blankspaceViewControl_projectTask" class="ns1blankspaceViewControl">' + 
-																		'Project Tasks</span></td></tr>');
-											}		
+														if (k.subNote !== undefined)
+														{	
+															aHTML.push('<br /><div class="ns1blankspaceSubNote" style="margin-top:2px;">' + 
+																	 k.subNote + '</div>');
+														}	
 
-											var oViewport = $.grep(ns1blankspace.views, function (a) {return a.title == 'Actions';})[0];
-											if (oViewport ? oViewport.show : false)
-											{		
-												aHTMLViewport.push('<tr class="ns1blankspaceViewControl">' +				
-																		'<td class="ns1blankspaceViewControl">' +
-																		'<span id="ns1blankspaceViewControl_action" class="ns1blankspaceViewControl">' +
-																		'Actions</span>' +
-																		'<br /><div class="ns1blankspaceSubNote" style="margin-top:2px;">' + 
-																		'& calendar</div>' +
-																		'</td></tr>');
-											}			
+														aHTML.push('</td></tr>');
+													});
 
-											if (aHTMLViewport.length > 0)
-											{
-												aHTML.push('<td class="ns1blankspaceViewControlColumn">');
-												aHTML.push('<table class="ns1blankspaceViewControlColumn">');
-
-												aHTML.push('<tr><td>' +
-																'<div id="ns1blankspaceViewProject" class="ns1blankspaceViewImage"></div>' +
-																'</td></tr>');
-						
-												aHTML.push(aHTMLViewport.join(''))
-
-												aHTML.push('</table>');
-												aHTML.push('</td>');
-											}	
-														
-											var aHTMLViewport = [];
-
-											var oViewport = $.grep(ns1blankspace.views, function (a) {return a.title == 'Documents';})[0];
-											if (oViewport ? oViewport.show : false)
-											{		
-												aHTMLViewport.push('<tr class="ns1blankspaceViewControl">' +
-																		'<td class="ns1blankspaceViewControl">' +
-																		'<span id="ns1blankspaceViewControl_document" class="ns1blankspaceViewControl">' +
-																		'Documents</span></td></tr>');
-											}		
-
-											var oViewport = $.grep(ns1blankspace.views, function (a) {return a.title == 'News';})[0];
-											if (oViewport ? oViewport.show : false)
-											{		
-												aHTMLViewport.push('<tr class="ns1blankspaceViewControl">' +
-																		'<td class="ns1blankspaceViewControl">' +
-																		'<span id="ns1blankspaceViewControl_news" class="ns1blankspaceViewControl">' +
-																		'News</span></td></tr>');
-											}		
-											
-											var oViewport = $.grep(ns1blankspace.views, function (a) {return a.title == 'Events';})[0];
-											if (oViewport ? oViewport.show : false)
-											{		
-												aHTMLViewport.push('<tr class="ns1blankspaceViewControl">' +
-																		'<td class="ns1blankspaceViewControl">' +
-																		'<span id="ns1blankspaceViewControl_event" class="ns1blankspaceViewControl">' +
-																		'Events</span></td></tr>');
-											}	
-
-											if (aHTMLViewport.length > 0)
-											{
-												aHTML.push('<td class="ns1blankspaceViewControlColumn">');
-												aHTML.push('<table class="ns1blankspaceViewControlColumn">');
-
-												aHTML.push('<tr><td>' +
-																'<div id="ns1blankspaceViewDocument" class="ns1blankspaceViewImage"></div>'+
-																'</td></tr>');
-
-												aHTML.push(aHTMLViewport.join(''))
-
-												aHTML.push('</table>');
-												aHTML.push('</td>');
-											}	
-											
-											var aHTMLViewport = [];
-
-											var oViewport = $.grep(ns1blankspace.views, function (a) {return a.title == 'Products';})[0];
-											if (oViewport ? oViewport.show : false)
-											{		
-												aHTMLViewport.push('<tr class="ns1blankspaceViewControl">' +
-																		'<td class="ns1blankspaceViewControl">' +
-																		'<span id="ns1blankspaceViewControl_product" class="ns1blankspaceViewControl">' +
-																		'Products</span>' +
-																		'</td></tr>');
-											}		
-											
-											var oViewport = $.grep(ns1blankspace.views, function (a) {return a.title == 'Orders';})[0];
-											if (oViewport ? oViewport.show : false)
-											{		
-												aHTMLViewport.push('<tr class="ns1blankspaceViewControl">' +
-																		'<td class="ns1blankspaceViewControl">' +
-																		'<span id="ns1blankspaceViewControl_order" class="ns1blankspaceViewControl">' +
-																		'Orders</span></td></tr>');
-											}	
-
-											if (aHTMLViewport.length > 0)
-											{
-												aHTML.push('<td class="ns1blankspaceViewControlColumn">');
-												aHTML.push('<table class="ns1blankspaceViewControlColumn">');
-
-												aHTML.push('<tr><td>' +
-																'<div id="ns1blankspaceViewProduct" class="ns1blankspaceViewImage"></div>' +
-																'</td></tr>');
-
-												aHTML.push(aHTMLViewport.join(''))
-
-												aHTML.push('</table>');
-												aHTML.push('</td>');
-											}	
-
-											var aHTMLViewport = [];
-
-											var oViewport = $.grep(ns1blankspace.views, function (a) {return a.title == 'Financials';})[0];
-											if (oViewport ? oViewport.show : false)
-											{		
-												aHTMLViewport.push('<tr class="ns1blankspaceViewControl">' +
-																		'<td class="ns1blankspaceViewControl">' +
-																		'<span id="ns1blankspaceViewControl_financial" class="ns1blankspaceViewControl">' +
-																		'Financials<br /><div class="ns1blankspaceSubNote" style="margin-top:2px;">' + 
-																		'P&L, Debtors..</div></span></td></tr>');
-											}		
-
-											var oViewport = $.grep(ns1blankspace.views, function (a) {return a.title == 'Bank Accounts';})[0];
-											if (oViewport ? oViewport.show : false)
-											{		
-												aHTMLViewport.push('<tr class="ns1blankspaceViewControl">' +
-																		'<td class="ns1blankspaceViewControl">' +
-																		'<span id="ns1blankspaceViewControl_financial_bankAccount" class="ns1blankspaceViewControl">' +
-																		'Bank Accounts<br /><div class="ns1blankspaceSubNote" style="margin-top:2px;">' + 
-																		'Reconcile..</div></span></td></tr>');
-											}	
-											
-											var oViewport = $.grep(ns1blankspace.views, function (a) {return a.title == 'Invoices';})[0];
-											if (oViewport ? oViewport.show : false)
-											{		
-												aHTMLViewport.push('<tr class="ns1blankspaceViewControl">' +
-																		'<td class="ns1blankspaceViewControl">' +
-																		'<span id="ns1blankspaceViewControl_financial_invoice" class="ns1blankspaceViewControl">' +
-																		'Invoices</span></td></tr>');
-											}
-
-											var oViewport = $.grep(ns1blankspace.views, function (a) {return a.title == 'Expenses';})[0];
-											if (oViewport ? oViewport.show : false)
-											{		
-												aHTMLViewport.push('<tr class="ns1blankspaceViewControl">' +
-																		'<td class="ns1blankspaceViewControl">' +
-																		'<span id="ns1blankspaceViewControl_financial_expense" class="ns1blankspaceViewControl">' +
-																		'Expenses</span></td></tr>');
-											}
-
-											var oViewport = $.grep(ns1blankspace.views, function (a) {return a.title == 'Receipts';})[0];
-											if (oViewport ? oViewport.show : false)
-											{		
-												aHTMLViewport.push('<tr class="ns1blankspaceViewControl">' +
-																		'<td class="ns1blankspaceViewControl">' +
-																		'<span id="ns1blankspaceViewControl_financial_receipt" class="ns1blankspaceViewControl">' +
-																		'Receipts</span></td></tr>');
-											}	
-
-											var oViewport = $.grep(ns1blankspace.views, function (a) {return a.title == 'Payments';})[0];
-											if (oViewport ? oViewport.show : false)
-											{		
-												aHTMLViewport.push('<tr class="ns1blankspaceViewControl">' +
-																		'<td class="ns1blankspaceViewControl">' +
-																		'<span id="ns1blankspaceViewControl_financial_payment" class="ns1blankspaceViewControl">' +
-																		'Payments</span></td></tr>');
-											}	
-
-											var oViewport = $.grep(ns1blankspace.views, function (a) {return a.title == 'Credits';})[0];
-											if (oViewport ? oViewport.show : false)
-											{		
-												aHTMLViewport.push('<tr class="ns1blankspaceViewControl">' +
-																		'<td class="ns1blankspaceViewControl">' +
-																		'<span id="ns1blankspaceViewControl_financial_credit" class="ns1blankspaceViewControl">' +
-																		'Credits</span></td></tr>');
-											}	
-
-											if (aHTMLViewport.length > 0)
-											{
-												aHTML.push('<td class="ns1blankspaceViewControlColumn">');
-												aHTML.push('<table class="ns1blankspaceViewControlColumn">');
-
-												aHTML.push('<tr><td>' +
-																'<div id="ns1blankspaceViewFinancial" class="ns1blankspaceViewImage"></div>' +
-																'</td></tr>');			
-											
-												aHTML.push(aHTMLViewport.join(''))
-
-												aHTML.push('</table>');
-												aHTML.push('</td>');
-											}	
-
-											var aHTMLViewport = [];
-
-											var oViewport = $.grep(ns1blankspace.views, function (a) {return a.title == 'Payroll';})[0];
-											if (oViewport ? oViewport.show : false)
-											{		
-												aHTMLViewport.push('<tr class="ns1blankspaceViewControl">' +
-																		'<td class="ns1blankspaceViewControl">' +
-																		'<span id="ns1blankspaceViewControl_financial_payroll" class="ns1blankspaceViewControl">' +
-																		'Payroll</span></td></tr>');
-											}	
-
-											var oViewport = $.grep(ns1blankspace.views, function (a) {return a.title == 'Tax';})[0];
-											if (oViewport ? oViewport.show : false)
-											{		
-												aHTMLViewport.push('<tr class="ns1blankspaceViewControl">' +
-																		'<td class="ns1blankspaceViewControl">' +
-																		'<span id="ns1blankspaceViewControl_financial_tax" class="ns1blankspaceViewControl">' +
-																		'Tax&nbsp;(BAS)</span></td></tr>');
-											}
-
-											var oViewport = $.grep(ns1blankspace.views, function (a) {return a.title == 'Journals';})[0];
-											if (oViewport ? oViewport.show : false)
-											{		
-												aHTMLViewport.push('<tr class="ns1blankspaceViewControl">' +
-																		'<td class="ns1blankspaceViewControl">' +
-																		'<span id="ns1blankspaceViewControl_financial_journal" class="ns1blankspaceViewControl">' +
-																		'Journals</span></td></tr>');
-											}	
-	
-											var oViewport = $.grep(ns1blankspace.views, function (a) {return a.title == 'Structures' && a.type == 1;})[0];
-											if (oViewport ? oViewport.show : false)
-											{		
-												aHTMLViewport.push('<tr class="ns1blankspaceViewControl">' +
-																		'<td class="ns1blankspaceViewControl">' +
-																		'<span id="ns1blankspaceViewControl_structure" class="ns1blankspaceViewControl">' +
-																		'Structures</span></td></tr>');
-											}	
-
-											if (aHTMLViewport.length > 0)
-											{
-												aHTML.push('<td class="ns1blankspaceViewControlColumn">');
-												aHTML.push('<table class="ns1blankspaceViewControlColumn">');
-
-												aHTML.push('<tr><td>' +
-																'<div id="ns1blankspaceViewReportX" class="ns1blankspaceViewImage"></div>' +
-																'</td></tr>');		
-											
-												aHTML.push(aHTMLViewport.join(''))
-
-												aHTML.push('</table>');
-												aHTML.push('</td>');
-											}	
+													aHTML.push('</table>');
+													aHTML.push('</td>');
+												}	
+											});
 
 											aHTML.push('</tr>');
 
 											aHTML.push('<tr class="ns1blankspaceViewControl">');
 
-											aHTML.push('<td class="ns1blankspaceViewControl" colspan=6 style="text-align: right; color: #999999; font-size:0.825em; padding-top:6px;">' +
+											aHTML.push('<td class="ns1blankspaceViewControl" colspan=' + ns1blankspace.viewGroups.length + ' style="text-align: right; color: #999999; font-size:0.825em; padding-top:6px;">' +
 															'<span id="ns1blankspaceViewControl_report" class="ns1blankspaceViewControl">' +
 															'Search... report, export, update, email & SMS</span></td>');
 
 											aHTML.push('</tr></table>');
-
+											
 											ns1blankspace.xhtml.viewControl = aHTML.join('');
 										}
 
