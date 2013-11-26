@@ -157,7 +157,8 @@ ns1blankspace.contactBusiness =
 															',webaddress,area,areatext,' +
 															'streetaddress1,streetaddress2,streetsuburb,streetpostcode,streetstate,streetcountry' + 
 															',mailingaddress1,mailingaddress2,mailingsuburb,mailingpostcode,mailingstate,mailingcountry,' +
-															'notes,primarycontactperson,modifieddate');
+															'notes,primarycontactperson,modifieddate,' +
+															'directdebitaccountname,directdebitaccountnumber,directdebitbank,directdebitbranchnumber');
 
 										oSearch.addField(ns1blankspace.option.auditFields);
 										
@@ -310,15 +311,12 @@ ns1blankspace.contactBusiness =
 						aHTML.push('</table>');					
 					
 						aHTML.push('<table class="ns1blankspaceControl">');
-					
 						aHTML.push('<tr><td id="ns1blankspaceControlGroups" class="ns1blankspaceControl">Groups</td></tr>');
-											
+						aHTML.push('<tr><td id="ns1blankspaceControlPeople" class="ns1blankspaceControl">People</td></tr>');
 						aHTML.push('</table>');
 
 						aHTML.push('<table class="ns1blankspaceControl">');
-					
-						aHTML.push('<tr><td id="ns1blankspaceControlPeople" class="ns1blankspaceControl">People</td></tr>');
-											
+						aHTML.push('<tr><td id="ns1blankspaceControlFinancial" class="ns1blankspaceControl">Financials</td></tr>');
 						aHTML.push('</table>');		
 					
 						aHTML.push('<table class="ns1blankspaceControl">');
@@ -339,6 +337,7 @@ ns1blankspace.contactBusiness =
 					aHTML.push('<div id="ns1blankspaceMainAddress" class="ns1blankspaceControlMain"></div>');
 					aHTML.push('<div id="ns1blankspaceMainGroups" class="ns1blankspaceControlMain"></div>');
 					aHTML.push('<div id="ns1blankspaceMainPeople" class="ns1blankspaceControlMain"></div>');
+					aHTML.push('<div id="ns1blankspaceMainFinancials" class="ns1blankspaceControlMain"></div>');
 					aHTML.push('<div id="ns1blankspaceMainActions" class="ns1blankspaceControlMain"></div>');
 					aHTML.push('<div id="ns1blankspaceMainAttachments" class="ns1blankspaceControlMain"></div>');
 					
@@ -373,6 +372,12 @@ ns1blankspace.contactBusiness =
 					{
 						ns1blankspace.show({selector: '#ns1blankspaceMainPeople', refresh: true});
 						ns1blankspace.contactBusiness.people.show();
+					});
+
+					$('#ns1blankspaceControlFinancial').click(function(event)
+					{
+						ns1blankspace.show({selector: '#ns1blankspaceMainFinancials', refresh: true});
+						ns1blankspace.contactBusiness.financials();
 					});
 					
 					$('#ns1blankspaceControlActions').click(function(event)
@@ -951,6 +956,67 @@ ns1blankspace.contactBusiness =
 					}	
 				},
 
+	financials: function ()
+				{
+					var aHTML = [];
+					
+					if ($('#ns1blankspaceMainFinancials').attr('data-loading') == '1')
+					{
+						$('#ns1blankspaceMainFinancials').attr('data-loading', '');
+						
+						aHTML.push('<table class="ns1blankspaceContainer">');
+						aHTML.push('<tr class="ns1blankspaceContainer">' +
+										'<td id="ns1blankspaceFinancialsColumn1" class="ns1blankspaceColumn1"></td>' +
+										'<td id="ns1blankspaceFinancialsColumn2" class="ns1blankspaceColumn2"></td>' +
+										'</tr>');
+						aHTML.push('</table>');					
+						
+						$('#ns1blankspaceMainFinancials').html(aHTML.join(''));
+						
+						var aHTML = [];
+						
+						aHTML.push('<table class="ns1blankspace">');
+						
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
+										'Account Name' +
+										'</td></tr>' +
+										'<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceText">' +
+										'<input id="ns1blankspaceFinancialsAccountName" class="ns1blankspaceText">' +
+										'</td></tr>');
+
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
+										'BSB' +
+										'</td></tr>' +
+										'<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceText">' +
+										'<input id="ns1blankspaceFinancialsBSB" class="ns1blankspaceText">' +
+										'</td></tr>');	
+
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
+										'Account Number' +
+										'</td></tr>' +
+										'<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceText">' +
+										'<input id="ns1blankspaceFinancialsAccountNumber" class="ns1blankspaceText">' +
+										'</td></tr>');											
+
+						aHTML.push('</table>');					
+						
+						$('#ns1blankspaceFinancialsColumn1').html(aHTML.join(''));
+						
+						if (ns1blankspace.objectContextData != undefined)
+						{
+							$('#ns1blankspaceFinancialsBSB').val(ns1blankspace.objectContextData.directdebitbranchnumber);
+							$('#ns1blankspaceFinancialsAccountNumber').val(ns1blankspace.objectContextData.directdebitaccountnumber);
+							$('#ns1blankspaceFinancialsAccountName').val(ns1blankspace.objectContextData.directdebitaccountname);
+						}
+					}	
+				},			
+
 	save: 		{
 					send: 		function ()
 								{
@@ -991,6 +1057,13 @@ ns1blankspace.contactBusiness =
 										sData += '&mailingpostcode=' + ns1blankspace.util.fs($('#ns1blankspaceAddressMailingPostCode').val());
 										sData += '&mailingcountry=' + ns1blankspace.util.fs($('#ns1blankspaceAddressMailingCountry').val());
 									}
+
+									if ($('#ns1blankspaceMainFinancials').html() != '')
+									{
+										sData += '&directdebitbranchnumber=' + ns1blankspace.util.fs($('#ns1blankspaceFinancialsBSB').val());
+										sData += '&directdebitaccountnumber=' + ns1blankspace.util.fs($('#ns1blankspaceFinancialsAccountNumber').val());
+										sData += '&directdebitaccountname=' + ns1blankspace.util.fs($('#ns1blankspaceFinancialsAccountName').val());
+									}	
 
 									sData += ns1blankspace.extend.save();
 									
