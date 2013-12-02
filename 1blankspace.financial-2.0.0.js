@@ -421,7 +421,6 @@ ns1blankspace.financial.summary = function (oParam, oResponse)
 					aHTML.push('</table>');					
 					
 					$('#ns1blankspaceSummaryColumn2').html(aHTML.join(''))
-					
 				}
 
 
@@ -537,7 +536,7 @@ ns1blankspace.financial.debtors =
 										'Statements</span></td></tr>');
 
 						aHTML.push('<tr><td id="ns1blankspaceFinancialDebtorsPreviewStatus" style="padding-top:5px; padding-bottom:12px; font-size:0.75em;" class="ns1blankspaceSub">' +
-									'Create statements for selected debtors</td></tr>');
+										'Create statements for selected debtors</td></tr>');
 
 						aHTML.push('<tr><td><span id="ns1blankspaceFinancialDebtorsEmail" class="ns1blankspaceAction">' +
 										'Email</span></td></tr>');

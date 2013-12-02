@@ -804,6 +804,7 @@
 		{"title":"SETUP_AGRI_MEMBERSHIP_SUBSCRIPTION_STATUS_SEARCH", "advancedSearch":"true", "rpc":"true"},
 		{"title":"AGRI_TEMP_BUSINESS_LINK_MANAGE", "advancedSearch":"true", "rpc":"true"},
 		{"title":"SETUP_AUDIT_TITLE_MANAGE", "advancedSearch":"true", "rpc":"true"},
-		{"title":"SETUP_AUDIT_TITLE_SEARCH", "advancedSearch":"true", "rpc":"true"}
+		{"title":"SETUP_AUDIT_TITLE_SEARCH", "advancedSearch":"true", "rpc":"true"},
+		{"title":"SETUP_SPACE_SETTINGS_MANAGE", "advancedSearch":"false", "rpc":"true"}
 	]
 }

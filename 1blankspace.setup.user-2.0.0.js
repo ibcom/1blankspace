@@ -591,8 +591,8 @@ ns1blankspace.setup.user =
 						{
 							$('#ns1blankspaceDetailsUserName').val(ns1blankspace.objectContextData.username);
 							$('[name="radioDisabled"][value="' + ns1blankspace.objectContextData.disabled + '"]').attr('checked', true);
-							$('[name="radioAuthenticationLevel"][value="' + ns1blankspace.objectContextData.Authenticationlevel  + '"]').attr('checked', true);
-							$('[name="radioAuthenticationDelivery"][value="' + ns1blankspace.objectContextData.Authenticationdelivery + '"]').attr('checked', true);
+							$('[name="radioAuthenticationLevel"][value="' + ns1blankspace.objectContextData.authenticationlevel  + '"]').attr('checked', true);
+							$('[name="radioAuthenticationDelivery"][value="' + ns1blankspace.objectContextData.authenticationdelivery + '"]').attr('checked', true);
 							$('#ns1blankspaceDetailsDisabledReason').val(ns1blankspace.objectContextData.disabledreason);
 						}
 						else

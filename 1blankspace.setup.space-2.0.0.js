@@ -22,105 +22,124 @@ ns1blankspace.setup.space =
 					$('#ns1blankspaceViewControlAction').button({disabled: false});
 				},
 
-	home:		function ()
+	home:		function (oParam, oResponse)
 				{
-					var aHTML = [];
-									
-					aHTML.push('<table class="ns1blankspace">' +
-									'<tr><td id="ns1blankspaceMostLikely" class="ns1blankspace">' +
-									ns1blankspace.xhtml.loading +
-									'</td></tr>' +
-									'</table>');					
-					
-					$('#ns1blankspaceMain').html(aHTML.join(''));
-					
-					var aHTML = [];
-
-					aHTML.push('<table>' +
-									'<tr><td><div id="ns1blankspaceViewSetupSpaceLarge" class="ns1blankspaceViewImageLarge"></div></td></tr>' +
-									'</table>');
-
-					aHTML.push('<table class="ns1blankspaceControl">');
-
-					aHTML.push('<tr class="ns1blankspaceControl">' +
-									'<td id="ns1blankspaceControlSummary" class="ns1blankspaceControl">Summary</td>' +
-									'</tr>');
-
-					aHTML.push('<tr class="ns1blankspaceControl">' +
-									'<td id="ns1blankspaceControlDetails" class="ns1blankspaceControl">Details</td>' +
-									'</tr>');
-
-					aHTML.push('</table>');	
-
-					aHTML.push('<table class="ns1blankspaceControl">');
-
-					aHTML.push('<tr class="ns1blankspaceControl">' +
-									'<td id="ns1blankspaceControlSubscriptions" class="ns1blankspaceControl">Memberships</td>' +
-									'</tr>');
-
-					aHTML.push('</table>');	
-
-					aHTML.push('<table class="ns1blankspaceControl">');
-
-					aHTML.push('<tr class="ns1blankspaceControl">' +
-									'<td id="ns1blankspaceControlInitialise" class="ns1blankspaceControl">Initialise<br />This Space</td>' +
-									'</tr>');						
-						
-					if (ns1blankspace.option.advancedAccess)
-					{	
-						aHTML.push('<tr class="ns1blankspaceControl">' +
-									'<td id="ns1blankspaceControlAccess" class="ns1blankspaceControl">Access</td>' +
-									'</tr>');
-					}	
-								
-					aHTML.push('</table>');		
-					
-					$('#ns1blankspaceControl').html(aHTML.join(''));
-
-					var aHTML = [];
-
-					aHTML.push('<div id="ns1blankspaceMainSubscription" class="ns1blankspaceControlMain"></div>');
-					aHTML.push('<div id="ns1blankspaceMainSummary" class="ns1blankspaceControlMain"></div>');
-					aHTML.push('<div id="ns1blankspaceMainDetails" class="ns1blankspaceControlMain"></div>');
-					aHTML.push('<div id="ns1blankspaceMainInitialise" class="ns1blankspaceControlMain"></div>');
-					aHTML.push('<div id="ns1blankspaceMainAccess" class="ns1blankspaceControlMain"></div>');
-					
-					$('#ns1blankspaceMain').html(aHTML.join(''));
-					
-					$('#ns1blankspaceControlSummary').click(function(event)
+					if (oResponse === undefined)
 					{
+						var oSearch = new AdvancedSearch();
+						oSearch.method = 'SETUP_SPACE_SETTINGS_SEARCH';
+						oSearch.addField('lostpassword,lostpasswordtext,minimumpasswordlength,minimumpasswordstrength,notes');
+						oSearch.getResults(function (data)
+						{
+							ns1blankspace.setup.space.home(oParam, data);
+						});
+					}
+					else
+					{
+						if (oResponse.data.rows.length > 0)
+						{	
+							ns1blankspace.objectContextData = oResponse.data.rows[0];
+						}	
+
+						var aHTML = [];
+										
+						aHTML.push('<table class="ns1blankspace">' +
+										'<tr><td id="ns1blankspaceMostLikely" class="ns1blankspace">' +
+										ns1blankspace.xhtml.loading +
+										'</td></tr>' +
+										'</table>');					
+						
+						$('#ns1blankspaceMain').html(aHTML.join(''));
+						
+						var aHTML = [];
+
+						aHTML.push('<table>' +
+										'<tr><td><div id="ns1blankspaceViewSetupSpaceLarge" class="ns1blankspaceViewImageLarge"></div></td></tr>' +
+										'</table>');
+
+						aHTML.push('<table class="ns1blankspaceControl">');
+
+						aHTML.push('<tr class="ns1blankspaceControl">' +
+										'<td id="ns1blankspaceControlSummary" class="ns1blankspaceControl">Summary</td>' +
+										'</tr>');
+
+						aHTML.push('<tr class="ns1blankspaceControl">' +
+										'<td id="ns1blankspaceControlDetails" class="ns1blankspaceControl">Details' +
+										'<br /><span class="ns1blankspaceSub" style="font-size:0.75em;">password<br />settings</span></td>' +
+										'</tr>');
+
+						aHTML.push('</table>');	
+
+						aHTML.push('<table class="ns1blankspaceControl">');
+
+						aHTML.push('<tr class="ns1blankspaceControl">' +
+										'<td id="ns1blankspaceControlSubscriptions" class="ns1blankspaceControl">Subscriptions</td>' +
+										'</tr>');
+
+						aHTML.push('</table>');	
+
+						aHTML.push('<table class="ns1blankspaceControl">');
+
+						aHTML.push('<tr class="ns1blankspaceControl">' +
+										'<td id="ns1blankspaceControlInitialise" class="ns1blankspaceControl">Initialise<br />This Space</td>' +
+										'</tr>');						
+							
+						if (ns1blankspace.option.advancedAccess)
+						{	
+							aHTML.push('<tr class="ns1blankspaceControl">' +
+										'<td id="ns1blankspaceControlAccess" class="ns1blankspaceControl">Access</td>' +
+										'</tr>');
+						}	
+									
+						aHTML.push('</table>');		
+						
+						$('#ns1blankspaceControl').html(aHTML.join(''));
+
+						var aHTML = [];
+
+						aHTML.push('<div id="ns1blankspaceMainSubscription" class="ns1blankspaceControlMain"></div>');
+						aHTML.push('<div id="ns1blankspaceMainSummary" class="ns1blankspaceControlMain"></div>');
+						aHTML.push('<div id="ns1blankspaceMainDetails" class="ns1blankspaceControlMain"></div>');
+						aHTML.push('<div id="ns1blankspaceMainInitialise" class="ns1blankspaceControlMain"></div>');
+						aHTML.push('<div id="ns1blankspaceMainAccess" class="ns1blankspaceControlMain"></div>');
+						
+						$('#ns1blankspaceMain').html(aHTML.join(''));
+						
+						$('#ns1blankspaceControlSummary').click(function(event)
+						{
+							ns1blankspace.show({selector: '#ns1blankspaceMainSummary', refresh: true});
+							ns1blankspace.setup.space.summary();
+						});
+
+						$('#ns1blankspaceControlDetails').click(function(event)
+						{
+							ns1blankspace.show({selector: '#ns1blankspaceMainDetails', refresh: true});
+							ns1blankspace.setup.space.details();
+						});
+
+						$('#ns1blankspaceControlSubscriptions').click(function(event)
+						{
+							ns1blankspace.show({selector: '#ns1blankspaceMainSubscription', refresh: true});
+							ns1blankspace.setup.space.subscriptions();
+						});
+
+						$('#ns1blankspaceControlInitialise').click(function(event)
+						{
+							ns1blankspace.show({selector: '#ns1blankspaceMainInitialise'});
+							ns1blankspace.setup.space.initialise.init();
+						});
+
+						$('#ns1blankspaceControlAccess').click(function(event)
+						{
+							ns1blankspace.show({selector: '#ns1blankspaceMainAccess'});
+							ns1blankspace.setup.space.access();
+						});
+						
+						$('#ns1blankspaceControlSummary').addClass('ns1blankspaceHighlight');
+
 						ns1blankspace.show({selector: '#ns1blankspaceMainSummary', refresh: true});
 						ns1blankspace.setup.space.summary();
-					});
-
-					$('#ns1blankspaceControlDetails').click(function(event)
-					{
-						ns1blankspace.show({selector: '#ns1blankspaceMainDetails', refresh: true});
-						ns1blankspace.setup.space.details();
-					});
-
-					$('#ns1blankspaceControlSubscriptions').click(function(event)
-					{
-						ns1blankspace.show({selector: '#ns1blankspaceMainSubscription', refresh: true});
-						ns1blankspace.setup.space.subscriptions();
-					});
-
-					$('#ns1blankspaceControlInitialise').click(function(event)
-					{
-						ns1blankspace.show({selector: '#ns1blankspaceMainInitialise'});
-						ns1blankspace.setup.space.initialise.init();
-					});
-
-					$('#ns1blankspaceControlAccess').click(function(event)
-					{
-						ns1blankspace.show({selector: '#ns1blankspaceMainAccess'});
-						ns1blankspace.setup.space.access();
-					});
-					
-					$('#ns1blankspaceControlSummary').addClass('ns1blankspaceHighlight');
-
-					ns1blankspace.show({selector: '#ns1blankspaceMainSummary', refresh: true});
-					ns1blankspace.setup.space.summary()
+					}	
 				},
 
 	summary: 	function (oParam, oResponse)
@@ -146,6 +165,24 @@ ns1blankspace.setup.space =
 										'<tr><td id="ns1blankspaceSummaryUsers" class="ns1blankspaceSummary">' +
 										ns1blankspace.xhtml.loadingSmall +
 										'</td></tr>');
+
+						if (ns1blankspace.objectContextData !== undefined)
+						{
+							aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Minimum Password Length</td></tr>' +
+										'<tr><td id="ns1blankspaceSummaryUsers" class="ns1blankspaceSummary">' +
+										ns1blankspace.objectContextData.minimumpasswordlength +
+										'</td></tr>');
+
+							//aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Minimum Password Strength</td></tr>' +
+							//			'<tr><td id="ns1blankspaceSummaryUsers" class="ns1blankspaceSummary">' +
+							//			ns1blankspace.objectContextData.minimumpasswordstrengthtext +
+							//			'</td></tr>');
+
+							aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Lost Password</td></tr>' +
+										'<tr><td id="ns1blankspaceSummaryUsers" class="ns1blankspaceSummary">' +
+										ns1blankspace.objectContextData.lostpasswordtext +
+										'</td></tr>');
+						}	
 						
 						aHTML.push('</table>');
 
@@ -177,74 +214,59 @@ ns1blankspace.setup.space =
 					}	
 				},
 
-	details: 	function (oParam, oResponse)
+	details: 	function (oParam)
 				{
-					if (oResponse === undefined)
-					{
-						var aHTML = [];
-						
-						aHTML.push('<table class="ns1blankspace" style="width:300px;">');
-						
-						aHTML.push('<tr class="ns1blankspaceCaption">' +
-										'<td class="ns1blankspaceCaption">' +
-										'Minimum Password Length' +
-										'</td></tr>' +
-										'<tr class="ns1blankspace">' +
-										'<td class="ns1blankspaceText">' +
-										'<input id="ns1blankspaceDetailsMinimumPasswordLength" class="ns1blankspaceText" style="width:200px;">' +
-										'</td></tr>');			
 					
-						aHTML.push('<tr class="ns1blankspaceCaption">' +
-										'<td class="ns1blankspaceCaption">' +
-										'Minimum Password Strength' +
-										'</td></tr>' +
-										'<tr class="ns1blankspace">' +
-										'<td class="ns1blankspaceRadio">' +
-										'<input type="radio" id="radioMinimumStrength1" name="radioMinimumStrength" value="1"/>Very Weak<br />' +
-										'<input type="radio" id="radioMinimumStrength3" name="radioMinimumStrength" value="3"/>Weak<br />' +
-										'<input type="radio" id="radioMinimumStrength4" name="radioMinimumStrength" value="4"/>Medium<br />' +
-										'<input type="radio" id="radioMinimumStrength6" name="radioMinimumStrength" value="6"/>Strong<br />' +
-										'<input type="radio" id="radioMinimumStrength7" name="radioMinimumStrength" value="7"/>Very Strong' +
-										'</td></tr>');
+					var aHTML = [];
+					
+					aHTML.push('<table class="ns1blankspace" style="width:300px;">');
+					
+					aHTML.push('<tr class="ns1blankspaceCaption">' +
+									'<td class="ns1blankspaceCaption">' +
+									'Minimum Password Length' +
+									'</td></tr>' +
+									'<tr class="ns1blankspace">' +
+									'<td class="ns1blankspaceText">' +
+									'<input id="ns1blankspaceDetailsMinimumPasswordLength" class="ns1blankspaceText" style="width:200px;">' +
+									'</td></tr>');			
+				
+					aHTML.push('<tr class="ns1blankspaceCaption">' +
+									'<td class="ns1blankspaceCaption">' +
+									'Minimum Password Strength' +
+									'</td></tr>' +
+									'<tr class="ns1blankspace">' +
+									'<td class="ns1blankspaceRadio">' +
+									'<input type="radio" id="radioMinimumStrength1" name="radioMinimumStrength" value="1"/>Very Weak<br />' +
+									'<input type="radio" id="radioMinimumStrength3" name="radioMinimumStrength" value="3"/>Weak<br />' +
+									'<input type="radio" id="radioMinimumStrength4" name="radioMinimumStrength" value="4"/>Medium<br />' +
+									'<input type="radio" id="radioMinimumStrength6" name="radioMinimumStrength" value="6"/>Strong<br />' +
+									'<input type="radio" id="radioMinimumStrength7" name="radioMinimumStrength" value="7"/>Very Strong' +
+									'</td></tr>');
 
-						aHTML.push('<tr class="ns1blankspaceCaption">' +
-										'<td class="ns1blankspaceCaption">' +
-										'Lost Password' +
-										'</td></tr>' +
-										'<tr class="ns1blankspace">' +
-										'<td class="ns1blankspaceRadio">' +
-										'<input type="radio" id="radioLostPassword1" name="radioLostPassword" value="1"/>Send<br />' +
-										'<input type="radio" id="radioLostPassword2" name="radioLostPassword" value="2"/>Reset & Send' +
-										'</td></tr>');
+					aHTML.push('<tr class="ns1blankspaceCaption">' +
+									'<td class="ns1blankspaceCaption">' +
+									'Lost Password' +
+									'</td></tr>' +
+									'<tr class="ns1blankspace">' +
+									'<td class="ns1blankspaceRadio">' +
+									'<input type="radio" id="radioLostPassword1" name="radioLostPassword" value="1"/>Send<br />' +
+									'<input type="radio" id="radioLostPassword2" name="radioLostPassword" value="2"/>Reset & Send' +
+									'</td></tr>');
 
-						$('#ns1blankspaceMainDetails').html(aHTML.join(''));
+					$('#ns1blankspaceMainDetails').html(aHTML.join(''));
 
-						$.ajax(
-						{
-							type: 'POST',
-							url: ns1blankspace.util.endpointURI('CORE_PROFILE_SEARCH'),
-							data: {type: 1, id: 461},
-							dataType: 'json',
-							success: function (oResponse)
-							{
-								$('#ns1blankspaceDetailsMinimumPasswordLength').val((oResponse.data!=''?oResponse.data:'6'));
-							}
-						});
-
-						$.ajax(
-						{
-							type: 'POST',
-							url: ns1blankspace.util.endpointURI('CORE_PROFILE_SEARCH'),
-							data: {type: 1, id: 462},
-							dataType: 'json',
-							success: function (oResponse)
-							{
-								$('[name="radioMinimumStrength"][value="' + (oResponse.data!=''?oResponse.data:'4') + '"]').attr('checked', true);
-							}
-						});
-
+					if (ns1blankspace.objectContextData !== undefined)
+					{
+						$('#ns1blankspaceDetailsMinimumPasswordLength').val(ns1blankspace.objectContextData.minimumpasswordlength);
+						$('[name="radioMinimumStrength"][value="' + ns1blankspace.objectContextData.minimumpasswordstrength + '"]').attr('checked', true);
+						$('[name="radioLostPassword"][value="' + ns1blankspace.objectContextData.lostpassword + '"]').attr('checked', true);
+					}
+					else
+					{
+						$('#ns1blankspaceDetailsMinimumPasswordLength').val('6');
+						$('[name="radioMinimumStrength"][value="1"]').attr('checked', true);
 						$('[name="radioLostPassword"][value="1"]').attr('checked', true);
-					}	
+					}
 				},
 
 	save: 		{
@@ -252,25 +274,24 @@ ns1blankspace.setup.space =
 								{
 									ns1blankspace.status.working();
 									
+									var oData =
+									{
+										minimumpasswordlength: $('#ns1blankspaceDetailsMinimumPasswordLength').val(),
+										minimumpasswordstrength: $('input[name="radioMinimumStrength"]:checked').val(),
+										lostpassword: $('input[name="radioLostPassword"]:checked').val()
+									}
+
+									if (ns1blankspace.objectContextData !== undefined) {oData.id = ns1blankspace.user.space}
+
 									$.ajax(
 									{
 										type: 'POST',
-										url: ns1blankspace.util.endpointURI('CORE_PROFILE_MANAGE'),
-										data: {type: 1, id: 461, value: $('#ns1blankspaceDetailsMinimumPasswordLength').val()},
+										url: ns1blankspace.util.endpointURI('SETUP_SPACE_SETTINGS_MANAGE'),
+										data: oData,
 										dataType: 'json',
 										success: function (data)
 										{
-											$.ajax(
-											{
-												type: 'POST',
-												url: ns1blankspace.util.endpointURI('CORE_PROFILE_MANAGE'),
-												data: {type: 1, id: 462, value: $('input[name="radioMinimumStrength"]:checked').val()},
-												dataType: 'json',
-												success: function (data)
-												{
-													ns1blankspace.status.message('Saved');
-												}
-											});
+											ns1blankspace.status.message('Settings saved');	
 										}
 									});
 								}	

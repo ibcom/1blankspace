@@ -1674,6 +1674,7 @@ ns1blankspace.logon =
 					{
 						type: 'POST',
 						url: '/rpc/logon/',
+						global: false,
 						data: oData,
 						dataType: 'json',
 						success: this.process
