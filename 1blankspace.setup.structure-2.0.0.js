@@ -1378,6 +1378,15 @@ ns1blankspace.setup.structure =
 														'<td class="ns1blankspaceTextMulti">' +
 														'<textarea rows="3" cols="35" id="ns1blankspaceSetupStructureElementTitle" class="ns1blankspaceTextMultiSmall" style="height: 50px;"></textarea>' +
 														'</td></tr>');
+
+										aHTML.push('<tr class="ns1blankspaceCaption">' +
+														'<td class="ns1blankspaceCaption">' +
+														'Reference' +
+														'</td></tr>' +
+														'<tr class="ns1blankspaceTextMulti">' +
+														'<td class="ns1blankspaceTextMulti">' +
+														'<input id="ns1blankspaceSetupStructureElementReference" class="ns1blankspaceText">' +
+														'</td></tr>');
 										
 										aHTML.push('<tr class="ns1blankspaceCaption">' +
 														'<td class="ns1blankspaceCaption">' +
@@ -1496,6 +1505,7 @@ ns1blankspace.setup.structure =
 											var sData = 'structure=' + ns1blankspace.util.fs(ns1blankspace.objectContext);
 											sData += '&id=' + ns1blankspace.util.fs(sID);
 											sData += '&title=' + ns1blankspace.util.fs($('#ns1blankspaceSetupStructureElementTitle').val());
+											sData += '&reference=' + ns1blankspace.util.fs($('#ns1blankspaceSetupStructureElementReference').val());
 											sData += '&datatype=' + ns1blankspace.util.fs($('input[name="radioDataType"]:checked').val());
 											sData += '&category=' + ns1blankspace.util.fs($('input[name="radioCategory"]:checked').val());
 											sData += '&textcolour=' + ns1blankspace.util.fs($('#ns1blankspaceSetupSetupStructureElementTextColour').val());
@@ -1538,6 +1548,7 @@ ns1blankspace.setup.structure =
 										{
 											var oObjectContext = oResponse.data.rows[0];
 											$('#ns1blankspaceSetupStructureElementTitle').val(oObjectContext.title);
+											$('#ns1blankspaceSetupStructureElementReference').val(oObjectContext.reference);
 											
 											var sHTML = (oObjectContext.description).formatXHTML();
 											

@@ -998,7 +998,7 @@ ns1blankspace.control =
 													{
 														aHTML.push('<tr class="ns1blankspaceViewControl">' +
 																	'<td class="ns1blankspaceViewControl">' +
-																	'<span id="ns1blankspaceViewControl_' + (k.parentnamespace!==undefined?k.parentnamespace + '_':'') + k.namespace +
+																	'<span id="ns1blankspaceViewControl_' + (k.parentNamespace!==undefined?k.parentNamespace + '_':'') + k.namespace +
 																	'" class="ns1blankspaceViewControl">' + k.title + '</span>');
 
 														if (k.subNote !== undefined)

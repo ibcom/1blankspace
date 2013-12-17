@@ -1521,11 +1521,11 @@ ns1blankspace.logon =
 					{
 						$('#ns1blankspaceLogonLogonName').val(sLogonName);
 						$('#ns1blankspaceLogonRemember').attr('checked', true);
-						$('#ns1blankspaceLogonPassword').focus();
+						if ($('#ns1blankspaceLogonPassword').is(':focus').length == 0) {$('#ns1blankspaceLogonPassword').focus()}
 					}
 					else
 					{
-						$('#ns1blankspaceLogonLogonName').focus();
+						if ($('#ns1blankspaceLogonLogonName').is(':focus').length == 0) {$('#ns1blankspaceLogonLogonName').focus()}
 					}
 					
 					$('#ns1blankspaceLogonSend').button(
@@ -5262,28 +5262,26 @@ ns1blankspace.pdf =
 {
 	create:		function (oParam, sReturn)
 				{
-					var sXHTMLElementID = 'ns1blankspaceSummaryCreatePDF';
-					var iObject = ns1blankspace.object;
-					var iObjectContext = ns1blankspace.objectContext;
-					var sFileName = ns1blankspace.objectContextData.id + '.pdf'
-					var sXHTMLContent = '';
-					var bOpen = false;
-					var fOnComplete;
+					var sXHTMLElementID = ns1blankspace.util.getParam(oParam, 'xhtmlElementID', {"default": 'ns1blankspaceSummaryCreatePDF'}).value;
+					var iObject = ns1blankspace.util.getParam(oParam, 'object', {"default": ns1blankspace.object}).value;
+					var iObjectContext = ns1blankspace.util.getParam(oParam, 'objectContext', {"default": ns1blankspace.objectContext}).value;
+					var sFileName = ns1blankspace.util.getParam(oParam, 'filename', {"default": ns1blankspace.objectContextData.id + '.pdf'}).value;
+					var sXHTMLContent = ns1blankspace.util.getParam(oParam, 'xhtmlContent', {"default": ''}).value;
+					var bOpen = ns1blankspace.util.getParam(oParam, 'open', {"default": false}).value;
+					var fOnComplete = ns1blankspace.util.getParam(oParam, 'onComplete').value;
+					var bReplace = ns1blankspace.util.getParam(oParam, 'replace', {"default": false}).value;
+					var iLeftMargin = ns1blankspace.util.getParam(oParam, 'leftmargin').value;
+					var iRightMargin = ns1blankspace.util.getParam(oParam, 'rightmargin').value;
+					var iTopMargin = ns1blankspace.util.getParam(oParam, 'topmargin').value;
+					var iBottomMargin = ns1blankspace.util.getParam(oParam, 'bottommargin').value;
+					var iOrientation = ns1blankspace.util.getParam(oParam, 'orientation', {"default": 1}).value;
 
-					if (oParam)
-					{
-						if (oParam.object) {iObject = oParam.object}
-						if (oParam.objectContext) {iObjectContext = oParam.objectContext}
-						if (oParam.filename) {sFileName = oParam.filename}	
-						if (oParam.xhtmlContent) {sXHTMLContent = oParam.xhtmlContent}
-						if (oParam.open) {bOpen = oParam.open}
-						if (oParam.xhtmlElementID) {sXHTMLElementID = oParam.xhtmlElementID}
-						if (oParam.onComplete) {fOnComplete = oParam.onComplete}
-					}
-
-					sXHTMLContent = sXHTMLContent.replace(/https/g,'http');
-					sXHTMLContent = sXHTMLContent.replace(/app.alt-enter.com/g,'[[host]]');
-					sXHTMLContent = sXHTMLContent.replace(/app.1blankspace.com/g,'[[host]]');
+					if (bReplace)
+					{	
+						sXHTMLContent = sXHTMLContent.replace(/https/g,'http');
+						sXHTMLContent = sXHTMLContent.replace(/app.alt-enter.com/g,'[[host]]');
+						sXHTMLContent = sXHTMLContent.replace(/app.1blankspace.com/g,'[[host]]');
+					}	
 													
 					if (sReturn === undefined)
 					{
@@ -5292,16 +5290,26 @@ ns1blankspace.pdf =
 							label: 'Creating'
 						});
 						
-						var sData = 'rf=TEXT&object=' + iObject;
-						sData += '&objectcontext=' + iObjectContext;
-						sData += '&filename=' + ns1blankspace.util.fs(sFileName);
-						sData += '&xhtmlcontent=' + ns1blankspace.util.fs(sXHTMLContent);
+						var oData =
+						{
+							rf: 'TEXT',
+							object: iObject,
+							objectcontext: iObjectContext,
+							filename: sFileName,
+							xhtmlcontent: sXHTMLContent,
+							orientation: iOrientation
+						}
+
+						if (iLeftMargin !== undefined) {oData.leftmargin = iLeftMargin}
+						if (iRightMargin !== undefined) {oData.rightmargin = iRightMargin}
+						if (iTopMargin !== undefined) {oData.topmargin = iTopMargin}
+						if (iBottomMargin !== undefined) {oData.bottommargin = iBottomMargin}
 						
 						$.ajax(
 						{
 							type: 'POST',
 							url: ns1blankspace.util.endpointURI('CORE_PDF_CREATE'),
-							data: sData,
+							data: oData,
 							dataType: 'text',
 							success: function(data) {ns1blankspace.pdf.create(oParam, data)}
 						});
