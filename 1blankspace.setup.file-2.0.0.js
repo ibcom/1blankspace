@@ -934,11 +934,11 @@ ns1blankspace.setup.file =
 														var oSearch = new AdvancedSearch();
 														oSearch.method = ns1blankspace.setup.file["import"].data.method + '_SEARCH';
 
-														$(ns1blankspace.setup.file["import"].data.keys).each(function()
+														$(ns1blankspace.setup.file["import"].data.keys).each(function(i, v)
 														{
-															oSearch.addField(this);
-															oSearch.addFilter(this, 'EQUAL_TO', oRow[this]);
-															ns1blankspace.setup.file["import"].data.current.push(this + '=' + oRow[this]);
+															oSearch.addField(v);
+															oSearch.addFilter(v, 'EQUAL_TO', oRow[v]);
+															ns1blankspace.setup.file["import"].data.current.push(v + '=' + oRow[v]);
 														});	
 														
 														oSearch.getResults(function(oResponse)
@@ -1032,7 +1032,7 @@ ns1blankspace.setup.file =
 														
 														$('#ns1blankspaceFileImportShowColumn1').html(aHTML.join(''));
 
-														ns1blankspace.setup.file["import"].data.errors = [];
+														//ns1blankspace.setup.file["import"].data.errors = [];
 													}
 
 													if (iRow < ns1blankspace.setup.file["import"].data.rows.length)
@@ -1139,11 +1139,11 @@ ns1blankspace.setup.file =
 														}
 														else
 														{
-															ns1blankspace.setup.file["import"].data.errors.push(
-															{
-																data: ns1blankspace.setup.file["import"].data.current.join('&'),
-																error: 'More than one record based on keys'
-															});
+															//ns1blankspace.setup.file["import"].data.errors.push(
+															//{
+															//	data: ns1blankspace.setup.file["import"].data.current.join('&'),
+															//	error: 'More than one record based on keys'
+															//});
 
 															oParam = ns1blankspace.util.setParam(oParam, 'row', iRow + 1);
 															ns1blankspace.setup.file["import"].upload.process(oParam)
@@ -1199,15 +1199,25 @@ ns1blankspace.setup.file =
 																	var oData = this.data;
 																	var aDataValues = [];
 
-																	for (var key in oData)
-																	{																		
-																		aDataValues.push(oData[key]);
+																	if (typeof(oData) === 'string')
+																	{
+																		aDataValues.push(oData);
+																	}
+																	else
+																	{
+																		for (var key in oData)
+																		{			
+																			if (typeof(oData[key]) === 'string')
+																			{													
+																				aDataValues.push(oData[key]);
+																			}	
+																		}
 																	}	
 																	
-																	aHTML.push('<tr><td id="ns1blankspaceImportDataError_error_' + i + '" class="ns1blankspaceRow">' +
+																	aHTML.push('<tr><td style="font-size:0.75em;" id="ns1blankspaceImportDataError_error_' + i + '" class="ns1blankspaceRow ns1blankspaceSub">' +
 																					aDataValues.join('<br />') + '</td>');
 
-																	aHTML.push('<td style="font-size:0.75em;" id="nns1blankspaceImportError_notes_' + i + '" class="ns1blankspaceRow ns1blankspaceSub">' +
+																	aHTML.push('<td style="font-size:0.75em;" id="ns1blankspaceImportError_notes_' + i + '" class="ns1blankspaceRow ns1blankspaceSub">' +
 																					this.error + '</td></tr>');
 																});		
 
