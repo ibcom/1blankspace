@@ -2498,8 +2498,9 @@ ns1blankspace.report =
 										{	
 											// Show editor and template fields, buttons for preview & Sending
 											ns1blankspace.format.editor.init();
-											for (edID in tinyMCE.editors) 
-														tinyMCE.editors[edID].destroy(true);
+											
+											//for (edID in tinyMCE.editors) 
+											//tinyMCE.editors[edID].destroy(true);
 													
 											ns1blankspace.counter.editor = ns1blankspace.counter.editor + 1;	
 

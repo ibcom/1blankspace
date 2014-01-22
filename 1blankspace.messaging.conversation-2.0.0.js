@@ -1430,8 +1430,8 @@ ns1blankspace.messaging.conversation =
 									var sXHTMLElementContextID;
 									var iPost;
 									
-									for (edId in tinyMCE.editors) 
-													tinyMCE.editors[edId].destroy(true);
+									//for (edId in tinyMCE.editors) 
+									//tinyMCE.editors[edId].destroy(true);
 												
 									ns1blankspace.counter.editor = ns1blankspace.counter.editor + 1;		
 									

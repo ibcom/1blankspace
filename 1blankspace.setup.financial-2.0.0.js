@@ -1844,8 +1844,8 @@ ns1blankspace.setup.financial =
 									{
 										$('#ns1blankspaceMainTemplate_' + sTemplate).attr('data-loading', '');
 												
-										for (edId in tinyMCE.editors) 
-													tinyMCE.editors[edId].destroy(true);
+										//for (edId in tinyMCE.editors) 
+										//tinyMCE.editors[edId].destroy(true);
 												
 										ns1blankspace.counter.editor = ns1blankspace.counter.editor + 1;		
 												

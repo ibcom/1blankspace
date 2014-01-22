@@ -1831,8 +1831,8 @@ ns1blankspace.messaging.imap =
 													
 													aHTML.push('</td></tr>');
 													
-													for (edId in tinyMCE.editors) 
-													tinyMCE.editors[edId].destroy(true);
+													//for (edId in tinyMCE.editors) 
+													//tinyMCE.editors[edId].destroy(true);
 
 													ns1blankspace.counter.editor++
 

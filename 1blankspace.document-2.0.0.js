@@ -591,8 +591,8 @@ ns1blankspace.document =
 							
 							var sHTML = sReturn;
 							
-							for (edId in tinyMCE.editors) 
-													tinyMCE.editors[edId].destroy(true);
+							//for (edId in tinyMCE.editors) 
+							//tinyMCE.editors[edId].destroy(true);
 												
 							ns1blankspace.counter.editor = ns1blankspace.counter.editor + 1;
 
