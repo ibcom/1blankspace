@@ -147,6 +147,8 @@ ns1blankspace.messaging.imap =
 					}
 					else
 					{
+						ns1blankspace.messaging.checking = false;
+
 						if (oResponse.status == 'OK')
 						{	
 							ns1blankspace.status.clear({duration: 2000});
@@ -154,8 +156,7 @@ ns1blankspace.messaging.imap =
 							if (ns1blankspace.messaging.emailNewCount == undefined) {ns1blankspace.messaging.emailNewCount = 0}
 
 							if (oResponse.fullrefresh != 'Y') {ns1blankspace.messaging.emailNewCount += oResponse.newrows};
-							ns1blankspace.messaging.checking = false;
-
+							
 							if (ns1blankspace.messaging.emailNewCount != undefined)
 							{
 								if (ns1blankspace.messaging.emailNewCount != 0)
@@ -177,6 +178,10 @@ ns1blankspace.messaging.imap =
 									});
 								}
 							}	
+						}
+						else
+						{
+							ns1blankspace.status.error('Can not connect to email service.');
 						}	
 					}
 				},			
