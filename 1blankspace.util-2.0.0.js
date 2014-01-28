@@ -522,6 +522,30 @@ ns1blankspace.util =
   					return oNS;
   				},
 
+	setProperty:
+  				function (oNS, sPath, sProperty, sValue)
+  				{
+  					if (sPath === undefined || sPath == '')
+  					{
+  						oNS = undefined;
+  					}
+  					else
+  					{
+	  					if (oNS === undefined) {oNS = window}
+
+	  					var aP = (sPath).split(".");
+
+	  					$.each(aP, function(i,v)
+	  					{
+	  						if(oNS !== undefined) {oNS = oNS[this]};	
+	  					});	
+	  				}	
+
+	  				oNS[sProperty] = sValue;
+	  				
+  					return oNS;
+  				},
+
   	execute:
   				function (sFunction, oParam, oNS)
   				{
