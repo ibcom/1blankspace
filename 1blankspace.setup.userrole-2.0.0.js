@@ -287,7 +287,7 @@ ns1blankspace.setup.userRole =
 					$('#ns1blankspaceControlAccess').click(function(event)
 					{
 						ns1blankspace.show({selector: '#ns1blankspaceMainAccess'});
-						ns1blankspace.setup.userRole.access();
+						ns1blankspace.setup.userRole.access.show();
 					});
 				},
 
@@ -466,380 +466,494 @@ ns1blankspace.setup.userRole =
 								}			
 				},				
 
-	access: 	function (oParam, oResponse)
-				{
-					var iStep = 1;
-					var iEndpoint;
-					var oMethods;
-
-					if (oParam != undefined)
-					{
-						if (oParam.step != undefined) {iStep = oParam.step}
-						if (oParam.endpoint != undefined) {iEndpoint = oParam.endpoint}
-						if (oParam.methods != undefined) {oMethods = oParam.methods}
-					}
-						
-					if (iStep == 1)
-					{
-						var aHTML = [];
-						
-						aHTML.push('<table class="ns1blankspaceContainer">' +
-										'<tr class="ns1blankspaceContainer">' +
-										'<td id="ns1blankspaceAccessColumnEndpoint" class="ns1blankspaceColumn1" style="width:100px;padding-right:5px;font-size:0.875em;">' +
-											ns1blankspace.xhtml.loading + '</td>' +
-										'<td id="ns1blankspaceAccessColumnMethod" class="ns1blankspaceColumn2" style="width:200px;padding-right:5px;font-size:0.875em;"></td>' +
-										'<td id="ns1blankspaceAccessColumnEdit" class="ns1blankspaceColumn2" style="width:280px;padding-right:15px;font-size:0.875em;"></td>' +
-										'<td id="ns1blankspaceAccessColumnAction" class="ns1blankspaceColumn2"></td>' +
-										'</tr>' + 
-										'</table>');			
-								
-						$('#ns1blankspaceMainAccess').html(aHTML.join(''));
-
-						if (oResponse == undefined)
-						{
-							var oSearch = new AdvancedSearch();
-							oSearch.method = 'SETUP_ENDPOINT_SEARCH';
-							oSearch.addField('title');
-							oSearch.rows = 200;
-							oSearch.sort('title', 'asc');
-							oSearch.getResults(function(data) {ns1blankspace.setup.userRole.access(oParam, data)})	
-						}
-						else
-						{
-							var aHTML = [];
-						
-							ns1blankspace.endpoints = oResponse.data.rows;
-					
-							aHTML.push('<table id="ns1blankspaceUserAccessEndpoints">');
-							
-							if (oResponse.data.rows.length == 0)
-							{
-								aHTML.push('<tr><td class="ns1blankspaceNothing">' +
-												'No access to endpoints has been setup.<br /><br / >You need to subscribe to at least one membership.</td></tr>');
-							}
-							else
-							{		
-								$(oResponse.data.rows).each(function()
+	access: 	{
+					show: 		function(oParam, oResponse)
 								{
-									aHTML.push('<tr class="ns1blankspaceRow">');
-									
-									aHTML.push('<td id="ns1blankspaceUserRoleEndpoint_title-' + this.id + '" class="ns1blankspaceRow ns1blankspaceRowSelect"' +
-															' title="">' +
-															(this.title).toUpperCase() + '</td>');
-
-									aHTML.push('</tr>');
-
-								});
-							}	
-						
-							aHTML.push('</table>');
-								
-							$('#ns1blankspaceAccessColumnEndpoint').html(aHTML.join(''));
-
-							$('#ns1blankspaceUserAccessEndpoints td.ns1blankspaceRowSelect').click(function(event)
-							{
-								var sXHTMLElementId = event.target.id;
-								var aID = sXHTMLElementId.split('-');
-								
-								ns1blankspace.setup.userRole.access({endpoint: aID[1], step: 3});
-							});
-						}
-					}	
-					else if (iStep == 2)
-					{
-						if (oResponse == undefined)
-						{
-							var oSearch = new AdvancedSearch();
-							oSearch.method = 'SETUP_METHOD_SEARCH';
-							oSearch.addField('title,useavailable,addavailable,updateavailable,removeavailable');
-							oSearch.addFilter('endpoint', 'EQUAL_TO', iEndpoint)
-							oSearch.rows = 200;
-							oSearch.sort('title', 'asc');
-							oSearch.getResults(function(data) {ns1blankspace.setup.userRole.access(oParam, data)})	
-						}
-						else
-						{
-							$.extend(true, oParam, {step: 3, methods: oResponse.data.rows});
-							ins1blankspace.setup.userRole.access(oParam);	
-						}
-					}
-
-					else if (iStep == 3)
-					{
-						if (oResponse == undefined)
-						{
-							$('#ns1blankspaceAccessColumnMethod').html(ns1blankspace.xhtml.loadingSmall);
-							$('#ns1blankspaceAccessColumnEdit').html("");
-
-							var aHTML = [];
-							
-							aHTML.push('<table class="ns1blankspaceColumn2">' +
-											'<tr><td><span id="ns1blankspaceUserAccessAdd" class="ns1blankspaceAction">' +
-											'Add</span></td></tr>' +
-											'</table>');									
-							
-							$('#ns1blankspaceAccessColumnAction').html(aHTML.join(''));
-						
-							$('#ns1blankspaceUserAccessAdd').button(
-							{
-								label: "Add"
-							})
-							.click(function()
-							{
-								$.extend(true, oParam, {step: 4, xhtmlElementID: ""});
-								ns1blankspace.setup.userRole.access(oParam);
-							})
-
-							var oSearch = new AdvancedSearch();
-							oSearch.method = 'SETUP_METHOD_SEARCH';
-							oSearch.addField('title,useavailable,addavailable,updateavailable,removeavailable');
-							oSearch.addFilter('endpoint', 'EQUAL_TO', iEndpoint)
-							oSearch.rows = 200;
-							oSearch.sort('title', 'asc');
-							oSearch.getResults(function(data) {ns1blankspace.setup.userRole.access(oParam, data)})	
-						}
-						else
-						{
-							var aHTML = [];
-					
-							aHTML.push('<table id="ns1blankspaceUserAccessMethods" class="ns1blankspaceColumn2">');
-						
-							if (oResponse.data.rows.length == 0)
-							{
-								aHTML.push('<tr><td class="ns1blankspaceNothing">' +
-												'No functional rights available.</td></tr>');
-							}
-							else
-							{		
-								$(oResponse.data.rows).each(function()
-								{
-									aHTML.push('<tr class="ns1blankspaceRow">');
-
-									aHTML.push('<td id="ns1blankspaceUserAccessMethod_title-' + this.id +
-														'-' + this.addavailable +
-														'-' + this.removeavailable +
-														'-' + this.updateavailable +
-														'-' + this.useavailable +
-														'" class="ns1blankspaceRow ns1blankspaceRowSelect"' +
-														' title="">' +
-															this.title + '</td>');
-							
-									aHTML.push('</tr>');
-								});
-							
-								aHTML.push('</table>');
-							}
-						
-							$('#ns1blankspaceAccessColumnMethod').html(aHTML.join(''));
-
-							$('#ns1blankspaceUserAccessMethods td.ns1blankspaceRowSelect').click(function()
-							{
-								$.extend(true, oParam, {step: 4, xhtmlElementID: this.id});
-								ns1blankspace.setup.userRole.access(oParam);
-							})
-						}
-					}
-
-					else if (iStep == 4)
-					{
-						var sXHTMLElementID;
-						
-						if (oParam != undefined)
-						{
-							if (oParam.xhtmlElementID != undefined) {sXHTMLElementID = oParam.xhtmlElementID}
-						}
-						
-						if (sXHTMLElementID != undefined)
-						{
-							var aXHTMLElementID = sXHTMLElementID.split('-');
-						}	
-
-						var oSearch = new AdvancedSearch();
-						oSearch.method = 'SETUP_ROLE_METHOD_ACCESS_SEARCH';
-						oSearch.addField('canadd,canremove,canupdate,canuse');
-						oSearch.addFilter('role', 'EQUAL_TO', ns1blankspace.objectContext);
-						oSearch.addFilter('accessmethod', 'EQUAL_TO', aXHTMLElementID[1]);
-
-						oSearch.getResults(function(data) {
-								$.extend(true, oParam, {step: 5});
-								ns1blankspace.setup.userRole.access(oParam, data)
-								});
-					}
-
-					else if (iStep == 5)
-					{
-						var sID; 
-						var sXHTMLElementID;
-						var aXHTMLElementID;
-						var aHTML = [];
-						var h = -1;
-						var bCan = false;
-
-						if (oParam != undefined)
-						{
-							if (oParam.xhtmlElementID != undefined) {sXHTMLElementID = oParam.xhtmlElementID}
-						}
-						
-						if (sXHTMLElementID != undefined)
-						{
-							aXHTMLElementID = sXHTMLElementID.split('-');
-						}	
-					
-						aHTML.push('<table id="ns1blankspaceUserAccessMethods" class="ns1blankspaceColumn2">');
-
-						if (oResponse != undefined)
-						{
-							if (oResponse.data.rows.length > 0)
-							{
-								sID = oResponse.data.rows[0].id;
-							}
-							else
-							{
-								aHTML.push('<tr><td class="ns1blankspaceNothing">' +
-												'This role doesn\'t have access to this method.  Click Save to add it.</td></tr>');
-							}
-						}
-
-						if (aXHTMLElementID[5] == 'Y')
-						{
-							bCan = true;			
-							aHTML.push('<tr><td class="ns1blankspaceCaption">' +
-											'Search?' +
-											'</td></tr>' +
-											'<tr class="ns1blankspace">' +
-											'<td class="ns1blankspaceRadio">' +
-											'<input type="radio" id="radioCanUseY" name="radioCanUse" value="Y"/>Yes' +
-											'<br /><input type="radio" id="radioCanUseN" name="radioCanUse" value="N"/>No' +
-											'</td></tr>');
-						}
-
-						if (aXHTMLElementID[2] == 'Y')
-						{		
-							bCan = true;	
-							aHTML.push('<tr><td class="ns1blankspaceCaption">' +
-											'Add?' +
-											'</td></tr>' +
-											'<tr class="ns1blankspace">' +
-											'<td class="ns1blankspaceRadio">' +
-											'<input type="radio" id="radioCanAddY" name="radioCanAdd" value="Y"/>Yes' +
-											'<br /><input type="radio" id="radioCanAddN" name="radioCanAdd" value="N"/>No' +
-											'</td></tr>');
-						}
-							
-						if (aXHTMLElementID[4] == 'Y')
-						{	
-							bCan = true;		
-							aHTML.push('<tr><td class="ns1blankspaceCaption">' +
-											'Update?' +
-											'</td></tr>' +
-											'<tr class="ns1blankspace">' +
-											'<td class="ns1blankspaceRadio">' +
-											'<input type="radio" id="radioCanUpdateY" name="radioCanUpdate" value="Y"/>Yes' +
-											'<br /><input type="radio" id="radioCanUpdateN" name="radioCanUpdate" value="N"/>No' +
-											'</td></tr>');
-						}
-							
-						if (aXHTMLElementID[3] == 'Y')
-						{		
-							bCan = true;	
-							aHTML.push('<tr><td class="ns1blankspaceCaption">' +
-											'Remove?' +
-											'</td></tr>' +
-											'<tr class="ns1blankspace">' +
-											'<td class="ns1blankspaceRadio">' +
-											'<input type="radio" id="radioCanRemoveY" name="radioCanRemove" value="Y"/>Yes' +
-											'<br /><input type="radio" id="radioCanRemoveN" name="radioCanRemove" value="N"/>No' +
-											'</td></tr>');
-						}
-									
-						if (!bCan)
-						{
-							aHTML.push('<tr><td class="ns1blankspaceNothing">' +
-												'Can not set any access to this functionality.</td></tr>');
-
-						}
-
-						aHTML.push('</table>');					
-						
-						$('#ns1blankspaceAccessColumnEdit').html(aHTML.join(''));
-						
-						var aHTML = [];
-						
-						aHTML.push('<table class="ns1blankspace" style="font-size:0.875em">');
-								
-						aHTML.push('<tr><td>' +
-										'<span style="width:70px;" id="ns1blankspaceUserAccessSave" class="ns1blankspaceAction">Save</span>' +
-										'</td></tr>');
-										
-						aHTML.push('<tr><td>' +
-										'<span style="width:70px;" id="ns1blankspaceUserAccessCancel" class="ns1blankspaceAction">Cancel</span>' +
-										'</td></tr>');
-															
-						aHTML.push('</table>');					
-							
-						$('#ns1blankspaceAccessColumnAction').html(aHTML.join(''));
-						
-						$('#ns1blankspaceUserAccessSave').button(
-						{
-							text: "Save"
-						})
-						.click(function() 
-						{
-							ns1blankspace.status.working();
-
-							var sData = 'id=' + ns1blankspace.util.fs(sID);
-							sData += '&role=' + ns1blankspace.util.fs(ns1blankspace.objectContext);
-							sData += '&accessmethod=' + ns1blankspace.util.fs(aXHTMLElementID[1]);
-							sData += '&canadd=' + (ns1blankspace.util.fs($('input[name="radioCanAdd"]:checked').val()) != '' ? ns1blankspace.util.fs($('input[name="radioCanAdd"]:checked').val()) : 'N');
-							sData += '&canremove=' + (ns1blankspace.util.fs($('input[name="radioCanRemove"]:checked').val()) != '' ? ns1blankspace.util.fs($('input[name="radioCanRemove"]:checked').val()) : 'N');
-							sData += '&canupdate=' + (ns1blankspace.util.fs($('input[name="radioCanUpdate"]:checked').val()) != '' ? ns1blankspace.util.fs($('input[name="radioCanUpdate"]:checked').val()) : 'N');
-							sData += '&canuse=' + (ns1blankspace.util.fs($('input[name="radioCanUse"]:checked').val()) != '' ? ns1blankspace.util.fs($('input[name="radioCanUse"]:checked').val()) : 'N');
-
-							$.ajax(
-							{
-								type: 'POST',
-								url: ns1blankspace.util.endpointURI('SETUP_ROLE_METHOD_ACCESS_MANAGE'),
-								data: sData,
-								dataType: 'json',
-								success: function(data) {
-									if (data.status == "OK")
+									if (oResponse == undefined)
 									{
-										ns1blankspace.status.message('Saved');
+										var aHTML = [];
+												
+										aHTML.push('<table class="ns1blankspaceContainer">' +
+														'<tr class="ns1blankspaceContainer">' +
+														'<td id="ns1blankspaceAccessColumn1" class="ns1blankspaceColumn1Flexible"></td>' +
+														'<td id="ns1blankspaceAccessColumn2" class="ns1blankspaceColumn2" style="width:50px;"></td>' +
+														'</tr>' + 
+														'</table>');
+
+										$('#ns1blankspaceMainAccess').html(aHTML.join(''));
+										
+										var aHTML = [];
+											
+										aHTML.push('<table class="ns1blankspaceColumn2">');
+										
+										aHTML.push('<tr><td>' +
+														'<span id="ns1blankspaceUserRoleAccessEdit" class="ns1blankspaceAction">Edit</span>' +
+														'</td></tr>');
+														
+										aHTML.push('</table>');					
+										
+										$('#ns1blankspaceAccessColumn2').html(aHTML.join(''));
+									
+										$('#ns1blankspaceUserRoleAccessEdit').button(
+										{
+											label: "Edit"
+										})
+										.click(function()
+										{
+											 ns1blankspace.setup.userRole.access.edit();
+										})
+
+										var oSearch = new AdvancedSearch();
+										oSearch.method = 'SETUP_ROLE_METHOD_ACCESS_SEARCH';
+										oSearch.addField('access,accesstext,accessmethod,accessmethodtext,canadd,canremove,canupdate,canuse');
+										oSearch.addFilter('role', 'EQUAL_TO', ns1blankspace.objectContext);
+										oSearch.sort('accessmethodtext', 'asc');
+										oSearch.getResults(function(data) {ns1blankspace.setup.userRole.access.show(oParam, data)});
 									}
 									else
 									{
-										ns1blankspace.status.error(data.error.errornotes);
+										var aHTML = [];
+										
+										if (oResponse.data.rows.length == 0)
+										{
+											aHTML.push('<table><tr><td class="ns1blankspaceNothing">No access set up.</td></tr></table>');
+
+											aHTML.push('</table>');
+
+											$('#ns1blankspaceAccessColumn1').html(aHTML.join(''));
+										}
+										else
+										{		
+											aHTML.push('<table id="ns1blankspaceUserRoleAccess" class="ns1blankspaceContainer" style="font-size:0.875em;">');
+											
+											aHTML.push('<tr class="ns1blankspaceCaption">');
+											aHTML.push('<td class="ns1blankspaceHeaderCaption">Method</td>');
+											aHTML.push('<td class="ns1blankspaceHeaderCaption">Search</td>');
+											aHTML.push('<td class="ns1blankspaceHeaderCaption">Add</td>');
+											aHTML.push('<td class="ns1blankspaceHeaderCaption">Update</td>');
+											aHTML.push('<td class="ns1blankspaceHeaderCaption">Remove</td>');
+											aHTML.push('</tr>');
+
+											$.each(oResponse.data.rows, function()
+											{
+												aHTML.push(ns1blankspace.setup.userRole.access.row(this));
+											});
+												
+											aHTML.push('</table>');
+											
+											ns1blankspace.render.page.show(
+											{
+												xhtmlElementID: 'ns1blankspaceAccessColumn1',
+												xhtmlContext: 'UserRoleAccess',
+												xhtml: aHTML.join(''),
+												showMore: (oResponse.morerows == "true"),
+												more: oResponse.moreid,
+												rows: ns1blankspace.option.defaultRows,
+												functionShowRow: ns1blankspace.setup.userRole.access.row,
+												headerRow: true,
+											});
+										}
+									}	
+
+								},
+
+					row:		function (oRow)
+								{
+									var aHTML = [];
+
+									aHTML.push('<tr class="ns1blankspaceRow">');
+									aHTML.push('<td id="ns1blankspaceUserRoleAccess_method-' + oRow.id + '" class="ns1blankspaceRow">' +
+															oRow.accessmethodtext + '</td>');
+									aHTML.push('<td id="ns1blankspaceUserRoleAccess_search-' + oRow.id + '" class="ns1blankspaceRow">' +
+															oRow.canuse + '</td>');
+									aHTML.push('<td id="ns1blankspaceUserRoleAccess_add-' + oRow.id + '" class="ns1blankspaceRow">' +
+															(oRow.canuse=='N'?oRow.canadd:'-') + '</td>');
+									aHTML.push('<td id="ns1blankspaceUserRoleAccess_update-' + oRow.id + '" class="ns1blankspaceRow">' +
+															(oRow.canuse=='N'?oRow.canupdate:'-') + '</td>');
+									aHTML.push('<td id="ns1blankspaceUserRoleAccess_remove-' + oRow.id + '" class="ns1blankspaceRow">' +
+															(oRow.canuse=='N'?oRow.canremove:'-') + '</td>');
+
+									aHTML.push('</tr>');
+
+									return aHTML.join('');						
+								},			
+
+					edit: 		function (oParam, oResponse)
+								{
+									var iStep = 1;
+									var iEndpoint;
+									var oMethods;
+
+									if (oParam != undefined)
+									{
+										if (oParam.step != undefined) {iStep = oParam.step}
+										if (oParam.endpoint != undefined) {iEndpoint = oParam.endpoint}
+										if (oParam.methods != undefined) {oMethods = oParam.methods}
 									}
-								}
-							});
-						});
+										
+									if (iStep == 1)
+									{
+										var aHTML = [];
+										
+										aHTML.push('<table class="ns1blankspaceContainer">' +
+														'<tr class="ns1blankspaceContainer">' +
+														'<td id="ns1blankspaceAccessColumnEndpoint" class="ns1blankspaceColumn1" style="width:100px;padding-right:5px;font-size:0.875em;">' +
+															ns1blankspace.xhtml.loading + '</td>' +
+														'<td id="ns1blankspaceAccessColumnMethod" class="ns1blankspaceColumn2" style="width:200px;padding-right:5px;font-size:0.875em;"></td>' +
+														'<td id="ns1blankspaceAccessColumnEdit" class="ns1blankspaceColumn2" style="width:280px;padding-right:15px;font-size:0.875em;"></td>' +
+														'<td id="ns1blankspaceAccessColumnAction" class="ns1blankspaceColumn2"></td>' +
+														'</tr>' + 
+														'</table>');			
+												
+										$('#ns1blankspaceMainAccess').html(aHTML.join(''));
 
-						$('#ns1blankspaceUserAccessCancel').button(
-						{
-							text: "Cancel"
-						})
-						.click(function() 
-						{
-							$.extend(true, oParam, {step: 2});
-							ins1blankspace.setup.userRole.access(oParam);
-						});
+										if (oResponse == undefined)
+										{
+											var oSearch = new AdvancedSearch();
+											oSearch.method = 'SETUP_ENDPOINT_SEARCH';
+											oSearch.addField('title');
+											oSearch.rows = 200;
+											oSearch.sort('title', 'asc');
+											oSearch.getResults(function(data) {ns1blankspace.setup.userRole.access.edit(oParam, data)})	
+										}
+										else
+										{
+											var aHTML = [];
+										
+											ns1blankspace.endpoints = oResponse.data.rows;
+									
+											aHTML.push('<table id="ns1blankspaceUserAccessEndpoints">');
+											
+											if (oResponse.data.rows.length == 0)
+											{
+												aHTML.push('<tr><td class="ns1blankspaceNothing">' +
+																'No access to endpoints has been setup.<br /><br / >You need to subscribe to at least one membership.</td></tr>');
+											}
+											else
+											{		
+												$(oResponse.data.rows).each(function()
+												{
+													aHTML.push('<tr class="ns1blankspaceRow">');
+													
+													aHTML.push('<td id="ns1blankspaceUserRoleEndpoint_title-' + this.id + '" class="ns1blankspaceRow ns1blankspaceRowSelect"' +
+																			' title="">' +
+																			(this.title).toUpperCase() + '</td>');
 
-						if (oResponse.data.rows.length != 0)
-						{
-							var oObjectContext = oResponse.data.rows[0];
-							
-							$('[name="radioCanAdd"][value="' + oObjectContext.canadd + '"]').attr('checked', true);
-							$('[name="radioCanRemove"][value="' + oObjectContext.canremove + '"]').attr('checked', true);
-							$('[name="radioCanUpdate"][value="' + oObjectContext.canupdate + '"]').attr('checked', true);
-							$('[name="radioCanUse"][value="' + oObjectContext.canuse + '"]').attr('checked', true);
-						}
-						else
-						{
-							$('[name="radioCanAdd"][value="Y"]').attr('checked', true);
-							$('[name="radioCanRemove"][value="Y"]').attr('checked', true);
-							$('[name="radioCanUpdate"][value="Y"]').attr('checked', true);
-							$('[name="radioCanUse"][value="Y"]').attr('checked', true);
-						}
-					}
+													aHTML.push('</tr>');
+
+												});
+											}	
+										
+											aHTML.push('</table>');
+												
+											$('#ns1blankspaceAccessColumnEndpoint').html(aHTML.join(''));
+
+											$('#ns1blankspaceUserAccessEndpoints td.ns1blankspaceRowSelect').click(function(event)
+											{
+												var sXHTMLElementId = event.target.id;
+												var aID = sXHTMLElementId.split('-');
+												
+												ns1blankspace.setup.userRole.access.edit({endpoint: aID[1], step: 3});
+											});
+										}
+									}	
+									else if (iStep == 2)
+									{
+										if (oResponse == undefined)
+										{
+											var oSearch = new AdvancedSearch();
+											oSearch.method = 'SETUP_METHOD_SEARCH';
+											oSearch.addField('title,useavailable,addavailable,updateavailable,removeavailable');
+											oSearch.addFilter('endpoint', 'EQUAL_TO', iEndpoint)
+											oSearch.rows = 200;
+											oSearch.sort('title', 'asc');
+											oSearch.getResults(function(data) {ns1blankspace.setup.userRole.access.edit(oParam, data)})	
+										}
+										else
+										{
+											$.extend(true, oParam, {step: 3, methods: oResponse.data.rows});
+											ins1blankspace.setup.userRole.access.edit(oParam);	
+										}
+									}
+
+									else if (iStep == 3)
+									{
+										if (oResponse == undefined)
+										{
+											$('#ns1blankspaceAccessColumnMethod').html(ns1blankspace.xhtml.loadingSmall);
+											$('#ns1blankspaceAccessColumnEdit').html("");
+
+											var aHTML = [];
+											
+											aHTML.push('<table class="ns1blankspaceColumn2">' +
+															'<tr><td><span id="ns1blankspaceUserAccessAdd" class="ns1blankspaceAction">' +
+															'Add</span></td></tr>' +
+															'</table>');									
+											
+											$('#ns1blankspaceAccessColumnAction').html(aHTML.join(''));
+										
+											$('#ns1blankspaceUserAccessAdd').button(
+											{
+												label: "Add"
+											})
+											.click(function()
+											{
+												$.extend(true, oParam, {step: 4, xhtmlElementID: ""});
+												ns1blankspace.setup.userRole.access.edit(oParam);
+											})
+
+											var oSearch = new AdvancedSearch();
+											oSearch.method = 'SETUP_METHOD_SEARCH';
+											oSearch.addField('title,useavailable,addavailable,updateavailable,removeavailable');
+											oSearch.addFilter('endpoint', 'EQUAL_TO', iEndpoint)
+											oSearch.rows = 200;
+											oSearch.sort('title', 'asc');
+											oSearch.getResults(function(data) {ns1blankspace.setup.userRole.access.edit(oParam, data)})	
+										}
+										else
+										{
+											var aHTML = [];
+									
+											aHTML.push('<table id="ns1blankspaceUserAccessMethods" class="ns1blankspaceColumn2">');
+										
+											if (oResponse.data.rows.length == 0)
+											{
+												aHTML.push('<tr><td class="ns1blankspaceNothing">' +
+																'No functional rights available.</td></tr>');
+											}
+											else
+											{		
+												$(oResponse.data.rows).each(function()
+												{
+													aHTML.push('<tr class="ns1blankspaceRow">');
+
+													aHTML.push('<td id="ns1blankspaceUserAccessMethod_title-' + this.id +
+																		'-' + this.addavailable +
+																		'-' + this.removeavailable +
+																		'-' + this.updateavailable +
+																		'-' + this.useavailable +
+																		'" class="ns1blankspaceRow ns1blankspaceRowSelect"' +
+																		' title="">' +
+																			this.title + '</td>');
+											
+													aHTML.push('</tr>');
+												});
+											
+												aHTML.push('</table>');
+											}
+										
+											$('#ns1blankspaceAccessColumnMethod').html(aHTML.join(''));
+
+											$('#ns1blankspaceUserAccessMethods td.ns1blankspaceRowSelect').click(function()
+											{
+												$.extend(true, oParam, {step: 4, xhtmlElementID: this.id});
+												ns1blankspace.setup.userRole.access.edit(oParam);
+											})
+										}
+									}
+
+									else if (iStep == 4)
+									{
+										var sXHTMLElementID;
+										
+										if (oParam != undefined)
+										{
+											if (oParam.xhtmlElementID != undefined) {sXHTMLElementID = oParam.xhtmlElementID}
+										}
+										
+										if (sXHTMLElementID != undefined)
+										{
+											var aXHTMLElementID = sXHTMLElementID.split('-');
+										}	
+
+										var oSearch = new AdvancedSearch();
+										oSearch.method = 'SETUP_ROLE_METHOD_ACCESS_SEARCH';
+										oSearch.addField('canadd,canremove,canupdate,canuse');
+										oSearch.addFilter('role', 'EQUAL_TO', ns1blankspace.objectContext);
+										oSearch.addFilter('accessmethod', 'EQUAL_TO', aXHTMLElementID[1]);
+
+										oSearch.getResults(function(data) {
+												$.extend(true, oParam, {step: 5});
+												ns1blankspace.setup.userRole.access.edit(oParam, data)
+												});
+									}
+
+									else if (iStep == 5)
+									{
+										var sID; 
+										var sXHTMLElementID;
+										var aXHTMLElementID;
+										var aHTML = [];
+										var h = -1;
+										var bCan = false;
+
+										if (oParam != undefined)
+										{
+											if (oParam.xhtmlElementID != undefined) {sXHTMLElementID = oParam.xhtmlElementID}
+										}
+										
+										if (sXHTMLElementID != undefined)
+										{
+											aXHTMLElementID = sXHTMLElementID.split('-');
+										}	
+									
+										aHTML.push('<table id="ns1blankspaceUserAccessMethods" class="ns1blankspaceColumn2">');
+
+										if (oResponse != undefined)
+										{
+											if (oResponse.data.rows.length > 0)
+											{
+												sID = oResponse.data.rows[0].id;
+											}
+											else
+											{
+												aHTML.push('<tr><td class="ns1blankspaceNothing">' +
+																'This role doesn\'t have access to this method.  Click Save to add it.</td></tr>');
+											}
+										}
+
+										if (aXHTMLElementID[5] == 'Y')
+										{
+											bCan = true;			
+											aHTML.push('<tr><td class="ns1blankspaceCaption">' +
+															'Search?' +
+															'</td></tr>' +
+															'<tr class="ns1blankspace">' +
+															'<td class="ns1blankspaceRadio">' +
+															'<input type="radio" id="radioCanUseY" name="radioCanUse" value="Y"/>Yes' +
+															'<br /><input type="radio" id="radioCanUseN" name="radioCanUse" value="N"/>No' +
+															'</td></tr>');
+										}
+
+										if (aXHTMLElementID[2] == 'Y')
+										{		
+											bCan = true;	
+											aHTML.push('<tr><td class="ns1blankspaceCaption">' +
+															'Add?' +
+															'</td></tr>' +
+															'<tr class="ns1blankspace">' +
+															'<td class="ns1blankspaceRadio">' +
+															'<input type="radio" id="radioCanAddY" name="radioCanAdd" value="Y"/>Yes' +
+															'<br /><input type="radio" id="radioCanAddN" name="radioCanAdd" value="N"/>No' +
+															'</td></tr>');
+										}
+											
+										if (aXHTMLElementID[4] == 'Y')
+										{	
+											bCan = true;		
+											aHTML.push('<tr><td class="ns1blankspaceCaption">' +
+															'Update?' +
+															'</td></tr>' +
+															'<tr class="ns1blankspace">' +
+															'<td class="ns1blankspaceRadio">' +
+															'<input type="radio" id="radioCanUpdateY" name="radioCanUpdate" value="Y"/>Yes' +
+															'<br /><input type="radio" id="radioCanUpdateN" name="radioCanUpdate" value="N"/>No' +
+															'</td></tr>');
+										}
+											
+										if (aXHTMLElementID[3] == 'Y')
+										{		
+											bCan = true;	
+											aHTML.push('<tr><td class="ns1blankspaceCaption">' +
+															'Remove?' +
+															'</td></tr>' +
+															'<tr class="ns1blankspace">' +
+															'<td class="ns1blankspaceRadio">' +
+															'<input type="radio" id="radioCanRemoveY" name="radioCanRemove" value="Y"/>Yes' +
+															'<br /><input type="radio" id="radioCanRemoveN" name="radioCanRemove" value="N"/>No' +
+															'</td></tr>');
+										}
+													
+										if (!bCan)
+										{
+											aHTML.push('<tr><td class="ns1blankspaceNothing">' +
+																'Can not set any access to this functionality.</td></tr>');
+
+										}
+
+										aHTML.push('</table>');					
+										
+										$('#ns1blankspaceAccessColumnEdit').html(aHTML.join(''));
+										
+										var aHTML = [];
+										
+										aHTML.push('<table class="ns1blankspace" style="font-size:0.875em">');
+												
+										aHTML.push('<tr><td>' +
+														'<span style="width:70px;" id="ns1blankspaceUserAccessSave" class="ns1blankspaceAction">Save</span>' +
+														'</td></tr>');
+														
+										aHTML.push('<tr><td>' +
+														'<span style="width:70px;" id="ns1blankspaceUserAccessCancel" class="ns1blankspaceAction">Cancel</span>' +
+														'</td></tr>');
+																			
+										aHTML.push('</table>');					
+											
+										$('#ns1blankspaceAccessColumnAction').html(aHTML.join(''));
+										
+										$('#ns1blankspaceUserAccessSave').button(
+										{
+											text: "Save"
+										})
+										.click(function() 
+										{
+											ns1blankspace.status.working();
+
+											var sData = 'id=' + ns1blankspace.util.fs(sID);
+											sData += '&role=' + ns1blankspace.util.fs(ns1blankspace.objectContext);
+											sData += '&accessmethod=' + ns1blankspace.util.fs(aXHTMLElementID[1]);
+											sData += '&canadd=' + (ns1blankspace.util.fs($('input[name="radioCanAdd"]:checked').val()) != '' ? ns1blankspace.util.fs($('input[name="radioCanAdd"]:checked').val()) : 'N');
+											sData += '&canremove=' + (ns1blankspace.util.fs($('input[name="radioCanRemove"]:checked').val()) != '' ? ns1blankspace.util.fs($('input[name="radioCanRemove"]:checked').val()) : 'N');
+											sData += '&canupdate=' + (ns1blankspace.util.fs($('input[name="radioCanUpdate"]:checked').val()) != '' ? ns1blankspace.util.fs($('input[name="radioCanUpdate"]:checked').val()) : 'N');
+											sData += '&canuse=' + (ns1blankspace.util.fs($('input[name="radioCanUse"]:checked').val()) != '' ? ns1blankspace.util.fs($('input[name="radioCanUse"]:checked').val()) : 'N');
+
+											$.ajax(
+											{
+												type: 'POST',
+												url: ns1blankspace.util.endpointURI('SETUP_ROLE_METHOD_ACCESS_MANAGE'),
+												data: sData,
+												dataType: 'json',
+												success: function(data)
+												{
+													if (data.status == "OK")
+													{
+														ns1blankspace.status.message('Saved');
+													}
+													else
+													{
+														ns1blankspace.status.error(data.error.errornotes);
+													}
+												}
+											});
+										});
+
+										$('#ns1blankspaceUserAccessCancel').button(
+										{
+											text: "Cancel"
+										})
+										.click(function() 
+										{
+											$.extend(true, oParam, {step: 2});
+											ins1blankspace.setup.userRole.access.edit(oParam);
+										});
+
+										if (oResponse.data.rows.length != 0)
+										{
+											var oObjectContext = oResponse.data.rows[0];
+											
+											$('[name="radioCanAdd"][value="' + oObjectContext.canadd + '"]').attr('checked', true);
+											$('[name="radioCanRemove"][value="' + oObjectContext.canremove + '"]').attr('checked', true);
+											$('[name="radioCanUpdate"][value="' + oObjectContext.canupdate + '"]').attr('checked', true);
+											$('[name="radioCanUse"][value="' + oObjectContext.canuse + '"]').attr('checked', true);
+										}
+										else
+										{
+											$('[name="radioCanAdd"][value="Y"]').attr('checked', true);
+											$('[name="radioCanRemove"][value="Y"]').attr('checked', true);
+											$('[name="radioCanUpdate"][value="Y"]').attr('checked', true);
+											$('[name="radioCanUse"][value="Y"]').attr('checked', true);
+										}
+									}
+								}	
 				}
 }				
