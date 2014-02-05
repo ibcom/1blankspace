@@ -5275,6 +5275,8 @@ ns1blankspace.pdf =
 					var iTopMargin = ns1blankspace.util.getParam(oParam, 'topmargin').value;
 					var iBottomMargin = ns1blankspace.util.getParam(oParam, 'bottommargin').value;
 					var iOrientation = ns1blankspace.util.getParam(oParam, 'orientation', {"default": 1}).value;
+					var bLink = ns1blankspace.util.getParam(oParam, 'link', {"default": false}).value;
+					var sLinkText = ns1blankspace.util.getParam(oParam, 'linkText', {"default": "Download&nbsp;&raquo;"}).value;
 
 					if (bReplace)
 					{	
@@ -5326,18 +5328,30 @@ ns1blankspace.pdf =
 								{
 									window.open('/download/' + aReturn[1])	
 								}
-								
-								$('#' + sXHTMLElementID).button(
+								else
 								{
-									label: 'Open'
-								})
-								.click(function(event)
-								{
-									window.open('/download/' + aReturn[1])
-								});
+									if (bLink && sXHTMLElementID !== undefined)
+									{
+										$('#' + sXHTMLElementID).button("destroy");
+										$('#' + sXHTMLElementID).html('<a href="/download/' + aReturn[1] + '" target="_blank">' + sLinkText + '</a>');
+									}
+									else
+									{	
+										$('#' + sXHTMLElementID).button("destroy");
+										$('#' + sXHTMLElementID).button(
+										{
+											label: 'Open'
+										})
+										.click(function(event)
+										{
+											window.open('/download/' + aReturn[1])
+										});
+									}	
+								}	
 							}
 							else
 							{
+								$('#' + sXHTMLElementID).button("destroy");
 								$('#' + sXHTMLElementID).button(
 								{
 									label: 'Error'

@@ -475,7 +475,8 @@ ns1blankspace.setup.userRole =
 												
 										aHTML.push('<table class="ns1blankspaceContainer">' +
 														'<tr class="ns1blankspaceContainer">' +
-														'<td id="ns1blankspaceAccessColumn1" class="ns1blankspaceColumn1Flexible"></td>' +
+														'<td id="ns1blankspaceAccessColumn1" class="ns1blankspaceColumn1Flexible">' +
+														ns1blankspace.xhtml.loading + '</td>' +
 														'<td id="ns1blankspaceAccessColumn2" class="ns1blankspaceColumn2" style="width:50px;"></td>' +
 														'</tr>' + 
 														'</table>');
