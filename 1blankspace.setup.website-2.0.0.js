@@ -389,6 +389,11 @@ ns1blankspace.setup.website =
 						ns1blankspace.objectContextData = oResponse.data.rows[0];
 						
 						$('#ns1blankspaceControlContext').html(ns1blankspace.objectContextData.title);
+
+						$('#ns1blankspaceControlContext').html(
+							ns1blankspace.objectContextData.title +
+							'<br /><span id="ns1blankspaceControlContext_id" class="ns1blankspaceSub">' + ns1blankspace.objectContextData.id + '</span>');
+
 						$('#ns1blankspaceViewControlAction').button({disabled: false});
 						$('#ns1blankspaceViewControlActionOptions').button({disabled: false});
 
