@@ -2143,5 +2143,5 @@ ns1blankspace.setup.financial =
 											}
 									});		
 								}
-				},
+				}
 }

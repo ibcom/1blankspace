@@ -280,6 +280,11 @@ ns1blankspace.setup.website =
 
 						aHTML.push('<tr><td id="ns1blankspaceControlURLs" class="ns1blankspaceControl">' +
 										'URLs</td></tr>');
+
+						aHTML.push('<tr><td>&nbsp;</td></tr>');
+
+						aHTML.push('<tr><td id="ns1blankspaceControlHTTPHeaders" class="ns1blankspaceControl">' +
+										'HTTP<br />Headers</td></tr>');
 					}	
 
 					aHTML.push('</table>');					
@@ -298,7 +303,8 @@ ns1blankspace.setup.website =
 					aHTML.push('<div id="ns1blankspaceMainScripts" class="ns1blankspaceControlMain"></div>');
 					aHTML.push('<div id="ns1blankspaceMainURLs" class="ns1blankspaceControlMain"></div>');	
 					aHTML.push('<div id="ns1blankspaceMainWebapp" class="ns1blankspaceControlMain"></div>');
-					aHTML.push('<div id="ns1blankspaceMainForms" class="ns1blankspaceControlMain"></div>');		
+					aHTML.push('<div id="ns1blankspaceMainForms" class="ns1blankspaceControlMain"></div>');	
+					aHTML.push('<div id="ns1blankspaceMainHTTPHeaders" class="ns1blankspaceControlMain"></div>');			
 						
 					$('#ns1blankspaceMain').html(aHTML.join(''));
 						
@@ -366,6 +372,12 @@ ns1blankspace.setup.website =
 					{
 						ns1blankspace.show({selector: '#ns1blankspaceMainURLs'});
 						ns1blankspace.setup.website.urls.show();
+					});
+
+					$('#ns1blankspaceControlHTTPHeaders').click(function(event)
+					{
+						ns1blankspace.show({selector: '#ns1blankspaceMainHTTPHeaders'});
+						ns1blankspace.setup.website.httpHeaders.show();
 					});
 				},
 
@@ -1832,15 +1844,302 @@ ns1blankspace.setup.website =
 								}
 				},
 
-	new2:		function (oParam)
+	
+	httpHeaders: 
 				{
-					ns1blankspace.objectContextData = undefined
-					ns1blankspace.objectContext = -1;
-					ns1blankspace.setup.website.init();
-					$('#ns1blankspaceViewControlAction').button({disabled: false});
-					ns1blankspace.show({selector: '#divInterfaceMainDetails'});
-					ns1blankspace.setup.website.details();
-				},				
+					show:		function (oParam, oResponse)
+								{
+									var iObjectContext = ns1blankspace.objectContext;
+									
+									if (oParam != undefined)
+									{
+										if (oParam.objectContext != undefined) {iObjectContext = oParam.objectContext}
+									}		
+										
+									if (oResponse == undefined)
+									{	
+										var oSearch = new AdvancedSearch();
+										oSearch.method = 'SETUP_SITE_HTTP_HEADER_SEARCH';
+										oSearch.addField('key,value');
+										oSearch.addFilter('site', 'EQUAL_TO', ns1blankspace.objectContext)
+										oSearch.rf = 'json';
+										oSearch.sort('key', 'asc');
+										
+										oSearch.getResults(function(data)
+										{
+											ns1blankspace.setup.website.httpHeaders.show(oParam, data)
+										});
+									}
+									else
+									{	
+										var aHTML = [];
+											
+										aHTML.push('<table class="ns1blankspaceContainer">' +
+														'<tr class="ns1blankspaceContainer">' +
+														'<td id="ns1blankspaceHTTPHeaderColumn1" class="ns1blankspaceColumn1Flexible"></td>' +
+														'<td id="ns1blankspaceHTTPHeaderColumn2" class="ns1blankspaceColumn2" style="width:100px;"></td>' +
+														'</tr>' + 
+														'</table>');
+
+										$('#ns1blankspaceMainHTTPHeaders').html(aHTML.join(''));
+										
+										var aHTML = [];
+											
+										aHTML.push('<table class="ns1blankspaceColumn2">');
+										
+										aHTML.push('<tr><td class="ns1blankspaceAction">' +
+													'<span id="ns1blankspaceWebsiteHTTPHeaderAdd">Add</span>' +
+													'</td></tr>');
+													
+										aHTML.push('<tr><td style="padding-top:20px;">' +
+													'<a href="http://en.wikipedia.org/wiki/List_of_HTTP_header_fields" target="_blank">What are HTTP headers</a>' +
+													'</td></tr>');			
+										
+										aHTML.push('</table>');					
+										
+										$('#ns1blankspaceHTTPHeaderColumn2').html(aHTML.join(''));
+									
+										$('#ns1blankspaceWebsiteHTTPHeaderAdd').button(
+										{
+											label: "Add"
+										})
+										.click(function()
+										{
+											 ns1blankspace.setup.website.httpHeaders.add(oParam);
+										})
+											
+										var aHTML = [];
+
+										if (oResponse.data.rows.length == 0)
+										{
+											aHTML.push('<table><tr><td class="ns1blankspaceNothing">No HTTP Headers.</td></tr></table>');
+	
+											$('#ns1blankspaceHTTPHeaderColumn1').html(aHTML.join(''));
+										}
+										else
+										{
+											aHTML.push('<table id="ns1blankspaceSetupWebsiteHTTPHeaders">');
+											aHTML.push('<tr class="ns1blankspaceCaption">');
+											aHTML.push('<td class="ns1blankspaceHeaderCaption">HTTP Header</td>');
+											aHTML.push('<td class="ns1blankspaceHeaderCaption">Value</td>');
+											aHTML.push('<td class="ns1blankspaceHeaderCaption">&nbsp;</td>');
+											aHTML.push('</tr>');
+		
+											$.each(oResponse.data.rows, function()
+											{
+												aHTML.push('<tr class="ns1blankspaceRow">');
+																
+												aHTML.push('<td id="ns1blankspaceWebsiteHTTPHeader_header-' + this.id + '" class="ns1blankspaceRow ns1blankspaceRowSelect">' +
+																		this.key + '</td>');
+
+												aHTML.push('<td id="ns1blankspaceWebsiteHTTPHeader_value-' + this.id + '" class="ns1blankspaceRow">' +
+																		this.value + '</td>');
+																		
+												aHTML.push('<td style="width:30px;text-align:right;" class="ns1blankspaceRow">');
+													
+												aHTML.push('<span id="ns1blankspaceWebsiteHTTPHeader_options_remove-' + this.id + '" class="ns1blankspaceRowRemove"></span>');
+														
+												aHTML.push('</td>');
+																
+												aHTML.push('</tr>');
+											});
+											
+											aHTML.push('</table>');
+
+											$('#ns1blankspaceHTTPHeaderColumn1').html(aHTML.join(''));
+													
+											$('#ns1blankspaceSetupWebsiteHTTPHeaders span.ns1blankspaceRowRemove').button(
+											{
+												text: false,
+												icons:
+												{
+													primary: "ui-icon-close"
+												}
+											})
+											.click(function()
+											{
+												ns1blankspace.setup.website.httpHeaders.remove({xhtmlElementID: this.id});
+											})
+											.css('width', '15px')
+											.css('height', '17px');
+											
+											$('#ns1blankspaceSetupWebsiteHTTPHeaders .ns1blankspaceRowSelect')
+											.click(function()
+											{
+												ns1blankspace.setup.website.httpHeaders.add({xhtmlElementID: this.id})
+											});
+										}
+									}
+								},
+
+					add:		function (oParam, oResponse)
+								{
+									var sID; 
+									
+									if (oResponse == undefined)
+									{
+										var sXHTMLElementID;
+
+										if (oParam != undefined)
+										{
+											if (oParam.xhtmlElementID != undefined) {sXHTMLElementID = oParam.xhtmlElementID}
+										}
+										
+										if (sXHTMLElementID != undefined)
+										{
+											var aXHTMLElementID = sXHTMLElementID.split('-');
+											var sID = aXHTMLElementID[1];
+										}	
+									
+										var aHTML = [];
+	
+										aHTML.push('<table class="ns1blankspace">');
+												
+										aHTML.push('<tr><td class="ns1blankspaceCaption">' +
+														'HTTP Header (Key)' +
+														'</td></tr>' +
+														'<tr class="ns1blankspaceText">' +
+														'<td class="ns1blankspaceText">' +
+														'<input id="ns1blankspaceSetupWebsiteHTTPHeaderKey" class="ns1blankspaceText">' +
+														'</td></tr>');
+
+										aHTML.push('<tr><td class="ns1blankspaceCaption">' +
+														'Value' +
+														'</td></tr>' +
+														'<tr class="ns1blankspaceText">' +
+														'<td class="ns1blankspaceText">' +
+														'<input id="ns1blankspaceSetupWebsiteHTTPHeaderValue" class="ns1blankspaceText">' +
+														'</td></tr>');
+														
+										aHTML.push('</table>');					
+										
+										$('#ns1blankspaceHTTPHeaderColumn1').html(aHTML.join(''));
+
+										$('#ns1blankspaceSetupWebsiteHTTPHeaderKey').focus();
+										
+										var aHTML = [];
+
+										aHTML.push('<table class="ns1blankspaceColumn2">');
+												
+										aHTML.push('<tr><td>' +
+														'<span class="ns1blankspaceAction" style="width:80px;" id="ns1blankspaceWebsiteHTTPHeaderSave">Save</span>' +
+														'</td></tr>');
+									
+										aHTML.push('<tr><td>' +
+														'<span class="ns1blankspaceAction" style="width:80px;" id="ns1blankspaceWebsiteHTTPHeaderCancel">Cancel</span>' +
+														'</td></tr>');
+														
+										aHTML.push('</table>');	
+	
+										$('#ns1blankspaceHTTPHeaderColumn2').html(aHTML.join(''));
+										
+										$('#ns1blankspaceWebsiteHTTPHeaderSave').button(
+										{
+											text: "Save"
+										})
+										.click(function() 
+										{
+											var oData =
+											{
+												site: ns1blankspace.objectContext,
+												key: $('#ns1blankspaceSetupWebsiteHTTPHeaderKey').val(),
+												value: $('#ns1blankspaceSetupWebsiteHTTPHeaderValue').val(),
+												id: sID
+											}	
+											
+											ns1blankspace.status.working();
+
+											$.ajax(
+											{
+												type: 'POST',
+												url: ns1blankspace.util.endpointURI('SETUP_SITE_HTTP_HEADER_MANAGE'),
+												data: oData,
+												dataType: 'json',
+												success: function(data)
+												{
+													if (data.status == 'OK')
+													{	
+														ns1blankspace.status.message('HTTP header added.')
+														ns1blankspace.show({selector: '#ns1blankspaceMainHTTPHeaders'});
+														ns1blankspace.setup.website.httpHeaders.show();
+
+													}
+													else
+													{
+														ns1blankspace.status.error(data.error.errornotes);
+													}	
+												}
+											});
+										});
+										
+										$('#ns1blankspaceWebsiteHTTPHeaderCancel').button(
+										{
+											text: "Cancel"
+										})
+										.click(function() 
+										{
+											ns1blankspace.show({selector: '#ns1blankspaceMainHTTPHeaders'});
+											ns1blankspace.setup.website.httpHeaders.show();
+										});
+										
+										if (sID != undefined)
+										{
+											var oSearch = new AdvancedSearch();
+											oSearch.method = 'SETUP_SITE_HTTP_HEADER_SEARCH';
+											oSearch.addField('key,value');
+											oSearch.addFilter('site', 'EQUAL_TO', ns1blankspace.objectContext)
+											oSearch.rf = 'json';
+											
+											oSearch.getResults(function(data)
+											{
+												ns1blankspace.setup.website.httpHeaders.add(oParam, data)
+											});
+										}
+									}
+									else
+									{
+										if (oResponse.data.rows.length != 0)
+										{
+											var oObjectContext = oResponse.data.rows[0];
+											$('#ns1blankspaceSetupWebsiteHTTPHeaderKey').val(oObjectContext.key)
+											$('#ns1blankspaceSetupWebsiteHTTPHeaderValue').val(oObjectContext.value)
+										}
+									}		
+								},
+
+					remove:		function (oParam, oResponse)
+								{
+									var sXHTMLElementID;
+
+									if (oParam != undefined)
+									{
+										if (oParam.xhtmlElementID != undefined) {sXHTMLElementID = oParam.xhtmlElementID}
+									}
+									
+									var aXHTMLElementID = sXHTMLElementID.split('-');
+									var sID = aXHTMLElementID[1];
+									
+									if (oResponse == undefined)
+									{	
+										$.ajax(
+										{
+											type: 'POST',
+											url: ns1blankspace.util.endpointURI('SETUP_SITE_HTTP_HEADER_MANAGE'),
+											data: 'remove=1&id=' + sID,
+											dataType: 'json',
+											success: function(data){ns1blankspace.setup.website.httpHeaders.remove(oParam, data)}
+										});
+									}	
+									else
+									{
+										if (oResponse.status == 'OK')
+										{
+											$('#' + sXHTMLElementID).parent().parent().fadeOut(500);
+										}	
+									}	
+									
+								}
+				},		
 
 	save: 		{
 					send:		function (oParam, oResponse)
