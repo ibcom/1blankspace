@@ -98,7 +98,7 @@
 		{"title":"CONTACT_PERSON_MANAGE", "advancedSearch":"false", "rpc":"true"},
 		{"title":"CONTACT_PERSON_SEARCH", "advancedSearch":"true", "rpc":"true"},
 		{"title":"CONTACT_PERSON_SUPPLIER_STATUS_CHANGE_SEARCH", "advancedSearch":"true", "rpc":"true"},
-		{"title":"CONTACT_RELATIONSHIP_MANAGE", "advancedSearch":"false", "rpc":"false"},
+		{"title":"CONTACT_RELATIONSHIP_MANAGE", "advancedSearch":"false", "rpc":"true"},
 		{"title":"CONTACT_RELATIONSHIP_SEARCH", "advancedSearch":"true", "rpc":"true"},
 		{"title":"CONTACT_RELATIONSHIP_TYPE_SEARCH", "advancedSearch":"false", "rpc":"false"},
 		{"title":"CONTACT_SECONDARY_RELATIONSHIP_MANAGE", "advancedSearch":"false", "rpc":"false"},
