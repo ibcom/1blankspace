@@ -7,7 +7,7 @@
  
 ns1blankspace.contactBusiness = 
 {
-		init: 	function (oParam)
+	init: 		function (oParam)
 				{
 					ns1blankspace.app.reset();
 
@@ -58,6 +58,10 @@ ns1blankspace.contactBusiness =
 										'<td id="ns1blankspaceControlFavourites" class="ns1blankspaceControl">Favourites</td>' +
 										'</tr>');			
 									
+						aHTML.push('<tr class="ns1blankspaceControl">' +
+										'<td id="ns1blankspaceControlByGroup" class="ns1blankspaceControl">Groups</td>' +
+										'</tr>');	
+													
 						aHTML.push('</table>');		
 						
 						$('#ns1blankspaceControl').html(aHTML.join(''));	
@@ -66,6 +70,12 @@ ns1blankspace.contactBusiness =
 						{
 							ns1blankspace.show({refresh: true});
 							ns1blankspace.contactBusiness.favourites.show({xhtmlElementID: "ns1blankspaceMain"});
+						});
+
+						$('#ns1blankspaceControlByGroup').click(function(event)
+						{
+							ns1blankspace.show({refresh: true});
+							ns1blankspace.contactBusiness.groups.search.show();
 						});
 						
 						$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions);
@@ -1338,7 +1348,7 @@ ns1blankspace.contactBusiness =
 															type: 'GET',
 															url: ns1blankspace.util.endpointURI('SETUP_CONTACT_BUSINESS_GROUP_SEARCH'),
 															dataType: 'json',
-															success: function(data) {ns1blankspace.contactBusiness.search.show(oParam, data)}
+															success: function(data) {ns1blankspace.contactBusiness.groups.search.show(oParam, data)}
 														});
 													}
 													else
@@ -1347,7 +1357,7 @@ ns1blankspace.contactBusiness =
 														
 														aHTML.push('<table class="ns1blankspaceContainer">' +
 																	'<tr class="ns1blankspaceContainer">' +
-																	'<td id="ns1blankspaceContactBusinessByGroupColumn1" style="width:150px;border-right-style:solid;border-width:2px;border-color:#B8B8B8;padding-right:15px;">' +
+																	'<td id="ns1blankspaceContactBusinessByGroupColumn1" style="width:150px;border-right-style:solid;border-width:1px;border-color:#B8B8B8;padding-right:15px;">' +
 																	'</td>' +
 																	'<td id="ns1blankspaceContactBusinessByGroupColumn2" class="ns1blankspaceColumn1Large" style="padding-left:15px;">' +
 																	'</td>' +
@@ -1368,7 +1378,7 @@ ns1blankspace.contactBusiness =
 														}
 														else
 														{
-															aHTML.push('<table>');
+															aHTML.push('<table class="ns1blankspace">');
 															
 															$.each(oResponse.data.rows, function()
 															{
@@ -1425,7 +1435,7 @@ ns1blankspace.contactBusiness =
 														}
 														else
 														{		
-															aHTML.push('<table class="ns1blankspace">');
+															aHTML.push('<table class="ns1blankspace" id="ns1blankspaceContactBusinessGroup">');
 										
 															aHTML.push('<tr class="ns1blankspaceCaption">' + 
 																			'<td colspan=2 class="ns1blankspaceCaption">' + aXHTMLElementId[2] + '</td>' +
@@ -1462,10 +1472,8 @@ ns1blankspace.contactBusiness =
 													
 													aHTML.push('<tr class="ns1blankspaceRow">');
 										
-													aHTML.push('<td id="ns1blankspaceContactBusinessGroup_tradename-' + oRow.contactbusiness + '" class="ns1blankspaceRow">' +
+													aHTML.push('<td id="ns1blankspaceContactBusinessGroup_tradename-' + oRow.contactbusiness + '" class="ns1blankspaceRow ns1blankspaceRowSelect">' +
 																			oRow["businessgroup.contactbusiness.tradename"] + '</td>');
-																			
-													aHTML.push('<td id="ns1blankspaceContactBusinessGroup-' + oRow.contactbusiness + '" class="ns1blankspaceRowSelect ns1blankspaceContactBusinessGroupRowSelect">&nbsp;</td>');						
 													
 													aHTML.push('</tr>');
 																
@@ -1474,18 +1482,12 @@ ns1blankspace.contactBusiness =
 
 									bind: 		function ()
 												{
-													$('.ns1blankspaceContactBusinessGroupRowSelect').button( {
-																text: false,
-																icons: {
-																	primary: "ui-icon-play"
-																}
-													})
-													.click(function() {
-														ns1blankspace.contactBusiness.init({showHome: false});
-														ins1blankspace.contactBusiness.search.send(this.id)
-													})
-													.css('width', '15px')
-													.css('height', '20px')
+													$('#ns1blankspaceContactBusinessGroup td.ns1blankspaceRowSelect')
+													.click(function()
+													{
+														var aID = (this.id).split('-');
+														ns1blankspace.contactBusiness.init({id: aID[1]});
+													});
 												}
 								}
 				},				

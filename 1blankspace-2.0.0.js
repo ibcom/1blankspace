@@ -81,7 +81,9 @@ String.prototype.formatXHTML = function(bDirection)
 		sValue = sValue.replace(/\&#47;/g, '/');
 		sValue = sValue.replace(/\&quot;/g, '"');
 		sValue = sValue.replace(/\&#39;/g, '\'');
-
+		sValue = sValue.replace(/\&#60;/g,'<');
+		sValue = sValue.replace(/\&#62;/g,'>');
+		
 		for ( var i = 0; i < aFind.length; i++ ) 
 		{
 			var regex = new RegExp(aFind[i], "gi");

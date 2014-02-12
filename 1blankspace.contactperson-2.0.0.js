@@ -1519,7 +1519,7 @@ ns1blankspace.contactPerson =
 														
 														aHTML.push('<table class="ns1blankspaceContainer">' +
 																	'<tr class="ns1blankspaceContainer">' +
-																	'<td id="ns1blankspaceContactPersonByGroupColumn1" style="width:150px;border-right-style:solid;border-width:2px;border-color:#B8B8B8;padding-right:15px;">' +
+																	'<td id="ns1blankspaceContactPersonByGroupColumn1" style="width:150px;border-right-style:solid;border-width:1px;border-color:#B8B8B8;padding-right:15px;">' +
 																	'</td>' +
 																	'<td id="ns1blankspaceContactPersonByGroupColumn2" class="ns1blankspaceColumn1Large" style="padding-left:15px;">' +
 																	'</td>' +
@@ -1635,18 +1635,16 @@ ns1blankspace.contactPerson =
 													
 													aHTML.push('<tr class="ns1blankspaceRow">');
 										
-													aHTML.push('<td id="ns1blankspaceContactPersonGroup_firstname-' + oRow.contactperson + '" class="ns1blankspaceRow">' +
+													aHTML.push('<td id="ns1blankspaceContactPersonGroup_firstname-' + oRow.contactperson + '" class="ns1blankspaceRow ns1blankspaceRowSelect">' +
 																			oRow["persongroup.contactperson.firstname"] + '</td>');
 																			
-													aHTML.push('<td id="ns1blankspaceContactPersonGroup_surname-' + oRow.contactperson + '" class="ns1blankspaceRow">' +
+													aHTML.push('<td id="ns1blankspaceContactPersonGroup_surname-' + oRow.contactperson + '" class="ns1blankspaceRow ns1blankspaceRowSelect">' +
 																			oRow["persongroup.contactperson.surname"]+ '</td>');
 															
-													aHTML.push('<td style="width:45px;text-align:right;" class="ns1blankspaceRow">' +
+													aHTML.push('<td style="width:30px;text-align:right;" class="ns1blankspaceRow">' +
 																	'<span id="ns1blankspaceContactPersonGroup_remove-' + oRow.id + 
 																	'" class="ns1blankspaceRow ns1blankspaceGroupsRemove">&nbsp;</span>' +
-																	'<span id="ns1blankspaceContactPersonGroup_view-' + oRow.id + 
-																	'-' + oRow.contactperson +
-																	'" class="ns1blankspaceRowView">&nbsp;</span></td>');
+																	'</td>');
 																		
 													aHTML.push('</tr>');
 																
@@ -1655,19 +1653,11 @@ ns1blankspace.contactPerson =
 
 									bind: 		function ()
 												{
-													$('#ns1blankspaceContactPersonGroup .ns1blankspaceRowView').button(
+													$('#ns1blankspaceContactPersonGroup .ns1blankspaceRowSelect')
+													.click(function()
 													{
-														text: false,
-														icons:
-														{
-															primary: "ui-icon-play"
-														}
-													})
-													.click(function() {
-														ns1blankspace.contactPerson.init({id: (this.id).split('-')[2]});
-													})
-													.css('width', '15px')
-													.css('height', '20px');
+														ns1blankspace.contactPerson.init({id: (this.id).split('-')[1]});
+													});
 
 													$('#ns1blankspaceContactPersonGroup .ns1blankspaceGroupsRemove').button(
 													{
