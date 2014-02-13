@@ -1474,6 +1474,11 @@ ns1blankspace.contactBusiness =
 										
 													aHTML.push('<td id="ns1blankspaceContactBusinessGroup_tradename-' + oRow.contactbusiness + '" class="ns1blankspaceRow ns1blankspaceRowSelect">' +
 																			oRow["businessgroup.contactbusiness.tradename"] + '</td>');
+
+													aHTML.push('<td style="width:30px;text-align:right;" class="ns1blankspaceRow">' +
+																	'<span id="ns1blankspaceContactBusinessGroup_remove-' + oRow.id + 
+																	'" class="ns1blankspaceRow ns1blankspaceGroupsRemove">&nbsp;</span>' +
+																	'</td>');
 													
 													aHTML.push('</tr>');
 																
@@ -1488,6 +1493,21 @@ ns1blankspace.contactBusiness =
 														var aID = (this.id).split('-');
 														ns1blankspace.contactBusiness.init({id: aID[1]});
 													});
+
+													$('#ns1blankspaceContactBusinessGroup .ns1blankspaceGroupsRemove').button(
+													{
+														text: false,
+														icons:
+														{
+															 primary: "ui-icon-close"
+														}
+													})
+													.click(function()
+													{
+														ns1blankspace.contactBusiness.groups.remove(this.id)
+													})
+													.css('width', '15px')
+													.css('height', '20px');
 												}
 								}
 				},				

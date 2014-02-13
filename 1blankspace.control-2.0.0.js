@@ -606,7 +606,7 @@ ns1blankspace.views =
 		title: "Search & Report",
 		namespace: "report",
 		endpoint: "", 
-		show: true,
+		show: false,
 		group: 6,
 		type: 1
 	},
