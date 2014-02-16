@@ -1100,15 +1100,15 @@ ns1blankspace.financial.bankAccount =
 										aHTML.push('<td id="ns1blankspaceBankAccountImport_processeddate-' + oRow.id + '"' +
 														' class="ns1blankspaceRow ns1blankspaceRowSelect ns1blankspaceBankAccountImportRowSelect"' +
 														' style="text-align:right;">');
-															
-										if (oRow.startdate != '')
+										
+										if (oRow.enddate != '')
 										{		
-											aHTML.push(oRow.startdate + '<br />');	
+											aHTML.push(oRow.enddate + '<br />');	
 										}
 
-										if (oRow.enddate != oRow.startdate)
+										if (oRow.startdate != oRow.enddate)
 										{		
-											aHTML.push(' to ' + oRow.enddate + '<br />');	
+											aHTML.push(' to ' + oRow.startdate + '<br />');	
 										}
 									
 										//aHTML.push('<span class="ns1blankspaceSub">' + oRow.processeddate + '</span></td>');

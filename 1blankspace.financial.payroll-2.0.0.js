@@ -34,6 +34,19 @@ ns1blankspace.financial.payroll =
 					}
 					else
 					{		
+						oParam.bind = ns1blankspace.financial.payroll.bind;
+
+						oParam.xhtml = '<table id="ns1blankspaceOptions" class="ns1blankspaceViewControlContainer">' +	
+											'<tr class="ns1blankspaceOptions">' +
+											'<td id="ns1blankspaceControlActionOptionsRemove" class="ns1blankspaceViewControl">' +
+											'Delete' +
+											'</td></tr>' +
+											'<tr class="ns1blankspaceOptions">' +
+											'<td id="ns1blankspaceControlActionOptionsComplete" class="ns1blankspaceViewControl">' +
+											'Complete' +
+											'</td></tr>' +
+											'</table>';
+
 						ns1blankspace.app.set(oParam);
 					}
 
@@ -44,6 +57,22 @@ ns1blankspace.financial.payroll =
 						ns1blankspace.financial.payroll.home({"new": true});
 					});
 				},
+
+	bind: 		function (oParam)
+				{
+					$('#ns1blankspaceControlActionOptionsRemove')
+					.click(function() 
+					{
+						ns1blankspace.app.options.remove(oParam)
+					});
+
+					$('#ns1blankspaceControlActionOptionsComplete')
+					.click(function() 
+					{
+						ns1blankspace.app.options.hide();
+						ns1blankspace.financial.payroll.complete({step: 1});
+					});
+				},			
 
 	home:		function (oParam, oResponse)
 				{		
