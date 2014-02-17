@@ -1147,6 +1147,16 @@ textarea.ns1blankspaceTextMultiSmall
 	background: url(/jscripts/images/1blankspace.icons.65-2.0.0.png) 0px -195px;
 }
 
+#ns1blankspaceViewVisualise
+{
+	background: url(/jscripts/images/1blankspace.icons.50-2.0.0.png) -300px -200px;
+}
+
+#ns1blankspaceViewVisualiseLarge
+{
+	background: url(/jscripts/images/1blankspace.icons.65-2.0.0.png) -390px -260px;
+}
+
 table.ns1blankspaceViewControlBrowse
 {
 	font-size: 0.875em;
