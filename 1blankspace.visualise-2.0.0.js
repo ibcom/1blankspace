@@ -68,11 +68,26 @@ ns1blankspace.visualise =
 												' data-method="' + this.method + '">' + this.name + '</td>' +
 										'</tr>');	
 					});
+
+					aHTML.push('</table>');
 					
 					if (ns1blankspace.visualise.options.example)
 					{	
+						aHTML.push('<table class="ns1blankspaceControl" style="padding-top:5px;">');
+
 						aHTML.push('<tr><td class="ns1blankspaceControl ns1blankspaceSub" style="font-size:0.875em; border-bottom-style:solid; border-width: 0px; border-color: #D0D0D0;">' +
-									'EXAMPLE</td></tr>');
+									'D3</td></tr>');
+
+						aHTML.push('<tr class="ns1blankspaceControl">' +
+									'<td id="ns1blankspaceControlD3Chart" class="ns1blankspaceControl">Chart</td>' +
+									'</tr>');
+
+						aHTML.push('</table>');
+
+						aHTML.push('<table class="ns1blankspaceControl" style="padding-top:20px;">');
+
+						aHTML.push('<tr><td class="ns1blankspaceControl ns1blankspaceSub" style="font-size:0.875em; border-bottom-style:solid; border-width: 0px; border-color: #D0D0D0;">' +
+									'DATAMAPS</td></tr>');
 
 						aHTML.push('<tr class="ns1blankspaceControl">' +
 									'<td id="ns1blankspaceControlSearch" class="ns1blankspaceControl">Search</td>' +
@@ -97,11 +112,16 @@ ns1blankspace.visualise =
 						aHTML.push('<tr class="ns1blankspaceControl">' +
 									'<td id="ns1blankspaceControlRenderBubblesUpdate" class="ns1blankspaceControl ns1blankspaceSubNote">Update</td>' +
 									'</tr>');
-					}	
 
-					aHTML.push('</table>');		
+						aHTML.push('</table>');	
+					}	
 					
 					$('#ns1blankspaceControl').html(aHTML.join(''));
+
+					$('#ns1blankspaceControlD3Chart').click(function(event)
+					{
+						ns1blankspace.visualise.provider.d3.chart();
+					});
 
 					$('#ns1blankspaceControlSearch').click(function(event)
 					{
@@ -184,6 +204,26 @@ ns1blankspace.visualise =
 				},			
 
 	provider:	{
+					d3:
+					{
+						chart: 	function(oParam)
+								{
+									var sXHTMLElementContainer = ns1blankspace.util.getParam(oParam, 'xhtmlElementContainerID', {"default": 'ns1blankspaceVisualiseContainer'}).value;
+
+									$('#' + sXHTMLElementContainer).empty();
+
+									var oData = [1,2,3,4];
+
+									var oD3 = d3.select('#' + sXHTMLElementContainer);
+
+									oD3.selectAll("div").data(oData)
+									  	.enter().append('div')
+									    .style('width', function(d) { return d * 10 + 'px'; })
+									    .style('background-color', 'red')
+									    .text(function(d) { return d; });
+								}
+					},
+
 					datamaps:
 					{
 						init: 	function(oParam)
@@ -262,6 +302,8 @@ ns1blankspace.visualise =
 
 								    if (bLegend) {ns1blankspace.visualise.data.map.legend()};
 								    if (bLabels) {ns1blankspace.visualise.data.map.labels()};
+
+								    ns1blankspace.util.onComplete(oParam);
 								},
 
 						template:
