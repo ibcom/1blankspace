@@ -140,11 +140,12 @@ $.extend(true, ns1blankspace.setup,
 									 primary: "ui-icon-close"
 								}
 							})
-							.click(function() {
+							.click(function()
+							{
 								ns1blankspace.setup.remove(this.id)
 							})
 							.css('width', '15px')
-							.css('height', '20px')
+							.css('height', '20px');
 								
 						$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions);
 					}	

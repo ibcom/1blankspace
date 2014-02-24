@@ -5,9 +5,9 @@
  * 01 FEB 2010
  */
  
-ns1blankspace.stucture = 
+ns1blankspace.structure = 
 {
-	init: 		function interfaceStructureMasterViewport(oParam)
+	init: 		function (oParam)
 				{
 					ns1blankspace.app.reset();
 
@@ -125,15 +125,16 @@ ns1blankspace.stucture =
 									if (sSearchContext != undefined && iSource != ns1blankspace.data.searchSource.browse)
 									{
 										$('#ns1blankspaceControl').html(ns1blankspace.xhtml.loading);
+
+										ns1blankspace.objectContext = sSearchContext;
 										
-										$.ajax(
-										{
-											type: 'GET',
-											url: ns1blankspace.util.endpointURI('SETUP_STRUCTURE_SEARCH'),
-											data: 'id=' + ns1blankspace.util.fs(ns1blankspace.objectContext),
-											dataType: 'json',
-											success: function(data) { ns1blankspace.structure.show(oParam, data)}
-										});
+										var oSearch = new AdvancedSearch();
+										oSearch.method = 'SETUP_STRUCTURE_SEARCH';
+										oSearch.addField('description,reference,status,statustext,title,type,typetext');
+										oSearch.addField(ns1blankspace.option.auditFields);
+										oSearch.rf = 'json';
+										oSearch.addFilter('id', 'EQUAL_TO', sSearchContext);
+										oSearch.getResults(function(data) {ns1blankspace.structure.show(oParam, data)});
 									}
 									else
 									{
@@ -155,15 +156,13 @@ ns1blankspace.stucture =
 										{
 											ns1blankspace.search.start();
 
-											$.ajax(
-											{
-												type: 'GET',
-												url: ns1blankspace.util.endpointURI('SETUP_STRUCTURE_SEARCH'),
-												data: 'quicksearch=' + sSearchText,
-												dataType: 'json',
-												success: function(data) {interfaceStructureSearchShow(oParam, data)}
-											});
-											
+											var oSearch = new AdvancedSearch();
+											oSearch.method = 'SETUP_STRUCTURE_SEARCH';
+											oSearch.addField('description,reference,status,statustext,title,type,typetext');
+											oSearch.addField(ns1blankspace.option.auditFields);
+											oSearch.rf = 'json';
+											oSearch.getResults(function(data) {ns1blankspace.structure.search.process(oParam, data)});
+											oSearch.sort('title', 'desc');											
 										}
 									};	
 								},
@@ -266,7 +265,7 @@ ns1blankspace.stucture =
 					$('#ns1blankspaceControlData').click(function(event)
 					{
 						ns1blankspace.show({selector: '#ns1blankspaceMainData'});
-						ns1blankspace.structure.data();
+						ns1blankspace.structure.data.show();
 					});
 
 					$('#ns1blankspaceControlReporting').click(function(event)
@@ -361,15 +360,16 @@ ns1blankspace.stucture =
 										
 									if (oResponse == undefined)
 									{	
-										$.ajax(
-										{
-											type: 'GET',
-											url: ns1blankspace.util.endpointURI('STRUCTURE_DATA_SEARCH'),
-											data: 'structure=' + ns1blankspace.objectContext,
-											dataType: 'json',
-											success: function(data) {ns1blankspace.structure.data.show(oParam, data)}
-										});
-
+										var oSearch = new AdvancedSearch();
+										oSearch.method = 'STRUCTURE_DATA_SEARCH';
+										oSearch.addField('completedbyuser,contactbusiness,contactperson,structure,completedbyuser,completedbyusertext,' +
+															'contactbusiness,contactbusinesstext,contactperson,contactpersontext,id,notes,' +
+															'object,objectcontext,reference,referencedate,referencetype,referencetypetext,resultscore,resultscoretext,' +
+															'scheduleddate,status,statustext,structure,structuretext,title,totalpoints');
+										oSearch.addField(ns1blankspace.option.auditFields);
+										oSearch.rf = 'json';
+										oSearch.addFilter('structure', 'EQUAL_TO', ns1blankspace.objectContext);
+										oSearch.getResults(function(data) {ns1blankspace.structure.data.show(oParam, data)});
 									}
 									else
 									{
@@ -379,10 +379,10 @@ ns1blankspace.stucture =
 															
 											aHTML.push('<table class="ns1blankspaceContainer">' +
 														'<tr class="ns1blankspaceContainer">' +
-														'<td id="ns1blankspaceStructureDataColumn1" class="ns1blankspaceColumn1Large">' +
+														'<td id="ns1blankspaceStructureDataColumn1" class="ns1blankspaceColumnFlexible">' +
 														ns1blankspace.xhtml.loading +
 														'</td>' +
-														'<td id="ns1blankspaceStructureDataColumn2" class="ns1blankspaceColumn2Action"></td>' +
+														'<td id="ns1blankspaceStructureDataColumn2" class="ns1blankspaceColumnAction" style="width:150px;"></td>' +
 														'</tr>' +
 														'</table>');					
 												
@@ -394,20 +394,21 @@ ns1blankspace.stucture =
 											
 											if (oActions.add)
 											{
-												aHTML.push('<tr><td class="ns1blankspaceAction">' +
-															'<span id="ns1blankspaceStructureDataAdd">Add</span>' +
+												aHTML.push('<tr><td>' +
+															'<span id="ns1blankspaceStructureDataAdd" class="ns1blankspaceAction">Add</span>' +
 															'</td></tr>');
 											}
 											
 											aHTML.push('</table>');					
 											
-											$('#tdns1blankspaceStructureDataColumn2').html(aHTML.join(''));
+											$('#ns1blankspaceStructureDataColumn2').html(aHTML.join(''));
 										
 											$('#ns1blankspaceStructureDataAdd').button(
 											{
 												label: "Add"
 											})
-											.click(function() {
+											.click(function()
+											{
 												 ns1blankspace.structure.data.edit(oParam);
 											})
 											
@@ -417,7 +418,7 @@ ns1blankspace.stucture =
 
 										if (oResponse.data.rows.length == 0)
 										{
-											aHTML.push('<table><tr><td valign="top">No data.</td></tr></table>');
+											aHTML.push('<table><tr><td class="ns1blankspaceNothing">No data.</td></tr></table>');
 
 											$('#ns1blankspaceStructureDataColumn1').html(aHTML.join(''));
 										
@@ -464,30 +465,35 @@ ns1blankspace.stucture =
 											
 											if (oOptions.remove) 
 											{
-												$('#ns1blankspaceStructureData > .ns1blankspaceRowRemove').button( {
+												$('#ns1blankspaceStructureData .ns1blankspaceRowRemove').button(
+												{
 													text: false,
-													icons: {
+													icons:
+													{
 														primary: "ui-icon-close"
 													}
 												})
-												.click(function() {
+												.click(function()
+												{
 													ns1blankspace.structure.data.remove({xhtmlElementID: this.id});
 												})
 												.css('width', '15px')
-												.css('height', '17px')
+												.css('height', '17px');
 											}
 											
 											if (oOptions.view) 
 											{
-												$('#ns1blankspace.structure.data > .ns1blankspaceRowView').button( {
+												$('#ns1blankspaceStructureData .ns1blankspaceRowView').button(
+												{
 													text: false,
-													icons: {
+													icons:
+													{
 														primary: "ui-icon-play"
 													}
 												})
-												.click(function() {
-													ns1blankspace.structureData.init({showHome: false});
-													ns1blankspace.structureData.search.send(this.id);
+												.click(function()
+												{
+													ns1blankspace.structureData.init({id: this.id});
 												})
 												.css('width', '15px')
 												.css('height', '17px');
@@ -519,13 +525,13 @@ ns1blankspace.stucture =
 										
 										aHTML.push('<table class="ns1blankspaceContainer">');
 												
-										aHTML.push('<tr class="ns1blankspaceCaption">' +
+										aHTML.push('<tr>' +
 														'<td class="ns1blankspaceCaption">' +
 														'Title' +
 														'</td></tr>' +
-														'<tr class="ns1blankspaceText">' +
-														'<tdclass="ns1blankspaceText">' +
-														'<input id="ns1blankspaceStructureDataTitle" class="inputns1blankspaceText">' +
+														'<tr>' +
+														'<td class="ns1blankspaceText">' +
+														'<input id="ns1blankspaceStructureDataTitle" class="ns1blankspaceText">' +
 														'</td></tr>');
 										
 										aHTML.push('</table>');					

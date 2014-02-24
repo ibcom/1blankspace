@@ -508,6 +508,7 @@ ns1blankspace.setup.userRole =
 										oSearch.method = 'SETUP_ROLE_METHOD_ACCESS_SEARCH';
 										oSearch.addField('access,accesstext,accessmethod,accessmethodtext,canadd,canremove,canupdate,canuse');
 										oSearch.addFilter('role', 'EQUAL_TO', ns1blankspace.objectContext);
+										oSearch.rows = 500;
 										oSearch.sort('accessmethodtext', 'asc');
 										oSearch.getResults(function(data) {ns1blankspace.setup.userRole.access.show(oParam, data)});
 									}

@@ -7,6 +7,8 @@
 
 ns1blankspace.setup.structure = 
 {
+	data: 		{},
+
 	init: 		function (oParam)
 				{
 					ns1blankspace.app.reset();
@@ -368,6 +370,7 @@ ns1blankspace.setup.structure =
 					else
 					{
 						ns1blankspace.objectContextData = oResponse.data.rows[0];
+						ns1blankspace.setup.structure.data.categories = undefined;
 						
 						$('#ns1blankspaceControlContext').html(ns1blankspace.objectContextData.title);
 						$('#ns1blankspaceViewControlAction').button({disabled: false});
@@ -480,16 +483,6 @@ ns1blankspace.setup.structure =
 						}
 					}	
 				},
-
-	new2:		function (oParam)
-				{
-					ns1blankspace.objectContextData = undefined
-					ns1blankspace.objectContext = -1;
-					ns1blankspace.setup.structure.layout();
-					$('#ns1blankspaceViewControlAction').button({disabled: false});
-					ns1blankspace.show({selector: '#ns1blankspaceMainDetails'});
-					ns1blankspace.setup.structure.details();
-				},			
 
 	save: 		{
 					send:		function (oParam, oResponse)
@@ -851,7 +844,7 @@ ns1blankspace.setup.structure =
 										oSearch.method = 'SETUP_STRUCTURE_CATEGORY_SEARCH';
 										oSearch.addField( 'description,displayorder,id,structure,structuretext,title,type,typetext');
 										oSearch.addFilter('structure', 'EQUAL_TO', ns1blankspace.objectContext);
-										oSearch.getResults(function(data) {ns1blankspace.setup.structure.category.show(oParam, data)}) 
+										oSearch.getResults(function(data) {ns1blankspace.setup.structure.category.show(oParam, data)});
 									}
 									else
 									{
@@ -1623,13 +1616,13 @@ ns1blankspace.setup.structure =
 													{	
 														var aHTML = [];
 
-														aHTML.push('<table id="ns1blankspaceElementOptions" style="width:100%"' +
+														aHTML.push('<table id="ns1blankspaceElementOptions" style="width:100%;"' +
 																			' data-structureElement="' + iStructureElementID + '"' +
 																			' data-method="SETUP_STRUCTURE_ELEMENT_OPTION">');
 										
 														aHTML.push('<tr class="ns1blankspaceRow">');
 														aHTML.push('<td class="ns1blankspaceHeaderCaption">Choices</td>');
-														aHTML.push('<td class="ns1blankspaceHeaderCaption">&nbsp;</td>');
+														aHTML.push('<td class="ns1blankspaceHeaderCaption">Points</td>');
 														aHTML.push('<td class="ns1blankspaceHeaderCaption" style="text-align:right"><span id="ns1blankspaceElementOptionAdd">Add</span></td>');
 														aHTML.push('</tr>');
 																
@@ -1643,21 +1636,21 @@ ns1blankspace.setup.structure =
 															{
 																aHTML.push('<tr class="ns1blankspaceRow">');
 																		
-																aHTML.push('<td id="ns1blankspaceElementOption_title-' + this.id + '" class="ns1blankspaceRow ns1blankspaceElementOption" style="width:100%">' +
+																aHTML.push('<td id="td_ns1blankspaceElementOption_title-' + this.id + '" class="ns1blankspaceRow ns1blankspaceElementOption" style="width:100%">' +
 																				this.title + '</td>');
 																	
 																if (this.points == '')
 																{
-																	aHTML.push('<td id="ns1blankspaceElementOption_points-' + this.id + '" class="ns1blankspaceRow ns1blankspaceElementOption" style="width:40px;">' +
+																	aHTML.push('<td id="td_ns1blankspaceElementOption_points-' + this.id + '" class="ns1blankspaceRow ns1blankspaceElementOption" style="width:40px;">' +
 																					'</td>');
 																}	
 																else
 																{		
-																	aHTML.push('<td id="ns1blankspaceElementOption_points-' + this.id + '" class="ns1blankspaceRow ns1blankspaceElementOption" style="width:40px;">' +
+																	aHTML.push('<td id="td_ns1blankspaceElementOption_points-' + this.id + '" class="ns1blankspaceRow ns1blankspaceElementOption" style="width:40px;">' +
 																				this.points + '</td>');
 																}							
 															
-																aHTML.push('<td style="width:23px;text-align:right;" id="tdElementOption_delete-' + this.id + 
+																aHTML.push('<td style="width:23px;text-align:right;" id="td_ElementOption_delete-' + this.id + 
 																				'" class="ns1blankspaceRowRemove"></td>');
 															
 																aHTML.push('</tr>');
@@ -1668,7 +1661,8 @@ ns1blankspace.setup.structure =
 
 														$('#ns1blankspaceSetupStructureElementOptions').html(aHTML.join(''));
 														
-														$('#ns1blankspaceElementOptionAdd').button({
+														$('#ns1blankspaceElementOptionAdd').button(
+														{
 																text: false,
 																 icons: {
 																	 primary: "ui-icon-plus"
@@ -1686,17 +1680,18 @@ ns1blankspace.setup.structure =
 														});
 													
 														$('#ns1blankspaceElementOptions .ns1blankspaceRowRemove').button(
-															{
-																text: false,
-																 icons: {
-																	 primary: "ui-icon-close"
-																}
-															})
-															.click(function() {
-																ns1blankspace.setup.structure.element.options.remove(this.id)
-															})
-															.css('width', '15px')
-															.css('height', '20px');
+														{
+															text: false,
+															 icons: {
+																 primary: "ui-icon-close"
+															}
+														})
+														.click(function()
+														{
+															ns1blankspace.setup.structure.element.options.remove(this.id)
+														})
+														.css('width', '15px')
+														.css('height', '20px');
 													}	
 												},
 
@@ -1760,7 +1755,7 @@ ns1blankspace.setup.structure =
 																	$('#' + sElementID).html(sHTML);
 																	$('#' + sElementInputID).focus();
 																	
-																	$('#' + sElementInputID).blur(function(event)
+																	$('#' + sElementInputID).focusout(function(event)
 																	{
 																		ns1blankspace.setup.structure.element.options.edit.stop(sElementID);
 																	});
