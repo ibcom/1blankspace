@@ -1576,7 +1576,7 @@ ns1blankspace.setup.structure =
 										{
 											type: 'POST',
 											url: ns1blankspace.util.endpointURI('SETUP_STRUCTURE_ELEMENT_MANAGE'),
-											data: 'id=' + sID,
+											data: 'remove=1&id=' + sID,
 											dataType: 'json',
 											success: function(data) {ns1blankspace.setup.structure.element.remove(oParam, data)}
 										});
@@ -1679,6 +1679,8 @@ ns1blankspace.setup.structure =
 															ns1blankspace.setup.structure.element.options.edit.start(event.target.id);
 														});
 													
+														$('#ns1blankspaceElementOptions .ns1blankspaceRowRemove').unbind('click');
+
 														$('#ns1blankspaceElementOptions .ns1blankspaceRowRemove').button(
 														{
 															text: false,
