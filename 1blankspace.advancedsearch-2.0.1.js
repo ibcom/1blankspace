@@ -52,15 +52,11 @@ ns1blankspace.data.searchComparison =
 			{title: "Last financial quarter", code: "LAST_FINANCIAL_QUARTER", dataType: "date", inputCount: 0}
 		];
 
-function AdvancedSearch() {
-//	this.async = true;
-//	this.endPoint = '';
-//	this.method = '';
+function AdvancedSearch()
+{
 	this.field = [];
 	this.summaryField = [];
 	
-	//couldn't work out how to have an array of a structure within the class
-	//so instead have 4 arrays that are kept synchronised
 	this.filterField = [];
 	this.filterComparison = [];
 	this.filterValue1 = [];
@@ -71,13 +67,9 @@ function AdvancedSearch() {
 	this.customOptionName = [];
 	this.customOptionValue = [];
 	
-//	this.rf = '';
 	this.sortField = [];
 	this.sortDirection = [];
-	
-//	this.categoryId = '';
-//	this.returnParameters = '';		
-		
+			
 	this.addBracket = addBracket;
 	this.addField = addField;
 	this.addSummaryField = addSummaryField;
@@ -92,8 +84,8 @@ function AdvancedSearch() {
 	this.reset();
 }
 
-function reset() {
-	//clear everything for between searches
+function reset()
+{
 	this.async = true;
 	this.endPoint = '';
 	this.method = '';
@@ -119,12 +111,11 @@ function reset() {
 	this.categoryId = '';
 	this.returnParameters = '';
 	
-	//working variables
 	this.bracketCount = 0;
 }
 
-//properties for calling advanced search as an object
-function addBracket(asBracket) {
+function addBracket(asBracket)
+{
 	if ((asBracket != '(') && (asBracket != ')')) {
 		alert('Bracket parameter must be either ( or )');
 		return false;
@@ -138,7 +129,8 @@ function addBracket(asBracket) {
 	else this.bracketCount --;
 }
 
-function addOperator(asOperator) {
+function addOperator(asOperator)
+{
 	if ((asOperator != 'and') && (asOperator != 'or')) {
 		alert('Operator parameter must be either (and) or (or)');
 		return false;
@@ -148,7 +140,8 @@ function addOperator(asOperator) {
 	this.addFilter(asOperator);
 }
 
-function addField(asField) {
+function addField(asField)
+{
 	//can be comma delimited list
 
 	if (asField.length > 0)
@@ -159,14 +152,16 @@ function addField(asField) {
 	}		
 }
 
-function addSummaryField(asField) {
+function addSummaryField(asField)
+{
 	//can be comma delimited list
 	var aFields = asField.split(',');
 
 	for (var i = 0; i < aFields.length; i++) this.summaryField.push(aFields[i]);
 }
 
-function addFilter(asField, asComparison, asValue1, asValue2, asValue3, asApplyToSubSearchJoin) {
+function addFilter(asField, asComparison, asValue1, asValue2, asValue3, asApplyToSubSearchJoin)
+{
 	//Note: brackets & operators are also implemented as filters
 	//to keep them in the sequence
 
@@ -185,12 +180,14 @@ function addFilter(asField, asComparison, asValue1, asValue2, asValue3, asApplyT
 	this.filterApplyToSubSearchJoin.push(asApplyToSubSearchJoin);
 }
 
-function sort(asField, asDirection) {
+function sort(asField, asDirection)
+{
 	this.sortField.push(asField);
 	this.sortDirection.push(asDirection);
 }
 
-function addCustomOption(asName, asValue) {
+function addCustomOption(asName, asValue)
+{
 	if (asName == undefined) asName = '';
 	if (asValue == undefined) asValue = '';
 
@@ -198,11 +195,12 @@ function addCustomOption(asName, asValue) {
 	this.customOptionValue.push(asValue);
 }
 
-function getResults(aoParm1, aoParm2) {
-	//first parameter is optional, and is the xml, or json string to search with (if you are not using the object)
-	//second parameter is the callback function
+function getResults(aoParm1, aoParm2)
+{
+	//!!!CHANGE TO WORK OFF THE OBJECT.data
 
 	var sEndpoint = this.endPoint;
+
 	if (sEndpoint == '')
 	{
 		var sMethod = this.method
@@ -216,72 +214,88 @@ function getResults(aoParm1, aoParm2) {
 	var fCallbackFunction;
 	var sAjaxDataType = '';
 	
-	if (aoParm1 == undefined) {
+	if (aoParm1 == undefined)
+	{
 		alert('You must pass at least the callback function')
 		return false;
 	}
 	
-	if (aoParm2 == undefined) {
+	if (aoParm2 == undefined)
+	{
 		fCallbackFunction = aoParm1;
 		sXML = '';
 	}
-	else {
+	else
+	{
 		sXML = aoParm1;
 		fCallbackFunction = aoParm2;
 	}
 	
-	if (sEndpoint == '') {
+	if (sEndpoint == '')
+	{
 		alert('Need to set the end point');
 		return false;
 	}
 
-	if (this.method == '') {
+	if (this.method == '')
+	{
 		alert('Need to set the method');
 		return false;
 	}
 	
-	if (this.bracketCount != 0) {
+	if (this.bracketCount != 0)
+	{
 		alert('Looks like you have an imbalance in your brackets.  Could be painful.');
 		return false;
 	}
 	
 	//todo if no xml - make sure they have set at least one field?
 	
-	if (sXML == '') sXML = BuildXMLFromObject(this)
-	else {
+	if (sXML == '')
+	{
+		sXML = BuildXMLFromObject(this)
+	}	
+	else
+	{
 		if (sXML.substr(0, 1) == '{') sXML = BuildXMLFromJSON(this, sXML);
 	}
 
 	if (sXML == '') return false;
 	
-	if (this.rf.toLowerCase() == 'xml') {
+	if (this.rf.toLowerCase() == 'xml')
+	{
 		sAjaxDataType = 'xml';
 		sURL += '&rf=xml';
 	}
-	if (this.rf.toLowerCase() == 'json') {
+
+	if (this.rf.toLowerCase() == 'json')
+	{
 		sAjaxDataType = 'json';
 		sURL += '&rf=json';
 	}	
-	//this is dodgy - passing one of the variables via querystring, and not the xml,
-	//but problem is that the category is locked in before the xml is passed
-	if (this.categoryId != '') sURL += '&categoryid=' + this.categoryId;
+
+	if (this.categoryId != '') {sURL += '&categoryid=' + this.categoryId;}
 	
-	//contentType: 'text/xml',
-	$.ajax({
+	var oData = this.data;
+
+	$.ajax(
+	{
 		type: 'POST',
 		async: this.async,
 		url: sURL,
-		data: sXML,
+		data: oData,
 		global: true,
-		success: function(asData) { 
-				getResultsComplete(asData, fCallbackFunction)
-			},		
+		success: function(asData)
+		{ 
+			getResultsComplete(asData, fCallbackFunction)
+		},		
 		dataType: sAjaxDataType
 	});
 
 }
 
-function BuildXMLFromObject(aoThis) {
+function BuildXMLFromObject(aoThis)
+{
 	var sXML;
 	
 	sXML = '<advancedSearch>';
@@ -413,7 +427,8 @@ function BuildXMLFromJSON(aoThis, asSearch) {
 	return BuildXMLFromObject(aoThis);
 }
 
-function ASXMLFormat(asValue) {
+function ASXMLFormat(asValue)
+{
 	var sValue;
 	// should be in common library
 	
