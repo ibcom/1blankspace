@@ -5,9 +5,9 @@
  * 01 FEB 2010
  */
 if (ns1blankspace === undefined) {var ns1blankspace = {}}
-if (ns1blankspace.data === undefined) {ns1blankspace.data = {}}
+if (ns1blankspace.advancedSearch === undefined) {ns1blankspace.advancedSearch = {data: {}, criteria: {}}
 
-ns1blankspace.data.searchComparison =
+ns1blankspace.advancedSearch.data.searchComparison =
 		[ 
 			{title: "None", code: "", dataType: "all", inputCount: 0},
 			{title: "Equal to", code: "EQUAL_TO", dataType: "all", inputCount: 1},
@@ -54,21 +54,23 @@ ns1blankspace.data.searchComparison =
 
 function AdvancedSearch()
 {
-	this.field = [];
-	this.summaryField = [];
+	this.criteria.field = [];
+	this.criteria.summaryField = [];
 	
-	this.filterField = [];
-	this.filterComparison = [];
-	this.filterValue1 = [];
-	this.filterValue2 = [];
-	this.filterValue3 = [];
-	this.filterApplyToSubSearchJoin = [];
+	this.criteria.filterField = [];
+	this.criteria.filterComparison = [];
+	this.criteria.filterValue1 = [];
+	this.criteria.filterValue2 = [];
+	this.criteria.filterValue3 = [];
+	this.criteria.filterApplyToSubSearchJoin = [];
 	
-	this.customOptionName = [];
-	this.customOptionValue = [];
+	this.criteria.customOptionName = [];
+	this.criteria.customOptionValue = [];
 	
-	this.sortField = [];
-	this.sortDirection = [];
+	this.criteria.sortField = [];
+	this.criteria.sortDirection = [];
+		
+	this.criteria.sort = sort;
 			
 	this.addBracket = addBracket;
 	this.addField = addField;
@@ -76,7 +78,6 @@ function AdvancedSearch()
 	this.addFilter = addFilter;
 	this.addOperator = addOperator;
 	this.addCustomOption = addCustomOption;
-	this.sort = sort;
 	
 	this.getResults = getResults;
 	this.reset = reset;
@@ -86,6 +87,8 @@ function AdvancedSearch()
 
 function reset()
 {
+	//!!!Convert to .criteria - from here on in
+	
 	this.async = true;
 	this.endPoint = '';
 	this.method = '';
@@ -249,8 +252,6 @@ function getResults(aoParm1, aoParm2)
 		return false;
 	}
 	
-	//todo if no xml - make sure they have set at least one field?
-	
 	if (sXML == '')
 	{
 		sXML = BuildXMLFromObject(this)
@@ -276,14 +277,14 @@ function getResults(aoParm1, aoParm2)
 
 	if (this.categoryId != '') {sURL += '&categoryid=' + this.categoryId;}
 	
-	var oData = this.data;
+	var sData = JSON.stringify(this.criteria);
 
 	$.ajax(
 	{
 		type: 'POST',
 		async: this.async,
 		url: sURL,
-		data: oData,
+		data: sData,
 		global: true,
 		success: function(asData)
 		{ 
@@ -470,7 +471,7 @@ function advancedSearchComparisonGet(oParam)
 	
 	sReturnFormat = sReturnFormat.toUpperCase();
 		
-	$.each(ns1blankspace.data.searchComparison, function()
+	$.each(ns1blankspace.advancedSearch.data.searchComparison, function()
 	{
 		if (this.dataType == sDataType || (bIncludeAll && this.dataType == 'all') || (sCode == this.code))
 		{
