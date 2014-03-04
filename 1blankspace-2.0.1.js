@@ -4298,6 +4298,38 @@ ns1blankspace.util =
 					return sWords;
 				},
 
+	protect: 	{
+					keys: 		{
+									create: 	function(oParam)
+												{
+													var oKeyPair =
+													{
+														key1: '',
+														key2: ''
+													}
+
+													return oKeyPair;
+												},
+
+									save: 		function(oParam)
+												{
+													bLocal = false;
+
+												},
+
+									search: 	function()
+												{
+													bLocal = false;
+												}					
+								},
+
+					encrypt: 	function(oParam)
+								{
+									sData = '';
+
+								}				
+				},						
+
 	local: 		{
 					cache: 		{
 									exists: 	function (oParam)
@@ -4306,6 +4338,11 @@ ns1blankspace.util =
 
 													return (bPersist?'localStorage' in window:'sessionStorage' in window);
 												},
+
+									data: 		function (oParam)
+												{
+
+												},		
 
 									key: 		function (oParam)
 												{
