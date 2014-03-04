@@ -5,7 +5,9 @@
  * 01 FEB 2010
  */
 
-ns1blankspace.admin = 
+if (ns1blankspace.admin === undefined) {ns1blankspace.admin = {}}
+
+ns1blankspace.admin.monitoring = 
 {
 	init: 		function (oParam)
 				{
@@ -18,8 +20,9 @@ ns1blankspace.admin =
 
 					ns1blankspace.app.reset();
 
-					ns1blankspace.objectName = 'admin';
-					ns1blankspace.viewName = 'Administration';
+					ns1blankspace.objectParentName = 'admin';
+					ns1blankspace.objectName = 'monitoring';
+					ns1blankspace.viewName = 'Monitoring';
 					
 					ns1blankspace.app.set(oParam);
 				},
@@ -96,7 +99,7 @@ ns1blankspace.admin =
 										dataType: 'json',
 										success: function()
 										{
-											ns1blankspace.admin.stateChannel.status(oParam, data);
+											ns1blankspace.admin.monitoring.stateChannel.status(oParam, data);
 										}
 									});		
 									}
