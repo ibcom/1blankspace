@@ -4300,6 +4300,8 @@ ns1blankspace.util =
 
 	protect: 	{
 					keys: 		{
+									data: 		{},
+
 									create: 	function(oParam)
 												{
 													var oKeyPair =
@@ -4317,15 +4319,41 @@ ns1blankspace.util =
 
 												},
 
-									search: 	function()
+									search: 	function(oParam, oResponse)
 												{
 													bLocal = false;
+													sCryptoKeyReference = '';
+
+													if (!bLocal && oResponse === undefined)
+													{
+														oSearch
+														.addFilter(sCryptoKeyReference)
+													}
+													else
+													{
+														if (bLocal)
+														{
+															ns1blankspace.util.local.cache.search({key: sCryptoKeyReference})
+														}	
+														else
+														{
+															sCryptoKey = oResponse.data.rows[0]
+														}
+
+														oParam = ns1blankspace.util.setParam(oParam, 'cryptoKey', sCryptoKey);
+
+														ns1blankspace.util.onComplete(oParam)
+													}
 												}					
 								},
 
 					encrypt: 	function(oParam)
 								{
 									sData = '';
+									sCryptoKey = '';
+									
+									oParam.onComplete = ns1blankspace.util.protect.encrypt;
+									ns1blankspace.util.protect.keys.search(oParam)
 
 								}				
 				},						
@@ -4341,7 +4369,10 @@ ns1blankspace.util =
 
 									data: 		function (oParam)
 												{
-
+													bSecure = true;
+													oParam.cryptoKeyReference = 'local-cache-key';
+													oParam.onCompleteWhenCan = ns1blankspace.util.local.cache.data;
+													ns1blankspace.util.protect.encrypt
 												},		
 
 									key: 		function (oParam)
