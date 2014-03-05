@@ -1203,6 +1203,7 @@ ns1blankspace.setup.structure =
 										oSearch.addField( 'backgroundcolour,caption,category,categorytext,datatype,datatypetext,' +
 															'description,displayorder,hint,id,notes,notestype,notestypetext,' +
 															'reference,structure,structuretext,textcolour,title');
+										oSearch.rows = 250;
 										oSearch.addFilter('category', 'EQUAL_TO', iCategory);
 										oSearch.getResults(function(data) {ns1blankspace.setup.structure.element.show(oParam, data)});
 									}
