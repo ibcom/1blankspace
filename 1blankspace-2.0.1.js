@@ -4299,62 +4299,104 @@ ns1blankspace.util =
 				},
 
 	protect: 	{
-					keys: 		{
+					key: 		{
 									data: 		{},
 
-									create: 	function(oParam)
-												{
-													var oKeyPair =
-													{
-														key1: '',
-														key2: ''
-													}
+									create: 	{				
+													single:		function(oParam)
+																{
+																	var iType
+																	var sCryptoKey = 'XXX'
+																	var bPersist = ns1blankspace.util.getParam(oParam, 'persist', {"default": false}).value;
+																	var sCryptoKeyReference = ns1blankspace.util.getParam(oParam, 'cryptoKeyReference').value;
+																	var bLocal = ns1blankspace.util.getParam(oParam, 'local', {"default": true}).value;
 
-													return oKeyPair;
-												},
+																	oParam =  ns1blankspace.util.setParam(oParam, 'key', sCryptoKeyReference);
+																	oParam =  ns1blankspace.util.setParam(oParam, 'data', sCryptoKey);
+																	oParam =  ns1blankspace.util.setParam(oParam, 'persist', bPersist);
+																	oParam =  ns1blankspace.util.setParam(oParam, 'protect', false);
 
-									save: 		function(oParam)
-												{
-													bLocal = false;
+																	if (sCryptoKeyReference !== undefined)
+																	{	
+																		ns1blankspace.util.protect.key.data[sCryptoKeyReference] = sCryptoKey;
+																	}	
 
-												},
+																	if (bLocal)
+																	{	
+																		ns1blankspace.util.local.cache.save(oParam);
+																	}
+																	else
+																	{
+																		//SEND TO MYDS CORE_PROTECT_KEY_MANAGE
+																	}	
+
+																	return sCryptoKey;
+																},
+
+													pair: 		function(oParam) {}			
+												},			
 
 									search: 	function(oParam, oResponse)
 												{
-													bLocal = false;
-													sCryptoKeyReference = '';
+													var bLocal = ns1blankspace.util.getParam(oParam, 'local', {"default": false}).value;
+													var sCryptoKeyReference = ns1blankspace.util.getParam(oParam, 'cryptoKeyReference').value;
 
-													if (!bLocal && oResponse === undefined)
-													{
-														oSearch
-														.addFilter(sCryptoKeyReference)
-													}
-													else
-													{
-														if (bLocal)
-														{
-															ns1blankspace.util.local.cache.search({key: sCryptoKeyReference})
-														}	
-														else
-														{
-															sCryptoKey = oResponse.data.rows[0]
-														}
-
-														oParam = ns1blankspace.util.setParam(oParam, 'cryptoKey', sCryptoKey);
-
+													if (ns1blankspace.util.protect.key.data[sCryptoKeyReference] !== undefined)
+													{	
+														oParam = ns1blankspace.util.setParam(oParam, 'cryptoKey', ns1blankspace.util.protect.key.data[sCryptoKeyReference]);
 														ns1blankspace.util.onComplete(oParam)
 													}
+													else
+													{	
+														oResponse = {data: {rows: [{key: 'XXX'}]}}
+
+														if (!bLocal && oResponse === undefined)
+														{
+															var oSearch = new AdvancedSearch();
+															oSearch.method = 'CORE_PROTECT_SEARCH';
+															oSearch.addField('key');
+															oSearch.addField(ns1blankspace.option.auditFields);
+															oSearch.addFilter('reference', 'EQUAL_TO', sCryptoKeyReference);
+															
+															oSearch.getResults(function(data)
+															{
+																ns1blankspace.util.protect.key.search(oParam, data)
+															});
+														}
+														else
+														{
+															if (bLocal)
+															{
+																var sCryptoKey = ns1blankspace.util.local.cache.search({key: sCryptoKeyReference});
+															}	
+															else
+															{
+																var sCryptoKey = oResponse.data.rows[0].key;
+															}
+
+															ns1blankspace.util.protect.key.data[sCryptoKeyReference] = sCryptoKey;
+															oParam = ns1blankspace.util.setParam(oParam, 'cryptoKey', sCryptoKey);
+															ns1blankspace.util.onComplete(oParam);
+														}
+													}	
 												}					
 								},
 
 					encrypt: 	function(oParam)
 								{
-									sData = '';
-									sCryptoKey = '';
-									
-									oParam.onComplete = ns1blankspace.util.protect.encrypt;
-									ns1blankspace.util.protect.keys.search(oParam)
-
+									if (ns1blankspace.util.getParam(oParam, 'cryptoKey').exists)
+									{
+										var sData = ns1blankspace.util.getParam(oParam, 'data').value;
+										var sCryptoKey = ns1blankspace.util.getParam(oParam, 'cryptoKey').value;
+										var sProtectedData = sData + sCryptoKey // TO BE DONE
+										oParam = ns1blankspace.util.setParam(oParam, 'protectedData', sProtectedData)
+										ns1blankspace.util.onComplete(oParam);
+									}
+									else
+									{	
+										oParam.onComplete = ns1blankspace.util.protect.encrypt;
+										ns1blankspace.util.protect.key.search(oParam)
+									}	
 								}				
 				},						
 
@@ -4363,19 +4405,16 @@ ns1blankspace.util =
 									exists: 	function (oParam)
 												{
 													var bPersist = ns1blankspace.util.getParam(oParam, "persist", {"default": false}).value;
-
 													return (bPersist?'localStorage' in window:'sessionStorage' in window);
 												},
 
-									data: 		function (oParam)
+									init: 		function (oParam)
 												{
-													bSecure = true;
-													oParam.cryptoKeyReference = 'local-cache-key';
-													oParam.onCompleteWhenCan = ns1blankspace.util.local.cache.data;
-													ns1blankspace.util.protect.encrypt
-												},		
+													//needs protection so doesn't reset key - need to check first.
+													ns1blankspace.util.protect.key.create.single({cryptoKeyReference: 'local-cache-key', persist: true})
+												},			
 
-									key: 		function (oParam)
+									context: 	function (oParam)
 												{
 													var bUserContext = ns1blankspace.util.getParam(oParam, 'userContext', {"default": false}).value;
 													var sKey = ns1blankspace.util.getParam(oParam, 'key').value;
@@ -4388,19 +4427,36 @@ ns1blankspace.util =
 												{
 													if (ns1blankspace.util.local.cache.exists(oParam))
 													{	
-														var oData = ns1blankspace.util.getParam(oParam, 'data').value;
-														var sKey = ns1blankspace.util.local.cache.key(oParam);
+														var sKey = ns1blankspace.util.local.cache.context(oParam);
 														var bPersist = ns1blankspace.util.getParam(oParam, 'persist', {"default": false}).value;
 														var oStorage = (bPersist?localStorage:sessionStorage);
-														
-														if (typeof oData == 'string')
+
+														var sData = ns1blankspace.util.getParam(oParam, 'data').value;
+														var bProtect = ns1blankspace.util.getParam(oParam, 'protect', {"default": false}).value;
+
+														if (typeof sData !== 'string')
 														{
-															oStorage.setItem(sKey, oData);
-														}	
+															sData = JSON.stringify(sData);
+														}
+
+														if (bProtect && ns1blankspace.util.protect !== undefined)
+														{	
+															if (ns1blankspace.util.getParam(oParam, 'protectedData').exists)
+															{
+																var sData = ns1blankspace.util.getParam(oParam, 'protectedData').value;
+																oStorage.setItem(sKey, sData);
+															}
+															else
+															{	
+																oParam = ns1blankspace.util.setParam(oParam, 'cryptoKeyReference', 'local-cache-key');
+																oParam = ns1blankspace.util.setParam(oParam, 'onCompleteWhenCan', ns1blankspace.util.local.cache.save);
+																ns1blankspace.util.protect.encrypt(oParam);
+															}	
+														}
 														else
 														{
-															oStorage.setItem(sKey, JSON.stringify(oData));
-														}
+															oStorage.setItem(sKey, sData);
+														}	
 													}	
 												},
 
@@ -4408,11 +4464,11 @@ ns1blankspace.util =
 												{
 													if (ns1blankspace.util.local.cache.exists(oParam))
 													{	
-														var sKey = ns1blankspace.util.local.cache.key(oParam);
+														var sKey = ns1blankspace.util.local.cache.context(oParam);
 														var bPersist = ns1blankspace.util.getParam(oParam, 'persist', {"default": false}).value;
 														var oStorage = (bPersist?localStorage:sessionStorage);
-														var bJSON = ns1blankspace.util.getParam(oParam, 'json', {default: false}).value;
-														
+														var bJSON = ns1blankspace.util.getParam(oParam, 'json', {default: sKey.toLowerCase().indexOf('.json') != -1}).value;
+
 														if (!bJSON)
 														{	
 															var oData = oStorage.getItem(sKey);
@@ -4430,7 +4486,7 @@ ns1blankspace.util =
 												{
 													if (ns1blankspace.util.local.cache.exists(oParam))
 													{	
-														var sKey = ns1blankspace.util.local.cache.key(oParam);
+														var sKey = ns1blankspace.util.local.cache.context(oParam);
 														var bPersist = ns1blankspace.util.getParam(oParam, 'persist', {"default": false}).value;
 														var bAll = ns1blankspace.util.getParam(oParam, 'all', {"default": false}).value;
 														var oStorage = (bPersist?localStorage:sessionStorage);
