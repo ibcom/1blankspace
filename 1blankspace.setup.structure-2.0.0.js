@@ -1302,24 +1302,29 @@ ns1blankspace.setup.structure =
 														primary: "ui-icon-close"
 													}
 												})
-												.click(function() {
+												.click(function()
+												{
 													ns1blankspace.setup.structure.element.remove({xhtmlElementID: this.id});
 												})
 												.css('width', '15px')
 												.css('height', '17px')
 											}
 											
-											$('#ns1blankspaceSetupStructureElementColumnElement .ns1blankspaceRowSelect').click(function() {
-												ns1blankspace.setup.structure.element.edit({xhtmlElementID: this.id})
+											$('#ns1blankspaceSetupStructureElementColumnElement .ns1blankspaceRowSelect').click(function()
+											{
+												oParam = ns1blankspace.util.setParam(oParam, 'xhtmlElementID', this.id);
+												ns1blankspace.setup.structure.element.edit(oParam);
 											})
 											.css('width', '15px')
 											.css('height', '17px')
 											
 											if (oOptions.automation) 
 											{
-												$('#ns1blankspaceSetupStructureElementColumnElement span.ns1blankspaceRowAutomation').button( {
+												$('#ns1blankspaceSetupStructureElementColumnElement span.ns1blankspaceRowAutomation').button(
+												{
 													text: false,
-													icons: {
+													icons:
+													{
 														primary: "ui-icon-gear"
 													}
 												})
@@ -1502,9 +1507,9 @@ ns1blankspace.setup.structure =
 											sData += '&reference=' + ns1blankspace.util.fs($('#ns1blankspaceSetupStructureElementReference').val());
 											sData += '&datatype=' + ns1blankspace.util.fs($('input[name="radioDataType"]:checked').val());
 											sData += '&category=' + ns1blankspace.util.fs($('input[name="radioCategory"]:checked').val());
-											sData += '&textcolour=' + ns1blankspace.util.fs($('#ns1blankspaceSetupSetupStructureElementTextColour').val());
-											sData += '&backgroundcolour=' + ns1blankspace.util.fs($('#ns1blankspaceSetupSetupStructureElementBackgroundColour').val());
-											sData += '&displayorder=' + ns1blankspace.util.fs($('#ns1blankspaceSetupSetupStructureElementDisplayOrder').val());
+											sData += '&textcolour=' + ns1blankspace.util.fs($('#ns1blankspaceSetupStructureElementTextColour').val());
+											sData += '&backgroundcolour=' + ns1blankspace.util.fs($('#ns1blankspaceSetupStructureElementBackgroundColour').val());
+											sData += '&displayorder=' + ns1blankspace.util.fs($('#ns1blankspaceSetupStructureElementDisplayOrder').val());
 											sData += '&description=' + ns1blankspace.util.fs(tinyMCE.get('ns1blankspaceSetupStructureElementDescription' + ns1blankspace.counter.editor).getContent());
 												
 											$.ajax(
@@ -1513,7 +1518,8 @@ ns1blankspace.setup.structure =
 												url: ns1blankspace.util.endpointURI('SETUP_STRUCTURE_ELEMENT_MANAGE'),
 												data: sData,
 												dataType: 'json',
-												success: function() {
+												success: function()
+												{
 													$('#ns1blankspaceSetupStructureElement_title-' + sID).html($('#ns1blankspaceSetupStructureElementTitle').val());
 													ns1blankspace.status.message('Element has been saved.');
 													ns1blankspace.setup.structure.element.show(oParam);
@@ -1541,19 +1547,19 @@ ns1blankspace.setup.structure =
 										if (oResponse.data.rows.length != 0)
 										{
 											var oObjectContext = oResponse.data.rows[0];
-											$('#ns1blankspaceSetupStructureElementTitle').val(oObjectContext.title);
+
+											$('#ns1blankspaceSetupStructureElementTitle').val((oObjectContext.title).formatXHTML());
 											$('#ns1blankspaceSetupStructureElementReference').val(oObjectContext.reference);
 											
 											var sHTML = (oObjectContext.description).formatXHTML();
-											
 											tinyMCE.get('ns1blankspaceSetupStructureElementDescription' + ns1blankspace.counter.editor).setContent(sHTML)
 											
 											$('[name="radioDataType"][value="' + oObjectContext.datatype + '"]').attr('checked', true);
 											$('[name="radioCategory"][value="' + oObjectContext.category + '"]').attr('checked', true);
-											$('#ns1blankspaceSetupSetupStructureElementTextColour').val(oObjectContext.textcolour)
-											$('#ns1blankspaceSetupSetupStructureElementBackgroundColour').val(oObjectContext.backgroundcolour)
-											$('#ns1blankspaceSetupSetupStructureElementDisplayOrder').val(oObjectContext.displayorder)	
-											$('#ns1blankspaceSetupSetupStructureElementTitle').focus();
+											$('#ns1blankspaceSetupStructureElementTextColour').val(oObjectContext.textcolour)
+											$('#ns1blankspaceSetupStructureElementBackgroundColour').val(oObjectContext.backgroundcolour)
+											$('#ns1blankspaceSetupStructureElementDisplayOrder').val(oObjectContext.displayorder)	
+											$('#ns1blankspaceSetupStructureElementTitle').focus();
 											ns1blankspace.setup.structure.element.options.show({structureElementID: oObjectContext.id});
 										}
 									}
