@@ -1,0 +1,114 @@
+/*!
+ * Copyright 2010, ibCom Pty Ltd ATF ibCom Unit Trust & contributors
+ * Licensed under the MIT license.
+ * http://1blankspace.com/license
+ * 01 FEB 2010
+ */
+
+"use strict";
+
+if (ns1blankspace === undefined) {var ns1blankspace = {}}
+if (ns1blankspace.util === undefined) {ns1blankspace.util = {}}
+
+ns1blankspace.util.protect =
+{
+	key: 		{
+					data: 		{},
+
+					create: 	{				
+									single:		function(oParam)
+												{
+													var iType
+													var sCryptoKey = 'XXX'
+													var bPersist = ns1blankspace.util.getParam(oParam, 'persist', {"default": false}).value;
+													var sCryptoKeyReference = ns1blankspace.util.getParam(oParam, 'cryptoKeyReference').value;
+													var bLocal = ns1blankspace.util.getParam(oParam, 'local', {"default": true}).value;
+
+													oParam =  ns1blankspace.util.setParam(oParam, 'key', sCryptoKeyReference);
+													oParam =  ns1blankspace.util.setParam(oParam, 'data', sCryptoKey);
+													oParam =  ns1blankspace.util.setParam(oParam, 'persist', bPersist);
+													oParam =  ns1blankspace.util.setParam(oParam, 'protect', false);
+
+													if (sCryptoKeyReference !== undefined)
+													{	
+														ns1blankspace.util.protect.key.data[sCryptoKeyReference] = sCryptoKey;
+													}	
+
+													if (bLocal)
+													{	
+														ns1blankspace.util.local.cache.save(oParam);
+													}
+													else
+													{
+														//SEND TO MYDS CORE_PROTECT_KEY_MANAGE
+													}	
+
+													return sCryptoKey;
+												},
+
+									pair: 		function(oParam) {}			
+								},			
+
+					search: 	function(oParam, oResponse)
+								{
+									var bLocal = ns1blankspace.util.getParam(oParam, 'local', {"default": false}).value;
+									var sCryptoKeyReference = ns1blankspace.util.getParam(oParam, 'cryptoKeyReference').value;
+
+									if (ns1blankspace.util.protect.key.data[sCryptoKeyReference] !== undefined)
+									{	
+										oParam = ns1blankspace.util.setParam(oParam, 'cryptoKey', ns1blankspace.util.protect.key.data[sCryptoKeyReference]);
+										ns1blankspace.util.onComplete(oParam)
+									}
+									else
+									{	
+										oResponse = {data: {rows: [{key: 'XXX'}]}}
+
+										if (!bLocal && oResponse === undefined)
+										{
+											var oSearch = new AdvancedSearch();
+											oSearch.method = 'CORE_PROTECT_SEARCH';
+											oSearch.addField('key');
+											oSearch.addField(ns1blankspace.option.auditFields);
+											oSearch.addFilter('reference', 'EQUAL_TO', sCryptoKeyReference);
+											
+											oSearch.getResults(function(data)
+											{
+												ns1blankspace.util.protect.key.search(oParam, data)
+											});
+										}
+										else
+										{
+											if (bLocal)
+											{
+												var sCryptoKey = ns1blankspace.util.local.cache.search({key: sCryptoKeyReference});
+											}	
+											else
+											{
+												var sCryptoKey = oResponse.data.rows[0].key;
+											}
+
+											ns1blankspace.util.protect.key.data[sCryptoKeyReference] = sCryptoKey;
+											oParam = ns1blankspace.util.setParam(oParam, 'cryptoKey', sCryptoKey);
+											ns1blankspace.util.onComplete(oParam);
+										}
+									}	
+								}					
+				},
+
+	encrypt: 	function(oParam)
+				{
+					if (ns1blankspace.util.getParam(oParam, 'cryptoKey').exists)
+					{
+						var sData = ns1blankspace.util.getParam(oParam, 'data').value;
+						var sCryptoKey = ns1blankspace.util.getParam(oParam, 'cryptoKey').value;
+						var sProtectedData = sData + sCryptoKey // TO BE DONE
+						oParam = ns1blankspace.util.setParam(oParam, 'protectedData', sProtectedData)
+						ns1blankspace.util.onComplete(oParam);
+					}
+					else
+					{	
+						oParam.onComplete = ns1blankspace.util.protect.encrypt;
+						ns1blankspace.util.protect.key.search(oParam)
+					}	
+				}				
+}	
