@@ -140,9 +140,16 @@ ns1blankspace.util.protect =
 						var sCryptoKey = ns1blankspace.util.getParam(oParam, 'cryptoKey').value;
 						var sData = sProtectedData.replace(sCryptoKey, ''); // TO BE DONE
 						oParam = ns1blankspace.util.setParam(oParam, 'data', sData)
-						s1blankspace.debug.message('DECRYPTING');
+						ns1blankspace.debug.message('DECRYPTING');
 						ns1blankspace.debug.message(oParam);
-						ns1blankspace.util.onComplete(oParam);
+						if (ns1blankspace.util.getParam(oParam, 'onComplete').exists)
+						{	
+							ns1blankspace.util.onComplete(oParam)
+						}
+						else
+						{
+							return sData;
+						}	
 					}
 					else
 					{	

@@ -23,6 +23,8 @@ ns1blankspace.util.local =
 
 					init: 		function (oParam)
 								{
+									ns1blankspace.debug.enabled = true;
+
 									if (ns1blankspace.util.local.cache.search({key: ns1blankspace.util.local.cache.data.cryptoKeyReference, persist: true}) == undefined)
 									{	
 										ns1blankspace.util.protect.key.create.single({cryptoKeyReference: ns1blankspace.util.local.cache.data.cryptoKeyReference, persist: true})
@@ -83,9 +85,17 @@ ns1blankspace.util.local =
 										var bPersist = ns1blankspace.util.getParam(oParam, 'persist', {"default": false}).value;
 										var oStorage = (bPersist?localStorage:sessionStorage);
 										var bJSON = ns1blankspace.util.getParam(oParam, 'json', {default: sKey.toLowerCase().indexOf('.json') != -1}).value;
+										var bProtect = ns1blankspace.util.getParam(oParam, 'protect', {"default": false}).value;
+
 										var oData;
 
 										var oData = oStorage.getItem(sKey);
+
+										if (bProtect && ns1blankspace.util.protect !== undefined)
+										{
+											var sCryptoKey = ns1blankspace.util.protect.key.data[sCryptoKeyReference];
+											oData = ns1blankspace.util.protect.decrypt({cryptoKey: sCryptoKey, protectedData: oData});
+										}
 
 										if (bJSON && oData !== undefined)
 										{
