@@ -13,6 +13,8 @@ if (ns1blankspace.util === undefined) {ns1blankspace.util = {}}
 ns1blankspace.util.local =
 {
 	cache: 		{
+					data: 		{cryptoKeyReference: 'local-cache-key'},
+
 					exists: 	function (oParam)
 								{
 									var bPersist = ns1blankspace.util.getParam(oParam, "persist", {"default": false}).value;
@@ -21,8 +23,10 @@ ns1blankspace.util.local =
 
 					init: 		function (oParam)
 								{
-									//needs protection so doesn't reset key - need to check first.
-									ns1blankspace.util.protect.key.create.single({cryptoKeyReference: 'local-cache-key', persist: true})
+									if (ns1blankspace.util.local.cache.search({key: ns1blankspace.util.local.cache.data.cryptoKeyReference, persist: true}) == undefined)
+									{	
+										ns1blankspace.util.protect.key.create.single({cryptoKeyReference: ns1blankspace.util.local.cache.data.cryptoKeyReference, persist: true})
+									}	
 								},			
 
 					context: 	function (oParam)
@@ -59,7 +63,7 @@ ns1blankspace.util.local =
 											}
 											else
 											{	
-												oParam = ns1blankspace.util.setParam(oParam, 'cryptoKeyReference', 'local-cache-key');
+												oParam = ns1blankspace.util.setParam(oParam, 'cryptoKeyReference', ns1blankspace.util.local.cache.data.cryptoKeyReference);
 												oParam = ns1blankspace.util.setParam(oParam, 'onCompleteWhenCan', ns1blankspace.util.local.cache.save);
 												ns1blankspace.util.protect.encrypt(oParam);
 											}	
@@ -79,14 +83,13 @@ ns1blankspace.util.local =
 										var bPersist = ns1blankspace.util.getParam(oParam, 'persist', {"default": false}).value;
 										var oStorage = (bPersist?localStorage:sessionStorage);
 										var bJSON = ns1blankspace.util.getParam(oParam, 'json', {default: sKey.toLowerCase().indexOf('.json') != -1}).value;
+										var oData;
 
-										if (!bJSON)
-										{	
-											var oData = oStorage.getItem(sKey);
-										}
-										else
+										var oData = oStorage.getItem(sKey);
+
+										if (bJSON && oData !== undefined)
 										{
-											var oData = JSON.parse(oStorage.getItem(sKey));
+											oData = JSON.parse(oStorage.getItem(sKey));
 										}	
 
 										return oData;

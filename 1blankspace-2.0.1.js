@@ -3740,15 +3740,15 @@ ns1blankspace.util =
 				{
 					ns1blankspace.util.getMethods();
 
-					var sBaseEndpoint = '/ondemand/';
+					var sBaseEndpoint = '/rpc/';
 
 					var oMethod = $.grep(ns1blankspace.methods, function (a) {return a.title == sMethod;})	
 
 					if (oMethod.length != 0) 
 					{
-						if (oMethod[0].rpc == 'true')
+						if (oMethod[0].rpc == 'false')
 						{	
-							sBaseEndpoint = '/rpc/';
+							sBaseEndpoint = '/ondemand/';
 						}	
 					}
 
