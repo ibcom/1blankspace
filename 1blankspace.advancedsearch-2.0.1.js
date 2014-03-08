@@ -5,55 +5,11 @@
  * 01 FEB 2010
  */
 if (ns1blankspace === undefined) {var ns1blankspace = {}}
-if (ns1blankspace.advancedSearch === undefined) {ns1blankspace.advancedSearch = {data: {}, criteria: {}}
-
-ns1blankspace.advancedSearch.data.searchComparison =
-		[ 
-			{title: "None", code: "", dataType: "all", inputCount: 0},
-			{title: "Equal to", code: "EQUAL_TO", dataType: "all", inputCount: 1},
-			{title: "Not equal to", code: "NOT_EQUAL_TO", dataType: "all", inputCount: 1},
-			{title: "Greater than", code: "GREATER_THAN", dataType: "all", inputCount: 1},
-			{title: "Greater than or equal to", code: "GREATER_THAN_OR_EQUAL_TO", dataType: "all", inputCount: 1},
-			{title: "Less than", code: "LESS_THAN", dataType: "all", inputCount: 1},
-			{title: "Less than or equal to", code: "LESS_THAN_OR_EQUAL_TO", dataType: "all", inputCount: 1},
-			{title: "Is in list", code: "IN_LIST", dataType: "all", inputCount: 1},
-			{title: "Not in list", code: "NOT_IN_LIST", dataType: "all", inputCount: 1},
-			{title: "Never set", code: "IS_NULL", dataType: "all", inputCount: 0},
-			{title: "Has been set", code: "IS_NOT_NULL", dataType: "all", inputCount: 0},
-			{title: "Approximately equal to", code: "APPROX_EQUAL_TO", dataType: "all", inputCount: 1},
-			{title: "Contains", code: "TEXT_IS_LIKE", dataType: "text", inputCount: 1},
-			{title: "Noes Not Contain", code: "TEXT_IS_NOT_LIKE", dataType: "text", inputCount: 1},
-			{title: "Starts with", code: "TEXT_STARTS_WITH", dataType: "text", inputCount: 1},
-			{title: "Is empty", code: "TEXT_IS_EMPTY", dataType: "text", inputCount: 0},
-			{title: "Is not empty", code: "TEXT_IS_NOT_EMPTY", dataType: "text", inputCount: 0},
-			{title: "Today", code: "TODAY", dataType: "date", inputCount: 0},
-			{title: "Yesterday", code: "YESTERDAY", dataType: "date", inputCount: 0},
-			{title: "Between", code: "BETWEEN", dataType: "date", inputCount: 2},
-			{title: "Week to date", code: "WEEK_TO_DATE", dataType: "date", inputCount: 0},
-			{title: "Month to date", code: "MONTH_TO_DATE", dataType: "date", inputCount: 0},
-			{title: "Calendar year to date", code: "CALENDAR_YEAR_TO_DATE", dataType: "date", inputCount: 0},
-			{title: "Calendar last week", code: "CALENDAR_LAST_WEEK", dataType: "date", inputCount: 0},
-			{title: "Calendar next week", code: "CALENDAR_NEXT_WEEK", dataType: "date", inputCount: 0},
-			{title: "Calendar last month", code: "CALENDAR_LAST_MONTH", dataType: "date", inputCount: 0},
-			{title: "Calendar next month", code: "CALENDAR_NEXT_MONTH", dataType: "date", inputCount: 0},
-			{title: "Calendar last year", code: "CALENDAR_LAST_YEAR", dataType: "date", inputCount: 0},
-			{title: "Calendar next year", code: "CALENDAR_NEXT_YEAR", dataType: "date", inputCount: 0},
-			{title: "End of last month", code: "END_OF_LAST_MONTH", dataType: "date", inputCount: 0},
-			{title: "End of next month", code: "END_OF_NEXT_MONTH", dataType: "date", inputCount: 0},
-			{title: "Last 52 weeks", code: "LAST_52_WEEKS", dataType: "date", inputCount: 0},
-			{title: "In month", code: "IN_MONTH", dataType: "date", inputCount: 1},
-			{title: "On day and month", code: "ON_DAY_MONTH", dataType: "date", inputCount: 1},
-			{title: "This month", code: "THIS_MONTH", dataType: "date", inputCount: 0},
-			{title: "Next month", code: "NEXT_MONTH", dataType: "date", inputCount: 0},
-			{title: "Aged 30 days", code: "AGED_THIRTY", dataType: "date", inputCount: 0},
-			{title: "Aged 60 days", code: "AGED_SIXTY", dataType: "date", inputCount: 0},
-			{title: "Aged 90 days", code: "AGED_NINETY", dataType: "date", inputCount: 0},
-			{title: "Aged 90+ days", code: "AGED_NINETY_PLUS", dataType: "date", inputCount: 0},
-			{title: "Last financial quarter", code: "LAST_FINANCIAL_QUARTER", dataType: "date", inputCount: 0}
-		];
+if (ns1blankspace.advancedSearch === undefined) {ns1blankspace.advancedSearch = {data: {}, criteria: {}}}
 
 function AdvancedSearch()
 {
+	this.criteria = {};
 	this.criteria.field = [];
 	this.criteria.summaryField = [];
 	
@@ -70,54 +26,53 @@ function AdvancedSearch()
 	this.criteria.sortField = [];
 	this.criteria.sortDirection = [];
 		
-	this.criteria.sort = sort;
+	this.sort = ns1blankspace.advancedSearch.sort;
 			
-	this.addBracket = addBracket;
-	this.addField = addField;
-	this.addSummaryField = addSummaryField;
-	this.addFilter = addFilter;
-	this.addOperator = addOperator;
-	this.addCustomOption = addCustomOption;
+	this.addBracket = ns1blankspace.advancedSearch.addBracket;
+	this.addField = ns1blankspace.advancedSearch.addField;
+	this.addSummaryField = ns1blankspace.advancedSearch.addSummaryField;
+	this.addFilter = ns1blankspace.advancedSearch.addFilter;
+	this.addOperator = ns1blankspace.advancedSearch.addOperator;
+	this.addCustomOption = ns1blankspace.advancedSearch.addCustomOption;
 	
-	this.getResults = getResults;
-	this.reset = reset;
+	this.getResults = ns1blankspace.advancedSearch.getResults;
+	this.reset = ns1blankspace.advancedSearch.reset;
 	
 	this.reset();
 }
 
-function reset()
+ns1blankspace.advancedSearch.reset = function ()
 {
-	//!!!Convert to .criteria - from here on in
-	
 	this.async = true;
 	this.endPoint = '';
 	this.method = '';
-	this.field.length = 0;
-	this.summaryField.length = 0;
-	
-	this.filterField.length = 0;
-	this.filterComparison.length = 0;
-	this.filterValue1.length = 0;
-	this.filterValue2.length = 0;
-	this.filterValue3.length = 0;
-	this.filterApplyToSubSearchJoin.length = 0;
-		
-	this.customOptionName.length = 0;
-	this.customOptionValue.length = 0;
-	
-	this.rf = '';
-	this.sortField.length = 0;
-	this.sortDirection.length = 0;
-	
-	this.startRow = 0;
-	this.rows = 20;
 	this.categoryId = '';
-	this.returnParameters = '';
-	
 	this.bracketCount = 0;
+
+	this.criteria.field.length = 0;
+	this.criteria.summaryField.length = 0;
+	
+	this.criteria.filterField.length = 0;
+	this.criteria.filterComparison.length = 0;
+	this.criteria.filterValue1.length = 0;
+	this.criteria.filterValue2.length = 0;
+	this.criteria.filterValue3.length = 0;
+	this.criteria.filterApplyToSubSearchJoin.length = 0;
+		
+	this.criteria.customOptionName.length = 0;
+	this.criteria.customOptionValue.length = 0;
+	
+	this.criteria.rf = '';
+	this.criteria.sortField.length = 0;
+	this.criteria.sortDirection.length = 0;
+	
+	this.criteria.startRow = 0;
+	this.criteria.rows = 20;
+	
+	this.criteria.returnParameters = '';
 }
 
-function addBracket(asBracket)
+ns1blankspace.advancedSearch.addBracket = function (asBracket)
 {
 	if ((asBracket != '(') && (asBracket != ')')) {
 		alert('Bracket parameter must be either ( or )');
@@ -132,7 +87,7 @@ function addBracket(asBracket)
 	else this.bracketCount --;
 }
 
-function addOperator(asOperator)
+ns1blankspace.advancedSearch.addOperator = function (asOperator)
 {
 	if ((asOperator != 'and') && (asOperator != 'or')) {
 		alert('Operator parameter must be either (and) or (or)');
@@ -143,7 +98,7 @@ function addOperator(asOperator)
 	this.addFilter(asOperator);
 }
 
-function addField(asField)
+ns1blankspace.advancedSearch.addField = function (asField)
 {
 	//can be comma delimited list
 
@@ -151,57 +106,120 @@ function addField(asField)
 	{	
 		var aFields = asField.split(',');
 
-		for (var i = 0; i < aFields.length; i++) this.field.push(aFields[i]);
+		for (var i = 0; i < aFields.length; i++) this.criteria.field.push(aFields[i]);
 	}		
 }
 
-function addSummaryField(asField)
+ns1blankspace.advancedSearch.addSummaryField = function (asField)
 {
 	//can be comma delimited list
 	var aFields = asField.split(',');
 
-	for (var i = 0; i < aFields.length; i++) this.summaryField.push(aFields[i]);
+	for (var i = 0; i < aFields.length; i++) this.criteria.summaryField.push(aFields[i]);
 }
 
-function addFilter(asField, asComparison, asValue1, asValue2, asValue3, asApplyToSubSearchJoin)
+ns1blankspace.advancedSearch.addFilter = function (asField, asComparison, asValue1, asValue2, asValue3, asApplyToSubSearchJoin)
 {
 	//Note: brackets & operators are also implemented as filters
 	//to keep them in the sequence
 
-	if (asField == undefined) asField = '';
-	if (asComparison == undefined) asComparison = '';
-	if (asValue1 == undefined) asValue1 = '';
-	if (asValue2 == undefined) asValue2 = '';
-	if (asValue3 == undefined) asValue3 = '';
-	if (asApplyToSubSearchJoin == undefined) asApplyToSubSearchJoin = '';
+	if (asField == undefined) {asField = ''};
+	if (asComparison == undefined) {asComparison = ''};
+	if (asValue1 == undefined) {asValue1 = ''};
+	if (asValue2 == undefined) {asValue2 = ''};
+	if (asValue3 == undefined) {asValue3 = ''};
+	if (asApplyToSubSearchJoin == undefined) {asApplyToSubSearchJoin = ''};
 	
-	this.filterField.push(asField);
-	this.filterComparison.push(asComparison);
-	this.filterValue1.push(asValue1);
-	this.filterValue2.push(asValue2);
-	this.filterValue3.push(asValue3);
-	this.filterApplyToSubSearchJoin.push(asApplyToSubSearchJoin);
+	this.criteria.filterField.push(asField);
+	this.criteria.filterComparison.push(asComparison);
+	this.criteria.filterValue1.push(asValue1);
+	this.criteria.filterValue2.push(asValue2);
+	this.criteria.filterValue3.push(asValue3);
+	this.criteria.filterApplyToSubSearchJoin.push(asApplyToSubSearchJoin);
 }
 
-function sort(asField, asDirection)
+ns1blankspace.advancedSearch.sort = function (asField, asDirection)
 {
-	this.sortField.push(asField);
-	this.sortDirection.push(asDirection);
+	this.criteria.sortField.push(asField);
+	this.criteria.sortDirection.push(asDirection);
 }
 
-function addCustomOption(asName, asValue)
+ns1blankspace.advancedSearch.addCustomOption = function (asName, asValue)
 {
 	if (asName == undefined) asName = '';
 	if (asValue == undefined) asValue = '';
 
-	this.customOptionName.push(asName);
-	this.customOptionValue.push(asValue);
+	this.criteria.customOptionName.push(asName);
+	this.criteria.customOptionValue.push(asValue);
 }
 
-function getResults(aoParm1, aoParm2)
+ns1blankspace.advancedSearch.buildCriteria = function (oCriteria)
 {
-	//!!!CHANGE TO WORK OFF THE OBJECT.data
+	var oData =
+	{
+		fields: [],
+		summaryFields: [],
+		filters: [],
+		sort: [],
+		options: {rf: 'JSON'}
+	};
 
+	$.each(oCriteria.field, function(i, v)
+	{
+		oData.fields.push({name: v});
+	});
+
+	$.each(oCriteria.summaryField, function(i, v)
+	{
+		oData.summaryFields.push({name: v});
+	});
+
+	$.each(oCriteria.filterField, function(i, v)
+	{
+		oData.filters.push(
+		{
+			name: v,
+			comparison: oCriteria.filterComparison[i],
+			value1: oCriteria.filterValue1[i],
+			value2: oCriteria.filterValue2[i],
+			value3: oCriteria.filterValue3[i],
+			ApplyToSubSearchJoin: oCriteria.filterApplyToSubSearchJoin[i]
+		});
+	});
+
+	$.each(oCriteria.sortField, function(i, v)
+	{
+		oData.sort.push(
+		{
+			name: v,
+			direction: oCriteria.sortDirection[i]
+		});
+	});
+
+	$.each(oCriteria.customOptionName, function(i, v)
+	{
+		oData.customOption.push(
+		{
+			name: v,
+			value: oCriteria.customOptionValue[i]
+		});
+	});
+
+	oData.options =
+	{
+		rf: oCriteria.rf,
+		startrow: oCriteria.startrow,
+		rows: oCriteria.rows,
+		returnparameters: oCriteria.returnparameters
+	}
+	
+	var sCriteria = JSON.stringify(oData);
+
+	return sCriteria;
+}
+
+ns1blankspace.advancedSearch.getResults = function (aoParm1, aoParm2)
+{
 	var sEndpoint = this.endPoint;
 
 	if (sEndpoint == '')
@@ -212,7 +230,7 @@ function getResults(aoParm1, aoParm2)
 	}
 	
 	var sURL = '/rpc/' + sEndpoint.toLowerCase() + '/?method=' + this.method + '&advanced=1';
-	var sXML;
+	var sCriteria;
 	var i;
 	var fCallbackFunction;
 	var sAjaxDataType = '';
@@ -226,11 +244,11 @@ function getResults(aoParm1, aoParm2)
 	if (aoParm2 == undefined)
 	{
 		fCallbackFunction = aoParm1;
-		sXML = '';
+		sCriteria = '';
 	}
 	else
 	{
-		sXML = aoParm1;
+		sCriteria = aoParm1;
 		fCallbackFunction = aoParm2;
 	}
 	
@@ -252,24 +270,20 @@ function getResults(aoParm1, aoParm2)
 		return false;
 	}
 	
-	if (sXML == '')
+	if (sCriteria == '')
 	{
-		sXML = BuildXMLFromObject(this)
+		sCriteria = ns1blankspace.advancedSearch.buildCriteria(this.criteria)
 	}	
-	else
-	{
-		if (sXML.substr(0, 1) == '{') sXML = BuildXMLFromJSON(this, sXML);
-	}
-
-	if (sXML == '') return false;
 	
-	if (this.rf.toLowerCase() == 'xml')
+	if (sCriteria == '') return false;
+	
+	if (this.criteria.rf.toLowerCase() == 'xml')
 	{
 		sAjaxDataType = 'xml';
 		sURL += '&rf=xml';
 	}
 
-	if (this.rf.toLowerCase() == 'json')
+	if (this.criteria.rf.toLowerCase() == 'json')
 	{
 		sAjaxDataType = 'json';
 		sURL += '&rf=json';
@@ -277,181 +291,70 @@ function getResults(aoParm1, aoParm2)
 
 	if (this.categoryId != '') {sURL += '&categoryid=' + this.categoryId;}
 	
-	var sData = JSON.stringify(this.criteria);
+	ns1blankspace.debug.message(sCriteria);
 
 	$.ajax(
 	{
 		type: 'POST',
 		async: this.async,
 		url: sURL,
-		data: sData,
+		data: sCriteria,
 		global: true,
 		success: function(asData)
 		{ 
-			getResultsComplete(asData, fCallbackFunction)
+			fCallbackFunction(asData)
 		},		
 		dataType: sAjaxDataType
 	});
-
 }
 
-function BuildXMLFromObject(aoThis)
-{
-	var sXML;
-	
-	sXML = '<advancedSearch>';
-		
-	for(i = 0; i < aoThis.field.length; i++) {
-		sXML += 
-			'<field>' + 
-				'<name>' + ASXMLFormat(aoThis.field[i]) + '</name>' +
-			'</field>';
-	}
-	
-	for(i = 0; i < aoThis.summaryField.length; i++) {
-		sXML += 
-			'<summaryField>' + 
-				'<name>' + ASXMLFormat(aoThis.summaryField[i]) + '</name>' +
-			'</summaryField>';
-	}
+ns1blankspace.advancedSearch.data.searchComparison =
+[ 
+	{title: "None", code: "", dataType: "all", inputCount: 0},
+	{title: "Equal to", code: "EQUAL_TO", dataType: "all", inputCount: 1},
+	{title: "Not equal to", code: "NOT_EQUAL_TO", dataType: "all", inputCount: 1},
+	{title: "Greater than", code: "GREATER_THAN", dataType: "all", inputCount: 1},
+	{title: "Greater than or equal to", code: "GREATER_THAN_OR_EQUAL_TO", dataType: "all", inputCount: 1},
+	{title: "Less than", code: "LESS_THAN", dataType: "all", inputCount: 1},
+	{title: "Less than or equal to", code: "LESS_THAN_OR_EQUAL_TO", dataType: "all", inputCount: 1},
+	{title: "Is in list", code: "IN_LIST", dataType: "all", inputCount: 1},
+	{title: "Not in list", code: "NOT_IN_LIST", dataType: "all", inputCount: 1},
+	{title: "Never set", code: "IS_NULL", dataType: "all", inputCount: 0},
+	{title: "Has been set", code: "IS_NOT_NULL", dataType: "all", inputCount: 0},
+	{title: "Approximately equal to", code: "APPROX_EQUAL_TO", dataType: "all", inputCount: 1},
+	{title: "Contains", code: "TEXT_IS_LIKE", dataType: "text", inputCount: 1},
+	{title: "Noes Not Contain", code: "TEXT_IS_NOT_LIKE", dataType: "text", inputCount: 1},
+	{title: "Starts with", code: "TEXT_STARTS_WITH", dataType: "text", inputCount: 1},
+	{title: "Is empty", code: "TEXT_IS_EMPTY", dataType: "text", inputCount: 0},
+	{title: "Is not empty", code: "TEXT_IS_NOT_EMPTY", dataType: "text", inputCount: 0},
+	{title: "Today", code: "TODAY", dataType: "date", inputCount: 0},
+	{title: "Yesterday", code: "YESTERDAY", dataType: "date", inputCount: 0},
+	{title: "Between", code: "BETWEEN", dataType: "date", inputCount: 2},
+	{title: "Week to date", code: "WEEK_TO_DATE", dataType: "date", inputCount: 0},
+	{title: "Month to date", code: "MONTH_TO_DATE", dataType: "date", inputCount: 0},
+	{title: "Calendar year to date", code: "CALENDAR_YEAR_TO_DATE", dataType: "date", inputCount: 0},
+	{title: "Calendar last week", code: "CALENDAR_LAST_WEEK", dataType: "date", inputCount: 0},
+	{title: "Calendar next week", code: "CALENDAR_NEXT_WEEK", dataType: "date", inputCount: 0},
+	{title: "Calendar last month", code: "CALENDAR_LAST_MONTH", dataType: "date", inputCount: 0},
+	{title: "Calendar next month", code: "CALENDAR_NEXT_MONTH", dataType: "date", inputCount: 0},
+	{title: "Calendar last year", code: "CALENDAR_LAST_YEAR", dataType: "date", inputCount: 0},
+	{title: "Calendar next year", code: "CALENDAR_NEXT_YEAR", dataType: "date", inputCount: 0},
+	{title: "End of last month", code: "END_OF_LAST_MONTH", dataType: "date", inputCount: 0},
+	{title: "End of next month", code: "END_OF_NEXT_MONTH", dataType: "date", inputCount: 0},
+	{title: "Last 52 weeks", code: "LAST_52_WEEKS", dataType: "date", inputCount: 0},
+	{title: "In month", code: "IN_MONTH", dataType: "date", inputCount: 1},
+	{title: "On day and month", code: "ON_DAY_MONTH", dataType: "date", inputCount: 1},
+	{title: "This month", code: "THIS_MONTH", dataType: "date", inputCount: 0},
+	{title: "Next month", code: "NEXT_MONTH", dataType: "date", inputCount: 0},
+	{title: "Aged 30 days", code: "AGED_THIRTY", dataType: "date", inputCount: 0},
+	{title: "Aged 60 days", code: "AGED_SIXTY", dataType: "date", inputCount: 0},
+	{title: "Aged 90 days", code: "AGED_NINETY", dataType: "date", inputCount: 0},
+	{title: "Aged 90+ days", code: "AGED_NINETY_PLUS", dataType: "date", inputCount: 0},
+	{title: "Last financial quarter", code: "LAST_FINANCIAL_QUARTER", dataType: "date", inputCount: 0}
+];
 
-	for(i = 0; i < aoThis.filterField.length; i++) {
-		sXML += 
-			'<filter>' + 
-				'<name>' + ASXMLFormat(aoThis.filterField[i]) + '</name>' +
-				'<comparison>' + ASXMLFormat(aoThis.filterComparison[i]) + '</comparison>' +
-				'<value1>' + ASXMLFormat(aoThis.filterValue1[i]) + '</value1>' +
-				'<value2>' + ASXMLFormat(aoThis.filterValue2[i]) + '</value2>' +
-				'<value3>' + ASXMLFormat(aoThis.filterValue3[i]) + '</value3>' +
-				'<ApplyToSubSearchJoin>' + ASXMLFormat(aoThis.filterApplyToSubSearchJoin[i]) + '</ApplyToSubSearchJoin>' +
-			'</filter>';
-	}
 
-	for(i = 0; i < aoThis.sortField.length; i++) {
-		sXML += 
-			'<sort>' +
-				'<name>' + ASXMLFormat(aoThis.sortField[i]) + '</name>' +
-				'<direction>' + ASXMLFormat(aoThis.sortDirection[i]) + '</direction>' +
-			'</sort>';
-	}
-
-	sXML += '<options>' + 
-				'<rf>' + ASXMLFormat(aoThis.rf) + '</rf>' +
-				'<startrow>' + ASXMLFormat(aoThis.startRow) + '</startrow>' +
-				'<rows>' + ASXMLFormat(aoThis.rows) + '</rows>' +
-				'<returnparameters>' + aoThis.returnParameters + '</returnparameters>' +
-			'</options>';
-			
-	for(i = 0; i < aoThis.customOptionName.length; i++) {
-		sXML += 
-			'<customOption>' + 
-				'<name>' + ASXMLFormat(aoThis.customOptionName[i]) + '</name>' +
-				'<value>' + ASXMLFormat(aoThis.customOptionValue[i]) + '</value>' +
-			'</customOption>';
-	}
-			
-	sXML += '</advancedSearch>';
-
-	return sXML;
-}
-
-function BuildXMLFromJSON(aoThis, asSearch) {
-	//expected format is:
-	//{
-	//	"fields":
-	//	[
-	//		{
-	//			"name": "sentDate"
-	//		}
-	//	],
-	//	"summaryFields":
-	//	[
-	//		{
-	//			"name": "count(*) actioncount"
-	//		}
-	//	],
-	//	"filters":
-	//	[
-	//		{
-	//			"name": "sent",
-	//			"comparison": "EQUAL_TO",
-	//			"value1": "N",
-	//			"value2": "",
-	//			"value3": "",
-	//			"ApplyToSubSearchJoin": ""
-	//		}
-	//	],
-	//	"sort":
-	//	{
-	//		"name": "reference",
-	//		"direction": "asc"
-	//	},
-	//	"options":
-	//	{
-	//		"rf": "XML"
-	//	}
-	//}
-	
-	var oAS;
-	var i;
-	
-	try { 
-		oAS = eval('(' + asSearch + ')');
-	}
-	catch (e) {
-		alert('Invalid JSON passed.');
-		return '';
-	}
-	
-	//convert json into our object
-	if (oAS.fields != undefined) {
-		for (i = 0; i < oAS.fields.length; i++) aoThis.addField(oAS.fields[i].name);
-	}
-	
-	if (oAS.summaryFields != undefined) {
-		for (i = 0; i < oAS.summaryFields.length; i++) aoThis.addSummaryField(oAS.summaryFields[i].name);
-	}
-
-	if (oAS.filters != undefined) {
-		for (i = 0; i < oAS.filters.length; i++) aoThis.addFilter(oAS.filters[i].name, oAS.filters[i].comparison, oAS.filters[i].value1, oAS.filters[i].value2);
-	}
-	
-	if (oAS.sort != undefined) {
-		aoThis.sort(oAS.sort.name, oAS.sort.direction);
-	}
-	
-	if (oAS.options != undefined) {
-		aoThis.rf = oAS.options.rf;
-	}
-	
-	//then use the object -> xml code
-	return BuildXMLFromObject(aoThis);
-}
-
-function ASXMLFormat(asValue)
-{
-	var sValue;
-	// should be in common library
-	
-	if (asValue == undefined) return '';
-	
-	if (typeof(asValue) == 'number') sValue = asValue.toString()
-	else sValue = asValue;
-	
-	sValue = sValue.replace("&", '&amp;');	//needs to be first
-	sValue = sValue.replace('"', '&quot;');
-	sValue = sValue.replace("'", '&apos;');
-	sValue = sValue.replace("<", '&lt;');
-	sValue = sValue.replace(">", '&gt;');
-	
-	return sValue;
-}
-
-function getResultsComplete(asData, afCallbackFunction) {
-	afCallbackFunction(asData);
-}
-
-function advancedSearchComparisonGet(oParam)
+ns1blankspace.advancedSearch.comparisonGet = function advancedSearchComparisonGet(oParam)
 {
 	var aReturn = [];
 	var sReturnFormat = 'JSON';
@@ -502,4 +405,68 @@ function advancedSearchComparisonGet(oParam)
 	});
 
 	return aReturn
+}
+
+ns1blankspace.advancedSearch.buildXMLFromObject = function (aoThis)
+{
+	var sXML;
+	
+	sXML = '<advancedSearch>';
+		
+	for (i = 0; i < aoThis.criteria.field.length; i++)
+	{
+		sXML += 
+			'<field>' + 
+				'<name>' + ns1blankspace.advancedSearch.asXMLFormat(aoThis.criteria.field[i]) + '</name>' +
+			'</field>';
+	}
+	
+	for(i = 0; i < aoThis.criteria.summaryField.length; i++) {
+		sXML += 
+			'<summaryField>' + 
+				'<name>' + s1blankspace.advancedSearch.asXMLFormat(aoThis.criteria.summaryField[i]) + '</name>' +
+			'</summaryField>';
+	}
+
+	for(i = 0; i < aoThis.criteria.filterField.length; i++)
+	{
+		sXML += 
+			'<filter>' + 
+				'<name>' + ns1blankspace.advancedSearch.asXMLFormat(aoThis.criteria.filterField[i]) + '</name>' +
+				'<comparison>' + ns1blankspace.advancedSearch.asXMLFormat(aoThis.criteria.filterComparison[i]) + '</comparison>' +
+				'<value1>' + ns1blankspace.advancedSearch.asXMLFormat(aoThis.criteria.filterValue1[i]) + '</value1>' +
+				'<value2>' + ns1blankspace.advancedSearch.asXMLFormat(aoThis.criteria.filterValue2[i]) + '</value2>' +
+				'<value3>' + ns1blankspace.advancedSearch.asXMLFormat(aoThis.criteria.filterValue3[i]) + '</value3>' +
+				'<ApplyToSubSearchJoin>' + ns1blankspace.advancedSearch.asXMLFormat(aoThis.criteria.filterApplyToSubSearchJoin[i]) + '</ApplyToSubSearchJoin>' +
+			'</filter>';
+	}
+
+	for(i = 0; i < aoThis.criteria.sortField.length; i++)
+	{
+		sXML += 
+			'<sort>' +
+				'<name>' + ns1blankspace.advancedSearch.asXMLFormat(aoThis.criteria.sortField[i]) + '</name>' +
+				'<direction>' + ns1blankspace.advancedSearch.asXMLFormat(aoThis.criteria.sortDirection[i]) + '</direction>' +
+			'</sort>';
+	}
+
+	sXML += '<options>' + 
+				'<rf>' + ns1blankspace.advancedSearch.asXMLFormat(aoThis.criteria.rf) + '</rf>' +
+				'<startrow>' + ns1blankspace.advancedSearch.asXMLFormat(aoThis.criteria.startRow) + '</startrow>' +
+				'<rows>' + ns1blankspace.advancedSearch.asXMLFormat(aoThis.criteria.rows) + '</rows>' +
+				'<returnparameters>' + aoThis.criteria.returnParameters + '</returnparameters>' +
+			'</options>';
+			
+	for(i = 0; i < aoThis.criteria.customOptionName.length; i++)
+	{
+		sXML += 
+			'<customOption>' + 
+				'<name>' + ns1blankspace.advancedSearch.asXMLFormat(aoThis.criteria.customOptionName[i]) + '</name>' +
+				'<value>' + ns1blankspace.advancedSearch.asXMLFormat(aoThis.criteria.customOptionValue[i]) + '</value>' +
+			'</customOption>';
+	}
+			
+	sXML += '</advancedSearch>';
+
+	return sXML;
 }
