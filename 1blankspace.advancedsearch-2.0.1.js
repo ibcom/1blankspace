@@ -290,6 +290,17 @@ ns1blankspace.advancedSearch.getResults = function (aoParm1, aoParm2)
 	}	
 
 	if (this.categoryId != '') {sURL += '&categoryid=' + this.categoryId;}
+
+	if (ns1blankspace !== undefined)
+	{
+		if (ns1blankspace.user !== undefined)
+		{
+			if (ns1blankspace.user.site !== undefined && sEndpoint.toLowerCase() == 'site')
+			{
+				sURL += '&site=' + ns1blankspace.user.site;
+			}	
+		}	
+	}
 	
 	ns1blankspace.debug.message(sCriteria);
 
