@@ -133,9 +133,9 @@ ns1blankspace.home.websites =
 						$.ajax(
 						{
 							type: 'GET',
-							url: ns1blankspace.util.endpointURI('SETUP_SITE_SEARCH') + '&rows=50',
+							url: ns1blankspace.util.endpointURI('SETUP_SITE_SEARCH') + '&rows=250',
 							dataType: 'json',
-							success: ns1blankspace.setup.website.home
+							success: ns1blankspace.home.websites.show
 						});
 						
 					}
@@ -147,6 +147,7 @@ ns1blankspace.home.websites =
 						{
 							aHTML.push('<table>' +
 											'<tr><td class="ns1blankspaceNothing">No websites or webapps.</td></tr>' +
+											'<tr><td class="ns1blankspaceNothing">Click New to create one.</td></tr>' +
 											'</table>');
 						}
 						else
