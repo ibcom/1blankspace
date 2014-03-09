@@ -365,7 +365,7 @@ ns1blankspace.advancedSearch.data.searchComparison =
 ];
 
 
-ns1blankspace.advancedSearch.comparisonGet = function advancedSearchComparisonGet(oParam)
+ns1blankspace.advancedSearch.comparisonGet = function (oParam)
 {
 	var aReturn = [];
 	var sReturnFormat = 'JSON';
