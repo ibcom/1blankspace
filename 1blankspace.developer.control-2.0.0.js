@@ -107,7 +107,7 @@ ns1blankspace.xhtml.homeNotes =
 	'<br /><br /><a href="http://mydigitalstructure.com/endpoints" target="_blank">Endpoints</a>' +
 	'<br /><br />If you\'re looking for help on a method you can do <i>mydigitalstructure.com/<br />[method name]</i> as a shortcut.' +
 	'<br /><br /><hr />' +
-	'<br /><a href="https://app.1blankspace.com" target="_blank">app.1blankspace.com</a> is an example jQueryUI app that covers all the endpoints.  You can use your logon to check it out.' +
+	'<br /><a href="https://app.1blankspace.com" target="_blank">app.1blankspace.com</a> is an example js/jQuery app that covers all the endpoints.  You can use your logon to check it out.' +
 		'<br /><br /><a href="http://mydigitalstructure.com/1blankspace" target="_blank">Developer notes</a>' +
 	'</td></tr></table>';
 
