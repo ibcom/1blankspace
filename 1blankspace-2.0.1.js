@@ -737,7 +737,7 @@ ns1blankspace.app =
 							ns1blankspace.user.email = oResponse.email;
 							ns1blankspace.user.systemAdmin = oResponse.systemadmin;
 							ns1blankspace.user.roles = oResponse.roles.rows;
-							ns1blankspace.user.site = oResponse.site;
+							ns1blankspace.user.site = parseInt(oResponse.site);
 
 							ns1blankspace.spaceText = oResponse.spacename;
 							ns1blankspace.space = oResponse.space;

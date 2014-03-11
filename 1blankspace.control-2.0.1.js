@@ -910,24 +910,34 @@ ns1blankspace.control =
 							iSiteID = mydigitalstructureSiteId;
 						}
 
-						if (iSiteID !== undefined && ns1blankspace.option.loadControl)
+						if (ns1blankspace.option.loadControl)
 						{
-							$.ajax(
+							var sURI = ns1blankspace.option.controlDataURI;
+
+							if (sURI === undefined && iSiteID !== undefined)
 							{
-								type: 'GET',
-								url: '/site/' + iSiteID + '/1blankspace.control.json',
-								dataType: 'json',
-								global: false,
-								success: function(data)
+								sURI = '/site/' + iSiteID + '/1blankspace.control.json'
+							}
+
+							if (sURI !== undefined)
+							{	
+								$.ajax(
 								{
-									ns1blankspace.data.control = data.control;
-									ns1blankspace.control.init(oParam)
-								},
-								error: function(data)
-								{
-									ns1blankspace.control.init(oParam)
-								}
-							});
+									type: 'GET',
+									url: sURI,
+									dataType: 'json',
+									global: false,
+									success: function(data)
+									{
+										ns1blankspace.data.control = data.control;
+										ns1blankspace.control.init(oParam)
+									},
+									error: function(data)
+									{
+										ns1blankspace.control.init(oParam)
+									}
+								});
+							}	
 						}
 						else
 						{
@@ -2158,7 +2168,8 @@ ns1blankspace.attachments =
 
 	bind:		function ()
 				{
-					$('span.ns1blankspaceAttachmentsRemove:not("ui-button")').button({
+					$('span.ns1blankspaceAttachmentsRemove:not(".ui-button")').button(
+					{
 								text: false,
 								 icons: {
 									 primary: "ui-icon-close"
@@ -2180,13 +2191,13 @@ ns1blankspace.attachments =
 					var sData = 'id=' + ns1blankspace.util.fs(sSearchContext) + '&remove=1';
 								
 					$.ajax(
-						{
-							type: 'POST',
-							url: ns1blankspace.util.endpointURI('CORE_ATTACHMENT_MANAGE'),
-							data: sData,
-							dataType: 'json',
-							success: function(data){$('#' + sXHTMLElementID).parent().parent().fadeOut(500)}
-						});
+					{
+						type: 'POST',
+						url: ns1blankspace.util.endpointURI('CORE_ATTACHMENT_MANAGE'),
+						data: sData,
+						dataType: 'json',
+						success: function(data){$('#' + sXHTMLElementID).parent().parent().fadeOut(500)}
+					});
 				},
 
 	add: 		function (oParam)

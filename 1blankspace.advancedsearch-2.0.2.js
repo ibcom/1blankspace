@@ -62,12 +62,12 @@ ns1blankspace.advancedSearch.reset = function ()
 	this.criteria.customOptionName.length = 0;
 	this.criteria.customOptionValue.length = 0;
 	
-	this.criteria.rf = '';
 	this.criteria.sortField.length = 0;
 	this.criteria.sortDirection.length = 0;
 	
-	this.criteria.startRow = 0;
-	this.criteria.rows = 20;
+	this.rf = '';
+	this.startRow = 0;
+	this.rows = 20;
 	
 	this.criteria.returnParameters = '';
 }
@@ -153,8 +153,10 @@ ns1blankspace.advancedSearch.addCustomOption = function (asName, asValue)
 	this.criteria.customOptionValue.push(asValue);
 }
 
-ns1blankspace.advancedSearch.buildCriteria = function (oCriteria)
+ns1blankspace.advancedSearch.buildCriteria = function (oSearch)
 {
+	var oCriteria = oSearch.criteria;
+
 	var oData =
 	{
 		fields: [],
@@ -207,10 +209,10 @@ ns1blankspace.advancedSearch.buildCriteria = function (oCriteria)
 
 	oData.options =
 	{
-		rf: oCriteria.rf,
-		startrow: oCriteria.startrow,
-		rows: oCriteria.rows,
-		returnparameters: oCriteria.returnparameters
+		rf: oSearch.rf,
+		startrow: oSearch.startrow,
+		rows: oSearch.rows,
+		returnparameters: oSearch.returnparameters
 	}
 	
 	var sCriteria = JSON.stringify(oData);
@@ -272,18 +274,18 @@ ns1blankspace.advancedSearch.getResults = function (aoParm1, aoParm2)
 	
 	if (sCriteria == '')
 	{
-		sCriteria = ns1blankspace.advancedSearch.buildCriteria(this.criteria)
+		sCriteria = ns1blankspace.advancedSearch.buildCriteria(this)
 	}	
 	
 	if (sCriteria == '') return false;
 	
-	if (this.criteria.rf.toLowerCase() == 'xml')
+	if (this.rf.toLowerCase() == 'xml')
 	{
 		sAjaxDataType = 'xml';
 		sURL += '&rf=xml';
 	}
 
-	if (this.criteria.rf.toLowerCase() == 'json')
+	if (this.rf.toLowerCase() == 'json')
 	{
 		sAjaxDataType = 'json';
 		sURL += '&rf=json';
