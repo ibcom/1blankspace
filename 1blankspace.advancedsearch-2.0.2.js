@@ -162,7 +162,7 @@ ns1blankspace.advancedSearch.buildCriteria = function (oSearch)
 		fields: [],
 		summaryFields: [],
 		filters: [],
-		sort: [],
+		sorts: [],
 		options: {rf: 'JSON'}
 	};
 
@@ -191,7 +191,7 @@ ns1blankspace.advancedSearch.buildCriteria = function (oSearch)
 
 	$.each(oCriteria.sortField, function(i, v)
 	{
-		oData.sort.push(
+		oData.sorts.push(
 		{
 			name: v,
 			direction: oCriteria.sortDirection[i]
