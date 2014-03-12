@@ -44,7 +44,7 @@ ns1blankspace.home =
 							
 					$('#ns1blankspaceControl').html(aHTML.join(''));
 					
-					this.bind();
+					ns1blankspace.home.bind();
 
 					var aHTML = [];
 					
