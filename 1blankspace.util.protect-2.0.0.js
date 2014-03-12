@@ -12,6 +12,11 @@ if (ns1blankspace.util === undefined) {ns1blankspace.util = {}}
 
 ns1blankspace.util.protect =
 {
+	exists: 	function (oParam)
+				{
+					return ('CryptoJS' in window);
+				},
+
 	key: 		{
 					data: 		{},
 
@@ -19,7 +24,6 @@ ns1blankspace.util.protect =
 									single:		function(oParam)
 												{
 													var iType
-													var sCryptoKey = 'XXX'
 													var bPersist = ns1blankspace.util.getParam(oParam, 'persist', {"default": false}).value;
 													var sCryptoKeyReference = ns1blankspace.util.getParam(oParam, 'cryptoKeyReference').value;
 													var bLocal = ns1blankspace.util.getParam(oParam, 'local', {"default": false}).value;
@@ -29,6 +33,9 @@ ns1blankspace.util.protect =
 													oParam =  ns1blankspace.util.setParam(oParam, 'persist', bPersist);
 													oParam =  ns1blankspace.util.setParam(oParam, 'protect', false);
 
+													var sSalt = CryptoJS.lib.WordArray.random(128/8);
+													var sCryptoKey = CryptoJS.PBKDF2(ns1blankspace.logonKey, sSalt, { keySize: 512/32 }).toString();
+		
 													if (sCryptoKeyReference !== undefined)
 													{	
 														ns1blankspace.util.protect.key.data[sCryptoKeyReference] = sCryptoKey;
@@ -119,7 +126,8 @@ ns1blankspace.util.protect =
 					{
 						var sData = ns1blankspace.util.getParam(oParam, 'data').value;
 						var sCryptoKey = ns1blankspace.util.getParam(oParam, 'cryptoKey').value;
-						var sProtectedData = sData + sCryptoKey // TO BE DONE
+						var sProtectedData = CryptoJS.AES.encrypt(sData, sCryptoKey).toString();
+
 						oParam = ns1blankspace.util.setParam(oParam, 'protectedData', sProtectedData);
 						ns1blankspace.debug.message('ENCRYPTING');
 						ns1blankspace.debug.message(oParam);
@@ -138,7 +146,8 @@ ns1blankspace.util.protect =
 					{
 						var sProtectedData = ns1blankspace.util.getParam(oParam, 'protectedData').value;
 						var sCryptoKey = ns1blankspace.util.getParam(oParam, 'cryptoKey').value;
-						var sData = sProtectedData.replace(sCryptoKey, ''); // TO BE DONE
+						var sData = CryptoJS.AES.decrypt(sProtectedData, sCryptoKey).toString()
+
 						oParam = ns1blankspace.util.setParam(oParam, 'data', sData)
 						ns1blankspace.debug.message('DECRYPTING');
 						ns1blankspace.debug.message(oParam);

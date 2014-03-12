@@ -93,7 +93,7 @@ ns1blankspace.util.local =
 
 										if (bProtect && ns1blankspace.util.protect !== undefined)
 										{
-											var sCryptoKey = ns1blankspace.util.protect.key.data[sCryptoKeyReference];
+											var sCryptoKey = ns1blankspace.util.protect.key.data[ns1blankspace.util.local.cache.data.cryptoKeyReference];
 											oData = ns1blankspace.util.protect.decrypt({cryptoKey: sCryptoKey, protectedData: oData});
 										}
 
