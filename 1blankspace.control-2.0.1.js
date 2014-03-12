@@ -260,10 +260,6 @@ ns1blankspace.scripts.concat(
 	{
 		nameSpace: '1blankspace.util.local',
 		source: '/jscripts/1blankspace.util.local-2.0.0.js'
-	},
-	{
-		nameSpace: '1blankspace.util.protect',
-		source: '/jscripts/1blankspace.util.protect-2.0.0.js'
 	}
 ])
 
@@ -835,13 +831,14 @@ ns1blankspace.control =
 				{
 					var iStep = 1;
 					var aRoles = [];
-					var fPostInit = ns1blankspace.option.postInit;
+					var sPostInit = ns1blankspace.option.postInit;
+					if (sPostInit === undefined) {sPostInit = 'ns1blankspace.app.postInit'}
 
 					if (oParam != undefined)
 					{
 						if (oParam.step != undefined) {iStep = oParam.step}
 						if (oParam.roles != undefined) {aRoles = oParam.roles}
-						if (oParam.postInit != undefined) {fPostInit = oParam.postInit}
+						if (oParam.postInit != undefined) {sPostInit = oParam.postInit}
 					}
 					else
 					{
@@ -955,14 +952,15 @@ ns1blankspace.control =
 							url: '/ondemand/core/?method=CORE_PROFILE_SEARCH&type=1&rf=TEXT&id=455',
 							dataType: 'text',
 							async: true,
-							success: function(data) {
+							success: function(data)
+							{
 								sData = data.replace('OK|RETURNED|', '')
 								if (sData != '')
 								{
 									ns1blankspace.control.user.changeTheme({theme: sData});
 								}
 
-								if (fPostInit) {fPostInit()}
+								if (sPostInit) {ns1blankspace.util.execute(sPostInit, oParam)}
 							}
 						})
 					}		

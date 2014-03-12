@@ -721,8 +721,6 @@ ns1blankspace.app =
 							window.location.hash = '';
 						}	
 
-						var aHTML = [];
-
 						if (oResponse !== undefined)
 						{
 							ns1blankspace.user.id = oResponse.user;
@@ -746,88 +744,93 @@ ns1blankspace.app =
 
 							ns1blankspace.setupShow = ns1blankspace.user.systemAdmin;
 
-							ns1blankspace.control.init();
-													
-							$('#ns1blankspaceSpaceText').html(ns1blankspace.spaceText);
-							$('#ns1blankspaceLogonName').html(ns1blankspace.user.logonName);
-
-							if (ns1blankspace.xhtml.viewContainer !== undefined)
-							{
-								aHTML.push(ns1blankspace.xhtml.viewContainer);
-							}	
-							else
-							{	
-								aHTML.push('<div id="ns1blankspaceViewControlHomeContainer">' +
-												'<span id="ns1blankspaceViewControlHome">&nbsp;</span>' +
-												'<span id="ns1blankspaceViewControlHomeOptions">&nbsp;</span>' +
-												'</div>');
-												
-								aHTML.push('<div id="ns1blankspaceViewControlHistoryContainer">' +
-												'<span id="ns1blankspaceViewControlBack" >&nbsp;</span>' +
-												'<span id="ns1blankspaceViewControlRefresh">&nbsp;</span>' +
-												'<span id="ns1blankspaceViewControlForward">&nbsp;</span>' +
-												'</div>');				
-										
-								aHTML.push('<div id="ns1blankspaceViewControlViewContainer">' +
-												'<span id="ns1blankspaceViewControlView">&nbsp;</span>' +
-												'</div>');
-												
-								aHTML.push('<div id="ns1blankspaceViewControlSearchContainer">' +
-												'<input id="ns1blankspaceViewControlSearch">' +
-												'</div>');
-												
-								aHTML.push('<div id="ns1blankspaceViewControlSearchStatus"></div>');
-												
-								aHTML.push('<div id="ns1blankspaceViewControlNewContainer">' +
-												'<span id="ns1blankspaceViewControlNew">New</span>' +
-												'</div>');
-												
-								aHTML.push('<div id="ns1blankspaceViewControlActionContainer">' +
-												'<span id="ns1blankspaceViewControlAction" ></span>' +
-												'<span id="ns1blankspaceViewControlActionOptions">&nbsp;</span>' +
-												'</div>');
-								
-								aHTML.push('<div id="ns1blankspaceViewControlActionStatus">&nbsp;</div>');
-								
-								if (ns1blankspace.setupShow) 
-								{
-									aHTML.push('<div id="ns1blankspaceViewControlSetupContainer">' +
-													'<input type="checkbox" id="ns1blankspaceViewControlSetup"/>' +
-													'<label for="ns1blankspaceViewControlSetup">&nbsp;</label>' +
-													'</div>');
-								}				
-								
-								aHTML.push('<div id="ns1blankspaceViewControlHelpContainer">' + 
-												'<span id="ns1blankspaceViewControlHelp">&nbsp;</span>' +
-												'</div>');
-							}	
-							
-							$('#ns1blankspaceViewControl').html(aHTML.join(''));
-
-							if (!ns1blankspace.setupShow) 
-							{
-								$('#ns1blankspaceViewControlActionStatus')
-									.css('width', '215px');
-							}
-
-							ns1blankspace.app.bind(oParam);
+							ns1blankspace.control.init(oParam);
 						}
-
-						if (ns1blankspace.history.sendOnLogon)
-						{
-							$.ajax(ns1blankspace.history.sendOnLogon);
-						}					
-
-						if (ns1blankspace.option.returnToLast) 
-						{
-							ns1blankspace.history.view({instruction: 8})
-						}
-						else
-						{
-							ns1blankspace.app.showWhenLoaded('home');
-						}	
-					}	
+					}		
 				},
+
+	postInit: 	function (oParam)
+				{			
+					var aHTML = [];
+					
+					$('#ns1blankspaceSpaceText').html(ns1blankspace.spaceText);
+					$('#ns1blankspaceLogonName').html(ns1blankspace.user.logonName);
+
+					if (ns1blankspace.xhtml.viewContainer !== undefined)
+					{
+						aHTML.push(ns1blankspace.xhtml.viewContainer);
+					}	
+					else
+					{	
+						aHTML.push('<div id="ns1blankspaceViewControlHomeContainer">' +
+										'<span id="ns1blankspaceViewControlHome">&nbsp;</span>' +
+										'<span id="ns1blankspaceViewControlHomeOptions">&nbsp;</span>' +
+										'</div>');
+										
+						aHTML.push('<div id="ns1blankspaceViewControlHistoryContainer">' +
+										'<span id="ns1blankspaceViewControlBack" >&nbsp;</span>' +
+										'<span id="ns1blankspaceViewControlRefresh">&nbsp;</span>' +
+										'<span id="ns1blankspaceViewControlForward">&nbsp;</span>' +
+										'</div>');				
+								
+						aHTML.push('<div id="ns1blankspaceViewControlViewContainer">' +
+										'<span id="ns1blankspaceViewControlView">&nbsp;</span>' +
+										'</div>');
+										
+						aHTML.push('<div id="ns1blankspaceViewControlSearchContainer">' +
+										'<input id="ns1blankspaceViewControlSearch">' +
+										'</div>');
+										
+						aHTML.push('<div id="ns1blankspaceViewControlSearchStatus"></div>');
+										
+						aHTML.push('<div id="ns1blankspaceViewControlNewContainer">' +
+										'<span id="ns1blankspaceViewControlNew">New</span>' +
+										'</div>');
+										
+						aHTML.push('<div id="ns1blankspaceViewControlActionContainer">' +
+										'<span id="ns1blankspaceViewControlAction" ></span>' +
+										'<span id="ns1blankspaceViewControlActionOptions">&nbsp;</span>' +
+										'</div>');
+						
+						aHTML.push('<div id="ns1blankspaceViewControlActionStatus">&nbsp;</div>');
+						
+						if (ns1blankspace.setupShow) 
+						{
+							aHTML.push('<div id="ns1blankspaceViewControlSetupContainer">' +
+											'<input type="checkbox" id="ns1blankspaceViewControlSetup"/>' +
+											'<label for="ns1blankspaceViewControlSetup">&nbsp;</label>' +
+											'</div>');
+						}				
+						
+						aHTML.push('<div id="ns1blankspaceViewControlHelpContainer">' + 
+										'<span id="ns1blankspaceViewControlHelp">&nbsp;</span>' +
+										'</div>');
+					}	
+					
+					$('#ns1blankspaceViewControl').html(aHTML.join(''));
+
+					if (!ns1blankspace.setupShow) 
+					{
+						$('#ns1blankspaceViewControlActionStatus')
+							.css('width', '215px');
+					}
+
+					ns1blankspace.app.bind(oParam);
+
+					if (ns1blankspace.history.sendOnLogon)
+					{
+						$.ajax(ns1blankspace.history.sendOnLogon);
+					}					
+
+					if (ns1blankspace.option.returnToLast) 
+					{
+						ns1blankspace.history.view({instruction: 8})
+					}
+					else
+					{
+						ns1blankspace.app.showWhenLoaded('home');
+					}
+				},	
 					
 	bind: 		function (oParam)	
 				{					
