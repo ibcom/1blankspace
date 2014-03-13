@@ -28,10 +28,7 @@ ns1blankspace.util.protect =
 													var sCryptoKeyReference = ns1blankspace.util.getParam(oParam, 'cryptoKeyReference').value;
 													var bLocal = ns1blankspace.util.getParam(oParam, 'local', {"default": false}).value;
 
-													oParam =  ns1blankspace.util.setParam(oParam, 'key', sCryptoKeyReference);
-													oParam =  ns1blankspace.util.setParam(oParam, 'data', sCryptoKey);
-													oParam =  ns1blankspace.util.setParam(oParam, 'persist', bPersist);
-													oParam =  ns1blankspace.util.setParam(oParam, 'protect', false);
+													
 
 													var sSalt = CryptoJS.lib.WordArray.random(128/8);
 													var sCryptoKey = CryptoJS.PBKDF2(ns1blankspace.logonKey, sSalt, { keySize: 512/32 }).toString();
@@ -41,35 +38,41 @@ ns1blankspace.util.protect =
 														ns1blankspace.util.protect.key.data[sCryptoKeyReference] = sCryptoKey;
 													}	
 
-													if (bLocal)
+													if (bPersist)
 													{	
-														ns1blankspace.util.local.cache.save(oParam);
-													}
-													else
-													{
-														var oData = 
-														{
-															reference: sCryptoKeyReference,
-															key: sCryptoKey
+														if (bLocal)
+														{	
+															oParam = ns1blankspace.util.setParam(oParam, 'key', sCryptoKeyReference);
+															oParam = ns1blankspace.util.setParam(oParam, 'data', sCryptoKey);
+															oParam = ns1blankspace.util.setParam(oParam, 'protect', false);
+															ns1blankspace.util.local.cache.save(oParam);
 														}
-
-														$.ajax(
+														else
 														{
-															type: 'POST',
-															url: ns1blankspace.util.endpointURI('CORE_PROTECT_KEY_MANAGE'),
-															data: oData,
-															dataType: 'json',
-															success: function ()
+															var oData = 
 															{
-																//Show Error
+																reference: sCryptoKeyReference,
+																key: sCryptoKey
 															}
-														});		
+
+															$.ajax(
+															{
+																type: 'POST',
+																url: ns1blankspace.util.endpointURI('CORE_PROTECT_KEY_MANAGE'),
+																data: oData,
+																dataType: 'json',
+																success: function ()
+																{
+																	//Show Error
+																}
+															});		
+														}
 													}	
 
 													return sCryptoKey;
 												},
 
-									pair: 		function(oParam) {}			
+									pair: 		function(oParam) {//To be implemented using RSA}			
 								},			
 
 					search: 	function(oParam, oResponse)
@@ -85,8 +88,6 @@ ns1blankspace.util.protect =
 									}
 									else
 									{	
-										//oResponse = {data: {rows: [{key: 'XXX'}]}}
-
 										if (!bLocal && oResponse === undefined)
 										{
 											var oSearch = new AdvancedSearch();
@@ -108,7 +109,16 @@ ns1blankspace.util.protect =
 											}	
 											else
 											{
-												var sCryptoKey = oResponse.data.rows[0].key;
+												if (oResponse.data.rows.length !== 0)
+												{	
+													var sCryptoKey = oResponse.data.rows[0].key;
+												}
+												else
+												{
+													//{cryptoKeyReference: ns1blankspace.util.local.cache.data.cryptoKeyReference, persist: true}
+													oParam =  ns1blankspace.util.setParam(oParam, 'persist', true);
+													ns1blankspace.util.protect.key.create.single(oParam)
+												}	
 											}
 
 											ns1blankspace.util.protect.key.data[sCryptoKeyReference] = sCryptoKey;
