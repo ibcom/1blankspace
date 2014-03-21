@@ -294,9 +294,8 @@ ns1blankspace.app =
 
 						   		if (originalOptions.retryCount == originalOptions.retryLimit || String(_jqXHR.status).substr(0,1) !== '5')
 						  		{
-						       	 	if (originalOptions._error) {originalOptions._error(_jqXHR, _textStatus, _errorThrown)}
-						        
-						        	return;
+									if (originalOptions._error) {originalOptions._error(_jqXHR, _textStatus, _errorThrown)}
+									return;
 						   		};
 
 						   		if (originalOptions.retryCount == 0)
