@@ -216,7 +216,7 @@ ns1blankspace.app =
 						ns1blankspace.option.setupURI = '/ondemand/setup/';
 						ns1blankspace.option.dateFormat = 'dd M yy';
 						ns1blankspace.option.auditFields = 'createddate,createduser,createdusertext,modifieddate,modifieduser,modifiedusertext';
-						ns1blankspace.option.retryLimit = 3;
+						ns1blankspace.option.retryLimit = 5;
 									
 						ns1blankspace.timer.messaging = 0;
 						ns1blankspace.timer.delay;
@@ -292,17 +292,20 @@ ns1blankspace.app =
 
 						   		if (originalOptions.retryCount == undefined) {originalOptions.retryCount = 0}
 
-						   		if (originalOptions.retryCount == originalOptions.retryLimit)
+						   		if (originalOptions.retryCount == originalOptions.retryLimit || String(_jqXHR.status).substr(0,1) !== '5')
 						  		{
-						  			var oErrors = ns1blankspace.util.local.cache.search({key: 'errors.json', persist: true});
-						  			if (oErrors == undefined) {oErrors = []}
-						  			oErrors.push({time: Date(), status: _textStatus});
-									ns1blankspace.util.local.cache.save({key: 'errors.json', persist: true, data: oErrors});
-
 						       	 	if (originalOptions._error) {originalOptions._error(_jqXHR, _textStatus, _errorThrown)}
 						        
 						        	return;
 						   		};
+
+						   		if (originalOptions.retryCount == 0)
+						   		{	
+						   			var oErrors = ns1blankspace.util.local.cache.search({key: 'errors.json', persist: true});
+						  			if (oErrors == undefined) {oErrors = []}
+						  			oErrors.push({time: Date(), status: _textStatus, statusCode: _jqXHR.status, error: _errorThrown});
+									ns1blankspace.util.local.cache.save({key: 'errors.json', persist: true, data: oErrors});
+								}	
 
 						   		originalOptions.retryCount = originalOptions.retryCount + 1;
 
