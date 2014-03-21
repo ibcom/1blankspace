@@ -315,9 +315,7 @@ ns1blankspace.app =
 
 						$(document).ajaxError(function(oEvent, oXMLHTTPRequest, oAjaxOptions, oError) 
 						{
-
-							//console.log('Error: ' + oAjaxOptions.url + ' \nException: ' + oError + ' \nReturned: ' + oXMLHTTPRequest.responseText);
-							//ns1blankspace.status.error('An error has occured');
+							ns1blankspace.status.error('An error has occured');
 						});	
 
 						$(document).ajaxComplete(function(oEvent, oXMLHTTPResponse, oAjaxSettings)
