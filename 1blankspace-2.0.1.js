@@ -302,7 +302,14 @@ ns1blankspace.app =
 						   		{	
 						   			var oErrors = ns1blankspace.util.local.cache.search({key: 'errors.json', persist: true});
 						  			if (oErrors == undefined) {oErrors = []}
-						  			oErrors.push({time: Date(), status: _textStatus, statusCode: _jqXHR.status, error: _errorThrown});
+						  			oErrors.push(
+						  			{
+						  				time: Date(),
+						  				uri: originalOptions.url,
+						  				instance: _jqXHR.getResponseHeader('X-HTTP-myds-instance'),
+						  				statusCode: _jqXHR.status,
+						  				status: _errorThrown
+						  			});
 									ns1blankspace.util.local.cache.save({key: 'errors.json', persist: true, data: oErrors});
 								}	
 
