@@ -307,6 +307,7 @@ ns1blankspace.app =
 						  				time: Date(),
 						  				uri: originalOptions.url,
 						  				instance: _jqXHR.getResponseHeader('X-HTTP-myds-instance'),
+						  				fault: _jqXHR.getResponseHeader('X-HTTP-myds-service-fault'),
 						  				statusCode: _jqXHR.status,
 						  				status: _errorThrown
 						  			});
