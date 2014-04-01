@@ -72,7 +72,7 @@ ns1blankspace.util.protect =
 													return sCryptoKey;
 												},
 
-									pair: 		function(oParam) {//To be implemented using RSA}			
+									pair: 		function(oParam) {}			
 								},			
 
 					search: 	function(oParam, oResponse)
