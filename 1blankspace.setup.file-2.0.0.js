@@ -646,7 +646,7 @@ ns1blankspace.setup.file =
 																{
 																	type: 'POST',
 																	url: ns1blankspace.util.endpointURI('CORE_ATTACHMENT_READ'),
-																	data: 'id=' + ns1blankspace.util.fs(oResponse.data.rows[0].id),
+																	data: 'allcolumnstext=Y&id=' + ns1blankspace.util.fs(oResponse.data.rows[0].id),
 																	success: function(data)
 																	{
 																		var aHTML = [];
@@ -1415,12 +1415,10 @@ ns1blankspace.setup.file =
 					getFields: 	function (oParam, oResponse)
 								{	
 									var iObject = ns1blankspace.object;
-									var fOnComplete;
 
 									if (oParam != undefined)
 									{
 										if (oParam.object != undefined) {iObject = oParam.object}
-										if (oParam.onComplete != undefined) {fOnComplete = oParam.onComplete}
 									}		
 
 									ns1blankspace.setup.file["import"].data.object = iObject;
@@ -1507,12 +1505,9 @@ ns1blankspace.setup.file =
 											v.key = (v.name).split('.')[1];
 										});	
 
-										if (fOnComplete)
-										{	
-											oParam.initialised = true;
-											fOnComplete(oParam)
-										}
-									}
+										oParam.initialised = true;
+										ns1blankspace.util.onComplete(oParam);
+									}	
 								},
 
 					resolveSelects: 

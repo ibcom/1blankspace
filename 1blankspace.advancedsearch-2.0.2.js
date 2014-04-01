@@ -69,7 +69,7 @@ ns1blankspace.advancedSearch.reset = function ()
 	this.startRow = 0;
 	this.rows = 20;
 	
-	this.criteria.returnParameters = '';
+	this.returnParameters = '';
 }
 
 ns1blankspace.advancedSearch.addBracket = function (asBracket)
@@ -212,7 +212,7 @@ ns1blankspace.advancedSearch.buildCriteria = function (oSearch)
 		rf: oSearch.rf,
 		startrow: oSearch.startrow,
 		rows: oSearch.rows,
-		returnparameters: oSearch.returnparameters
+		returnparameters: oSearch.returnParameters
 	}
 	
 	var sCriteria = JSON.stringify(oData);
@@ -464,10 +464,10 @@ ns1blankspace.advancedSearch.buildXMLFromObject = function (aoThis)
 	}
 
 	sXML += '<options>' + 
-				'<rf>' + ns1blankspace.advancedSearch.asXMLFormat(aoThis.criteria.rf) + '</rf>' +
-				'<startrow>' + ns1blankspace.advancedSearch.asXMLFormat(aoThis.criteria.startRow) + '</startrow>' +
-				'<rows>' + ns1blankspace.advancedSearch.asXMLFormat(aoThis.criteria.rows) + '</rows>' +
-				'<returnparameters>' + aoThis.criteria.returnParameters + '</returnparameters>' +
+				'<rf>' + ns1blankspace.advancedSearch.asXMLFormat(aoThis.rf) + '</rf>' +
+				'<startrow>' + ns1blankspace.advancedSearch.asXMLFormat(aoThis.startRow) + '</startrow>' +
+				'<rows>' + ns1blankspace.advancedSearch.asXMLFormat(aoThis.rows) + '</rows>' +
+				'<returnparameters>' + aoThis.returnParameters + '</returnparameters>' +
 			'</options>';
 			
 	for(i = 0; i < aoThis.criteria.customOptionName.length; i++)
