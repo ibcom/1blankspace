@@ -872,20 +872,28 @@ ns1blankspace.control =
 
 					else if (iStep == 2)
 					{
-						if (oResponse == undefined)
+						if (ns1blankspace.user.unrestricted)
 						{
-							var oSearch = new AdvancedSearch();
-							oSearch.method = 'SETUP_ROLE_METHOD_ACCESS_SEARCH';
-							oSearch.addField('accessmethodtext,canadd,canremove,canupdate,canuse');
-							oSearch.addFilter('role', 'IN_LIST', aRoles.join(','));
-							oSearch.getResults(function(data) {ns1blankspace.control.init(oParam, data)})
+							$.extend(true, oParam, {step: 4});
+							ns1blankspace.control.init(oParam)
 						}
 						else
 						{
-							ns1blankspace.user.methods = oResponse.data.rows;
-							$.extend(true, oParam, {step: 3});
-							ns1blankspace.control.init(oParam);
-						}
+							if (oResponse == undefined)
+							{
+								var oSearch = new AdvancedSearch();
+								oSearch.method = 'SETUP_ROLE_METHOD_ACCESS_SEARCH';
+								oSearch.addField('accessmethodtext,canadd,canremove,canupdate,canuse');
+								oSearch.addFilter('role', 'IN_LIST', aRoles.join(','));
+								oSearch.getResults(function(data) {ns1blankspace.control.init(oParam, data)})
+							}
+							else
+							{
+								ns1blankspace.user.methods = oResponse.data.rows;
+								$.extend(true, oParam, {step: 3});
+								ns1blankspace.control.init(oParam);
+							}
+						}	
 					}
 
 					else if (iStep == 3)
