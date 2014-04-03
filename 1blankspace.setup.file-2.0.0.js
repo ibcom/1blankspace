@@ -775,7 +775,7 @@ ns1blankspace.setup.file =
 														{
 															type: 'POST',
 															url: ns1blankspace.util.endpointURI('CORE_ATTACHMENT_READ'),
-															data: 'id=' + ns1blankspace.util.fs(ns1blankspace.setup.file["import"].data.attachment),
+															data: 'allcolumnstext=Y&id=' + ns1blankspace.util.fs(ns1blankspace.setup.file["import"].data.attachment),
 															success: function(data)
 															{	
 																if (data.rowlimit == 'Y')
