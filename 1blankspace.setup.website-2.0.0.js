@@ -1877,7 +1877,7 @@ ns1blankspace.setup.website =
 										aHTML.push('<table class="ns1blankspaceContainer">' +
 														'<tr class="ns1blankspaceContainer">' +
 														'<td id="ns1blankspaceHTTPHeaderColumn1" class="ns1blankspaceColumn1Flexible"></td>' +
-														'<td id="ns1blankspaceHTTPHeaderColumn2" class="ns1blankspaceColumn2" style="width:100px;"></td>' +
+														'<td id="ns1blankspaceHTTPHeaderColumn2" class="ns1blankspaceColumn2" style="width:200px;"></td>' +
 														'</tr>' + 
 														'</table>');
 
@@ -1892,9 +1892,13 @@ ns1blankspace.setup.website =
 													'</td></tr>');
 													
 										aHTML.push('<tr><td style="padding-top:20px;">' +
-													'<a href="http://en.wikipedia.org/wiki/List_of_HTTP_header_fields" target="_blank">What are HTTP headers</a>' +
-													'</td></tr>');			
-										
+													'<a href="http://en.wikipedia.org/wiki/List_of_HTTP_header_fields" target="_blank">What are HTTP headers?</a>' +
+													'</td></tr>');	
+
+										aHTML.push('<tr><td style="padding-top:16px;" class="ns1blankspaceSubNote">' +
+													'A common header is<br />Access-Control-Allow-Origin:<br />[your domain or * for all domains]' +
+													'</td></tr>');	
+
 										aHTML.push('</table>');					
 										
 										$('#ns1blankspaceHTTPHeaderColumn2').html(aHTML.join(''));
