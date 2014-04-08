@@ -178,7 +178,7 @@ ns1blankspace.setup.space =
 							//			ns1blankspace.objectContextData.minimumpasswordstrengthtext +
 							//			'</td></tr>');
 
-							aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Lost Password</td></tr>' +
+							aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Forgetten Password</td></tr>' +
 										'<tr><td id="ns1blankspaceSummaryUsers" class="ns1blankspaceSummary">' +
 										ns1blankspace.objectContextData.lostpasswordtext +
 										'</td></tr>');
@@ -245,7 +245,7 @@ ns1blankspace.setup.space =
 
 					aHTML.push('<tr class="ns1blankspaceCaption">' +
 									'<td class="ns1blankspaceCaption">' +
-									'Lost Password' +
+									'Forgotten Password' +
 									'</td></tr>' +
 									'<tr class="ns1blankspace">' +
 									'<td class="ns1blankspaceRadio">' +
