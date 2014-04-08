@@ -633,7 +633,7 @@ ns1blankspace.contactPerson =
 									label: 'Favourite',
 									icons:
 									{
-									primary: "ui-icon-star"
+										primary: "ui-icon-star"
 									}
 								}
 
