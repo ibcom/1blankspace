@@ -105,16 +105,13 @@ ns1blankspace.supportIssue =
 										'</td></tr>');	
 						}
 
-						aHTML.push('<tr><td style="padding-top:16px;" class="ns1blankspaceHeader">' +
-										'DEBUGGING LOG' +
+						aHTML.push('<tr><td style="padding-top:20px;" class="ns1blankspaceHeader">' +
+										'DEBUGGING' +
 										'</td></tr>');
 
 						aHTML.push('<tr><td id="ns1blankspaceSupportDebugLogShowContainer">' +
-										'<span id="ns1blankspaceSupportDebugLogShow" class="ns1blankspaceAction" style="width:75px;">Show</span>' +
-										'</td></tr>');
-
-						aHTML.push('<tr><td id="ns1blankspaceSupportDebugLogClearContainer">' +
-										'<span id="ns1blankspaceSupportDebugLogClear" class="ns1blankspaceAction" style="width:75px;">Clear</span>' +
+										'<span id="ns1blankspaceSupportDebugLogShow" class="ns1blankspaceAction" style="width:20px; height:20px;"></span>' +
+										'<span id="ns1blankspaceSupportDebugLogClear" class="ns1blankspaceAction" style="margin-left:4px; width:20px; height:20px;"></span>' +
 										'</td></tr>');
 
 						aHTML.push('</table>');
@@ -126,13 +123,29 @@ ns1blankspace.supportIssue =
 
 						$('#ns1blankspaceHomeAction').html(aHTML.join(''));	
 
-						$('#ns1blankspaceSupportDebugLogShow').button()
+						$('#ns1blankspaceSupportDebugLogShow').button(
+						{	
+							text: false,
+							label: 'Show',
+							icons:
+							{
+								primary: "ui-icon-copy"
+							}
+						})
 						.click(function()
 						{
 							ns1blankspace.supportIssue.debug.show();
 						});
 
-						$('#ns1blankspaceSupportDebugLogClear').button()
+						$('#ns1blankspaceSupportDebugLogClear').button(
+						{	
+							text: false,
+							label: 'Clear',
+							icons:
+							{
+								primary: "ui-icon-close"
+							}
+						})
 						.click(function()
 						{
 							ns1blankspace.supportIssue.debug.clear();
