@@ -129,7 +129,7 @@ ns1blankspace.supportIssue =
 							label: 'Show',
 							icons:
 							{
-								primary: "ui-icon-copy"
+								primary: "ui-icon-clipboard"
 							}
 						})
 						.click(function()
