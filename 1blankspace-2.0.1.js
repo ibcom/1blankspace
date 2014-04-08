@@ -300,9 +300,9 @@ ns1blankspace.app =
 
 						   		if (originalOptions.retryCount == 0)
 						   		{	
-						   			var oErrors = ns1blankspace.util.local.cache.search({key: 'errors.json', persist: true});
+						   			var oErrors = ns1blankspace.util.local.cache.search({key: '1blankspace-debug.json', persist: true});
 						  			if (oErrors == undefined) {oErrors = []}
-						  			oErrors.push(
+						  			oErrors.unshift(
 						  			{
 						  				time: Date(),
 						  				uri: originalOptions.url,
@@ -311,7 +311,7 @@ ns1blankspace.app =
 						  				statusCode: _jqXHR.status,
 						  				status: _errorThrown
 						  			});
-									ns1blankspace.util.local.cache.save({key: 'errors.json', persist: true, data: oErrors});
+									ns1blankspace.util.local.cache.save({key: '1blankspace-debug.json', persist: true, data: oErrors});
 								}	
 
 						   		originalOptions.retryCount = originalOptions.retryCount + 1;

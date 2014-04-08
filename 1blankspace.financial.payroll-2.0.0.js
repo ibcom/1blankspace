@@ -519,9 +519,7 @@ ns1blankspace.financial.payroll =
 						
 						$('#ns1blankspaceSummaryColumn2').html(aHTML.join(''));	
 
-						$('#ns1blankspaceStatusComplete').button(
-						{
-						})
+						$('#ns1blankspaceStatusComplete').button()
 						.click(function()
 						{
 							ns1blankspace.financial.payroll.complete({step: 1});

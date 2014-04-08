@@ -95,17 +95,29 @@ ns1blankspace.supportIssue =
 
 						var aHTML = [];
 
+						aHTML.push('<table class="ns1blankspaceColumn2">');
+
 						if (ns1blankspace.option.helpURI !== undefined)
 						{ 
-							aHTML.push('<table class="ns1blankspaceColumn2">');
-							
-							aHTML.push('<tr><td style="font-size:0.875em; width:110px;" >' +
+							aHTML.push('<tr><td style="font-size:0.875em; width:110px;">' +
 										'<a href="' + ns1blankspace.option.helpURI + '" target="_blank"' +
 										'>Get help from the community</a>' +
 										'</td></tr>');	
-														
-							aHTML.push('</td></tr></table>');
 						}
+
+						aHTML.push('<tr><td style="padding-top:16px;" class="ns1blankspaceHeader">' +
+										'DEBUGGING LOG' +
+										'</td></tr>');
+
+						aHTML.push('<tr><td id="ns1blankspaceSupportDebugLogShowContainer">' +
+										'<span id="ns1blankspaceSupportDebugLogShow" class="ns1blankspaceAction" style="width:75px;">Show</span>' +
+										'</td></tr>');
+
+						aHTML.push('<tr><td id="ns1blankspaceSupportDebugLogClearContainer">' +
+										'<span id="ns1blankspaceSupportDebugLogClear" class="ns1blankspaceAction" style="width:75px;">Clear</span>' +
+										'</td></tr>');
+
+						aHTML.push('</table>');
 
 						if (ns1blankspace.option.helpNotes !== undefined)
 						{ 
@@ -113,6 +125,19 @@ ns1blankspace.supportIssue =
 						}						
 
 						$('#ns1blankspaceHomeAction').html(aHTML.join(''));	
+
+						$('#ns1blankspaceSupportDebugLogShow').button()
+						.click(function()
+						{
+							ns1blankspace.supportIssue.debug.show();
+						});
+
+						$('#ns1blankspaceSupportDebugLogClear').button()
+						.click(function()
+						{
+							ns1blankspace.supportIssue.debug.clear();
+							ns1blankspace.supportIssue.debug.show();
+						});
 
 						var aHTML = [];
 									
@@ -1057,5 +1082,50 @@ ns1blankspace.supportIssue =
 										ns1blankspace.util.onComplete(oParam);
 									}	
 								}			
-				}			
+				},
+
+	debug: 		{
+						show: 		function()
+									{
+										var oErrors = ns1blankspace.util.local.cache.search({key: '1blankspace-debug.json', persist: true});
+										var aHTML = [];
+
+							  			if (oErrors == undefined)
+							  			{
+							  				oErrors = []
+							  			}
+
+							  			aHTML.push('<div class="ns1blankspaceNothing">');
+
+							  			if (oErrors.length == 0)
+							  			{
+							  				aHTML.push('Nothing to show');
+							  			}	
+							  			else
+							  			{	
+							  				aHTML.push('Time,URI,Instance,Service Fault ID,Status Code,Status<br />');
+
+								  			$.each(oErrors, function(i,v)
+								  			{
+									  			aHTML.push(
+									  				v.time + ',' +
+									  				v.uri + ',' +
+									  				v.instance + ',' +
+									  				v.fault + ',' +
+									  				v.statusCode + ',' +
+									  				v.status + '<br />'
+									  			);
+								  			});
+								  		}
+
+								  		aHTML.push('</div>');
+
+							  			$('#ns1blankspaceMostLikely').html(aHTML.join(''));
+									},
+
+						clear: 		function()
+									{
+										ns1blankspace.util.local.cache.save({key: '1blankspace-debug.json', persist: true, data: []});
+									}			
+				}					
 }					
