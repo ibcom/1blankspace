@@ -1953,7 +1953,7 @@ ns1blankspace.messaging.imap =
 																{
 																	var sParam = ns1blankspace.util.endpointURI('MESSAGING_EMAIL_ATTACHMENT_MANAGE') + '&rf=TEXT';
 																	var sData = 'account=' + ns1blankspace.messaging.imap.account;
-																	sData += '&id=' + ns1blankspace.util.fs(ns1blankspace.objectContextData.messageid);
+																	sData += '&id=' + ns1blankspace.util.fs(ns1blankspace.objectContext);
 																	
 																	$.ajax(
 																	{
@@ -1993,7 +1993,7 @@ ns1blankspace.messaging.imap =
 															}	
 															else
 															{
-																ns1blankspace.messaging.imap.message.edit.attach.process();
+																//ns1blankspace.messaging.imap.edit.attachments();
 															}			
 														}
 														

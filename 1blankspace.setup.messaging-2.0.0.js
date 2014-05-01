@@ -136,7 +136,7 @@ ns1blankspace.setup.messaging =
 									
 										var oSearch = new AdvancedSearch();
 										oSearch.method = 'SETUP_MESSAGING_ACCOUNT_SEARCH';
-										oSearch.addField('email,type,typetext,authtype,authtypetext,accountname,server,port,sslport,title,user,usertext,footer');
+										oSearch.addField('email,type,typetext,authtype,authtypetext,accountname,server,port,sslport,title,user,usertext,footer,smtpserver,smtpserver,smtpserverport');
 										oSearch.addFilter('id', 'EQUAL_TO', ns1blankspace.objectContext);
 										oSearch.getResults(function(data) {ns1blankspace.setup.messaging.show(data)});
 									}
@@ -377,7 +377,7 @@ ns1blankspace.setup.messaging =
 										ns1blankspace.objectContextData.email +
 										'</td></tr>');
 
-						aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Server</td></tr>' +
+						aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Incoming Server (IMAP)</td></tr>' +
 										'<tr><td id="ns1blankspaceSummaryServer" class="ns1blankspaceSummary">' +
 										ns1blankspace.objectContextData.server +
 										'</td></tr>');			
@@ -449,7 +449,7 @@ ns1blankspace.setup.messaging =
 
 						aHTML.push('<tr class="ns1blankspaceCaption">' +
 										'<td class="ns1blankspaceCaption">' +
-										'Server' +
+										'Incoming Server (IMAP)' +
 										'</td></tr>' +
 										'<tr class="ns1blankspace">' +
 										'<td class="ns1blankspaceText">' +
@@ -458,7 +458,7 @@ ns1blankspace.setup.messaging =
 
 						aHTML.push('<tr class="ns1blankspaceCaption">' +
 										'<td class="ns1blankspaceCaption">' +
-										'Port' +
+										'Incoming Port' +
 										'</td></tr>' +
 										'<tr class="ns1blankspace">' +
 										'<td class="ns1blankspaceText">' +
@@ -467,7 +467,7 @@ ns1blankspace.setup.messaging =
 
 						aHTML.push('<tr class="ns1blankspaceCaption">' +
 										'<td class="ns1blankspaceCaption">' +
-										'SSL Port' +
+										'Incoming SSL Port' +
 										'</td></tr>' +
 										'<tr class="ns1blankspace">' +
 										'<td class="ns1blankspaceText">' +
@@ -475,8 +475,26 @@ ns1blankspace.setup.messaging =
 										'</td></tr>');
 
 						aHTML.push('<tr><td class="ns1blankspaceSubNote">' +
-										'If you leave server, port or SSL port blank; defaults will be used.</td></tr>');
-														
+										'If you leave incoming server, port or SSL port blank; defaults will be used.</td></tr>');
+
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
+										'Outgoing Server (SMTP)' +
+										'</td></tr>' +
+										'<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceText">' +
+										'<input id="ns1blankspaceDetailsSMTPServer" class="ns1blankspaceText">' +
+										'</td></tr>');
+
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
+										'Outgoing Port' +
+										'</td></tr>' +
+										'<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceText">' +
+										'<input id="ns1blankspaceDetailsSMTPPort" class="ns1blankspaceText">' +
+										'</td></tr>');
+		
 						aHTML.push('</table>');					
 						
 						$('#ns1blankspaceDetailsColumn1').html(aHTML.join(''));
@@ -491,7 +509,7 @@ ns1blankspace.setup.messaging =
 										'</td></tr>' +
 										'<tr class="ns1blankspace">' +
 										'<td class="ns1blankspaceRadio">' +
-										'<input type="radio" id="radioType5" name="radioType" value="5"/>IMAP' +
+										'<input type="radio" id="radioType5" name="radioType" value="5"/>Email' +
 										'</td></tr>');
 	
 						aHTML.push('</table>');					
@@ -508,6 +526,8 @@ ns1blankspace.setup.messaging =
 							$('#ns1blankspaceDetailsServer').val(ns1blankspace.objectContextData.server);
 							$('#ns1blankspaceDetailsPort').val(ns1blankspace.objectContextData.port);
 							$('#ns1blankspaceDetailsSSLPort').val(ns1blankspace.objectContextData.sslport);
+							$('#ns1blankspaceDetailsSMTPServer').val(ns1blankspace.objectContextData.smtpserver);
+							$('#ns1blankspaceDetailsSMTPPort').val(ns1blankspace.objectContextData.smtpserverport);
 						}
 						else
 						{
@@ -574,6 +594,8 @@ ns1blankspace.setup.messaging =
 										sData += '&sslport=' + sSSLPort;
 										sData += '&port=' + sPort;
 										sData += '&authtype=0';
+										sData += '&smtpserver=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsSMTPServer').val());
+										sData += '&smtpserverport=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsSMTPPort').val());
 										
 										if ($('#ns1blankspaceDetailsAccountPassword').val() != '')
 										{
