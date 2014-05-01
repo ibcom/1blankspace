@@ -404,7 +404,7 @@ ns1blankspace.setup.website =
 
 						$('#ns1blankspaceControlContext').html(
 							ns1blankspace.objectContextData.title +
-							'<br /><span id="ns1blankspaceControlContext_id" class="ns1blankspaceSub">' + ns1blankspace.objectContextData.id + '</span>');
+							'<br /><span id="ns1blankspaceControlContext_id" class="ns1blankspaceSub" style="padding-top:4px;">' + ns1blankspace.objectContextData.id + '</span>');
 
 						$('#ns1blankspaceViewControlAction').button({disabled: false});
 						$('#ns1blankspaceViewControlActionOptions').button({disabled: false});
@@ -480,8 +480,7 @@ ns1blankspace.setup.website =
 						$('#ns1blankspaceSummaryColumn1').html(aHTML.join(''));
 
 						var aHTML = [];
-							
-						
+											
 						aHTML.push('<table class="ns1blankspaceColumn2">');
 											
 						aHTML.push('<tr><td class="ns1blankspaceSummaryColumn2Action" style="width:175px;">' +
