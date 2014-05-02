@@ -1934,7 +1934,7 @@ ns1blankspace.messaging.imap =
 																		aToDetails = (this).split('|');
 																		sToEmail = aToDetails[1];
 																		
-																		if (sToEmail != ns1blankspace.user.email && sToEmail != sFrom)
+																		if (sToEmail != ns1blankspace.messaging.imap.data.fromEmail && sToEmail != sFrom)
 																		{	
 																			sTo += sToEmail + '; ';
 																		}
@@ -1951,7 +1951,7 @@ ns1blankspace.messaging.imap =
 															{
 																if (ns1blankspace.objectContextData.sourcetypetext == "EMAIL")
 																{
-																	var sParam = ns1blankspace.util.endpointURI('MESSAGING_EMAIL_ATTACHMENT_MANAGE') + '&rf=TEXT';
+																	var sParam = ns1blankspace.util.endpointURI('MESSAGING_EMAIL_ATTACHMENT_MANAGE') + '&rf=TEXT&new=1';
 																	var sData = 'account=' + ns1blankspace.messaging.imap.account;
 																	sData += '&id=' + ns1blankspace.util.fs(ns1blankspace.objectContextData.messageid);
 																	

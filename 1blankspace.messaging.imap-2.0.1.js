@@ -1934,7 +1934,7 @@ ns1blankspace.messaging.imap =
 																		aToDetails = (this).split('|');
 																		sToEmail = aToDetails[1];
 																		
-																		if (sToEmail != ns1blankspace.user.email && sToEmail != sFrom)
+																		if (sToEmail != ns1blankspace.messaging.imap.data.fromEmail && sToEmail != sFrom)
 																		{	
 																			sTo += sToEmail + '; ';
 																		}
