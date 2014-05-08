@@ -1469,6 +1469,7 @@ ns1blankspace.messaging.imap =
 									oSearch.getResults(function(oResponse) 
 										{
 											ns1blankspace.objectContextData = oResponse.data.rows[0];
+											ns1blankspace.objectContextData.sourcetypetext = 'EMAIL';
 											ns1blankspace.messaging.imap.message.attachments();
 											ns1blankspace.messaging.imap.message.contents.show();
 										});
@@ -1897,12 +1898,16 @@ ns1blankspace.messaging.imap =
 														{
 															ns1blankspace.messaging.imap.message.edit.contents(oParam);
 
+															var sSubject = (ns1blankspace.objectContextData.subject).formatXHTML();		
+
 															if (bForward)
 															{
+																if (sSubject.toLowerCase().indexOf('fw:') == -1) {sSubject = 'Fw: ' + sSubject}
 																$('#ns1blankspaceMessagingEditMessageSubject').val('Fw: ' + ns1blankspace.objectContextData.subject)
 															}
 															else
 															{
+																if (sSubject.toLowerCase().indexOf('re:') == -1) {sSubject = 'Re: ' + sSubject}
 																$('#ns1blankspaceMessagingEditMessageSubject').val('Re: ' + ns1blankspace.objectContextData.subject)
 															}	
 															
@@ -2064,6 +2069,7 @@ ns1blankspace.messaging.imap =
 																oSearch.getResults(function(oResponse)
 																{
 																	ns1blankspace.objectContextData = oResponse.data.rows[0];
+																	ns1blankspace.objectContextData.sourcetypetext = 'EMAIL';
 																	ns1blankspace.messaging.imap.message.edit.contents(oParam);
 																});
 															}
