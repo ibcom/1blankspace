@@ -1903,12 +1903,12 @@ ns1blankspace.messaging.imap =
 															if (bForward)
 															{
 																if (sSubject.toLowerCase().indexOf('fw:') == -1) {sSubject = 'Fw: ' + sSubject}
-																$('#ns1blankspaceMessagingEditMessageSubject').val('Fw: ' + ns1blankspace.objectContextData.subject)
+																$('#ns1blankspaceMessagingEditMessageSubject').val(sSubject)
 															}
 															else
 															{
 																if (sSubject.toLowerCase().indexOf('re:') == -1) {sSubject = 'Re: ' + sSubject}
-																$('#ns1blankspaceMessagingEditMessageSubject').val('Re: ' + ns1blankspace.objectContextData.subject)
+																$('#ns1blankspaceMessagingEditMessageSubject').val(sSubject)
 															}	
 															
 															$('#ns1blankspaceMessagingEditMessageSubject').removeClass('ns1blankspaceWatermark');
