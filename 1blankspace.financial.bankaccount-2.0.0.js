@@ -2264,10 +2264,13 @@ ns1blankspace.financial.bankAccount =
 										}
 
 										aHTML.push('<div style="text-align:right; margin-left:5px; margin-right:3px; margin-bottom:16px;" id="ns1blankspaceBankAccountColumnItemType">');
-										aHTML.push('<input style="width: 100%;" type="radio" id="ns1blankspaceBankAccountColumnItemType-1-' + iReconciliation + '" name="radioType" checked="checked" /><label for="ns1blankspaceBankAccountColumnItemType-1-' + iReconciliation + '" style="width:90px; margin-bottom:2px;">' +
-														'Payments<br /><span style="font-weight:200">(Debits)</span></label>');
+										
 										aHTML.push('<input style="width: 100%;"  type="radio" id="ns1blankspaceBankAccountColumnItemType-2-' + iReconciliation + '" name="radioType" /><label for="ns1blankspaceBankAccountColumnItemType-2-' + iReconciliation + '" style="width: 90px;">' +
 														'Receipts<br /><span style="font-weight:200">(Credits)</span></label>');
+
+										aHTML.push('<input style="width: 100%;" type="radio" id="ns1blankspaceBankAccountColumnItemType-1-' + iReconciliation + '" name="radioType" checked="checked" /><label for="ns1blankspaceBankAccountColumnItemType-1-' + iReconciliation + '" style="width:90px; margin-bottom:2px;">' +
+														'Payments<br /><span style="font-weight:200">(Debits)</span></label>');
+										
 										aHTML.push('</div>');
 
 										if (iMode == 1)
