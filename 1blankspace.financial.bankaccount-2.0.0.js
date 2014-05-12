@@ -3835,11 +3835,11 @@ ns1blankspace.financial.bankAccount =
 																if (cAmount < 0) {cAmount = 0}
 																cAmount = parseFloat(cAmount);
 															}	
-
 														}
 														else
 														{
-															var dDate = ns1blankspace.util.getParam(oParam, 'reconciliationEndDate').value;
+															var dDate = ns1blankspace.util.getParam(oParam, 'date').value;
+															if (dDate == undefined) {dDate = ns1blankspace.util.getParam(oParam, 'reconciliationEndDate').value;
 															if (dDate == undefined) {dDate = Date.today().toString("dd-MMM-yyyy")};
 															var cAmount = cOutstandingAmount;
 														}

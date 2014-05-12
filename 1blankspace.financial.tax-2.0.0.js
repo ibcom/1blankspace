@@ -783,10 +783,10 @@ ns1blankspace.financial.tax =
 																		'<label for="interfaceMainTaxSubTypeColumn-2" style="width: 115px;">Credit Notes</label>');
 													
 														aHTML.push('<input style="width: 115px;"  type="radio" id="interfaceMainTaxSubTypeColumn-3" name="radioSubType" />' +
-																		'<label for="interfaceMainTaxSubTypeColumn-3" style="width: 115px;">Jounals (+ve)</label>');
+																		'<label for="interfaceMainTaxSubTypeColumn-3" style="width: 115px;">Journals (+ve)</label>');
 													
 														aHTML.push('<input style="width: 115px;"  type="radio" id="interfaceMainTaxSubTypeColumn-4" name="radioSubType" />' +
-																		'<label for="interfaceMainTaxSubTypeColumn-4" style="width: 115px;">Jounals (-ve)</label>');
+																		'<label for="interfaceMainTaxSubTypeColumn-4" style="width: 115px;">Journals (-ve)</label>');
 														
 														aHTML.push('</div>');
 
