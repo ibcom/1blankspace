@@ -1534,9 +1534,9 @@ ns1blankspace.setup.file =
 											if (v == sName) {ns1blankspace.setup.file["import"].data.fields.splice(i,1,sIDName)}
 										});
 
-										$($.grep(ns1blankspace.setup.file["import"].data.rows, function (a) {return a[sName] != ''})).each(function (i, k)
+										$($.grep(ns1blankspace.setup.file["import"].data.rows, function (a) {return a[sName] != '' && a[sName] != undefined})).each(function (i, k)
 										{
-											aResolveText.push(k[sName]);
+											aResolveText.push((k[sName]).formatXHTML());
 										});
 
 										if (aResolveText.length > 0)
