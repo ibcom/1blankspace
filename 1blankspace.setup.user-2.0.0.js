@@ -150,7 +150,7 @@ ns1blankspace.setup.user =
 										
 										var oSearch = new AdvancedSearch();
 										oSearch.method = 'SETUP_USER_SEARCH';
-										oSearch.addField('username,contactpersontext,lastlogon,disabled,disabledreason,unrestrictedaccess,Authenticationlevel,Authenticationdelivery');
+										oSearch.addField('username,contactpersontext,contactperson,lastlogon,disabled,disabledreason,unrestrictedaccess,Authenticationlevel,Authenticationdelivery');
 										oSearch.addFilter('id', 'EQUAL_TO', ns1blankspace.objectContext);
 										oSearch.getResults(function(data) {ns1blankspace.setup.user.show(data)});
 									}
@@ -943,7 +943,7 @@ ns1blankspace.setup.user =
 										{
 											type: 'POST',
 											url: ns1blankspace.util.endpointURI('NETWORK_USER_SEARCH'),
-											data: 'scope=3',
+											data: 'scope=3&contactperson=' + ns1blankspace.objectContextData.contactperson,
 											dataType: 'json',
 											success: function(data)
 											{
@@ -1141,11 +1141,16 @@ ns1blankspace.setup.user =
 
 									if ($('#ns1blankspaceMainNetwork').html() != '')
 									{
+										var sData = 'canswitch=' + ns1blankspace.util.fs($('input[name="radioSwitch"]:checked').val()) +
+														'&contactperson=' + ns1blankspace.objectContextData.contactperson
+
+										//ns1blankspace.util.endpointURI('NETWORK_USER_MANAGE'),
+
 										$.ajax(
 										{
 											type: 'POST',
-											url: ns1blankspace.util.endpointURI('NETWORK_USER_MANAGE'),
-											data: 'canswitch=' + ns1blankspace.util.fs($('input[name="radioSwitch"]:checked').val()),
+											url: '/ondemand/network/?method=NETWORK_USER_MANAGE',
+											data: sData,
 											dataType: 'json'
 										});
 

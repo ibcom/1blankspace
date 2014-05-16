@@ -900,7 +900,7 @@ ns1blankspace.financial.credit =
 										if (ns1blankspace.objectContextData.type == '1')
 										{
 											oSearch.method = 'FINANCIAL_INVOICE_SEARCH';
-											oSearch.addField('reference,sentdate,amount,tax,invoice.lineitem.id,invoice.lineitem.description,invoice.lineitem.amount,invoice.lineitem.tax');
+											oSearch.addField('reference,sentdate,amount,outstandingamount,tax,invoice.lineitem.id,invoice.lineitem.description,invoice.lineitem.amount,invoice.lineitem.tax');
 
 											if (ns1blankspace.objectContextData.contactbusiness !== '')
 												{oSearch.addFilter('contactbusinesssentto', 'EQUAL_TO', ns1blankspace.objectContextData.contactbusiness)};
@@ -911,7 +911,7 @@ ns1blankspace.financial.credit =
 										else
 										{
 											oSearch.method = 'FINANCIAL_EXPENSE_SEARCH';
-											oSearch.addField('reference,accrueddate,amount,tax,expense.lineitem.id,expense.lineitem.description,expense.lineitem.amount,expense.lineitem.tax');
+											oSearch.addField('reference,accrueddate,amount,outstandingamount,tax,expense.lineitem.id,expense.lineitem.description,expense.lineitem.amount,expense.lineitem.tax');
 
 											if (ns1blankspace.objectContextData.contactbusiness !== '')
 												{oSearch.addFilter('contactbusinesspaidto', 'EQUAL_TO', ns1blankspace.objectContextData.contactbusiness)};
@@ -920,8 +920,9 @@ ns1blankspace.financial.credit =
 												{oSearch.addFilter('contactpersonpaidto', 'EQUAL_TO', ns1blankspace.objectContextData.contactperson)};
 										}	
 										
-										oSearch.addFilter('amount', 'NOT_EQUAL_TO', 0);
+										oSearch.addFilter('outstandingamount', 'NOT_EQUAL_TO', 0);
 										oSearch.sort('reference', 'asc');
+										oSearch.rows = 200;
 										oSearch.getResults(function(data) {ns1blankspace.financial.credit.appliedTo.edit(oParam, data)});
 									}
 									else
@@ -970,8 +971,8 @@ ns1blankspace.financial.credit =
 																		this.accrueddate + '</td>');
 														}
 
-														aHTML.push('<td style="text-align:right;font-size:0.875em; background-color:#f3f3f3;">' +
-																	this["amount"]  + '</td>');
+														aHTML.push('<td style="text-align:right;font-size:0.875em; background-color:#f3f3f3;">(' +
+																	this["amount"]  + ')&nbsp;' + this["outstandingamount"] + '</td>');
 
 														aHTML.push('<td style="width:30px;text-align:right;font-size:0.875em; background-color:#f3f3f3;"></td>');
 
