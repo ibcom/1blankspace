@@ -639,7 +639,7 @@ ns1blankspace.app =
 							}
 							else
 							{
-								ns1blankspace.financial.data = undefined;
+								if (ns1blankspace.financial) {ns1blankspace.financial.data = undefined};
 								if (ns1blankspace.control.extend !== undefined) {ns1blankspace.control.extend()}
 								if (ns1blankspace.control.doLast !== undefined) {ns1blankspace.control.doLast()}
 								oParam = ns1blankspace.util.setParam(oParam, 'user', data);
