@@ -60,6 +60,8 @@ ns1blankspace.xhtml.templates.source =
 	payslip: '/jscripts/1blankspace.setup.financial.payslip-1.0.0.html',
 }	
 
+ns1blankspace.xhtml.logonNotes = undefined;
+
 ns1blankspace.xhtml.logonNotesFooter =
 	'<span style="font-weight:bold;">THIS IS AN UI BEING WORKED ON BY THE COMMUNITY.</span><br /><br />' +
 	'As much as mydigitalstructure is well proven and stable, this HTML/js UI code is not yet stable and should not be used in production as is. ' +

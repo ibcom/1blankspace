@@ -428,7 +428,8 @@ ns1blankspace.app =
 							$('#ns1blankspaceSelectOptions').button(
 							{
 								text: false,
-								icons: {
+								icons:
+								{
 									primary: "ui-icon-triangle-1-s"
 								}
 							})
