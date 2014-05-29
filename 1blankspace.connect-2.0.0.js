@@ -158,10 +158,16 @@ ns1blankspace.connect =
 								aHTML.push('<td id="ns1blankspaceMostLikely_Title-' + this.id + '" class="ns1blankspaceMostLikely" style="width:100px;">' +
 														this.title + '</td>');
 
-								aHTML.push('<td id="ns1blankspaceMostLikely_URL-' + this.id + '" class="ns1blankspaceMostLikelySub">' +
-														ns1blankspace.connect.url.asXHTML({title: this.url, url: this.url})  + '</td>');
-									
-								aHTML.push('</tr>');
+								aHTML.push('<td id="ns1blankspaceMostLikely_URL-' + this.id + '" class="ns1blankspaceMostLikely">' +
+														ns1blankspace.connect.url.asXHTML({title: this.url, url: this.url}));
+
+								if (this.urllogon != '')
+								{	
+									aHTML.push('<span style="color:#999999;"> (' +
+														this.urllogon + ')</span>');
+								}
+
+								aHTML.push('</td></tr>');
 							});
 							
 							aHTML.push('</table>');			
@@ -245,7 +251,7 @@ ns1blankspace.connect =
 
 											oSearch.sort('title', 'desc');
 											
-											oSearch.getResults(function(data) {ns1blankspace.connect.search.show(oParam, data)});
+											oSearch.getResults(function(data) {ns1blankspace.connect.search.process(oParam, data)});
 										}
 									};	
 								},
@@ -284,7 +290,8 @@ ns1blankspace.connect =
 
 											aHTML.push('<td class="ns1blankspaceSearch" id="ns1blankspaceSearch-' +
 															this.id + '">' +
-															this.url + '</td>');
+															ns1blankspace.connect.url.asXHTML({title: this.url, url: this.url}) +
+															'</td>');
 
 											if (iColumn == iMaximumColumns)
 											{
@@ -342,6 +349,9 @@ ns1blankspace.connect =
 
 						aHTML.push('<tr><td id="ns1blankspaceControlDetails" class="ns1blankspaceControl">' +
 										'Details</td></tr>');
+
+						aHTML.push('<tr><td id="ns1blankspaceControlLogon" class="ns1blankspaceControl">' +
+										'Logon</td></tr>');
 					}	
 					
 					aHTML.push('</table>');					
@@ -352,6 +362,7 @@ ns1blankspace.connect =
 
 					aHTML.push('<div id="ns1blankspaceMainSummary" class="ns1blankspaceControlMain"></div>');
 					aHTML.push('<div id="ns1blankspaceMainDetails" class="ns1blankspaceControlMain"></div>');
+					aHTML.push('<div id="ns1blankspaceMainLogon" class="ns1blankspaceControlMain"></div>');
 							
 					$('#ns1blankspaceMain').html(aHTML.join(''));
 
@@ -365,6 +376,12 @@ ns1blankspace.connect =
 					{
 						ns1blankspace.show({selector: '#ns1blankspaceMainDetails'});
 						ns1blankspace.connect.details();
+					});
+
+						$('#ns1blankspaceControlLogon').click(function(event)
+					{
+						ns1blankspace.show({selector: '#ns1blankspaceMainLogon'});
+						ns1blankspace.connect.logon();
 					});
 				},
 
@@ -417,12 +434,14 @@ ns1blankspace.connect =
 					{
 						aHTML.push('<table class="ns1blankspaceMain">' +
 									'<tr class="ns1blankspaceRow">' +
-									'<td id="ns1blankspaceSummaryColumn1" class="ns1blankspaceColumn1Large"></td>' +
-									'<td id="ns1blankspaceSummaryColumn2" class="ns1blankspaceColumn2Action" style="width:100px;"></td>' +
+									'<td id="ns1blankspaceSummaryColumn1" class="ns1blankspaceColumn1Flexible"></td>' +
+									'<td id="ns1blankspaceSummaryColumn2" class="ns1blankspaceColumn2Action" style="width:200px;"></td>' +
 									'</tr>' +
 									'</table>');				
 						
 						$('#ns1blankspaceMainSummary').html(aHTML.join(''));
+
+						var aHTML = [];
 
 						aHTML.push('<table class="ns1blankspace">');
 						
@@ -435,16 +454,8 @@ ns1blankspace.connect =
 
 							aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">URL</td></tr>' +
 											'<tr><td id="ns1blankspaceSummaryURL" class="ns1blankspaceSummary">' +
-											ns1blankspace.objectContextData.url +
-											'</td></tr>');	
-
-							if (ns1blankspace.objectContextData.urllogon != '')
-							{
-								aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Logon / Username</td></tr>' +
-												'<tr><td id="ns1blankspaceSummaryURLLogon" class="ns1blankspaceSummary">' +
-												ns1blankspace.objectContextData.urllogon +
-												'</td></tr>');
-							}		
+											ns1blankspace.connect.url.asXHTML() +
+											'</td></tr>');			
 
 							if (ns1blankspace.objectContextData.description != '')
 							{
@@ -458,6 +469,42 @@ ns1blankspace.connect =
 						aHTML.push('</table>');								
 
 						$('#ns1blankspaceSummaryColumn1').html(aHTML.join(''));
+
+						var aHTML = [];
+						
+						aHTML.push('<table class="ns1blankspaceColumn2">');
+						
+						if (ns1blankspace.objectContextData.urllogon != '')
+						{
+							aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Logon / Username</td></tr>' +
+											'<tr><td id="ns1blankspaceSummaryURLLogon" class="ns1blankspaceSummary">' +
+											ns1blankspace.objectContextData.urllogon +
+											'</td></tr>');
+						
+							aHTML.push('<tr><td>' +
+											'<span id="ns1blankspaceConnectGetPassword" class="ns1blankspaceAction" style="font-size:0.75em;">Get Password</span>' +
+											'</td></tr>');
+
+							aHTML.push('<tr><td id="ns1blankspaceConnectPasswordShow" class="ns1blankspaceNoteSub"></td></tr>');
+						}
+
+						aHTML.push('</table>');					
+						
+						$('#ns1blankspaceSummaryColumn2').html(aHTML.join(''));	
+
+						$('#ns1blankspaceConnectGetPassword').button().click(function()
+						{
+							$('#ns1blankspaceConnectPasswordShow').html(ns1blankspace.xhtml.loadingSmall);
+
+							var oSearch = new AdvancedSearch();	
+							oSearch.method = 'CORE_URL_SEARCH';		
+							oSearch.addField('urlpassword');
+							oSearch.addFilter('id', 'EQUAL_TO', ns1blankspace.objectContext);
+							oSearch.getResults(function(oResponse)
+							{
+								$('#ns1blankspaceConnectPasswordShow').html(oResponse.data.rows[0].urlpassword);
+							});
+						});	
 					}	
 				},
 
@@ -518,7 +565,7 @@ ns1blankspace.connect =
 						aHTML.push('<table class="ns1blankspaceMain">');
 
 						aHTML.push('<tr><td class="ns1blankspaceCaption">' +
-										'Access within this space by' +
+										'Available to' +
 										'</td></tr>' +
 										'<tr class="ns1blankspace">' +
 										'<td class="ns1blankspaceRadio">' +
@@ -527,7 +574,7 @@ ns1blankspace.connect =
 										'</td></tr>');
 
 						aHTML.push('<tr><td class="ns1blankspaceCaption">' +
-										'Accessed by external users?' +
+										'Available to external users?' +
 										'</td></tr>' +
 										'<tr class="ns1blankspace">' +
 										'<td class="ns1blankspaceRadio">' +
@@ -556,6 +603,57 @@ ns1blankspace.connect =
 					}	
 				},
 
+	logon: 		function ()
+				{
+					var aHTML = [];
+
+					if ($('#ns1blankspaceMainLogon').attr('data-loading') == '1')
+					{
+						$('#ns1blankspaceMainLogon').attr('data-loading', '');
+						
+						aHTML.push('<table class="ns1blankspaceContainer">' +
+										'<tr class="ns1blankspaceContainer">' +
+										'<td id="ns1blankspaceLogonColumn1" class="ns1blankspaceColumn1"></td>' +
+										'<td id="ns1blankspaceLogonColumn2" class="ns1blankspaceColumn2"></td>' +
+										'</tr>' + 
+										'</table>');					
+						
+						$('#ns1blankspaceMainLogon').html(aHTML.join(''));
+						
+						var aHTML = [];
+						
+						aHTML.push('<table class="ns1blankspace">');
+
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
+										'Logon / Username' +
+										'</td></tr>' +
+										'<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceText">' +
+										'<input id="ns1blankspaceLogonUsername" class="ns1blankspaceText">' +
+										'</td></tr>');
+
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
+										'Password' +
+										'</td></tr>' +
+										'<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceText">' +
+										'<input type="password" id="ns1blankspaceLogonPassword" class="ns1blankspaceText">' +
+										'</td></tr>');	
+
+					
+						aHTML.push('</table>');					
+
+						$('#ns1blankspaceLogonColumn1').html(aHTML.join(''));
+
+						if (ns1blankspace.objectContextData != undefined)
+						{
+							$('#ns1blankspaceLogonUsername').val(ns1blankspace.objectContextData.urllogon);
+						}
+					}	
+				},			
+
 	save: 		{
 					send:		function ()
 								{
@@ -575,6 +673,12 @@ ns1blankspace.connect =
 										oData.url = $('#ns1blankspaceDetailsURL').val();
 										oData.private = $('input[name="radioPrivate"]:checked').val();
 										oData.public = $('input[name="radioPublic"]:checked').val();
+									}
+
+									if ($('#ns1blankspaceMainLogon').html() != '')
+									{
+										oData.urllogon = $('#ns1blankspaceLogonUsername').val();
+										if ($('#ns1blankspaceLogonPassword').val().length > 0) {oData.urlpassword = $('#ns1blankspaceLogonPassword').val()}
 									}
 
 									if (!ns1blankspace.util.isEmpty(oData))
@@ -619,6 +723,8 @@ ns1blankspace.connect =
 				},
 
 	url: 		{
+					match:   	/^(https?|ftp):\/\//,
+
 					asXHTML:	function (oParam)
 								{
 									var bUseTitle = ns1blankspace.util.getParam(oParam, 'useTitle', {"default": false}).value;
@@ -642,7 +748,9 @@ ns1blankspace.connect =
 											sHTML = 'http://' + sHTML;
 										}
 
-										sHTML = '<a href="' + sHTML + '" target="_blank">' + sTitle + '</a>';
+										
+
+										sHTML = '<a href="' + sHTML + '" target="_blank">' + sTitle.replace(ns1blankspace.connect.url.match, '') + '</a>';
 									}	
 								
 									return sHTML;
