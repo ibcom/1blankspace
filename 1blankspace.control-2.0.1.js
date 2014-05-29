@@ -264,6 +264,10 @@ ns1blankspace.scripts.concat(
 	{
 		nameSpace: '1blankspace.util.protect',
 		source: '/jscripts/1blankspace.util.protect-2.0.0.js'
+	},
+	{
+		nameSpace: '1blankspace.connect',
+		source: '/jscripts/1blankspace.connect-2.0.0.js'
 	}
 ])
 
