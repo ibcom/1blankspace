@@ -155,12 +155,12 @@ ns1blankspace.connect =
 							{
 								aHTML.push('<tr class="ns1blankspaceRow">');
 
-								aHTML.push('<td id="ns1blankspaceMostLikely_Title-' + this.id + '" class="ns1blankspaceMostLikely" style="width:50px;">' +
+								aHTML.push('<td id="ns1blankspaceMostLikely_Title-' + this.id + '" class="ns1blankspaceMostLikely" style="width:100px;">' +
 														this.title + '</td>');
-								
-								aHTML.push('<td id="ns1blankspaceMostLikely_URL-' + this.id + '" class="ns1blankspaceMostLikelySub" style="width:75px;" style="padding-left:10px;">' +
-														this.url + '</td>');
-								
+
+								aHTML.push('<td id="ns1blankspaceMostLikely_URL-' + this.id + '" class="ns1blankspaceMostLikelySub">' +
+														ns1blankspace.connect.url.asXHTML({title: this.url, url: this.url})  + '</td>');
+									
 								aHTML.push('</tr>');
 							});
 							
@@ -518,12 +518,21 @@ ns1blankspace.connect =
 						aHTML.push('<table class="ns1blankspaceMain">');
 
 						aHTML.push('<tr><td class="ns1blankspaceCaption">' +
-										'Can be accessed by' +
+										'Access within this space by' +
 										'</td></tr>' +
 										'<tr class="ns1blankspace">' +
 										'<td class="ns1blankspaceRadio">' +
-										'<input type="radio" id="radioType1" name="radioType" value="1"/>Just Me' +
-										'<br /><input type="radio" id="radioType2" name="radioType" value="2"/>All Users' +
+										'<input type="radio" id="radioPrivateY" name="radioPrivate" value="Y"/>Just Me' +
+										'<br /><input type="radio" id="radioPrivateN" name="radioPrivate" value="N"/>All Users' +
+										'</td></tr>');
+
+						aHTML.push('<tr><td class="ns1blankspaceCaption">' +
+										'Accessed by external users?' +
+										'</td></tr>' +
+										'<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceRadio">' +
+										'<input type="radio" id="radioPublic1" name="radioPublic" value="Y"/>Yes' +
+										'<br /><input type="radio" id="radioPublic2" name="radioPublic" value="N"/>No' +
 										'</td></tr>');
 
 						aHTML.push('</table>');					
@@ -536,13 +545,14 @@ ns1blankspace.connect =
 							$('#ns1blankspaceDetailsDescription').val(ns1blankspace.objectContextData.description);
 							$('#ns1blankspaceDetailsURL').val(ns1blankspace.objectContextData.url);
 
-							$('[name="radioType"][value="' + ns1blankspace.objectContextData.type + '"]').attr('checked', true);
+							$('[name="radioPrivate"][value="' + ns1blankspace.objectContextData.private + '"]').attr('checked', true);
+							$('[name="radioPublic"][value="' + ns1blankspace.objectContextData.public + '"]').attr('checked', true);
 						}
 						else
 						{
-							$('[name="radioType"][value="1"]').attr('checked', true);
+							$('[name="radioPrivate"][value="Y"]').attr('checked', true);
+							$('[name="radioPublic"][value="N"]').attr('checked', true);
 						}
-
 					}	
 				},
 
@@ -563,7 +573,8 @@ ns1blankspace.connect =
 										oData.title = $('#ns1blankspaceDetailsTitle').val();
 										oData.description = $('#ns1blankspaceDetailsDescription').val();
 										oData.url = $('#ns1blankspaceDetailsURL').val();
-										oData.type = $('input[name="radioType"]:checked').val();
+										oData.private = $('input[name="radioPrivate"]:checked').val();
+										oData.public = $('input[name="radioPublic"]:checked').val();
 									}
 
 									if (!ns1blankspace.util.isEmpty(oData))
@@ -605,5 +616,36 @@ ns1blankspace.connect =
 										ns1blankspace.status.error(oResponse.error.errornotes);
 									}
 								}
-				}
+				},
+
+	url: 		{
+					asXHTML:	function (oParam)
+								{
+									var bUseTitle = ns1blankspace.util.getParam(oParam, 'useTitle', {"default": false}).value;
+									var sTitle = ns1blankspace.util.getParam(oParam, 'title').value;
+									var sURL = ns1blankspace.util.getParam(oParam, 'url').value;
+
+									if (ns1blankspace.objectContextData && sURL === undefined)
+									{
+										var sURL = ns1blankspace.objectContextData.url;
+										var sTitle = (bUseTitle?ns1blankspace.objectContextData.title:sURL);
+									}
+
+									var sHTML = sTitle;
+									
+									if (sURL !== undefined && sURL !== '')
+									{	
+										sHTML = sURL;
+
+										if (sHTML.toLowerCase().indexOf('http') == -1)
+										{
+											sHTML = 'http://' + sHTML;
+										}
+
+										sHTML = '<a href="' + sHTML + '" target="_blank">' + sTitle + '</a>';
+									}	
+								
+									return sHTML;
+								}
+				}						
 }					
