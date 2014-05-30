@@ -89,7 +89,8 @@ ns1blankspace.connect =
 						var aHTML = [];
 
 						aHTML.push('<table class="ns1blankspaceColumn2">');
-
+						aHTML.push('<tr class="ns1blankspaceControl">' +
+										'<td id="ns1blankspaceHomeActionProtectKey"></td></tr>');	
 						aHTML.push('</table>');
 
 						$('#ns1blankspaceHomeAction').html(aHTML.join(''));	
@@ -179,6 +180,8 @@ ns1blankspace.connect =
 						{
 							ns1blankspace.connect.search.send(event.target.id, {source: 1});
 						});
+
+						ns1blankspace.connect.protect.init({xhtmlElementID: 'ns1blankspaceHomeActionProtectKey'});
 					}
 				},
 
@@ -445,13 +448,8 @@ ns1blankspace.connect =
 
 						aHTML.push('<table class="ns1blankspace">');
 						
-						if (ns1blankspace.objectContextData.title != '')
+						if (ns1blankspace.objectContextData.url != '')
 						{
-							aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Title</td></tr>' +
-											'<tr><td id="ns1blankspaceSummaryTitle" class="ns1blankspaceSummary">' +
-											ns1blankspace.objectContextData.title +
-											'</td></tr>');
-
 							aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">URL</td></tr>' +
 											'<tr><td id="ns1blankspaceSummaryURL" class="ns1blankspaceSummary">' +
 											ns1blankspace.connect.url.asXHTML() +
@@ -494,16 +492,21 @@ ns1blankspace.connect =
 
 						$('#ns1blankspaceConnectGetPassword').button().click(function()
 						{
-							$('#ns1blankspaceConnectPasswordShow').html(ns1blankspace.xhtml.loadingSmall);
+							ns1blankspace.connect.protect.init({xhtmlElementID: 'ns1blankspaceConnectGetPasswordShow'})
 
-							var oSearch = new AdvancedSearch();	
-							oSearch.method = 'CORE_URL_SEARCH';		
-							oSearch.addField('urlpassword');
-							oSearch.addFilter('id', 'EQUAL_TO', ns1blankspace.objectContext);
-							oSearch.getResults(function(oResponse)
-							{
-								$('#ns1blankspaceConnectPasswordShow').html(oResponse.data.rows[0].urlpassword);
-							});
+							if (false)
+							{	
+								$('#ns1blankspaceConnectPasswordShow').html(ns1blankspace.xhtml.loadingSmall);
+
+								var oSearch = new AdvancedSearch();	
+								oSearch.method = 'CORE_URL_SEARCH';		
+								oSearch.addField('urlpassword');
+								oSearch.addFilter('id', 'EQUAL_TO', ns1blankspace.objectContext);
+								oSearch.getResults(function(oResponse)
+								{
+									$('#ns1blankspaceConnectPasswordShow').html(oResponse.data.rows[0].urlpassword);
+								});
+							}
 						});	
 					}	
 				},
@@ -755,5 +758,161 @@ ns1blankspace.connect =
 								
 									return sHTML;
 								}
-				}						
+				},
+
+	protect: 	{
+					init: 		function (oParam)
+								{
+									var sXHTMLElementID = ns1blankspace.util.getParam(oParam, 'xhtmlElementID', {"default": 'ns1blankspaceConnectProtect'}).value;
+
+									if (ns1blankspace.connect.protect.key.get() != undefined)
+									{
+										var aHTML = [];
+
+										aHTML.push('<div class="ns1blankspaceSubNote">Protection key installed.</div>');
+
+										aHTML.push('<div id="ns1blankspaceConnectProtectGet" class="ns1blankspaceAction" style="margin-top:10px; font-size:0.75em;">Get key</div>');
+
+										$('#' + sXHTMLElementID).html(aHTML.join(''));
+
+										$('#ns1blankspaceConnectProtectGet').button().click(function()
+										{
+											var aHTML = [];
+
+											aHTML.push('<div class="ns1blankspaceSubNote" style="margin-top:10px;">' +
+															'<textarea id="ns1blankspaceContectProtectKeyValue" style="width: 100%; height:100px;" rows="3" cols="35" class="ns1blankspaceTextMulti">' +
+															ns1blankspace.connect.protect.key.get(oParam) +
+														 	'</textarea></div>');
+
+											$('#ns1blankspaceMostLikely').html(aHTML.join(''));
+										});
+									}
+									else
+									{
+										var aHTML = [];
+
+										aHTML.push('<div class="ns1blankspaceSubNote">You need a key to protect the connection/URL password. The key will be stored locally and if you change to another device, you will need to install it.</div>');
+										aHTML.push('<div id="ns1blankspaceConnectProtectExisting" class="ns1blankspaceAction" style="margin-top:10px; font-size:0.75em;">I have existing key</div>');
+										aHTML.push('<div id="ns1blankspaceConnectProtectCreate" class="ns1blankspaceAction" style="margin-top:10px; font-size:0.75em;">Create new key</div>');
+
+										$('#' + sXHTMLElementID).html(aHTML.join(''));
+
+										$('#ns1blankspaceConnectProtectExisting').button().click(function()
+										{
+											var aHTML = [];
+
+											aHTML.push('<div class="ns1blankspaceSubNote">The key below will be stored on this device and all passwords you set on a connection / URL will be protected using it.</div>');
+
+											aHTML.push('<div class="ns1blankspaceSubNote" style="margin-top:10px;">If this key is different to the key that was used to protect a password, you will not be able to get the password back.</div>');
+
+											aHTML.push('<div class="ns1blankspaceSubNote" style="margin-top:10px;">Enter the key to be used:</div>');
+
+											aHTML.push('<div class="ns1blankspaceSubNote" style="margin-top:10px;">' +
+															'<textarea id="ns1blankspaceContectProtectKeyValue" style="width: 100%; height:100px;" rows="3" cols="35" class="ns1blankspaceTextMulti">' +
+														 	'</textarea></div>');
+
+											aHTML.push('<div id="ns1blankspaceConnectProtectInstall" class="ns1blankspaceAction" style="margin-top:10px; font-size:0.75em;">Install</div>');
+
+											$('#ns1blankspaceMostLikely').html(aHTML.join(''));
+
+											$('#ns1blankspaceConnectProtectInstall').button().click(function()
+											{
+												ns1blankspace.connect.protect.key.remove(oParam);
+												oParam = ns1blankspace.util.setParam(oParam, 'protectKey', $('#ns1blankspaceContectProtectKeyValue').val());
+												oParam = ns1blankspace.util.setParam(oParam, 'onComplete', ns1blankspace.connect.init);
+												ns1blankspace.connect.protect.key.install(oParam);
+											});
+										});	
+
+										$('#ns1blankspaceConnectProtectCreate').button().click(function()
+										{
+											var sKey = ns1blankspace.connect.protect.key.create(oParam)
+
+											var aHTML = [];
+
+											aHTML.push('<div class="ns1blankspaceSubNote">The key below has been stored on this device and all passwords you set on a connection / URL will be protected using it.</div>');
+
+											aHTML.push('<div class="ns1blankspaceSubNote" style="margin-top:10px;">If you change the key, you will not be able to get the passwords back.</div>');
+
+											aHTML.push('<div class="ns1blankspaceSubNote" style="margin-top:10px;">You should copy this key and keep it safe.</div>');
+
+											aHTML.push('<div class="ns1blankspaceSubNote" style="margin-top:10px;">' +
+															'<textarea style="width: 100%; height:100px;" rows="3" cols="35" class="ns1blankspaceTextMulti">' +
+														 	sKey + '</textarea></div>');
+
+											$('#ns1blankspaceMostLikely').html(aHTML.join(''));
+										})
+										.css('width', '150px');	
+									}
+								},
+
+					key: 		{
+									get: 		function (oParam)
+												{
+													if (ns1blankspace.connect.protect.key.value == undefined)
+													{	
+														ns1blankspace.connect.protect.key.value = ns1blankspace.util.local.cache.search({key: '1blankspace-connect-auth-key', persist: true});
+													}
+
+													return ns1blankspace.connect.protect.key.value;
+												},
+
+									install: 	function (oParam)
+												{
+													ns1blankspace.connect.protect.key.value = ns1blankspace.util.getParam(oParam, 'protectKey').value;
+													ns1blankspace.util.local.cache.save({key: '1blankspace-connect-auth-key', persist: true, data: ns1blankspace.connect.protect.key.value});
+													ns1blankspace.util.onComplete(oParam);
+												},					
+
+									create: 	function (oParam)
+												{
+													if (ns1blankspace.connect.protect.key.value == undefined)
+													{	
+														ns1blankspace.connect.protect.key.value = ns1blankspace.util.local.cache.search({key: '1blankspace-connect-auth-key', persist: true})
+
+														if (ns1blankspace.connect.protect.key.value == undefined)
+														{	
+															ns1blankspace.connect.protect.key.value = ns1blankspace.util.protect.key.create.single({cryptoKeyReference: '1blankspace-connect-auth-key', persist: true, local: true})
+														}
+													}
+
+													return ns1blankspace.connect.protect.key.value;
+												},
+
+									remove: 	function (oParam)
+												{
+													ns1blankspace.connect.protect.key.value = undefined;
+													ns1blankspace.util.local.cache.remove({key: '1blankspace-connect-auth-key', persist: true})
+												}			
+								},
+
+					password: 	{
+									save:		function (oParam)
+												{
+													var sPassword = ns1blankspace.util.getParam(oParam, 'password').value;
+													var sPasswordProtected = ns1blankspace.util.getParam(oParam, 'protectedData').value;
+
+													if (sPasswordProtected == undefined)
+													{	
+														ns1blankspace.util.protect.encrypt(
+														{
+															data: sPassword,
+															cryptoKeyReference: '1blankspace-connect-auth-key',
+															local: true,
+															persist: true,
+															onComplete: ns1blankspace.connect.protect.password.save
+														});
+													}
+													else
+													{
+
+													}	
+
+												},
+
+									search: 	function (oParam)
+												{
+
+												}							
+				}								
 }					

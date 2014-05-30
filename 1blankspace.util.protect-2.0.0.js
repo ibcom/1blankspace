@@ -105,7 +105,8 @@ ns1blankspace.util.protect =
 										{
 											if (bLocal)
 											{
-												var sCryptoKey = ns1blankspace.util.local.cache.search({key: sCryptoKeyReference});
+												oParam = ns1blankspace.util.setParam(oParam, 'key', sCryptoKeyReference);
+												var sCryptoKey = ns1blankspace.util.local.cache.search(oParam);
 											}	
 											else
 											{
