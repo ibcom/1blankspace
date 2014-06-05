@@ -1356,6 +1356,10 @@ ns1blankspace.control =
 														$($.grep(ns1blankspace.views, function (a) {return a.type == 2;})).each(function()
 														{
 															var sNS = '_' + this.namespace;
+															var oRoot = ns1blankspace;
+															if (this.rootnamespace !== undefined) {oRoot = this.rootnamespace}
+															if (this.rootNamespace !== undefined) {oRoot = this.rootNamespace}
+
 															var sParent = this.parentNamespace;
 															if (sParent === undefined) {sParent = this.parentnamespace}
 
@@ -1391,11 +1395,11 @@ ns1blankspace.control =
 
 																if ($(this).attr('data-parentnamespace'))
 																{
-																	var oNS = ns1blankspace[$(this).attr('data-parentnamespace')][$(this).attr('data-namespace')];
+																	var oNS = oRoot[$(this).attr('data-parentnamespace')][$(this).attr('data-namespace')];
 																}
 																else
 																{
-																	var oNS = ns1blankspace[$(this).attr('data-namespace')];
+																	var oNS = oRoot[$(this).attr('data-namespace')];
 																}
 
 																oNS.init(oParam);
