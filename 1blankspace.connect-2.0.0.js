@@ -851,7 +851,7 @@ ns1blankspace.connect =
 												{
 													if (ns1blankspace.connect.protect.key.value == undefined)
 													{	
-														ns1blankspace.connect.protect.key.value = ns1blankspace.util.local.cache.search({key: '1blankspace-connect-auth-key', persist: true});
+														ns1blankspace.connect.protect.key.value = ns1blankspace.util.local.cache.search({key: '1blankspace-connect-auth-key', persist: true, protect: true});
 													}
 
 													return ns1blankspace.connect.protect.key.value;
@@ -868,11 +868,11 @@ ns1blankspace.connect =
 												{
 													if (ns1blankspace.connect.protect.key.value == undefined)
 													{	
-														ns1blankspace.connect.protect.key.value = ns1blankspace.util.local.cache.search({key: '1blankspace-connect-auth-key', persist: true})
+														ns1blankspace.connect.protect.key.value = ns1blankspace.util.local.cache.search({key: '1blankspace-connect-auth-key', persist: true, protect: true})
 
 														if (ns1blankspace.connect.protect.key.value == undefined)
 														{	
-															ns1blankspace.connect.protect.key.value = ns1blankspace.util.protect.key.create.single({cryptoKeyReference: '1blankspace-connect-auth-key', persist: true, local: true})
+															ns1blankspace.connect.protect.key.value = ns1blankspace.util.protect.key.create.single({cryptoKeyReference: '1blankspace-connect-auth-key', persist: true, local: true, protect: true})
 														}
 													}
 
@@ -882,7 +882,7 @@ ns1blankspace.connect =
 									remove: 	function (oParam)
 												{
 													ns1blankspace.connect.protect.key.value = undefined;
-													ns1blankspace.util.local.cache.remove({key: '1blankspace-connect-auth-key', persist: true})
+													ns1blankspace.util.local.cache.remove({key: '1blankspace-connect-auth-key', persist: true, protect: true})
 												}			
 								},
 
