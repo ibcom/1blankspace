@@ -856,7 +856,8 @@ ns1blankspace.connect =
 														ns1blankspace.connect.protect.key.value = ns1blankspace.util.local.cache.search({key: '1blankspace-connect-auth-key', persist: true, protect: true});
 													}
 
-													return ns1blankspace.connect.protect.key.value;
+													oParam = ns1blankspace.util.setParam(oParam, 'returnValue', ns1blankspace.connect.protect.key.value;
+													if (ns1blankspace.util.whenCan.return(oParam)) {return ns1blankspace.connect.protect.key.value}
 												},
 
 									install: 	function (oParam)
@@ -879,6 +880,7 @@ ns1blankspace.connect =
 														{
 															if (!oParam.create)
 															{	
+																oParam.create = true;
 																ns1blankspace.util.whenCan.execute(
 																{
 																	now:
@@ -895,16 +897,14 @@ ns1blankspace.connect =
 																	{
 																		method: ns1blankspace.connect.protect.key.create,
 																		set: 'key',
-																		param:
-																		{
-																			create: true
-																		}
+																		param: oParam
 																	}
 																});
 																//ns1blankspace.util.local.cache.search({key: '1blankspace-connect-auth-key', persist: true, protect: true});
 															}
 															else
 															{	
+																oParam.create = false;
 																ns1blankspace.util.whenCan.execute(
 																{
 																	now:
@@ -922,10 +922,7 @@ ns1blankspace.connect =
 																	{
 																		method: ns1blankspace.connect.protect.key.create,
 																		set: 'key',
-																		param:
-																		{
-																			create: false
-																		}
+																		param: oParam
 																	}
 																});
 

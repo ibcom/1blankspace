@@ -127,7 +127,8 @@ ns1blankspace.util.local =
 												oData = JSON.parse(oStorage.getItem(sKey));
 											}
 
-											ns1blankspace.util.whenCan.return({data: oData});
+											oParam.data = oData;
+											ns1blankspace.util.whenCan.return(oParam);
 										}	
 									}	
 								},

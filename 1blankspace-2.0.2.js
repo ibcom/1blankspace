@@ -3956,7 +3956,14 @@ ns1blankspace.util =
 
 					exists: 	function(oParam)
 								{
-									return (ns1blankspace.util.whenCan.queue.length != 0);
+									if (oParam && oParam.uuid)
+									{
+										return ($.grep(ns1blankspace.util.whenCan.queue, function (a) {a.uuid == oParam.uuid}).length > 0)
+									}	
+									else
+									{	
+										return (ns1blankspace.util.whenCan.queue.length != 0);
+									}	
 								},
 
 					clear: 		function(oParam)
@@ -3968,20 +3975,22 @@ ns1blankspace.util =
 								{
 									var sUUID = ns1blankspace.util.uuid();
 
-									oParam.later.param = (oParam.later.param||{});
-									oParam.later.param.uuid = sUUID;
+									//oParam.later.param = (oParam.later.param||{});
+									oParam.later.uuid = sUUID;
 									ns1blankspace.util.whenCan.queue.unshift(oParam.later);
 
 									if (oParam.now)
 									{
 										var oNowParam = (oParam.now.param||{});
-										oNowParam = sUUID;
+										oNowParam.uuid = sUUID;
 										oParam.now.method(oNowParam)
 									}	
 								},
 								
 					return: 	function(oParam)
 								{
+									var bReturn = true;
+
 									if (ns1blankspace.util.whenCan.queue.length > 0)
 									{	
 										var oLater;
@@ -3990,11 +3999,14 @@ ns1blankspace.util =
 										{
 											$.each(ns1blankspace.util.whenCan.queue, function (i, v)
 											{
-												if (v.uuid = oParam.uuid)
-												{
-													oLater = v;
-													ns1blankspace.util.whenCan.queue.splice(i, 1);
-												}
+												if (v)
+												{	
+													if (v.uuid == oParam.uuid)
+													{
+														oLater = v;
+														ns1blankspace.util.whenCan.queue.splice(i, 1);
+													}
+												}	
 											});
 										}	
 										else
@@ -4004,6 +4016,7 @@ ns1blankspace.util =
 
 										if (oLater)
 										{	
+											bReturn = false;
 											if (!oParam) {oParam = {}}
 											oParam = $.extend(true, oParam, oLater.param)
 											if (oLater.set) {oParam[oLater.set] = oParam.data};
@@ -4022,10 +4035,9 @@ ns1blankspace.util =
 											}
 										}	
 									}
-									else
-									{
-										return oParam.data;
-									}
+									
+									return bReturn;
+							
 								}			
 				},			
 

@@ -30,7 +30,7 @@ ns1blankspace.util.protect =
 
 													var sSalt = CryptoJS.lib.WordArray.random(128/8);
 													var sPassword = ns1blankspace.logonKey;
-													if (sPassword == undefined) {sPassword = Math.random()}
+													if (sPassword == undefined) {sPassword = (Math.random()).toString()}
 													var sCryptoKey = CryptoJS.PBKDF2(sPassword, sSalt, { keySize: 512/32 }).toString();
 		
 													if (sCryptoKeyReference !== undefined)
@@ -44,7 +44,7 @@ ns1blankspace.util.protect =
 														{	
 															oParam = ns1blankspace.util.setParam(oParam, 'key', sCryptoKeyReference);
 															oParam = ns1blankspace.util.setParam(oParam, 'data', sCryptoKey);
-															oParam = ns1blankspace.util.setParam(oParam, 'protect', false);
+															//oParam = ns1blankspace.util.setParam(oParam, 'protect', false);
 															ns1blankspace.util.local.cache.save(oParam);
 														}
 														else
