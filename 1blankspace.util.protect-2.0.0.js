@@ -28,10 +28,10 @@ ns1blankspace.util.protect =
 													var sCryptoKeyReference = ns1blankspace.util.getParam(oParam, 'cryptoKeyReference').value;
 													var bLocal = ns1blankspace.util.getParam(oParam, 'local', {"default": false}).value;
 
-													
-
 													var sSalt = CryptoJS.lib.WordArray.random(128/8);
-													var sCryptoKey = CryptoJS.PBKDF2(ns1blankspace.logonKey, sSalt, { keySize: 512/32 }).toString();
+													var sPassword = ns1blankspace.logonKey;
+													if (sPassword == undefined) {sPassword = Math.random()}
+													var sCryptoKey = CryptoJS.PBKDF2(sPassword, sSalt, { keySize: 512/32 }).toString();
 		
 													if (sCryptoKeyReference !== undefined)
 													{	
@@ -67,9 +67,9 @@ ns1blankspace.util.protect =
 																}
 															});		
 														}
-													}	
+													}
 
-													return sCryptoKey;
+													ns1blankspace.util.whenCan.return({data: sCryptoKey})
 												},
 
 									pair: 		function(oParam) {}			
@@ -95,6 +95,7 @@ ns1blankspace.util.protect =
 											oSearch.addField('key');
 											oSearch.addField(ns1blankspace.option.auditFields);
 											oSearch.addFilter('reference', 'EQUAL_TO', sCryptoKeyReference);
+											oSearch.sort('modifieddate', 'desc');
 											
 											oSearch.getResults(function(data)
 											{
@@ -153,11 +154,11 @@ ns1blankspace.util.protect =
 
 	decrypt: 	function(oParam)
 				{
-					if (ns1blankspace.util.getParam(oParam, 'cryptoKey').exists)
+					if (ns1blankspace.util.getParam(oParam, 'cryptoKey').value)
 					{
 						var sProtectedData = ns1blankspace.util.getParam(oParam, 'protectedData').value;
 						var sCryptoKey = ns1blankspace.util.getParam(oParam, 'cryptoKey').value;
-						var sData = CryptoJS.AES.decrypt(sProtectedData, sCryptoKey).toString()
+						var sData = CryptoJS.AES.decrypt(sProtectedData, sCryptoKey).toString(CryptoJS.enc.Utf8);
 
 						oParam = ns1blankspace.util.setParam(oParam, 'data', sData)
 						ns1blankspace.debug.message('DECRYPTING');

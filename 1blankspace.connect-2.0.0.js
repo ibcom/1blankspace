@@ -494,19 +494,16 @@ ns1blankspace.connect =
 						{
 							ns1blankspace.connect.protect.init({xhtmlElementID: 'ns1blankspaceConnectGetPasswordShow'})
 
-							if (false)
-							{	
-								$('#ns1blankspaceConnectPasswordShow').html(ns1blankspace.xhtml.loadingSmall);
+							$('#ns1blankspaceConnectPasswordShow').html(ns1blankspace.xhtml.loadingSmall);
 
-								var oSearch = new AdvancedSearch();	
-								oSearch.method = 'CORE_URL_SEARCH';		
-								oSearch.addField('urlpassword');
-								oSearch.addFilter('id', 'EQUAL_TO', ns1blankspace.objectContext);
-								oSearch.getResults(function(oResponse)
-								{
-									$('#ns1blankspaceConnectPasswordShow').html(oResponse.data.rows[0].urlpassword);
-								});
-							}
+							var oSearch = new AdvancedSearch();
+							oSearch.method = 'CORE_URL_SEARCH';
+							oSearch.addField('urlpassword');
+							oSearch.addFilter('id', 'EQUAL_TO', ns1blankspace.objectContext);
+							oSearch.getResults(function(oResponse)
+							{
+								$('#ns1blankspaceConnectPasswordShow').html(oResponse.data.rows[0].urlpassword);
+							});
 						});	
 					}	
 				},
@@ -826,8 +823,6 @@ ns1blankspace.connect =
 
 										$('#ns1blankspaceConnectProtectCreate').button().click(function()
 										{
-											var sKey = ns1blankspace.connect.protect.key.create(oParam)
-
 											var aHTML = [];
 
 											aHTML.push('<div class="ns1blankspaceSubNote">The key below has been stored on this device and all passwords you set on a connection / URL will be protected using it.</div>');
@@ -838,9 +833,16 @@ ns1blankspace.connect =
 
 											aHTML.push('<div class="ns1blankspaceSubNote" style="margin-top:10px;">' +
 															'<textarea style="width: 100%; height:100px;" rows="3" cols="35" class="ns1blankspaceTextMulti">' +
-														 	sKey + '</textarea></div>');
+														 	'{{key}}</textarea></div>');
 
-											$('#ns1blankspaceMostLikely').html(aHTML.join(''));
+											var oParam =
+											{
+												xhtml: aHTML.join(''),
+												xhtmlElementID: 'ns1blankspaceMostLikely'
+											}
+
+											ns1blankspace.connect.protect.key.create(oParam)
+
 										})
 										.css('width', '150px');	
 									}
@@ -866,17 +868,77 @@ ns1blankspace.connect =
 
 									create: 	function (oParam)
 												{
-													if (ns1blankspace.connect.protect.key.value == undefined)
-													{	
-														ns1blankspace.connect.protect.key.value = ns1blankspace.util.local.cache.search({key: '1blankspace-connect-auth-key', persist: true, protect: true})
+													if (!oParam.key)
+													{
+														if (ns1blankspace.connect.protect.key.value != undefined)
+														{
+															oParam.key = ns1blankspace.connect.protect.key.value;
+															ns1blankspace.connect.protect.key.create(oParam);
+														}
+														else
+														{
+															if (!oParam.create)
+															{	
+																ns1blankspace.util.whenCan.execute(
+																{
+																	now:
+																	{
+																		method: ns1blankspace.util.local.cache.search,
+																		param: 
+																		{
+																			key: '1blankspace-connect-auth-key',
+																			persist: true,
+																			protect: true
+																		}
+																	},
+																	later:
+																	{
+																		method: ns1blankspace.connect.protect.key.create,
+																		set: 'key',
+																		param:
+																		{
+																			create: true
+																		}
+																	}
+																});
+																//ns1blankspace.util.local.cache.search({key: '1blankspace-connect-auth-key', persist: true, protect: true});
+															}
+															else
+															{	
+																ns1blankspace.util.whenCan.execute(
+																{
+																	now:
+																	{
+																		method: ns1blankspace.util.protect.key.create.single,
+																		param: 
+																		{
+																			cryptoKeyReference: '1blankspace-connect-auth-key',
+																			persist: true,
+																			protect: true,
+																			local: true
+																		}
+																	},
+																	later:
+																	{
+																		method: ns1blankspace.connect.protect.key.create,
+																		set: 'key',
+																		param:
+																		{
+																			create: false
+																		}
+																	}
+																});
 
-														if (ns1blankspace.connect.protect.key.value == undefined)
-														{	
-															ns1blankspace.connect.protect.key.value = ns1blankspace.util.protect.key.create.single({cryptoKeyReference: '1blankspace-connect-auth-key', persist: true, local: true, protect: true})
+																//ns1blankspace.util.whenCan.set({execute: ns1blankspace.connect.protect.key.create, returnParameter: 'key'});
+																//ns1blankspace.util.protect.key.create.single({cryptoKeyReference: '1blankspace-connect-auth-key', persist: true, local: true, protect: true})
+															}
 														}
 													}
-
-													return ns1blankspace.connect.protect.key.value;
+													else
+													{
+														ns1blankspace.connect.protect.key.value = oParam.key;
+														$('#' + oParam.xhtmlElementID).html(oParam.xhtml.replace('{{key}}', oParam.key));
+													}	
 												},
 
 									remove: 	function (oParam)
@@ -913,6 +975,7 @@ ns1blankspace.connect =
 									search: 	function (oParam)
 												{
 
-												}							
+												}
+								}										
 				}								
 }					

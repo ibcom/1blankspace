@@ -25,7 +25,7 @@ ns1blankspace.util.local =
 								{
 									ns1blankspace.debug.enabled = true;
 
-									if (ns1blankspace.util.local.cache.search({key: ns1blankspace.util.local.cache.data.cryptoKeyReference, persist: true}) == undefined)
+									if (ns1blankspace.util.protect.key.search({key: ns1blankspace.util.local.cache.data.cryptoKeyReference, persist: true}) == undefined)
 									{	
 										ns1blankspace.util.protect.key.create.single({cryptoKeyReference: ns1blankspace.util.local.cache.data.cryptoKeyReference, persist: true})
 									}	
@@ -87,22 +87,48 @@ ns1blankspace.util.local =
 										var bJSON = ns1blankspace.util.getParam(oParam, 'json', {default: sKey.toLowerCase().indexOf('.json') != -1}).value;
 										var bProtect = ns1blankspace.util.getParam(oParam, 'protect', {"default": false}).value;
 
-										var oData;
+										var oData = ns1blankspace.util.getParam(oParam, 'data').value;
 
-										var oData = oStorage.getItem(sKey);
+										if (oData === undefined)
+										{	
+											var oData = oStorage.getItem(sKey);
 
-										if (bProtect && ns1blankspace.util.protect !== undefined)
-										{
-											var sCryptoKey = ns1blankspace.util.protect.key.data[ns1blankspace.util.local.cache.data.cryptoKeyReference];
-											oData = ns1blankspace.util.protect.decrypt({cryptoKey: sCryptoKey, protectedData: oData});
-										}
+											if (bProtect && ns1blankspace.util.protect !== undefined && oData !== null)
+											{
+												oParam = ns1blankspace.util.setParam(oParam, 'cryptoKeyReference', ns1blankspace.util.local.cache.data.cryptoKeyReference);
+												oParam = ns1blankspace.util.setParam(oParam, 'cryptoKey', ns1blankspace.util.protect.key.data[ns1blankspace.util.local.cache.data.cryptoKeyReference]);
+												oParam = ns1blankspace.util.setParam(oParam, 'protectedData', oData);
+												oParam = ns1blankspace.util.setParam(oParam, 'onCompleteWhenCan', ns1blankspace.util.local.cache.search);
 
-										if (bJSON && oData !== undefined)
-										{
-											oData = JSON.parse(oStorage.getItem(sKey));
+												ns1blankspace.util.whenCan.execute(
+												{
+													now:
+													{
+														method: ns1blankspace.util.protect.decrypt,
+														param: oParam
+													},
+													later:
+													{
+														method: ns1blankspace.util.local.cache.search,
+														set: 'data'
+													}	
+												});
+											}
+											else
+											{
+												oParam.data = oData;
+												ns1blankspace.util.local.cache.search(oParam)
+											}
 										}	
+										else		
+										{
+											if (bJSON && oData !== undefined)
+											{
+												oData = JSON.parse(oStorage.getItem(sKey));
+											}
 
-										return oData;
+											ns1blankspace.util.whenCan.return({data: oData});
+										}	
 									}	
 								},
 
