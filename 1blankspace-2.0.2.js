@@ -1287,6 +1287,21 @@ ns1blankspace.app =
 					}	
 				},
 
+	context: 	function (oParam)
+				{
+					var bNew = ns1blankspace.util.getParam(oParam, 'new', {"default": false}).value;
+					var bAction = ns1blankspace.util.getParam(oParam, 'action', {"default": false}).value;
+					var bActionOptions = ns1blankspace.util.getParam(oParam, 'actionOptions', {"default": false}).value;
+					var bContext = ns1blankspace.util.getParam(oParam, 'in', {"default": true}).value;
+					var bAll = ns1blankspace.util.getParam(oParam, 'all', {"default": true}).value;
+
+					var bSpecific = (bNew || bAction || bActionOptions);
+
+					if (bAll || bNew) {$('#ns1blankspaceViewControlNew').button({disabled: !bContext && (!bSpecific || bNew)})};
+					if (bAll || bAction) {$('#ns1blankspaceViewControlAction').button({disabled: !bContext && (!bSpecific || bAction)})};
+					if (bAll || bActionOptions) {$('#ns1blankspaceViewControlActionOptions').button({disabled: !bContext && (!bSpecific || bActionOptions)})};
+				},				
+
 	options: 	{
 					show: 		function (oParam)
 								{
@@ -5561,13 +5576,17 @@ ns1blankspace.show =
 					var bRefresh = false;
 					var sSelector = '#ns1blankspaceMain';
 					var sClassSelector = 'div.ns1blankspaceControlMain';
+					var oContext;
 
 					if (oParam)
 					{
 						if (oParam.refresh) {bRefresh = oParam.refresh}
 						if (oParam.selector) {sSelector = oParam.selector}
 						if (oParam.classSelector) {sClassSelector = oParam.classSelector}
+						if (oParam.context) {oContext = oParam.context}
 					}
+							
+					ns1blankspace.app.context(oContext);
 							
 					$(ns1blankspace.xhtml.container).hide();
 

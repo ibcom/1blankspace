@@ -2032,6 +2032,7 @@ ns1blankspace.attachments =
 					var iAttachmentType;
 					var oActions = {add: true};
 					var sHelpNotes;
+					var oContext = {in: false};
 					
 					if (oParam != undefined)
 					{
@@ -2043,10 +2044,13 @@ ns1blankspace.attachments =
 						if (oParam.xhtmlElementID != undefined ) {sXHTMLElementID = oParam.xhtmlElementID}
 						if (oParam.actions != undefined) {oActions = oParam.actions}
 						if (oParam.helpNotes != undefined) {sHelpNotes = oParam.helpNotes}
+						if (oParam.context != undefined) {oContext = oParam.context}
 					}
 					
 					if (oActions.add)
 					{
+						if (ns1blankspace.app.context) {ns1blankspace.app.context(oContext)};
+
 						var aHTML = [];
 									
 						aHTML.push('<table>' +
