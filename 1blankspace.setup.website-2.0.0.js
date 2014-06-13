@@ -2427,18 +2427,18 @@ ns1blankspace.setup.website =
 					{
 						var aHTML = [];
 						
-						aHTML.push('<table class="ns1blankspaceViewControlContainer">');
+						aHTML.push('<table class="ns1blankspaceViewControlContainer" style="width:225px;">');
 								
 						aHTML.push('<tr><td class="ns1blankspace">' +
 										'Enter verification code: ' + sVerifyCode +
 										'</td></tr>' +
 										'<tr>' +
 										'<td class="ns1blankspaceText">' +
-										'<input id="ns1blankspaceSetupWebsiteRemoveVerify" class="ns1blankspaceText">' +
+										'<input id="ns1blankspaceSetupWebsiteRemoveVerify" class="ns1blankspaceText" style="width:150px;">' +
 										'</td></tr>' +
 										'<tr class="ns1blankspaceText">' +
 										'<td class="ns1blankspaceText">' +
-										'<span id="ns1blankspaceSetupWebsiteRemoveVerifyRemove" class="ns1blankspaceAction">Delete</span>' +
+										'<span id="ns1blankspaceSetupWebsiteRemoveVerifyRemove" class="ns1blankspaceAction">Delete this website</span>' +
 										'</td></tr>');
 										
 						aHTML.push('</table>');					
@@ -2447,7 +2447,7 @@ ns1blankspace.setup.website =
 						
 						$('#ns1blankspaceSetupWebsiteRemoveVerifyRemove').button(
 						{
-							text: "Delete"
+							text: "Delete this website"
 						})
 						.click(function() 
 						{
