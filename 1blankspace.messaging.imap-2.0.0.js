@@ -1837,9 +1837,6 @@ ns1blankspace.messaging.imap =
 														aHTML.push('</table>');				
 													
 													aHTML.push('</td></tr>');
-													
-													//for (edId in tinyMCE.editors) 
-													//tinyMCE.editors[edId].destroy(true);
 
 													ns1blankspace.counter.editor++
 
@@ -2816,8 +2813,6 @@ ns1blankspace.messaging.imap =
 														if (oParam.setContext != undefined) {bSetContext = oParam.setContext}
 													}	
 													
-													
-															
 													ns1blankspace.messaging.imap.layout(oParam);
 													
 													ns1blankspace.objectContextData.sourcetypetext = 'ACTION';

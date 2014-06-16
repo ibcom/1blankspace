@@ -111,7 +111,7 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.messaging.imap',
-		source: '/jscripts/1blankspace.messaging.imap-2.0.0.js'
+		source: '/jscripts/1blankspace.messaging.imap-2.0.1.js'
 	},
 	{
 		nameSpace: '1blankspace.document',
@@ -2558,19 +2558,10 @@ ns1blankspace.actions =
 					.css('width', '15px')
 					.css('height', '17px');
 					
-					$('#' + sXHTMLContainerID + ' span.ns1blankspaceRowSelect').button({
-						text: false,
-						icons:
-						{
-							primary: "ui-icon-play"
-						}
-					})
-					.click(function()
+					$('#' + sXHTMLContainerID + ' td.ns1blankspaceRowSelect').click(function()
 					{
 						ns1blankspace.action.init({id: (this.id).split('-')[1]})
-					})
-					.css('width', '15px')
-					.css('height', '17px');
+					});
 				},	
 
 	row: 		function (oRow, oParam)
@@ -2581,7 +2572,7 @@ ns1blankspace.actions =
 
 					aHTML.push('<tr>');
 
-					aHTML.push('<td id="ns1blankspaceAction_subject-' + oRow.id + '" class="ns1blankspaceRow">' +
+					aHTML.push('<td id="ns1blankspaceAction_subject-' + oRow.id + '" class="ns1blankspaceRow ns1blankspaceRowSelect">' +
 									oRow.subject + '</td>');
 
 					aHTML.push('<td id="ns1blankspaceAction_date-' + oRow.id + '" class="ns1blankspaceRow">' +
@@ -2596,9 +2587,8 @@ ns1blankspace.actions =
 										oRow.description + '</td>');
 					}					
 					
-					aHTML.push('<td style="width:60px;text-align:right;" class="ns1blankspaceRow">' + 			
+					aHTML.push('<td style="width:30px;text-align:right;" class="ns1blankspaceRow">' + 			
 									'<span id="ns1blankspaceAction_options_remove-' + oRow.id + '" class="ns1blankspaceRowRemove"></span>' +
-									'<span id="ns1blankspaceAction_options_select-' + oRow.id + '" class="ns1blankspaceRowSelect"></span>' +	
 									'</td>');
 
 					aHTML.push('</tr>');
@@ -2608,35 +2598,67 @@ ns1blankspace.actions =
 
 	remove:		function (oParam, oResponse)
 				{
-					var sXHTMLElementID;
-
-					if (oParam != undefined)
+					var sXHTMLElementID = ns1blankspace.util.getParam(oParam, 'xhtmlElementID').value;
+					var bConfirmed = ns1blankspace.util.getParam(oParam, 'confirmed').value;
+	
+					if (!bConfirmed)
 					{
-						if (oParam.xhtmlElementID != undefined) {sXHTMLElementID = oParam.xhtmlElementID}
-					}
-					
-					var aXHTMLElementID = sXHTMLElementID.split('-');
-					var sID = aXHTMLElementID[1];
-					
-					if (oResponse === undefined)
-					{	
-						$.ajax(
+						if ($(ns1blankspace.xhtml.container).attr('data-initiator') == sXHTMLElementID)
 						{
-							type: 'POST',
-							url: ns1blankspace.util.endpointURI('ACTION_MANAGE'),
-							data: 'remove=1&id=' + sID,
-							dataType: 'json',
-							success: function(data){ns1blankspace.actions.remove(oParam, data)}
-						});
+							$(ns1blankspace.xhtml.container).slideUp(300);
+							$(ns1blankspace.xhtml.container).attr('data-initiator', '');
+						}
+						else
+						{	
+							$(ns1blankspace.xhtml.container).attr('data-initiator', sXHTMLElementID)
+
+							ns1blankspace.container.position({xhtmlElementID: sXHTMLElementID, leftOffset: -72, topOffset: -19});
+
+							var aHTML = [];
+											
+							aHTML.push('<div style="margin-right:4px;" id="ns1blankspaceMessageRemove" class="ns1blankspaceAction">Delete</div>');
+		
+							$(ns1blankspace.xhtml.container).html(aHTML.join(''));
+
+							$('#ns1blankspaceMessageRemove').button(
+							{
+								label: 'Delete'
+							})
+							.click(function()
+							{
+								ns1blankspace.app.options.hide();
+								oParam = ns1blankspace.util.setParam(oParam, 'confirmed', true);
+								ns1blankspace.actions.remove(oParam);
+							})
+							.css('width', '60px')
+							.css('height', '20px')
+							.css('font-size', '0.675em');
+						}
 					}	
 					else
-					{
-						if (oResponse.status === 'OK')
-						{
-							$('#' + sXHTMLElementID).parent().parent().fadeOut(500);
+					{	
+						var aXHTMLElementID = sXHTMLElementID.split('-');
+						var sID = aXHTMLElementID[1];
+						
+						if (oResponse === undefined)
+						{	
+							$.ajax(
+							{
+								type: 'POST',
+								url: ns1blankspace.util.endpointURI('ACTION_MANAGE'),
+								data: 'remove=1&id=' + sID,
+								dataType: 'json',
+								success: function(data){ns1blankspace.actions.remove(oParam, data)}
+							});
 						}	
-					}	
-					
+						else
+						{
+							if (oResponse.status === 'OK')
+							{
+								$('#' + sXHTMLElementID).parent().parent().fadeOut(500);
+							}	
+						}
+					}
 				},
 
 	edit:		function (oParam, oResponse)
