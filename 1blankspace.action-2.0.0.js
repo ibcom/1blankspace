@@ -394,7 +394,7 @@ ns1blankspace.action =
 								
 						if (iMessageActionID != undefined)
 						{
-							ns1blankspace.messaging.imap.init({autoShow: false});
+							ns1blankspace.messaging.imap.init({autoShow: false, action: 2});
 							ns1blankspace.messaging.imap.actions.search.send(
 							{
 								xhtmlElementID: '-' + iMessageActionID

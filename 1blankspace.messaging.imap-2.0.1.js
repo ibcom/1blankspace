@@ -2719,7 +2719,11 @@ ns1blankspace.messaging.imap =
 													{
 														if (bSetContext) {ns1blankspace.objectContextData = oResponse.data.rows[0]};
 														
-														if (oResponse.data.rows.length != 0)
+														if (oResponse.data.rows.length == 0)
+														{
+															$('#ns1blankspaceMainSummary').html('<table><tr><td class="ns1blankspaceNothing">Can\'t find the message.</td></tr></table>');
+														}
+														else
 														{
 															var oRow = oResponse.data.rows[0];
 															

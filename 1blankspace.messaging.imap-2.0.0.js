@@ -198,6 +198,7 @@ ns1blankspace.messaging.imap =
 					$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions);
 					
 					// 1 = Compose New
+					// 2 = Do nothing
 
 					var iAction = ns1blankspace.util.getParam(oParam, 'action').value;
 					var sNamespace = ns1blankspace.util.getParam(oParam, 'namespace').value;
@@ -344,7 +345,7 @@ ns1blankspace.messaging.imap =
 								}	
 							});
 
-							if (iAction != 1)
+							if (iAction != 1 && iAction != 2)
 							{	
 								ns1blankspace.show({selector: '#ns1blankspaceMainInbox'});
 
@@ -2706,6 +2707,8 @@ ns1blankspace.messaging.imap =
 													var aSearch = sXHTMLElementID.split('-');
 													var sElementId = aSearch[0];
 													var sSearchContext = aSearch[1];
+
+													oParam.action = sSearchContext;
 													
 													if (bSetContext) {ns1blankspace.show({selector: '#ns1blankspaceMainSummary'});};
 													
@@ -2718,14 +2721,18 @@ ns1blankspace.messaging.imap =
 														oSearch.addField('actionreference,duedatetime,text');
 														oSearch.rf = 'json';
 														oSearch.addFilter('id', 'EQUAL_TO', sSearchContext);
-														oSearch.addFilter('actiontype', 'EQUAL_TO', 5);				
+														//oSearch.addFilter('actiontype', 'EQUAL_TO', 5);				
 														oSearch.getResults(function(data) {ns1blankspace.messaging.imap.actions.search.send(oParam, data)});
 													}
 													else
 													{
 														if (bSetContext) {ns1blankspace.objectContextData = oResponse.data.rows[0]};
 														
-														if (oResponse.data.rows.length != 0)
+														if (oResponse.data.rows.length == 0)
+														{
+															$('#ns1blankspaceMainSummary').html('<table><tr><td class="ns1blankspaceNothing">Can\'t find the message.</td></tr></table>');
+														}
+														else
 														{
 															var oRow = oResponse.data.rows[0];
 															
@@ -2740,12 +2747,61 @@ ns1blankspace.messaging.imap =
 															oSearch.addField('type,email,name');
 															oSearch.rf = 'json';
 															oSearch.addFilter('action', 'EQUAL_TO', sSearchContext);		
-															oSearch.getResults(function(data) {ns1blankspace.messaging.imap.actions.search.process(oParam, data)});
+															oSearch.getResults(function(oResponse)
+															{
+																var aTo = [];
+																var aCC = [];
+																
+																$.each(oResponse.data.rows, function(index)
+																{	
+																	if (this.type == 1) {ns1blankspace.objectContextData.from = this.email; ns1blankspace.objectContextData.fromname = this.name;}
+																	if (this.type == 2) {aTo.push(this.name); aTo.push(this.email)}
+																	if (this.type == 3) {aCC.push(this.name); aCC.push(this.email)}
+																});
+																
+																ns1blankspace.objectContextData.to = aTo.join('|');
+																ns1blankspace.objectContextData.cc = aCC.join('|');
+
+																ns1blankspace.messaging.imap.actions.search.attachments(oParam)
+															});
 														}
 													}
 												},
+
+								attachments: 	function (oParam, oResponse)
+												{
+													if (oResponse == undefined)
+													{
+														var oSearch = new AdvancedSearch();
+														oSearch.method = 'CORE_ATTACHMENT_SEARCH';
+														oSearch.addField('filename,attachment,download');
+														oSearch.addFilter('object', 'EQUAL_TO', 17);
+														oSearch.addFilter('objectcontext', 'EQUAL_TO', oParam.action);
+														oSearch.getResults(function(data) {ns1blankspace.messaging.imap.actions.search.attachments(oParam, data)});
+													}
+													else
+													{
+														ns1blankspace.objectContextData.attachments = '';
+														ns1blankspace.objectContextData.hasattachments = 'N';
+
+														if (oResponse.data.rows.length > 0)
+														{
+															ns1blankspace.objectContextData.hasattachments = 'Y';
+
+															var aAttachments = [];
+															$.each(oResponse.data.rows, function (i, v)
+															{
+																aAttachments.push(v.filename + '|' + v.download);
+															});
+
+															ns1blankspace.objectContextData.attachments = aAttachments.join('#');
+														}
+
+														ns1blankspace.messaging.imap.actions.search.process(oParam)
+													}
+												},
 													
-								process:		function (oParam, oResponse)
+								process:		function (oParam)
 												{	
 													var aHTML = [];
 													
@@ -2760,19 +2816,7 @@ ns1blankspace.messaging.imap =
 														if (oParam.setContext != undefined) {bSetContext = oParam.setContext}
 													}	
 													
-													var aTo = [];
-													var aCC = [];
 													
-													$.each(oResponse.data.rows, function(index)
-													{	
-														if (this.type == 1) {ns1blankspace.objectContextData.from = this.email; ns1blankspace.objectContextData.fromname = this.name;}
-														if (this.type == 2) {aTo.push(this.name); aTo.push(this.email)}
-														if (this.type == 3) {aCC.push(this.name); aCC.push(this.email)}
-													});
-													
-													ns1blankspace.objectContextData.to = aTo.join('|');
-													ns1blankspace.objectContextData.cc = aCC.join('|');
-													ns1blankspace.objectContextData.attachments = '';
 															
 													ns1blankspace.messaging.imap.layout(oParam);
 													

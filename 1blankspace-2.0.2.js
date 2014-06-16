@@ -3601,7 +3601,7 @@ ns1blankspace.util =
 								}	
 							}
 
-							delete oParam[sParam];
+							if (bRemove) {delete oParam[sParam]};
 						}	
 					}	
 
