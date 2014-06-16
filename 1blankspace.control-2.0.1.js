@@ -2392,6 +2392,7 @@ ns1blankspace.actions =
 					var iContactPerson;
 					var sContactBusinessText;
 					var sContactPersonText;
+					var oContext = {in: false};
 					
 					if (oParam != undefined)
 					{
@@ -2407,6 +2408,7 @@ ns1blankspace.actions =
 						if (oParam.contactPerson != undefined) {iContactPerson = oParam.contactPerson}
 						if (oParam.contactBusinessText != undefined) {sContactBusinessText = oParam.contactBusinessText}
 						if (oParam.contactPersonText != undefined) {sContactPersonText = oParam.contactPersonText}
+						if (oParam.context != undefined) {oContext = oParam.context}
 					}	
 					else
 					{
@@ -2415,6 +2417,8 @@ ns1blankspace.actions =
 					
 					if (oActions.add)
 					{
+						if (ns1blankspace.app.context) {ns1blankspace.app.context(oContext)};
+
 						var aHTML = [];
 						var h = -1;	
 									

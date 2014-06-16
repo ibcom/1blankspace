@@ -386,16 +386,16 @@ ns1blankspace.action =
 						
 						var iMessageActionID;
 						
-						if (ns1blankspace.objectContextData.type == ns1blankspace.data.actionTypes.emailSent.id || ns1blankspace.objectContextData.type == ns1blankspace.data.actionTypes.emailReceived.id)
+						if (ns1blankspace.objectContextData.actiontype == ns1blankspace.data.actionTypes.emailSent.id || ns1blankspace.objectContextData.actiontype == ns1blankspace.data.actionTypes.emailReceived.id)
 								{iMessageActionID = ns1blankspace.objectContextData.id}
 						
-						if (ns1blankspace.objectContextData.type == ns1blankspace.data.actionTypes.fileNote.id && ns1blankspace.objectContextData.object == 17)
+						if (ns1blankspace.objectContextData.actiontype == ns1blankspace.data.actionTypes.fileNote.id && ns1blankspace.objectContextData.object == 17)
 								{iMessageActionID = ns1blankspace.objectContextData.objectcontext}
 								
 						if (iMessageActionID != undefined)
 						{
-							ns1blankspace.messaging.imap.nit({autoShow: false});
-							ns1blankspace.messaging.imap.search.send(
+							ns1blankspace.messaging.imap.init({autoShow: false});
+							ns1blankspace.messaging.imap.actions.search.send(
 							{
 								xhtmlElementID: '-' + iMessageActionID
 							});	

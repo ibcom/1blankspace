@@ -5482,7 +5482,8 @@ ns1blankspace.show =
 						if (oParam.classSelector) {sClassSelector = oParam.classSelector}
 						if (oParam.context) {oContext = oParam.context}
 					}
-							
+						
+					if (!oContext && bRefresh) {oContext = {in: false}} 		
 					ns1blankspace.app.context(oContext);
 							
 					$(ns1blankspace.xhtml.container).hide();
@@ -5499,7 +5500,7 @@ ns1blankspace.show =
 						$(sSelector).html(ns1blankspace.xhtml.loading);
 					}	
 				}
-				
+
 ns1blankspace.extend =
 {
 	init: 		function (oParam, oResponse)

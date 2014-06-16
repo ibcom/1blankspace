@@ -3557,6 +3557,7 @@ ns1blankspace.util =
 					var sDefault;
 					var sSplit;
 					var iIndex;
+					var bRemove = ns1blankspace.util.param(oOption, 'remove').value;
 
 					var oReturn = {exists: false};
 
@@ -3599,6 +3600,8 @@ ns1blankspace.util =
 									}
 								}	
 							}
+
+							delete oParam[sParam];
 						}	
 					}	
 
@@ -4002,10 +4005,8 @@ ns1blankspace.util =
 									}	
 								},
 								
-					return: 	function(oParam)
+					return: 	function(sReturn, oParam)
 								{
-									var bReturn = true;
-
 									if (ns1blankspace.util.whenCan.queue.length > 0)
 									{	
 										var oLater;
@@ -4031,10 +4032,11 @@ ns1blankspace.util =
 
 										if (oLater)
 										{	
-											bReturn = false;
 											if (!oParam) {oParam = {}}
 											oParam = $.extend(true, oParam, oLater.param)
-											if (oLater.set) {oParam[oLater.set] = oParam.data};
+											if (oLater.set) {oParam[oLater.set] = sReturn};
+
+											sReturn = undefined;
 											
 											var fMethod = oLater.method;
 											if (fMethod)
@@ -4051,8 +4053,7 @@ ns1blankspace.util =
 										}	
 									}
 									
-									return bReturn;
-							
+									return sReturn;
 								}			
 				},			
 
@@ -5586,6 +5587,7 @@ ns1blankspace.show =
 						if (oParam.context) {oContext = oParam.context}
 					}
 							
+					if (!oContext && bRefresh) {oContext = {in: false}} 		
 					ns1blankspace.app.context(oContext);
 							
 					$(ns1blankspace.xhtml.container).hide();

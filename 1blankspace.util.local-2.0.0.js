@@ -13,7 +13,7 @@ if (ns1blankspace.util === undefined) {ns1blankspace.util = {}}
 ns1blankspace.util.local =
 {
 	cache: 		{
-					data: 		{cryptoKeyReference: 'local-cache-key'},
+					data: 		{cryptoKeyReference: '1blankspace-local-cache-key'},
 
 					exists: 	function (oParam)
 								{
@@ -66,8 +66,22 @@ ns1blankspace.util.local =
 											else
 											{	
 												oParam = ns1blankspace.util.setParam(oParam, 'cryptoKeyReference', ns1blankspace.util.local.cache.data.cryptoKeyReference);
-												oParam = ns1blankspace.util.setParam(oParam, 'onCompleteWhenCan', ns1blankspace.util.local.cache.save);
-												ns1blankspace.util.protect.encrypt(oParam);
+
+												ns1blankspace.util.whenCan.execute(
+												{
+													now:
+													{
+														method: ns1blankspace.util.protect.encrypt,
+														param: oParam
+													},
+													later:
+													{
+														method: ns1blankspace.util.local.cache.save,
+														set: 'protectedData'
+													}	
+												});
+												//oParam = ns1blankspace.util.setParam(oParam, 'onCompleteWhenCan', ns1blankspace.util.local.cache.save);
+												//ns1blankspace.util.protect.encrypt(oParam);
 											}	
 										}
 										else
@@ -98,7 +112,7 @@ ns1blankspace.util.local =
 												oParam = ns1blankspace.util.setParam(oParam, 'cryptoKeyReference', ns1blankspace.util.local.cache.data.cryptoKeyReference);
 												oParam = ns1blankspace.util.setParam(oParam, 'cryptoKey', ns1blankspace.util.protect.key.data[ns1blankspace.util.local.cache.data.cryptoKeyReference]);
 												oParam = ns1blankspace.util.setParam(oParam, 'protectedData', oData);
-												oParam = ns1blankspace.util.setParam(oParam, 'onCompleteWhenCan', ns1blankspace.util.local.cache.search);
+												//oParam = ns1blankspace.util.setParam(oParam, 'onCompleteWhenCan', ns1blankspace.util.local.cache.search);
 
 												ns1blankspace.util.whenCan.execute(
 												{
@@ -127,8 +141,7 @@ ns1blankspace.util.local =
 												oData = JSON.parse(oStorage.getItem(sKey));
 											}
 
-											oParam.data = oData;
-											ns1blankspace.util.whenCan.return(oParam);
+											ns1blankspace.util.whenCan.return(oData, oParam);
 										}	
 									}	
 								},

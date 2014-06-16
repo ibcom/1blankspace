@@ -84,7 +84,8 @@ ns1blankspace.util.protect =
 									{	
 										oParam = ns1blankspace.util.setParam(oParam, 'cryptoKey', ns1blankspace.util.protect.key.data[sCryptoKeyReference]);
 										ns1blankspace.debug.message(oParam);
-										ns1blankspace.util.onComplete(oParam);
+										//ns1blankspace.util.onComplete(oParam);
+										return ns1blankspace.util.whenCan.return(ns1blankspace.connect.protect.key.value, oParam);
 									}
 									else
 									{	
@@ -124,9 +125,11 @@ ns1blankspace.util.protect =
 											}
 
 											ns1blankspace.util.protect.key.data[sCryptoKeyReference] = sCryptoKey;
-											oParam = ns1blankspace.util.setParam(oParam, 'cryptoKey', sCryptoKey);
-											ns1blankspace.debug.message(oParam);
-											ns1blankspace.util.onComplete(oParam);
+											//oParam = ns1blankspace.util.setParam(oParam, 'cryptoKey', sCryptoKey);
+											ns1blankspace.debug.message(sCryptoKeyReference + ':' + sCryptoKey);
+
+											//ns1blankspace.util.onComplete(oParam);
+											return ns1blankspace.util.whenCan.return(sCryptoKey, oParam);
 										}
 									}	
 								}					
@@ -136,19 +139,39 @@ ns1blankspace.util.protect =
 				{
 					if (ns1blankspace.util.getParam(oParam, 'cryptoKey').exists)
 					{
-						var sData = ns1blankspace.util.getParam(oParam, 'data').value;
-						var sCryptoKey = ns1blankspace.util.getParam(oParam, 'cryptoKey').value;
+						var sData = ns1blankspace.util.getParam(oParam, 'data', {remove: true}).value;
+						var sCryptoKey = ns1blankspace.util.getParam(oParam, 'cryptoKey', {remove: true}).value;
 						var sProtectedData = CryptoJS.AES.encrypt(sData, sCryptoKey).toString();
 
 						oParam = ns1blankspace.util.setParam(oParam, 'protectedData', sProtectedData);
 						ns1blankspace.debug.message('ENCRYPTING');
 						ns1blankspace.debug.message(oParam);
-						ns1blankspace.util.onComplete(oParam);
+						if (ns1blankspace.util.getParam(oParam, 'onComplete').exists)
+						{	
+							ns1blankspace.util.onComplete(oParam)
+						}
+						else
+						{
+							return ns1blankspace.util.whenCan.return(ns1blankspace.connect.protect.key.value, oParam);
+						}	
 					}
 					else
 					{	
-						oParam.onComplete = ns1blankspace.util.protect.encrypt;
-						ns1blankspace.util.protect.key.search(oParam)
+						ns1blankspace.util.whenCan.execute(
+						{
+							now:
+							{
+								method: ns1blankspace.util.protect.key.search,
+								param: oParam
+							},
+							later:
+							{
+								method: ns1blankspace.util.protect.encrypt,
+								set: 'cryptoKey'
+							}	
+						});
+						//oParam.onComplete = ns1blankspace.util.protect.encrypt;
+						//ns1blankspace.util.protect.key.search(oParam)
 					}	
 				},
 
@@ -156,8 +179,8 @@ ns1blankspace.util.protect =
 				{
 					if (ns1blankspace.util.getParam(oParam, 'cryptoKey').value)
 					{
-						var sProtectedData = ns1blankspace.util.getParam(oParam, 'protectedData').value;
-						var sCryptoKey = ns1blankspace.util.getParam(oParam, 'cryptoKey').value;
+						var sProtectedData = ns1blankspace.util.getParam(oParam, 'protectedData', {remove: true}).value;
+						var sCryptoKey = ns1blankspace.util.getParam(oParam, 'cryptoKey', {remove: true}).value;
 						var sData = CryptoJS.AES.decrypt(sProtectedData, sCryptoKey).toString(CryptoJS.enc.Utf8);
 
 						oParam = ns1blankspace.util.setParam(oParam, 'data', sData)
@@ -169,13 +192,26 @@ ns1blankspace.util.protect =
 						}
 						else
 						{
-							return sData;
+							return ns1blankspace.util.whenCan.return(ns1blankspace.connect.protect.key.value, oParam);
 						}	
 					}
 					else
 					{	
-						oParam.onComplete = ns1blankspace.util.protect.decrypt;
-						ns1blankspace.util.protect.key.search(oParam)
+						ns1blankspace.util.whenCan.execute(
+						{
+							now:
+							{
+								method: ns1blankspace.util.protect.key.search,
+								param: oParam
+							},
+							later:
+							{
+								method: ns1blankspace.util.protect.decrypt,
+								set: 'cryptoKey'
+							}	
+						});
+						//oParam.onComplete = ns1blankspace.util.protect.decrypt;
+						//ns1blankspace.util.protect.key.search(oParam)
 					}	
 				}								
 }	
