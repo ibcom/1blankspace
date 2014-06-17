@@ -2197,8 +2197,15 @@ ns1blankspace.attachments =
 									 primary: "ui-icon-close"
 						}
 					})
-					.click(function() {
-						ns1blankspace.attachments.remove(this.id)
+					.click(function()
+					{
+						ns1blankspace.remove(
+						{
+							xhtmlElementID: this.id,
+							method: 'CORE_ATTACHMENT_MANAGE',
+							parentLevel: 2
+						});
+						//ns1blankspace.attachments.remove(this.id)
 					})
 					.css('width', '15px')
 					.css('height', '20px')	
@@ -2544,7 +2551,8 @@ ns1blankspace.actions =
 				{
 					var sXHTMLContainerID = ns1blankspace.util.getParam(oParam, 'xhtmlContainerID', {"default": 'ns1blankspaceRenderPage_Action-0'}).value;
 
-					$('#' + sXHTMLContainerID + ' .ns1blankspaceRowRemove').button({
+					$('#' + sXHTMLContainerID + ' .ns1blankspaceRowRemove').button(
+					{
 						text: false,
 						icons:
 						{
@@ -2553,7 +2561,14 @@ ns1blankspace.actions =
 					})
 					.click(function()
 					{
-						ns1blankspace.actions.remove({xhtmlElementID: this.id});
+						ns1blankspace.remove(
+						{
+							xhtmlElementID: this.id,
+							method: 'ACTION_MANAGE',
+							parentLevel: 2
+						});
+
+						//ns1blankspace.actions.remove({xhtmlElementID: this.id});
 					})
 					.css('width', '15px')
 					.css('height', '17px');
