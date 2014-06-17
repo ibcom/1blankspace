@@ -1061,7 +1061,6 @@ ns1blankspace.setup.website =
 													method: 'SETUP_SITE_DOCUMENT_MANAGE',
 													parentLevel: 2
 												});
-												//ns1blankspace.setup.website.pages.remove({xhtmlElementID: this.id});
 											})
 											.css('width', '15px')
 											.css('height', '17px');
@@ -1403,42 +1402,6 @@ ns1blankspace.setup.website =
 									}
 
 									$('#ns1blankspaceWebsitePageNetworkGroupsCaption').html(sRetrictionCaption)		
-								},		
-
-					remove:		function (oParam, oResponse)
-								{
-									var sXHTMLElementID;
-
-									if (oParam != undefined)
-									{
-										if (oParam.xhtmlElementID != undefined) {sXHTMLElementID = oParam.xhtmlElementID}
-									}
-									
-									var aXHTMLElementID = sXHTMLElementID.split('-');
-									var sID = aXHTMLElementID[1];
-									
-									if (oResponse == undefined)
-									{	
-										if (confirm('Continue with removing page from website?'))
-										{	
-											$.ajax(
-											{
-												type: 'POST',
-												url: ns1blankspace.util.endpointURI('SETUP_SITE_DOCUMENT_MANAGE'),
-												data: 'remove=1&id=' + sID,
-												dataType: 'json',
-												success: function(data){ns1blankspace.setup.website.pages.remove(oParam, data)}
-											});
-										}	
-									}	
-									else
-									{
-										if (oResponse.status == 'OK')
-										{
-											$('#' + sXHTMLElementID).parent().parent().fadeOut(500);
-										}	
-									}	
-									
 								}
 				},
 				
@@ -1682,8 +1645,16 @@ ns1blankspace.setup.website =
 														primary: "ui-icon-close"
 													}
 												})
-												.click(function() {
-													ns1blankspace.setup.website.urls.remove({xhtmlElementID: this.id});
+												.click(function()
+												{
+													ns1blankspace.remove(
+													{
+														xhtmlElementID: this.id,
+														method: 'SETUP_SITE_URL_MANAGE',
+														parentLevel: 2
+													});
+
+													//ns1blankspace.setup.website.urls.remove({xhtmlElementID: this.id});
 												})
 												.css('width', '15px')
 												.css('height', '17px')
@@ -1979,7 +1950,14 @@ ns1blankspace.setup.website =
 											})
 											.click(function()
 											{
-												ns1blankspace.setup.website.httpHeaders.remove({xhtmlElementID: this.id});
+												ns1blankspace.remove(
+												{
+													xhtmlElementID: this.id,
+													method: 'SETUP_SITE_HTTP_HEADER_MANAGE',
+													parentLevel: 2
+												});
+
+												//ns1blankspace.setup.website.httpHeaders.remove({xhtmlElementID: this.id});
 											})
 											.css('width', '15px')
 											.css('height', '17px');
