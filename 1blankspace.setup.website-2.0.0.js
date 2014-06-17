@@ -1053,8 +1053,15 @@ ns1blankspace.setup.website =
 													primary: "ui-icon-close"
 												}
 											})
-											.click(function() {
-												ns1blankspace.setup.website.pages.remove({xhtmlElementID: this.id});
+											.click(function()
+											{
+												ns1blankspace.remove(
+												{
+													xhtmlElementID: this.id,
+													method: 'SETUP_SITE_DOCUMENT_MANAGE',
+													parentLevel: 2
+												});
+												//ns1blankspace.setup.website.pages.remove({xhtmlElementID: this.id});
 											})
 											.css('width', '15px')
 											.css('height', '17px');

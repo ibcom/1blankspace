@@ -5621,7 +5621,93 @@ ns1blankspace.show =
 						$(sSelector).attr('data-loading', '1');
 						$(sSelector).html(ns1blankspace.xhtml.loading);
 					}	
-				}			
+				}
+
+ns1blankspace.remove =
+				function (oParam, oResponse)
+				{
+					var sXHTMLElementID = ns1blankspace.util.getParam(oParam, 'xhtmlElementID').value;
+					var sID = ns1blankspace.util.getParam(oParam, 'id', {"default": ns1blankspace.util.getParam(oParam, 'xhtmlElementID', {index: 1}).value}).value;
+					var bConfirmed = ns1blankspace.util.getParam(oParam, 'confirmed').value;
+					var iLeftOffset = ns1blankspace.util.getParam(oParam, 'leftOffset', {"default": -72}).value;
+					var iTopOffset = ns1blankspace.util.getParam(oParam, 'topOffset', {"default": -19}).value;
+					var sWidth = ns1blankspace.util.getParam(oParam, 'width', {"default": '60px'}).value;
+					var sHeight = ns1blankspace.util.getParam(oParam, 'height', {"default": '100%'}).value;
+					var sFontSize = ns1blankspace.util.getParam(oParam, 'fontSize', {"default": '0.675em'}).value;
+					var iParentLevel = ns1blankspace.util.getParam(oParam, 'parentLevel', {"default": 0}).value;
+					var sMethod = ns1blankspace.util.getParam(oParam, 'method').value;
+	
+					if (!bConfirmed)
+					{
+						if ($(ns1blankspace.xhtml.container).attr('data-initiator') == sXHTMLElementID)
+						{
+							$(ns1blankspace.xhtml.container).slideUp(300);
+							$(ns1blankspace.xhtml.container).attr('data-initiator', '');
+						}
+						else
+						{	
+							$(ns1blankspace.xhtml.container).attr('data-initiator', sXHTMLElementID)
+
+							ns1blankspace.container.position({xhtmlElementID: sXHTMLElementID, leftOffset: -66, topOffset: -21});
+
+							var aHTML = [];
+											
+							aHTML.push('<div style="margin-right:4px;" id="ns1blankspaceMessageRemove" class="ns1blankspaceAction">Delete</div>');
+		
+							$(ns1blankspace.xhtml.container).html(aHTML.join(''));
+
+							$('#ns1blankspaceMessageRemove').button(
+							{
+								label: 'Delete'
+							})
+							.click(function()
+							{
+								ns1blankspace.app.options.hide();
+								oParam = ns1blankspace.util.setParam(oParam, 'confirmed', true);
+								ns1blankspace.remove(oParam);
+							})
+							.css('width', sWidth)
+							.css('height', sHeight)
+							.css('font-size', sFontSize)
+							.css('margin-top', '0px');
+						}
+					}	
+					else
+					{	
+						if (sMethod)
+						{	
+							if (oResponse === undefined)
+							{	
+								$.ajax(
+								{
+									type: 'POST',
+									url: ns1blankspace.util.endpointURI(sMethod),
+									data: 'remove=1&id=' + sID,
+									dataType: 'json',
+									success: function(data){ns1blankspace.remove(oParam, data)}
+								});
+							}	
+							else
+							{
+								if (oResponse.status === 'OK')
+								{
+									var oXHTMLElementID = $('#' + sXHTMLElementID);
+									
+									for ( var i = 0; i < iParentLevel; i++ ) 
+									{
+										oXHTMLElementID = oXHTMLElementID.parent();
+									}
+									
+									oXHTMLElementID.fadeOut(500);
+								}
+								else
+								{
+									ns1blankspace.status.error('Could not be deleted');
+								}
+							}
+						}	
+					}
+				}						
 
 ns1blankspace.extend =
 {
