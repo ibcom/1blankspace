@@ -5634,7 +5634,7 @@ ns1blankspace.remove =
 					var sWidth = ns1blankspace.util.getParam(oParam, 'width', {"default": '60px'}).value;
 					var sHeight = ns1blankspace.util.getParam(oParam, 'height', {"default": '100%'}).value;
 					var sFontSize = ns1blankspace.util.getParam(oParam, 'fontSize', {"default": '0.675em'}).value;
-					var iParentLevel = ns1blankspace.util.getParam(oParam, 'parentLevel', {"default": 0}).value;
+					var iParentLevel = ns1blankspace.util.getParam(oParam, 'parentLevel').value;
 					var sMethod = ns1blankspace.util.getParam(oParam, 'method').value;
 					var fIfNone = ns1blankspace.util.getParam(oParam, 'ifNone').value;
 					var sIfNoneMessage = ns1blankspace.util.getParam(oParam, 'ifNoneMessage', {"default": 'Nothing to show.'}).value;
@@ -5695,9 +5695,16 @@ ns1blankspace.remove =
 								{
 									var oXHTMLElement = $('#' + sXHTMLElementID);
 									
-									for ( var i = 0; i < iParentLevel; i++ ) 
+									if (iParentLevel)
 									{
-										oXHTMLElement = oXHTMLElement.parent();
+										for ( var i = 0; i < iParentLevel; i++ ) 
+										{
+											oXHTMLElement = oXHTMLElement.parent();
+										}
+									}
+									else
+									{
+										oXHTMLElement = oXHTMLElement.closest('tr');
 									}
 									
 									oXHTMLElement.fadeOut(500);

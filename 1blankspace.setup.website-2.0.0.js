@@ -1057,7 +1057,6 @@ ns1blankspace.setup.website =
 												{
 													xhtmlElementID: this.id,
 													method: 'SETUP_SITE_DOCUMENT_MANAGE',
-													parentLevel: 2,
 													ifNoneMessage: 'No pages.'
 												});
 											})
