@@ -404,7 +404,7 @@ ns1blankspace.setup.website =
 
 						$('#ns1blankspaceControlContext').html(
 							ns1blankspace.objectContextData.title +
-							'<br /><span id="ns1blankspaceControlContext_id" class="ns1blankspaceSub" style="padding-top:4px;">' + ns1blankspace.objectContextData.id + '</span>');
+							'<br /><span id="ns1blankspaceControlContext_id" class="ns1blankspaceSub" style="padding-top:6px;">' + ns1blankspace.objectContextData.id + '</span>');
 
 						$('#ns1blankspaceViewControlAction').button({disabled: false});
 						$('#ns1blankspaceViewControlActionOptions').button({disabled: false});
@@ -929,13 +929,17 @@ ns1blankspace.setup.website =
 										
 									if (oResponse == undefined)
 									{
-										$.ajax(
+										var oSearch = new AdvancedSearch();
+										oSearch.method = 'SETUP_SITE_DOCUMENT_SEARCH';
+										
+										oSearch.addField('documenttitle,documentpublic,locationtext,documenturl,document');
+
+										oSearch.addFilter('site', 'EQUAL_TO', iObjectContext)
+										oSearch.sort('documenttitle', 'asc');
+										
+										oSearch.getResults(function(data)
 										{
-											type: 'GET',
-											url: ns1blankspace.util.endpointURI('SETUP_SITE_DOCUMENT_SEARCH'),
-											data: 'rows=100&site=' + iObjectContext,
-											dataType: 'json',
-											success: function(data) {ns1blankspace.setup.website.pages.show(oParam, data)}
+											ns1blankspace.setup.website.pages.show(oParam, data)
 										});
 									}
 									else
@@ -1126,9 +1130,9 @@ ns1blankspace.setup.website =
 										aHTML.push('<tr class="ns1blankspaceText">');
 														
 										aHTML.push('<td class="ns1blankspaceRadio" style="width:125px;">' +
-														'<input type="radio" id="radioType9" name="radioType" value="9"/>Page' +
-														'<br /><input type="radio" id="radioType2" name="radioType" value="2"/>Home' +
-														'<br /><input type="radio" id="radioType3" name="radioType" value="3"/>Header' +
+														'<input type="radio" id="radioLocation9" name="radioLocation" value="9"/>Page' +
+														'<br /><input type="radio" id="radioLocation2" name="radioLocation" value="2"/>Home' +
+														'<br /><input type="radio" id="radioLocation3" name="radioLocation" value="3"/>Header' +
 														'</td>');
 														
 										aHTML.push('<td class="ns1blankspaceRadio" style="width:125px;">' +
@@ -1195,12 +1199,14 @@ ns1blankspace.setup.website =
 										})
 										.click(function() 
 										{
+											ns1blankspace.status.working();
+
 											var sData = 'site=' + ns1blankspace.util.fs(ns1blankspace.objectContext);
 											sData += '&documenttitle=' + ns1blankspace.util.fs($('#ns1blankspaceSetupWebsitePageTitle').val());
 											sData += '&documenturl=' + ns1blankspace.util.fs($('#ns1blankspaceSetupWebsitePageURL').val());
 											sData += '&documenttype=' + ns1blankspace.util.fs($('input[name="radioDocumentType"]:checked').val());
 											sData += '&documentpublic=' + ns1blankspace.util.fs($('input[name="radioPublic"]:checked').val());
-											sData += '&location=' + ns1blankspace.util.fs($('input[name="radioType"]:checked').val());
+											sData += '&location=' + ns1blankspace.util.fs($('input[name="radioLocation"]:checked').val());
 											sData += '&documentignorewebsitelayout=' + ($('#ns1blankspaceWebsitePageIgnoreLayout:checked').length==0?'N':'Y');
 											sData += '&documentignorewebsiteheadertags=' + ($('#ns1blankspaceWebsitePageIgnoreHead:checked').length==0?'N':'Y');
 											
@@ -1215,15 +1221,18 @@ ns1blankspace.setup.website =
 											
 											sData += '&id=' + ns1blankspace.util.fs(sID);
 											
+											//ns1blankspace.util.endpointURI('SETUP_SITE_DOCUMENT_MANAGE')
+
 											$.ajax(
 											{
 												type: 'POST',
-												url: ns1blankspace.util.endpointURI('SETUP_SITE_DOCUMENT_MANAGE'),
+												url: '/rpc/setup/?method=SETUP_SITE_DOCUMENT_MANAGE',
 												data: sData,
 												dataType: 'json',
 												success: function()
 												{
 													ns1blankspace.setup.website.pages.show();
+													ns1blankspace.status.clear();
 												}
 											});
 										})
@@ -1307,19 +1316,21 @@ ns1blankspace.setup.website =
 										
 										if (sID != undefined)
 										{
-											$.ajax(
+											var oSearch = new AdvancedSearch();
+											oSearch.method = 'SETUP_SITE_DOCUMENT_SEARCH';
+											oSearch.addField('documentcontent,documentignorewebsiteheadertags,documentignorewebsitelayout,documentpublic,' +
+																'location,locationtext,documenturl,document,documenttitle,documenttype');
+											oSearch.addFilter('id', 'EQUAL_TO', sID)
+						
+											oSearch.getResults(function(data)
 											{
-												type: 'POST',
-												url: ns1blankspace.util.endpointURI('SETUP_SITE_DOCUMENT_SEARCH'),
-												data: 'includecontent=1&id=' + sID,
-												dataType: 'json',
-												success: function(data) {ns1blankspace.setup.website.pages.edit(oParam, data)}
+												ns1blankspace.setup.website.pages.edit(oParam, data)
 											});
 										}
 										else
 										{
 											$('[name="radioDocumentType"][value="5"]').attr('checked', true);
-											$('[name="radioType"][value="9"]').attr('checked', true);
+											$('[name="radioLocation"][value="9"]').attr('checked', true);
 											tinyMCE.execCommand('mceAddControl', false, 'ns1blankspaceEditText' + ns1blankspace.counter.editor);
 											$('[name="radioPublic"][value="Y"]').attr('checked', true);	
 										}
@@ -1339,7 +1350,7 @@ ns1blankspace.setup.website =
 												tinyMCE.execCommand('mceAddControl', false, 'ns1blankspaceEditText' + ns1blankspace.counter.editor);
 											}
 											
-											$('[name="radioType"][value="' + oObjectContext.location + '"]').attr('checked', true);
+											$('[name="radioLocation"][value="' + oObjectContext.location + '"]').attr('checked', true);
 											$('[name="radioDocumentType"][value="' + oObjectContext.documenttype + '"]').attr('checked', true);
 											$('[name="radioPublic"][value="' + oObjectContext.documentpublic + '"]').attr('checked', true);
 
@@ -1350,7 +1361,7 @@ ns1blankspace.setup.website =
 										}
 										else
 										{
-											$('[name="radioType"][value="9"]').attr('checked', true);
+											$('[name="radioLocation"][value="9"]').attr('checked', true);
 											$('[name="radioDocumentType"][value="5"]').attr('checked', true);
 											tinyMCE.execCommand('mceAddControl', false, 'inputInterfaceMainEditText' + ns1blankspace.counter.editor);
 											$('[name="radioPublic"][value="Y"]').attr('checked', true);					
