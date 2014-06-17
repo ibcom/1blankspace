@@ -2188,7 +2188,7 @@ ns1blankspace.attachments =
 					return aHTML.join('');
 				},
 
-	bind:		function ()
+	bind:		function (oParam)
 				{
 					$('span.ns1blankspaceAttachmentsRemove:not(".ui-button")').button(
 					{
@@ -2203,30 +2203,12 @@ ns1blankspace.attachments =
 						{
 							xhtmlElementID: this.id,
 							method: 'CORE_ATTACHMENT_MANAGE',
-							parentLevel: 2
+							parentLevel: 2,
+							ifNoneMessage: 'No attachments.'
 						});
-						//ns1blankspace.attachments.remove(this.id)
 					})
 					.css('width', '15px')
 					.css('height', '20px')	
-				},
-
-	remove: 	function (sXHTMLElementID)
-				{
-					var aSearch = sXHTMLElementID.split('-');
-					var sElementId = aSearch[0];
-					var sSearchContext = aSearch[1];
-					
-					var sData = 'id=' + ns1blankspace.util.fs(sSearchContext) + '&remove=1';
-								
-					$.ajax(
-					{
-						type: 'POST',
-						url: ns1blankspace.util.endpointURI('CORE_ATTACHMENT_MANAGE'),
-						data: sData,
-						dataType: 'json',
-						success: function(data){$('#' + sXHTMLElementID).parent().parent().fadeOut(500)}
-					});
 				},
 
 	add: 		function (oParam)
@@ -2565,10 +2547,9 @@ ns1blankspace.actions =
 						{
 							xhtmlElementID: this.id,
 							method: 'ACTION_MANAGE',
-							parentLevel: 2
+							parentLevel: 2,
+							ifNoneMessage: 'No actions.'
 						});
-
-						//ns1blankspace.actions.remove({xhtmlElementID: this.id});
 					})
 					.css('width', '15px')
 					.css('height', '17px');
@@ -2609,71 +2590,6 @@ ns1blankspace.actions =
 					aHTML.push('</tr>');
 
 					return aHTML.join('');
-				},
-
-	remove:		function (oParam, oResponse)
-				{
-					var sXHTMLElementID = ns1blankspace.util.getParam(oParam, 'xhtmlElementID').value;
-					var bConfirmed = ns1blankspace.util.getParam(oParam, 'confirmed').value;
-	
-					if (!bConfirmed)
-					{
-						if ($(ns1blankspace.xhtml.container).attr('data-initiator') == sXHTMLElementID)
-						{
-							$(ns1blankspace.xhtml.container).slideUp(300);
-							$(ns1blankspace.xhtml.container).attr('data-initiator', '');
-						}
-						else
-						{	
-							$(ns1blankspace.xhtml.container).attr('data-initiator', sXHTMLElementID)
-
-							ns1blankspace.container.position({xhtmlElementID: sXHTMLElementID, leftOffset: -72, topOffset: -19});
-
-							var aHTML = [];
-											
-							aHTML.push('<div style="margin-right:4px;" id="ns1blankspaceMessageRemove" class="ns1blankspaceAction">Delete</div>');
-		
-							$(ns1blankspace.xhtml.container).html(aHTML.join(''));
-
-							$('#ns1blankspaceMessageRemove').button(
-							{
-								label: 'Delete'
-							})
-							.click(function()
-							{
-								ns1blankspace.app.options.hide();
-								oParam = ns1blankspace.util.setParam(oParam, 'confirmed', true);
-								ns1blankspace.actions.remove(oParam);
-							})
-							.css('width', '60px')
-							.css('height', '20px')
-							.css('font-size', '0.675em');
-						}
-					}	
-					else
-					{	
-						var aXHTMLElementID = sXHTMLElementID.split('-');
-						var sID = aXHTMLElementID[1];
-						
-						if (oResponse === undefined)
-						{	
-							$.ajax(
-							{
-								type: 'POST',
-								url: ns1blankspace.util.endpointURI('ACTION_MANAGE'),
-								data: 'remove=1&id=' + sID,
-								dataType: 'json',
-								success: function(data){ns1blankspace.actions.remove(oParam, data)}
-							});
-						}	
-						else
-						{
-							if (oResponse.status === 'OK')
-							{
-								$('#' + sXHTMLElementID).parent().parent().fadeOut(500);
-							}	
-						}
-					}
 				},
 
 	edit:		function (oParam, oResponse)

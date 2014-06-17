@@ -1057,7 +1057,8 @@ ns1blankspace.setup.website =
 												{
 													xhtmlElementID: this.id,
 													method: 'SETUP_SITE_DOCUMENT_MANAGE',
-													parentLevel: 2
+													parentLevel: 2,
+													ifNoneMessage: 'No pages.'
 												});
 											})
 											.css('width', '15px')
@@ -1633,7 +1634,8 @@ ns1blankspace.setup.website =
 													{
 														xhtmlElementID: this.id,
 														method: 'SETUP_SITE_URL_MANAGE',
-														parentLevel: 2
+														parentLevel: 2,
+														ifNoneMessage: 'No URLs.'
 													});
 												})
 												.css('width', '15px')
@@ -1895,7 +1897,8 @@ ns1blankspace.setup.website =
 												{
 													xhtmlElementID: this.id,
 													method: 'SETUP_SITE_HTTP_HEADER_MANAGE',
-													parentLevel: 2
+													parentLevel: 2,
+													ifNoneMessage: 'No HTTP Headers.'
 												});
 											})
 											.css('width', '15px')

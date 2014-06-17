@@ -5636,6 +5636,8 @@ ns1blankspace.remove =
 					var sFontSize = ns1blankspace.util.getParam(oParam, 'fontSize', {"default": '0.675em'}).value;
 					var iParentLevel = ns1blankspace.util.getParam(oParam, 'parentLevel', {"default": 0}).value;
 					var sMethod = ns1blankspace.util.getParam(oParam, 'method').value;
+					var fIfNone = ns1blankspace.util.getParam(oParam, 'ifNone').value;
+					var sIfNoneMessage = ns1blankspace.util.getParam(oParam, 'ifNoneMessage', {"default": 'Nothing to show.'}).value;
 	
 					if (!bConfirmed)
 					{
@@ -5691,14 +5693,26 @@ ns1blankspace.remove =
 							{
 								if (oResponse.status === 'OK')
 								{
-									var oXHTMLElementID = $('#' + sXHTMLElementID);
+									var oXHTMLElement = $('#' + sXHTMLElementID);
 									
 									for ( var i = 0; i < iParentLevel; i++ ) 
 									{
-										oXHTMLElementID = oXHTMLElementID.parent();
+										oXHTMLElement = oXHTMLElement.parent();
 									}
 									
-									oXHTMLElementID.fadeOut(500);
+									oXHTMLElement.fadeOut(500);
+
+									if (oXHTMLElement.siblings().length == 1)
+									{	
+										if (fIfNone)
+										{
+											fIfNone()
+										}
+										else
+										{
+											oXHTMLElement.closest('div').html('<div class="ns1blankspaceNothing" style="margin-top:5px;">' + sIfNoneMessage + '</div>');
+										}
+									}	
 								}
 								else
 								{
