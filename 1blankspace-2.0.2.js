@@ -3422,7 +3422,8 @@ ns1blankspace.search =
 
 	multiSelect: 
 	{
-		add: 	function(oParam) {
+		add: 	function(oParam) 
+				{
 
 					var sXHTMLElementID = '';
 					var sInputElementId;
@@ -3430,43 +3431,53 @@ ns1blankspace.search =
 					var sTableElementId;
 					var aHTML = [];
 
-					if (oParam) {
+					// User has selected a value from the combo (sXHTMLElementID)
+					// We need to create a table to hold the list of selected items - place it below the input element if not already existing
+					// We're assuming that the input element is within a table cell
+					if (oParam) 
+					{
 						if (oParam.xhtmlElementID) {sXHTMLElementID = oParam.xhtmlElementID;}
 					}
 
-					sInputElementId = sXHTMLElementID.split('-')[0];
-					sCellElementId = $('#' + sInputElementId).parent().attr('id');
-					sTableElementId = sCellElementId.replace(/-/g, '_');
-					sTableElementId = sTableElementId.replace('_input_', '_selectrows_');
+					sInputElementId = sXHTMLElementID.split('-').shift();
+					//sCellElementId = $('#' + sInputElementId).parent().attr('id');
+					sTableElementId = sInputElementId + '_SelectRows';
+					//sTableElementId = sTableElementId.replace('_input_', '_selectrows_');
 
-					if ($('#' + sTableElementId).html() === undefined) {
+					// Check it the table is already there - if not, add it
+					if (!$('#' + sTableElementId).is('*')) 
+					{
 						aHTML.push('<table id="' + sTableElementId + '" style="width:100%;">');
 
 					}
 
 					// Make sure the value hasn't already been selected and then Insert the row that's just been clicked 
-					if ($('#' + sInputElementId.replace('_input_', '_selectrows_') + '-' + sXHTMLElementID.split('-')[1]).html() === undefined) {
-						aHTML.push('<tr>' +
-									'<td id="' + sInputElementId.replace('_input_', '_selectrows_') + '-' + sXHTMLElementID.split('-')[1] + '"' +
-									   ' width="250px" class="ns1blankspaceMultiSelect">' +
-									$('#' + sXHTMLElementID).html() + 
-									'</td>' +
-									'<td class="ns1blankspaceMultiRemove">Delete</td>' +
-									'</tr>');
-					}
-					else { 
+					if ($('#' + sTableElementId + '-' + sXHTMLElementID.split('-').pop()).is('*')) 
+					{
 						ns1blankspace.status.message("Value has already been selected.");
 						return;
 					}
+					else 
+					{ 
+						aHTML.push('<tr>' +
+									'<td id="' + sTableElementId + '-' + sXHTMLElementID.split('-').pop() + '"' +
+									   ' class="ns1blankspaceMultiSelect">' +
+									$('#' + sXHTMLElementID).html() + 
+									'</td>' +
+									'<td width="20px" class="ns1blankspaceMultiRemove">Delete</td>' +
+									'</tr>');
+					}
 					
 
-					if ($('#' + sTableElementId).html() === undefined) {
+					if (!$('#' + sTableElementId).is('*')) 
+					{
 						// Let's insert the table into the td following the input element
 						aHTML.push('</table>');
 
-						$('#' + sCellElementId).html($('#' + sCellElementId).html() + aHTML.join(''));
+						$('#' + sInputElementId).parent().html($('#' + sInputElementId).parent().html() + aHTML.join(''));
 					}
-					else {
+					else 
+					{
 						// Insert the row into the table 
 						$('#' + sTableElementId).append(aHTML.join(''));
 					}
@@ -3486,7 +3497,14 @@ ns1blankspace.search =
 						// remove the row
 						$(this).parent().remove();
 					});
-		}
+
+					if ($('#' + sInputElementId).attr('data-click'))
+					{
+						// We have a post-click function to call
+						var fFunctionToCall = ns1blankspace.util.toFunction($('#' + sInputElementId).attr('data-click'));
+						fFunctionToCall();
+					}
+				}
 	}
 }
 
