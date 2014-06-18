@@ -760,7 +760,7 @@ ns1blankspace.connect =
 	protect: 	{
 					init: 		function (oParam)
 								{
-									var sXHTMLElementID = ns1blankspace.util.getParam(oParam, 'xhtmlElementID', {"default": 'ns1blankspaceHomeAction'}).value;
+									var sXHTMLElementID = ns1blankspace.util.getParam(oParam, 'xhtmlElementID', {"default": 'ns1blankspaceHomeActionProtectKey'}).value;
 									var bCryptoKeyExists = ns1blankspace.util.getParam(oParam, 'cryptoKey').exists;
 									var sCryptoKey = ns1blankspace.util.getParam(oParam, 'cryptoKey').value;
 
@@ -810,7 +810,8 @@ ns1blankspace.connect =
 										{
 											var aHTML = [];
 
-											aHTML.push('<div class="ns1blankspaceSubNote">You need a key to protect the connection/URL password. The key will be stored locally and if you change to another device, you will need to install it.</div>');
+											aHTML.push('<div class="ns1blankspaceSubNote" style="font-weight: bold; margin-bottom: 8px;">PASSWORD ENCRYPTION</div>');
+											aHTML.push('<div class="ns1blankspaceSubNote" style="margin-bottom: 8px;">If you plan to store passwords with your connections, it is highly recommended that you use an encryption key that only users within your space know.<br/ > <br />The key will be stored on this device and if you change to another device, you will need to install it there.</div>');
 											aHTML.push('<div id="ns1blankspaceConnectProtectExisting" class="ns1blankspaceAction" style="margin-top:10px; font-size:0.75em;">I have existing key</div>');
 											aHTML.push('<div id="ns1blankspaceConnectProtectCreate" class="ns1blankspaceAction" style="margin-top:10px; font-size:0.75em;">Create new key</div>');
 
@@ -855,7 +856,7 @@ ns1blankspace.connect =
 
 												aHTML.push('<div class="ns1blankspaceSubNote" style="margin-top:10px;">' +
 																'<textarea style="width: 100%; height:100px;" rows="3" cols="35" class="ns1blankspaceTextMulti">' +
-															 	'{{key}}</textarea></div>');
+															 	'{{1blankspace-connect-auth-key}}</textarea></div>');
 
 												var oParam =
 												{
@@ -892,11 +893,11 @@ ns1blankspace.connect =
 
 									create: 	function (oParam)
 												{
-													if (!oParam.key)
+													if (!oParam.connectCryptoKey)
 													{
 														if (ns1blankspace.connect.protect.key.value != undefined)
 														{
-															oParam.key = ns1blankspace.connect.protect.key.value;
+															oParam.connectCryptoKey = ns1blankspace.connect.protect.key.value;
 															ns1blankspace.connect.protect.key.create(oParam);
 														}
 														else
@@ -920,7 +921,7 @@ ns1blankspace.connect =
 																	{
 																		comment: 'util.local.cache.search<>connect.protect.key.create:true',
 																		method: ns1blankspace.connect.protect.key.create,
-																		set: 'key',
+																		set: 'connectCryptoKey',
 																		param: oParam
 																	}
 																});
@@ -945,7 +946,7 @@ ns1blankspace.connect =
 																	{
 																		comment: 'util.protect.key.create.single<>connect.protect.key.create:false',
 																		method: ns1blankspace.connect.protect.key.create,
-																		set: 'key',
+																		set: 'connectCryptoKey',
 																		param: oParam
 																	}
 																});
@@ -955,7 +956,7 @@ ns1blankspace.connect =
 													else
 													{
 														ns1blankspace.connect.protect.key.value = oParam.key;
-														$('#' + oParam.xhtmlElementID).html(oParam.xhtml.replace('{{key}}', oParam.key));
+														$('#' + oParam.xhtmlElementID).html(oParam.xhtml.replace('{{1blankspace-connect-auth-key}}', oParam.connectCryptoKey));
 													}	
 												},
 

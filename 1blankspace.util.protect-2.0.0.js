@@ -28,48 +28,79 @@ ns1blankspace.util.protect =
 													var sCryptoKeyReference = ns1blankspace.util.getParam(oParam, 'cryptoKeyReference').value;
 													var bLocal = ns1blankspace.util.getParam(oParam, 'local', {"default": false}).value;
 
-													var sSalt = CryptoJS.lib.WordArray.random(128/8);
-													var sPassword = ns1blankspace.logonKey;
-													if (sPassword == undefined) {sPassword = (Math.random()).toString()}
-													var sCryptoKey = CryptoJS.PBKDF2(sPassword, sSalt, { keySize: 512/32 }).toString();
-		
-													if (sCryptoKeyReference !== undefined)
-													{	
-														ns1blankspace.util.protect.key.data[sCryptoKeyReference] = sCryptoKey;
-													}	
+													var sSavedCryptoKey = ns1blankspace.util.getParam(oParam, 'savedCryptoKey').value;
 
-													if (bPersist)
+													if (!sSavedCryptoKey)
 													{	
-														if (bLocal)
+														var sSalt = CryptoJS.lib.WordArray.random(128/8);
+														var sPassword = ns1blankspace.logonKey;
+														if (sPassword == undefined) {sPassword = (Math.random()).toString()}
+														var sCryptoKey = CryptoJS.PBKDF2(sPassword, sSalt, { keySize: 512/32 }).toString();
+
+														if (bPersist)
 														{	
-															oParam = ns1blankspace.util.setParam(oParam, 'key', sCryptoKeyReference);
-															oParam = ns1blankspace.util.setParam(oParam, 'data', sCryptoKey);
+															if (bLocal)
+															{	
+																//oParam = ns1blankspace.util.setParam(oParam, 'key', sCryptoKeyReference);
+																//oParam = ns1blankspace.util.setParam(oParam, 'data', sCryptoKey);
 
-															ns1blankspace.util.local.cache.save(oParam);
-														}
-														else
-														{
-															var oData = 
-															{
-																reference: sCryptoKeyReference,
-																key: sCryptoKey
-															}
-
-															$.ajax(
-															{
-																type: 'POST',
-																url: ns1blankspace.util.endpointURI('CORE_PROTECT_KEY_MANAGE'),
-																data: oData,
-																dataType: 'json',
-																success: function ()
+																ns1blankspace.util.whenCan.execute(
 																{
-																	//Show Error
+																	now:
+																	{
+																		method: ns1blankspace.util.local.cache.save,
+																		param:
+																		{
+																			key: sCryptoKeyReference,
+																			cryptoKeyReference: sCryptoKeyReference,
+																			persist: true,
+																			protect: oParam.protect,
+																			data: sCryptoKey
+																		}
+																	},
+																	then:
+																	{
+																		comment: 'util.local.cache.save<>util.protect.key.create.single',
+																		method: ns1blankspace.util.protect.key.create.single,
+																		set: 'savedCryptoKey',
+																		param: oParam
+																	}	
+																});
+
+																//ns1blankspace.util.local.cache.save(oParam);
+															}
+															else
+															{
+																var oData = 
+																{
+																	reference: sCryptoKeyReference,
+																	key: sCryptoKey
 																}
-															});		
+
+																$.ajax(
+																{
+																	type: 'POST',
+																	url: ns1blankspace.util.endpointURI('CORE_PROTECT_KEY_MANAGE'),
+																	data: oData,
+																	dataType: 'json',
+																	success: function ()
+																	{
+																		oParam.savedCryptoKey = sCryptoKey;
+																		ns1blankspace.util.protect.key.create.single(oParam)
+																	}
+																});		
+															}
 														}
 													}
+													else
+													{	
+														if (sCryptoKeyReference !== undefined)
+														{	
+															ns1blankspace.util.protect.key.data[sCryptoKeyReference] = sCryptoKey;
+														}
 
-													return ns1blankspace.util.whenCan.return(sCryptoKey, oParam)
+														return ns1blankspace.util.whenCan.return(sSavedCryptoKey, oParam)
+													}	
 												},
 
 									pair: 		function(oParam) {}			
