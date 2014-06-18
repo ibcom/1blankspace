@@ -3990,6 +3990,8 @@ ns1blankspace.util =
 	whenCan: 	{
 					queue: 		[],
 
+					completed: 	[],
+
 					exists: 	function(oParam)
 								{
 									if (oParam && oParam.uuid)
@@ -4002,6 +4004,14 @@ ns1blankspace.util =
 									}	
 								},
 
+					then: 	function(oParam)
+								{
+									if (oParam && oParam.uuid)
+									{
+										return ($.grep(ns1blankspace.util.whenCan.queue, function (a) {a.uuid == oParam.uuid})[0])
+									}	
+								},			
+
 					clear: 		function(oParam)
 								{
 									ns1blankspace.util.whenCan.queue.length = 0;
@@ -4011,13 +4021,14 @@ ns1blankspace.util =
 								{
 									var sUUID = ns1blankspace.util.uuid();
 
-									//oParam.later.param = (oParam.later.param||{});
-									oParam.later.uuid = sUUID;
-									ns1blankspace.util.whenCan.queue.unshift(oParam.later);
+									oParam.then.uuid = sUUID;
+									ns1blankspace.util.whenCan.queue.unshift(oParam.then);
+
+									ns1blankspace.debug.message(oParam.then, true);
 
 									if (oParam.now)
 									{
-										var oNowParam = (oParam.now.param||{});
+										var oNowParam = $.extend(true, {}, oParam.now.param);
 										oNowParam.uuid = sUUID;
 										oParam.now.method(oNowParam)
 									}	
@@ -4027,7 +4038,7 @@ ns1blankspace.util =
 								{
 									if (ns1blankspace.util.whenCan.queue.length > 0)
 									{	
-										var oLater;
+										var oThen;
 
 										if (oParam.uuid)
 										{
@@ -4037,7 +4048,7 @@ ns1blankspace.util =
 												{	
 													if (v.uuid == oParam.uuid)
 													{
-														oLater = v;
+														oThen = v;
 														ns1blankspace.util.whenCan.queue.splice(i, 1);
 													}
 												}	
@@ -4045,18 +4056,20 @@ ns1blankspace.util =
 										}	
 										else
 										{	
-											oLater = ns1blankspace.util.whenCan.queue.shift();
+											oThen = ns1blankspace.util.whenCan.queue.shift();
 										}
 
-										if (oLater)
+										if (oThen)
 										{	
+											ns1blankspace.util.whenCan.completed.unshift(oThen);
+
 											if (!oParam) {oParam = {}}
-											oParam = $.extend(true, oParam, oLater.param)
-											if (oLater.set) {oParam[oLater.set] = sReturn};
+											oParam = $.extend(true, oParam, oThen.param)
+											if (oThen.set) {oParam[oThen.set] = sReturn};
 
 											sReturn = undefined;
 											
-											var fMethod = oLater.method;
+											var fMethod = oThen.method;
 											if (fMethod)
 											{
 												if (typeof fMethod === 'string')
@@ -4487,9 +4500,9 @@ ns1blankspace.debug =
 
 	log: 		[],
 
-	message: 	function (sMessage)
+	message: 	function (sMessage, bLog)
 				{
-					if (ns1blankspace.debug.enabled)
+					if (ns1blankspace.debug.enabled || bLog)
 					{
 						ns1blankspace.debug.log.push({time: Date(), message: sMessage})
 						window.console && console.log(sMessage);

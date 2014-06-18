@@ -62,31 +62,38 @@ ns1blankspace.util.local =
 											{
 												var sData = ns1blankspace.util.getParam(oParam, 'protectedData').value;
 												oStorage.setItem(sKey, sData);
+
+												return ns1blankspace.util.whenCan.return(sData, oParam);
 											}
 											else
 											{	
-												oParam = ns1blankspace.util.setParam(oParam, 'cryptoKeyReference', ns1blankspace.util.local.cache.data.cryptoKeyReference);
-
 												ns1blankspace.util.whenCan.execute(
 												{
 													now:
 													{
 														method: ns1blankspace.util.protect.encrypt,
-														param: oParam
+														param:
+														{
+															cryptoKeyReference: ns1blankspace.util.local.cache.data.cryptoKeyReference,
+															local: false,
+															data: sData
+														}
 													},
-													later:
+													then:
 													{
+														comment: 'util.protect.encrypt<>util.local.cache.save',
 														method: ns1blankspace.util.local.cache.save,
-														set: 'protectedData'
+														set: 'protectedData',
+														param: oParam
 													}	
 												});
-												//oParam = ns1blankspace.util.setParam(oParam, 'onCompleteWhenCan', ns1blankspace.util.local.cache.save);
-												//ns1blankspace.util.protect.encrypt(oParam);
 											}	
 										}
 										else
 										{
 											oStorage.setItem(sKey, sData);
+
+											return ns1blankspace.util.whenCan.return(sData, oParam);
 										}	
 									}	
 								},
@@ -112,7 +119,6 @@ ns1blankspace.util.local =
 												oParam = ns1blankspace.util.setParam(oParam, 'cryptoKeyReference', ns1blankspace.util.local.cache.data.cryptoKeyReference);
 												oParam = ns1blankspace.util.setParam(oParam, 'cryptoKey', ns1blankspace.util.protect.key.data[ns1blankspace.util.local.cache.data.cryptoKeyReference]);
 												oParam = ns1blankspace.util.setParam(oParam, 'protectedData', oData);
-												//oParam = ns1blankspace.util.setParam(oParam, 'onCompleteWhenCan', ns1blankspace.util.local.cache.search);
 
 												ns1blankspace.util.whenCan.execute(
 												{
@@ -121,8 +127,9 @@ ns1blankspace.util.local =
 														method: ns1blankspace.util.protect.decrypt,
 														param: oParam
 													},
-													later:
+													then:
 													{
+														comment: 'util.protect.decrypt<>util.local.cache.search',
 														method: ns1blankspace.util.local.cache.search,
 														set: 'data'
 													}	

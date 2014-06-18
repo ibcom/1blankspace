@@ -760,7 +760,7 @@ ns1blankspace.connect =
 	protect: 	{
 					init: 		function (oParam)
 								{
-									var sXHTMLElementID = ns1blankspace.util.getParam(oParam, 'xhtmlElementID', {"default": 'ns1blankspaceConnectProtect'}).value;
+									var sXHTMLElementID = ns1blankspace.util.getParam(oParam, 'xhtmlElementID', {"default": 'ns1blankspaceHomeAction'}).value;
 									var bCryptoKeyExists = ns1blankspace.util.getParam(oParam, 'cryptoKey').exists;
 									var sCryptoKey = ns1blankspace.util.getParam(oParam, 'cryptoKey').value;
 
@@ -773,9 +773,10 @@ ns1blankspace.connect =
 												method: ns1blankspace.util.local.cache.search,
 												param: {key: '1blankspace-connect-auth-key', persist: true, protect: true}
 											},
-											later:
+											then:
 											{
-												method: ns1blankspace.connect.protect.key.init,
+												comment: 'util.local.cache.search<>connect.protect.key.init',
+												method: ns1blankspace.connect.protect.init,
 												set: 'cryptoKey',
 												param: {}
 											}
@@ -915,14 +916,14 @@ ns1blankspace.connect =
 																			protect: true
 																		}
 																	},
-																	later:
+																	then:
 																	{
+																		comment: 'util.local.cache.search<>connect.protect.key.create:true',
 																		method: ns1blankspace.connect.protect.key.create,
 																		set: 'key',
 																		param: oParam
 																	}
 																});
-																//ns1blankspace.util.local.cache.search({key: '1blankspace-connect-auth-key', persist: true, protect: true});
 															}
 															else
 															{	
@@ -940,16 +941,14 @@ ns1blankspace.connect =
 																			local: true
 																		}
 																	},
-																	later:
+																	then:
 																	{
+																		comment: 'util.protect.key.create.single<>connect.protect.key.create:false',
 																		method: ns1blankspace.connect.protect.key.create,
 																		set: 'key',
 																		param: oParam
 																	}
 																});
-
-																//ns1blankspace.util.whenCan.set({execute: ns1blankspace.connect.protect.key.create, returnParameter: 'key'});
-																//ns1blankspace.util.protect.key.create.single({cryptoKeyReference: '1blankspace-connect-auth-key', persist: true, local: true, protect: true})
 															}
 														}
 													}
