@@ -125,13 +125,18 @@ ns1blankspace.util.local =
 													now:
 													{
 														method: ns1blankspace.util.protect.decrypt,
-														param: oParam
+														param:
+														{
+															cryptoKeyReference: ns1blankspace.util.local.cache.data.cryptoKeyReference,
+															protectedData: sData
+														}
 													},
 													then:
 													{
 														comment: 'util.protect.decrypt<>util.local.cache.search',
 														method: ns1blankspace.util.local.cache.search,
-														set: 'data'
+														set: 'data',
+														param: oParam
 													}	
 												});
 											}
