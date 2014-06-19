@@ -15,7 +15,9 @@ ns1blankspace.connect =
 							user: 1,
 							everyone: 2
 						}
-					}
+					},
+
+					cryptoKeyReference: '1blankspace-connect-auth-key'
 				},
 
 	init: 		function (oParam)
@@ -655,49 +657,82 @@ ns1blankspace.connect =
 				},			
 
 	save: 		{
-					send:		function ()
+					send:		function (oParam)
 								{
-									ns1blankspace.status.working();
+									var sURLPassword = $('#ns1blankspaceLogonPassword') && $('#ns1blankspaceLogonPassword').val();
+
+									var bURLPasswordExists = ns1blankspace.util.getParam(oParam, 'urlpassword').exists;
+
+									if (bURLPasswordExists)
+									{
+										var sURLPassword = ns1blankspace.util.getParam(oParam, 'urlpassword').value;
+									}	
 									
-									var oData = {}
+									ns1blankspace.status.working();
 
-									if (ns1blankspace.objectContext != -1)
+									if (sURLPassword && ns1blankspace.util.protect.key.data[ns1blankspace.connect.data.cryptoKeyReference] && !bURLPasswordExists)
 									{
-										oData.id = ns1blankspace.objectContext;
-									} 
-							
-									if ($('#ns1blankspaceMainDetails').html() != '')
-									{
-										oData.title = $('#ns1blankspaceDetailsTitle').val();
-										oData.description = $('#ns1blankspaceDetailsDescription').val();
-										oData.url = $('#ns1blankspaceDetailsURL').val();
-										oData.private = $('input[name="radioPrivate"]:checked').val();
-										oData.public = $('input[name="radioPublic"]:checked').val();
-									}
-
-									if ($('#ns1blankspaceMainLogon').html() != '')
-									{
-										oData.urllogon = $('#ns1blankspaceLogonUsername').val();
-										if ($('#ns1blankspaceLogonPassword').val().length > 0) {oData.urlpassword = $('#ns1blankspaceLogonPassword').val()}
-									}
-
-									if (!ns1blankspace.util.isEmpty(oData))
-									{									
-										$.ajax(
+										ns1blankspace.util.whenCan.execute(
 										{
-											type: 'POST',
-											url: ns1blankspace.util.endpointURI('CORE_URL_MANAGE'),
-											data: oData,
-											dataType: 'json',
-											success: function (data) {ns1blankspace.connect.save.process(data, oData)}
+											now:
+											{
+												method: ns1blankspace.util.protect.encrypt,
+												param:
+												{
+													cryptoKeyReference: ns1blankspace.connect.data.cryptoKeyReference,
+													local: true,
+													data: sURLPassword
+												}
+											},
+											then:
+											{
+												comment: 'util.protect.encrypt<>connect.save.send',
+												method: ns1blankspace.connect.save.send,
+												set: 'urlpassword'
+											}	
 										});
-										
 									}
 									else
-									{
-										ns1blankspace.status.message('Saved');
-									}	
-										
+									{	
+										var oData = {}
+
+										if (ns1blankspace.objectContext != -1)
+										{
+											oData.id = ns1blankspace.objectContext;
+										} 
+								
+										if ($('#ns1blankspaceMainDetails').html() != '')
+										{
+											oData.title = $('#ns1blankspaceDetailsTitle').val();
+											oData.description = $('#ns1blankspaceDetailsDescription').val();
+											oData.url = $('#ns1blankspaceDetailsURL').val();
+											oData.private = $('input[name="radioPrivate"]:checked').val();
+											oData.public = $('input[name="radioPublic"]:checked').val();
+										}
+
+										if ($('#ns1blankspaceMainLogon').html() != '')
+										{
+											oData.urllogon = $('#ns1blankspaceLogonUsername').val();
+											oData.urlpassword = sURLPassword;
+										}
+
+										if (!ns1blankspace.util.isEmpty(oData))
+										{									
+											$.ajax(
+											{
+												type: 'POST',
+												url: ns1blankspace.util.endpointURI('CORE_URL_MANAGE'),
+												data: oData,
+												dataType: 'json',
+												success: function (data) {ns1blankspace.connect.save.process(data, oData)}
+											});
+											
+										}
+										else
+										{
+											ns1blankspace.status.message('Saved');
+										}
+									}		
 								},
 
 					process:	function (oResponse, oData)
@@ -775,7 +810,7 @@ ns1blankspace.connect =
 											},
 											then:
 											{
-												comment: 'util.local.cache.search<>connect.protect.key.init',
+												comment: 'util.local.cache.search<>connect.protect.init',
 												method: ns1blankspace.connect.protect.init,
 												set: 'cryptoKey',
 												param: {}
@@ -786,6 +821,8 @@ ns1blankspace.connect =
 									{
 										if (sCryptoKey)
 										{
+											ns1blankspace.util.protect.key.data['1blankspace-connect-auth-key'] = sCryptoKey;
+
 											var aHTML = [];
 
 											aHTML.push('<div class="ns1blankspaceSubNote">Protection key installed.</div>');
@@ -800,10 +837,14 @@ ns1blankspace.connect =
 
 												aHTML.push('<div class="ns1blankspaceSubNote" style="margin-top:10px;">' +
 																'<textarea id="ns1blankspaceContectProtectKeyValue" style="width: 100%; height:100px;" rows="3" cols="35" class="ns1blankspaceTextMulti">' +
-																ns1blankspace.connect.protect.key.get(oParam) +
+																'{{1blankspace-connect-auth-key}}' +
 															 	'</textarea></div>');
 
-												$('#ns1blankspaceMostLikely').html(aHTML.join(''));
+												ns1blankspace.connect.protect.key.get(
+												{
+													xhtml: aHTML.join(''),
+													xhtmlElementID: 'ns1blankspaceMostLikely'
+												});
 											});
 										}
 										else
@@ -838,9 +879,25 @@ ns1blankspace.connect =
 												$('#ns1blankspaceConnectProtectInstall').button().click(function()
 												{
 													ns1blankspace.connect.protect.key.remove(oParam);
-													oParam = ns1blankspace.util.setParam(oParam, 'protectKey', $('#ns1blankspaceContectProtectKeyValue').val());
-													oParam = ns1blankspace.util.setParam(oParam, 'onComplete', ns1blankspace.connect.init);
-													ns1blankspace.connect.protect.key.install(oParam);
+
+													ns1blankspace.util.whenCan.execute(
+													{
+														now:
+														{
+															method: ns1blankspace.util.local.cache.save,
+															param:
+															{
+																key: '1blankspace-connect-auth-key',
+																data: $('#ns1blankspaceContectProtectKeyValue').val(),
+																persist: true
+															}
+														},
+														then:
+														{
+															comment: 'util.local.cache.save<>connect.protect.init',
+															method: ns1blankspace.connect.init
+														}
+													});
 												});
 											});	
 
@@ -875,13 +932,36 @@ ns1blankspace.connect =
 					key: 		{
 									get: 		function (oParam)
 												{
-													//REMOVE METHOD - REDUNDANT
-													if (ns1blankspace.connect.protect.key.value == undefined)
-													{	
-														ns1blankspace.connect.protect.key.value = ns1blankspace.util.local.cache.search({key: '1blankspace-connect-auth-key', persist: true, protect: true});
-													}
+													var sXHTMLElementID = ns1blankspace.util.getParam(oParam, 'xhtmlElementID', {"default": 'ns1blankspaceHomeActionProtectKey'}).value;
+													var sXHTML = ns1blankspace.util.getParam(oParam, 'xhtml', {"default": ''}).value;
+													var bCryptoKeyExists = ns1blankspace.util.getParam(oParam, 'savedCryptoKey').exists;
+													var sCryptoKey = ns1blankspace.util.getParam(oParam, 'savedCryptoKey').value;
 
-													return ns1blankspace.util.whenCan.return(ns1blankspace.connect.protect.key.value, oParam);
+													if (!bCryptoKeyExists)
+													{	
+														oParam.savedCryptoKey = '';
+
+														ns1blankspace.util.whenCan.execute(
+														{
+															now:
+															{
+																method: ns1blankspace.util.local.cache.search,
+																param: {key: '1blankspace-connect-auth-key', persist: true}
+															},
+															then:
+															{
+																comment: 'util.local.cache.search<>connect.protect.key.get',
+																method: ns1blankspace.connect.protect.key.get,
+																set: 'savedCryptoKey',
+																param: oParam
+															}
+														});
+													}
+													else
+													{
+														$('#' + sXHTMLElementID).html(sXHTML.replace('{{1blankspace-connect-auth-key}}', sCryptoKey));
+													}	
+
 												},
 
 									install: 	function (oParam)

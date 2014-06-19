@@ -128,7 +128,8 @@ ns1blankspace.util.local =
 														param:
 														{
 															cryptoKeyReference: ns1blankspace.util.local.cache.data.cryptoKeyReference,
-															protectedData: sData
+															cryptoKey: ns1blankspace.util.protect.key.data[ns1blankspace.util.local.cache.data.cryptoKeyReference],
+															protectedData: oData
 														}
 													},
 													then:

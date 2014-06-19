@@ -113,8 +113,7 @@ ns1blankspace.util.protect =
 
 									if (ns1blankspace.util.protect.key.data[sCryptoKeyReference] !== undefined)
 									{	
-										oParam = ns1blankspace.util.setParam(oParam, 'cryptoKey', ns1blankspace.util.protect.key.data[sCryptoKeyReference]);
-										return ns1blankspace.util.whenCan.return(ns1blankspace.connect.protect.key.value, oParam);
+										ns1blankspace.util.whenCan.return(ns1blankspace.util.protect.key.data[sCryptoKeyReference], oParam);
 									}
 									else
 									{	
