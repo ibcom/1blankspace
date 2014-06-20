@@ -144,15 +144,17 @@ ns1blankspace.util.protect =
 												{	
 													var sCryptoKey = oResponse.data.rows[0].key;
 												}
-												else
-												{
-													oParam =  ns1blankspace.util.setParam(oParam, 'persist', true);
-													ns1blankspace.util.protect.key.create.single(oParam)
-												}	
+												//else
+												//{
+													//oParam =  ns1blankspace.util.setParam(oParam, 'persist', true);
+													//ns1blankspace.util.protect.key.create.single(oParam)
+												//}	
 											}
 
-											ns1blankspace.util.protect.key.data[sCryptoKeyReference] = sCryptoKey;
-											ns1blankspace.debug.message(sCryptoKeyReference + ':' + sCryptoKey);
+											if (sCryptoKey)
+											{	
+												ns1blankspace.util.protect.key.data[sCryptoKeyReference] = sCryptoKey;
+											}
 
 											return ns1blankspace.util.whenCan.return(sCryptoKey, oParam);
 										}

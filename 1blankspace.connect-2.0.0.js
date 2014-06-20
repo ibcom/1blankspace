@@ -494,21 +494,106 @@ ns1blankspace.connect =
 
 						$('#ns1blankspaceConnectGetPassword').button().click(function()
 						{
-							ns1blankspace.connect.protect.init({xhtmlElementID: 'ns1blankspaceConnectGetPasswordShow'})
-
-							$('#ns1blankspaceConnectPasswordShow').html(ns1blankspace.xhtml.loadingSmall);
-
-							var oSearch = new AdvancedSearch();
-							oSearch.method = 'CORE_URL_SEARCH';
-							oSearch.addField('urlpassword');
-							oSearch.addFilter('id', 'EQUAL_TO', ns1blankspace.objectContext);
-							oSearch.getResults(function(oResponse)
-							{
-								$('#ns1blankspaceConnectPasswordShow').html(oResponse.data.rows[0].urlpassword);
-							});
+							ns1blankspace.connect.getPassword();
 						});	
 					}	
 				},
+
+	password: 	{
+					get: 		function (oParam, oResponse)
+								{
+									var oURLPassword = ns1blankspace.util.getParam(oParam, 'urlpassword');
+
+									if (!oURLPassword.exists && oResponse == undefined)
+									{
+										$('#ns1blankspaceConnectPasswordShow').html(ns1blankspace.xhtml.loadingSmall);
+
+										var oSearch = new AdvancedSearch();
+										oSearch.method = 'CORE_URL_SEARCH';
+										oSearch.addField('urlpassword');
+										oSearch.addFilter('id', 'EQUAL_TO', ns1blankspace.objectContext);
+										oSearch.getResults(function(oResponse)
+										{
+											oParam = ns1blankspace.util.getParam(oParam, 'urlpassword', '');
+
+											if (oResponse.data.rows.length == 1)
+											{
+												oParam = ns1blankspace.util.getParam(oParam, 'urlpassword', oResponse.data.rows[0].urlpassword);	
+											}
+											
+											if (oParam.urlpassword == '')
+											{
+												ns1blankspace.connect.password.show(oParam);
+											}
+											else
+											{	
+												ns1blankspace.connect.password.get(oParam, data);
+											}										
+										});
+									}
+									else
+									{	
+										ns1blankspace.util.whenCan.execute(
+										{
+											now:
+											{
+												method: ns1blankspace.util.protect.key.search,
+												param:
+												{
+													cryptoKeyReference: ns1blankspace.connect.data.cryptoKeyReference,
+													local: true,
+													protect: true
+												}
+											},
+											then:
+											{
+												comment: 'util.protect.key.search<>connect.password.show',
+												method: ns1blankspace.connect.password.show,
+												set: 'cryptoKey',
+												param: oParam
+											}	
+										});
+									}
+								},
+
+					show: 		function (oParam, oResponse)
+								{
+									var oCryptoKey = ns1blankspace.util.getParam(oParam, 'cryptoKey');
+
+									if (oURLPassword.value == '')
+									{
+										$('#ns1blankspaceConnectPasswordShow').html('Not set');
+									}
+									else
+									{
+										if (oCryptoKey.exists)
+										{
+											ns1blankspace.util.whenCan.execute(
+											{
+												now:
+												{
+													method: ns1blankspace.util.protect.decrypt,
+													param:
+													{
+														cryptoKeyReference: ns1blankspace.connect.data.cryptoKeyReference,
+														data: oURLPassword.value
+													}
+												},
+												then:
+												{
+													comment: 'util.protect.encrypt<>connect.save.send',
+													method: ns1blankspace.connect.getPassword,
+													set: 'urlpassword'
+												}
+											}	
+										}	
+										else
+										{
+											//show
+										}
+									}
+								}
+				},				
 
 	details: 	function ()
 				{
@@ -783,8 +868,6 @@ ns1blankspace.connect =
 											sHTML = 'http://' + sHTML;
 										}
 
-										
-
 										sHTML = '<a href="' + sHTML + '" target="_blank">' + sTitle.replace(ns1blankspace.connect.url.match, '') + '</a>';
 									}	
 								
@@ -962,14 +1045,7 @@ ns1blankspace.connect =
 														$('#' + sXHTMLElementID).html(sXHTML.replace('{{1blankspace-connect-auth-key}}', sCryptoKey));
 													}	
 
-												},
-
-									install: 	function (oParam)
-												{
-													ns1blankspace.connect.protect.key.value = ns1blankspace.util.getParam(oParam, 'protectKey').value;
-													ns1blankspace.util.local.cache.save({key: '1blankspace-connect-auth-key', persist: true, data: ns1blankspace.connect.protect.key.value});
-													ns1blankspace.util.onComplete(oParam);
-												},					
+												},		
 
 									create: 	function (oParam)
 												{
