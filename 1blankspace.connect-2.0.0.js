@@ -494,7 +494,7 @@ ns1blankspace.connect =
 
 						$('#ns1blankspaceConnectGetPassword').button().click(function()
 						{
-							ns1blankspace.connect.getPassword();
+							ns1blankspace.connect.password.get();
 						});	
 					}	
 				},
@@ -502,9 +502,7 @@ ns1blankspace.connect =
 	password: 	{
 					get: 		function (oParam, oResponse)
 								{
-									var oURLPassword = ns1blankspace.util.getParam(oParam, 'urlpassword');
-
-									if (!oURLPassword.exists && oResponse == undefined)
+									if (oResponse == undefined)
 									{
 										$('#ns1blankspaceConnectPasswordShow').html(ns1blankspace.xhtml.loadingSmall);
 
@@ -514,7 +512,7 @@ ns1blankspace.connect =
 										oSearch.addFilter('id', 'EQUAL_TO', ns1blankspace.objectContext);
 										oSearch.getResults(function(oResponse)
 										{
-											oParam = ns1blankspace.util.getParam(oParam, 'urlpassword', '');
+											oParam = ns1blankspace.util.setParam(oParam, 'urlpassword', '');
 
 											if (oResponse.data.rows.length == 1)
 											{
@@ -527,7 +525,7 @@ ns1blankspace.connect =
 											}
 											else
 											{	
-												ns1blankspace.connect.password.get(oParam, data);
+												ns1blankspace.connect.password.get(oParam, oResponse);
 											}										
 										});
 									}
@@ -559,6 +557,8 @@ ns1blankspace.connect =
 					show: 		function (oParam, oResponse)
 								{
 									var oCryptoKey = ns1blankspace.util.getParam(oParam, 'cryptoKey');
+									var oURLPassword = ns1blankspace.util.getParam(oParam, 'urlpassword');
+									var bDecrypted = ns1blankspace.util.getParam(oParam, 'decrypted').value;
 
 									if (oURLPassword.value == '')
 									{
@@ -566,8 +566,10 @@ ns1blankspace.connect =
 									}
 									else
 									{
-										if (oCryptoKey.exists)
+										if (oCryptoKey.exists && !bDecrypted)
 										{
+											oParam = ns1blankspace.util.setParam(oParam, 'decrypted', true);
+
 											ns1blankspace.util.whenCan.execute(
 											{
 												now:
@@ -579,17 +581,19 @@ ns1blankspace.connect =
 														data: oURLPassword.value
 													}
 												},
+
 												then:
 												{
-													comment: 'util.protect.encrypt<>connect.save.send',
-													method: ns1blankspace.connect.getPassword,
-													set: 'urlpassword'
+													comment: 'util.protect.decrypt<>connect.password.show',
+													method: ns1blankspace.connect.password.show,
+													set: 'urlpassword',
+													param: oParam
 												}
-											}	
+											});	
 										}	
 										else
 										{
-											//show
+											$('#ns1blankspaceConnectPasswordShow').html(oURLPassword.value);
 										}
 									}
 								}
