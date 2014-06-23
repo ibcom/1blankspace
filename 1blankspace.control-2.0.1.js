@@ -2241,6 +2241,8 @@ ns1blankspace.attachments =
 									var sHelpNotes;
 									var aInputs = [];
 									var sURL = '/ondemand/attach/';
+									var aInputParams = [];
+									var iPublicType;
 									
 									if (oParam != undefined)
 									{
@@ -2255,6 +2257,8 @@ ns1blankspace.attachments =
 										if (oParam.helpNotes != undefined) {sHelpNotes = oParam.helpNotes}
 										if (oParam.inputs != undefined) {aInputs = oParam.inputs}
 										if (oParam.url != undefined) {sURL = oParam.url}
+										if (oParam.inputParams != undefined) {aInputParams = oParam.inputParams}
+										if (oParam.publicType != undefined) {iPublicType = oParam.publicType}
 									}	
 
 									$('[name="ns1blankspaceFileUpload"]').remove();
@@ -2275,6 +2279,22 @@ ns1blankspace.attachments =
 										aHTML.push('<input type="hidden" name="' + this + '" id="' + this + '" value="">');
 									});
 
+									for (var i = 0; i < iMaxFiles; i++) 	
+									{
+										$.each(aInputParams, function ()
+										{	
+											aHTML.push('<input type="hidden" name="' + this.id + i + '" id="' + this.id + i + '" value="' + (this.value || '') + '">');
+										});
+									}
+
+									if (iPublicType)
+									{
+										for (var i = 0; i < iMaxFiles; i++) 	
+										{
+											aHTML.push('<input type="hidden" name="publictype' + i + '" id="publictype' + i + '" value="' + iPublicType + '">');
+										}
+									}	
+
 									aHTML.push(sXHTML);
 									
 									if (sLabel != '') 
@@ -2288,7 +2308,7 @@ ns1blankspace.attachments =
 														'<input class="ns1blankspaceUpload" type="file" name="oFile' + i + '" id="oFile' + i + '">' +
 														'</div>');
 									}
-									
+
 									if (bShowUpload)
 									{
 										aHTML.push('<span id="ns1blankspaceUpload" class="ns1blankspaceAction" style="margin-top:10px;"></span>');
