@@ -685,10 +685,9 @@ ns1blankspace.views =
 		type: 2
 	},
 	{
-		title: "Structures",
-		parentNamespace: "setup",
-		namespace: "structure",
-		endpoint: "SETUP_STRUCTURE", 
+		title: "Connections",
+		namespace: "connect",
+		endpoint: "CORE_URL", 
 		show: true,
 		group: 2,
 		type: 2
@@ -1165,13 +1164,13 @@ ns1blankspace.control =
 																				'Websites & Webapps</span></td></tr>');
 														}
 
-														var oViewport = $.grep(ns1blankspace.views, function (a) {return a.title == 'Structures';})[0];
+														var oViewport = $.grep(ns1blankspace.views, function (a) {return a.title == 'Connections';})[0];
 														if (oViewport ? oViewport.show : false)
 														{
 															aHTMLViewport.push('<tr class="ns1blankspaceViewControl">' +
 																				'<td class="ns1blankspaceViewControl">' +
-																				'<span id="ns1blankspaceViewControl_setup_structure" class="ns1blankspaceViewControl">' +
-																				'Structures</span></td></tr>');
+																				'<span id="ns1blankspaceViewControl_connect" class="ns1blankspaceViewControl">' +
+																				'Connections</span></td></tr>');
 														}
 
 														var oViewport = $.grep(ns1blankspace.views, function (a) {return a.title == 'Automation';})[0];
