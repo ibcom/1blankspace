@@ -24,6 +24,8 @@ ns1blankspace.connect =
 				{
 					if (oParam === undefined) {oParam = {}}
 
+					var bInitialised = ns1blankspace.util.getParam(oParam, 'initialised', {"default": false}).value;
+
 					ns1blankspace.app.reset();
 
 					ns1blankspace.object = -8;
@@ -49,8 +51,38 @@ ns1blankspace.connect =
 											'Send Request' +
 											'</td></tr>' +
 											'</table>';
-							
-					ns1blankspace.app.set(oParam);
+
+					if (!bInitialised)
+					{	
+						oParam = ns1blankspace.util.setParam(oParam, 'initialised', true);
+
+						ns1blankspace.util.whenCan.execute(
+						{
+							now:
+							{
+								method: ns1blankspace.util.local.cache.search,
+								param: {key: '1blankspace-connect-auth-key', persist: true, protect: true}
+							},
+							then:
+							{
+								comment: 'util.local.cache.search<>connect.init',
+								method: ns1blankspace.connect.init,
+								set: 'cryptoKey',
+								param: oParam
+							}
+						});	
+					}
+					else
+					{	
+						var oCryptoKey = ns1blankspace.util.getParam(oParam, 'cryptoKey');
+
+						if (oCryptoKey.exists)
+						{	
+							ns1blankspace.util.protect.key.data[ns1blankspace.connect.data.cryptoKeyReference] = oCryptoKey.value;
+						}	
+
+						ns1blankspace.app.set(oParam);
+					}	
 				},
 
 	bind: 		function (oParam)
@@ -476,7 +508,7 @@ ns1blankspace.connect =
 						
 						if (ns1blankspace.objectContextData.urllogon != '')
 						{
-							aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Logon / Username</td></tr>' +
+							aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Username</td></tr>' +
 											'<tr><td id="ns1blankspaceSummaryURLLogon" class="ns1blankspaceSummary">' +
 											ns1blankspace.objectContextData.urllogon +
 											'</td></tr>');
@@ -500,9 +532,9 @@ ns1blankspace.connect =
 				},
 
 	password: 	{
-					get: 		function (oParam, oResponse)
+					get: 		function (oParam)
 								{
-									if (oResponse == undefined)
+									if (!ns1blankspace.util.getParam(oParam, 'urlpassword').exists)
 									{
 										$('#ns1blankspaceConnectPasswordShow').html(ns1blankspace.xhtml.loadingSmall);
 
@@ -516,7 +548,7 @@ ns1blankspace.connect =
 
 											if (oResponse.data.rows.length == 1)
 											{
-												oParam = ns1blankspace.util.getParam(oParam, 'urlpassword', oResponse.data.rows[0].urlpassword);	
+												oParam = ns1blankspace.util.setParam(oParam, 'urlpassword', oResponse.data.rows[0].urlpassword);	
 											}
 											
 											if (oParam.urlpassword == '')
@@ -525,7 +557,7 @@ ns1blankspace.connect =
 											}
 											else
 											{	
-												ns1blankspace.connect.password.get(oParam, oResponse);
+												ns1blankspace.connect.password.get(oParam);
 											}										
 										});
 									}
@@ -554,7 +586,7 @@ ns1blankspace.connect =
 									}
 								},
 
-					show: 		function (oParam, oResponse)
+					show: 		function (oParam)
 								{
 									var oCryptoKey = ns1blankspace.util.getParam(oParam, 'cryptoKey');
 									var oURLPassword = ns1blankspace.util.getParam(oParam, 'urlpassword');
@@ -578,7 +610,7 @@ ns1blankspace.connect =
 													param:
 													{
 														cryptoKeyReference: ns1blankspace.connect.data.cryptoKeyReference,
-														data: oURLPassword.value
+														protectedData: oURLPassword.value
 													}
 												},
 
@@ -717,7 +749,7 @@ ns1blankspace.connect =
 
 						aHTML.push('<tr class="ns1blankspaceCaption">' +
 										'<td class="ns1blankspaceCaption">' +
-										'Logon / Username' +
+										'Username' +
 										'</td></tr>' +
 										'<tr class="ns1blankspace">' +
 										'<td class="ns1blankspaceText">' +
@@ -905,7 +937,7 @@ ns1blankspace.connect =
 										});
 									}
 									else
-									{
+									{	
 										if (sCryptoKey)
 										{
 											ns1blankspace.util.protect.key.data['1blankspace-connect-auth-key'] = sCryptoKey;
