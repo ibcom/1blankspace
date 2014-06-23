@@ -97,7 +97,7 @@ ns1blankspace.connect =
 					.click(function() 
 					{
 						$(ns1blankspace.xhtml.container).hide();
-						ns1blankspace.connect.send(oParam);
+						ns1blankspace.connect.url.send(oParam);
 					});
 				},			
 
@@ -908,6 +908,41 @@ ns1blankspace.connect =
 									}	
 								
 									return sHTML;
+								},
+
+					send: 		function (oParam, oResponse)
+								{
+									if (ns1blankspace.objectContext.url == '')
+									{
+										ns1blankspace.status.error('No url set.');
+									}
+									else
+									{	
+										if (!oResponse)
+										{
+											var oData =
+											{
+												url: ns1blankspace.objectContextData.url,
+												headerall: 'Y'
+											}
+
+											$.ajax(
+											{
+												type: 'POST',
+												url: ns1blankspace.util.endpointURI('CORE_URL_GET'),
+												data: oData,
+												dataType: 'json',
+												success: function (data)
+												{
+													ns1blankspace.connect.url.send(oParam, data)
+												}
+											});
+										}
+										else
+										{
+
+										}
+									}
 								}
 				},
 
@@ -1157,36 +1192,6 @@ ns1blankspace.connect =
 													ns1blankspace.connect.protect.key.value = undefined;
 													ns1blankspace.util.local.cache.remove({key: '1blankspace-connect-auth-key', persist: true, protect: true})
 												}			
-								},
-
-					password: 	{
-									save:		function (oParam)
-												{
-													var sPassword = ns1blankspace.util.getParam(oParam, 'password').value;
-													var sPasswordProtected = ns1blankspace.util.getParam(oParam, 'protectedData').value;
-
-													if (sPasswordProtected == undefined)
-													{	
-														ns1blankspace.util.protect.encrypt(
-														{
-															data: sPassword,
-															cryptoKeyReference: '1blankspace-connect-auth-key',
-															local: true,
-															persist: true,
-															onComplete: ns1blankspace.connect.protect.password.save
-														});
-													}
-													else
-													{
-
-													}	
-
-												},
-
-									search: 	function (oParam)
-												{
-
-												}
-								}										
+								}								
 				}								
 }					
