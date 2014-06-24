@@ -37,13 +37,12 @@ ns1blankspace.util.protect =
 														if (sPassword == undefined) {sPassword = (Math.random()).toString()}
 														var sCryptoKey = CryptoJS.PBKDF2(sPassword, sSalt, { keySize: 512/32 }).toString();
 
+														oParam = ns1blankspace.util.setParam(oParam, 'cryptoKey', sCryptoKey);
+
 														if (bPersist)
 														{	
 															if (bLocal)
 															{	
-																//oParam = ns1blankspace.util.setParam(oParam, 'key', sCryptoKeyReference);
-																//oParam = ns1blankspace.util.setParam(oParam, 'data', sCryptoKey);
-
 																ns1blankspace.util.whenCan.execute(
 																{
 																	now:
@@ -66,8 +65,6 @@ ns1blankspace.util.protect =
 																		param: oParam
 																	}	
 																});
-
-																//ns1blankspace.util.local.cache.save(oParam);
 															}
 															else
 															{
@@ -94,7 +91,9 @@ ns1blankspace.util.protect =
 													}
 													else
 													{	
-														if (sCryptoKeyReference !== undefined)
+														var sCryptoKey = ns1blankspace.util.getParam(oParam, 'cryptoKey', {remove: true}).value;
+
+														if (sCryptoKeyReference && sCryptoKey)
 														{	
 															ns1blankspace.util.protect.key.data[sCryptoKeyReference] = sCryptoKey;
 														}
@@ -144,11 +143,28 @@ ns1blankspace.util.protect =
 												{	
 													var sCryptoKey = oResponse.data.rows[0].key;
 												}
-												//else
-												//{
-													//oParam =  ns1blankspace.util.setParam(oParam, 'persist', true);
-													//ns1blankspace.util.protect.key.create.single(oParam)
-												//}	
+												else
+												{
+													ns1blankspace.util.whenCan.execute(
+													{
+														now:
+														{
+															method: ns1blankspace.util.protect.key.create.single,
+															param:
+															{
+																local: bLocal,
+																persist: true,
+																cryptoKeyReference: sCryptoKeyReference
+															}
+														},
+														then:
+														{
+															comment: 'util.protect.key.create.single<>util.protect.key.search',
+															method: ns1blankspace.util.protect.key.search,
+															param: oParam
+														}
+													});
+												}	
 											}
 
 											if (sCryptoKey)
