@@ -78,7 +78,7 @@ ns1blankspace.connect =
 
 						if (oCryptoKey.exists)
 						{	
-							ns1blankspace.util.protect.key.data[ns1blankspace.connect.data.cryptoKeyReference] = oCryptoKey.value;
+							if (oCryptoKey.value) {ns1blankspace.util.protect.key.data[ns1blankspace.connect.data.cryptoKeyReference] = oCryptoKey.value;}
 						}	
 
 						ns1blankspace.app.set(oParam);

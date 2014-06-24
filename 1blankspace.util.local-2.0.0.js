@@ -108,17 +108,18 @@ ns1blankspace.util.local =
 										var bJSON = ns1blankspace.util.getParam(oParam, 'json', {default: sKey.toLowerCase().indexOf('.json') != -1}).value;
 										var bProtect = ns1blankspace.util.getParam(oParam, 'protect', {"default": false}).value;
 
-										var oData = ns1blankspace.util.getParam(oParam, 'data').value;
+										var oData = ns1blankspace.util.getParam(oParam, 'data');
 
-										if (oData === undefined)
+										if (!oData.exists)
 										{	
-											var oData = oStorage.getItem(sKey);
+											var sData = oStorage.getItem(sKey);
+											if (sData == null) {sData = undefined}
 
-											if (bProtect && ns1blankspace.util.protect !== undefined && oData !== null)
+											if (bProtect && ns1blankspace.util.protect !== undefined && sData !== undefined)
 											{
 												oParam = ns1blankspace.util.setParam(oParam, 'cryptoKeyReference', ns1blankspace.util.local.cache.data.cryptoKeyReference);
 												oParam = ns1blankspace.util.setParam(oParam, 'cryptoKey', ns1blankspace.util.protect.key.data[ns1blankspace.util.local.cache.data.cryptoKeyReference]);
-												oParam = ns1blankspace.util.setParam(oParam, 'protectedData', oData);
+												oParam = ns1blankspace.util.setParam(oParam, 'protectedData', sData);
 
 												ns1blankspace.util.whenCan.execute(
 												{
@@ -129,7 +130,7 @@ ns1blankspace.util.local =
 														{
 															cryptoKeyReference: ns1blankspace.util.local.cache.data.cryptoKeyReference,
 															cryptoKey: ns1blankspace.util.protect.key.data[ns1blankspace.util.local.cache.data.cryptoKeyReference],
-															protectedData: oData
+															protectedData: sData
 														}
 													},
 													then:
@@ -143,18 +144,20 @@ ns1blankspace.util.local =
 											}
 											else
 											{
-												oParam.data = oData;
+												oParam.data = sData;
 												ns1blankspace.util.local.cache.search(oParam)
 											}
 										}	
 										else		
 										{
-											if (bJSON && oData !== undefined)
+											var oDataReturn = oData.value;
+
+											if (bJSON && oDataReturn !== undefined)
 											{
-												oData = JSON.parse(oStorage.getItem(sKey));
+												oDataReturn = JSON.parse(oDataReturn);
 											}
 
-											ns1blankspace.util.whenCan.return(oData, oParam);
+											ns1blankspace.util.whenCan.return(oDataReturn, oParam);
 										}	
 									}	
 								},
