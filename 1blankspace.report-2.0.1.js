@@ -1917,7 +1917,7 @@ ns1blankspace.report =
 					{
 						var sFieldToSearch = (this.indexOf('*') > -1) ? this.substr(0, this.length - 1) : this;
 						if ($.grep(aFieldsIncluded, function(a) 
-													{ return a.substr(0, sFieldToSearch.length) === sFieldToSearch}
+													{ return a.substr(0, sFieldToSearch.length) === sFieldToSearch.toString()}
 							).length > 0)
 						{	
 							bIncluded = true;
