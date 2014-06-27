@@ -102,7 +102,7 @@ ns1blankspace.experience.journey =
 
 	init: 		function (oParam) 
 				{
-					ns1blankspace.experience.journey.init(
+					ns1blankspace.experience.journey.controller.init(
 					[
 						{
 							what: 'click',
@@ -168,17 +168,18 @@ ns1blankspace.experience.journey =
 					}
 				},
 
-	coordinate:
+	controller:
 				{
 					init: 		function (aActions)
 								{
 									$.each(aActions, function (i, v)
 									{
-										$(document).on(v.what, v.where, function ()
+										$(document).on(v.what, v.where, function (e)
 										{
-											ns1blankspace.experience.journey.coordinate.message(
+											ns1blankspace.experience.journey.controller.message(
 											{
-												initiator: $(this)
+												initiator: $(this),
+												event: e,
 												subject: v.message
 											});
 										});
@@ -194,7 +195,7 @@ ns1blankspace.experience.journey =
 
 									if (sSubject)
 									{
-										fMethod = ns1blankspace.experience.journey.coordinate[sSubject];
+										fMethod = ns1blankspace.experience.journey.controller[sSubject];
 										fMethod(oParam);
 									}
 								},
@@ -298,6 +299,7 @@ ns1blankspace.experience.journey =
 								function (oParam)
 								{
 									var oInitiator = ns1blankspace.util.getParam(oParam, 'initiator').value;
+									var oEvent = ns1blankspace.util.getParam(oParam, 'event').value;
 									
 									var oParam = {xhtmlElementID: toInitiator.attr('id')}
 									var oJourney = ns1blankspace.experience.journey.get(oParam);
@@ -305,7 +307,7 @@ ns1blankspace.experience.journey =
 									oParam = ns1blankspace.util.setParam(oParam, 'xhtmlPopulateElementID', oJourney.previousDestination.xhtmlContainerID + '-populate');
 									oParam = ns1blankspace.util.setParam(oParam, 'routeID', oJourney.sourceRouteID);
 
-									if (e.which === 13)
+									if (oEvent.which === 13)
 							    	{
 										oParam = ns1blankspace.util.setParam(oParam, 'tenancy', 'multi');
 										ns1blankspace.experience.journey.populateThingsToSee(oParam);
@@ -326,6 +328,7 @@ ns1blankspace.experience.journey =
 								function (oParam)
 								{
 									var oInitiator = ns1blankspace.util.getParam(oParam, 'initiator').value;
+									var oEvent = ns1blankspace.util.getParam(oParam, 'event').value;
 									
 									var oParam = {xhtmlElementID: oInitiator.attr('id')}
 									var oJourney = ns1blankspace.experience.journey.get(oParam);
@@ -351,7 +354,7 @@ ns1blankspace.experience.journey =
 											oParam = ns1blankspace.util.setParam(oParam, 'xhtmlPopulateElementID', oInitiator.attr('id') + '-populate');
 										}
 
-										if (e.which === 13)
+										if (oEvent.which === 13)
 								    	{
 											oParam = ns1blankspace.util.setParam(oParam, 'tenancy', 'multi');
 											ns1blankspace.experience.journey.populateThingsToSee(oParam);
