@@ -132,17 +132,19 @@ ns1blankspace.experience.journey =
 						{
 							what: 'keyup',
 							where: 'input.ns1blankspaceExperiencePopulateWithDestination',
-							message: 'makeMutableDestination'
+							message: 'populateWithDestination',
+							inspection: false
 						},
 						{
 							what: 'keyup',
 							where: 'input.ns1blankspaceExperiencePopulateWith',
-							message: 'makeMutable'
+							message: 'populateWith',
+							inspection: false
 						},
 						{
 							what: 'click',
 							where: 'td.ns1blankspaceExperiencePopulateWith, div.ns1blankspaceExperiencePopulateWith',
-							message: 'populateWith'
+							message: 'makeMutable'
 						},
 						{
 							what: 'click',
@@ -180,7 +182,8 @@ ns1blankspace.experience.journey =
 											{
 												initiator: $(this),
 												event: e,
-												subject: v.message
+												subject: v.message,
+												inspection: (v.inspection!==undefined?v.inspection:true)
 											});
 										});
 									});
@@ -190,18 +193,23 @@ ns1blankspace.experience.journey =
 								{
 									var fMethod = ns1blankspace.util.getParam(oParam, 'method', {remove: true}).value;
 									var sSubject = ns1blankspace.util.getParam(oParam, 'subject', {remove: true}).value;
-
-									if (fMethod) {fMethod(oParam)}
+									var bInspection = ns1blankspace.util.getParam(oParam, 'inspection', {"default": true}).value;
 
 									if (sSubject)
 									{
 										fMethod = ns1blankspace.experience.journey.controller[sSubject];
-										fMethod(oParam);
 									}
+
+									if (bInspection) {debugger;}
+
+									ns1blankspace.debug.message(oParam, true);
+
+									if (fMethod) {fMethod(oParam)}
 								},
 
 					change: 	function (oParam)
 								{
+									// Reset a thing to see - so can be re-populated
 									var oInitiator = ns1blankspace.util.getParam(oParam, 'initiator').value;
 									var sXHTMLElementID = ns1blankspace.util.getParam(oParam, 'xhtmlElementID').value;
 									var sRouteID = oInitiator.attr('data-routeid');
@@ -217,6 +225,7 @@ ns1blankspace.experience.journey =
 
 					done: 		function (oParam)
 								{
+									// Populate a thing to see - based on selection
 									var oInitiator = ns1blankspace.util.getParam(oParam, 'initiator').value;
 
 									var sRouteID = oInitiator.attr('data-routeid');
@@ -285,6 +294,7 @@ ns1blankspace.experience.journey =
 
 					close: 		function (oParam)
 								{
+									//Cancel a potential population creation
 									var oInitiator = ns1blankspace.util.getParam(oParam, 'initiator').value;
 
 									oInitiator.closest('tr').hide();
@@ -295,7 +305,7 @@ ns1blankspace.experience.journey =
 									}	
 								},
 
-					makeMutableDestination: 	
+					populateWithDestination: 	
 								function (oParam)
 								{
 									var oInitiator = ns1blankspace.util.getParam(oParam, 'initiator').value;
@@ -324,7 +334,7 @@ ns1blankspace.experience.journey =
 									}
 								},
 
-					makeMutable: 	
+					populateWith: 	
 								function (oParam)
 								{
 									var oInitiator = ns1blankspace.util.getParam(oParam, 'initiator').value;
@@ -372,7 +382,7 @@ ns1blankspace.experience.journey =
 									}	
 								},
 
-					populateWith:
+					makeMutable:
 								function (oParam)
 								{
 									var oInitiator = ns1blankspace.util.getParam(oParam, 'initiator').value;
