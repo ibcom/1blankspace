@@ -73,16 +73,7 @@ ns1blankspace.experience.journey =
 					oJourney.previousDestination = (oJourney.sourceRoute.length!=0?oJourney.destinations[oJourney.sourceRoute.length-1]:undefined)
 
 					oJourney.destination.populationIsAtWork = false;
-					if (oJourney.previousDestination.populationAtWork)
-					{	
-						//oJourney.destination.populationIsAtWork = (oJourney.previousDestination.populationAtWork[0].id != undefined && oJourney.previousDestination.populationAtWork[0].id != '')
-					}
-
-					if (ns1blankspace.util.getParam(oParam, 'tenancy').value !== undefined)
-					{
-						//oJourney.destination.tenancy = ns1blankspace.util.getParam(oParam, 'tenancy').value;
-					}
-
+	
 					if (oJourney.destination.tenancy === undefined) {oJourney.destination.tenancy = 'single'}
 					if (oJourney.destination.thingsToDo === undefined) {oJourney.destination.thingsToDo = []}
 
@@ -131,14 +122,14 @@ ns1blankspace.experience.journey =
 						},
 						{
 							what: 'keyup',
-							where: 'input.ns1blankspaceExperiencePopulateWithDestination',
-							message: 'populateWithDestination',
+							where: 'input.ns1blankspaceExperiencePopulateDestinationWith, input.ns1blankspaceExperiencePopulateWithDestination',
+							message: 'populateDestinationWith',
 							inspection: false
 						},
 						{
 							what: 'keyup',
-							where: 'input.ns1blankspaceExperiencePopulateWith',
-							message: 'populateWith',
+							where: 'input.ns1blankspaceExperiencePopulateThingWith, input.ns1blankspaceExperiencePopulateWith',
+							message: 'populateThingWith',
 							inspection: false
 						},
 						{
@@ -160,7 +151,14 @@ ns1blankspace.experience.journey =
 							what: 'click',
 							where: 'td.ns1blankspaceExperienceTravelTo',
 							message: 'travelTo'
-						}
+						},
+						{
+							what: 'focusout',
+							where: 'input.ns1blankspaceExperiencePopulation',
+							message: 'rest'
+						},
+
+						
 					]);
 
 					//START APP
@@ -181,6 +179,8 @@ ns1blankspace.experience.journey =
 											ns1blankspace.experience.journey.controller.message(
 											{
 												initiator: $(this),
+												xhtmlElementID: $(this).attr('id'),
+												routeID: $(this).attr('data-routeid'),
 												event: e,
 												subject: v.message,
 												inspection: (v.inspection!==undefined?v.inspection:true)
@@ -193,10 +193,14 @@ ns1blankspace.experience.journey =
 								{
 									var fMethod = ns1blankspace.util.getParam(oParam, 'method', {remove: true}).value;
 									var sSubject = ns1blankspace.util.getParam(oParam, 'subject', {remove: true}).value;
+									var sRouteID = ns1blankspace.util.getParam(oParam, 'routeID').value;
 									var bInspection = ns1blankspace.util.getParam(oParam, 'inspection', {"default": true}).value;
-
 									var oInitiator = ns1blankspace.util.getParam(oParam, 'initiator').value;
-									var sRouteID = oInitiator.attr('data-routeid');
+
+									if (oInitiator.attr('data-populate'))
+									{
+										oParam = ns1blankspace.util.setParam(oParam, 'xhtmlPopulateElementID', oInitiator.attr('data-populate'));
+									}
 
 									ns1blankspace.debug.message(sSubject + ': ' + sRouteID, true);
 
@@ -205,44 +209,28 @@ ns1blankspace.experience.journey =
 										fMethod = ns1blankspace.experience.journey.controller[sSubject];
 									}
 
-									if (bInspection) {debugger;}
+									if (bInspection && ns1blankspace.debug.enabled) {debugger;}
 
 									if (fMethod) {fMethod(oParam)}
 								},
 
 					change: 	function (oParam)
 								{
-									// Reset a thing to see - so can be re-populated
-									var oInitiator = ns1blankspace.util.getParam(oParam, 'initiator').value;
+									var oInitiator = ns1blankspace.util.getParam(oParam, 'initiator', {remove: true}).value;
 									var sXHTMLElementID = ns1blankspace.util.getParam(oParam, 'xhtmlElementID').value;
-									var sRouteID = oInitiator.attr('data-routeid');
+									var sRouteID = ns1blankspace.util.getParam(oParam, 'routeID').value;
 
-									var oParam =
-									{
-										routeID: sRouteID,
-										xhtmlElementID: 'ns1blankspaceExperience-' + sRouteID
-									}
+									oParam = ns1blankspace.util.setParam(oParam, 'xhtmlElementID', 'ns1blankspaceExperience-' + sRouteID);
 
 									ns1blankspace.experience.journey.vacateThingToSee(oParam);
 								},
 
 					done: 		function (oParam)
 								{
-									// Populate a thing to see - based on selection
-									var oInitiator = ns1blankspace.util.getParam(oParam, 'initiator').value;
-
-									var sRouteID = oInitiator.attr('data-routeid');
-									var oParam = {routeID: sRouteID}
+									var oInitiator = ns1blankspace.util.getParam(oParam, 'initiator', {remove: true}).value;
 									var oJourney = ns1blankspace.experience.journey.get(oParam);
 
 									var sValue = oJourney.previousDestination.populationAtWork[0][oJourney.destination.model]
-
-									if (oInitiator.attr('data-populate'))
-									{
-										oParam = ns1blankspace.util.setParam(oParam, 'xhtmlPopulateElementID', oInitiator.attr('data-populate'));
-									}
-
-									oParam = ns1blankspace.util.setParam(oParam, 'xhtmlElementID', oInitiator.attr('id'));
 
 									if (oInitiator.attr('data-populaterouteid'))
 									{
@@ -256,21 +244,16 @@ ns1blankspace.experience.journey =
 
 					edit: 		function (oParam)
 								{
-									var oInitiator = ns1blankspace.util.getParam(oParam, 'initiator').value;
-
-									var sRouteID = oInitiator.attr('data-routeid');
-									var oParam = {routeID: sRouteID}
+									var oInitiator = ns1blankspace.util.getParam(oParam, 'initiator', {remove: true}).value;
 									var oJourney = ns1blankspace.experience.journey.get(oParam);
+
+									var sValue = oJourney.previousDestination.populationAtWork[0][oJourney.destination.model];
 
 									if (oJourney.destination.populationAtWork)
 									{
 										var sValue = oJourney.destination.populationAtWork[0]['id'];
 									}
-									else
-									{	
-										var sValue = oJourney.previousDestination.populationAtWork[0][oJourney.destination.model];
-									}
-
+									
 									if (oInitiator.attr('data-populate'))
 									{
 										oParam = ns1blankspace.util.setParam(oParam, 'xhtmlPopulateElementID', oInitiator.attr('data-populate'));
@@ -297,8 +280,7 @@ ns1blankspace.experience.journey =
 
 					close: 		function (oParam)
 								{
-									//Cancel a potential population creation
-									var oInitiator = ns1blankspace.util.getParam(oParam, 'initiator').value;
+									var oInitiator = ns1blankspace.util.getParam(oParam, 'initiator', {remove: true}).value;
 
 									oInitiator.closest('tr').hide();
 
@@ -308,14 +290,14 @@ ns1blankspace.experience.journey =
 									}	
 								},
 
-					populateWithDestination: 	
+					populateDestinationWith: 	
 								function (oParam)
 								{
-									var oInitiator = ns1blankspace.util.getParam(oParam, 'initiator').value;
-									var oEvent = ns1blankspace.util.getParam(oParam, 'event').value;
-									
-									var oParam = {xhtmlElementID: oInitiator.attr('id')}
+									var oInitiator = ns1blankspace.util.getParam(oParam, 'initiator', {remove: true}).value;
+									var oEvent = ns1blankspace.util.getParam(oParam, 'event', {remove: true}).value;
 									var oJourney = ns1blankspace.experience.journey.get(oParam);
+
+									var oParam = {xhtmlElementID: oInitiator.attr('id')}
 									
 									oParam = ns1blankspace.util.setParam(oParam, 'xhtmlPopulateElementID', oJourney.previousDestination.xhtmlContainerID + '-populate');
 									oParam = ns1blankspace.util.setParam(oParam, 'routeID', oJourney.sourceRouteID);
@@ -337,13 +319,11 @@ ns1blankspace.experience.journey =
 									}
 								},
 
-					populateWith: 	
+					populateThingWith: 	
 								function (oParam)
 								{
-									var oInitiator = ns1blankspace.util.getParam(oParam, 'initiator').value;
-									var oEvent = ns1blankspace.util.getParam(oParam, 'event').value;
-									
-									var oParam = {xhtmlElementID: oInitiator.attr('id')}
+									var oInitiator = ns1blankspace.util.getParam(oParam, 'initiator', {remove: true}).value;
+									var oEvent = ns1blankspace.util.getParam(oParam, 'event', {remove: true}).value;
 									var oJourney = ns1blankspace.experience.journey.get(oParam);
 
 									if (oInitiator.val().length == 0)
@@ -388,59 +368,15 @@ ns1blankspace.experience.journey =
 					makeMutable:
 								function (oParam)
 								{
-									var oInitiator = ns1blankspace.util.getParam(oParam, 'initiator').value;
+									var oInitiator = ns1blankspace.util.getParam(oParam, 'initiator', {remove: true}).value;
+									var oJourney = ns1blankspace.experience.journey.get(oParam);
 
 									if ($('#' + oInitiator.attr('id') + ' input').length == 0)
 									{	
-										var oParam = {}
-
-										oParam = ns1blankspace.util.setParam(oParam, 'xhtmlElementID', oInitiator.attr('id'));
-
-										if (oInitiator.attr('data-populate'))
-										{
-											oParam = ns1blankspace.util.setParam(oParam, 'xhtmlPopulateElementID', oInitiator.attr('data-populate'));
-										}
-										
-										var sRoute = oInitiator.attr('data-routeid');
-										var oJourney = ns1blankspace.experience.journey.get(oParam);
-
-										var sDestinationID = oInitiator.attr('data-destinationid');
-										var sContextID = oInitiator.attr('data-id');
-										
-										var sHTML = $('#' + oParam.xhtmlElementID).html();
-										
-										var sElementID = ns1blankspace.util.getParam(oParam, 'xhtmlElementID').value;
-										var sElementInputID = sElementID + '-input';
-				
-										var sClass = 'ns1blankspaceExperiencePopulate';
-
-										if (oJourney.destination.type == 'select')
-										{
-											sClass = 'ns1blankspaceExperiencePopulateWith'
-										}
-
-										if (oJourney.previousDestination.tenancy == 'single' && !oJourney.destination.populationIsAtWork)
-										{
-											sClass = 'ns1blankspaceExperiencePopulateWithDestination'
-										}
-
-										sHTML = '<input style="width:100%;" id="' + sElementInputID + '" class="' + sClass + '" ' +
-													(sDestinationID?' data-destinationid="' + sDestinationID + '"':'') +
-													(sRoute?' data-routeid="' + sRoute + '"':'') +
-													(sContextID?' data-populateid="' + sContextID + '"':'') +
-																'value="' + sHTML + '">'
-										
-										$('#' + sElementID).html(sHTML);
-										$('#' + sElementInputID).focus();
-
-										if (oJourney.destination.type == "select")
-										{	
-											ns1blankspace.experience.journey.space.lease(
-											{
-												nextTo: 2,
-												xhtmlElementID: sElementInputID
-											});
-										}	
+										//if (oInitiator.attr('data-populate'))
+										//{
+										//	oParamMakeMutable = ns1blankspace.util.setParam(oParamMakeMutable, 'xhtmlPopulateElementID', oInitiator.attr('data-populate'));
+										//}
 										
 										if (oJourney.destination.type == "text")
 										{
@@ -450,27 +386,17 @@ ns1blankspace.experience.journey =
 											{
 												oJourney.previousDestination.populationAtRestIsNewBorn = true;
 
-												var oParam =
+												ns1blankspace.experience.journey.vacateThingToSee(
 												{
 													routeID: oJourney.previousRouteID,
 													xhtmlElementID: 'ns1blankspaceExperience-' + oJourney.previousRouteID
-												}
+												});
 
-												ns1blankspace.experience.journey.vacateThingToSee(oParam);
+												//ns1blankspace.experience.journey.controller.makeMutable(oParam);
 											}
 											else
 											{	
-												$('#' + sElementInputID).focusout(function(e)
-												{
-													ns1blankspace.experience.journey.controller.message(
-													{
-														initiator: $(this),
-														xhtmlElementID: $(this).attr('id'),
-														event: e,
-														subject: 'rest',
-														inspection: true
-													});
-												});	
+												ns1blankspace.experience.journey.mutateThingToSee(oParam)
 											}	
 										}	
 									}
@@ -478,7 +404,7 @@ ns1blankspace.experience.journey =
 
 					rest: 		function (oParam)
 								{
-									var oInitiator = ns1blankspace.util.getParam(oParam, 'initiator').value;
+									var oInitiator = ns1blankspace.util.getParam(oParam, 'initiator', {remove: true}).value;
 									var sXHTMLElementID = ns1blankspace.util.getParam(oParam, 'xhtmlElementID').value;
 									var sValue = $('#' + sXHTMLElementID).val();
 
@@ -490,12 +416,8 @@ ns1blankspace.experience.journey =
 
 					populate: 	function (oParam)
 								{
-									var oInitiator = ns1blankspace.util.getParam(oParam, 'initiator').value;
-
-									var oParam = {}
-
-									oParam = ns1blankspace.util.setParam(oParam, 'xhtmlElementID', oInitiator.attr('id'));
-
+									var oInitiator = ns1blankspace.util.getParam(oParam, 'initiator', {remove: true}).value;
+									
 									if (oInitiator.attr('data-populaterouteid'))
 									{
 										oParam = ns1blankspace.util.setParam(oParam, 'routeID', oInitiator.attr('data-populaterouteid'));
@@ -517,15 +439,9 @@ ns1blankspace.experience.journey =
 
 					doIt: 		function (oParam)
 								{
-									var oInitiator = ns1blankspace.util.getParam(oParam, 'initiator').value;
-
-									var oParam = {}
-
-									oParam = ns1blankspace.util.setParam(oParam, 'xhtmlElementID', oInitiator.attr('id'));
-									var sDoItID = oInitiator.attr('data-doitid');
-
+									var oInitiator = ns1blankspace.util.getParam(oParam, 'initiator', {remove: true}).value;
 									var oJourney = ns1blankspace.experience.journey.get(oParam);
-									
+									var sDoItID = oInitiator.attr('data-doitid');
 									var sDoIt = $.grep(oJourney.destination.thingsToDo, function(a) {return a.id == sDoItID})[0].doIt;
 
 									ns1blankspace.util.execute(sDoIt);
@@ -533,11 +449,7 @@ ns1blankspace.experience.journey =
 
 					travelTo: 	function (oParam)
 								{
-									var oInitiator = ns1blankspace.util.getParam(oParam, 'initiator').value;
-
-									var oParam = {}
-
-									oParam = ns1blankspace.util.setParam(oParam, 'xhtmlElementID', oInitiator.attr('id'));
+									var oInitiator = ns1blankspace.util.getParam(oParam, 'initiator', {remove: true}).value;
 
 									if (oInitiator.attr('data-travelToRouteID'))
 									{
@@ -643,14 +555,51 @@ ns1blankspace.experience.journey =
 								}
 				},
 
+	space: 		{		
+					options: {lease: {nextTo: {me: 1, myParent: 2}}},
+
+					lease:	function(oParam)
+								{
+									var sXHTMLElementID = ns1blankspace.util.getParam(oParam, 'xhtmlElementID').value;
+									var iNextTo = ns1blankspace.util.getParam(oParam, 'nextTo', {"default": ns1blankspace.experience.journey.space.options.lease.nextTo.me}).value;
+									var bRelease = ns1blankspace.util.getParam(oParam, 'release', {"default": false}).value;
+
+									var sXHTMLNextToElementID = sXHTMLElementID;
+									var oXHTMLNextToElement = $('#' + sXHTMLNextToElementID);
+
+									if (iNextTo == ns1blankspace.experience.journey.space.options.lease.nextTo.myParent)
+									{
+										sXHTMLNextToElementID = sXHTMLElementID.replace('-input', '');
+										oXHTMLNextToElement = $('#' + sXHTMLNextToElementID).closest('tr');
+									}
+
+									var sXHTMLPopulateElementID = sXHTMLElementID + '-populate';
+									var iLength = oXHTMLNextToElement.children().length;
+
+									if (bRelease)
+									{	
+										oXHTMLNextToElement.next().remove();
+									}	
+									else if ($('#' + sXHTMLPopulateElementID).length == 0)
+									{	
+										oXHTMLNextToElement.after('<tr>' +
+											'<td colspan=' + iLength + '"><div id="' + sXHTMLPopulateElementID + '"></div></td></tr>');
+									}	
+								},
+
+					release:	function(oParam)
+								{
+									oParam = ns1blankspace.util.setParam(oParam, 'release', true);
+									ns1blankspace.experience.journey.space.lease(oParam);
+								}			
+				},					
+
 	vacateThingToSee: 	
 				function (oParam) 
 				{
 					var oJourney = ns1blankspace.experience.journey.get(oParam);
 					var bPermanent = ns1blankspace.util.getParam(oParam, 'terminate', {"default": false}).value;
 					var oData = {};
-
-					//oJourney.destination.populationAtWork = [];
 
 					if (oJourney.destination.type == 'destination')  // VACATE DOWN
 					{
@@ -736,12 +685,6 @@ ns1blankspace.experience.journey =
 
 					$('#' + sXHTMLPopulateElementID).attr(ns1blankspace.xhtml.loadingSmall);
 
-					/*
-					$('#' + sXHTMLPopulateElementID).attr('data-populationatrest', sPopulateContext);
-					$('#' + sXHTMLPopulateElementID).val(aValues.join(' '));
-					$('#' + sXHTMLPopulateElementID).html(aValues.join(' '));
-					*/
-
 					$('#' + sXHTMLPopulateElementID + '-populate').slideUp(500);
 					$('#' + sXHTMLPopulateElementID + '-input-populate').slideUp(500);
 
@@ -750,6 +693,53 @@ ns1blankspace.experience.journey =
 
 					return oJourney.destination.population;
 				},
+
+	mutateThingToSee:
+				function (oParam)
+				{
+					var oJourney = ns1blankspace.experience.journey.get(oParam);
+
+					//var sRoute = oJourney.RouteID;
+					//var sDestinationID = oInitiator.attr('data-destinationid');
+					//var sContextID = oInitiator.attr('data-id');
+			
+					var sElementID = oJourney.xhtmlElementID;
+					var sHTML = $('#' + sElementID).html();
+					var sElementInputID = sElementID + '-input';
+
+					var bIsPopulateWith = ($.grep(oJourney.previousDestination.populateWith, function (a) {return (a.model == oJourney.destination.model)}).length != 0);
+
+					var sClass = 'ns1blankspaceExperiencePopulation';
+
+					if (oJourney.destination.type == 'select')
+					{
+						sClass += ' ns1blankspaceExperiencePopulateWith'
+					}
+
+					if (oJourney.previousDestination.tenancy == 'single' && !oJourney.destination.populationIsAtWork && bIsPopulateWith)
+					{
+						sClass += ' ns1blankspaceExperiencePopulateDestinationWith'
+					}
+
+					sHTML = '<input style="width:100%;" id="' + sElementInputID + '"' +
+								' class="' + sClass + '" ' +
+								(oJourney.destinationID?' data-destinationid="' + oJourney.destinationID + '"':'') +
+								(oJourney.routeID?' data-routeid="' + oJourney.routeID + '"':'') +
+								(oJourney.dataID?' data-populateid="' + oJourney.dataID + '"':'') +
+											'value="' + sHTML + '">'
+					
+					$('#' + sElementID).html(sHTML);
+					$('#' + sElementInputID).focus();
+
+					if (oJourney.destination.type == "select")
+					{	
+						ns1blankspace.experience.journey.space.lease(
+						{
+							nextTo: 2,
+							xhtmlElementID: sElementInputID
+						});
+					}
+				},		
 
 	restThingToSee: 	
 				function (oParam, oResponse) 
@@ -795,6 +785,8 @@ ns1blankspace.experience.journey =
 								{
 									oPopulationBeingRested[oJourney.destination.model + '.' + v.model] = oPopulationAtWorkToBeRested[v.model]
 								});
+
+								bOKToRest = true;
 							}	
 
 							if (oJourney.destination.type == 'text')
@@ -839,9 +831,7 @@ ns1blankspace.experience.journey =
 							}	
 						}	
 
-						console.log(oData);
-						console.log(oPopulationBeingRested);
-						console.log(bOKToRest);
+						ns1blankspace.debug.message(oPopulationBeingRested, true);
 
 						if (bOKToRest)
 						{	
@@ -1039,7 +1029,6 @@ ns1blankspace.experience.journey =
 								else if (sValue.toLowerCase() == 'id')
 								{
 									sValue = oJourney.previousDestination.populationAtWork[0].id;
-									//sValue = oJourney.destinationContext.population[0].id;
 								}
 								else
 								{	
@@ -1058,9 +1047,6 @@ ns1blankspace.experience.journey =
 											sValue = $($('#ns1blankspaceExperience-' + sRouteID + '-' + sValue + ' input')[0]).val();
 										}	
 									}
-
-									//sValue = $('#ns1blankspaceExperience-' + sRouteID + '-' + sValue).val()
-									//sValue = $('#ns1blankspaceExperience-' + oJourney.originID + '-' + oJourney.destinationID + '-' + sValue).val();
 								}
 							}	
 
@@ -1120,8 +1106,6 @@ ns1blankspace.experience.journey =
 							oJourney.destination.populationAtRestContext = 
 								(oJourney.destination.populationAtRest.length>0?oJourney.destination.populationAtRest[0].id:undefined)
 
-							//oJourney.destination.xhtmlContainerID = 'ns1blankspaceExperienceContainer-' + oJourney.routeID;
-
 							var sClass = '';
 
 							if (oJourney.destination.model) {sClass = 'ns1blankspaceExperienceContainer'};
@@ -1140,8 +1124,6 @@ ns1blankspace.experience.journey =
 										{	
 											var aValues = [];
 
-											//var sObject = thingToSee.model.split('.')[0];
-
 											$.each(thingToSee.thingsToSee, function (j, thingToSeeThingToSee)
 											{
 												if (thingToSeeThingToSee.model) {aValues.push(oJourney.destination.populationAtRest[0][thingToSee.model + '.' + thingToSeeThingToSee.model])}
@@ -1156,7 +1138,6 @@ ns1blankspace.experience.journey =
 									}	
 								}
 
-								//if (thingToSee.tenancy == 'multi')
 								if (thingToSee.type == 'destination')
 								{
 									if (oJourney.destination.populationAtWork.length > 0)
@@ -1269,8 +1250,6 @@ ns1blankspace.experience.journey =
 									}
 
 									aHTML.push('</div>');
-
-									//aHTML.push('<div id="ns1blankspaceExperience-' + oJourney.originID + '-' + oJourney.destinationID + '-' + thingToSee.id + '-populate"></div>');
 								}
 							});
 
@@ -1562,45 +1541,5 @@ ns1blankspace.experience.journey =
 							});	
 						}
 					}
-				},
-
-	space: 	
-				{		
-					options: {lease: {nextTo: {me: 1, myParent: 2}}},
-
-					lease:	function(oParam)
-								{
-									var sXHTMLElementID = ns1blankspace.util.getParam(oParam, 'xhtmlElementID').value;
-									var iNextTo = ns1blankspace.util.getParam(oParam, 'nextTo', {"default": ns1blankspace.experience.journey.space.options.lease.nextTo.me}).value;
-									var bRelease = ns1blankspace.util.getParam(oParam, 'release', {"default": false}).value;
-
-									var sXHTMLNextToElementID = sXHTMLElementID;
-									var oXHTMLNextToElement = $('#' + sXHTMLNextToElementID);
-
-									if (iNextTo == ns1blankspace.experience.journey.space.options.lease.nextTo.myParent)
-									{
-										sXHTMLNextToElementID = sXHTMLElementID.replace('-input', '');
-										oXHTMLNextToElement = $('#' + sXHTMLNextToElementID).closest('tr');
-									}
-
-									var sXHTMLPopulateElementID = sXHTMLElementID + '-populate';
-									var iLength = oXHTMLNextToElement.children().length;
-
-									if (bRelease)
-									{	
-										oXHTMLNextToElement.next().remove();
-									}	
-									else if ($('#' + sXHTMLPopulateElementID).length == 0)
-									{	
-										oXHTMLNextToElement.after('<tr>' +
-											'<td colspan=' + iLength + '"><div id="' + sXHTMLPopulateElementID + '"></div></td></tr>');
-									}	
-								},
-
-					release:	function(oParam)
-								{
-									oParam = ns1blankspace.util.setParam(oParam, 'release', true);
-									ns1blankspace.experience.journey.space.lease(oParam);
-								}			
-				}									
+				}			
 }
