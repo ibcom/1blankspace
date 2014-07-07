@@ -372,12 +372,7 @@ ns1blankspace.experience.journey =
 									var oJourney = ns1blankspace.experience.journey.get(oParam);
 
 									if ($('#' + oInitiator.attr('id') + ' input').length == 0)
-									{	
-										//if (oInitiator.attr('data-populate'))
-										//{
-										//	oParamMakeMutable = ns1blankspace.util.setParam(oParamMakeMutable, 'xhtmlPopulateElementID', oInitiator.attr('data-populate'));
-										//}
-										
+									{											
 										if (oJourney.destination.type == "text")
 										{
 											var bIsPopulateWith = ($.grep(oJourney.previousDestination.populateWith, function (a) {return (a.model == oJourney.destination.model)}).length != 0);
@@ -392,13 +387,17 @@ ns1blankspace.experience.journey =
 													xhtmlElementID: 'ns1blankspaceExperience-' + oJourney.previousRouteID
 												});
 
-												//ns1blankspace.experience.journey.controller.makeMutable(oParam);
+												ns1blankspace.experience.journey.mutateThingToSee(oParam);
 											}
 											else
 											{	
-												ns1blankspace.experience.journey.mutateThingToSee(oParam)
+												ns1blankspace.experience.journey.mutateThingToSee(oParam);
 											}	
-										}	
+										}
+										else
+										{
+											ns1blankspace.experience.journey.mutateThingToSee(oParam);
+										}
 									}
 								},
 
@@ -628,6 +627,7 @@ ns1blankspace.experience.journey =
 					}
 					else
 					{
+						oParam.edit = true;
 						ns1blankspace.experience.journey.populateThingsToSee(oParam);
 					}
 				},
@@ -698,10 +698,6 @@ ns1blankspace.experience.journey =
 				function (oParam)
 				{
 					var oJourney = ns1blankspace.experience.journey.get(oParam);
-
-					//var sRoute = oJourney.RouteID;
-					//var sDestinationID = oInitiator.attr('data-destinationid');
-					//var sContextID = oInitiator.attr('data-id');
 			
 					var sElementID = oJourney.xhtmlElementID;
 					var sHTML = $('#' + sElementID).html();
@@ -1151,12 +1147,12 @@ ns1blankspace.experience.journey =
 									aHTML.push('<div><div class="ns1blankspaceCaption" style="width:300px; float:left;">' +
 												thingToSee.caption + '</div>');
 
-									if (thingToSee.tenancy == 'single')
+									if (thingToSee.tenancy == 'single' && oJourney.previousDestination.populationAtRestIsNewBorn)
 									{	
 										aHTML.push('<div id="ns1blankspaceExperience-' + oJourney.routeID + '-' + thingToSee.id +
 														'-action" class="ns1blankspaceExperienceCancel" style="float:right; width:100px;"' +
 														' data-routeid="' + oJourney.routeID + '-' + thingToSee.id + '">' +
-														'</div></div>');
+														'CANCEL</div></div>');
 									}
 									else if (thingToSee.populationCanReproduce == 'true')
 									{
@@ -1196,19 +1192,6 @@ ns1blankspace.experience.journey =
 										oJourney.destination.populationAtRest[0][thingToSee.model] = sValue;
 									}	
 
-									if (false)
-									{	
-										aHTML.push('<div><input ' +
-												' id="ns1blankspaceExperience-' + oJourney.routeID + '-' + thingToSee.id + '"' +
-												' class="ns1blankspaceText ns1blankspaceExperiencePopulateWith' +
-												(thingToSee.populationCanReproduce == "true"?' ns1blankspaceExperienceEdit':'') + '"' +
-												' data-destinationid="' + thingToSee.id + '"' +
-												' data-routeID="' + oJourney.routeID + '-' + thingToSee.id + '"' +
-												' data-populationatrestcontext="' + oJourney.destination.populationAtRestContext + '"' +
-												' data-id="' + oJourney.destination.populationAtRestContext + '"' +
-												' value="' + sValue + '">');
-									}
-									
 									var bShow = true;
 									var bSet = false;
 
@@ -1229,16 +1212,31 @@ ns1blankspace.experience.journey =
 										aHTML.push('<div><div class="ns1blankspaceCaption">' +
 													thingToSee.caption + '</div>');
 
-										aHTML.push('<div' +
-													' id="ns1blankspaceExperience-' + oJourney.routeID + '-' + thingToSee.id + '"' +
-													' class="ns1blankspaceText ns1blankspaceExperiencePopulateWith' +
-													(thingToSee.populationCanReproduce == "true"?' ns1blankspaceExperienceEdit':'') + '"' +
-													' data-destinationid="' + thingToSee.id + '"' +
-													' data-routeID="' + oJourney.routeID + '-' + thingToSee.id + '"' +
-													' data-populationatrestcontext="' + oJourney.destination.populationAtRestContext + '"' +
-													' data-id="' + oJourney.destination.populationAtRestContext + '"' +
-													' style="height:30px;">' +
-													 sValue + '</div>');
+										if (bEdit)
+										{	
+											aHTML.push('<div><input ' +
+														' id="ns1blankspaceExperience-' + oJourney.routeID + '-' + thingToSee.id + '"' +
+														' class="ns1blankspaceText ns1blankspaceExperiencePopulateDestinationWith' +
+														(thingToSee.populationCanReproduce == "true"?' ns1blankspaceExperienceEdit':'') + '"' +
+														' data-destinationid="' + thingToSee.id + '"' +
+														' data-routeID="' + oJourney.routeID + '-' + thingToSee.id + '"' +
+														' data-populationatrestcontext="' + oJourney.destination.populationAtRestContext + '"' +
+														' data-id="' + oJourney.destination.populationAtRestContext + '"' +
+														' value="' + sValue + '">');
+										}
+										else
+										{
+											aHTML.push('<div' +
+														' id="ns1blankspaceExperience-' + oJourney.routeID + '-' + thingToSee.id + '"' +
+														' class="ns1blankspaceText ns1blankspaceExperiencePopulateWith' +
+														(thingToSee.populationCanReproduce == "true"?' ns1blankspaceExperienceEdit':'') + '"' +
+														' data-destinationid="' + thingToSee.id + '"' +
+														' data-routeID="' + oJourney.routeID + '-' + thingToSee.id + '"' +
+														' data-populationatrestcontext="' + oJourney.destination.populationAtRestContext + '"' +
+														' data-id="' + oJourney.destination.populationAtRestContext + '"' +
+														' style="height:30px;">' +
+														 sValue + '</div>');
+										}	
 									}	
 
 									if (false && thingToSee.populationCanReproduce == "true")

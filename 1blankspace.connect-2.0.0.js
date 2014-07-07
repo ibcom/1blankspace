@@ -190,17 +190,11 @@ ns1blankspace.connect =
 							{
 								aHTML.push('<tr class="ns1blankspaceRow">');
 
-								aHTML.push('<td id="ns1blankspaceMostLikely_Title-' + this.id + '" class="ns1blankspaceMostLikely" style="width:100px;">' +
+								aHTML.push('<td id="ns1blankspaceMostLikely_Title-' + this.id + '" class="ns1blankspaceMostLikely" style="width:200px;">' +
 														this.title + '</td>');
 
 								aHTML.push('<td id="ns1blankspaceMostLikely_URL-' + this.id + '" class="ns1blankspaceMostLikely">' +
-														ns1blankspace.connect.url.asXHTML({title: this.url, url: this.url}));
-
-								if (this.urllogon != '')
-								{	
-									aHTML.push('<span style="color:#999999;"> (' +
-														this.urllogon + ')</span>');
-								}
+														ns1blankspace.connect.url.asXHTML({title: 'Open', url: this.url}));
 
 								aHTML.push('</td></tr>');
 							});
