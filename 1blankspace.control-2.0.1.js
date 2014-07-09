@@ -2031,7 +2031,7 @@ ns1blankspace.attachments =
 					var iAttachmentType;
 					var oActions = {add: true};
 					var sHelpNotes;
-					var oContext = {in: false};
+					var oContext = {inContext: false};
 					
 					if (oParam != undefined)
 					{
@@ -2400,7 +2400,7 @@ ns1blankspace.actions =
 					var iContactPerson;
 					var sContactBusinessText;
 					var sContactPersonText;
-					var oContext = {in: false};
+					var oContext = {inContext: false};
 					
 					if (oParam != undefined)
 					{

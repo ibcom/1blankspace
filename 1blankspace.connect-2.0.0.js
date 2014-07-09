@@ -966,7 +966,7 @@ ns1blankspace.connect =
 											}
 											else
 											{
-												return ns1blankspace.util.whenCan.return(oResponse, oParam)
+												return ns1blankspace.util.whenCan.complete(oResponse, oParam)
 											}
 										}
 									}

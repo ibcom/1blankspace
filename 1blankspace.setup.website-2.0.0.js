@@ -338,19 +338,19 @@ ns1blankspace.setup.website =
 
 					$('#ns1blankspaceControlPages').click(function(event)
 					{
-						ns1blankspace.show({selector: '#ns1blankspaceMainPages', context: {in: false}});
+						ns1blankspace.show({selector: '#ns1blankspaceMainPages', context: {inContext: false}});
 						ns1blankspace.setup.website.css.getURI();  //after getting custom css it calls pages.show()
 					});
 
 					$('#ns1blankspaceControlForms').click(function(event)
 					{
-						ns1blankspace.show({selector: '#ns1blankspaceMainForms', context: {in: false}});
+						ns1blankspace.show({selector: '#ns1blankspaceMainForms', context: {inContext: false}});
 						ns1blankspace.setup.website.forms();
 					});
 					
 					$('#ns1blankspaceControlAddAttachment').click(function(event)
 					{
-						ns1blankspace.show({selector: '#ns1blankspaceMainAddAttachment', context: {in: false}});
+						ns1blankspace.show({selector: '#ns1blankspaceMainAddAttachment', context: {inContext: false}});
 						ns1blankspace.setup.website.attachment.add();
 					});
 					
@@ -368,13 +368,13 @@ ns1blankspace.setup.website =
 
 					$('#ns1blankspaceControlURLs').click(function(event)
 					{
-						ns1blankspace.show({selector: '#ns1blankspaceMainURLs', context: {in: false}});
+						ns1blankspace.show({selector: '#ns1blankspaceMainURLs', context: {inContext: false}});
 						ns1blankspace.setup.website.urls.show();
 					});
 
 					$('#ns1blankspaceControlHTTPHeaders').click(function(event)
 					{
-						ns1blankspace.show({selector: '#ns1blankspaceMainHTTPHeaders', context: {in: false}});
+						ns1blankspace.show({selector: '#ns1blankspaceMainHTTPHeaders', context: {inContext: false}});
 						ns1blankspace.setup.website.httpHeaders.show();
 					});
 				},

@@ -365,13 +365,13 @@ ns1blankspace.messaging.conversation =
 
 					$('#ns1blankspaceControlParticipants').click(function(event)
 					{
-						ns1blankspace.show({selector: '#ns1blankspaceMainParticipants', context: {in: false}});
+						ns1blankspace.show({selector: '#ns1blankspaceMainParticipants', context: {inContext: false}});
 						ns1blankspace.messaging.conversation.participants.init();
 					});
 
 					$('#ns1blankspaceControlPosts').click(function(event)
 					{
-						ns1blankspace.show({selector: '#ns1blankspaceMainPosts', context: {in: false}});
+						ns1blankspace.show({selector: '#ns1blankspaceMainPosts', context: {inContext: false}});
 						ns1blankspace.messaging.conversation.posts.show();
 					});
 				

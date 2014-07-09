@@ -63,7 +63,7 @@ ns1blankspace.util.local =
 												var sData = ns1blankspace.util.getParam(oParam, 'protectedData').value;
 												oStorage.setItem(sKey, sData);
 
-												return ns1blankspace.util.whenCan.return(sData, oParam);
+												return ns1blankspace.util.whenCan.complete(sData, oParam);
 											}
 											else
 											{	
@@ -93,7 +93,7 @@ ns1blankspace.util.local =
 										{
 											oStorage.setItem(sKey, sData);
 
-											return ns1blankspace.util.whenCan.return(sData, oParam);
+											return ns1blankspace.util.whenCan.complete(sData, oParam);
 										}	
 									}	
 								},
@@ -157,7 +157,7 @@ ns1blankspace.util.local =
 												oDataReturn = JSON.parse(oDataReturn);
 											}
 
-											ns1blankspace.util.whenCan.return(oDataReturn, oParam);
+											ns1blankspace.util.whenCan.complete(oDataReturn, oParam);
 										}	
 									}	
 								},

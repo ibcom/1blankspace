@@ -98,7 +98,7 @@ ns1blankspace.util.protect =
 															ns1blankspace.util.protect.key.data[sCryptoKeyReference] = sCryptoKey;
 														}
 
-														return ns1blankspace.util.whenCan.return(sSavedCryptoKey, oParam)
+														return ns1blankspace.util.whenCan.complete(sSavedCryptoKey, oParam)
 													}	
 												},
 
@@ -112,7 +112,7 @@ ns1blankspace.util.protect =
 
 									if (ns1blankspace.util.protect.key.data[sCryptoKeyReference] !== undefined)
 									{	
-										ns1blankspace.util.whenCan.return(ns1blankspace.util.protect.key.data[sCryptoKeyReference], oParam);
+										ns1blankspace.util.whenCan.complete(ns1blankspace.util.protect.key.data[sCryptoKeyReference], oParam);
 									}
 									else
 									{	
@@ -172,7 +172,7 @@ ns1blankspace.util.protect =
 												ns1blankspace.util.protect.key.data[sCryptoKeyReference] = sCryptoKey;
 											}
 
-											return ns1blankspace.util.whenCan.return(sCryptoKey, oParam);
+											return ns1blankspace.util.whenCan.complete(sCryptoKey, oParam);
 										}
 									}	
 								}					
@@ -193,7 +193,7 @@ ns1blankspace.util.protect =
 						}
 						else
 						{
-							return ns1blankspace.util.whenCan.return(sProtectedData, oParam);
+							return ns1blankspace.util.whenCan.complete(sProtectedData, oParam);
 						}	
 					}
 					else
@@ -231,7 +231,7 @@ ns1blankspace.util.protect =
 						}
 						else
 						{
-							return ns1blankspace.util.whenCan.return(sData, oParam);
+							return ns1blankspace.util.whenCan.complete(sData, oParam);
 						}	
 					}
 					else

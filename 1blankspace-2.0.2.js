@@ -1292,7 +1292,8 @@ ns1blankspace.app =
 					var bNew = ns1blankspace.util.getParam(oParam, 'new', {"default": false}).value;
 					var bAction = ns1blankspace.util.getParam(oParam, 'action', {"default": false}).value;
 					var bActionOptions = ns1blankspace.util.getParam(oParam, 'actionOptions', {"default": false}).value;
-					var bContext = ns1blankspace.util.getParam(oParam, 'in', {"default": true}).value;
+					var bContext = ns1blankspace.util.getParam(oParam, 'in').value;
+					if (!bContext) {ns1blankspace.util.getParam(oParam, 'inContext', {"default": true}).value};
 					var bAll = ns1blankspace.util.getParam(oParam, 'all', {"default": true}).value;
 
 					var bSpecific = (bNew || bAction || bActionOptions);
@@ -4033,8 +4034,10 @@ ns1blankspace.util =
 										oParam.now.method(oNowParam)
 									}	
 								},
+
+					"return": 	ns1blankspace.util.whenCan.complete;		
 								
-					return: 	function(sReturn, oParam)
+					complete: 	function(sReturn, oParam)
 								{
 									if (ns1blankspace.util.whenCan.queue.length > 0)
 									{	
