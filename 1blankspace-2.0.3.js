@@ -1293,7 +1293,7 @@ ns1blankspace.app =
 					var bAction = ns1blankspace.util.getParam(oParam, 'action', {"default": false}).value;
 					var bActionOptions = ns1blankspace.util.getParam(oParam, 'actionOptions', {"default": false}).value;
 					var bContext = ns1blankspace.util.getParam(oParam, 'in').value;
-					if (!bContext) {ns1blankspace.util.getParam(oParam, 'inContext', {"default": true}).value};
+					if (bContext == undefined) {bContext = ns1blankspace.util.getParam(oParam, 'inContext', {"default": true}).value};
 					var bAll = ns1blankspace.util.getParam(oParam, 'all', {"default": true}).value;
 
 					var bSpecific = (bNew || bAction || bActionOptions);
@@ -5664,7 +5664,7 @@ ns1blankspace.show =
 						if (oParam.context) {oContext = oParam.context}
 					}
 							
-					if (!oContext && bRefresh) {oContext = {"in": false}} 		
+					if (!oContext && bRefresh) {oContext = {inContext: false}} 		
 					ns1blankspace.app.context(oContext);
 							
 					$(ns1blankspace.xhtml.container).hide();
