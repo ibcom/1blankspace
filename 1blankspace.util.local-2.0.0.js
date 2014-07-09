@@ -105,7 +105,7 @@ ns1blankspace.util.local =
 										var sKey = ns1blankspace.util.local.cache.context(oParam);
 										var bPersist = ns1blankspace.util.getParam(oParam, 'persist', {"default": false}).value;
 										var oStorage = (bPersist?localStorage:sessionStorage);
-										var bJSON = ns1blankspace.util.getParam(oParam, 'json', {default: sKey.toLowerCase().indexOf('.json') != -1}).value;
+										var bJSON = ns1blankspace.util.getParam(oParam, 'json', {"default": sKey.toLowerCase().indexOf('.json') != -1}).value;
 										var bProtect = ns1blankspace.util.getParam(oParam, 'protect', {"default": false}).value;
 
 										var oData = ns1blankspace.util.getParam(oParam, 'data');

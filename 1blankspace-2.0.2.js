@@ -4035,8 +4035,6 @@ ns1blankspace.util =
 									}	
 								},
 
-					"return": 	ns1blankspace.util.whenCan.complete;		
-								
 					complete: 	function(sReturn, oParam)
 								{
 									if (ns1blankspace.util.whenCan.queue.length > 0)
