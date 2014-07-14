@@ -463,7 +463,7 @@ ns1blankspace.experience.journey =
 									else if ($('#' + sXHTMLPopulateElementID).length == 0)
 									{	
 										oXHTMLNextToElement.after('<tr>' +
-											'<td colspan=' + iLength + '"><div id="' + sXHTMLPopulateElementID + '"></div></td></tr>');
+											'<td colspan=' + iLength + '" style="padding:0px;"><div id="' + sXHTMLPopulateElementID + '"></div></td></tr>');
 									}	
 								},
 
@@ -1333,7 +1333,7 @@ ns1blankspace.experience.journey =
 																	}
 																});
 
-																if (oJourney.dataID == 'new' && oJourney.previousDestination.type == 'destination')
+																if (oParam.populateID == '' && oJourney.previousDestination.type == 'destination')
 																{	
 																	$.each(oJourney.previousDestination.populateWith, function (i, v)
 																	{
@@ -1370,9 +1370,9 @@ ns1blankspace.experience.journey =
 															oPopulationAtWorkToBeRested.xhtmlElementID = oJourney.xhtmlElementID;
 															oJourney.previousDestination.populationAtWorkToBeRestedWhenCan.push(oPopulationAtWorkToBeRested);
 
-															$('#' + oJourney.xhtmlElementID + '-' + oParam.populateID).closest('tr').css('background-color', '#FF6666');
+															$('#' + oJourney.xhtmlElementID).closest('tr').css('background-color', '#FF6666');
 
-															$('#' + oJourney.xhtmlElementID + '-' + oParam.populateID).html(oPopulationAtWorkToBeRested.text);
+															$('#' + oJourney.xhtmlElementID).html(oPopulationAtWorkToBeRested.text);
 														}	
 														else
 														{
@@ -1386,9 +1386,9 @@ ns1blankspace.experience.journey =
 																$('#ns1blankspaceExperience-' + oJourney.sourceRouteID + '-').addClass('ns1blankspaceExperiencePopulate');
 															}
 
-															$('#ns1blankspaceExperience-' + oJourney.sourceRouteID + '-new-container [data-id="new"]').attr('data-id', oResponse.id)
+															$('#ns1blankspaceExperience-' + oJourney.previousRouteID + '-new-container [data-populate-id=""]').attr('data-populate-id', oResponse.id)
 
-															$('#ns1blankspaceExperience-' + oJourney.sourceRouteID + '-add').show();
+															//$('#ns1blankspaceExperience-' + oJourney.previousRouteID + '-add').show();
 															
 															$.each(oJourney.previousDestination.populationAtWorkToBeRestedWhenCan, function (i, v)
 															{
