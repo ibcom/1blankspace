@@ -28,8 +28,8 @@ ns1blankspace.experience.journey =
 					[
 						{
 							what: 'click',
-							where: 'div.ns1blankspaceExperienceClose, td.ns1blankspaceExperienceClose',
-							subject: 'close'
+							where: 'div.ns1blankspaceExperienceCancel, div.ns1blankspaceExperienceClose, td.ns1blankspaceExperienceClose',
+							subject: 'cancel'
 						},
 						{
 							what: 'click',
@@ -170,7 +170,7 @@ ns1blankspace.experience.journey =
 												id: $(this).attr('id'),
 												xhtmlElementID: $(this).attr('id'),
 												routeID: $(this).attr('data-route-id'),
-												populateRouteID: $(this).attr('data-populaterouteid'),
+												populateRouteID: $(this).attr('data-populate-route-id'),
 												event: e,
 												subject: v.subject,
 												inspection: (v.inspection!==undefined?v.inspection:true),
@@ -252,12 +252,14 @@ ns1blankspace.experience.journey =
 									ns1blankspace.experience.journey.thingsToSee.populate(oParam);
 								},
 
-					close: 		function (oParam)
-								{
-									var oInitiator = ns1blankspace.util.getParam(oParam, 'initiator', {remove: true}).value;
+					cancel: 	function (oParam)
+								{	
+									$('#ns1blankspaceExperience-' + oParam.routeID + '-control').html('<div class="ns1blankspaceExperienceAdd"' +
+											' id="ns1blankspaceExperience-' + oParam.routeID + '-cancel"' +
+											' data-route-id="' + oParam.routeID + '">' +
+											'Add</div>');
 
-									//Need to find one in table below
-									oInitiator.closest('tr').hide();
+									$('#ns1blankspaceExperience-' + oParam.routeID + '-new-container').hide();
 								},
 
 					populateDestinationWith: 	
@@ -267,8 +269,6 @@ ns1blankspace.experience.journey =
 									var oEvent = ns1blankspace.util.getParam(oParam, 'event', {remove: true}).value;
 									var oJourney = ns1blankspace.experience.journey.get(oParam);
 
-									//var oParam = {xhtmlElementID: oInitiator.attr('id')}
-									
 									oParam = ns1blankspace.util.setParam(oParam, 'xhtmlPopulateElementID', oJourney.previousDestination.xhtmlContainerID + '-populate');
 									oParam = ns1blankspace.util.setParam(oParam, 'routeID', oJourney.sourceRouteID);
 
@@ -384,9 +384,9 @@ ns1blankspace.experience.journey =
 								{
 									var oInitiator = ns1blankspace.util.getParam(oParam, 'initiator', {remove: true}).value;
 									
-									if (oInitiator.attr('data-populaterouteid'))
+									if (oInitiator.attr('data-populate-route-id'))
 									{
-										oParam = ns1blankspace.util.setParam(oParam, 'routeID', oInitiator.attr('data-populaterouteid'));
+										oParam = ns1blankspace.util.setParam(oParam, 'routeID', oInitiator.attr('data-populate-route-id'));
 									}
 									
 									//oParam = ns1blankspace.util.setParam(oParam, 'populateContext', oInitiator.attr('data-id'));
@@ -408,7 +408,7 @@ ns1blankspace.experience.journey =
 								{
 									var oInitiator = ns1blankspace.util.getParam(oParam, 'initiator', {remove: true}).value;
 									var oJourney = ns1blankspace.experience.journey.get(oParam);
-									var sDoItID = oInitiator.attr('data-doitid');
+									var sDoItID = oInitiator.attr('data-do-it-id');
 									var sDoIt = $.grep(oJourney.destination.thingsToDo, function(a) {return a.id == sDoItID})[0].doIt;
 
 									ns1blankspace.util.execute(sDoIt);
@@ -418,13 +418,11 @@ ns1blankspace.experience.journey =
 								{
 									var oInitiator = ns1blankspace.util.getParam(oParam, 'initiator', {remove: true}).value;
 
-									if (oInitiator.attr('data-travelToRouteID'))
+									if (oInitiator.attr('data-travel-to-route-id'))
 									{
-										oParam = ns1blankspace.util.setParam(oParam, 'routeID', oInitiator.attr('data-travelToRouteID'));
+										oParam = ns1blankspace.util.setParam(oParam, 'routeID', oInitiator.attr('data-travel-to-route-id'));
 									}
 									
-									//oParam = ns1blankspace.util.setParam(oParam, 'populateContext', oParam.populationID);
-
 									ns1blankspace.experience.journey.destinations.destination.travelTo(oParam);
 								},
 
@@ -818,23 +816,26 @@ ns1blankspace.experience.journey =
 													aHTML.push('<div><div class="ns1blankspaceCaption" style="width:300px; float:left;">' +
 																thingToSee.caption + '</div>');
 
+													aHTML.push('<div id="ns1blankspaceExperience-' + oJourney.routeID + '-' + thingToSee.id +
+																	'-control" data-route-id="' + oJourney.routeID + '-' + thingToSee.id + '" class="ns1blankspaceExperienceControl" style="text-align:right; float:right; width:100px; margin-right:14px;">');
+
+													
 													if (thingToSee.tenancy == 'single' && oJourney.previousDestination.populationAtRestIsNewBorn)
 													{	
 														aHTML.push('<div id="ns1blankspaceExperience-' + oJourney.routeID + '-' + thingToSee.id +
-																		'-action" class="ns1blankspaceExperienceCancel" style="float:right; width:100px;"' +
+																		'-cancel" class="ns1blankspaceExperienceCancel" style="text-align:right; float:right; width:100px; margin-right:14px;"' +
 																		' data-route-id="' + oJourney.routeID + '-' + thingToSee.id + '">' +
-																		'CANCEL</div></div>');
+																		'CANCEL</div>>');
 													}
 													else if (thingToSee.tenancy == 'multi' && thingToSee.populationCanReproduce == 'true')
 													{
 														aHTML.push('<div id="ns1blankspaceExperience-' + oJourney.routeID + '-' + thingToSee.id +
-																	'-action" data-route-id="' + oJourney.routeID + '-' + thingToSee.id + '" class="ns1blankspaceExperienceAdd" style="float:right; width:100px;">Add</div></div>');
+																	'-add" data-route-id="' + oJourney.routeID + '-' + thingToSee.id + '"' +
+																	' class="ns1blankspaceExperienceAdd" style="text-align:right; float:right; width:100px; margin-right:14px;">Add</div>');
 													}
-													else
-													{
-														aHTML.push('</div>');
-													}
-
+													
+													aHTML.push('</div>');
+													
 													aHTML.push('<div id="ns1blankspaceExperience-' + oJourney.originID + '-' + oJourney.destinationID + '-' + thingToSee.id + '"' +
 																	' data-destination-id="' + thingToSee.id + '"' +
 																	' data-route-id="' + oJourney.originID + '-' + oJourney.destinationID + '-' + thingToSee.id + '"' +
@@ -982,11 +983,9 @@ ns1blankspace.experience.journey =
 												var sClass = 'ns1blankspaceExperiencePopulateWith';
 
 												aHTML.push('<td class="' + sClass + '" style="height:30px;"' +
-																' id="ns1blankspaceExperience-' + oJourney.routeID + '-' + thingToSee.id + '-new"' +
-																' data-traveltorouteid="' + thingToSee.travelToRouteID + '"' +
-																' data-populaterouteid="' + oJourney.routeID + '"' +
-																(oJourney.populateID?' data-populate-id="' + oJourney.populateID + '"':'') +
-																' data-id="new"' +
+																' id="ns1blankspaceExperience-' + oJourney.routeID + '-' + thingToSee.id + '-"' +
+																' data-populate-route-id="' + oJourney.routeID + '"' +
+																' data-populate-id=""' +
 																' data-route-id="' + oJourney.routeID + '-' + thingToSee.id + '"' +
 																' data-destination-id="' + thingToSee.id + '">' +
 																'</td>');
@@ -1003,14 +1002,14 @@ ns1blankspace.experience.journey =
 											{	
 												if (true)
 												{
-													$('#ns1blankspaceExperience-' + oJourney.routeID + '-action').html('<td class="ns1blankspaceExperienceClose"' +
+													$('#ns1blankspaceExperience-' + oJourney.routeID + '-control').html('<div class="ns1blankspaceExperienceCancel"' +
 																	' id="ns1blankspaceExperience-' + oJourney.routeID + '-cancel"' +
-																	' data-populaterouteid="' + oJourney.routeID + '"' +
+																	' data-populate-route-id="' + oJourney.routeID + '"' +
 																	(oJourney.populateID?' data-populate-id="' + oJourney.populateID + '"':'') +
 																	' data-id="new"' +
 																	' data-route-id="' + oJourney.routeID + '"' +
 																	' data-destination-id="">' +
-																	'Cancel</td>');
+																	'Cancel</div>');
 												}	
 
 												$('#ns1blankspaceExperience-' + oJourney.routeID + '-header').after(aHTML.join(''));
@@ -1110,10 +1109,10 @@ ns1blankspace.experience.journey =
 
 														aHTML.push('<td class="' + sClass + '"' +
 																		' id="ns1blankspaceExperience-' + oJourney.routeID + '-' + thingToSee.id + '-' + v.id + '"' +
-																		(thingToSee.travelToRouteID?' data-traveltorouteid="' + thingToSee.travelToRouteID + '"':'') +
-																		' data-populaterouteid="' + oJourney.routeID + '"' +
-																		(iPopulateID?' data-populate-id="' + iPopulateID + '"':' data-populate-id="' + v.id + '"') +
-																		(iPopulateWithID?' data-populate-with-id="' + iPopulateWithID + '"':'') +
+																		(thingToSee.travelToRouteID?' data-travel-to-route-id="' + thingToSee.travelToRouteID + '"':'') +
+																		' data-populate-route-id="' + oJourney.routeID + '"' +
+																		(iPopulateID!==undefined?' data-populate-id="' + iPopulateID + '"':' data-populate-id="' + v.id + '"') +
+																		(iPopulateWithID!==undefined?' data-populate-with-id="' + iPopulateWithID + '"':'') +
 																		' data-route-id="' + oJourney.routeID + '-' + thingToSee.id + '"' +
 																		' data-destination-id="' + thingToSee.id + '">' +
 																		sValue + '</td>');
@@ -1126,7 +1125,7 @@ ns1blankspace.experience.journey =
 													{
 														aXHTMLToDo.push('<div class="ns1blankspaceExperienceDoIt"' +
 																		' id="ns1blankspaceExperienceJourneyDoIt-' + oJourney.routeID + '-' + thingToDo.id + '"' +
-																		' data-doitid="' + thingToDo.id + '"' +
+																		' data-do-it-id="' + thingToDo.id + '"' +
 																		' data-route-id="' + oJourney.routeID + '">' + thingToDo.caption + '</div>');
 													});
 
@@ -1136,7 +1135,6 @@ ns1blankspace.experience.journey =
 																		'<span class="ns1blankspaceExperienceDone"' +
 																		' data-route-id="' + oJourney.routeID + '"' +
 																		' data-id="' + oJourney.destination.populationAtRest[0]['id'] + '"' +
-																		' data-xhtmlpopulateelementid="' + oJourney.xhtmlPopulateElementID +
 																		'">Done</span></td>');
 													}
 														
@@ -1200,7 +1198,7 @@ ns1blankspace.experience.journey =
 
 													var sXHTMLPopulateElementID = 'ns1blankspaceExperience-' + oJourney.routeID;
 
-													if (oParam.populateID) {sXHTMLPopulateElementID = sXHTMLPopulateElementID + '-' + oParam.populateID}
+													if (oParam.populateID!==undefined) {sXHTMLPopulateElementID = sXHTMLPopulateElementID + '-' + oParam.populateID}
 
 													oParam.populationAtWorkToBeRested = $.grep(oData, function(a) {return a.id == sPopulateWithID})[0];
 
@@ -1248,11 +1246,11 @@ ns1blankspace.experience.journey =
 														sClass = 'ns1blankspaceExperiencePopulation';
 													}
 
-													sHTML = '<input style="width:100%;" id="' + sElementMutatedToID + '"' +
+													sHTML = '<input id="' + sElementMutatedToID + '"' +
 																' class="' + sClass + '" ' +
-																(oJourney.destinationID?' data-destination-id="' + oJourney.destinationID + '"':'') +
-																(oJourney.routeID?' data-route-id="' + oJourney.routeID + '"':'') +
-																(iPopulateID?' data-populate-id="' + iPopulateID + '"':'') +
+																(oJourney.destinationID!==undefined?' data-destination-id="' + oJourney.destinationID + '"':'') +
+																(oJourney.routeID!==undefined?' data-route-id="' + oJourney.routeID + '"':'') +
+																(iPopulateID!==undefined?' data-populate-id="' + iPopulateID + '"':'') +
 																			'value="' + sHTML + '">'
 													
 													$('#' + sElementID).html(sHTML);
@@ -1288,15 +1286,6 @@ ns1blankspace.experience.journey =
 														}
 														else
 														{
-															if (oJourney.dataID == "new")
-															{
-
-															}	
-															else
-															{
-
-															}
-																
 															oData.id = oParam.populateID;
 															oPopulationBeingRested.id = oData.id;
 
@@ -1381,9 +1370,9 @@ ns1blankspace.experience.journey =
 															oPopulationAtWorkToBeRested.xhtmlElementID = oJourney.xhtmlElementID;
 															oJourney.previousDestination.populationAtWorkToBeRestedWhenCan.push(oPopulationAtWorkToBeRested);
 
-															$('#' + oJourney.xhtmlElementID).closest('tr').css('background-color', '#FF6666');
+															$('#' + oJourney.xhtmlElementID + '-' + oParam.populateID).closest('tr').css('background-color', '#FF6666');
 
-															$('#' + oJourney.xhtmlElementID).html(oPopulationAtWorkToBeRested.text);
+															$('#' + oJourney.xhtmlElementID + '-' + oParam.populateID).html(oPopulationAtWorkToBeRested.text);
 														}	
 														else
 														{
@@ -1393,8 +1382,8 @@ ns1blankspace.experience.journey =
 															}
 															else
 															{
-																$('#ns1blankspaceExperience-' + oJourney.sourceRouteID + '-new').text('Done');
-																$('#ns1blankspaceExperience-' + oJourney.sourceRouteID + '-new').addClass('ns1blankspaceExperiencePopulate');
+																$('#ns1blankspaceExperience-' + oJourney.sourceRouteID + '-').text('Done');
+																$('#ns1blankspaceExperience-' + oJourney.sourceRouteID + '-').addClass('ns1blankspaceExperiencePopulate');
 															}
 
 															$('#ns1blankspaceExperience-' + oJourney.sourceRouteID + '-new-container [data-id="new"]').attr('data-id', oResponse.id)
