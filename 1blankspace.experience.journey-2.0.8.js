@@ -143,6 +143,17 @@ ns1blankspace.experience.journey =
 					oJourney.previousDestination = (oJourney.sourceRoute.length!=0?oJourney.destinations[oJourney.sourceRoute.length-1]:undefined)
 
 					oJourney.destination.populationIsAtWork = false;
+
+					if (oJourney.destination.thingsToSee)
+					{	
+						$.each(oJourney.destination.thingsToSee, function (i, v)
+						{
+							if (oJourney.destination.populateWith !== undefined)
+							{
+								v.isPopulateWith = ($.grep(oJourney.destination.populateWith, function (a) {return (a.model == v.model)}).length != 0);
+							}	
+						});
+					}	
 	
 					if (oJourney.destination.tenancy === undefined) {oJourney.destination.tenancy = 'single'}
 					if (oJourney.destination.thingsToDo === undefined) {oJourney.destination.thingsToDo = []}
@@ -270,6 +281,7 @@ ns1blankspace.experience.journey =
 									var oJourney = ns1blankspace.experience.journey.get(oParam);
 
 									oParam = ns1blankspace.util.setParam(oParam, 'xhtmlPopulateElementID', oJourney.previousDestination.xhtmlContainerID + '-populate');
+									
 									oParam = ns1blankspace.util.setParam(oParam, 'routeID', oJourney.sourceRouteID);
 
 									if (oEvent.which === 13)
@@ -350,7 +362,7 @@ ns1blankspace.experience.journey =
 
 											if (bIsPopulateWith && !oJourney.previousDestination.populationAtRestIsNewBorn)
 											{
-												oJourney.previousDestination.populationAtRestIsNewBorn = true;
+												//oJourney.previousDestination.populationAtRestIsNewBorn = true;
 
 												ns1blankspace.experience.journey.thingsToSee.thingToSee.vacate(
 												{
@@ -580,7 +592,7 @@ ns1blankspace.experience.journey =
 
 													oParam.populationAtWorkToBeRested =
 													{
-														id: oJourney.previousDestination.populationAtRestContext
+														id: oParam.populateID
 													}
 
 													oParam.populationAtWorkToBeRested[(oJourney.destination.model).split('.')[1] || oJourney.destination.model] = sPopulateWithID;
@@ -661,8 +673,9 @@ ns1blankspace.experience.journey =
 									var bExtend = ns1blankspace.util.getParam(oParam, 'extend', {"default": false}).value;
 									var sTenancy = ns1blankspace.util.getParam(oParam, 'tenancy', {"default": oJourney.destination.tenancy}).value;
 									var bEdit = ns1blankspace.util.getParam(oParam, 'edit', {"default": false}).value;
-									//var iPopulateID = ns1blankspace.util.getParam(oParam, 'populateID', {"default": oJourney.previousDestination.populationID}).value;
 									var iPopulateID = ns1blankspace.util.getParam(oParam, 'populateID').value;
+									var bOK = false;
+									var bValue = ns1blankspace.util.getParam(oParam, 'value').exists;
 
 									if (oJourney.populateWith !== undefined && oResponse === undefined && !bExtend && ((sTenancy == 'single' && oJourney.previousDestination.tenancy != 'single') || sTenancy == 'multi'))
 									{	
@@ -674,13 +687,17 @@ ns1blankspace.experience.journey =
 										{
 											if (v.model)
 											{
+												//if (bValue?v.isPopulateWith:true) {aFields.push(v.model)}
 												aFields.push(v.model)
 
 												if (v.thingsToSee)
 												{
 													$.each(v.thingsToSee, function (j, k)
 													{
-														if (k.model) aFields.push(v.model + '.' + k.model)
+														if (k.model)
+														{
+															aFields.push(v.model + '.' + k.model)
+														}	
 													});		
 												}
 											}	
@@ -825,21 +842,21 @@ ns1blankspace.experience.journey =
 														aHTML.push('<div id="ns1blankspaceExperience-' + oJourney.routeID + '-' + thingToSee.id +
 																		'-cancel" class="ns1blankspaceExperienceCancel" style="text-align:right; float:right; width:100px; margin-right:14px;"' +
 																		' data-route-id="' + oJourney.routeID + '-' + thingToSee.id + '">' +
-																		'CANCEL</div>>');
+																		'CANCEL</div>');
 													}
 													else if (thingToSee.tenancy == 'multi' && thingToSee.populationCanReproduce == 'true')
 													{
 														aHTML.push('<div id="ns1blankspaceExperience-' + oJourney.routeID + '-' + thingToSee.id +
 																	'-add" data-route-id="' + oJourney.routeID + '-' + thingToSee.id + '"' +
-																	' class="ns1blankspaceExperienceAdd" style="text-align:right; float:right; width:100px; margin-right:14px;">Add</div>');
+																	' class="ns1blankspaceExperienceAdd" style="text-align:right;">Add</div>');
 													}
 													
-													aHTML.push('</div>');
+													aHTML.push('</div></div>');
 													
 													aHTML.push('<div id="ns1blankspaceExperience-' + oJourney.originID + '-' + oJourney.destinationID + '-' + thingToSee.id + '"' +
 																	' data-destination-id="' + thingToSee.id + '"' +
 																	' data-route-id="' + oJourney.originID + '-' + oJourney.destinationID + '-' + thingToSee.id + '"' +
-																	' data-populate-id="' + iPopulateID + '"' +
+																	(iPopulateID!==undefined?' data-populate-id="' + iPopulateID + '"':'') +
 																	(sValue?' data-populate-with-id="' + sValue + '"':'') +
 																	(sValue?' data-id="' + sValue + '"':'') +
 																	' class="ns1blankspaceExperienceDestination">');
@@ -850,6 +867,9 @@ ns1blankspace.experience.journey =
 												{	
 													if (oJourney.previousDestination.populationAtWork.length > 0)
 													{	
+														oJourney.destination.populationID = 
+															oJourney.previousDestination.populationAtWork[0][oJourney.destination.model]
+
 														if (thingToSee.model)
 														{	
 															sValue = (oJourney.previousDestination.populationAtWork[0][oJourney.destination.model + '.' + thingToSee.model] || '');
@@ -857,11 +877,11 @@ ns1blankspace.experience.journey =
 
 														if (oJourney.destination.populationAtWork.length == 0)
 														{
-															oJourney.destination.populationAtWork.push({id: oJourney.dataID})
+															oJourney.destination.populationAtWork.push({id: oJourney.destination.populationID})
 														}
 														if (oJourney.destination.populationAtRest.length == 0)
 														{
-															oJourney.destination.populationAtRest.push({id: oJourney.dataID})
+															oJourney.destination.populationAtRest.push({id: oJourney.destination.populationID})
 														}
 
 														oJourney.destination.populationAtWork[0][thingToSee.model] = sValue;
@@ -885,26 +905,26 @@ ns1blankspace.experience.journey =
 													aHTMLThing.push('<div><div class="ns1blankspaceCaption">' +
 																thingToSee.caption + '</div>');
 
-													if (bEdit)
+													if (bEdit && false)
 													{	
 														aHTMLThing.push('<div><input ' +
 																	' id="ns1blankspaceExperience-' + oJourney.routeID + '-' + thingToSee.id + '"' +
-																	' class="ns1blankspaceText ns1blankspaceExperiencePopulateDestinationWith' +
+																	' class="ns1blankspaceExperiencePopulateDestinationWith' +
 																	(thingToSee.populationCanReproduce == "true"?' ns1blankspaceExperienceEdit':'') + '"' +
 																	' data-destination-id="' + thingToSee.id + '"' +
 																	' data-route-id="' + oJourney.routeID + '-' + thingToSee.id + '"' +
-																	' data-populate-id="' + iPopulateID + '"' +
+																	(iPopulateID!==undefined?' data-populate-id="' + iPopulateID + '"':'') +
 																	' value="' + sValue + '">');
 													}
 													else
 													{
 														aHTMLThing.push('<div' +
 																	' id="ns1blankspaceExperience-' + oJourney.routeID + '-' + thingToSee.id + '"' +
-																	' class="ns1blankspaceText ns1blankspaceExperiencePopulateWith' +
+																	' class="ns1blankspaceExperiencePopulateWith' +
 																	(thingToSee.populationCanReproduce == "true"?' ns1blankspaceExperienceEdit':'') + '"' +
 																	' data-destination-id="' + thingToSee.id + '"' +
 																	' data-route-id="' + oJourney.routeID + '-' + thingToSee.id + '"' +
-																	' data-populate-id="' + iPopulateID + '"' +
+																	' data-populate-id="' + (!bIsPopulateWith?iPopulateID:oJourney.previousDestination.populationID) + '"' +
 																	' style="height:30px;">' +
 																	 sValue + '</div>');
 													}	
@@ -944,14 +964,19 @@ ns1blankspace.experience.journey =
 												aHTMLContainer.push('</div>');
 											}
 
-											aHTMLContainer.push('<div id="' + oJourney.destination.xhtmlContainerID + '-populate"></div>');
+											aHTMLContainer.push('<div id="' + oJourney.destination.xhtmlContainerID + '-populate" style="width:95%"></div>');
 
 											$('#' + oJourney.xhtmlPopulateElementID).html(aHTMLContainer.join(''));
 
 											$('#' + oJourney.destination.xhtmlContainerID + ' div.ns1blankspaceExperienceDestination').each(function(i, v)
 											{
-												var iID;
-												if ($(v).attr('data-populate-with-id')) {iID = $(v).attr('data-populate-with-id')}
+												var iID = $(v).attr('data-populate-id');
+
+												if ($(v).attr('data-populate-with-id'))
+												{
+													iID = $(v).attr('data-populate-with-id');
+												}
+												
 												ns1blankspace.experience.journey.thingsToSee.populate({xhtmlElementID: v.id, populateID: iID});
 											});
 										}
@@ -999,18 +1024,15 @@ ns1blankspace.experience.journey =
 												$('#' + oJourney.xhtmlPopulateElementID).html(aHTML.join(''));
 											}
 											else
-											{	
-												if (true)
-												{
-													$('#ns1blankspaceExperience-' + oJourney.routeID + '-control').html('<div class="ns1blankspaceExperienceCancel"' +
-																	' id="ns1blankspaceExperience-' + oJourney.routeID + '-cancel"' +
-																	' data-populate-route-id="' + oJourney.routeID + '"' +
-																	(oJourney.populateID?' data-populate-id="' + oJourney.populateID + '"':'') +
-																	' data-id="new"' +
-																	' data-route-id="' + oJourney.routeID + '"' +
-																	' data-destination-id="">' +
-																	'Cancel</div>');
-												}	
+											{				
+												$('#ns1blankspaceExperience-' + oJourney.routeID + '-control').html('<div class="ns1blankspaceExperienceCancel"' +
+														' id="ns1blankspaceExperience-' + oJourney.routeID + '-cancel"' +
+														' data-populate-route-id="' + oJourney.routeID + '"' +
+														(iPopulateID!==undefined?' data-populate-id="' + iPopulateID + '"':'') +
+														' data-id="new"' +
+														' data-route-id="' + oJourney.routeID + '"' +
+														' data-destination-id="">' +
+														'Cancel</div>');	
 
 												$('#ns1blankspaceExperience-' + oJourney.routeID + '-header').after(aHTML.join(''));
 											}
@@ -1022,8 +1044,8 @@ ns1blankspace.experience.journey =
 											{	
 												if (oJourney.destination.populationCanReproduce == 'true')
 												{	
-													oParam = ns1blankspace.util.setParam(oParam, 'extend', true);
-													ns1blankspace.experience.journey.thingsToSee.populate(oParam);
+													//oParam = ns1blankspace.util.setParam(oParam, 'extend', true);
+													//ns1blankspace.experience.journey.thingsToSee.populate(oParam);
 												}
 												else
 												{
@@ -1046,8 +1068,11 @@ ns1blankspace.experience.journey =
 													{	
 														$.each(oJourney.destination.thingsToSee, function (i, v)
 														{
-															aHTML.push('<td class="ns1blankspaceExperienceHeader">' +
+															if (bValue?v.isPopulateWith:true)
+															{
+																aHTML.push('<td class="ns1blankspaceExperienceHeader">' +
 																			v.caption + '</td>');
+															}	
 														});
 													}	
 	
@@ -1103,20 +1128,22 @@ ns1blankspace.experience.journey =
 															else
 															{
 																sValue = v[thingToSee.model];
-																if (thingToSee.type != 'text') {iPopulateWithID = v['id']};
+																if (thingToSee.type != 'text' || sTenancy == 'multi') {iPopulateWithID = v['id']};
 															}
 														}
 
-														aHTML.push('<td class="' + sClass + '"' +
+														if (bValue?thingToSee.isPopulateWith:true)
+														{	
+															aHTML.push('<td class="' + sClass + '"' +
 																		' id="ns1blankspaceExperience-' + oJourney.routeID + '-' + thingToSee.id + '-' + v.id + '"' +
 																		(thingToSee.travelToRouteID?' data-travel-to-route-id="' + thingToSee.travelToRouteID + '"':'') +
 																		' data-populate-route-id="' + oJourney.routeID + '"' +
-																		(iPopulateID!==undefined?' data-populate-id="' + iPopulateID + '"':' data-populate-id="' + v.id + '"') +
+																		(iPopulateID!==undefined&&bValue?' data-populate-id="' + iPopulateID + '"':' data-populate-id="' + v.id + '"') +
 																		(iPopulateWithID!==undefined?' data-populate-with-id="' + iPopulateWithID + '"':'') +
 																		' data-route-id="' + oJourney.routeID + '-' + thingToSee.id + '"' +
 																		' data-destination-id="' + thingToSee.id + '">' +
 																		sValue + '</td>');
-															
+														}	
 													});
 
 													var aXHTMLToDo = [];
@@ -1225,8 +1252,8 @@ ns1blankspace.experience.journey =
 													var oJourney = ns1blankspace.experience.journey.get(oParam);
 											
 													var sElementID = oJourney.xhtmlElementID;
-													var sHTML = $('#' + sElementID).html();
-													var iPopulateID = $('#' + sElementID).attr('data-populate-id');
+													var sHTML = oParam.xhtml;
+													var iPopulateID = oParam.populateID;
 													var sElementMutatedToID = sElementID + '-input';
 
 													var bIsPopulateWith = ($.grep(oJourney.previousDestination.populateWith, function (a) {return (a.model == oJourney.destination.model)}).length != 0);
@@ -1251,7 +1278,7 @@ ns1blankspace.experience.journey =
 																(oJourney.destinationID!==undefined?' data-destination-id="' + oJourney.destinationID + '"':'') +
 																(oJourney.routeID!==undefined?' data-route-id="' + oJourney.routeID + '"':'') +
 																(iPopulateID!==undefined?' data-populate-id="' + iPopulateID + '"':'') +
-																			'value="' + sHTML + '">'
+																			' value="' + sHTML + '">'
 													
 													$('#' + sElementID).html(sHTML);
 													$('#' + sElementMutatedToID).focus();
@@ -1376,52 +1403,67 @@ ns1blankspace.experience.journey =
 														}	
 														else
 														{
-															if (oJourney.previousDestination.type == 'destination')
-															{
-																$('td.ns1blankspaceExperienceClose').html('');
-															}
-															else
-															{
-																$('#ns1blankspaceExperience-' + oJourney.sourceRouteID + '-').text('Done');
-																$('#ns1blankspaceExperience-' + oJourney.sourceRouteID + '-').addClass('ns1blankspaceExperiencePopulate');
-															}
-
-															$('#ns1blankspaceExperience-' + oJourney.previousRouteID + '-new-container [data-populate-id=""]').attr('data-populate-id', oResponse.id)
-
-															//$('#ns1blankspaceExperience-' + oJourney.previousRouteID + '-add').show();
-															
-															$.each(oJourney.previousDestination.populationAtWorkToBeRestedWhenCan, function (i, v)
-															{
-																$('#' + v.xhtmlElementID).closest('tr').css('background-color', '');
-															});
-
-															oJourney.previousDestination.populationAtWorkToBeRestedWhenCan = undefined;
-															oJourney.previousDestination.populationAtRestIsNewBorn = (oResponse.notes == 'ADDED');
-
-															oJourney.destination.populationAtWork = [oPopulationAtWorkToBeRested];
-
 															var oPopulationBeingRested = ns1blankspace.util.getParam(oParam, 'populationBeingRested').value;
-
 															if (oResponse.id) {oPopulationBeingRested.id = oResponse.id}
 
-															var aPopulationAtRest = $.grep(oJourney.previousDestination.populationAtRest, function(a) {return a.id == oPopulationBeingRested.id});
+															if (oJourney.destination.type == 'destination')
+															{
+																var iID = oPopulationBeingRested[oJourney.destination.model.split('.')[1]];
+																var aPopulationAtRest = $.grep(oJourney.destination.populationAtRest, function(a) {return a.id == iID});
+																oJourney.destination.populationAtWork = [aPopulationAtRest[0]];
 
-															if (aPopulationAtRest.length == 0)
-															{	
-																oJourney.previousDestination.populationAtRest.push(oPopulationBeingRested);
+																oJourney.previousDestination.populationAtWork = [{}];
+																oJourney.previousDestination.populationAtWork[0][oJourney.destination.model] = iID;
+
+																$.each(oJourney.destination.thingsToSee, function (i, v)
+																{	
+																	if (v.model)
+																	{
+																		oJourney.previousDestination.populationAtWork[0][oJourney.destination.model + '.' + v.model] = aPopulationAtRest[0][v.model]
+																	}	
+																})
+
+																oParam.xhtmlElementID = 'ns1blankspaceExperience-' + oParam.routeID;
+																ns1blankspace.experience.journey.thingsToSee.populate(oParam);
 															}
 															else
 															{
-																aPopulationAtRest[0] = $.extend(true, aPopulationAtRest[0], oPopulationBeingRested)
-															}	
+																$('#ns1blankspaceExperience-' + oJourney.previousRouteID + '-new-container [data-populate-id=""]').attr('data-populate-id', oResponse.id)
+																
+																$.each(oJourney.previousDestination.populationAtWorkToBeRestedWhenCan, function (i, v)
+																{
+																	$('#' + v.xhtmlElementID).closest('tr').css('background-color', '');
+																});
 
-															if (oJourney.destination.type == 'select')
-															{		
-																$('#' + oJourney.xhtmlElementID).attr('data-populate-with-id', oJourney.destination.populationAtWork[0].id);
+																oJourney.previousDestination.populationAtWorkToBeRestedWhenCan = undefined;
+																oJourney.previousDestination.populationAtRestIsNewBorn = (oResponse.notes == 'ADDED');
+
+																oJourney.destination.populationAtWork = [oPopulationAtWorkToBeRested];
+
+																var aPopulationAtRest = $.grep(oJourney.previousDestination.populationAtRest, function(a) {return a.id == oPopulationBeingRested.id});
+
+																if (aPopulationAtRest.length == 0)
+																{	
+																	oJourney.previousDestination.populationAtRest.push(oPopulationBeingRested);
+																}
+																else
+																{
+																	aPopulationAtRest[0] = $.extend(true, aPopulationAtRest[0], oPopulationBeingRested)
+																}	
+
+																if (oJourney.destination.type == 'select')
+																{		
+																	$('#' + oJourney.xhtmlElementID).attr('data-populate-with-id', oJourney.destination.populationAtWork[0].id);
+																	$('#' + oJourney.xhtmlElementID).val(oJourney.destination.populationAtWork[0].text);
+																	$('#' + oJourney.xhtmlElementID).html(oJourney.destination.populationAtWork[0].text);
+																}
+
+																if (oJourney.destination.type == 'text')
+																{		
+																	$('#' + oJourney.xhtmlElementID).val(oJourney.destination.populationAtWork[0].text);
+																	$('#' + oJourney.xhtmlElementID).html(oJourney.destination.populationAtWork[0].text);
+																}
 															}
-
-															$('#' + oJourney.xhtmlElementID).val(oJourney.destination.populationAtWork[0].text);
-															$('#' + oJourney.xhtmlElementID).html(oJourney.destination.populationAtWork[0].text);
 														}
 													}	
 												}
