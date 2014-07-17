@@ -714,7 +714,9 @@ ns1blankspace.setup.automation =
 					
 						aHTML.push('<tr class="ns1blankspaceCaption">' +
 										'<td class="ns1blankspaceCaption">' +
-										'XHTML Style' +
+										'XHTML' +
+										'<br /><div class="ns1blankspaceSubNote" style="margin-top:2px;">' + 
+																	 'Inserted before data</div>' +
 										'</td></tr>' +
 										'<tr class="ns1blankspace">' +
 										'<td class="ns1blankspaceTextMulti">' +
