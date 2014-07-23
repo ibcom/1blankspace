@@ -23,35 +23,31 @@ ns1blankspace.util.pdf =
 
 	header:		function (oParam)
 				{
-					var sXHTML = ns1blankspace.util.getParam(oParam, 'xhtml', {"default": false}).value;
-
-
+					//To be implemented
+					var sXHTML = ns1blankspace.util.getParam(oParam, 'xhtml').value;
 				},
 
 	footer:		function (oParam)
 				{
-					var sXHTML = ns1blankspace.util.getParam(oParam, 'xhtml', {"default": false}).value;
-
-
+					//To be implemented
+					var sXHTML = ns1blankspace.util.getParam(oParam, 'xhtml').value;
 				},				
 
 	create: 	function (oParam)
 				{
 					ns1blankspace.util.pdf.process = new jsPDF('p', 'pt', 'letter');
 				   
-				    var source = $('#customers')[0];
-				    var sHTML = 'Hello World';
+				  	var oXHTML = ns1blankspace.util.getParam(oParam, 'xhtml', {"default": '<i>No content.</i>'}).value;
 
-				    var specialElementHandlers =
+				    var oElementHandlers =
 				    {
-				        // element with id of "bypass" - jQuery style selector
-				        '#bypassme': function (element, renderer) {
-				            // true = "handled elsewhere, bypass text extraction"
-				            return true
-				        }
+				        "#skip": 	function (element, renderer)
+							    	{
+							            return true
+							        }    
 				    };
 
-				    var margins =
+				    var oMargins =
 				    {
 				        top: 80,
 				        bottom: 60,
@@ -60,12 +56,12 @@ ns1blankspace.util.pdf =
 				    };
 
 				    ns1blankspace.util.pdf.process.fromHTML(
-				   	 	sHTML,
-				   	 	margins.left, 
-				    	margins.top,
+				   	 	oHTML,
+				   	 	oMargins.left, 
+				    	oMargins.top,
 					    { 
-					        'width': margins.width,
-					        'elementHandlers': specialElementHandlers
+					        'width': oMargins.width,
+					        'elementHandlers': oElementHandlers
 					    },
 					    function (dispose)
 					    {
@@ -97,7 +93,7 @@ ns1blankspace.util.pdf =
 					    		}	
 					    	}
 					    },
-					    margins
+					    oMargins
 					);
 				},
 
@@ -115,7 +111,7 @@ ns1blankspace.util.pdf =
 						var oData =
 						{
 							filedata: ns1blankspace.util.pdf.data,
-							filename: 'test.pdf'
+							filename: sFilename
 						}
 
 						if (ns1blankspace.util.getParam(oParam, 'object').exists)
