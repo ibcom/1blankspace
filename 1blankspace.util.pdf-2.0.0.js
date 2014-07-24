@@ -3,8 +3,18 @@
  * Licensed under the MIT license.
  * http://1blankspace.com/license
  * 01 FEB 2010
- * Examplea: 	http://jsfiddle.net/xzZ7n/1/
+ * Example code: 	http://jsfiddle.net/xzZ7n/1/
  * 				https://github.com/MrRio/jsPDF/blob/master/examples/basic.html
+ *
+ * Example usage:
+ *				ns1blankspace.util.pdf.create({saveToFile: true, saveLocal: true,
+ 						xhtml: '<header>Header</header><div style="margin-top:20px;">Hello I am a PDF.</div><footer>Page <span class="pageCounter"></span> of <span class="totalPages"></span></footer>'})
+ *
+ * Example xhtml:
+ *				<header>
+ *				<footer>
+ * 				<span class="pageCounter">
+ * 				<span class="totalPages">
  */
 
 "use strict";
@@ -21,30 +31,18 @@ ns1blankspace.util.pdf =
 					return ('jsPDF' in window);
 				},
 
-	header:		function (oParam)
-				{
-					//To be implemented
-					var sXHTML = ns1blankspace.util.getParam(oParam, 'xhtml').value;
-				},
-
-	footer:		function (oParam)
-				{
-					//To be implemented
-					var sXHTML = ns1blankspace.util.getParam(oParam, 'xhtml').value;
-				},				
-
 	create: 	function (oParam)
 				{
 					var bLocal = ns1blankspace.util.getParam(oParam, 'saveLocal', {"default": false}).value;
 					var sFilename = ns1blankspace.util.getParam(oParam, 'filename', {"default": ns1blankspace.util.uuid() + '.pdf'}).value;
 
-					ns1blankspace.util.pdf.process = new jsPDF('p', 'pt', 'letter');
+					ns1blankspace.util.pdf.factory = new jsPDF('p', 'pt', 'letter');
 				   
 				  	var oXHTML = ns1blankspace.util.getParam(oParam, 'xhtml', {"default": '<i>No content.</i>'}).value;
 
 				    var oElementHandlers =
 				    {
-				        "#skip": 	function (element, renderer)
+				        '.skip': 	function (element, renderer)
 							    	{
 							            return true
 							        }    
@@ -58,7 +56,13 @@ ns1blankspace.util.pdf =
 				        width: 522
 				    };
 
-				    ns1blankspace.util.pdf.process.fromHTML(
+				    if (ns1blankspace.util.getParam(oParam, 'properties').exists)
+				    {
+				    	 // properties | title: subject: author: keywords: generated: creator:
+					    ns1blankspace.util.pdf.factory.setProperties(ns1blankspace.util.getParam(oParam, 'properties').value);
+					}	
+
+				    ns1blankspace.util.pdf.factory.fromHTML(
 				   	 	oXHTML,
 				   	 	oMargins.left, 
 				    	oMargins.top,
@@ -72,11 +76,11 @@ ns1blankspace.util.pdf =
 					    	{
 					    		if (bLocal)
 								{
-									ns1blankspace.util.pdf.process.save(sFilename);
+									ns1blankspace.util.pdf.factory.save(sFilename);
 								}
 								else
 								{
-									ns1blankspace.util.pdf.data = ns1blankspace.util.pdf.process.output();
+									ns1blankspace.util.pdf.data = ns1blankspace.util.pdf.factory.output();
 
 						    		if (ns1blankspace.util.getParam(oParam, 'whenCan').exists)
 						    		{
