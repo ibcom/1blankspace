@@ -13,7 +13,7 @@
  					saveLocal: true,
  					filename: 'file.pdf',
  					pageFormat: 'a4',
- 					unit: 'mm',
+ 					unit: 'pt',
  					margins:
  					{
 				        top: 25,
@@ -34,7 +34,7 @@
  				});
  
  *				1. if filename missing; a filename is generated using UUID.
- * 				2. margin: units as per the unit: value [default: mm]
+ * 				2. margin: units as per the unit: value [default: pt]
  *
  * Example xhtml:
  *				<header>
