@@ -35,6 +35,9 @@ ns1blankspace.util.pdf =
 
 	create: 	function (oParam)
 				{
+					var bLocal = ns1blankspace.util.getParam(oParam, 'saveLocal', {"default": false}).value;
+					var sFilename = ns1blankspace.util.getParam(oParam, 'filename', {"default": ns1blankspace.util.uuid() + '.pdf'}).value;
+
 					ns1blankspace.util.pdf.process = new jsPDF('p', 'pt', 'letter');
 				   
 				  	var oXHTML = ns1blankspace.util.getParam(oParam, 'xhtml', {"default": '<i>No content.</i>'}).value;
@@ -56,7 +59,7 @@ ns1blankspace.util.pdf =
 				    };
 
 				    ns1blankspace.util.pdf.process.fromHTML(
-				   	 	oHTML,
+				   	 	oXHTML,
 				   	 	oMargins.left, 
 				    	oMargins.top,
 					    { 
@@ -65,80 +68,79 @@ ns1blankspace.util.pdf =
 					    },
 					    function (dispose)
 					    {
-					    	ns1blankspace.util.pdf.data = ns1blankspace.util.pdf.process.output();
-
 					    	if (ns1blankspace.util.getParam(oParam, 'saveToFile').exists)
 					    	{
-					    		if (ns1blankspace.util.getParam(oParam, 'whenCan').exists)
-					    		{
-					    			ns1blankspace.util.whenCan.execute(
-									{
-										now:
+					    		if (bLocal)
+								{
+									ns1blankspace.util.pdf.process.save(sFilename);
+								}
+								else
+								{
+									ns1blankspace.util.pdf.data = ns1blankspace.util.pdf.process.output();
+
+						    		if (ns1blankspace.util.getParam(oParam, 'whenCan').exists)
+						    		{
+						    			ns1blankspace.util.whenCan.execute(
 										{
-											method: ns1blankspace.util.pdf.file,
-											param: oParam
-										},
-										then:
-										{
-											comment: 'pdfCreate',
-											method: ns1blankspace.util.getParam(oParam, 'whenCan').value,
-											set: 'downloadLink',
-											param: oParam
-										}	
-									});
-					    		}
-					    		else
-					    		{
-					    			ns1blankspace.util.pdf.file(oParam);
-					    		}	
+											now:
+											{
+												method: ns1blankspace.util.pdf.persist,
+												param: oParam
+											},
+											then:
+											{
+												comment: 'pdfCreate',
+												method: ns1blankspace.util.getParam(oParam, 'whenCan').value,
+												set: 'downloadLink',
+												param: oParam
+											}	
+										});
+						    		}
+						    		else
+						    		{
+						    			ns1blankspace.util.pdf.persist(oParam);
+						    		}
+						    	}	
 					    	}
 					    },
 					    oMargins
 					);
 				},
 
-	file: 		function (oParam)
+	persist: 	function (oParam)
 				{
-					var bLocal = ns1blankspace.util.getParam(oParam, 'saveLocal', {"default": false}).value;
 					var sFilename = ns1blankspace.util.getParam(oParam, 'filename', {"default": ns1blankspace.util.uuid() + '.pdf'}).value;
 
-					if (bLocal)
+					var oData =
 					{
-						ns1blankspace.util.pdf.process.save(sFilename);
+						filedata: ns1blankspace.util.pdf.data,
+						filename: sFilename
 					}
-					else
-					{	
-						var oData =
-						{
-							filedata: ns1blankspace.util.pdf.data,
-							filename: sFilename
-						}
 
-						if (ns1blankspace.util.getParam(oParam, 'object').exists)
-						{
-							oData.object = ns1blankspace.util.getParam(oParam, 'object').value;
-						}
-
-						if (ns1blankspace.util.getParam(oParam, 'objectcontext').exists)
-						{
-							oData.objectcontext = ns1blankspace.util.getParam(oParam, 'objectcontext').value;
-						}
-
-						$.ajax(
-						{
-							type: 'POST',
-							url: ns1blankspace.util.endpointURI('CORE_FILE_MANAGE'),
-							data: oData,
-							dataType: 'json',
-							success: function(oResponse)
-							{
-								if (oResponse.status == 'OK')
-								{	
-									ns1blankspace.debug.message(oResponse.link, true)
-									return ns1blankspace.util.whenCan.complete(oResponse.link, oParam);
-								}	
-							}
-						});
+					if (ns1blankspace.util.getParam(oParam, 'object').exists)
+					{
+						oData.object = ns1blankspace.util.getParam(oParam, 'object').value;
 					}
+
+					if (ns1blankspace.util.getParam(oParam, 'objectcontext').exists)
+					{
+						oData.objectcontext = ns1blankspace.util.getParam(oParam, 'objectcontext').value;
+					}
+
+					$.ajax(
+					{
+						type: 'POST',
+						url: ns1blankspace.util.endpointURI('CORE_FILE_MANAGE'),
+						data: oData,
+						dataType: 'json',
+						success: function(oResponse)
+						{
+							if (oResponse.status == 'OK')
+							{	
+								ns1blankspace.debug.message(oResponse.link, true)
+								return ns1blankspace.util.whenCan.complete(oResponse.link, oParam);
+							}	
+						}
+					});
 				}			
 }	
