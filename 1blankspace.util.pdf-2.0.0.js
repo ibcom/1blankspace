@@ -4,11 +4,18 @@
  * http://1blankspace.com/license
  * 01 FEB 2010
  * Example code: 	http://jsfiddle.net/xzZ7n/1/
- * 				https://github.com/MrRio/jsPDF/blob/master/examples/basic.html
+ * 					https://github.com/MrRio/jsPDF/blob/master/examples/basic.html
  *
  * Example usage:
- *				ns1blankspace.util.pdf.create({saveToFile: true, saveLocal: true,
- 						xhtml: '<header>Header</header><div style="margin-top:20px;">Hello I am a PDF.</div><footer>Page <span class="pageCounter"></span> of <span class="totalPages"></span></footer>'})
+ *				ns1blankspace.util.pdf.create(
+ 				{
+ 					saveToFile: true,
+ 					saveLocal: true,
+ 					filename: 'file.pdf',
+ 					xhtml: '<header>Header</header><div style="margin-top:20px;">Hello I am a PDF.</div><footer>Page <span class="pageCounter"></span> of <span class="totalPages"></span></footer>'
+ 				});
+ 
+ *				if filename missing; a filename is generated using UUID.
  *
  * Example xhtml:
  *				<header>
