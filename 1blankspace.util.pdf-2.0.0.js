@@ -12,10 +12,29 @@
  					saveToFile: true,
  					saveLocal: true,
  					filename: 'file.pdf',
+ 					pageFormat: 'a4',
+ 					unit: 'mm',
+ 					margins:
+ 					{
+				        top: 25,
+				        bottom: 25,
+				        left: 40,
+				        width: 150
+ 					},
+ 					properties: 
+ 					{
+						title:,
+						subject:,
+						author:,
+						keywords:,
+						generated:,
+						creator:
+ 					}
  					xhtml: '<header>Header</header><div style="margin-top:20px;">Hello I am a PDF.</div><footer>Page <span class="pageCounter"></span> of <span class="totalPages"></span></footer>'
  				});
  
- *				if filename missing; a filename is generated using UUID.
+ *				1. if filename missing; a filename is generated using UUID.
+ * 				2. margin: units as per the unit: value [default: mm]
  *
  * Example xhtml:
  *				<header>
@@ -31,7 +50,37 @@ if (ns1blankspace.util === undefined) {ns1blankspace.util = {}}
 
 ns1blankspace.util.pdf =
 {
-	data: 		{},
+	data: 		{
+					pageFormats:
+					[
+						'a0', 'a1',
+						'a2', 'a3',
+						'a4', 'a5',
+						'a6', 'a7',
+						'a8', 'a9',
+						'a10', 'b0',
+						'b1', 'b2',
+						'b3', 'b4',
+						'b5', 'b6',
+						'b7', 'b8',
+						'b9', 'b10',
+						'c0', 'c1',
+						'c2', 'c3',
+						'c4', 'c5',
+						'c6', 'c7',
+						'c8', 'c9',
+						'c10', 'dl',
+						'letter',
+						'government-letter',
+						'legal' ,
+						'junior-legal',
+						'ledger',
+						'tabloid',
+						'credit-card'
+					],
+					orientations: 	['portrait', 'landscape'],
+					units: 			['pt','mm','cm', 'in']
+				},
 
 	exists: 	function (oParam)
 				{
@@ -42,30 +91,29 @@ ns1blankspace.util.pdf =
 				{
 					var bLocal = ns1blankspace.util.getParam(oParam, 'saveLocal', {"default": false}).value;
 					var sFilename = ns1blankspace.util.getParam(oParam, 'filename', {"default": ns1blankspace.util.uuid() + '.pdf'}).value;
+					var sOrientation = ns1blankspace.util.getParam(oParam, 'orientation', {"default": 'portrait'}).value;
+					var sUnit = ns1blankspace.util.getParam(oParam, 'unit', {"default": 'pt'}).value;
+					var sPaperSize = ns1blankspace.util.getParam(oParam, 'paperSize', {"default": 'a4'}).value;
+					var oMargins = ns1blankspace.util.getParam(oParam, 'margins', {"default":  {top: 40, bottom: 60, left: 25, width: 500}}).value;
+					var oElementHandlers = ns1blankspace.util.getParam(oParam, 'elementHanders').value;
 
-					ns1blankspace.util.pdf.factory = new jsPDF('p', 'pt', 'letter');
+					ns1blankspace.util.pdf.factory = new jsPDF(sOrientation, sUnit, sPaperSize);
 				   
 				  	var oXHTML = ns1blankspace.util.getParam(oParam, 'xhtml', {"default": '<i>No content.</i>'}).value;
 
-				    var oElementHandlers =
-				    {
-				        '.skip': 	function (element, renderer)
-							    	{
-							            return true
-							        }    
-				    };
-
-				    var oMargins =
-				    {
-				        top: 80,
-				        bottom: 60,
-				        left: 40,
-				        width: 522
-				    };
+				    if (oElementHandlers == undefined)
+				    {	
+				    	oElementHandlers =
+					    {
+					        '.skip': 	function (element, renderer)
+								    	{
+								            return true
+								        }    
+					    }
+					} 
 
 				    if (ns1blankspace.util.getParam(oParam, 'properties').exists)
 				    {
-				    	 // properties | title: subject: author: keywords: generated: creator:
 					    ns1blankspace.util.pdf.factory.setProperties(ns1blankspace.util.getParam(oParam, 'properties').value);
 					}	
 
@@ -87,7 +135,7 @@ ns1blankspace.util.pdf =
 								}
 								else
 								{
-									ns1blankspace.util.pdf.data = ns1blankspace.util.pdf.factory.output();
+									ns1blankspace.util.pdf.data.raw = ns1blankspace.util.pdf.factory.output();
 
 						    		if (ns1blankspace.util.getParam(oParam, 'whenCan').exists)
 						    		{
@@ -124,7 +172,7 @@ ns1blankspace.util.pdf =
 
 					var oData =
 					{
-						filedata: ns1blankspace.util.pdf.data,
+						filedata: ns1blankspace.util.pdf.data.raw,
 						filename: sFilename
 					}
 
