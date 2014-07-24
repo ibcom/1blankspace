@@ -11,6 +11,8 @@
  				{
  					saveToFile: true,
  					saveLocal: true,
+ 					object:,
+ 					objectContext:,
  					filename: 'file.pdf',
  					pageFormat: 'a4',
  					unit: 'pt',
@@ -181,9 +183,9 @@ ns1blankspace.util.pdf =
 						oData.object = ns1blankspace.util.getParam(oParam, 'object').value;
 					}
 
-					if (ns1blankspace.util.getParam(oParam, 'objectcontext').exists)
+					if (ns1blankspace.util.getParam(oParam, 'objectContext').exists)
 					{
-						oData.objectcontext = ns1blankspace.util.getParam(oParam, 'objectcontext').value;
+						oData.objectcontext = ns1blankspace.util.getParam(oParam, 'objectContext').value;
 					}
 
 					$.ajax(
