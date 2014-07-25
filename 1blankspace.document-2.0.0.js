@@ -36,7 +36,7 @@ ns1blankspace.document =
 									
 						aHTML.push('<table class="ns1blankspaceMain">');
 						aHTML.push('<tr class="ns1blankspaceMain">' +
-										'<td id="ns1blankspaceMostLikely" class="ins1blankspaceMain">' +
+										'<td id="ns1blankspaceMostLikely" class="ns1blankspaceMain">' +
 										ns1blankspace.xhtml.loading +
 										'</td>' +
 										'</tr>');
@@ -291,6 +291,12 @@ ns1blankspace.document =
 					aHTML.push('<div id="ns1blankspaceMainDetails" class="ns1blankspaceControlMain"></div>');
 					aHTML.push('<div id="ns1blankspaceMainEdit" class="ns1blankspaceControlMain"></div>');
 					aHTML.push('<div id="ns1blankspaceMainAttachments" class="ns1blankspaceControlMain"></div>');
+
+					aHTML.push('<div id="ns1blankspaceMainPDF" class="ns1blankspaceControlMain" style="display:none;">' +
+										'<iframe name="ns1blankspaceContainerPDF" ' +
+										'id="ns1blankspaceContainerPDF" frameborder="2" border="0" scrolling="no" style="width:97%; height:500px;"></iframe></div>');
+
+					
 							
 					$('#ns1blankspaceMain').html(aHTML.join(''));
 
@@ -553,16 +559,29 @@ ns1blankspace.document =
 						
 							aHTML.push('<table class="ns1blankspaceContainer">' +
 										'<tr class="ns1blankspaceContainer">' +
-										'<td id="ns1blankspaceEditColumn1" class="ns1blankspaceColumn1"></td>' +
-										'<td id="ns1blankspaceEditColumn2" class="ns1blankspaceColumn2"></td>' +
+										'<td id="ns1blankspaceEditColumn1" class="ns1blankspaceColumn1Flexible"></td>' +
+										'<td id="ns1blankspaceEditColumn2" class="ns1blankspaceColumn2Action" style="width:50px;"></td>' +
 										'</tr>' + 
 										'</table>');		
 							
 						$('#ns1blankspaceMainEdit').html(aHTML.join(''));
+
+						$('#ns1blankspaceEditColumn2').html('<div style="margin-top:4px;" id="ns1blankspaceEditPDFv2" class="ns1blankspaceAction">PDF</div>');
 							
-						$('#ns1blankspaceEditPDF').click(function(event)
+						$('#ns1blankspaceEditPDFv1').click(function(event)
 						{
-							ns1blankspace.document.pdf();
+							ns1blankspace.document.pdf.v1();
+						});
+
+						$('#ns1blankspaceEditPDFv2').button(
+						{
+							label: "PDF"
+						})
+						.click(function(event)
+						{
+							var sXHTML = tinyMCE.get('ns1blankspaceEditText' + ns1blankspace.counter.editor).getContent();
+							ns1blankspace.show({selector: '#ns1blankspaceMainPDF'});
+							ns1blankspace.document.pdf.v2({xhtml: sXHTML});
 						});
 						
 						if (sReturn == undefined)
@@ -670,17 +689,6 @@ ns1blankspace.document =
 					}	
 				},
 
-	new2:		function ()
-				{
-					ns1blankspace.objectContextData = undefined;
-					ns1blankspace.objectContext = -1;
-					ns1blankspace.document.layout();
-					ns1blankspace.show({selector: '#ns1blankspaceMainDetails'});
-					$('#ns1blankspaceViewportControlAction').button({disabled: false});
-					$('#ns1blankspaceViewportControlActionOptions').button({disabled: true});
-					ns1blankspace.document.details();
-				},
-
 	save: 		{
 					send: 		function ()
 								{
@@ -751,55 +759,67 @@ ns1blankspace.document =
 									}	
 								}
 				},
-	
-	pdf:		function (oParam, sReturn)
-				{
-					var sFilename = 'document_' + ns1blankspace.objectContext + '.pdf'
-					var sXHTMLElementID = '';
-					var sXHTMLContent;
-					
-					if (oParam != undefined)
-					{
-						if (oParam.filename != undefined) {sFilename = oParam.filename}
-						if (oParam.xhtmlElementID != undefined) {sXHTMLElementID = oParam.xhtmlElementID}
-						if (oParam.xhtmlContent != undefined) {sXHTMLContent = oParam.xhtmlContent}
-					}		
 
-					if (sXHTMLContent == undefined)
-					{
-						if ($('#ns1blankspaceMainEdit').html() != '')
-						{
-							sXHTMLContent = tinyMCE.get('ns1blankspaceEditText').getContent();
-						}
-					}
-					
-					if (sXHTMLContent == undefined)
-					{
-						alert('Nothing to PDF!')
-					}
-					else
-					{	
-						if (sReturn == undefined)
-						{
-							var sData = 'rf=TEXT&object=' + ns1blankspace.util.fs(ns1blankspace.object)
-							sData += '&objectcontext=' + ns1blankspace.util.fs(ns1blankspace.objectContext);
-							sData += '&filename=' + ns1blankspace.util.fs(sFilename);
-							sData += '&xhtmlcontent=' + ns1blankspace.util.fs(sXHTMLContent);
-							
-							$.ajax(
-							{
-								type: 'POST',
-								url: ns1blankspace.util.endpointURI('CORE_PDF_CREATE'),
-								data: sData,
-								dataType: 'text',
-								success: function(data) {ns1blankspace.document.pdf(oParam, data)}
-							});
-						}	
-						else	
-						{
-							var aReturn = sReturn.split('|');
-							window.open('/download/' + aReturn[1]);
-						}	
-					}
-				}
+	pdf: 		{
+					v1:			function (oParam, sReturn)
+								{
+									var sFilename = 'document_' + ns1blankspace.objectContext + '.pdf'
+									var sXHTMLElementID = '';
+									var sXHTMLContent;
+									
+									if (oParam != undefined)
+									{
+										if (oParam.filename != undefined) {sFilename = oParam.filename}
+										if (oParam.xhtmlElementID != undefined) {sXHTMLElementID = oParam.xhtmlElementID}
+										if (oParam.xhtmlContent != undefined) {sXHTMLContent = oParam.xhtmlContent}
+									}		
+
+									if (sXHTMLContent == undefined)
+									{
+										if ($('#ns1blankspaceMainEdit').html() != '')
+										{
+											sXHTMLContent = tinyMCE.get('ns1blankspaceEditText' + ns1blankspace.counter.editor).getContent();
+										}
+									}
+									
+									if (sXHTMLContent == undefined)
+									{
+										alert('Nothing to PDF!')
+									}
+									else
+									{	
+										if (sReturn == undefined)
+										{
+											var sData = 'rf=TEXT&object=' + ns1blankspace.util.fs(ns1blankspace.object)
+											sData += '&objectcontext=' + ns1blankspace.util.fs(ns1blankspace.objectContext);
+											sData += '&filename=' + ns1blankspace.util.fs(sFilename);
+											sData += '&xhtmlcontent=' + ns1blankspace.util.fs(sXHTMLContent);
+											
+											$.ajax(
+											{
+												type: 'POST',
+												url: ns1blankspace.util.endpointURI('CORE_PDF_CREATE'),
+												data: sData,
+												dataType: 'text',
+												success: function(data) {ns1blankspace.document.pdf(oParam, data)}
+											});
+										}	
+										else	
+										{
+											var aReturn = sReturn.split('|');
+											window.open('/download/' + aReturn[1]);
+										}	
+									}
+								},
+
+					v2:			function (oParam)
+								{
+									oParam = ns1blankspace.util.setParam(oParam, 'xhtmlContainerElementID', 'ns1blankspaceContainerPDF');
+
+									if (ns1blankspace.util.getParam(oParam, 'xhtml').exists)
+									{
+										ns1blankspace.util.pdf.create(oParam);
+						 			}	
+								}			
+				}				
 }

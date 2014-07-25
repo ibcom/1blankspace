@@ -11,6 +11,9 @@
  				{
  					saveToFile: true,
  					saveLocal: true,
+ 					xhtmlContainerElementID:,
+ 					setURI:,
+ 					openURI:,
  					object:,
  					objectContext:,
  					filename: 'file.pdf',
@@ -37,6 +40,11 @@
  
  *				1. if filename missing; a filename is generated using UUID.
  * 				2. margin: units as per the unit: value [default: pt]
+ *
+ * 				ns1blankspace.util.pdf.create(
+ 				{
+ 					xhtml: '<header>Header</header><div style="margin-top:20px;">Hello I am a PDF.</div><footer>Page <span class="pageCounter"></span> of <span class="totalPages"></span></footer>'
+ 				});
  *
  * Example xhtml:
  *				<header>
@@ -162,6 +170,27 @@ ns1blankspace.util.pdf =
 						    			ns1blankspace.util.pdf.persist(oParam);
 						    		}
 						    	}	
+					    	}
+					    	else
+					    	{
+					    		ns1blankspace.util.pdf.data.raw = ns1blankspace.util.pdf.factory.output('datauristring');
+
+					    		if (ns1blankspace.util.getParam(oParam, 'setURI').value)
+					    		{
+					    			window.location.href = ns1blankspace.util.pdf.data.raw
+					    		}
+					    		else if (ns1blankspace.util.getParam(oParam, 'openURI').value)
+					    		{
+					    			window.open(ns1blankspace.util.pdf.data.raw)
+					    		}
+					    		else if (ns1blankspace.util.getParam(oParam, 'xhtmlContainerElementID').exists)
+					    		{
+					    			$('#' + ns1blankspace.util.getParam(oParam, 'xhtmlContainerElementID').value).attr('src', ns1blankspace.util.pdf.data.raw);
+					    		}
+					    		else
+					    		{
+					    			ns1blankspace.util.whenCan.complete(ns1blankspace.util.pdf.data.raw, oParam);
+					    		}	
 					    	}
 					    },
 					    oMargins
