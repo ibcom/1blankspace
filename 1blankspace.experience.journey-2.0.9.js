@@ -677,36 +677,39 @@ ns1blankspace.experience.journey =
 									var bOK = false;
 									var bValue = ns1blankspace.util.getParam(oParam, 'value').exists;
 
-									if (oResponse === undefined && !bExtend && ((sTenancy == 'single' && oJourney.previousDestination.tenancy != 'single') || sTenancy == 'multi'))
+									if (oJourney.populateWith !== undefined && oResponse === undefined && !bExtend && ((sTenancy == 'single' && oJourney.previousDestination.tenancy != 'single') || sTenancy == 'multi'))
 									{	
 										$('#' + oJourney.xhtmlPopulateElementID).html('');
 
+										var oSearch = new AdvancedSearch();
+										oSearch.method = oJourney.destination.populationAtRestLocation + '_SEARCH';
+
 										var aFields = [];
 
-										$.each(oJourney.destination.thingsToSee, function (i, v)
+										$.each($.grep(oJourney.destination.thingsToSee, function(a) {return a.model !== undefined}), function (i, v)
 										{
-											if (v.model)
+											if (i==0)
 											{
-												//if (bValue?v.isPopulateWith:true) {aFields.push(v.model)}
-												aFields.push(v.model)
+												oSearch.sort(v.model, (v.type=='text'?'asc':'desc'));
+											}
 
-												if (v.thingsToSee)
+											aFields.push(v.model)
+
+											if (v.thingsToSee)
+											{
+												$.each(v.thingsToSee, function (j, k)
 												{
-													$.each(v.thingsToSee, function (j, k)
+													if (k.model)
 													{
-														if (k.model)
-														{
-															aFields.push(v.model + '.' + k.model)
-														}	
-													});		
-												}
-											}	
+														aFields.push(v.model + '.' + k.model)
+													}	
+												});		
+											}
 										});
 
 										sFields = aFields.join(',');
 
-										var oSearch = new AdvancedSearch();
-										oSearch.method = oJourney.destination.populationAtRestLocation + '_SEARCH';
+										
 										oSearch.addField(sFields);
 
 										$.each(oJourney.populateWith, function(i, v)
@@ -946,20 +949,20 @@ ns1blankspace.experience.journey =
 
 											if (!bContainsDestination)
 											{	
-												aHTMLContainer.push('<div id="' + oJourney.destination.xhtmlContainerID + '-populateWith" class="' + sClass + '" style="width:250px;">');
+												aHTMLContainer.push('<div id="' + oJourney.destination.xhtmlContainerID + '-populateWith" class="' + sClass + '" style="width:240px;">');
 												aHTMLContainer.push(aHTMLPopulateWith.join(''));
 												aHTMLContainer.push('</div>');
 
 												if (!bEdit)
 												{	
-													aHTMLContainer.push('<div id="' + oJourney.destination.xhtmlContainerID + '" class="' + sClass + '" style="float:right; width:250px;">');
+													aHTMLContainer.push('<div id="' + oJourney.destination.xhtmlContainerID + '" class="' + sClass + '" style="float:right; width:240px;">');
 													aHTMLContainer.push(aHTML.join(''));
 													aHTMLContainer.push('</div>');
 												}	
 											}
 											else
 											{	
-												aHTMLContainer.push('<div id="' + oJourney.destination.xhtmlContainerID + '" class="' + sClass + '" style="float:right;">');
+												aHTMLContainer.push('<div id="' + oJourney.destination.xhtmlContainerID + '" class="' + sClass + '" style="width:98%; float:right;">');
 												aHTMLContainer.push(aHTML.join(''));
 												aHTMLContainer.push('</div>');
 											}
