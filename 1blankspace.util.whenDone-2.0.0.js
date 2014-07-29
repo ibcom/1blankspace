@@ -48,7 +48,8 @@
 			]
 		});
  *
- *		1. timeout: number of seconds before error: function is called.		
+ *		1. timeout: is the number of seconds before error: function is called.
+ * 		2. All the returned data is set in the store: object under its allocated name:.
  */
 
 
