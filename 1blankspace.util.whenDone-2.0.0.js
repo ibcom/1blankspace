@@ -7,10 +7,13 @@
  * Reference: http://www.mydigitalstructure.com/advancedSearch_direct
  *
  * Example usage:
+ *
  		ns1blankspace.util.whenDone.init({manifest:
 		{
-			execute: 	'nsXXX.populate',
+			success: 	'nsXXX.populate',
+			error: 		'nsXXX.error',
 			store: 		'nsXXX.data',
+			timeout: 	15,
 			search:
 			[
 				{
@@ -37,9 +40,15 @@
 							"rows": "1"
 						}
 					}
-				}
+				},
+				{
+					name: 'promisedIns',
+					uri: '/rpc/financial/?method=FINANCIAL_DEBTOR_SEARCH&rows=100',
+				},
 			]
 		});
+ *
+ *		1. timeout: number of seconds before error: function is called.		
  */
 
 
