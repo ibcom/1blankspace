@@ -631,7 +631,7 @@ ns1blankspace.experience.journey =
 														aHTML.push('<div id="ns1blankspaceJourney-' + oJourney.originID + '-' + oJourney.destinationID + '"' + 
 																			' style="width:560px; margin-right:18px; float:left; background-color: rgba(255,255,255,0.2);' +
 																			' border-radius:5px; padding:18px; padding-left:18px; padding-top:12px;">' +
-																			nsSite1667.xhtml.loading +
+																			'loading...' +
 																			'</div>');
 
 														aHTML.push('<div id="ns1blankspaceExperienceToDo" style="width:100px; float:right;">');
@@ -683,7 +683,6 @@ ns1blankspace.experience.journey =
 														}	
 													}	
 												}
-
 								}			
 				},
 

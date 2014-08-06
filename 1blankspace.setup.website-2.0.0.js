@@ -272,17 +272,22 @@ ns1blankspace.setup.website =
 
 						aHTML.push('<tr><td>&nbsp;</td></tr>');
 
+						aHTML.push('<tr><td id="ns1blankspaceControlScripts" class="ns1blankspaceControl">' +
+										'Scripts</td></tr>');
+
 						aHTML.push('<tr><td id="ns1blankspaceControlAdvanced" class="ns1blankspaceControl">' +
 										'Advanced</td></tr>');
 
-						aHTML.push('<tr><td id="ns1blankspaceControlScripts" class="ns1blankspaceControl">' +
-										'Scripts</td></tr>');
+						aHTML.push('<tr><td>&nbsp;</td></tr>');
 
 						aHTML.push('<tr><td id="ns1blankspaceControlURLs" class="ns1blankspaceControl">' +
 										'URLs</td></tr>');
 
 						aHTML.push('<tr><td id="ns1blankspaceControlHTTPHeaders" class="ns1blankspaceControl">' +
 										'Headers</td></tr>');
+
+						aHTML.push('<tr><td id="ns1blankspaceControlRedirects" class="ns1blankspaceControl">' +
+										'Redirects</td></tr>');
 					}	
 
 					aHTML.push('</table>');					
@@ -302,7 +307,8 @@ ns1blankspace.setup.website =
 					aHTML.push('<div id="ns1blankspaceMainURLs" class="ns1blankspaceControlMain"></div>');	
 					aHTML.push('<div id="ns1blankspaceMainWebapp" class="ns1blankspaceControlMain"></div>');
 					aHTML.push('<div id="ns1blankspaceMainForms" class="ns1blankspaceControlMain"></div>');	
-					aHTML.push('<div id="ns1blankspaceMainHTTPHeaders" class="ns1blankspaceControlMain"></div>');			
+					aHTML.push('<div id="ns1blankspaceMainHTTPHeaders" class="ns1blankspaceControlMain"></div>');
+					aHTML.push('<div id="ns1blankspaceMainRedirects" class="ns1blankspaceControlMain"></div>');			
 						
 					$('#ns1blankspaceMain').html(aHTML.join(''));
 						
@@ -376,6 +382,12 @@ ns1blankspace.setup.website =
 					{
 						ns1blankspace.show({selector: '#ns1blankspaceMainHTTPHeaders', context: {inContext: false}});
 						ns1blankspace.setup.website.httpHeaders.show();
+					});
+
+					$('#ns1blankspaceControlRedirects').click(function(event)
+					{
+						ns1blankspace.show({selector: '#ns1blankspaceMainRedirects', context: {inContext: false}});
+						ns1blankspace.setup.website.redirects.show();
 					});
 				},
 
@@ -2045,7 +2057,295 @@ ns1blankspace.setup.website =
 										}
 									}		
 								}
-				},		
+				},
+
+	redirects: 
+				{
+					show:		function (oParam, oResponse)
+								{
+									var iObjectContext = ns1blankspace.objectContext;
+									
+									if (oParam != undefined)
+									{
+										if (oParam.objectContext != undefined) {iObjectContext = oParam.objectContext}
+									}		
+										
+									if (oResponse == undefined)
+									{	
+										var oSearch = new AdvancedSearch();
+										oSearch.method = 'SETUP_SITE_URL_REDIRECT_SEARCH';
+										oSearch.addField('statustext,urlnew,urlold');
+										oSearch.addFilter('site', 'EQUAL_TO', ns1blankspace.objectContext)
+										oSearch.rf = 'json';
+										oSearch.sort('urlold', 'asc');
+										
+										oSearch.getResults(function(data)
+										{
+											ns1blankspace.setup.website.redirects.show(oParam, data)
+										});
+									}
+									else
+									{	
+										var aHTML = [];
+											
+										aHTML.push('<table class="ns1blankspaceContainer">' +
+														'<tr class="ns1blankspaceContainer">' +
+														'<td id="ns1blankspaceRedirectColumn1" class="ns1blankspaceColumn1Flexible"></td>' +
+														'<td id="ns1blankspaceRedirectColumn2" class="ns1blankspaceColumn2" style="width:200px;"></td>' +
+														'</tr>' + 
+														'</table>');
+
+										$('#ns1blankspaceMainRedirects').html(aHTML.join(''));
+										
+										var aHTML = [];
+											
+										aHTML.push('<table class="ns1blankspaceColumn2">');
+										
+										aHTML.push('<tr><td class="ns1blankspaceAction">' +
+													'<span id="ns1blankspaceWebsiteRedirectAdd">Add</span>' +
+													'</td></tr>');
+													
+										aHTML.push('<tr><td style="padding-top:20px;">' +
+													'<a href="http://en.wikipedia.org/wiki/URL_redirection" target="_blank">What are HTTP redirects?</a>' +
+													'</td></tr>');	
+
+										aHTML.push('</table>');					
+										
+										$('#ns1blankspaceRedirectColumn2').html(aHTML.join(''));
+									
+										$('#ns1blankspaceWebsiteRedirectAdd').button(
+										{
+											label: "Add"
+										})
+										.click(function()
+										{
+											 ns1blankspace.setup.website.redirects.add(oParam);
+										})
+											
+										var aHTML = [];
+
+										if (oResponse.data.rows.length == 0)
+										{
+											aHTML.push('<table><tr><td class="ns1blankspaceNothing">No redirects.</td></tr></table>');
+	
+											$('#ns1blankspaceRedirectColumn1').html(aHTML.join(''));
+										}
+										else
+										{
+											aHTML.push('<table id="ns1blankspaceSetupWebsiteRedirects">');
+											aHTML.push('<tr class="ns1blankspaceCaption">');
+											aHTML.push('<td class="ns1blankspaceHeaderCaption">URLs</td>');
+											aHTML.push('<td class="ns1blankspaceHeaderCaption">HTTP Status Text</td>');
+											aHTML.push('<td class="ns1blankspaceHeaderCaption">&nbsp;</td>');
+											aHTML.push('</tr>');
+		
+											$.each(oResponse.data.rows, function()
+											{
+												aHTML.push('<tr class="ns1blankspaceRow">');
+																
+												aHTML.push('<td id="ns1blankspaceWebsiteRedirect_oldurl-' + this.id + '" class="ns1blankspaceRow ns1blankspaceRowSelect">' +
+																		this.urlold + '<br />' + this.urlnew + '</td>');
+
+												aHTML.push('<td id="ns1blankspaceWebsiteRedirect_statustext-' + this.id + '" class="ns1blankspaceRow">' +
+																		this.statustext + '</td>');
+																		
+												aHTML.push('<td style="width:30px;text-align:right;" class="ns1blankspaceRow">');
+													
+												aHTML.push('<span id="ns1blankspaceWebsiteRedirect_options_remove-' + this.id + '" class="ns1blankspaceRowRemove"></span>');
+														
+												aHTML.push('</td>');
+																
+												aHTML.push('</tr>');
+											});
+											
+											aHTML.push('</table>');
+
+											$('#ns1blankspaceRedirectColumn1').html(aHTML.join(''));
+													
+											$('#ns1blankspaceSetupWebsiteRedirects span.ns1blankspaceRowRemove').button(
+											{
+												text: false,
+												icons:
+												{
+													primary: "ui-icon-close"
+												}
+											})
+											.click(function()
+											{
+												ns1blankspace.remove(
+												{
+													xhtmlElementID: this.id,
+													method: 'SETUP_SITE_URL_REDIRECT_MANAGE',
+													parentLevel: 2,
+													ifNoneMessage: 'No redirects.'
+												});
+											})
+											.css('width', '15px')
+											.css('height', '17px');
+											
+											$('#ns1blankspaceSetupWebsiteRedirects .ns1blankspaceRowSelect')
+											.click(function()
+											{
+												ns1blankspace.setup.website.redirects.add({xhtmlElementID: this.id})
+											});
+										}
+									}
+								},
+
+					add:		function (oParam, oResponse)
+								{
+									var sID; 
+									
+									if (oResponse == undefined)
+									{
+										var sXHTMLElementID;
+
+										if (oParam != undefined)
+										{
+											if (oParam.xhtmlElementID != undefined) {sXHTMLElementID = oParam.xhtmlElementID}
+										}
+										
+										if (sXHTMLElementID != undefined)
+										{
+											var aXHTMLElementID = sXHTMLElementID.split('-');
+											var sID = aXHTMLElementID[1];
+										}	
+									
+										var aHTML = [];
+	
+										aHTML.push('<table class="ns1blankspace">');
+												
+										aHTML.push('<tr><td class="ns1blankspaceCaption">' +
+														'If URL is' +
+														'</td></tr>' +
+														'<tr class="ns1blankspaceText">' +
+														'<td class="ns1blankspaceText">' +
+														'<input id="ns1blankspaceSetupWebsiteRedirectURLOld" class="ns1blankspaceText">' +
+														'</td></tr>');
+
+										aHTML.push('<tr><td class="ns1blankspaceCaption">' +
+														'Redirect to this URL' +
+														'</td></tr>' +
+														'<tr class="ns1blankspaceText">' +
+														'<td class="ns1blankspaceText">' +
+														'<input id="ns1blankspaceSetupWebsiteRedirectURLNew" class="ns1blankspaceText">' +
+														'</td></tr>');
+
+
+										aHTML.push('<tr><td class="ns1blankspaceCaption">' +
+														'HTTP Status Text' +
+														'</td></tr>' +
+														'<tr class="ns1blankspaceText">' +
+														'<td class="ns1blankspaceText">' +
+														'<input id="ns1blankspaceSetupWebsiteRedirectStatusText" class="ns1blankspaceText">' +
+														'</td></tr>');
+														
+										aHTML.push('</table>');					
+										
+										$('#ns1blankspaceRedirectColumn1').html(aHTML.join(''));
+
+										$('#ns1blankspaceSetupWebsiteRedirectOldURL').focus();
+										
+										var aHTML = [];
+
+										aHTML.push('<table class="ns1blankspaceColumn2">');
+												
+										aHTML.push('<tr><td>' +
+														'<span class="ns1blankspaceAction" style="width:80px;" id="ns1blankspaceWebsiteRedirectSave">Save</span>' +
+														'</td></tr>');
+									
+										aHTML.push('<tr><td>' +
+														'<span class="ns1blankspaceAction" style="width:80px;" id="ns1blankspaceWebsiteRedirectCancel">Cancel</span>' +
+														'</td></tr>');
+
+										aHTML.push('<tr><td style="padding-top:16px;" class="ns1blankspaceSubNote">' +
+													'A common status text is<br />301 Moved Permanently.' +
+													'</td></tr>');	
+
+										aHTML.push('<tr><td style="padding-top:16px;" class="ns1blankspaceSubNote">' +
+													'The URLs need to be fully qualified, ie http://...' +
+													'</td></tr>');	
+														
+										aHTML.push('</table>');	
+	
+										$('#ns1blankspaceRedirectColumn2').html(aHTML.join(''));
+										
+										$('#ns1blankspaceWebsiteRedirectSave').button(
+										{
+											text: "Save"
+										})
+										.click(function() 
+										{
+											var oData =
+											{
+												site: ns1blankspace.objectContext,
+												urlold: $('#ns1blankspaceSetupWebsiteRedirectURLOld').val(),
+												urlnew: $('#ns1blankspaceSetupWebsiteRedirectURLNew').val(),
+												statustext: $('#ns1blankspaceSetupWebsiteRedirectStatusText').val(),
+												id: sID
+											}	
+											
+											ns1blankspace.status.working();
+
+											//ns1blankspace.util.endpointURI('SETUP_SITE_URL_REDIRECT_MANAGE')'
+											$.ajax(
+											{
+												type: 'POST',
+												url: '/rpc/setup/?method=SETUP_SITE_URL_REDIRECT_MANAGE',
+												data: oData,
+												dataType: 'json',
+												success: function(data)
+												{
+													if (data.status == 'OK')
+													{	
+														ns1blankspace.status.message('Redirect added.')
+														ns1blankspace.show({selector: '#ns1blankspaceMainRedirects', refresh: true});
+														ns1blankspace.setup.website.redirects.show();
+													}
+													else
+													{
+														ns1blankspace.status.error(data.error.errornotes);
+													}	
+												}
+											});
+										});
+										
+										$('#ns1blankspaceWebsiteRedirectCancel').button(
+										{
+											text: "Cancel"
+										})
+										.click(function() 
+										{
+											ns1blankspace.show({selector: '#ns1blankspaceMainRedirects', refresh: true});
+														ns1blankspace.setup.website.redirects.show();
+										});
+										
+										if (sID != undefined)
+										{
+											var oSearch = new AdvancedSearch();
+											oSearch.method = 'SETUP_SITE_URL_REDIRECT_SEARCH';
+											oSearch.addField('statustext,urlnew,urlold');
+											oSearch.addFilter('site', 'EQUAL_TO', ns1blankspace.objectContext)
+											oSearch.rf = 'json';
+											
+											oSearch.getResults(function(data)
+											{
+												ns1blankspace.setup.website.redirects.add(oParam, data)
+											});
+										}
+									}
+									else
+									{
+										if (oResponse.data.rows.length != 0)
+										{
+											var oObjectContext = oResponse.data.rows[0];
+											$('#ns1blankspaceSetupWebsiteRedirectURLOld').val(oObjectContext.urlold);
+											$('#ns1blankspaceSetupWebsiteRedirectURLNew').val(oObjectContext.urlnew);
+											$('#ns1blankspaceSetupWebsiteRedirectStatusText').val(oObjectContext.statustext);
+										}
+									}		
+								}
+				},						
 
 	save: 		{
 					send:		function (oParam, oResponse)
