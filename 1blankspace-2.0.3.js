@@ -5513,10 +5513,10 @@ ns1blankspace.pdf =
 					var bOpen = ns1blankspace.util.getParam(oParam, 'open', {"default": false}).value;
 					var fOnComplete = ns1blankspace.util.getParam(oParam, 'onComplete').value;
 					var bReplace = ns1blankspace.util.getParam(oParam, 'replace', {"default": false}).value;
-					var iLeftMargin = ns1blankspace.util.getParam(oParam, 'leftmargin').value;
-					var iRightMargin = ns1blankspace.util.getParam(oParam, 'rightmargin').value;
-					var iTopMargin = ns1blankspace.util.getParam(oParam, 'topmargin').value;
-					var iBottomMargin = ns1blankspace.util.getParam(oParam, 'bottommargin').value;
+					var iLeftMargin = ns1blankspace.util.getParam(oParam, 'leftmargin', {"default": 25}).value;
+					var iRightMargin = ns1blankspace.util.getParam(oParam, 'rightmargin', {"default": 25}).value;
+					var iTopMargin = ns1blankspace.util.getParam(oParam, 'topmargin', {"default": 25}).value;
+					var iBottomMargin = ns1blankspace.util.getParam(oParam, 'bottommargin', {"default": 25}).value;
 					var iOrientation = ns1blankspace.util.getParam(oParam, 'orientation', {"default": 1}).value;
 					var bLink = ns1blankspace.util.getParam(oParam, 'link', {"default": false}).value;
 					var sLinkText = ns1blankspace.util.getParam(oParam, 'linkText', {"default": "Download&nbsp;&raquo;"}).value;
@@ -5541,14 +5541,14 @@ ns1blankspace.pdf =
 							object: iObject,
 							objectcontext: iObjectContext,
 							filename: sFileName,
-							xhtmlcontent: sXHTMLContent,
+							xhtmlbody: sXHTMLContent,
 							orientation: iOrientation
 						}
 
-						if (iLeftMargin !== undefined) {oData.leftmargin = iLeftMargin}
-						if (iRightMargin !== undefined) {oData.rightmargin = iRightMargin}
-						if (iTopMargin !== undefined) {oData.topmargin = iTopMargin}
-						if (iBottomMargin !== undefined) {oData.bottommargin = iBottomMargin}
+						if (iLeftMargin !== undefined) {oData.xhtmlBody_LeftMargin = iLeftMargin}
+						if (iRightMargin !== undefined) {oData.xhtmlBody_RightMargin = iRightMargin}
+						if (iTopMargin !== undefined) {oData.xhtmlBody_TopMargin = iTopMargin}
+						if (iBottomMargin !== undefined) {oData.xhtmlBody_BottomMargin = iBottomMargin}
 						
 						$.ajax(
 						{
@@ -5569,14 +5569,14 @@ ns1blankspace.pdf =
 							{
 								if (bOpen)
 								{
-									window.open('/download/' + aReturn[1])	
+									window.open('/download/' + aReturn[2])	
 								}
 								else
 								{
 									if (bLink && sXHTMLElementID !== undefined)
 									{
 										$('#' + sXHTMLElementID).button("destroy");
-										$('#' + sXHTMLElementID).html('<a href="/download/' + aReturn[1] + '" target="_blank">' + sLinkText + '</a>');
+										$('#' + sXHTMLElementID).html('<a href="/download/' + aReturn[2] + '" target="_blank">' + sLinkText + '</a>');
 									}
 									else
 									{	
@@ -5587,7 +5587,7 @@ ns1blankspace.pdf =
 										})
 										.click(function(event)
 										{
-											window.open('/download/' + aReturn[1])
+											window.open('/download/' + aReturn[2])
 										});
 									}	
 								}	

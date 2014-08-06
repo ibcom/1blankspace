@@ -139,31 +139,34 @@ ns1blankspace.experience.journey =
 					oJourney.sourceRouteID = oJourney.sourceRoute.join('-');
 					oJourney.previousRouteID = oJourney.sourceRouteID;
 
-					oJourney.destination.xhtmlContainerID = 'ns1blankspaceExperience-' + oJourney.routeID + '-container';
-
-					oJourney.previousDestination = (oJourney.sourceRoute.length!=0?oJourney.destinations[oJourney.sourceRoute.length-1]:undefined)
-
-					oJourney.destination.populationIsAtWork = false;
-
-					if (oJourney.destination.thingsToSee)
+					if (oJourney.destination !== undefined)
 					{	
-						$.each(oJourney.destination.thingsToSee, function (i, v)
-						{
-							if (oJourney.destination.populateWith !== undefined)
+						oJourney.destination.xhtmlContainerID = 'ns1blankspaceExperience-' + oJourney.routeID + '-container';
+
+						oJourney.previousDestination = (oJourney.sourceRoute.length!=0?oJourney.destinations[oJourney.sourceRoute.length-1]:undefined)
+
+						oJourney.destination.populationIsAtWork = false;
+
+						if (oJourney.destination.thingsToSee)
+						{	
+							$.each(oJourney.destination.thingsToSee, function (i, v)
 							{
-								v.isPopulateWith = ($.grep(oJourney.destination.populateWith, function (a) {return (a.model == v.model)}).length != 0);
-							}	
-						});
+								if (oJourney.destination.populateWith !== undefined)
+								{
+									v.isPopulateWith = ($.grep(oJourney.destination.populateWith, function (a) {return (a.model == v.model)}).length != 0);
+								}	
+							});
+						}	
+		
+						if (oJourney.destination.tenancy === undefined) {oJourney.destination.tenancy = 'single'}
+						if (oJourney.destination.thingsToDo === undefined) {oJourney.destination.thingsToDo = []}
+
+						oJourney.previousDestination.populationAtWorkToBeRestedWhenCan	= (oJourney.previousDestination.populationAtWorkToBeRestedWhenCan || []);
+
+						oJourney.populateWith = ns1blankspace.util.getParam(oParam, 'populateWith', {"default": oJourney.destination.populateWith}).value;
+
+						ns1blankspace.experience.journey.whereami = oJourney.destination;
 					}	
-	
-					if (oJourney.destination.tenancy === undefined) {oJourney.destination.tenancy = 'single'}
-					if (oJourney.destination.thingsToDo === undefined) {oJourney.destination.thingsToDo = []}
-
-					oJourney.previousDestination.populationAtWorkToBeRestedWhenCan	= (oJourney.previousDestination.populationAtWorkToBeRestedWhenCan || []);
-
-					oJourney.populateWith = ns1blankspace.util.getParam(oParam, 'populateWith', {"default": oJourney.destination.populateWith}).value;
-
-					ns1blankspace.experience.journey.whereami = oJourney.destination;
 
 					return oJourney
 				},			
@@ -224,11 +227,8 @@ ns1blankspace.experience.journey =
 								{
 									var oInitiator = ns1blankspace.util.getParam(oParam, 'initiator', {remove: true}).value;
 									var oJourney = ns1blankspace.experience.journey.get(oParam);
-
 									var sValue = oJourney.previousDestination.populationAtWork[0][oJourney.destination.model]
 	
-									//oParam = ns1blankspace.util.setParam(oParam, 'populateContext', oParam.populationID);
-
 									ns1blankspace.experience.journey.thingsToSee.thingToSee.populate(oParam);
 								},
 
@@ -236,7 +236,6 @@ ns1blankspace.experience.journey =
 								{
 									var oInitiator = ns1blankspace.util.getParam(oParam, 'initiator', {remove: true}).value;
 									var oJourney = ns1blankspace.experience.journey.get(oParam);
-
 									var sValue = oJourney.previousDestination.populationAtWork[0][oJourney.destination.model];
 
 									if (oJourney.destination.populationAtWork)
@@ -503,10 +502,7 @@ ns1blankspace.experience.journey =
 
 										aHTML.push('<div id="ns1blankspaceExperienceOrigin-' + v.id + '"' +
 														' data-route-id="' + v.id + '"' +
-														' style="margin-top:10px; padding: 10px; font-size:2em; color:#ffffff; cursor: pointer; text-align:center; vertical-align:middle;' +
-														' height:' + v.height + ';' +
-														' width:80px;' +
-														' background-color: #333366;"' +
+														' style="height:' + v.height + ';"' +
 														' class="ns1blankspaceExperienceOrigins">' +
 														v.xhtmlImage + v.caption + '</div>');
 									});
@@ -526,6 +522,19 @@ ns1blankspace.experience.journey =
 										oParam = ns1blankspace.util.setParam(oParam, 'originID', (this.id).split('-')[1]);
 										ns1blankspace.experience.journey.destinations.show(oParam);
 									});	
+								},
+
+					loading: 	function (oParam)
+								{
+									var sOriginID = ns1blankspace.util.getParam(oParam, 'originID').value;
+									$('#ns1blankspaceExperienceOrigin-' + sOriginID).html('<div style="padding-top:20px;">' + ns1blankspace.xhtml.loading + '</div>');
+								},
+
+					reset: 		function (oParam)
+								{
+									var sOriginID = ns1blankspace.util.getParam(oParam, 'originID').value;
+									var oJourney = ns1blankspace.experience.journey.get({routeID: sOriginID});
+									$('#ns1blankspaceExperienceOrigin-' + sOriginID).html(oJourney.origin.caption);
 								}			
 				},	
 
@@ -547,7 +556,7 @@ ns1blankspace.experience.journey =
 										aHTML.push('<div id="ns1blankspaceExperience-' + sOriginID + '-' + v.id + '"' +
 														' data-route-id="' + sOriginID + '-' + v.id + '"' +
 														' style="padding:10px; font-size:1.2em; cursor: pointer;" class="ns1blankspaceExperiences">' +
-														ns1blankspace.experience.translate({commonText: v.name}) + '</div>');
+														ns1blankspace.experience.translate({commonText: (v.signage!==undefined?v.signage:v.name)}) + '</div>');
 									});
 
 									aHTML.push('</div>');
@@ -621,7 +630,9 @@ ns1blankspace.experience.journey =
 
 														aHTML.push('<div id="ns1blankspaceJourney-' + oJourney.originID + '-' + oJourney.destinationID + '"' + 
 																			' style="width:560px; margin-right:18px; float:left; background-color: rgba(255,255,255,0.2);' +
-																			' border-radius:5px; padding:18px; padding-left:18px; padding-top:12px;"></div>');
+																			' border-radius:5px; padding:18px; padding-left:18px; padding-top:12px;">' +
+																			nsSite1667.xhtml.loading +
+																			'</div>');
 
 														aHTML.push('<div id="ns1blankspaceExperienceToDo" style="width:100px; float:right;">');
 
@@ -688,10 +699,11 @@ ns1blankspace.experience.journey =
 									var bOK = false;
 									var bValue = ns1blankspace.util.getParam(oParam, 'value').exists;
 
-									//if (oJourney.populateWith !== undefined && oResponse === undefined && !bExtend && ((sTenancy == 'single' && oJourney.previousDestination.tenancy != 'single') || sTenancy == 'multi'))
 									if (oJourney.populateWith !== undefined && oResponse === undefined && !bExtend && (sTenancy == 'single' || sTenancy == 'multi'))
 									{	
 										$('#' + oJourney.xhtmlPopulateElementID).html('');
+
+										ns1blankspace.experience.journey.origins.loading({originID: oJourney.originID});
 
 										if (oJourney.destination.populationAtRestLocationURI !== undefined)
 										{
@@ -710,6 +722,7 @@ ns1blankspace.experience.journey =
 										{
 											var oSearch = new AdvancedSearch();
 											oSearch.method = oJourney.destination.populationAtRestLocation + '_SEARCH';
+											oSearch.rows = 10;
 
 											var aFields = [];
 
@@ -791,6 +804,8 @@ ns1blankspace.experience.journey =
 									else
 									{
 										$('#' + oJourney.xhtmlPopulateElementID).slideDown(500);
+
+										ns1blankspace.experience.journey.origins.reset({originID: oJourney.originID});
 
 										if (!bExtend) {oJourney.destination.populationAtRest = []};
 

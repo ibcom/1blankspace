@@ -52,7 +52,6 @@
  * 		2. All the returned data is set in the store: object under its allocated name:.
  */
 
-
 ns1blankspace.util.whenDone =
 {
 	data: 		{},
@@ -63,6 +62,8 @@ ns1blankspace.util.whenDone =
 					var bIsLoggedOn  = ns1blankspace.util.getParam(oParam, 'isLoggedOn', {"default": false}).value;
 					var iTimeout  = ns1blankspace.util.getParam(oParam, 'timeout').value;
 					var iTimer  = ns1blankspace.util.getParam(oParam, 'timer').value;
+
+					var oStore = ns1blankspace.util.toFunction(oManifest.store);
 
 					if (!bIsLoggedOn)
 					{
@@ -129,7 +130,7 @@ ns1blankspace.util.whenDone =
 				{
 					var oManifest = ns1blankspace.util.getParam(oParam, 'manifest').value;
 					var oStore = ns1blankspace.util.toFunction(oManifest.store);
-					oStore[oSearch.name] = oResponse.data;
+					oStore[oSearch.name] = oResponse;
 					ns1blankspace.util.whenDone.checkIfDone(oParam);
 				},
 
@@ -143,13 +144,13 @@ ns1blankspace.util.whenDone =
 					var iStoreLength = 0;
 					var oStore = ns1blankspace.util.toFunction(oManifest.store);
 
-					for (var key in oStore)
+					$.each(oManifest.search, function (i, v)
 					{
-    					if (oStore.hasOwnProperty(key))
+    					if (oStore.hasOwnProperty(v.name))
     					{
     						iStoreLength++;
     					}
-					}
+					});
 
 					if (!bError & (iStoreLength == oManifest.search.length))
 					{

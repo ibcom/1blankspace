@@ -154,7 +154,7 @@
 		{"title":"CORE_OBJECT_SEARCH", "advancedSearch":"false", "rpc":"false"},
 		{"title":"CORE_OBJECT_TYPE_SEARCH", "advancedSearch":"false", "rpc":"false"},
 		{"title":"CORE_OPPORTUNITY_STATUS_SEARCH", "advancedSearch":"false", "rpc":"false"},
-		{"title":"CORE_PDF_CREATE", "advancedSearch":"false", "rpc":"false"},
+		{"title":"CORE_PDF_CREATE", "advancedSearch":"false", "rpc":"true"},
 		{"title":"CORE_POSTCODE_SEARCH", "advancedSearch":"false", "rpc":"false"},
 		{"title":"CORE_PROFILE_MANAGE", "advancedSearch":"false", "rpc":"false"},
 		{"title":"CORE_PROFILE_SEARCH", "advancedSearch":"false", "rpc":"false"},
