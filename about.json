@@ -5,7 +5,7 @@
 		{
 			"company": "ibCom Pty Ltd ATF ibCom Unit Trust and other contributors",
 			"name": "Mark Byers",
-			"phone": "-",
+			"phone": "",
 			"email": "mark.byers@ibcom.biz",
 			"scope": "Design & code only",
 			"comments": ""
@@ -18,16 +18,10 @@
 			"versions":
 			[
 				{
-					"number": "0.0.1",
-					"date": "",
-					"comments": "",
-					"log":
-					[
-						{
-							"type": "fix",
-							"comments": ""
-						}
-					]
+					"number": "2.0.2",
+					"date": "27 Jun 2014",
+					"comments": "General",
+					"url": "http://1blankspace/updates"
 				}	
 			]
 		},
