@@ -9,6 +9,8 @@ You can fork the repo to create your own app or generate a pull request for any 
 
 Scripts are highly dependent on jQuery and jQueryUI/themeroller.
 
+<a href="https://github.com/ibcom/1blankspace/blob/master/about.json">about.json</a>
+
 Dependencies:
 
 <pre>
@@ -27,14 +29,14 @@ For medium to large form factor use dependencies +
 
 <pre>
 link rel=stylesheet href="/jscripts/1blankspace-2.0.0.css"
-script src="/jscripts/1blankspace-2.0.0.js"
-script src="/jscripts/1blankspace.control-2.0.0.js"
+script src="/jscripts/1blankspace-2.0.3.js"
+script src="/jscripts/1blankspace.control-2.0.1.js"
 </pre>
 
 For small form factor use dependencies + 
 
 <pre>
 link rel=stylesheet href="/jscripts/1blankspace.small-2.0.0.css"
-script src="/jscripts/1blankspace-2.0.0.js"
+script src="/jscripts/1blankspace-2.0.3.js"
 script src="/jscripts/1blankspace.small.control-2.0.0.js"
 </pre>
