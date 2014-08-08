@@ -71,7 +71,7 @@ ns1blankspace.experience.journey =
 						},
 						{
 							what: 'click',
-							where: 'td.ns1blankspaceExperienceTravelTo',
+							where: 'td.ns1blankspaceExperienceTravelTo, div.ns1blankspaceExperienceTravelTo',
 							subject: 'travelTo'
 						},
 						{
@@ -179,7 +179,7 @@ ns1blankspace.experience.journey =
 									{
 										$(document).on(v.what, v.where, function (e)
 										{
-											ns1blankspace.experience.journey.controller.message(
+											var oParam = 
 											{
 												initiator: $(this),
 												id: $(this).attr('id'),
@@ -191,9 +191,15 @@ ns1blankspace.experience.journey =
 												inspection: (v.inspection!==undefined?v.inspection:true),
 												value: $(this).val(),
 												xhtml: $(this).html(),
-												populateID: $(this).attr('data-populate-id'),
-												populateWithID: $(this).attr('data-populate-with-id')
-											});
+												populateID: $(this).attr('data-populate-id')
+											}
+
+											if ($(this).attr('data-populate-with-id') !== undefined)
+											{	
+												oParam.populateWithID = $(this).attr('data-populate-with-id')
+											}		
+
+											ns1blankspace.experience.journey.controller.message(oParam);
 										});
 									});
 								},
@@ -450,7 +456,7 @@ ns1blankspace.experience.journey =
 	space: 		{		
 					options: {lease: {nextTo: {me: 1, myParent: 2}}},
 
-					lease:	function(oParam)
+					lease:		function(oParam)
 								{
 									var sXHTMLElementID = ns1blankspace.util.getParam(oParam, 'xhtmlElementID').value;
 									var iNextTo = ns1blankspace.util.getParam(oParam, 'nextTo', {"default": ns1blankspace.experience.journey.space.options.lease.nextTo.me}).value;
@@ -458,11 +464,15 @@ ns1blankspace.experience.journey =
 
 									var sXHTMLNextToElementID = sXHTMLElementID;
 									var oXHTMLNextToElement = $('#' + sXHTMLNextToElementID);
+									var sType = $('#' + sXHTMLNextToElementID).get(0).tagName.toLowerCase();
 
 									if (iNextTo == ns1blankspace.experience.journey.space.options.lease.nextTo.myParent)
 									{
-										sXHTMLNextToElementID = sXHTMLElementID.replace('-input', '');
-										oXHTMLNextToElement = $('#' + sXHTMLNextToElementID).closest('tr');
+										if (sType !== 'div')
+										{
+											sXHTMLNextToElementID = sXHTMLElementID.replace('-input', '');
+											oXHTMLNextToElement = $('#' + sXHTMLNextToElementID).closest('tr');
+										}	
 									}
 
 									var sXHTMLPopulateElementID = sXHTMLElementID + '-populate';
@@ -474,9 +484,18 @@ ns1blankspace.experience.journey =
 									}	
 									else if ($('#' + sXHTMLPopulateElementID).length == 0)
 									{	
-										oXHTMLNextToElement.after('<tr>' +
-											'<td colspan=' + iLength + '" style="padding:0px;"><div id="' + sXHTMLPopulateElementID + '"></div></td></tr>');
-									}	
+										if (sType !== 'div')
+										{
+											oXHTMLNextToElement.after('<tr>' +
+												'<td colspan=' + iLength + '" style="padding:0px;"><div id="' + sXHTMLPopulateElementID + '"></div></td></tr>');
+										}
+										else
+										{
+											oXHTMLNextToElement.after('<div id="' + sXHTMLPopulateElementID + '"></div>');
+										}	
+									}
+
+									return {xhtmlElementID: sXHTMLPopulateElementID}
 								},
 
 					release:	function(oParam)
@@ -661,13 +680,13 @@ ns1blankspace.experience.journey =
 														if (ns1blankspace.util.getParam(oParam, 'populateWithID').exists)
 														{
 															oParam = ns1blankspace.util.setParam(oParam, 'populateWith', 
-																		[
-																			{
-																				"model": "id",
-																				"comparison": "EQUAL_TO",
-																				"value1": ns1blankspace.util.getParam(oParam, 'populateWithID').value
-																			}
-																		]);
+															[
+																{
+																	"model": "id",
+																	"comparison": "EQUAL_TO",
+																	"value1": ns1blankspace.util.getParam(oParam, 'populateWithID').value
+																}
+															]);
 														}
 
 														if (oJourney.destination.tenancy == 'vacant')
