@@ -320,6 +320,15 @@ ns1blankspace.financial.tax =
 						aHTML.push('<tr><td id="ns1blankspaceControlPayroll" class="ns1blankspaceControl">' +
 										ns1blankspace.option.taxPayrollCaption + '<br /><span class="ns1blankspaceSub" style="font-size:0.75em;">wages</span></td></tr>');
 
+						if (ns1blankspace.objectContextData.status == 2)
+						{
+							aHTML.push('</table>');
+
+							aHTML.push('<table class="ns1blankspaceControl">');
+
+							aHTML.push('<tr><td id="ns1blankspaceControlFinancials" class="ns1blankspaceControl">' +
+										'Financials</td></tr>');
+						}	
 					}				
 					
 					aHTML.push('</table>');
@@ -332,7 +341,7 @@ ns1blankspace.financial.tax =
 					aHTML.push('<div id="ns1blankspaceMainDetails" class="ns1blankspaceControlMain"></div>');
 					aHTML.push('<div id="ns1blankspaceMainVAT" class="ns1blankspaceControlMain"></div>');
 					aHTML.push('<div id="ns1blankspaceMainPayroll" class="ns1blankspaceControlMain"></div>');
-					aHTML.push('<div id="ns1blankspaceMainBusiness" class="ns1blankspaceControlMain"></div>');
+					aHTML.push('<div id="ns1blankspaceMainFinancials" class="ns1blankspaceControlMain"></div>');
 					
 					$('#ns1blankspaceMain').html(aHTML.join(''));
 					
@@ -360,17 +369,16 @@ ns1blankspace.financial.tax =
 						ns1blankspace.financial.tax.payroll.layout();
 					});
 
-					$('#ns1blankspaceControlBusiness').click(function(event)
+					$('#ns1blankspaceControlFinancials').click(function(event)
 					{
-						ns1blankspace.show({selector: '#ns1blankspaceMainBusiness', refresh: true});
-						ns1blankspace.financial.tax.business.layout();
+						ns1blankspace.show({selector: '#ns1blankspaceMainFinancials', refresh: true});
+						ns1blankspace.financial.tax.financials.init();
 					});
 				},
 
 	show:		function (oParam, oResponse)
 				{	
 					ns1blankspace.app.clean();
-					ns1blankspace.financial.tax.layout();
 					
 					var aHTML = [];
 					
@@ -385,6 +393,7 @@ ns1blankspace.financial.tax =
 					else
 					{
 						ns1blankspace.objectContextData = oResponse.data.rows[0];
+						ns1blankspace.financial.tax.layout();
 						
 						$('#ns1blankspaceViewControlAction').button({disabled: false});
 								
@@ -476,7 +485,11 @@ ns1blankspace.financial.tax =
 							if (ns1blankspace.objectContextData['status'] == 1)
 							{	
 								aHTML.push('<tr><td style="padding-top:10px;">' +
-											'<span id="ns1blankspaceSummaryCalculate" class="ns1blankspaceAction" style="font-size:0.875em;">Recalculate</span>' +
+											'<span id="ns1blankspaceSummaryCalculate" class="ns1blankspaceAction" style="font-size:0.875em; width:120px;">Recalculate</span>' +
+											'</td></tr>');
+
+								aHTML.push('<tr><td style="padding-top:10px;">' +
+											'<span id="ns1blankspaceSummaryComplete" class="ns1blankspaceAction" style="font-size:0.875em; width:120px;">Complete</span>' +
 											'</td></tr>');
 							}	
 
@@ -489,8 +502,15 @@ ns1blankspace.financial.tax =
 							$('#ns1blankspaceSummaryColumn2').html(aHTML.join(''));
 
 							$('#ns1blankspaceSummaryCalculate').button({})
-							.click(function() {
+							.click(function()
+							{
 								ns1blankspace.financial.tax.save.send()
+							});
+
+							$('#ns1blankspaceSummaryComplete').button({})
+							.click(function()
+							{
+								ns1blankspace.financial.tax.complete.send()
 							});	
 
 							if (ns1blankspace.objectContextData['status'] == 1)
@@ -969,6 +989,175 @@ ns1blankspace.financial.tax =
 									}				
 								}
 				},
+
+	financials: 	{
+					data: 		{},
+
+					init: 		function (oParam)
+								{
+									$('#ns1blankspaceMainFinancials').html(ns1blankspace.xhtml.loading);
+									
+									ns1blankspace.util.whenDone.init(
+									ns1blankspace.util.setParam(oParam, 'manifest',
+									{
+										success: 	'ns1blankspace.financial.tax.financials.populate',
+										store: 		'ns1blankspace.financial.tax.financials.data',
+										search:
+										[
+											{
+												name: 'expenses',
+												method: 'FINANCIAL_EXPENSE_SEARCH',
+												criteria:
+												{
+													"fields":
+													[
+														{
+															"name": "description"
+														},
+														{
+															"name": "amount"
+														}
+													],
+													"filters":
+													[
+														{
+															"name": "object",
+															"comparison": "EQUAL_TO",
+															"value1": "46"
+														},
+														{
+															"name": "objectcontext",
+															"comparison": "EQUAL_TO",
+															"value1": ns1blankspace.objectContext
+														}
+													]
+												}
+											},
+											{
+												name: 'invoices',
+												method: 'FINANCIAL_INVOICE_SEARCH',
+												criteria:
+												{
+													"fields":
+													[
+														{
+															"name": "description"
+														},
+														{
+															"name": "amount"
+														}
+													],
+													"filters":
+													[
+														{
+															"name": "object",
+															"comparison": "EQUAL_TO",
+															"value1": "46"
+														},
+														{
+															"name": "objectcontext",
+															"comparison": "EQUAL_TO",
+															"value1": ns1blankspace.objectContext
+														}
+													]
+												}
+											}
+										]
+									}));
+								},
+
+					populate: 	function (oParam)
+								{
+									var aHTML = [];
+							
+									aHTML.push('<table id="ns1blankspaceFinancialTaxFinancials" class="ns1blankspace" style="font-size:1em;">');
+								
+									var oData = ns1blankspace.financial.tax.financials.data;
+
+									if (oData.expenses.data.rows.length == 0 && oData.invoices.data.rows.length == 0)
+									{
+										aHTML.push('<tr class="ns1blankspaceCaption">' +
+														'<td class="ns1blankspaceSub">No items</td></tr>');
+										aHTML.push('</table>');
+									}
+									else
+									{		
+										$(oData.expenses.data.rows).each(function()
+										{
+											aHTML.push('<tr class="ns1blankspaceRow">');
+												
+											aHTML.push('<td id="ns1blankspaceFinancialTaxExpenseItem_description-' + this.id + '" class="ns1blankspaceRow">' +
+																	this["description"]);
+
+											aHTML.push('<div id="ns1blankspaceFinancialTaxExpenseItem_type-' + this.id + '" class="ns1blankspaceSub">' +
+																	 'Expense</div></td>');
+
+											aHTML.push('<td id="ns1blankspaceFinancialTaxExpenseItem_amount-' + this.id + '" class="ns1blankspaceRow" style="text-align:right;">' +
+																	this["amount"] + '</td>');
+
+											aHTML.push('<td class="ns1blankspaceRow" style="width:30px;text-align:right;">' +
+															'<span id="ns1blankspaceTax_view-' + this.id + '" class="ns1blankspaceRowViewExpense"></span></td>');						 					
+																																		
+											aHTML.push('</tr>');
+										});
+
+										$(oData.invoices.data.rows).each(function()
+										{
+											aHTML.push('<tr class="ns1blankspaceRow">');
+												
+											aHTML.push('<td id="ns1blankspaceFinancialTaxExpenseItem_description-' + this.id + '" class="ns1blankspaceRow">' +
+																	this["description"]);
+
+											aHTML.push('<div id="ns1blankspaceFinancialTaxExpenseItem_type-' + this.id + '" class="ns1blankspaceSub">' +
+																	 'Invoice</div></td>');
+
+											aHTML.push('<td id="ns1blankspaceFinancialTaxExpenseItem_amount-' + this.id + '" class="ns1blankspaceRow" style="text-align:right;">' +
+																	this["amount"] + '</td>');
+
+											aHTML.push('<td class="ns1blankspaceRow" style="width:30px;text-align:right;">' +
+															'<span id="ns1blankspaceTax_view-' + this.id + '" class="ns1blankspaceRowViewInvoice"></span></td>');						 					
+																																		
+											aHTML.push('</tr>');
+										});	
+									}
+										
+									aHTML.push('</table>');
+								
+									$('#ns1blankspaceMainFinancials').html(aHTML.join(''));
+
+									$('#ns1blankspaceFinancialTaxFinancials .ns1blankspaceRowViewExpense')
+									.button(
+									{
+										text: false,
+										icons:
+										{
+											primary: "ui-icon-play"
+										}
+									})
+									.click(function()
+									{
+										ns1blankspace.financial.expense.init({id: (this.id).split('-')[1]});
+									})
+									.css('width', '15px')
+									.css('height', '20px');
+
+									$('#ns1blankspaceFinancialTaxFinancials .ns1blankspaceRowViewInvoice')
+									.button(
+									{
+										text: false,
+										icons:
+										{
+											primary: "ui-icon-play"
+										}
+									})
+									.click(function()
+									{
+										ns1blankspace.financial.invoice.init({id: (this.id).split('-')[1]});
+									})
+									.css('width', '15px')
+									.css('height', '20px');
+								}
+				},		
 		
 	save: 		{
 					send: 		function ()
@@ -1022,6 +1211,36 @@ ns1blankspace.financial.tax =
 										ns1blankspace.status.error(oResponse.error.errornotes);
 									}
 								}
-				}			
+				},
 
+	complete: 	{
+					send: 		function ()
+								{
+									var oData = {id: ns1blankspace.objectContext}
+													
+									ns1blankspace.status.working('Completing...');
+										
+									$.ajax(
+									{
+										type: 'POST',
+										url: ns1blankspace.util.endpointURI('FINANCIAL_TAX_REPORT_COMPLETE'),
+										data: oData,
+										dataType: 'json',
+										success: ns1blankspace.financial.tax.complete.process
+									});
+								},
+
+					process: 	function (oResponse)
+								{	
+									if (oResponse.status == 'OK')
+									{
+										ns1blankspace.status.message('Completed');
+										ns1blankspace.financial.tax.search.send('-' + ns1blankspace.objectContext);
+									}
+									else
+									{
+										ns1blankspace.status.error(oResponse.error.errornotes);
+									}
+								}
+				}
 }				

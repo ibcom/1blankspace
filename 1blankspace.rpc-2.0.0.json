@@ -278,7 +278,7 @@
 		{"title":"FINANCIAL_SETTINGS_MANAGE", "advancedSearch":"false", "rpc":"false"},
 		{"title":"FINANCIAL_SETTINGS_SEARCH", "advancedSearch":"false", "rpc":"false"},
 		{"title":"FINANCIAL_TAX_REPORT_ITEM_SEARCH", "advancedSearch":"false", "rpc":"false"},
-		{"title":"FINANCIAL_TAX_REPORT_MANAGE", "advancedSearch":"false", "rpc":"false"},
+		{"title":"FINANCIAL_TAX_REPORT_MANAGE", "advancedSearch":"false", "rpc":"true"},
 		{"title":"FINANCIAL_TAX_REPORT_SEARCH", "advancedSearch":"true", "rpc":"false"},
 		{"title":"FINANCIAL_TRANSACTION_SEARCH", "advancedSearch":"true", "rpc":"true"},
 		{"title":"FINANCIAL_TRANSFER_CREATE_FILE", "advancedSearch":"false", "rpc":"true"},
