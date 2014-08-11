@@ -493,6 +493,28 @@ ns1blankspace.financial.summaryPL = function (oParam, oResponse)
 					}
 				}
 
+ns1blankspace.financial.optimise =
+{
+	start: 		function (oParam)
+				{
+					$.ajax(
+					{
+						type: 'POST',
+						url: ns1blankspace.util.endpointURI('FINANCIAL_DEBTORSCREDITORS_PROCESSING_MANAGE'),
+						dataType: 'json',
+						global: false,
+						success: function(oResponse)
+						{
+							if (oResponse.status == 'OK')
+							{	
+								ns1blankspace.status.message('Complete');
+								ns1blankspace.util.onComplete(oParam);
+							}	
+						}
+					});			
+				}		
+}
+
 ns1blankspace.financial.debtors =
 {
 	data: 		{},
@@ -611,9 +633,24 @@ ns1blankspace.financial.debtors =
 							dataType: 'json',
 							data: oData,
 							global: false,
-							success: function(data)
+							success: function(oResponse)
 							{
-								ns1blankspace.financial.debtors.show(oParam, data);
+								if (oResponse.status == 'OK')
+								{	
+									ns1blankspace.financial.debtors.show(oParam, oResponse);
+								}
+								else
+								{
+									if (oResponse.error.errorcode == '4')
+									{	
+										if (oResponse.error.errornotes.indexOf('FINANCIAL_DEBTORSCREDITORS_PROCESSING_MANAGE') != -1)
+										{	
+											ns1blankspace.status.working('Optimising debtors');
+											oParam = ns1blankspace.util.setParam(oParam, 'onComplete', ns1blankspace.financial.debtors.show)
+											ns1blankspace.financial.optimise.start(oParam);
+										}
+									}
+								}	
 							}
 						});			
 					}
@@ -1107,7 +1144,25 @@ ns1blankspace.financial.creditors =
 							data: 'rows=50',
 							dataType: 'json',
 							global: false,
-							success: function(data) {ns1blankspace.financial.creditors.show(oParam, data)}
+							success: function(oResponse)
+							{
+								if (oResponse.status == 'OK')
+								{	
+									ns1blankspace.financial.creditors.show(oParam, oResponse);
+								}
+								else
+								{
+									if (oResponse.error.errorcode == '4')
+									{	
+										if (oResponse.error.errornotes.indexOf('FINANCIAL_DEBTORSCREDITORS_PROCESSING_MANAGE') != -1)
+										{	
+											ns1blankspace.status.working('Optimising creditors');
+											oParam = ns1blankspace.util.setParam(oParam, 'onComplete', ns1blankspace.financial.creditors.show)
+											ns1blankspace.financial.optimise.start(oParam);
+										}
+									}
+								}
+							}
 						});
 					}
 					else

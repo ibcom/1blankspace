@@ -3393,7 +3393,7 @@ ns1blankspace.financial.bankAccount =
 
 																oSearch.addFilter('outstandingamount', 'GREATER_THAN', 0)
 																
-																oSearch.rows = 50;
+																oSearch.rows = (sSearchReference == ''?50:200);
 																oSearch.getResults(function(data) {ns1blankspace.financial.bankAccount.reconcile.items.edit(oParam, data)});
 															}
 															else
