@@ -460,7 +460,7 @@ ns1blankspace.contactPerson =
 						ns1blankspace.data.contactPersonText = ns1blankspace.objectContextData.firstname + ' ' + ns1blankspace.objectContextData.surname;
 						
 						$('#ns1blankspaceControlContext').html(ns1blankspace.objectContextData.firstname + 
-									'<br />' + ns1blankspace.objectContextData.surname);
+									(ns1blankspace.objectContextData.firstname!==''?'<br />':'') + ns1blankspace.objectContextData.surname);
 						$('#ns1blankspaceViewControlAction').button({disabled: false});
 						$('#ns1blankspaceViewControlActionOptions').button({disabled: false});
 						

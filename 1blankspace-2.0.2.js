@@ -329,7 +329,7 @@ ns1blankspace.app =
 						{
 							ns1blankspace.ajaxSettings = undefined;
 
-							if (oAjaxSettings.dataType == 'json')
+							if (oAjaxSettings.dataType == 'json' || oAjaxSettings.dataType == '')
 							{	
 								var oResponse = $.parseJSON(oXMLHTTPResponse.responseText);
 

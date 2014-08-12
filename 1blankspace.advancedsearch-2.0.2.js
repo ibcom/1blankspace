@@ -65,7 +65,7 @@ ns1blankspace.advancedSearch.reset = function ()
 	this.criteria.sortField.length = 0;
 	this.criteria.sortDirection.length = 0;
 	
-	this.rf = '';
+	this.rf = 'json';
 	this.startRow = 0;
 	this.rows = 20;
 	
@@ -164,7 +164,7 @@ ns1blankspace.advancedSearch.buildCriteria = function (oSearch)
 		filters: [],
 		sorts: [],
 		customoptions: [],
-		options: {rf: 'JSON'}
+		options: {"rf": 'json'}
 	};
 
 	$.each(oCriteria.field, function(i, v)
