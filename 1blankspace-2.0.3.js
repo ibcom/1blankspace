@@ -2514,14 +2514,30 @@ ns1blankspace.status =
 
 						$('#ns1blankspaceStatusError').click(function()
 						{
-							ns1blankspace.container.position({xhtmlElementID: 'ns1blankspaceViewControlActionStatus', topOffset: 2, setWidth: true});
-							$(ns1blankspace.xhtml.container).html('<div style="font-size: 0.75em; background-color: #F8F8F8; width: 100%; color: #888888; border-style:solid; border-width: 7px;border-color: #F8F8F8; opacity: 0.95;">' + sError + '</div>');
-							window.setTimeout('$(ns1blankspace.xhtml.container).fadeOut(4000)', 7000);
+							ns1blankspace.container.show(
+							{
+								xhtmlElementID: 'ns1blankspaceViewControlActionStatus',
+								xhtml: '<div style="font-size: 0.75em; background-color: #F8F8F8; width: 100%; color: #888888; ' +
+											'border-style:solid; border-width: 7px;border-color: #F8F8F8; opacity: 0.95;">' + sError + '</div>',
+								forceShow: true,
+								offsetTop: 8,
+								setWidth: true,
+								timeOut: 7000,
+								fadeOutTime: 3500
+							});	
 						});
 
-						ns1blankspace.container.position({xhtmlElementID: 'ns1blankspaceViewControlActionStatus', topOffset: 2, setWidth: true});
-						$(ns1blankspace.xhtml.container).html('<div style="font-size: 0.75em; background-color: #F8F8F8; width: 100%; color: #888888; border-style:solid; border-width: 7px;border-color: #F8F8F8; opacity: 0.95;">' + sError + '</div>');
-						window.setTimeout('$(ns1blankspace.xhtml.container).fadeOut(3000)', 5000);
+						ns1blankspace.container.show(
+						{
+							xhtmlElementID: 'ns1blankspaceViewControlActionStatus',
+							xhtml: '<div style="font-size: 0.75em; background-color: #F8F8F8; width: 100%; color: #888888; ' +
+										'border-style:solid; border-width: 7px;border-color: #F8F8F8; opacity: 0.95;">' + sError + '</div>',
+							forceShow: true,
+							offsetTop: 8,
+							setWidth: true,
+							timeOut: 10000,
+							fadeOutTime: 3500
+						});				
 					}	
 				}
 }
@@ -2546,7 +2562,8 @@ ns1blankspace.container =
 					var iOffsetLeft = 0;
 					var bForceShow = false;
 					var bSetWidth = false;
-					
+					var iTimeOut = ns1blankspace.util.getParam(oParam, 'timeOut').value;
+
 					if (oParam != undefined)
 					{
 						if (oParam.xhtmlElement != undefined) {oXHTMLElement = oParam.xhtmlElement}
@@ -2566,6 +2583,11 @@ ns1blankspace.container =
 						oXHTMLElement = $('#' + sXHTMLElementID)
 					}
 					
+					if (iTimeOut)
+					{	
+						window.setTimeout('ns1blankspace.container.hide(' + JSON.stringify(oParam) + ')', iTimeOut);
+					}	
+
 					if (oXHTMLElement != undefined)
 					{
 						if ($(ns1blankspace.xhtml.container).attr('data-initiator') === oXHTMLElement.attr('id') && !bForceShow)
@@ -2592,11 +2614,25 @@ ns1blankspace.container =
 					}	
 				},
 
-	hide:		function ()
+	hide:		function (oParam)
 				{
-					$(ns1blankspace.xhtml.container).attr('data-initiator', '')
-						.html("&nbsp;")
-						.hide(ns1blankspace.option.hideSpeedOptions);
+					var iFadeOutTime = ns1blankspace.util.getParam(oParam, 'fadeOutTime', {"default": ns1blankspace.option.hideSpeedOptions}).value;
+					var sXHTMLElementID = ns1blankspace.util.getParam(oParam, 'xhtmlElementID').value;
+
+					if ($(ns1blankspace.xhtml.container).attr('data-initiator') == sXHTMLElementID)
+					{
+						if (iFadeOutTime == 0)
+						{
+							$(ns1blankspace.xhtml.container).attr('data-initiator', '')
+							.html("&nbsp;")
+							.hide();
+						}
+						else
+						{
+							$(ns1blankspace.xhtml.container).attr('data-initiator', '')
+							.fadeOut(iFadeOutTime);
+						}
+					}	
 				},
 				
 	position:	function (oParam)
