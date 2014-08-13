@@ -675,6 +675,7 @@ ns1blankspace.app =
 
 					if (!bInitialised)
 					{	
+						ns1blankspace.container.hide({sXHTMLElementID: 'ns1blankspaceViewControl'});
 						$('#ns1blankspaceViewControl').html('<span style="font-size:1.3em; padding-left:6px; color: #999999;">Initialising the app...</span>');
 						oParam = ns1blankspace.util.setParam(oParam, 'onComplete', ns1blankspace.app.show);
 						ns1blankspace.extend.init(oParam);
@@ -1771,7 +1772,7 @@ ns1blankspace.logon =
 							if (oResponse.url === '#' || ns1blankspace.option.logonStayOnDocument)
 							{
 								//document.location.reload(false);
-								ns1blankspace.container.hide();
+								ns1blankspace.container.hide({force: true});
 								ns1blankspace.app.start();
 							}	
 							else
@@ -2212,7 +2213,7 @@ ns1blankspace.history.view =
 										type: 'POST',
 										url: ns1blankspace.util.endpointURI('CORE_PROFILE_MANAGE'),
 										data: sData,
-										dataType: 'text'
+										dataType: 'json'
 									});
 								}		
 							}	
@@ -2578,7 +2579,7 @@ ns1blankspace.container =
 						if (oParam.setWidth != undefined) {bSetWidth = oParam.setWidth}
 					}
 					
-					if (oXHTMLElement === undefined)
+					if (oXHTMLElement === undefined && sXHTMLElementID != undefined)
 					{
 						oXHTMLElement = $('#' + sXHTMLElementID)
 					}
@@ -2588,7 +2589,7 @@ ns1blankspace.container =
 						window.setTimeout('ns1blankspace.container.hide(' + JSON.stringify(oParam) + ')', iTimeOut);
 					}	
 
-					if (oXHTMLElement != undefined)
+					if (oXHTMLElement !== undefined)
 					{
 						if ($(ns1blankspace.xhtml.container).attr('data-initiator') === oXHTMLElement.attr('id') && !bForceShow)
 						{
@@ -2618,8 +2619,9 @@ ns1blankspace.container =
 				{
 					var iFadeOutTime = ns1blankspace.util.getParam(oParam, 'fadeOutTime', {"default": ns1blankspace.option.hideSpeedOptions}).value;
 					var sXHTMLElementID = ns1blankspace.util.getParam(oParam, 'xhtmlElementID').value;
+					var bForce = ns1blankspace.util.getParam(oParam, 'force', {"default": false}).value;
 
-					if ($(ns1blankspace.xhtml.container).attr('data-initiator') == sXHTMLElementID)
+					if (bForce || $(ns1blankspace.xhtml.container).attr('data-initiator') == sXHTMLElementID)
 					{
 						if (iFadeOutTime == 0)
 						{
