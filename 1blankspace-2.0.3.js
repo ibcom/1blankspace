@@ -115,7 +115,7 @@ ns1blankspace.scripts =
 [
 	{
 		nameSpace: '1blankspace.advancedsearch',
-		source: '/jscripts/1blankspace.advancedsearch-2.0.2.js'
+		source: '/jscripts/1blankspace.advancedsearch-2.0.3.js'
 	}
 ]
 
