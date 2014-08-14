@@ -136,11 +136,15 @@ ns1blankspace.option.formFactor =
 	}
 }
 
-window.onbeforeunload = function() 
+window.onbeforeunload = function(event) 
 {
 	if (ns1blankspace.unloadWarning)
 	{
 	      return "You potentially will lose unsaved information if you close. Press Cancel to stop the close."
+	}
+	else
+	{
+		ns1blankspace.unloadWarning = true;
 	}
 }
 
@@ -376,7 +380,12 @@ ns1blankspace.app =
 						if (navigator.platform.indexOf('iPad') != -1 || navigator.platform.indexOf('iPhone') != -1) 
 						{
 							ns1blankspace.option.setFocus = false;
-						}	 
+						}	
+
+						$(document).on('click', '.ns1blankspaceNoUnloadWarn', function (e)
+						{
+							ns1blankspace.unloadWarning=false;
+						});
 
 						$('td.ns1blankspaceControl').live('click', function()
 						{

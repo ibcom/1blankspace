@@ -2170,11 +2170,13 @@ ns1blankspace.attachments =
 	row:		function (oRow)
 				{
 					var aHTML = [];
+
+					//onClick="ns1blankspace.unloadWarning=false;"
 					
 					aHTML.push('<tr class="ns1blankspaceAttachments">');
 					
 					aHTML.push('<td id="ns1blankspaceAttachment_filename-' + oRow.id + '" class="ns1blankspaceRow">' +
-										'<a href="' + oRow.download + '">' + oRow.filename + '</a></td>');
+										'<a href="' + oRow.download + '" class="ns1blankspaceNoUnloadWarn">' + oRow.filename + '</a></td>');
 										
 					aHTML.push('<td id="ns1blankspaceAttachment_date-' + oRow.id + '" class="ns1blankspaceRow">' + oRow.modifieddate + '</td>');
 					
