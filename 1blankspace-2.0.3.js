@@ -384,7 +384,7 @@ ns1blankspace.app =
 
 						$(document).on('click', '.ns1blankspaceNoUnloadWarn', function (e)
 						{
-							ns1blankspace.unloadWarning=false;
+							ns1blankspace.unloadWarning = false;
 						});
 
 						$('td.ns1blankspaceControl').live('click', function()
