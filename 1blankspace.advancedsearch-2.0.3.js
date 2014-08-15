@@ -37,6 +37,7 @@ function AdvancedSearch()
 	this.addCustomOption = ns1blankspace.advancedSearch.addCustomOption;
 	
 	this.getResults = ns1blankspace.advancedSearch.getResults;
+	this.send = ns1blankspace.advancedSearch.getResults;
 	this.reset = ns1blankspace.advancedSearch.reset;
 	
 	this.reset();
