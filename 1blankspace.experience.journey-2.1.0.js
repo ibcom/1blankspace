@@ -167,7 +167,7 @@ ns1blankspace.experience.journey =
 
 						ns1blankspace.experience.journey.whereami = oJourney.destination;
 					}	
-
+ 
 					return oJourney
 				},			
 
@@ -203,6 +203,36 @@ ns1blankspace.experience.journey =
 										});
 									});
 								},
+
+					send: 		function (oParam)
+								{
+									var aThings = ns1blankspace.util.getParam(oParam, 'things').value;
+									var sSubject = ns1blankspace.util.getParam(oParam, 'subject').value;
+
+									$.each(aThings, function (i, thing)
+									{
+										var oParam = 
+										{
+											initiator: $(this),
+											id: $(this).attr('id'),
+											xhtmlElementID: $(this).attr('id'),
+											routeID: $(this).attr('data-route-id'),
+											populateRouteID: $(this).attr('data-populate-route-id'),
+											subject: sSubject,
+											value: $(this).val(),
+											xhtml: $(this).html(),
+											populateID: $(this).attr('data-populate-id'),
+											setFocus: false
+										}
+
+										if ($(this).attr('data-populate-with-id') !== undefined)
+										{	
+											oParam.populateWithID = $(this).attr('data-populate-with-id')
+										}		
+
+										ns1blankspace.experience.journey.controller.message(oParam);
+									});
+								},	
 
 					message:	function (oParam)
 								{
@@ -1314,13 +1344,19 @@ ns1blankspace.experience.journey =
 									mutate: 	function (oParam)
 												{
 													var oJourney = ns1blankspace.experience.journey.get(oParam);
+													var bSetFocus = ns1blankspace.util.getParam(oParam, 'setFocus', {"default": true}).value;
 											
 													var sElementID = oJourney.xhtmlElementID;
 													var sHTML = oParam.xhtml;
 													var iPopulateID = oParam.populateID;
 													var sElementMutatedToID = sElementID + '-input';
 
-													var bIsPopulateWith = ($.grep(oJourney.previousDestination.populateWith, function (a) {return (a.model == oJourney.destination.model)}).length != 0);
+													var bIsPopulateWith = false;
+
+													if (oJourney.previousDestination.tenancy == 'single')
+													{
+														bIsPopulateWith = ($.grep(oJourney.previousDestination.populateWith, function (a) {return (a.model == oJourney.destination.model)}).length != 0);
+													}
 
 													var sClass = '';
 
@@ -1338,14 +1374,20 @@ ns1blankspace.experience.journey =
 													}
 
 													sHTML = '<input id="' + sElementMutatedToID + '"' +
-																' class="' + sClass + '" ' +
+																' class="' + sClass + '" style="margin-bottom:4px;' +
 																(oJourney.destinationID!==undefined?' data-destination-id="' + oJourney.destinationID + '"':'') +
 																(oJourney.routeID!==undefined?' data-route-id="' + oJourney.routeID + '"':'') +
 																(iPopulateID!==undefined?' data-populate-id="' + iPopulateID + '"':'') +
 																			' value="' + sHTML + '">'
 													
 													$('#' + sElementID).html(sHTML);
-													$('#' + sElementMutatedToID).focus();
+
+													if (bSetFocus) {$('#' + sElementMutatedToID).focus()}
+
+													if (oJourney.destination.type == 'date')
+													{	
+														$('#' + sElementMutatedToID).datepicker({dateFormat: 'dd M yy', showAnim: 'slideDown'});
+													}	
 
 													if (oJourney.destination.type == "select")
 													{	
