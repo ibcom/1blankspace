@@ -60,6 +60,11 @@ ns1blankspace.experience.journey =
 							subject: 'makeMutable'
 						},
 						{
+							what: 'change',
+							where: 'input.ns1blankspaceExperiencePopulation',
+							subject: 'repopulate'
+						},
+						{
 							what: 'click',
 							where: 'td.ns1blankspaceExperiencePopulate',
 							subject: 'populate'
@@ -419,6 +424,22 @@ ns1blankspace.experience.journey =
 										}
 									}
 								},
+
+					repopulate: function (oParam)
+								{
+									var oInitiator = ns1blankspace.util.getParam(oParam, 'initiator', {remove: true}).value;
+									var oJourney = ns1blankspace.experience.journey.get(oParam);
+
+									if (oJourney.previousDestination.populationData)
+									{
+										ns1blankspace.util.toFunction(oJourney.previousDestination.populationData)['populateWith'][oJourney.destination.model] = oInitiator.val();
+									}
+
+									if (oJourney.previousDestination.onArrival)
+									{
+										ns1blankspace.util.execute(oJourney.previousDestination.onArrival)
+									}
+								},			
 
 					rest: 		function (oParam)
 								{
