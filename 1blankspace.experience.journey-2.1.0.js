@@ -480,7 +480,7 @@ ns1blankspace.experience.journey =
 									var sDoItID = oInitiator.attr('data-do-it-id');
 									var sDoIt = $.grep(oJourney.destination.thingsToDo, function(a) {return a.id == sDoItID})[0].doIt;
 
-									ns1blankspace.util.execute(sDoIt);
+									ns1blankspace.util.execute(sDoIt, oParam);
 								},
 
 					travelTo: 	function (oParam)
@@ -700,25 +700,33 @@ ns1blankspace.experience.journey =
 														var aHTML = [];
 
 														aHTML.push('<div id="ns1blankspaceJourney-' + oJourney.originID + '-' + oJourney.destinationID + '"' + 
-																			' style="width:560px; margin-right:18px; float:left; background-color: rgba(255,255,255,0.2);' +
+																			' style="' + (oJourney.destination.boundary=='scalable'?'':'width:560px;') + 
+																			' margin-right:18px; float:left; background-color: rgba(255,255,255,0.2);' +
 																			' border-radius:5px; padding:18px; padding-left:18px; padding-top:12px;">' +
 																			'loading...' +
 																			'</div>');
 
 														aHTML.push('<div id="ns1blankspaceExperienceToDo" style="width:100px; float:right;">');
 
-														$.each(oJourney.destination.thingsToDo, function (i, v)
+														$.each(oJourney.destination.thingsToDo, function (i, thingToDo)
 														{
-															var sStyle = (v.backgroundColor?'background-color:' + v.backgroundColor + ';':'');
+															var sStyle = (thingToDo.backgroundColor?'background-color:' + thingToDo.backgroundColor + ';':'');
 
 															sStyle = 'style="' + sStyle + ' padding:8px;"';
 
-															aHTML.push('<div id="ns1blankspaceExperienceToDo-' + oJourney.originID + '-' + oJourney.destinationID + '-' + v.id + '"' +
+															/* aHTML.push('<div id="ns1blankspaceExperienceToDo-' + oJourney.originID + '-' + oJourney.destinationID + '-' + v.id + '"' +
 																			' class="ns1blankspaceAction"' +
 																			' data-route-id="' + oJourney.originID + '-' + oJourney.destinationID + '"' +
 																			sStyle + '>' +
 																			v.caption +
-																			'</div>');
+																			'</div>'); */
+
+															aHTML.push('<div class="ns1blankspaceExperienceDoIt"' +
+																		' id="ns1blankspaceExperienceJourneyDoIt-' + oJourney.routeID + '-' + thingToDo.id + '"' +
+																		' data-do-it-id="' + thingToDo.id + '"' +
+																		' data-route-id="' + oJourney.routeID + '">' + thingToDo.caption + '</div>');
+													});
+
 														});
 
 														aHTML.push('</div>');
