@@ -725,8 +725,6 @@ ns1blankspace.experience.journey =
 																		' id="ns1blankspaceExperienceJourneyDoIt-' + oJourney.routeID + '-' + thingToDo.id + '"' +
 																		' data-do-it-id="' + thingToDo.id + '"' +
 																		' data-route-id="' + oJourney.routeID + '">' + thingToDo.caption + '</div>');
-													});
-
 														});
 
 														aHTML.push('</div>');

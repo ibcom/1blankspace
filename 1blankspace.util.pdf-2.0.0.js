@@ -185,7 +185,18 @@ ns1blankspace.util.pdf =
 					    		}
 					    		else if (ns1blankspace.util.getParam(oParam, 'xhtmlContainerElementID').exists)
 					    		{
-					    			$('#' + ns1blankspace.util.getParam(oParam, 'xhtmlContainerElementID').value).attr('src', ns1blankspace.util.pdf.data.raw);
+					    			if ($('#' + ns1blankspace.util.getParam(oParam, 'xhtmlContainerElementID').value + ' iframe').length == 0)
+					    			{
+					    				$('#' + ns1blankspace.util.getParam(oParam, 'xhtmlContainerElementID').value).html(
+					    						'<iframe name="ns1blankspaceContainerPDF" id="ns1blankspaceContainerPDF" frameborder="0"' +
+					    						' border="0" scrolling="no" style="width:97%; height:500px;"' +
+					    						' src="' + ns1blankspace.util.pdf.data.raw + '">' +
+					    						'</iframe>');
+					    			}
+					    			else
+					    			{
+					    				$('#' + ns1blankspace.util.getParam(oParam, 'xhtmlContainerElementID').value).attr('src', ns1blankspace.util.pdf.data.raw);
+					    			}			
 					    		}
 					    		else
 					    		{
