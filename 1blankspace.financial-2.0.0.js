@@ -1272,11 +1272,13 @@ ns1blankspace.financial.profitLoss =
 				{
 					var sStartDate;
 					var sEndDate;
+					var bPercentage = true;
 
 					if (oParam != undefined)
 					{
 						if (oParam.startDate != undefined) {sStartDate = oParam.startDate}
 						if (oParam.endDate != undefined) {sEndDate = oParam.endDate}
+						if (oParam.percentage != undefined) {bPercentage = oParam.percentage}
 					}		
 
 					if (oResponse == undefined)
@@ -1389,11 +1391,11 @@ ns1blankspace.financial.profitLoss =
 									id: $.grep(ns1blankspace.financial.data.rootAccounts, function (a) {return parseInt(a.type) == 1})[0]['id'],
 									filter: function (a) {return a.expensecostofsale == 'Y'},
 									xhtml: '<span class="ns1blankspaceHeaderLarge">Cost&nbsp;of&nbsp;Sales</span><br /><span class="ns1blankspaceSub" style="color:#999999;">' + (oResponse.totalcostofsales).formatMoney(2, '.', ',') + '</span>' +
-												'<br /><span class="ns1blankspaceSub" style="color:#CCCCCC;">' + (oResponse.totalcostofsalespercentage).formatMoney(2, '.', ',') + '%</span>' 
+												(bPercentage?'<br /><span class="ns1blankspaceSub" style="color:#CCCCCC;">' + (oResponse.totalcostofsalespercentage).formatMoney(2, '.', ',') + '%</span>':'')
 								},
 								{
 									xhtml: '<span class="ns1blankspaceHeaderLarge">Gross&nbsp;Margin</span><br /><span class="ns1blankspaceSub" style="color:#999999;">' + (oResponse.grossmargin).formatMoney(2, '.', ',') + '</span>' +
-												'<br /><span class="ns1blankspaceSub" style="color:#CCCCCC;">' + (oResponse.grossmarginpercentage).formatMoney(2, '.', ',') + '%</span>',
+												(bPercentage?'<br /><span class="ns1blankspaceSub" style="color:#CCCCCC;">' + (oResponse.grossmarginpercentage).formatMoney(2, '.', ',') + '%</span>':''),
 									"class": 'ns1blankspaceRowShaded'
 								},
 								{
@@ -1401,7 +1403,7 @@ ns1blankspace.financial.profitLoss =
 									id: $.grep(ns1blankspace.financial.data.rootAccounts, function (a) {return parseInt(a.type) == 1})[0]['id'],
 									filter: function (a) {return a.expensecostofsale != 'Y'},
 									xhtml: '<span class="ns1blankspaceHeaderLarge">Expenses</span><br /><span class="ns1blankspaceSub" style="color:#999999;">' + (oResponse.totaloperationalexpenses).formatMoney(2, '.', ',') + '</span>' +
-											'<br /><span class="ns1blankspaceSub" style="color:#CCCCCC;">' + (oResponse.totaloperationalexpensespercentage).formatMoney(2, '.', ',') + '%</span>' 
+												(bPercentage?'<br /><span class="ns1blankspaceSub" style="color:#CCCCCC;">' + (oResponse.totaloperationalexpensespercentage).formatMoney(2, '.', ',') + '%</span>':'')
 								}
 							]	
 
@@ -1410,7 +1412,7 @@ ns1blankspace.financial.profitLoss =
 								oParam.dataRoot.push(
 								{
 									xhtml: '<span class="ns1blankspaceHeaderLarge">Margin</span><br /><span class="ns1blankspaceSub" style="color:#999999;">' + (oResponse.netmargin).formatMoney(2, '.', ',') + '</span>' +
-												'<br /><span class="ns1blankspaceSub" style="color:#CCCCCC;">' + (oResponse.netmarginpercentage).formatMoney(2, '.', ',') + '%</span>',
+												(bPercentage?'<br /><span class="ns1blankspaceSub" style="color:#CCCCCC;">' + (oResponse.netmarginpercentage).formatMoney(2, '.', ',') + '%</span>':''),
 									"class": 'ns1blankspaceRowShaded'
 								});
 							}
@@ -1419,7 +1421,7 @@ ns1blankspace.financial.profitLoss =
 								oParam.dataRoot.push(
 								{
 									xhtml: '<span class="ns1blankspaceHeaderLarge">Net&nbsp;Margin</span><br /><span class="ns1blankspaceSub" style="color:#999999;"> ' + (oResponse.operatingmargin).formatMoney(2, '.', ',') + '</span>' +
-												'<br /><span class="ns1blankspaceSub" style="color:#CCCCCC;">' + (oResponse.operatingmarginpercentage).formatMoney(2, '.', ',') + '%</span>',
+												(bPercentage?'<br /><span class="ns1blankspaceSub" style="color:#CCCCCC;">' + (oResponse.operatingmarginpercentage).formatMoney(2, '.', ',') + '%</span>':''),
 									"class": 'ns1blankspaceRowShaded'
 								});
 
@@ -1429,7 +1431,7 @@ ns1blankspace.financial.profitLoss =
 									oParam.dataRoot.push(
 									{
 										xhtml: '<span class="ns1blankspaceHeaderLarge">Other&nbsp;Income</span><br /><span class="ns1blankspaceSub" style="color:#999999;">' + (oResponse.totalotherincome).formatMoney(2, '.', ',') + '</span>' +
-													'<br /><span class="ns1blankspaceSub" style="color:#CCCCCC;">' + (oResponse.totalotherincomepercentage).formatMoney(2, '.', ',') + '%</span>',
+													(bPercentage?'<br /><span class="ns1blankspaceSub" style="color:#CCCCCC;">' + (oResponse.totalotherincomepercentage).formatMoney(2, '.', ',') + '%</span>':''),
 										"class": 'ns1blankspaceRowShaded'
 									});
 								}
@@ -1439,7 +1441,7 @@ ns1blankspace.financial.profitLoss =
 									oParam.dataRoot.push(
 									{
 										xhtml: '<span class="ns1blankspaceHeaderLarge">Other&nbsp;Expenses</span><br /><span class="ns1blankspaceSub" style="color:#999999;">' + (oResponse.totalotherexpenses).formatMoney(2, '.', ',') + '</span>' +
-													'<br /><span class="ns1blankspaceSub" style="color:#CCCCCC;">' + (oResponse.totalotherexpensespercentage).formatMoney(2, '.', ',') + '%</span>',
+													(bPercentage?'<br /><span class="ns1blankspaceSub" style="color:#CCCCCC;">' + (oResponse.totalotherexpensespercentage).formatMoney(2, '.', ',') + '%</span>':''),
 										"class": 'ns1blankspaceRowShaded'
 									});
 								}	
@@ -1447,7 +1449,7 @@ ns1blankspace.financial.profitLoss =
 								oParam.dataRoot.push(
 								{
 									xhtml: '<span class="ns1blankspaceHeaderLarge">Margin</span><br /><span class="ns1blankspaceSub" style="color:#999999;">' + (oResponse.netmargin).formatMoney(2, '.', ',') + '</span>' +
-												'<br /><span class="ns1blankspaceSub" style="color:#CCCCCC;">' + (oResponse.netmarginpercentage).formatMoney(2, '.', ',') + '%</span>',
+													(bPercentage?'<br /><span class="ns1blankspaceSub" style="color:#CCCCCC;">' + (oResponse.netmarginpercentage).formatMoney(2, '.', ',') + '%</span>':''),
 									"class": 'ns1blankspaceRowShaded'
 								});
 							}
