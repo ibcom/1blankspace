@@ -1046,14 +1046,23 @@ ns1blankspace.experience.journey =
 													}
 													else
 													{	
-														if (oJourney.previousDestination.populationAtWork.length > 0)
+														var oDestination = (oJourney.previousDestination.tenancy=='single'?oJourney.previousDestination:oJourney.destination);
+
+														if (oDestination.populationAtWork.length > 0)
 														{	
 															oJourney.destination.populationID = 
-																oJourney.previousDestination.populationAtWork[0][oJourney.destination.model]
+																oDestination.populationAtWork[0][oJourney.destination.model]
 
 															if (thingToSee.model)
 															{	
-																sValue = (oJourney.previousDestination.populationAtWork[0][oJourney.destination.model + '.' + thingToSee.model] || '');
+																if (oJourney.destination.model != undefined)
+																{	
+																	sValue = (oDestination.populationAtWork[0][oJourney.destination.model + '.' + thingToSee.model] || '');
+																}
+																else
+																{
+																	sValue = (oDestination.populationAtWork[0][thingToSee.model] || '');
+																}	
 															}
 
 															if (oJourney.destination.populationAtWork.length == 0)
@@ -1069,17 +1078,20 @@ ns1blankspace.experience.journey =
 															oJourney.destination.populationAtRest[0][thingToSee.model] = sValue;
 														}	
 
-														var bIsPopulateWith = true;
+														var bIsPopulateWith = false;
 														var bSet = false;
 
-														var oPopulationAtWork = oJourney.previousDestination.populationAtWork[0];
+														var oPopulationAtWork = oDestination.populationAtWork[0];
 
 														if (oPopulationAtWork)
 														{
 															bSet = (oPopulationAtWork[oJourney.destination.model] != undefined && oPopulationAtWork[oJourney.destination.model] != '')
 														}
 
-														bIsPopulateWith = ($.grep(oJourney.destination.populateWith, function(a) {return a.model == thingToSee.model}).length != 0);
+														if (oJourney.destination.populateWith)
+														{	
+															bIsPopulateWith = ($.grep(oJourney.destination.populateWith, function(a) {return a.model == thingToSee.model}).length != 0);
+														}	
 
 														var aHTMLThing = [];
 
@@ -1202,7 +1214,14 @@ ns1blankspace.experience.journey =
 														' data-destination-id="">' +
 														'Cancel</div>');	
 
-												$('#ns1blankspaceExperience-' + oJourney.routeID + '-header').after(aHTML.join(''));
+												if ($('#ns1blankspaceExperience-' + oJourney.routeID + '-header').length == 0)
+												{
+													$('#ns1blankspaceExperience-' + oJourney.routeID).html(aHTML.join(''));
+												}
+												else
+												{	
+													$('#ns1blankspaceExperience-' + oJourney.routeID + '-header').after(aHTML.join(''));
+												}
 											}
 										}
 
@@ -1300,7 +1319,7 @@ ns1blankspace.experience.journey =
 															}
 														}
 
-														if (!oJourney.previousDestination.populationIsAtWork) {iPopulateID = 0}
+														if (!oJourney.previousDestination.populationIsAtWork) {iPopulateID = ''}
 
 														if (bValue?thingToSee.isPopulateWith:true)
 														{	
@@ -1545,7 +1564,7 @@ ns1blankspace.experience.journey =
 																	}
 																});
 
-																if (oParam.populateID == '' && oJourney.previousDestination.type == 'destination')
+																if ((oParam.populateID == '' || oParam.populateID == '0') && oJourney.previousDestination.type == 'destination')
 																{	
 																	$.each(oJourney.previousDestination.populateWith, function (i, v)
 																	{
@@ -1591,7 +1610,7 @@ ns1blankspace.experience.journey =
 															var oPopulationBeingRested = ns1blankspace.util.getParam(oParam, 'populationBeingRested').value;
 															if (oResponse.id) {oPopulationBeingRested.id = oResponse.id}
 
-															if (oResponse.notes = 'ADDED')
+															if (oResponse.notes = 'ADDED' && oJourney.previousDestination.tenancy != 'multi')
 															{
 																ns1blankspace.experience.journey.thingsToSee.populate(
 																{
