@@ -882,7 +882,7 @@ ns1blankspace.app =
 					{
 						if (ns1blankspace.option.returnToLast) 
 						{
-							ns1blankspace.history.view({instruction: 8})
+							ns1blankspace.history.view({instruction: 8});
 						}
 						else
 						{

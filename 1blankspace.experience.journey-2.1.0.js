@@ -694,7 +694,8 @@ ns1blankspace.experience.journey =
 													}	
 													else
 													{	
-														$('#ns1blankspaceControl').html(ns1blankspace.experience.translate({commonText: oJourney.destination.name}));
+														$('#ns1blankspaceControl').html(ns1blankspace.experience.translate({commonText: oJourney.destination.name}) +
+																					'<span style="padding-left:6px; font-weight:100; font-size:0.875em;" id="signpost"></span>');
 
 														var aHTML = [];
 
@@ -959,7 +960,14 @@ ns1blankspace.experience.journey =
 												{
 													if (thingToSee.type == 'text')
 													{
-														if ($.grep(oJourney.destination.populateWith, function(a) {return a.model == thingToSee.model}).length != 0)
+														var bShow = false;
+
+														if (oJourney.destination.populateWith != undefined)
+														{
+															bShow = ($.grep(oJourney.destination.populateWith, function(a) {return a.model == thingToSee.model}).length != 0)
+														}
+
+														if (bShow)
 														{	
 															aHTML.push('<div><div class="ns1blankspaceCaption">' +
 																	thingToSee.caption + '</div>');
@@ -1078,46 +1086,53 @@ ns1blankspace.experience.journey =
 															oJourney.destination.populationAtRest[0][thingToSee.model] = sValue;
 														}	
 
-														var bIsPopulateWith = false;
-														var bSet = false;
-
-														var oPopulationAtWork = oDestination.populationAtWork[0];
-
-														if (oPopulationAtWork)
+														if (thingToSee.type == 'signpost')
 														{
-															bSet = (oPopulationAtWork[oJourney.destination.model] != undefined && oPopulationAtWork[oJourney.destination.model] != '')
-														}
-
-														if (oJourney.destination.populateWith)
-														{	
-															bIsPopulateWith = ($.grep(oJourney.destination.populateWith, function(a) {return a.model == thingToSee.model}).length != 0);
-														}	
-
-														var aHTMLThing = [];
-
-														aHTMLThing.push('<div><div class="ns1blankspaceCaption">' +
-																	thingToSee.caption + '</div>');
-
-														aHTMLThing.push('<div' +
-																		' id="ns1blankspaceExperience-' + oJourney.routeID + '-' + thingToSee.id + '"' +
-																		' class="ns1blankspaceExperiencePopulateWith' +
-																		(thingToSee.populationCanReproduce == "true"?' ns1blankspaceExperienceEdit':'') + '"' +
-																		' data-destination-id="' + thingToSee.id + '"' +
-																		' data-route-id="' + oJourney.routeID + '-' + thingToSee.id + '"' +
-																		' data-populate-id="' + (!bIsPopulateWith?iPopulateID:oJourney.previousDestination.populationID) + '"' +
-																		' style="height:30px;">' +
-																		 sValue + '</div>');
-															
-														aHTMLThing.push('</div>');
-
-														if (bIsPopulateWith)
-														{
-															aHTMLPopulateWith.push(aHTMLThing.join(''))
+															$('#signpost').html(sValue);
 														}
 														else
 														{
-															aHTML.push(aHTMLThing.join(''))
-														}
+															var bIsPopulateWith = false;
+															var bSet = false;
+
+															var oPopulationAtWork = oDestination.populationAtWork[0];
+
+															if (oPopulationAtWork)
+															{
+																bSet = (oPopulationAtWork[oJourney.destination.model] != undefined && oPopulationAtWork[oJourney.destination.model] != '')
+															}
+
+															if (oJourney.destination.populateWith)
+															{	
+																bIsPopulateWith = ($.grep(oJourney.destination.populateWith, function(a) {return a.model == thingToSee.model}).length != 0);
+															}	
+
+															var aHTMLThing = [];
+
+															aHTMLThing.push('<div><div class="ns1blankspaceCaption">' +
+																		thingToSee.caption + '</div>');
+
+															aHTMLThing.push('<div' +
+																			' id="ns1blankspaceExperience-' + oJourney.routeID + '-' + thingToSee.id + '"' +
+																			' class="ns1blankspaceExperiencePopulateWith' +
+																			(thingToSee.populationCanReproduce == "true"?' ns1blankspaceExperienceEdit':'') + '"' +
+																			' data-destination-id="' + thingToSee.id + '"' +
+																			' data-route-id="' + oJourney.routeID + '-' + thingToSee.id + '"' +
+																			' data-populate-id="' + (!bIsPopulateWith?iPopulateID:oJourney.previousDestination.populationID) + '"' +
+																			' style="height:30px;">' +
+																			 sValue + '</div>');
+																
+															aHTMLThing.push('</div>');
+
+															if (bIsPopulateWith)
+															{
+																aHTMLPopulateWith.push(aHTMLThing.join(''))
+															}
+															else
+															{
+																aHTML.push(aHTMLThing.join(''))
+															}
+														}	
 													}
 												});
 
