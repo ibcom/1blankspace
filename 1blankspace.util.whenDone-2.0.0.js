@@ -113,7 +113,7 @@ ns1blankspace.util.whenDone =
 								$.ajax(
 								{
 									type: 'POST',
-									url: ns1blankspace.util.endpointURI(oSearch.method),
+									url: ns1blankspace.util.endpointURI(oSearch.method) + '&advanced=1',
 									data: JSON.stringify(oSearch.criteria),
 									dataType: 'json',
 									success: function(data)
