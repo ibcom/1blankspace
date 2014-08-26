@@ -85,6 +85,11 @@ ns1blankspace.experience.journey =
 							subject: 'rest'
 						},
 						{
+							what: 'change',
+							where: 'input.ns1blankspaceExperiencePopulationDate',
+							subject: 'rest'
+						},
+						{
 							what: 'click',
 							where: 'div.ns1blankspaceExperienceAdd',
 							subject: 'extend'
@@ -396,10 +401,15 @@ ns1blankspace.experience.journey =
 									var oJourney = ns1blankspace.experience.journey.get(oParam);
 
 									if ($('#' + oParam.xhtmlElementID + ' input').length == 0)
-									{											
+									{					
+										var bIsPopulateWith = false;
+
 										if (oJourney.destination.type == "text")
 										{
-											var bIsPopulateWith = ($.grep(oJourney.previousDestination.populateWith, function (a) {return (a.model == oJourney.destination.model)}).length != 0);
+											if (oJourney.previousDestination.populateWith != undefined)
+											{	
+												bIsPopulateWith = ($.grep(oJourney.previousDestination.populateWith, function (a) {return (a.model == oJourney.destination.model)}).length != 0);
+											}
 
 											if (bIsPopulateWith && !oJourney.previousDestination.populationAtRestIsNewBorn)
 											{
@@ -443,8 +453,14 @@ ns1blankspace.experience.journey =
 
 					rest: 		function (oParam)
 								{
+									var oJourney = ns1blankspace.experience.journey.get(oParam);
+
 									oParam.xhtmlElementID = oParam.xhtmlElementID.replace('-input', '');
-									oParam.populationAtWorkToBeRested = {type: 'text', text: oParam.value}
+									oParam.populationAtWorkToBeRested =
+									{
+										type: oJourney.destination.type,
+										text: oParam.value
+									}
 
 									ns1blankspace.experience.journey.thingsToSee.thingToSee.rest(oParam);
 								},	
@@ -694,8 +710,8 @@ ns1blankspace.experience.journey =
 													}	
 													else
 													{	
-														$('#ns1blankspaceControl').html(ns1blankspace.experience.translate({commonText: oJourney.destination.name}) +
-																					'<span style="padding-left:6px; font-weight:100; font-size:0.875em;" id="signpost"></span>');
+														$('#ns1blankspaceControl').html('<div style="width:400px; float:left;">' + ns1blankspace.experience.translate({commonText: oJourney.destination.name}) + '</div>' +
+																					'<div style="float:right; width:150px; padding-left:6px; font-weight:100; font-size:0.75em; text-align:right; margin-right:130px; vertical-align:bottom" id="ns1blankspaceExperienceSignPost"></span>');
 
 														var aHTML = [];
 
@@ -897,11 +913,16 @@ ns1blankspace.experience.journey =
 
 										ns1blankspace.experience.journey.origins.reset({originID: oJourney.originID});
 
-										if (!bExtend) {oJourney.destination.populationAtRest = []};
+										if (!bExtend)
+										{
+											oJourney.destination.populationAtRest = [];
+											oJourney.destination.populationAtRestResponse = {};
+										};
 
 										if (oResponse !== undefined)
 										{	
 											oJourney.destination.populationAtRest = oResponse.data.rows;
+											oJourney.destination.populationAtRestResponse = oResponse;
 										}
 
 										var aHTML = [];
@@ -969,7 +990,7 @@ ns1blankspace.experience.journey =
 
 														if (bShow)
 														{	
-															aHTML.push('<div><div class="ns1blankspaceCaption">' +
+															aHTML.push('<div><div style="clear:both;" class="ns1blankspaceCaption">' +
 																	thingToSee.caption + '</div>');
 
 															aHTML.push('<div' +
@@ -999,6 +1020,8 @@ ns1blankspace.experience.journey =
 
 												oJourney.destination.populationID = 
 													(oJourney.destination.populationAtRest.length>0?oJourney.destination.populationAtRest[0].id:undefined)	
+
+												iPopulateID = oJourney.destination.populationID;
 
 												var sClass = '';
 
@@ -1088,7 +1111,7 @@ ns1blankspace.experience.journey =
 
 														if (thingToSee.type == 'signpost')
 														{
-															$('#signpost').html(sValue);
+															$('#ns1blankspaceExperienceSignPost').html(sValue);
 														}
 														else
 														{
@@ -1109,7 +1132,7 @@ ns1blankspace.experience.journey =
 
 															var aHTMLThing = [];
 
-															aHTMLThing.push('<div><div class="ns1blankspaceCaption">' +
+															aHTMLThing.push('<div style="clear:both;"><div class="ns1blankspaceCaption">' +
 																		thingToSee.caption + '</div>');
 
 															aHTMLThing.push('<div' +
@@ -1372,7 +1395,14 @@ ns1blankspace.experience.journey =
 													aHTML.push('<td>' + aXHTMLToDo.join('') + '</td></tr>');
 												});
 
-												aHTML.push('</table></div>');
+												aHTML.push('</table>');
+
+												if (oJourney.destination.populationAtRestResponse.morerows == "true")
+												{
+													aHTML.push('<div class="ns1blankspaceExperienceShowMore">show more</div>');
+												}
+
+												aHTML.push('</div>');
 
 												$('#' + oJourney.xhtmlPopulateElementID).html(aHTML.join(''));
 											}	
@@ -1468,8 +1498,11 @@ ns1blankspace.experience.journey =
 
 													if (oJourney.previousDestination.tenancy == 'single')
 													{
-														bIsPopulateWith = ($.grep(oJourney.previousDestination.populateWith, function (a) {return (a.model == oJourney.destination.model)}).length != 0);
-													}
+														if (oJourney.previousDestination.populateWith != undefined)
+														{	
+															bIsPopulateWith = ($.grep(oJourney.previousDestination.populateWith, function (a) {return (a.model == oJourney.destination.model)}).length != 0);
+														}
+													}	
 
 													var sClass = '';
 
@@ -1483,7 +1516,14 @@ ns1blankspace.experience.journey =
 													}
 													else
 													{
-														sClass = 'ns1blankspaceExperiencePopulation';
+														if (oJourney.destination.type == 'date')
+														{	
+															sClass = 'ns1blankspaceExperiencePopulationDate';
+														}
+														else
+														{
+															sClass = 'ns1blankspaceExperiencePopulation';
+														}	
 													}
 
 													sHTML = '<input id="' + sElementMutatedToID + '"' +
@@ -1495,12 +1535,16 @@ ns1blankspace.experience.journey =
 													
 													$('#' + sElementID).html(sHTML);
 
-													if (bSetFocus) {$('#' + sElementMutatedToID).focus()}
-
 													if (oJourney.destination.type == 'date')
 													{	
-														$('#' + sElementMutatedToID).datepicker({dateFormat: 'dd M yy', showAnim: 'slideDown'});
-													}	
+														//$('#' + sElementMutatedToID).datepicker('destroy');
+														$('#' + sElementMutatedToID).datepicker({dateFormat: 'd M yy'});
+														$('#' + sElementMutatedToID).datepicker({showAnim: 'slideDown'});
+														//$('#' + sElementMutatedToID).datepicker('show');
+														//bSetFocus = false;
+													}
+
+													if (bSetFocus) {$('#' + sElementMutatedToID).focus()}
 
 													if (oJourney.destination.type == "select")
 													{	
@@ -1548,22 +1592,22 @@ ns1blankspace.experience.journey =
 																bOKToRest = true;
 															}	
 
-															if (oJourney.destination.type == 'text')
+															if (oJourney.destination.type == 'text' || oJourney.destination.type == 'date')
 															{		
 																oData[(oJourney.destination.model).split('.')[1] || oJourney.destination.model] = oPopulationAtWorkToBeRested.text;
 																oPopulationBeingRested[oJourney.destination.model] = oPopulationAtWorkToBeRested.text;
 
-																if ($.grep(oJourney.previousDestination.populateWith, function (a) {return (a.model == oJourney.destination.model)}).length == 0)
-																{
+																//if ($.grep(oJourney.previousDestination.populateWith, function (a) {return (a.model == oJourney.destination.model)}).length == 0)
+																//{
 																	bOKToRest = true;
-																}
-																else
-																{
-																	bOKToRest = (oJourney.previousDestination.populationAtWork[0].id == '');
-																}
+																//}
+																//else
+																//{
+																//	bOKToRest = (oJourney.previousDestination.populationAtWork[0].id == '');
+																//}
 															}
 
-															if (bOKToRest)
+															if (true || bOKToRest)
 															{	
 																//TODO GREP ON data-id
 																$.each(oJourney.previousDestination.populationAtWorkToBeRestedWhenCan, function (i, v)
@@ -1625,7 +1669,7 @@ ns1blankspace.experience.journey =
 															var oPopulationBeingRested = ns1blankspace.util.getParam(oParam, 'populationBeingRested').value;
 															if (oResponse.id) {oPopulationBeingRested.id = oResponse.id}
 
-															if (oResponse.notes = 'ADDED' && oJourney.previousDestination.tenancy != 'multi')
+															if (oResponse.notes == 'ADDED' && oJourney.previousDestination.tenancy != 'multi')
 															{
 																ns1blankspace.experience.journey.thingsToSee.populate(
 																{
@@ -1697,7 +1741,7 @@ ns1blankspace.experience.journey =
 																		$('#' + oJourney.xhtmlElementID).html(oJourney.destination.populationAtWork[0].text);
 																	}
 
-																	if (oJourney.destination.type == 'text')
+																	if (oJourney.destination.type == 'text' || oJourney.destination.type == 'date')
 																	{		
 																		$('#' + oJourney.xhtmlElementID).val(oJourney.destination.populationAtWork[0].text);
 																		$('#' + oJourney.xhtmlElementID).html(oJourney.destination.populationAtWork[0].text);

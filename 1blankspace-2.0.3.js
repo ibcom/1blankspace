@@ -874,21 +874,14 @@ ns1blankspace.app =
 						$.ajax(ns1blankspace.history.sendOnLogon);
 					}
 
-					if (ns1blankspace.option.destination !== undefined)
+					if (ns1blankspace.option.returnToLast) 
 					{
-						ns1blankspace.app.show(oParam);
-					}			
+						ns1blankspace.history.view({instruction: 8})
+					}
 					else
 					{
-						if (ns1blankspace.option.returnToLast) 
-						{
-							ns1blankspace.history.view({instruction: 8})
-						}
-						else
-						{
-							ns1blankspace.app.showWhenLoaded('home');
-						}
-					}	
+						ns1blankspace.app.showWhenLoaded('home');
+					}
 				},	
 					
 	bind: 		function (oParam)	
