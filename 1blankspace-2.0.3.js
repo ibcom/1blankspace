@@ -932,13 +932,16 @@ ns1blankspace.app =
 							})
 							.click(function()
 							{
+								var sNS = ns1blankspace.namespace;
+								if (sNS == undefined) {sNS = 'ns1blankspace'}
+
 								if (ns1blankspace.objectParentName !== undefined)
 								{
-									ns1blankspace[ns1blankspace.objectParentName][ns1blankspace.objectName].init();
+									window[sNS][ns1blankspace.objectParentName][ns1blankspace.objectName].init();
 								}	
 								else
 								{
-									ns1blankspace[ns1blankspace.objectName].init();
+									window[sNS][ns1blankspace.objectName].init();
 								}	
 							})
 							.css('width', '25px')
@@ -2182,6 +2185,7 @@ ns1blankspace.history.view =
 							{
 								if (sDestinationInstructions === ns1blankspace.history.lastDestinationInstruction)
 								{
+									/*
 									var aTmp = sDestinationInstructions.split(';');
 									
 									$.each(aTmp, function(index) 
@@ -2202,7 +2206,8 @@ ns1blankspace.history.view =
 												bAdd = true;
 											}
 										});
-									}	
+									}
+									*/
 								}
 								else
 								{

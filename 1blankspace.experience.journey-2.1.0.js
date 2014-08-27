@@ -670,7 +670,6 @@ ns1blankspace.experience.journey =
 										ns1blankspace.container.hide();
 
 										ns1blankspace.experience.journey.destinations.destination.travelTo(oParam);
-										
 									});	
 								},
 
