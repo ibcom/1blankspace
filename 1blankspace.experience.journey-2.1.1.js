@@ -734,8 +734,8 @@ ns1blankspace.experience.journey =
 
 														aHTML.push('<div id="ns1blankspaceExperienceToDo" style="width:100px; float:right;">');
 
-														if (oParam.populateWithID != undefined)
-														{	
+														//if (oParam.populateWithID != undefined)
+														//{	
 															$.each(oJourney.destination.thingsToDo, function (i, thingToDo)
 															{
 																var sStyle = (thingToDo.backgroundColor?'background-color:' + thingToDo.backgroundColor + ';':'');
@@ -747,7 +747,7 @@ ns1blankspace.experience.journey =
 																			' data-do-it-id="' + thingToDo.id + '"' +
 																			' data-route-id="' + oJourney.routeID + '">' + thingToDo.caption + '</div>');
 															});
-														}	
+														//}	
 
 														aHTML.push('</div>');
 
