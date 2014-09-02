@@ -587,6 +587,7 @@ ns1blankspace.setup.messaging =
 										sData += '&user=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsUser').attr("data-id"));
 										sData += '&email=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsEmail').val());
 										sData += '&title=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsEmail').val());
+										sData += '&address=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsEmail').val());
 										sData += '&type=' + ns1blankspace.util.fs($('input[name="radioType"]:checked').val());
 										sData += '&accountname=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsAccountName').val());
 										sData += '&server=' + sServer;

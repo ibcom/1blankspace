@@ -1078,6 +1078,7 @@ ns1blankspace.messaging.conversation =
 										oSearch.method = 'MESSAGING_CONVERSATION_POST_SEARCH';
 										oSearch.addField('subject,message,ownerusertext,createddate,modifieddate,lastcommentdate,createdusertext');
 										oSearch.addFilter('conversation', 'EQUAL_TO', ns1blankspace.objectContext);
+										oSearch.addCustomOption('conversation', ns1blankspace.objectContext);
 
 										if (iID !== undefined)
 										{

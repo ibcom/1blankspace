@@ -93,7 +93,12 @@ ns1blankspace.experience.journey =
 							what: 'click',
 							where: 'div.ns1blankspaceExperienceAdd',
 							subject: 'extend'
-						}
+						},
+						{
+							what: 'click',
+							where: 'td.ns1blankspaceExperiencePopulateDerived',
+							subject: 'derive'
+						}						
 					]);
 
 					//START APP
@@ -522,7 +527,12 @@ ns1blankspace.experience.journey =
 								function (oParam)
 								{
 									ns1blankspace.experience.journey.thingsToSee.populate(oParam);
-								},																		
+								},
+
+					derive: 	function (oParam)
+								{
+									ns1blankspace.experience.journey.thingsToSee.thingToSee.derive(oParam);
+								},																						
 				},
 
 	space: 		{		
@@ -535,12 +545,18 @@ ns1blankspace.experience.journey =
 									var bRelease = ns1blankspace.util.getParam(oParam, 'release', {"default": false}).value;
 									var sDisplay = (ns1blankspace.util.getParam(oParam, 'hide', {"default": 'false'}).value?'none':'block');
 									var sRouteID = ns1blankspace.util.getParam(oParam, 'routeID').value;
+									var sDataPopulateID = '';
 
 									var sDataRouteID = (sRouteID!=undefined?' data-route-id="' + sRouteID + '"':'');
 
 									var sXHTMLNextToElementID = sXHTMLElementID;
 									var oXHTMLNextToElement = $('#' + sXHTMLNextToElementID);
 									var sType = $('#' + sXHTMLNextToElementID).get(0).tagName.toLowerCase();
+
+									if (oXHTMLNextToElement.attr('data-populate-id') != undefined)
+									{
+										sDataPopulateID = ' data-populate-id="' + oXHTMLNextToElement.attr('data-populate-id') + '"'
+									}
 
 									if (iNextTo == ns1blankspace.experience.journey.space.options.lease.nextTo.myParent)
 									{
@@ -564,12 +580,12 @@ ns1blankspace.experience.journey =
 										{
 											oXHTMLNextToElement.after('<tr>' +
 												'<td colspan=' + iLength + '" style="padding:0px;"><div id="' + sXHTMLPopulateElementID + '"' +
-												sDataRouteID + '></div></td></tr>');
+												sDataRouteID + sDataPopulateID + '></div></td></tr>');
 										}
 										else
 										{
 											oXHTMLNextToElement.after('<div style="display:' + sDisplay + ';" id="' + sXHTMLPopulateElementID + '"' +
-												sDataRouteID + '></div>');
+												sDataRouteID + sDataPopulateID + '></div>');
 										}	
 									}
 
@@ -857,7 +873,14 @@ ns1blankspace.experience.journey =
 													{
 														if (k.model)
 														{
-															aFields.push(v.model + '.' + k.model)
+															if (v.type == 'derived')
+															{
+																aFields.push(k.model);
+															}
+															else
+															{	
+																aFields.push(v.model + '.' + k.model);
+															}	
 														}	
 													});		
 												}
@@ -1038,7 +1061,7 @@ ns1blankspace.experience.journey =
 												oJourney.destination.populationID = 
 													(oJourney.destination.populationAtRest.length>0?oJourney.destination.populationAtRest[0].id:undefined)	
 
-												iPopulateID = oJourney.destination.populationID;
+												//iPopulateID = oJourney.destination.populationID;
 
 												var sClass = '';
 
@@ -1312,7 +1335,8 @@ ns1blankspace.experience.journey =
 														{
 															if (bValue?v.isPopulateWith:true)
 															{
-																aHTML.push('<td class="ns1blankspaceExperienceHeader">' +
+																aHTML.push('<td class="ns1blankspaceExperienceHeader"' +
+																			(v.style?' style="' + v.style + '"':'') + '">' +
 																			v.caption + '</td>');
 															}	
 														});
@@ -1343,7 +1367,7 @@ ns1blankspace.experience.journey =
 														}
 														else if (thingToSee.type == 'derived')
 														{	
-															sClass = 'ns1blankspaceExperience'
+															sClass = 'ns1blankspaceExperiencePopulateDerived'
 														}
 														else
 														{
@@ -1355,7 +1379,7 @@ ns1blankspace.experience.journey =
 
 														if (thingToSee.model)
 														{	
-															if (thingToSee.thingsToSee)
+															if (thingToSee.thingsToSee && thingToSee.type != 'derived')
 															{	
 																var aValues = [];
 
@@ -1385,7 +1409,8 @@ ns1blankspace.experience.journey =
 																		(iPopulateID!==undefined&&bValue?' data-populate-id="' + iPopulateID + '"':' data-populate-id="' + v.id + '"') +
 																		(iPopulateWithID!==undefined?' data-populate-with-id="' + iPopulateWithID + '"':'') +
 																		' data-route-id="' + oJourney.routeID + '-' + thingToSee.id + '"' +
-																		' data-destination-id="' + thingToSee.id + '">' +
+																		' data-destination-id="' + thingToSee.id + '"' +
+																		(thingToSee.style?' style="' + thingToSee.style + '"':'') + '">' +
 																		sValue + '</td>');
 														}	
 													});
@@ -1571,7 +1596,51 @@ ns1blankspace.experience.journey =
 															xhtmlElementID: sElementMutatedToID
 														});
 													}
-												},		
+												},	
+
+									derive: 	function (oParam, oResponse) 
+												{
+													var oJourney = ns1blankspace.experience.journey.get(oParam);
+													var sXHTMLElementID = ns1blankspace.util.getParam(oParam, 'xhtmlElementID').value;
+													
+													sXHTMLElementID = ns1blankspace.experience.journey.space.lease(
+													{
+														nextTo: 2,
+														xhtmlElementID: sXHTMLElementID
+													})
+													.xhtmlElementID;
+
+													var aHTML = [];
+
+													aHTML.push('<div class="ns1blankspaceExperienceContainer"><table><tr>');
+
+													$.each(oJourney.destination.thingsToSee, function (i, thingToSee)
+													{
+														aHTML.push('<td>' + thingToSee.caption + '</td>');
+
+														var oPopulationAtRest = $.grep(thingToSee.populationData, function (a) {return a.value == thingToSee.value});
+														var sPopulationAtRestValue = oPopulationAtRest[0];
+
+														<td class="ns1blankspaceExperiencePopulate" id="ns1blankspaceExperience-ins-invoice-items-account-title-30188" data-populate-route-id="ins-invoice-items-account" data-populate-id="4439619" data-populate-with-id="30188" data-route-id="ins-invoice-items-account-title" data-destination-id="title" "="">Sales Commission</td>
+
+														if (sPopulationAtRestValue != undefined)
+														{
+															aHTML.push('<b>' + populationData.caption + '</b>');
+														}	
+
+														$.each(thingToSee.populationData, function (i, populationData)
+														{
+															if (populationData.value != sPopulationAtRestValue)
+															{	
+																aHTML.push(populationData.caption);
+															}	
+														});
+													});
+
+													aHTML.push('</div>');
+
+													$('#' + sXHTMLElementID).html(aHTML.join(''));
+												},
 
 									rest: 		function (oParam, oResponse) 
 												{
@@ -1650,7 +1719,9 @@ ns1blankspace.experience.journey =
 															}	
 														}	
 
-														ns1blankspace.debug.message(oPopulationBeingRested, true);
+														//ns1blankspace.debug.message(oPopulationBeingRested, true);
+														ns1blankspace.debug.message('rest: ' + sPutToRest + ':', true);
+														ns1blankspace.debug.message(oData, true);
 
 														if (bOKToRest)
 														{	
