@@ -6,6 +6,8 @@ if (ns1blankspace.experience === undefined) {ns1blankspace.experience = {}}
 
 ns1blankspace.experience =
 {
+	data: 		{},
+
 	translate: 	function (oParam)
 				{
 					var sCommonText = ns1blankspace.util.getParam(oParam, 'commonText').value;
@@ -23,6 +25,8 @@ ns1blankspace.experience =
 
 ns1blankspace.experience.journey =
 {
+	data: 		{},
+
 	init: 		function (oParam) 
 				{
 					ns1blankspace.experience.journey.controller.init(
@@ -100,6 +104,8 @@ ns1blankspace.experience.journey =
 							subject: 'derive'
 						}						
 					]);
+
+					ns1blankspace.experience.journey.prepare.affectedBy();
 
 					//START APP
 					if (ns1blankspace.util.getParam(oParam, 'xhtmlElementID').exists)
@@ -184,7 +190,79 @@ ns1blankspace.experience.journey =
 					}	
  
 					return oJourney
-				},			
+				},
+
+	prepare: 	{
+					routes: 	function (sNamespace, sRouteID)
+				  				{
+				  					if (sNamespace === undefined) {sNamespace = 'ns1blankspace.data.control.experience.origins'}
+
+				  					var sPreviousRouteID = '';
+				  						
+									if (sRouteID !== undefined)
+									{
+										sPreviousRouteID = sRouteID + '-';
+									}
+
+				  					var oNamespace = ns1blankspace.util.toFunction(sNamespace);
+				  					var aNamespaces = [];
+				  					var iLevel = sNamespace.split('.').length;
+				  				
+									for (var m in oNamespace)
+									{
+										if (oNamespace[m]['id'] != undefined)
+										{	
+											oNamespace[m]['routeID'] = sPreviousRouteID + oNamespace[m]['id'];
+											oNamespace[m]['level'] = iLevel;
+										}	
+									}
+
+									for (var m in oNamespace)
+									{
+										if (typeof oNamespace[m] == 'object')
+										{
+											aNamespaces.push({name: sNamespace + '.' + m, routeID: (oNamespace[m]['routeID']!=undefined?oNamespace[m]['routeID']:sRouteID)});
+										}
+									}
+
+									$.each(aNamespaces, function(i, nameSpace)
+									{	
+										ns1blankspace.experience.journey.prepare.routes(nameSpace.name, nameSpace.routeID);
+									});
+				  				},
+
+				  	affectedBy: function (sNamespace, bPreserve)
+				  				{
+				  					if (sNamespace === undefined) {sNamespace = 'ns1blankspace.data.control.experience.origins'}
+	
+				  					var oNamespace = ns1blankspace.util.toFunction(sNamespace);
+				  					var aNamespaces = [];
+
+				  					if (!bPreserve) {ns1blankspace.experience.journey.data.affectedBy = []};
+
+									for (var m in oNamespace)
+									{
+										if (m == 'affectedBy')
+										{	
+											$.each(oNamespace[m], function (i, v)
+											{
+												ns1blankspace.experience.journey.data.affectedBy.push({routeID: v, affectedRouteID: oNamespace});
+											});
+										}	
+
+										if (typeof oNamespace[m] == 'string') {}
+										else
+										{
+											aNamespaces.push(sNamespace + '.' + m)
+										}	
+									}
+	
+									$.each(aNamespaces, function(i, nameSpace)
+									{	
+										ns1blankspace.experience.journey.prepare.affectedBy(nameSpace, true);
+									});
+				  				}
+				},  									
 
 	controller:
 				{
@@ -472,7 +550,7 @@ ns1blankspace.experience.journey =
 
 					populate: 	function (oParam)
 								{
-									var oInitiator = ns1blankspace.util.getParam(oParam, 'initiator', {remove: true}).value;
+									var oInitiator = ns1blankspace.util.getParam(oParam, 'initiator').value;
 									
 									if (oInitiator.attr('data-populate-route-id'))
 									{
@@ -486,6 +564,10 @@ ns1blankspace.experience.journey =
 									if (oJourney.destination.type == 'select')
 									{	
 										ns1blankspace.experience.journey.thingsToSee.thingToSee.populate(oParam);
+									}
+									else if (oJourney.destination.type == 'derived')
+									{
+										ns1blankspace.util.execute(oJourney.destination.deriveWith, oParam);
 									}
 									else
 									{	
@@ -532,8 +614,18 @@ ns1blankspace.experience.journey =
 					derive: 	function (oParam)
 								{
 									ns1blankspace.experience.journey.thingsToSee.thingToSee.derive(oParam);
-								},																						
+								}																											
 				},
+
+	affects: 	function (oParam)
+				{
+					var sRouteID = ns1blankspace.util.getParam(oParam, 'routeID');
+
+					var aEffects = $.grep(ns1blankspace.experience.journey.data.affectedBy, function (a) {a = sRouteID});
+
+
+
+				},			
 
 	space: 		{		
 					options: {lease: {nextTo: {me: 1, myParent: 2}}},
@@ -1602,6 +1694,8 @@ ns1blankspace.experience.journey =
 												{
 													var oJourney = ns1blankspace.experience.journey.get(oParam);
 													var sXHTMLElementID = ns1blankspace.util.getParam(oParam, 'xhtmlElementID').value;
+
+													var oPopulation = $.grep(oJourney.previousDestination.populationAtRest, function (a) {return a.id == oParam.populateID})[0];
 													
 													sXHTMLElementID = ns1blankspace.experience.journey.space.lease(
 													{
@@ -1616,28 +1710,33 @@ ns1blankspace.experience.journey =
 
 													$.each(oJourney.destination.thingsToSee, function (i, thingToSee)
 													{
-														aHTML.push('<td>' + thingToSee.caption + '</td>');
+														//aHTML.push('<td>' + thingToSee.caption + '</td>');
 
-														var oPopulationAtRest = $.grep(thingToSee.populationData, function (a) {return a.value == thingToSee.value});
-														var sPopulationAtRestValue = oPopulationAtRest[0];
-
-														<td class="ns1blankspaceExperiencePopulate" id="ns1blankspaceExperience-ins-invoice-items-account-title-30188" data-populate-route-id="ins-invoice-items-account" data-populate-id="4439619" data-populate-with-id="30188" data-route-id="ins-invoice-items-account-title" data-destination-id="title" "="">Sales Commission</td>
-
-														if (sPopulationAtRestValue != undefined)
+														if (oPopulation !== undefined)
 														{
-															aHTML.push('<b>' + populationData.caption + '</b>');
+															var sPopulationValue = oPopulation[thingToSee.model];
+															var oPopulationData = $.grep(thingToSee.populationData, function (a) {return a.value == sPopulationValue})[0];
 														}	
 
 														$.each(thingToSee.populationData, function (i, populationData)
 														{
-															if (populationData.value != sPopulationAtRestValue)
+															aHTML.push('<td class="ns1blankspaceExperiencePopulate" id="ns1blankspaceExperience-ins-invoice-items-tax-type-' + oParam.populateID + '-' + populationData.value + '" ' +
+																				' style="text-align:center; width:' + (100/thingToSee.populationData.length) + '%"' +
+																				' data-populate-derived-route-id="ins-invoice-items-tax-type" data-populate-id="' + oParam.populateID + '" ' +
+																				' data-populate-with-id="' + populationData.value + '" data-route-id="ins-invoice-items-tax" data-destination-id="tax">')
+
+															if (populationData.value != (oPopulationData?oPopulationData.value:''))
 															{	
-																aHTML.push(populationData.caption);
-															}	
+																aHTML.push(populationData.name);
+															}
+															else
+															{
+																aHTML.push('<b>' + populationData.name + '</b></td>');
+															}
 														});
 													});
 
-													aHTML.push('</div>');
+													aHTML.push('</tr></table></div>');
 
 													$('#' + sXHTMLElementID).html(aHTML.join(''));
 												},
@@ -1654,7 +1753,7 @@ ns1blankspace.experience.journey =
 														var oPopulationBeingRested = {};
 														var sPutToRest = oJourney.previousDestination.populationAtRestLocation + '_MANAGE';
 
-														if (oJourney.destination.type == 'destination')
+														if (oJourney.destination.type == 'destination' || oJourney.destination.type == 'derived')
 														{
 															oData = oPopulationAtWorkToBeRested;
 															oPopulationBeingRested = oData;
@@ -1796,6 +1895,13 @@ ns1blankspace.experience.journey =
 
 																	oParam.xhtmlElementID = 'ns1blankspaceExperience-' + oParam.routeID;
 																	ns1blankspace.experience.journey.thingsToSee.populate(oParam);
+																}
+																else if (oJourney.destination.type == 'derived')
+																{
+																	console.log(oJourney);
+
+
+
 																}
 																else
 																{
