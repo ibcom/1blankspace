@@ -928,7 +928,7 @@ ns1blankspace.control =
 
 							if (sURI === undefined && iSiteID !== undefined)
 							{
-								sURI = '/site/' + parseInt(ns1blankspace.user.site) + '/billing.control.json'
+								sURI = '/site/' + parseInt(ns1blankspace.user.site) + '/1blankspace.control.json'
 							}
 
 							if (sURI !== undefined)
