@@ -126,7 +126,7 @@
 		{"title":"CORE_FAVOURITE_MANAGE", "advancedSearch":"false", "rpc":"false"},
 		{"title":"CORE_FAVOURITE_SEARCH", "advancedSearch":"false", "rpc":"false"},
 		{"title":"CORE_FILE_CREATE", "advancedSearch":"false", "rpc":"false"},
-		{"title":"CORE_FILE_MANAGE", "advancedSearch":"false", "rpc":"false"},
+		{"title":"CORE_FILE_MANAGE", "advancedSearch":"false", "rpc":"true"},
 		{"title":"CORE_GET_NEW", "advancedSearch":"false", "rpc":"false"},
 		{"title":"CORE_GET_NEXT_REFERENCE", "advancedSearch":"false", "rpc":"false"},
 		{"title":"CORE_GET_NEXT_REFERENCE_SEARCH", "advancedSearch":"false", "rpc":"false"},
