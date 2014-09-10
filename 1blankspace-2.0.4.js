@@ -3861,10 +3861,10 @@ ns1blankspace.util =
 						$.ajax(
 						{
 							type: 'GET',
-							url: '/jscripts/1blankspace.rpc-2.0.0.json',
+							url: '/jscripts/1blankspace.mydigitalstructure-2.0.0.json',
 							dataType: 'json',
 							async: false,
-							success: function(data) {ns1blankspace.methods = data.methods}
+							success: function(data) {ns1blankspace.methods = data.ondemand}
 						});
 					}
 				},
@@ -3880,10 +3880,7 @@ ns1blankspace.util =
 
 					if (oMethod.length != 0) 
 					{
-						if (oMethod[0].rpc == 'false')
-						{	
-							sBaseEndpoint = '/ondemand/';
-						}	
+						sBaseEndpoint = '/ondemand/';
 					}
 
 					var aMethod = sMethod.split('_');
@@ -3903,7 +3900,7 @@ ns1blankspace.util =
 
 					if (oMethod.length == 0) 
 					{
-						return false;
+						return true;
 					}
 					else
 					{
