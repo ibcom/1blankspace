@@ -1205,6 +1205,15 @@ ns1blankspace.financial.payroll =
 
 										aHTML.push('<tr class="ns1blankspaceCaption">' +
 														'<td class="ns1blankspaceCaption">' +
+														'Standard Hours per Pay Period' +
+														'</td></tr>' +
+														'<tr><td class="ns1blankspaceText">' +
+														'<tr><td class="ns1blankspaceText">' +
+														'<input id="ns1blankspaceDetailsStandardHours" class="ns1blankspaceText">' +
+														'</td></tr>');
+
+										aHTML.push('<tr class="ns1blankspaceCaption">' +
+														'<td class="ns1blankspaceCaption">' +
 														'Allowance Amount' +
 														'</td></tr>' +
 														'<tr><td class="ns1blankspaceText">' +
@@ -1275,6 +1284,7 @@ ns1blankspace.financial.payroll =
 										{
 											$('[name="radioMedicare"][value="' + ns1blankspace.financial.employee["medicare"] + '"]').attr('checked', true);
 											$('[name="radioFrequency"][value="' + ns1blankspace.financial.employee["payfrequency"] + '"]').attr('checked', true);
+											$('#ns1blankspaceDetailsStandardHours').val(ns1blankspace.financial.employee["standardhours"]);
 											$('#ns1blankspaceDetailsAllowance').val(ns1blankspace.financial.employee["allowance"]);
 											$('#ns1blankspaceDetailsAllowanceDescription').val(ns1blankspace.financial.employee["allowancedescription"]);
 											$('#ns1blankspaceDetailsDeduction').val(ns1blankspace.financial.employee["deduction"]);
@@ -1309,6 +1319,7 @@ ns1blankspace.financial.payroll =
 											sData += '&payfrequency=' + ns1blankspace.util.fs($('input[name="radioFrequency"]:checked').val());
 											sData += '&medicare=' + ns1blankspace.util.fs($('input[name="radioMedicare"]:checked').val());
 											sData += '&allowance=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsAllowance').val());
+											sData += '&standardhours=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsStandardHours').val());
 											sData += '&allowancedescription=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsAllowanceDescription').val());
 											sData += '&deduction=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsDeduction').val());
 											sData += '&deductiondescription=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsDeductionDescription').val());
