@@ -1148,9 +1148,6 @@ ns1blankspace.control =
 														
 														var aHTMLViewport = [];
 
-														//aHTML.push('<td class="ns1blankspaceViewControlColumn">');
-														//aHTML.push('<table class="ns1blankspaceViewControlColumn">');
-
 														$.each($.grep(ns1blankspace.viewGroups, function (a) {return a.type == 2;}), function(i, v)
 														{
 															var oViewGroup = $.grep(ns1blankspace.views, function (a) {return a.group == v.id && a.show == true && a.type == 2;});
