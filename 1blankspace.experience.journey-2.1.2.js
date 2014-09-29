@@ -196,6 +196,8 @@ ns1blankspace.experience.journey =
 	prepare: 	{
 					routes: 	function (sNamespace, sRouteID)
 				  				{
+				  					ns1blankspace.experience.journey.data.routes = [];
+
 				  					if (sNamespace === undefined) {sNamespace = 'ns1blankspace.data.control.experience.origins'}
 
 				  					var sPreviousRouteID = '';
@@ -215,6 +217,8 @@ ns1blankspace.experience.journey =
 										{	
 											oNamespace[m]['routeID'] = sPreviousRouteID + oNamespace[m]['id'];
 											oNamespace[m]['level'] = iLevel;
+
+											ns1blankspace.experience.journey.data.routes.push({routeID: soNamespace[m]['routeID'], level: oNamespace[m]['level']})
 										}	
 									}
 
@@ -537,6 +541,8 @@ ns1blankspace.experience.journey =
 
 					rest: 		function (oParam)
 								{
+									oParam = ns1blankspace.experience.journey.affects(oParam);
+
 									var oJourney = ns1blankspace.experience.journey.get(oParam);
 
 									oParam.xhtmlElementID = oParam.xhtmlElementID.replace('-input', '');
@@ -553,7 +559,7 @@ ns1blankspace.experience.journey =
 								{
 									var oInitiator = ns1blankspace.util.getParam(oParam, 'initiator').value;
 									
-									if (oInitiator.attr('x-data-populate-route-id'))
+									if (oInitiator.attr('data-populate-route-id'))
 									{
 										oParam = ns1blankspace.util.setParam(oParam, 'routeID', oInitiator.attr('data-populate-route-id'));
 									}
@@ -1551,6 +1557,30 @@ ns1blankspace.experience.journey =
 									}
 								},
 
+					refresh: 	function (oParam)
+								{
+									//var oJourney = ns1blankspace.experience.journey.get(oParam);
+									var sXHTMLElementID = 'ns1blankspaceExperience-' + oParam.routeID;
+									var oPopulationBeingRested = oParam.populationBeingRested;
+									var sValue;
+
+									for (var key in oPopulationBeingRested)
+							  		{
+							     		if (oPopulationBeingRested.hasOwnProperty(key))
+							     		{
+							     			oJourney = ns1blankspace.experience.journey.get({routeID: oParam.routeID + '-' + key});
+							     			
+							     			if (oJourney !== undefined)
+							     			{
+							     				sValue = oPopulationBeingRested[key];
+							     				$('#' + sXHTMLElementID + '-' + key + oParam.populateID).html(sValue);
+							     			}	
+							     		}
+							     	}
+
+									
+								},			
+
 					thingToSee: {			
 									vacate: 	function (oParam) 
 												{
@@ -1784,8 +1814,11 @@ ns1blankspace.experience.journey =
 														}
 														else
 														{
-															oData.id = oParam.populateID;
-															oPopulationBeingRested.id = oData.id;
+															if (oParam.populateID !== '' && oParam.populateID !== undefined)
+															{	
+																oData.id = oParam.populateID;
+																oPopulationBeingRested.id = oData.id;
+															}	
 
 															if (oJourney.destination.type == 'select')
 															{		
@@ -1808,14 +1841,7 @@ ns1blankspace.experience.journey =
 																oData[(oJourney.destination.model).split('.')[1] || oJourney.destination.model] = oPopulationAtWorkToBeRested.text;
 																oPopulationBeingRested[oJourney.destination.model] = oPopulationAtWorkToBeRested.text;
 
-																//if ($.grep(oJourney.previousDestination.populateWith, function (a) {return (a.model == oJourney.destination.model)}).length == 0)
-																//{
-																	bOKToRest = true;
-																//}
-																//else
-																//{
-																//	bOKToRest = (oJourney.previousDestination.populationAtWork[0].id == '');
-																//}
+																bOKToRest = true;
 															}
 
 															if (true || bOKToRest)
@@ -1825,14 +1851,36 @@ ns1blankspace.experience.journey =
 																{
 																	if (whenCan.type == 'select')
 																	{		
+																		oPopulationBeingRested[whenCan.model] = whenCan.id;
 																		oData[(whenCan.model).split('.')[1]] = whenCan.id;
 																	}	
 
 																	if (whenCan.type == 'text')
 																	{		
+																		oPopulationBeingRested[whenCan.model] = whenCan.text;
 																		oData[(whenCan.model).split('.')[1] || whenCan.model] = whenCan.text;
 																	}
 																});
+
+																if (oParam.populationAtWorkToBeRestedWhenCan !== undefined)
+																{	
+																	$.each(oParam.populationAtWorkToBeRestedWhenCan, function (i, whenCan)
+																	{
+																		if (whenCan.type == 'select')
+																		{		
+																			oPopulationBeingRested[whenCan.model] = whenCan.id;
+																			oData[(whenCan.model).split('.')[1]] = whenCan.id;
+																		}	
+
+																		if (whenCan.type == 'text')
+																		{		
+																			oPopulationBeingRested[whenCan.model] = whenCan.text;
+																			oData[(whenCan.model).split('.')[1] || whenCan.model] = whenCan.text;
+																		}
+																	});
+
+																	oParam.populationAtWorkToBeRestedWhenCan.length = 0;
+																}	
 
 																if ((oParam.populateID == '' || oParam.populateID == '0') && oJourney.previousDestination.type == 'destination')
 																{	
@@ -1925,9 +1973,6 @@ ns1blankspace.experience.journey =
 																else if (oJourney.destination.type == 'derived')
 																{
 																	console.log(oJourney);
-
-
-
 																}
 																else
 																{
@@ -1966,8 +2011,13 @@ ns1blankspace.experience.journey =
 																		$('#' + oJourney.xhtmlElementID).val(oJourney.destination.populationAtWork[0].text);
 																		$('#' + oJourney.xhtmlElementID).html(oJourney.destination.populationAtWork[0].text);
 																	}
+
+																	ns1blankspace.experience.journey.thingsToSee.refresh(oParam);
 																}
-															}	
+															}
+
+															ns1blankspace.util.execute(oJourney.previousDestination.afterResting, oParam);
+
 														}
 													}	
 												}
