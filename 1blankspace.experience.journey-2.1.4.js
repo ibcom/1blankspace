@@ -64,6 +64,11 @@ ns1blankspace.experience.journey =
 							subject: 'makeMutable'
 						},
 						{
+							what: 'click',
+							where: 'td.ns1blankspaceExperiencePopulateWithData',
+							subject: 'populateWithData'
+						},
+						{
 							what: 'change',
 							where: 'input.ns1blankspaceExperiencePopulation',
 							subject: 'repopulate'
@@ -525,6 +530,33 @@ ns1blankspace.experience.journey =
 										}
 									}	
 								},
+
+					populateWithData: 	
+								function (oParam)
+								{
+									var oInitiator = ns1blankspace.util.getParam(oParam, 'initiator', {remove: true}).value;
+									var oEvent = ns1blankspace.util.getParam(oParam, 'event', {remove: true}).value;
+									var oJourney = ns1blankspace.experience.journey.get(oParam);
+									
+									var sXHTMLElementID = ns1blankspace.experience.journey.space.lease(
+									{
+										nextTo: 2,
+										xhtmlElementID: oParam.xhtmlElementID
+									})
+									.xhtmlElementID;
+
+									if (oInitiator.attr('data-populate'))
+									{
+										oParam = ns1blankspace.util.setParam(oParam, 'xhtmlPopulateElementID', oInitiator.attr('data-populate'));
+									}
+									else
+									{
+										oParam = ns1blankspace.util.setParam(oParam, 'xhtmlPopulateElementID', sXHTMLElementID);
+									}
+
+									oParam = ns1blankspace.util.setParam(oParam, 'tenancy', 'multi');
+									ns1blankspace.experience.journey.thingsToSee.populate(oParam);
+								},			
 
 					makeMutable:
 								function (oParam)
@@ -995,10 +1027,6 @@ ns1blankspace.experience.journey =
 												}
 											});
 										}
-										else if (oJourney.destination.populationAtRestData !== undefined)
-										{
-											ns1blankspace.experience.journey.thingsToSee.populate(oParam, {status: 'OK', data: {rows: oJourney.destination.populationAtRestData}});
-										}
 										else
 										{
 											var oSearch = new AdvancedSearch();
@@ -1112,6 +1140,10 @@ ns1blankspace.experience.journey =
 										{	
 											oJourney.destination.populationAtRest = oResponse.data.rows;
 											oJourney.destination.populationAtRestResponse = oResponse;
+										}
+										else if (oJourney.destination.populationAtRestData !== undefined)
+										{
+											oJourney.destination.populationAtRest = oJourney.destination.populationAtRestData;
 										}
 
 										var aHTML = [];
@@ -1519,6 +1551,10 @@ ns1blankspace.experience.journey =
 														{	
 															sClass = 'ns1blankspaceExperiencePopulateDerived'
 														}
+														else if (thingToSee.populationAtRestData && bCanBeMutable)
+														{	
+															sClass = 'ns1blankspaceExperiencePopulateWithData'
+														}
 														else
 														{
 															sClass = 'ns1blankspaceExperiencePopulate'
@@ -1628,7 +1664,7 @@ ns1blankspace.experience.journey =
 
 						     				if (oJourney !== undefined)
 						     				{	
-						     					if (oJourney.destination.thingsToSee !== undefined)
+						     					if (oJourney.destination.thingsToSee !== undefined && oJourney.destination.type != 'derived')
 						     					{
 						     						var aValues = [];
 
