@@ -644,6 +644,7 @@ ns1blankspace.app =
 							$('#ns1blankspaceSpaceText').html('&nbsp;')
 							$('#ns1blankspaceSpaceText').unbind('click');
 							ns1blankspace.status.message('');
+							$('#ns1blankspaceMultiUseDialog').hide();
 
 							if (data.status === 'ER')
 							{
