@@ -283,10 +283,10 @@ ns1blankspace.app =
 					        			}
 						});
 
-/*
 						$.ajaxPrefilter(function(options, originalOptions, jqXHR)
 						{
 						   originalOptions._error = originalOptions.error;
+						   originalOptions._success = originalOptions.success;
 
 						   options.error = function(_jqXHR, _textStatus, _errorThrown)
 						   {
@@ -322,62 +322,68 @@ ns1blankspace.app =
 						   		originalOptions.retryCount = originalOptions.retryCount + 1;
 
 						   		$.ajax(originalOptions);
+						   	}
+
+						   	options.success = function(data, _textStatus, _jqXHR)
+						   	{
+						   		ns1blankspace.ajaxSettings = undefined;
+
+						   		if (originalOptions.global != false)
+						   		{	
+									if (originalOptions.dataType == 'json' || originalOptions.dataType == '')
+									{	
+										if (data.status == 'ER')
+										{
+											if (data.error.errorcode == '1')
+											{
+												originalOptions.success = originalOptions._success;
+												originalOptions._success = undefined;
+												ns1blankspace.history.sendOnLogon = originalOptions;
+												ns1blankspace.app.start({message: 'You need to logon again.'});		
+											}
+											else if ((data.error.errornotes).toLowerCase().indexOf('undefined') != -1)
+											{
+												ns1blankspace.status.error('There is an error with this app.');
+											}	
+											else
+											{	
+												ns1blankspace.status.error(data.error.errornotes);
+											}	
+										}
+									}
+									else if (originalOptions.dataType == 'text')
+									{
+										var aResponse = (data).split('|');
+
+										if (aResponse[0] == 'ER')
+										{
+											if (aResponse[1].indexOf('Not logged on') !== -1)
+											{
+												originalOptions.success = originalOptions._success;
+												originalOptions._success = undefined;
+												ns1blankspace.history.sendOnLogon = originalOptions;
+												ns1blankspace.app.start({message: 'You need to logon again.'});		
+											}	
+											else if ((aResponse[1]).toLowerCase().indexOf('undefined') != -1)
+											{
+												ns1blankspace.status.error('There is an error with this app.');
+											}	
+											else
+											{	
+												ns1blankspace.status.error(aResponse[1]);
+											}	
+										}
+									}
+								}	
+						   		
+						   		if (originalOptions._success !== undefined) {originalOptions._success(data)};
 						   	}	
 						});
-*/
 
 						$(document).ajaxError(function(oEvent, oXMLHTTPRequest, oAjaxOptions, oError) 
 						{
 							ns1blankspace.status.error('An error has occured');
 						});	
-
-						$(document).ajaxComplete(function(oEvent, oXMLHTTPResponse, oAjaxSettings)
-						{
-							ns1blankspace.ajaxSettings = undefined;
-
-							if (oAjaxSettings.dataType == 'json' || oAjaxSettings.dataType == '')
-							{	
-								var oResponse = $.parseJSON(oXMLHTTPResponse.responseText);
-
-								if (oResponse.status == 'ER')
-								{
-									if (oResponse.error.errorcode == '1')
-									{
-										ns1blankspace.history.sendOnLogon = oAjaxSettings;
-										ns1blankspace.app.start({message: 'You need to logon again.'});		
-									}
-									else if ((oResponse.error.errornotes).toLowerCase().indexOf('undefined') != -1)
-									{
-										ns1blankspace.status.error('There is an error with this app.');
-									}	
-									else
-									{	
-										ns1blankspace.status.error(oResponse.error.errornotes);
-									}	
-								}
-							}
-							else if (oAjaxSettings.dataType == 'text')
-							{
-								var aResponse = (oXMLHTTPResponse.responseText).split('|');
-
-								if (aResponse[0] == 'ER')
-								{
-									if (aResponse[1].indexOf('Not logged on') !== -1)
-									{
-										ns1blankspace.history.sendOnLogon = oAjaxSettings;
-										ns1blankspace.app.start({message: 'You need to logon again.'});		
-									}	
-									else if ((aResponse[1]).toLowerCase().indexOf('undefined') != -1)
-									{
-										ns1blankspace.status.error('There is an error with this app.');
-									}	
-									else
-									{	
-										ns1blankspace.status.error(aResponse[1]);
-									}	
-								}
-							}		
-						});
 
 						if (navigator.platform.indexOf('iPad') != -1 || navigator.platform.indexOf('iPhone') != -1) 
 						{
