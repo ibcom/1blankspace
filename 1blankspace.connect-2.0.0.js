@@ -139,7 +139,8 @@ ns1blankspace.connect =
 								
 						aHTML.push('<tr class="ns1blankspaceControl">' +
 										'<td id="ns1blankspaceControl-2" class="ns1blankspaceControl">' +
-										'Everyone</td></tr>');	
+										'Everyone<br /><span class="ns1blankspaceSubNote">in this space</span>' +
+										'</td></tr>');	
 
 						aHTML.push('</table>');	
 						
@@ -163,7 +164,7 @@ ns1blankspace.connect =
 						}
 						else
 						{
-							oSearch.addFilter('public', 'EQUAL_TO', 'Y');
+							oSearch.addFilter('private', 'EQUAL_TO', 'N');
 						}
 
 						oSearch.rows = 30;
@@ -211,7 +212,7 @@ ns1blankspace.connect =
 
 						ns1blankspace.connect.protect.init({xhtmlElementID: 'ns1blankspaceHomeActionProtectKey'});
 					}
-				},
+				},								
 
 	search: 	{
 					send: 		function (sXHTMLElementID, oParam)
@@ -481,6 +482,13 @@ ns1blankspace.connect =
 
 						aHTML.push('<table class="ns1blankspace">');
 						
+						if (ns1blankspace.objectContextData.description != '')
+						{
+							aHTML.push('<tr><td id="ns1blankspaceSummaryDescription" class="ns1blankspaceSummary">' +
+											ns1blankspace.objectContextData.description +
+											'</td></tr>');
+						}	
+
 						if (ns1blankspace.objectContextData.url != '')
 						{
 							aHTML.push('<tr><td id="ns1blankspaceSummaryURL" class="ns1blankspaceSummary">' +
@@ -499,14 +507,6 @@ ns1blankspace.connect =
 												'</td></tr>');
 
 								aHTML.push('<tr><td id="ns1blankspaceConnectPasswordShow" class="ns1blankspaceSubNote" style="padding-left: 4px; padding-top: 6px;"></td></tr>');
-							}						
-
-							if (ns1blankspace.objectContextData.description != '')
-							{
-								aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Description</td></tr>' +
-												'<tr><td id="ns1blankspaceSummaryDescription" class="ns1blankspaceSummary">' +
-												ns1blankspace.objectContextData.description +
-												'</td></tr>');
 							}											
 						}
 
@@ -684,7 +684,7 @@ ns1blankspace.connect =
 										'<tr class="ns1blankspace">' +
 										'<td class="ns1blankspaceRadio">' +
 										'<input type="radio" id="radioPrivateY" name="radioPrivate" value="Y"/>Just Me' +
-										'<br /><input type="radio" id="radioPrivateN" name="radioPrivate" value="N"/>All Users' +
+										'<br /><input type="radio" id="radioPrivateN" name="radioPrivate" value="N"/>All Users <span class="ns1blankspaceSubNote">(in this space)</span>' +
 										'</td></tr>');
 
 						aHTML.push('<tr><td class="ns1blankspaceCaption">' +

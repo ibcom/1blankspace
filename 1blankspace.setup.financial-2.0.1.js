@@ -1849,7 +1849,7 @@ ns1blankspace.setup.financial =
 										aHTML.push('<table class="ns1blankspaceContainer">' +
 														'<tr class="ns1blankspaceContainer">' +
 														'<td id="ns1blankspaceTemplateColumn1_' + sTemplate + '" class="ns1blankspaceColumn1Flexible"></td>' +
-														'<td id="ns1blankspaceTemplateColumn2_' + sTemplate + '" class="ns1blankspaceColumn2Action" style="width:100px;"></td>' +
+														'<td id="ns1blankspaceTemplateColumn2_' + sTemplate + '" class="ns1blankspaceColumn2Action" style="width:100px; padding-left:12px;"></td>' +
 														'</tr>' + 
 														'</table>');
 													
