@@ -636,7 +636,7 @@ ns1blankspace.format.editor =
 
 						        templates: "/rpc/core/?method=CORE_DYNAMIC_TAG_SEARCH",
 						        link_list: "/rpc/core/?method=CORE_EDITOR_LINK_SEARCH",
-						        image_list: "/rpc/core/?method=CORE_EDITOR_IMAGE_SEARCH&object=19&objectcontext=" + ns1blankspace.objectContext
+						        image_list: "/rpc/core/?method=CORE_EDITOR_IMAGE_SEARCH"
 							}
 						}
 						else if (sVersion == '3')

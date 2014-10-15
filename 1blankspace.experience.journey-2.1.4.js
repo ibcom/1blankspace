@@ -1,5 +1,5 @@
 // notes @ http://www.mydigitalstructure.com/1blankspace_namespace_experience
-//ns1blankspace.experience.journey.get({routeID: 'ins-invoice'})
+// ns1blankspace.experience.journey.get({routeID: 'ins-invoice'})
 // http://json.parser.online.fr/
 
 if (ns1blankspace.experience === undefined) {ns1blankspace.experience = {}}
