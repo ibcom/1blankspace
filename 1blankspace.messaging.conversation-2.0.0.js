@@ -1306,6 +1306,7 @@ ns1blankspace.messaging.conversation =
 																	oSearch.addField('message,modifiedusertext,modifieddate');
 																	oSearch.addFilter('post', 'EQUAL_TO', iPost);
 																	oSearch.addFilter('conversation', 'EQUAL_TO', ns1blankspace.objectContext)
+																	oSearch.addCustomOption('conversation', ns1blankspace.objectContext);
 																	oSearch.rows = 100;
 																	oSearch.sort('modifieddate', 'desc');
 																	oSearch.getResults(function(data) {ns1blankspace.messaging.conversation.posts.comments.search.process(oParam, data)});

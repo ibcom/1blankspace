@@ -1,0 +1,290 @@
+html
+{
+	background: url(/site/1667/1667.background-1.0.0.jpg) no-repeat center center fixed;
+	background-size: cover;
+	height: 100%;
+}
+
+.ns1blankspaceCaption
+{
+	color: #484848;
+	font-weight: bold;
+	padding-top: 5px;
+	padding-bottom: 2px;
+	padding-right: 2px;
+	padding-left: 2px;
+}
+
+.ns1blankspaceSelected
+{
+	font-weight: bold;
+}
+
+#divContainer
+{
+	width: 920px;
+	overflow: visible;
+	margin: auto;
+}
+
+#ns1blankspaceLogo
+{
+	position:fixed;
+	bottom: 0;
+	right: 0;
+	float:left;
+	background: url(/site/1667/1667.header.png) no-repeat;
+	width: 220px;
+	height: 70px;
+	margin: 2px 0 0 2px;
+}
+
+#ns1blankspaceFooter
+{
+	position:fixed;
+	bottom: 0;
+	right: 0;
+	width: 140px;
+	height: 30px;
+	margin: 2px 0 0 2px;
+	cursor: pointer;
+}
+
+#ns1blankspaceMain
+{
+	position: absolute;
+	width: 725px;
+	left: 140px;
+	top: 98px;
+	margin-top: 0px;
+}
+
+#ns1blankspaceControl
+{
+	position: absolute;
+	width: 725px;
+	left: 140px;
+	top: 62px;
+	margin-top: 0px;
+	font-size: 1.5em;
+	font-weight: bold;
+	text-align: left;
+	border: none;
+}
+
+#ns1blankspaceSpaceText
+{
+	font-weight: lighter;
+	color: white;
+	font-size: 1.5em;
+	margin-top: 10px;
+	text-align: left;
+	margin-left: 2px;
+}
+
+#ns1blankspaceLogonName
+{
+	font-weight: lighter;
+	color: #CCCCCC;
+	cursor: pointer;
+	font-size: 1em;
+	text-align: left;
+}
+
+div.ns1blankspaceExperienceOrigins
+{
+	background-color: #333366;
+	margin-top: 10px;
+	padding: 10px;
+	font-size: 2em;
+	color: #ffffff;
+	cursor: pointer;
+	text-align: center;
+	width: 80px;
+}
+
+a:link, a:visited, a:active
+{
+	color: #cccc00;
+}
+
+a:hover
+{
+	color: #006EBA;
+}
+
+td.ns1blankspaceRowSelect, td.ns1blankspaceMostLikely, td.ns1blankspaceControl
+{
+	color: #333333;
+}
+
+td.ns1blankspaceHighlight
+{
+	color: #cccc00;
+}
+
+input
+{
+	border-width: 0px;
+}
+
+input.ns1blankspaceText
+{
+	padding-right: 0px;
+	width: 90%;
+}
+
+td
+{
+	vertical-align: middle;
+}
+
+td.ns1blankspaceExperienceTravelTo, td.ns1blankspaceExperiencePopulate, td.ns1blankspaceExperiencePopulateWith, div.ns1blankspaceExperienceDiscover,
+td.ns1blankspaceExperiencePopulateDerived, td.ns1blankspaceExperiencePopulateWithData, div.ns1blankspaceExperienceExplore, td.ns1blankspaceExperienceExplore,
+div.ns1blankspaceExperienceSwitch
+{
+	cursor: pointer;
+}
+
+td.ns1blankspaceExperiencePopulateWith, td.ns1blankspaceExperiencePopulation
+{
+	height: 22px;
+	padding: 3px;
+	font-size: 1em;
+}
+
+div.ns1blankspaceExperiencePopulateWith
+{
+	padding-left: 3px;
+}
+
+input.ns1blankspaceExperiencePopulateWith, input.ns1blankspaceExperiencePopulation, input.ns1blankspaceExperiencePopulateDestinationWith, input.ns1blankspaceExperiencePopulationDate
+{
+	background-color: rgba(255, 255, 255, 0.4);
+	height: 22px;
+	padding: 3px;
+	font-size: 1em;
+	margin-top: 2px;
+	margin-left: -2px;
+	width: 92%;
+}
+
+div.ns1blankspaceExperienceContainer
+{
+	width: 95%;
+	margin-right: 10px;
+	margin-bottom: 14px;
+	float: left;
+	background-color: rgba(255, 255, 255, 0.4);
+	border-top-left-radius: 5px;
+	border-top-right-radius: 5px;
+	border-bottom-right-radius: 5px;
+	border-bottom-left-radius: 5px;
+	padding: 6px 9px 9px;
+}
+
+div.ns1blankspaceExperienceShowMore
+{
+	width: 95%;
+	margin-top: 8px;
+	margin-bottom: 4px;
+	background-color: rgba(255, 255, 255, 0.7);
+	border-top-left-radius: 5px;
+	border-top-right-radius: 5px;
+	border-bottom-right-radius: 5px;
+	border-bottom-left-radius: 5px;
+	padding: 6px;
+	color: #B8B8B8;
+	text-align:center;
+	font-size: 0.875em;
+	cursor: pointer;
+}
+
+td.ns1blankspaceExperienceHeader
+{
+	background-color: rgba(255, 255, 255, 0.7);
+	border-top-left-radius: 2px;
+	border-top-right-radius: 2px;
+	border-bottom-right-radius: 2px;
+	border-bottom-left-radius: 2px;
+	font-weight: bold;
+}
+
+td.ns1blankspaceExperienceClose, span.ns1blankspaceExperienceEdit,
+td.ns1blankspaceExperienceDone, span.ns1blankspaceExperienceDone, div.ns1blankspaceAction,
+div.ns1blankspaceExperienceChange, div.ns1blankspaceExperienceControl
+{
+	font-size: 0.875em;
+	color: #F8F8F8;
+	cursor: pointer;
+}
+
+div.ns1blankspaceExperienceContainer .notch {
+    position: absolute;
+    top: -10px;
+    left: 20px;
+    margin: 0;
+    border-top: 0;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-bottom: 10px solid #eef4f9;
+    padding: 0;
+    width: 0;
+    height: 0;
+    /* ie6 height fix */
+    font-size: 0;
+    line-height: 0;
+     /* ie6 transparent fix */
+    _border-right-color: pink;
+    _border-left-color: pink;
+    _filter: chroma(color=pink);
+}
+
+.ui-datepicker
+{
+	margin-top: 4px;
+	margin-left: -2px;
+}
+
+td.ns1blankspaceColumn1Divider, td.ns1blankspaceRoot, td.ns1blankspaceParent, td.ns1blankspaceChild
+{
+	vertical-align: top;
+	color: #000000 !important;
+}
+
+#ns1blankspaceJourney-effect-profit_loss, #ns1blankspaceJourney-effect-balance_sheet
+{
+	font-size: 1.25em;
+}
+
+input.ns1blankspaceDate
+{
+	background-color: rgba(255, 255, 255, 0.4);
+	height: 22px;
+	padding: 3px;
+	font-size: 1em;
+	margin-top: 2px;
+	margin-left: -2px;
+	width: 120px;
+}
+
+span.ns1blankspaceHeaderLarge, span.ns1blankspaceSub
+{
+	color: #000000 !important;
+}
+
+td.ns1blankspaceRowShaded
+{
+	background-color: rgba(255, 255, 255, 0.2);
+}
+
+div.ns1blankspaceExperienceDoIt
+{
+	cursor: pointer;
+	margin-top: 10px;
+}
+
+#ns1blankspaceFinancialTransactions
+{
+	background-color: #ffffff !important;
+}
