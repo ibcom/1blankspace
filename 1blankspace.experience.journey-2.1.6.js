@@ -1289,7 +1289,9 @@ ns1blankspace.experience.journey =
 												oJourney.destination.populationAtWork = oJourney.destination.populationAtRest.slice(0,1);
 
 												oJourney.destination.populationID = 
-													(oJourney.destination.populationAtRest.length>0?oJourney.destination.populationAtRest[0].id:undefined)	
+													(oJourney.destination.populationAtRest.length>0?oJourney.destination.populationAtRest[0].id:undefined)
+
+												oJourney.destination.populationIsAtWork = true;
 
 												//iPopulateID = oJourney.destination.populationID;
 
@@ -1351,8 +1353,8 @@ ns1blankspace.experience.journey =
 
 														if (oDestination.populationAtWork.length > 0)
 														{	
-															oJourney.destination.populationID = 
-																oDestination.populationAtWork[0][oJourney.destination.model]
+															//oJourney.destination.populationID = 
+															//	oDestination.populationAtWork[0][oJourney.destination.model]
 
 															if (thingToSee.model)
 															{	
@@ -1603,6 +1605,10 @@ ns1blankspace.experience.journey =
 														else if (thingToSee.populationAtRestData && bCanBeMutable)
 														{	
 															sClass = 'ns1blankspaceExperiencePopulateWithData'
+														}
+														else if (thingToSee.type == 'view')
+														{	
+															sClass = 'ns1blankspaceExperiencePopulation'
 														}
 														else
 														{
