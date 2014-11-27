@@ -1,0 +1,17 @@
+{
+	"objects":
+	[
+		{
+			"name": "contact-person",
+			"title": "Contacts Person",
+			"properties":
+			[
+				{
+					"name": "firstname",
+					"type": "text",
+					"length": ""
+				}	
+			]
+		}
+	]
+}
