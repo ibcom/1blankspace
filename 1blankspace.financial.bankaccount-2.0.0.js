@@ -3524,8 +3524,9 @@ ns1blankspace.financial.bankAccount =
 														var aXHTMLElementID = sXHTMLElementID.split('-');
 														var oData = {reconciliation: iReconciliation};
 														var bAllUsed = ns1blankspace.util.getParam(oParam, 'allused', {"default": true}).value;
+														var bReset = true;
 
-														if (iObject === undefined)
+														if (iObject === undefined || bReset)
 														{	
 															if (aXHTMLElementID[2] == 'payment') {iObject = 3}
 															if (aXHTMLElementID[2] == 'receipt') {iObject = 6}
@@ -4093,7 +4094,8 @@ ns1blankspace.financial.bankAccount =
 															
 															if (cSearchAmount) {oSearch.addFilter((iType==1?'creditamount':'debitamount'), 'APPROX_EQUAL_TO', cSearchAmount)}
 															
-															oSearch.addFilter('taxcategory', 'EQUAL_TO', (iType==1?1:2));
+															//oSearch.addFilter('taxcategory', 'EQUAL_TO', (iType==1?2:1));
+															oSearch.addFilter((iType==1?'creditamount':'debitamount'), 'NOT_EQUAL_TO', 0);
 
 															oSearch.sort('generaljournalitem.generaljournal.journaldate', 'asc');
 														}	

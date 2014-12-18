@@ -31,7 +31,7 @@ ns1blankspace.experience =
 							  		{
 							     		if (oObject.hasOwnProperty(key))
 							     		{
-							     			sReturn = key + ':' + oObject[key] & '; ';
+							     			sReturn = sReturn + key + ':' + oObject[key] + '; ';
 							     		}
 							     	}
 

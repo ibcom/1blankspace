@@ -1,0 +1,61 @@
+{
+	"templates":
+	[
+		{
+			"name": "default",
+			"data":
+			{
+				"title": "Blank",
+				"status": "2",
+				"layout": "3",
+				"showfooterlinks": "N",
+				"hidestandardlinks": "Y",
+				"ondemandstatus": "4",
+				"documenttype": "&lt;!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/tr/xhtml1/DTD/xhtml1-transitional.dtd\"&gt;",
+				"bodytag": "&lt;body&gt;",
+				"cssattachment": "-1"
+			}	
+		},
+		{
+			"name": "1blankspace_app",
+			"data":
+			{
+				"title": "1blankspace App",
+				"headerscript": "&lt;link type=\"text/css\" href=\"/jscripts/jqueryui/metro/css/jquery-ui-1.8.16.orange.css\" rel=\"stylesheet\"/&gt;\r\n&lt;link rel=stylesheet href='/jscripts/fullcalendar-1.5.4/fullcalendar.css'&gt;\r\n&lt;link rel=stylesheet href='/jscripts/1blankspace-2.0.0.css'&gt;\r\n\r\n&lt;script src=\"/jscripts/jquery-1.8.3.min.js\"&gt;&lt;/script&gt;\r\n&lt;script src=\"/jscripts/jquery-ui-1.9.2/jquery-ui-1.9.2.min.js\"&gt;&lt;/script&gt;\r\n&lt;script src=\"/jscripts/jquery-ui-timepicker-addon.js\"&gt;&lt;/script&gt;\r\n\r\n&lt;script src=\"/jscripts/jquery.cookie.js\"&gt;&lt;/script&gt;\r\n&lt;script src=\"/jscripts/tiny_mce-3.5.8/tiny_mce.js\"&gt;&lt;/script&gt;\r\n&lt;script src=\"/jscripts/fullcalendar-1.5.4/fullcalendar.min.js\"&gt;&lt;/script&gt;\r\n&lt;script src=\"/jscripts/date-2.0.0.js\"&gt;&lt;/script&gt;\r\n&lt;script src=\"/jscripts/toword.js\"&gt;&lt;/script&gt;\r\n&lt;script src=\"/jscripts/md5-min.js\"&gt;&lt;/script&gt;\r\n&lt;script src=\"/jscripts/cryptojs-3.1.2/pbkdf2.js\"&gt;&lt;/script&gt;\r\n&lt;script src=\"/jscripts/cryptojs-3.1.2/aes.js\"&gt;&lt;/script&gt;\r\n\r\n&lt;script src=\"/jscripts/1blankspace-2.0.1.js\"&gt;&lt;/script&gt;\r\n&lt;script src=\"/jscripts/1blankspace.control-2.0.1.js\"&gt;&lt;/script&gt;",
+				"columns": "*,900,*"
+			}	
+		},
+		{
+			"name": "bootstrap_cdn",
+			"data":
+			{
+				"title": "Bootstrap (CDN)",
+				"headerscript": "&lt;link rel=\"stylesheet\" href=\"https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css\"&gt;\r\n&lt;link rel=\"stylesheet\" href=\"https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap-theme.min.css\"&gt;\r\n&lt;script src=\"https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js\"&gt;&lt;/script&gt;"
+			}
+		},
+		{
+			"name": "jquery",
+			"data":
+			{
+				"title": "jQuery",
+				"headerscript": "&lt;script src=\"//code.jquery.com/jquery-1.11.0.min.js\"&gt;&lt;/script&gt;\r\n&lt;script src=\"//code.jquery.com/jquery-migrate-1.2.1.min.js\"&gt;&lt;/script&gt;"
+			}
+		},
+		{
+			"name": "skeleton",
+			"data":
+			{
+				"title": "Skeleton",
+				"headerscript": "&lt;link rel=\"stylesheet\" href=\"https://cdnjs.cloudflare.com/ajax/libs/skeleton/1.2/base.min,css\"&gt;"
+			}
+		},
+		{
+			"name": "skel_baseline",
+			"data":
+			{
+				"title": "skel-baseline",
+				"headerscript": "&lt;script src=\"/jscripts/skel-baseline/jquery.min.js\"&gt;&lt;/script&gt;\r\n&lt;script src=\"/jscripts/skel-baseline/skel.min.js\"&gt;&lt;/script&gt;\r\n&lt;script src=\"/jscripts/skel-baseline/skel-layers.min.js\"&gt;&lt;/script&gt;\r\n&lt;script src=\"/jscripts/skel-baseline/init.js\"&gt;&lt;/script&gt;\r\n&lt;noscript&gt;\r\n&lt;link rel=\"stylesheet\" href=\"/jscripts/skel-baseline/css/skel.css\"/&gt;\r\n&lt;link rel=\"stylesheet\" href=\"/jscripts/skel-baseline/css/style.css\"/&gt;\r\n&lt;link rel=\"stylesheet\" href=\"/jscripts/skel-baseline/css/style-xlarge.css\"/&gt;\r\n&lt;/noscript&gt;\r\n"
+			}
+		}
+	]
+}

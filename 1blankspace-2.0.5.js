@@ -1281,9 +1281,17 @@ ns1blankspace.app =
 								ns1blankspace.objectContextData = undefined
 								ns1blankspace.objectContext = -1;
 								$('#ns1blankspaceViewControlAction').button({disabled: false});
-								if (typeof(oNS.layout) === 'function') {oNS.layout()}
-								ns1blankspace.show({selector: '#ns1blankspaceMainDetails'});
-								if (typeof(oNS.details) === 'function') {oNS.details()} else {oNS.home.show()}
+							
+								if (typeof(oNS["new"]) === 'function')
+								{
+									oNS["new"]()
+								}	
+								else
+								{
+									if (typeof(oNS.layout) === 'function') {oNS.layout()}
+									ns1blankspace.show({selector: '#ns1blankspaceMainDetails'});
+									if (typeof(oNS.details) === 'function') {oNS.details()} else {oNS.home.show()}
+								}		
 							}
 							else
 							{
