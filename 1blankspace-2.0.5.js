@@ -339,7 +339,7 @@ ns1blankspace.app =
 												originalOptions.success = originalOptions._success;
 												originalOptions._success = undefined;
 												ns1blankspace.history.sendOnLogon = originalOptions;
-												ns1blankspace.app.start({message: 'You need to logon again.'});		
+												ns1blankspace.app.start({message: 'You need to log on again.'});		
 											}
 											else if ((data.error.errornotes).toLowerCase().indexOf('undefined') != -1)
 											{
@@ -362,7 +362,7 @@ ns1blankspace.app =
 												originalOptions.success = originalOptions._success;
 												originalOptions._success = undefined;
 												ns1blankspace.history.sendOnLogon = originalOptions;
-												ns1blankspace.app.start({message: 'You need to logon again.'});		
+												ns1blankspace.app.start({message: 'You need to log on again.'});		
 											}	
 											else if ((aResponse[1]).toLowerCase().indexOf('undefined') != -1)
 											{
@@ -1565,7 +1565,7 @@ ns1blankspace.logon =
 
 					aHTML.push('<tr>' +
 								'<td class="ns1blankspaceLogon" style="width:110px">' +
-								'<span id="ns1blankspaceLogonSend">Logon</span>' +
+								'<span id="ns1blankspaceLogonSend">Log on</span>' +
 								'</td>');
 				
 					aHTML.push('<td id="ns1blankspaceLogonStatus" style="vertical-align:middle;">' +
@@ -3873,7 +3873,7 @@ ns1blankspace.util =
 
 	getMethods:		function ()
 				{
-					if (ns1blankspace.methods === undefined)
+					if (ns1blankspace.ondemand === undefined)
 					{
 						$.ajax(
 						{
@@ -3881,7 +3881,7 @@ ns1blankspace.util =
 							url: '/jscripts/1blankspace.mydigitalstructure-2.0.0.json',
 							dataType: 'json',
 							async: false,
-							success: function(data) {ns1blankspace.methods = data.ondemand}
+							success: function(data) {ns1blankspace.ondemand = data.ondemand}
 						});
 					}
 				},
@@ -3893,7 +3893,7 @@ ns1blankspace.util =
 
 					var sBaseEndpoint = '/rpc/';
 
-					var oMethod = $.grep(ns1blankspace.methods, function (a) {return a.title == sMethod;})	
+					var oMethod = $.grep(ns1blankspace.ondemand, function (a) {return a.title == sMethod;})	
 
 					if (oMethod.length != 0) 
 					{
@@ -3913,7 +3913,7 @@ ns1blankspace.util =
 
 					var sBaseEndpoint;
 
-					var oMethod = $.grep(ns1blankspace.methods, function (a) {return a.title == sMethod;})	
+					var oMethod = $.grep(ns1blankspace.ondemand, function (a) {return a.title == sMethod;})	
 
 					if (oMethod.length == 0) 
 					{
