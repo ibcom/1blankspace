@@ -1093,6 +1093,7 @@ ns1blankspace.setup.user =
 										sData += '&contactbusiness=' + iContactBusiness;
 										sData += '&contactperson=' + iContactPerson;
 										sData += '&unrestrictedaccess=N';
+										sData += '&newsalerts=N';
 									}
 									
 									if ($('#ns1blankspaceMainDetails').html() != '')
