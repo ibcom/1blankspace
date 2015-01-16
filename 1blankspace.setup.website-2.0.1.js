@@ -53,7 +53,7 @@ ns1blankspace.setup.website =
 										success: function(data)
 										{
 											ns1blankspace.setup.website.data.templates = data.templates;
-											ns1blankspace.setup.website.siteTemplate.show(oParam)
+											ns1blankspace.setup.website.siteTemplate.show(oParam);
 										},
 										error: function(data)
 										{
@@ -62,6 +62,10 @@ ns1blankspace.setup.website =
 										}
 									});
 								}
+								else
+								{
+									ns1blankspace.setup.website.siteTemplate.show(oParam);
+								}
 
 								ns1blankspace.status.clear();
 							},
@@ -69,17 +73,29 @@ ns1blankspace.setup.website =
 					show: 	function(oParam)
 							{
 								var aHTML = [];
+
+								aHTML.push('<table class="ns1blankspaceMain" id="ns1blankspaceNewTemplates">');
+		
+								aHTML.push('<tr><td class="ns1blankspaceCaption">SELECT A TEMPLATE</td></tr>')
+								
+
 								$.each(ns1blankspace.setup.website.data.templates, function (i, template)
 								{
-									aHTML.push(template.title)
+									aHTML.push('<tr><td id="ns1blankspaceNewTemplate-' + template.name + '" class="ns1blankspaceMostLikely">' + template.data.title + '</td></tr>')
 								});
 
-								$('#ns1blankspaceMain').html(aHTML.join('<br />'));
-							},
+								aHTML.push('</table>');
 
-					set: 	function(oParam)
-							{
-								ns1blankspace.setup.website.save(oParam);
+								$('#ns1blankspaceMain').html(aHTML.join(''));
+
+								$('#ns1blankspaceNewTemplates td.ns1blankspaceMostLikely').click(function(event)
+								{
+									var oTemplateDefault = $.grep(ns1blankspace.setup.website.data.templates, function(a) {return a.name == 'default'});
+									var sName = (this.id).split('-')[1]
+									var oTemplate = $.grep(ns1blankspace.setup.website.data.templates, function(a) {return a.name == sName});
+									var oParam = {data: $.extend(true, oTemplateDefault[0].data, oTemplate[0].data)};
+									ns1blankspace.setup.website.save.send(oParam);
+								});
 							}
 				},				
 
@@ -547,12 +563,7 @@ ns1blankspace.setup.website =
 						var aHTML = [];
 											
 						aHTML.push('<table class="ns1blankspaceColumn2">');
-											
-						aHTML.push('<tr><td class="ns1blankspaceSummaryColumn2Action" style="width:175px;">' +
-										'<a href="#" id="ns1blankspaceSummarySetupWebApp">' +
-										'<strong>Set up as a jQuery webapp</strong></a>' +
-										'</td></tr>');
-									
+																
 						if (ns1blankspace.objectContextData.primaryurl != '')
 						{
 							aHTML.push('<tr><td class="ns1blankspaceSummaryColumn2Action" style="width:175px; padding-top:10px;">' +
@@ -2409,63 +2420,69 @@ ns1blankspace.setup.website =
 									{
 										ns1blankspace.status.working();
 										
-										var sData = '_=1';
-										var sCSSAttachment;
-										
-										if (ns1blankspace.objectContext != -1)
-										{
-											sData += '&id=' + ns1blankspace.objectContext	
-										}
-										else
-										{
-											sCSSAttachment = -1;
-										}
-										
-										if ($('#ns1blankspaceMainDetails').html() != '')
-										{
-											sData += '&title=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsTitle').val());
-											sData += '&email=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsEmail').val());
-											sData += '&status=' + ns1blankspace.util.fs($('input[name="radioStatus"]:checked').val());	
+										var oData = ns1blankspace.util.getParam(oParam, 'data').value;
+
+										if (oData == undefined)
+										{	
+											var sCSSAttachment;
+
+											oData = {};
+											
+											if (ns1blankspace.objectContext != -1)
+											{
+												oData.id = ns1blankspace.objectContext;
+											}
+											else
+											{
+												sCSSAttachment = -1;
+											}
+											
+											if ($('#ns1blankspaceMainDetails').html() != '')
+											{
+												oData.title = $('#ns1blankspaceDetailsTitle').val();
+												oData.email = $('#ns1blankspaceDetailsEmail').val();
+												oData.status = $('input[name="radioStatus"]:checked').val();	
+											}
+
+											if ($('#ns1blankspaceMainLayout').html() != '')
+											{
+												oData.headerheight = $('#ns1blankspaceLayoutHeaderHeight').val();
+												oData.footerheight = $('#ns1blankspaceLayoutFooterHeight').val();
+												oData.columns = $('#ns1blankspaceLayoutColumns').val();
+												oData.layout = $('input[name="radioLayout"]:checked').val();
+												oData.templatedocument = $('input[name="radioTemplateDocument"]:checked').val();
+												sCSSAttachment = $('input[name="radioCSSAttachment"]:checked').val();
+												ns1blankspace.objectContextData.cssattachment = sCSSAttachment;
+												ns1blankspace.objectContextData.cssuri = undefined;
+											}
+											
+											if ($('#ns1blankspaceMainAdvanced').html() != '')
+											{
+												oData.ondemandstatus = $('input[name="radioAppStatus"]:checked').val();	
+												oData.usekeywordsastitle = $('input[name="radioTitle"]:checked').val();
+												oData.documenttype = $('#ns1blankspaceAdvancedDocumentType').val();
+												oData.bodytag = $('#ns1blankspaceAdvancedBodyTag').val();
+											}
+											
+											if ($('#ns1blankspaceMainScripts').html() != '')
+											{
+												oData.headerscript = $('#ns1blankspaceScriptsHeader').val();
+												oData.footerscript = $('#ns1blankspaceScriptsFooter').val();
+											}
+											
+											if (sCSSAttachment != undefined)
+											{
+												oData.cssattachment = sCSSAttachment;
+											}	
 										}
 
-										if ($('#ns1blankspaceMainLayout').html() != '')
-										{
-											sData += '&headerheight=' + ns1blankspace.util.fs($('#ns1blankspaceLayoutHeaderHeight').val());
-											sData += '&footerheight=' + ns1blankspace.util.fs($('#ns1blankspaceLayoutFooterHeight').val());
-											sData += '&columns=' + ns1blankspace.util.fs($('#ns1blankspaceLayoutColumns').val());
-											sData += '&layout=' + ns1blankspace.util.fs($('input[name="radioLayout"]:checked').val());
-											sData += '&templatedocument=' + ns1blankspace.util.fs($('input[name="radioTemplateDocument"]:checked').val());
-											sCSSAttachment = $('input[name="radioCSSAttachment"]:checked').val();
-											ns1blankspace.objectContextData.cssattachment = sCSSAttachment;
-											ns1blankspace.objectContextData.cssuri = undefined;
-										}
-										
-										if ($('#ns1blankspaceMainAdvanced').html() != '')
-										{
-											sData += '&ondemandstatus=' + ns1blankspace.util.fs($('input[name="radioAppStatus"]:checked').val());	
-											sData += '&usekeywordsastitle=' + ns1blankspace.util.fs($('input[name="radioTitle"]:checked').val());
-											sData += '&documenttype=' + ns1blankspace.util.fs($('#ns1blankspaceAdvancedDocumentType').val());
-											sData += '&bodytag=' + ns1blankspace.util.fs($('#ns1blankspaceAdvancedBodyTag').val());
-										}
-										
-										if ($('#ns1blankspaceMainScripts').html() != '')
-										{
-											sData += '&headerscript=' + ns1blankspace.util.fs($('#ns1blankspaceScriptsHeader').val());
-											sData += '&footerscript=' + ns1blankspace.util.fs($('#ns1blankspaceScriptsFooter').val());
-										}
-										
-										if (sCSSAttachment != undefined)
-										{
-											sData += '&cssattachment=' + sCSSAttachment;
-										}	
-										
 										ns1blankspace.status.working();
 
 										$.ajax(
 										{
 											type: 'POST',
 											url: ns1blankspace.util.endpointURI('SETUP_SITE_MANAGE'),
-											data: sData,
+											data: oData,
 											dataType: 'json',
 											success: function(data) {ns1blankspace.setup.website.save.send(oParam, data)}
 										});

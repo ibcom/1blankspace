@@ -522,6 +522,7 @@ ns1blankspace.financial.debtors =
 	show: 		function (oParam, oResponse)
 				{
 					var iType = ns1blankspace.util.getParam(oParam, 'type', {"default": 1}).value;
+					var iView = ns1blankspace.util.getParam(oParam, 'view', {"default": 2}).value;
 					var sEndDate = ns1blankspace.util.getParam(oParam, 'endDate').value;
 
 					if (oResponse == undefined)
@@ -618,7 +619,7 @@ ns1blankspace.financial.debtors =
 						.css('width', '115px')
 						.css('text-align', 'left');
 
-						var oData = {reportby: iType, rows: 50}
+						var oData = {reportby: iType, rows: 100, view: iView}
 
 						if (sEndDate !== undefined)
 						{

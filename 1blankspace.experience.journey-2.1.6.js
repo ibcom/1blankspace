@@ -20,7 +20,24 @@ ns1blankspace.experience =
 					}); 
 
 					return sCommonText;
-				}
+				},
+
+	util: 		{
+					toCSS: 		function (oObject)
+								{
+									var sReturn = '';
+
+									for (var key in oObject)
+							  		{
+							     		if (oObject.hasOwnProperty(key))
+							     		{
+							     			sReturn = key + ':' + oObject[key] & '; ';
+							     		}
+							     	}
+
+							     	return sReturn;
+							     }
+				}			
 }
 
 ns1blankspace.experience.journey =
@@ -1569,7 +1586,7 @@ ns1blankspace.experience.journey =
 															if (true)
 															{
 																aHTML.push('<td class="ns1blankspaceExperienceHeader"' +
-																			(v.style?' style="' + v.style + '"':'') + '">' +
+																			(v.style?' style="' + ns1blankspace.experience.util.toCSS(v.style) + '"':'') + '">' +
 																			v.caption + '</td>');
 															}	
 														});
@@ -1657,7 +1674,7 @@ ns1blankspace.experience.journey =
 																		(iPopulateWithID!==undefined?' data-populate-with-id="' + iPopulateWithID + '"':'') +
 																		' data-route-id="' + oJourney.routeID + '-' + thingToSee.id + '"' +
 																		' data-destination-id="' + thingToSee.id + '"' +
-																		(thingToSee.style?' style="' + thingToSee.style + '"':'') + '">' +
+																		(thingToSee.style?' style="' + ns1blankspace.experience.util.toCSS(thingToSee.style) + '"':'') + '">' +
 																		sValue + '</td>');
 														}	
 													});
@@ -2234,6 +2251,11 @@ ns1blankspace.experience.journey =
 
 																	if (oJourney.destination.type == 'text' || oJourney.destination.type == 'date')
 																	{		
+																		if (oJourney.destination.style !== undefined)
+																		{
+																			$('#' + oJourney.xhtmlElementID).css(oJourney.destination.style);
+																		}
+
 																		$('#' + oJourney.xhtmlElementID).val(oJourney.destination.populationAtWork[0].text);
 																		$('#' + oJourney.xhtmlElementID).html(oJourney.destination.populationAtWork[0].text);
 																	}
