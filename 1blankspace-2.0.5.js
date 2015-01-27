@@ -3067,8 +3067,20 @@ ns1blankspace.search =
 											oSearch.addFilter(sParentColumnText, 'TEXT_STARTS_WITH', sParentContextText);
 										}
 									}
-									oSearch.rows = 100;
-									oSearch.sort(aColumns[0], 'asc');
+
+									var iRows = $('#' + sXHTMLInputElementID).attr("data-rows");
+									if (iRows == undefined) {iRows = 100}
+
+									oSearch.rows = iRows;
+
+									var sSortColumn = $('#' + sXHTMLInputElementID).attr("data-methodsortcolumn");
+									if (sSortColumn == undefined) {sSortColumn = aColumns[0]}
+
+									var sSortDirection = $('#' + sXHTMLInputElementID).attr("data-methodsortdirection");
+									if (sSortDirection == undefined) {sSortDirection = 'asc'}
+
+									oSearch.sort(sSortColumn, sSortDirection);
+
 									oSearch.getResults(function(data){ns1blankspace.search.show(oParam, data)});
 								}
 								else
