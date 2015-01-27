@@ -391,7 +391,6 @@
 		{"title":"SITE_SEARCH"},
 		{"title":"SITE_SEND_EMAIL"},
 		{"title":"SITE_SEND_ENQUIRY"},
-		{"title":"SITE_SEND_PASSWORD"},
 		{"title":"SITE_SEND_REQUEST"},
 		{"title":"SITE_SESSION_VARIABLE_MANAGE"},
 		{"title":"SITE_SESSION_VARIABLE_SEARCH"},

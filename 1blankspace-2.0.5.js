@@ -2014,7 +2014,7 @@ ns1blankspace.logon.getPassword =
 					{
 						$('#tns1blankspaceGetPasswordStatus').html('Sending password...');
 										
-						var sData = 'site=1533' +
+						var sData = 'site=' + mydigitalstructureSiteId +
 										'&logon=' + $('#ns1blankspaceGetPasswordLogonName').val();	
 						
 						$.ajax(
