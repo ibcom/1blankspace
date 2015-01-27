@@ -1,2 +1,10 @@
 
 1blankspace.experience.journey-2.1.7.js
+
+*.sublime-project
+
+*.sublime-workspace
+
+*.db
+
+*.db:encryptable
