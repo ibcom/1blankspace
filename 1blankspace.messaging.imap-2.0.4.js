@@ -11,6 +11,8 @@
 // totals & get details for messages not fully cached.  Show part of message that have and then back fill attachments and message
 // Back update flags for read.
 
+// DELETE Now move to trash
+
 if (ns1blankspace.messaging === undefined) {ns1blankspace.messaging = {}}
 
 ns1blankspace.messaging.imap = 
@@ -37,6 +39,7 @@ ns1blankspace.messaging.imap =
 		ns1blankspace.viewName = 'Email';
 		
 		ns1blankspace.messaging.autoCheck = true;
+		ns1blankspace.messaging.fullRefresh = false;
 		ns1blankspace.messaging.imap.emailAccounts = [];
 		ns1blankspace.messaging.defaultRows = 25;
 		ns1blankspace.messaging.imap.account = -1;
@@ -54,56 +57,6 @@ ns1blankspace.messaging.imap =
 
 		if (ns1blankspace.option.richTextEditing)
 		{
-			/*
-			tinyMCE.init(
-			{
-				mode : "none",
-				height : "400px", 
-				width : "100%",
-				theme : "advanced",
-
-				theme_advanced_path : false,
-				theme_advanced_statusbar_location : "bottom",
-
-				plugins : "table,advimage,advlink,emotions,iespell,insertdatetime,templateFields,preview,media,fullscreen,print,visualchars,nonbreaking,pagebreak,style,paste,searchreplace,print,contextmenu", 
-
-				theme_advanced_buttons1_add_before : "forecolor,backcolor", 
-				theme_advanced_buttons1_add : "fontselect,fontsizeselect", 
-		 
-				theme_advanced_buttons2_add : "separator,insertdate,inserttime,preview,zoom,separator,nonbreaking,pagebreak,visualchars", 
-				theme_advanced_buttons2_add_before: "cut,copy,paste,pasteword,separator,search,replace,separator", 
-				
-				theme_advanced_buttons3_add_before : "tablecontrols,separator", 
-				theme_advanced_buttons3_add : "emotions,iespell,fullscreen,print,templateFields,media,selectall,advhr",
-		 						
-				plugin_insertdate_dateFormat : "%d-%m-%y", 
-				plugin_insertdate_timeFormat : "%H:%M:%S", 
-			
-				theme_advanced_toolbar_location : "top",
-				theme_advanced_toolbar_align : "left",
-				theme_advanced_resizing : true,
-			
-				font_size_style_values : "8pt,10pt,12pt,14pt,18pt,24pt,36pt",
-				
-				extended_valid_elements : "style,input[accept|accesskey|align<bottom?left?middle?right?top|alt|checked<checked|class|dir<ltr?rtl|disabled<disabled|id|ismap<ismap|lang|maxlength|name|onblur|onclick|ondblclick|onfocus|onkeydown|onkeypress|onkeyup|onmousedown|onmousemove|onmouseout|onmouseover|onmouseup|onselect|readonly<readonly|size|src|style|tabindex|title|type<button?checkbox?file?hidden?image?password?radio?reset?submit?text|usemap|value],select[class|dir<ltr?rtl|disabled<disabled|id|lang|multiple<multiple|name|onblur|onchange|onclick|ondblclick|onfocus|onkeydown|onkeypress|onkeyup|onmousedown|onmousemove|onmouseout|onmouseover|onmouseup|size|style|tabindex|title],ol[class|compact<compact|dir<ltr?rtl|id|lang|onclick|ondblclick|onkeydown|onkeypress|onkeyup|onmousedown|onmousemove|onmouseout|onmouseover|onmouseup|start|style|title|type],div[align<center?justify?left?right|class|dir<ltr?rtl|id|lang|onclick|ondblclick|onkeydown|onkeypress|onkeyup|onmousedown|onmousemove|onmouseout|onmouseover|onmouseup|style|title],li[class|dir<ltr?rtl|id|lang|onclick|ondblclick|onkeydown|onkeypress|onkeyup|onmousedown|onmousemove|onmouseout|onmouseover|onmouseup|style|title|type|value],iframe[src|width|height|name|align|frameborder|scrolling|marginheight|marginwidth]",
-
-				fullscreen_new_window : true, 
-				fullscreen_settings : 
-				{ 
-					theme_advanced_path_location : "top" 
-				}, 
-				relative_urls : false, 
-				remove_script_host : false, 
-				convert_urls : false, 
-				visual : false, 
-				gecko_spellcheck : true,
-				content_css : ns1blankspace.xhtml.editorCSS,
-				
-				external_link_list_url : "/ondemand/core/?method=CORE_EDITOR_LINK_SEARCH", 
-				external_image_list_url : "/ondemand/core/?method=CORE_EDITOR_LINK_SEARCH&object=19&objectcontext=" + ns1blankspace.objectContext, 
-				media_external_list_url : "/ondemand/core/?method=CORE_EDITOR_LINK_SEARCH&object=19&objectcontext=" + ns1blankspace.objectContext
-			});	
-			*/
 			ns1blankspace.format.editor.init();			
 		}
 		
@@ -132,19 +85,129 @@ ns1blankspace.messaging.imap =
 		});
 	},
 
+
+	folders:
+	{
+		data:
+		{
+			names:
+			{
+				deleted: ['Trash', 'Deleted']
+			}	
+		},
+
+		init:	function (oParam, oResponse)
+		{		
+			var sXHTMLElementID = ns1blankspace.util.getParam(oParam, 'xhtmlElementID').value;
+
+			if (sXHTMLElementID != undefined)
+			{
+				var aXHTMLElementID = sXHTMLElementID.split('-');
+				ns1blankspace.messaging.imap.account = aXHTMLElementID[1];
+			}
+
+			ns1blankspace.messaging.imap.emailAccount = $.grep(ns1blankspace.messaging.imap.emailAccounts, function (a) {return a.id == ns1blankspace.messaging.imap.account})[0];
+
+			if (ns1blankspace.messaging.imap.emailAccount.folders == undefined)
+			{	
+				if (oResponse == undefined)
+				{	
+					var oSearch = new AdvancedSearch();
+					oSearch.method = 'MESSAGING_EMAIL_CACHE_FOLDER_SEARCH';
+					oSearch.addField('title');
+					oSearch.addFilter('account', 'EQUAL_TO', ns1blankspace.messaging.imap.account);
+					oSearch.getResults(function(data) {ns1blankspace.messaging.imap.folders.init(oParam, data)});
+				}
+				else
+				{
+					if (oResponse.status == 'OK')
+					{	
+						ns1blankspace.messaging.imap.emailAccount.folders = oResponse.data.rows;
+
+						$.each(ns1blankspace.messaging.imap.emailAccount.folders, function (i, v)
+						{
+							if ($.grep(ns1blankspace.messaging.imap.folders.data.names.deleted, function(a) {return a == v.title}).length != 0)
+							{
+								ns1blankspace.messaging.imap.emailAccount.deletedFolder = v.id;
+							}
+						});
+
+						ns1blankspace.util.onComplete(oParam);
+					}
+					else
+					{
+						ns1blankspace.status.error('Can not connect to email service.');
+					}	
+				}
+			}	
+		},
+
+		set: 	function (oParam, oResponse)
+		{
+				var oAccount = $.grep(ns1blankspace.messaging.imap.emailAccounts, function (a) {return a.id == ns1blankspace.messaging.imap.account});
+
+				ns1blankspace.messaging.imap.emailAccount.deletedFolder = undefined;
+
+				if (oAccount.length == 1)
+				{
+					ns1blankspace.messaging.imap.emailAccount.deletedFolder = oAccount[0].deletedFolder;
+				}
+		},
+
+		folder:
+		{
+			show: function (oParam)
+			{
+				if (ns1blankspace.messaging.imap.emailAccount.deletedFolder == undefined)
+				{
+					ns1blankspace.messaging.imap.folders.init(oParam);
+				}
+				else
+				{
+					ns1blankspace.util.onComplete(oParam);
+				}
+			}
+		},
+
+		refresh: function (oParam)
+		{
+			var oData = {account: ns1blankspace.messaging.imap.account}
+
+			$.ajax(
+			{
+				type: 'POST',
+				url: '/rpc/messaging/?method=MESSAGING_EMAIL_CACHE_REFRESH_FOLDERS',
+				data: oData,
+				dataType: 'json',
+				success: function(data) {ns1blankspace.messaging.imap.init()}
+			});
+		}
+	},		
+
+
 	check:		function (oParam, oResponse)
-	{					
+	{		
+		var bDeleted = ns1blankspace.util.getParam(oParam, 'deleted', {'default': false}).value;
+
 		if (oResponse == undefined)
 		{	
 			if (!ns1blankspace.messaging.checking)
 			{
 				ns1blankspace.messaging.checking = true;
 
+				var oData =
+				{
+					account: ns1blankspace.messaging.imap.account
+				}
+
+				if (ns1blankspace.messaging.fullRefresh) {oData.fullrefresh = 1}
+				if (ns1blankspace.messaging.imap.folder != undefined) {oData.folder = ns1blankspace.messaging.imap.folder}
+
 				$.ajax(
 				{
 					type: 'POST',
 					url: '/rpc/messaging/?method=MESSAGING_EMAIL_CACHE_CHECK',
-					data: 'account=' + ns1blankspace.util.fs(ns1blankspace.messaging.imap.account),
+					data: oData,
 					dataType: 'json',
 					success: function(data) {ns1blankspace.messaging.imap.check(oParam, data)}
 				});
@@ -172,7 +235,7 @@ ns1blankspace.messaging.imap =
 							disabled: false
 						});
 					
-						ns1blankspace.util.app.option({titlePrefix: '(' + ns1blankspace.messaging.emailNewCount + ') '});
+						ns1blankspace.util.app.option({title: '(' + ns1blankspace.messaging.emailNewCount + ') ' + ns1blankspace.messaging.imap.emailAccount.email});
 					}
 					else
 					{
@@ -189,7 +252,8 @@ ns1blankspace.messaging.imap =
 				ns1blankspace.status.error('Can not connect to email service.');
 			}	
 		}
-	},			
+	},	
+
 
 	home:		function (oParam, oResponse)
 	{
@@ -226,23 +290,12 @@ ns1blankspace.messaging.imap =
 		
 				$('#ns1blankspaceViewportControl').html(ns1blankspace.xhtml.loading);
 				
-				/*var oSearch = new AdvancedSearch();
-				oSearch.method = 'MESSAGING_EMAIL_ACCOUNT_SEARCH';
-				oSearch.addField('type,port,sslport,email,description,footer');
-				oSearch.addFilter('type', 'EQUAL_TO', '5');			// IMAP
-				oSearch.getResults(function(data) {ns1blankspace.messaging.imap.home(oParam, data)});*/
-
-				var sData = 'type=5';
-				if (ns1blankspace.option.messagingEmailShowCount) {sData += '&advanced=1'}
-
-				$.ajax(
-				{
-					type: 'POST',
-					url: '/rpc/messaging/?method=MESSAGING_EMAIL_ACCOUNT_SEARCH',
-					data: sData,
-					dataType: 'json',
-					success: function(data) {ns1blankspace.messaging.imap.home(oParam, data)}
-				});
+				var oSearch = new AdvancedSearch();
+				oSearch.method = 'SETUP_MESSAGING_ACCOUNT_SEARCH';
+				oSearch.addField('type,port,sslport,email,title,footer');
+				oSearch.addFilter('type', 'EQUAL_TO', '5');
+				oSearch.addFilter('user', 'EQUAL_TO', ns1blankspace.user.id);
+				oSearch.getResults(function(data) {ns1blankspace.messaging.imap.home(oParam, data)});
 			}
 			else
 			{
@@ -306,10 +359,6 @@ ns1blankspace.messaging.imap =
 
 					aHTML.push('<table class="ns1blankspaceControl" style="padding-top:10px; margin-top:12px; border-top-style:solid; border-top-width: 1px; border-top-color:#D0D0D0;">');
 
-					aHTML.push('<tr><td id="ns1blankspaceMessaging-Recycle" ' +
-										'class="ns1blankspaceControl">' +
-										'Recycle Bin</td></tr>');
-
 					//aHTML.push('<tr><td id="ns1blankspaceMessaging-Drafts" ' +
 					//					'class="ns1blankspaceControl">' +
 					//					'Drafts</td></tr>');
@@ -346,12 +395,6 @@ ns1blankspace.messaging.imap =
 						ns1blankspace.messaging.imap.actions.show({xhtmlElementID: 'ns1blankspaceMainDrafts', type: 5});
 					}
 					
-					else if (sID.split('-').pop() === 'Recycle')
-					{
-						ns1blankspace.show({selector: '#ns1blankspaceMainRecycle'});
-						ns1blankspace.messaging.imap.inbox.show({xhtmlElementID: 'ns1blankspaceMainRecycle', recycle: true});
-					}
-
 					else
 					{	
 						ns1blankspace.show({selector: '#ns1blankspaceMainInbox'});
@@ -361,7 +404,12 @@ ns1blankspace.messaging.imap =
 						if (ns1blankspace.messaging.imap.account != aID[1])
 						{
 							ns1blankspace.messaging.imap.data.fromEmail = $(this).attr('title');
-							ns1blankspace.messaging.imap.inbox.show({xhtmlElementID: this.id, source: 1, newOnly: false, repaginate: true});
+
+							ns1blankspace.messaging.imap.folders.init(
+							{
+								xhtmlElementID: this.id, source: 1, newOnly: false, repaginate: true,
+								onComplete: ns1blankspace.messaging.imap.inbox.show
+							});
 						}	
 					}	
 				});
@@ -393,7 +441,7 @@ ns1blankspace.messaging.imap =
 			var iStart;
 			var bRefresh = false;
 			var bRebuild = true;
-			var bRecycle = ns1blankspace.util.getParam(oParam, 'recycle', {'default': false}).value;
+			var bDeleted = ns1blankspace.util.getParam(oParam, 'deleted', {'default': false}).value;
 			
 			if (oParam != undefined)
 			{
@@ -415,14 +463,17 @@ ns1blankspace.messaging.imap =
 			
 			if (sXHTMLElementID != undefined)
 			{
+				ns1blankspace.messaging.imap.account = undefined;
+
 				var aXHTMLElementID = sXHTMLElementID.split('-');
 				
-				if (ns1blankspace.messaging.imap.account != aXHTMLElementID[1] || bRecycle) 
+				if (ns1blankspace.messaging.imap.account != aXHTMLElementID[1] || bDeleted) 
 				{
 					bRefresh = true;
 					oParam.refreshInbox = true;
 				}
-				ns1blankspace.messaging.imap.account = aXHTMLElementID[1];
+
+				if (!bDeleted) {ns1blankspace.messaging.imap.account = aXHTMLElementID[1]};
 			}	
 			
 			if (bRefresh)
@@ -435,11 +486,12 @@ ns1blankspace.messaging.imap =
 					disabled: true
 				});
 
-				ns1blankspace.util.app.option({titleSuffix: ''})
+				//ns1blankspace.util.app.option({title: })
 			}
 			
 			if (bRebuild)
 			{
+				ns1blankspace.util.app.option({title: ns1blankspace.messaging.imap.emailAccount.email});
 				ns1blankspace.messaging.emailNewCount = 0;
 				ns1blankspace.messaging.emailLastPagination = undefined;
 				ns1blankspace.messaging.emailLastPage = 1;
@@ -454,27 +506,20 @@ ns1blankspace.messaging.imap =
 				$('#ns1blankspaceMainInbox').html(aHTML.join(''));
 				
 				if (ns1blankspace.timer.messaging != 0) {clearInterval(ns1blankspace.timer.messaging)};
-		        if (ns1blankspace.messaging.autoCheck && !bRecycle) {ns1blankspace.timer.messaging = setInterval("ns1blankspace.messaging.imap.check()", ns1blankspace.option.messagingCheckForNew)};
+		        if (ns1blankspace.messaging.autoCheck && !bDeleted) {ns1blankspace.timer.messaging = setInterval("ns1blankspace.messaging.imap.check()", ns1blankspace.option.messagingCheckForNew)};
 			}	
 				
 			if (oResponse == undefined && bRefresh
-				&& (ns1blankspace.messaging.imap.account != undefined
-					|| (ns1blankspace.messaging.imap.account === undefined && bRecycle))
-				)
+				&& ns1blankspace.messaging.imap.account != undefined)
 			{	
 				var oSearch = new AdvancedSearch();
 				oSearch.method = 'MESSAGING_EMAIL_CACHE_SEARCH';
 				oSearch.addField('messageid,to,cc,from,fromname,subject,date,' +
 									'hasattachments,attachments,imapflags,detailscached');
-				if (bRecycle && ns1blankspace.messaging.imap.account == undefined)
-				{
-					oSearch.addFilter('account', 'IN_LIST', $.map(ns1blankspace.messaging.imap.emailAccounts, function(x) {return x.id}).join(','));
-				}
-				else
-				{
-					oSearch.addFilter('account', 'EQUAL_TO', ns1blankspace.messaging.imap.account);
-				}
-				//oSearch.addFilter('imapflags', ((bRecycle) ? 'TEXT_IS_LIKE' : 'TEXT_IS_NOT_LIKE'), 'DELETED');
+				oSearch.addFilter('account', 'EQUAL_TO', ns1blankspace.messaging.imap.account);
+
+				if (bDeleted) {oSearch.addFilter('folder', 'EQUAL_TO', ns1blankspace.messaging.imap.emailAccount.deletedFolder)}
+				
 				oSearch.addSummaryField('count(*) cachecount');
 				oSearch.sort('date', 'desc')
 				oSearch.rows = ns1blankspace.messaging.defaultRows;
@@ -489,7 +534,7 @@ ns1blankspace.messaging.imap =
 				if (bRebuild)
 				{
 					ns1blankspace.status.message('Checking for new emails...', {timeout: false});
-					if (!bRecycle)
+					if (!bDeleted)
 					{	ns1blankspace.messaging.imap.check();	}
 
 					var aHTML = [];
@@ -503,6 +548,8 @@ ns1blankspace.messaging.imap =
 										'</td>');
 					
 					aHTML.push('<td class="ns1blankspaceHeader" style="text-align:right;">' +
+									'<span id="ns1blankspaceMessagingIMAPInboxShowDeleted" class="ns1blankspaceAction" style="margin-right:4px;">' +
+										'Show Deleted</span>' +
 									'<span id="ns1blankspaceMessagingIMAPInboxRefresh" class="ns1blankspaceAction" style="margin-right:4px;">' +
 										'Refresh</span></td>');
 
@@ -519,6 +566,19 @@ ns1blankspace.messaging.imap =
 					.click(function(event)
 					{
 						ns1blankspace.messaging.imap.inbox.show({xhtmlElementID: '-' + ns1blankspace.messaging.imap.account, source: 1, newOnly: false, refreshInbox: true, rebuild: false});
+					});
+
+					$('#ns1blankspaceMessagingIMAPInboxShowDeleted').button(
+					{
+							label: 'Show Deleted'
+					})
+					.click(function(event)
+					{
+						ns1blankspace.messaging.imap.folders.folder.show(
+						{
+							xhtmlElementID: '-' + ns1blankspace.messaging.imap.account, source: 1, deleted: true, refreshInbox: true, rebuild: false,
+							onComplete: ns1blankspace.messaging.imap.inbox.show
+						});
 					});
 				}
 
@@ -744,12 +804,19 @@ ns1blankspace.messaging.imap =
 			{	
 				$('#' + sXHTMLElementID).parent().parent().css('opacity', '0.5');
 				$('#' + sXHTMLElementID).parent().parent().children().removeClass('ns1blankspaceRowSelect');
-													
+				
+
+				oData = 
+				{
+					id: sSearchContext,
+					destinationFolder: ns1blankspace.messaging.imap.emailAccount.deletedFolder
+				}
+
 				$.ajax(
 				{
 					type: 'POST',
-					url: '/rpc/messaging/?method=MESSAGING_EMAIL_CACHE_MANAGE',
-					data: 'remove=1&id=' + ns1blankspace.util.fs(sSearchContext),
+					url: '/rpc/messaging/?method=MESSAGING_EMAIL_CACHE_MOVE_FOLDER',
+					data: oData,
 					dataType: 'json',
 					success: function(data)
 					{
@@ -768,6 +835,7 @@ ns1blankspace.messaging.imap =
 						ns1blankspace.status.message('');
 					}
 				});
+
 			}	
 		},
 
@@ -827,6 +895,7 @@ ns1blankspace.messaging.imap =
 								'<div style="margin-right:4px;" id="ns1blankspaceMessageMarkAsRead" class="ns1blankspaceAction">Mark as Read</div>' +
 								'<div style="margin-right:4px;" id="ns1blankspaceMessageReplyAll" class="ns1blankspaceAction">Reply All</div>' +
 								'<div style="margin-right:4px;" id="ns1blankspaceMessageForward" class="ns1blankspaceAction">Forward</div>' +
+								'<div style="margin-right:4px;" data-debug="1" id="ns1blankspaceMessageDelete" class="ns1blankspaceAction">Delete</div>' +
 								'</td></tr>');
 				}
 
@@ -1339,7 +1408,12 @@ ns1blankspace.messaging.imap =
 						'Forward</td>' +
 						'</tr>');
 		}	
-									
+			
+		aHTML.push('<tr class="ns1blankspaceControl">' +
+						'<td id="ns1blankspaceControlDelete" class="ns1blankspaceControl ns1blankspaceMessageSelect" style="padding-top:18px;">' +
+						'Delete</td>' +
+						'</tr>');
+													
 		aHTML.push('</table>');					
 					
 		$('#ns1blankspaceMessagingMessageControlContainer').html(aHTML.join(''));
@@ -1401,6 +1475,11 @@ ns1blankspace.messaging.imap =
 			{	
 				ns1blankspace.messaging.imap.message.edit.show({forward: true});
 			}
+		});
+
+		$('#ns1blankspaceControlDelete').click(function(event)
+		{
+			ns1blankspace.messaging.imap.message.remove();
 		});
 		
 		$('#ns1blankspaceControlActions').click(function(event)
@@ -2518,7 +2597,82 @@ ns1blankspace.messaging.imap =
 								});
 							}	
 						}	
+					},
+
+		remove: 	function (oParam)
+		{	
+			var sXHTMLElementID = ns1blankspace.util.getParam(oParam, 'xhtmlElementID', {"default": 'ns1blankspaceControlDelete'}).value;
+			var bConfirmed = ns1blankspace.util.getParam(oParam, 'confirmed', {"default": false}).value;
+
+			if (!bConfirmed)
+			{
+				if ($(ns1blankspace.xhtml.container).attr('data-initiator') == sXHTMLElementID)
+				{
+					$(ns1blankspace.xhtml.container).slideUp(500);
+					$(ns1blankspace.xhtml.container).attr('data-initiator', '');
+				}
+				else
+				{	
+					$(ns1blankspace.xhtml.container).attr('data-initiator', sXHTMLElementID)
+
+					ns1blankspace.container.position({xhtmlElementID: sXHTMLElementID, leftOffset: 72, topOffset: 25});
+
+					var aHTML = [];
+									
+					aHTML.push('<div style="margin-right:4px;" id="ns1blankspaceMessageRemove" class="ns1blankspaceAction">Delete</div>');
+
+					$(ns1blankspace.xhtml.container).html(aHTML.join(''));
+
+					$('#ns1blankspaceMessageRemove').button(
+					{
+						label: 'Delete Now'
+					})
+					.click(function()
+					{
+						ns1blankspace.app.options.hide();
+						oParam = ns1blankspace.util.setParam(oParam, 'confirmed', true);
+						ns1blankspace.messaging.imap.message.remove(oParam);
+					})
+					.css('width', '75px')
+					.css('height', '45px');
+				}
+			}	
+			else
+			{	
+				ns1blankspace.status.working('Deleting...');
+
+				oData = 
+				{
+					id: ns1blankspace.objectContext,
+					destinationfolder: ns1blankspace.messaging.imap.emailAccount.deletedFolder
+				}
+
+				$.ajax(
+				{
+					type: 'POST',
+					url: '/rpc/messaging/?method=MESSAGING_EMAIL_CACHE_MOVE_FOLDER',
+					data: oData,
+					dataType: 'json',
+					success: function(data)
+					{
+						if (data.status == 'OK')
+						{	
+							ns1blankspace.show({selector: '#ns1blankspaceMainInbox'});
+							$('#ns1blankspaceMessagingMessageControlContainer').html('');
+
+							if (ns1blankspace.messaging.imap.account != undefined)
+							{
+								$('#ns1blankspaceMessaging-' + ns1blankspace.messaging.imap.account).addClass('ns1blankspaceHighlight');
+								ns1blankspace.messaging.imap.inbox.show({xhtmlElementID: '-' + ns1blankspace.messaging.imap.account, source: 1, newOnly: false, refreshInbox: true, repaginate: true})
+							}
+						}
+
+						ns1blankspace.status.message('Deleted');
 					}
+				});
+
+			}	
+		},			
 	},
 
 	save: 		
