@@ -1,9 +1,8 @@
 
 /*!
- * Copyright 2010, ibCom Pty Ltd ATF ibCom Unit Trust & contributors
- * Licensed under the MIT license.
- * http://1blankspace.com/license
- * 01 FEB 2010
+ * ibCom Pty Ltd ATF ibCom Unit Trust & contributors
+ * Licensed as Attribution-ShareAlike 4.0 International
+ * http://creativecommons.org/licenses/by-sa/4.0/
  */
 
 // Based on using the mydigitalstructure caching.
@@ -92,7 +91,9 @@ ns1blankspace.messaging.imap =
 		{
 			names:
 			{
-				deleted: ['Trash', 'Deleted']
+				deleted: ['Trash', 'Deleted'],
+				archived: ['All Mail', 'Archive'],
+				inbox: ['Inbox', 'INBOX']
 			}	
 		},
 
@@ -130,15 +131,29 @@ ns1blankspace.messaging.imap =
 							{
 								ns1blankspace.messaging.imap.emailAccount.deletedFolder = v.id;
 							}
+
+							if ($.grep(ns1blankspace.messaging.imap.folders.data.names.archived, function(a) {return a == v.title}).length != 0)
+							{
+								ns1blankspace.messaging.imap.emailAccount.archivedFolder = v.id;
+							}
+
+							if ($.grep(ns1blankspace.messaging.imap.folders.data.names.inbox, function(a) {return a == v.title}).length != 0)
+							{
+								ns1blankspace.messaging.imap.emailAccount.inboxFolder = v.id;
+							}
 						});
 
 						ns1blankspace.util.onComplete(oParam);
 					}
 					else
 					{
-						ns1blankspace.status.error('Can not connect to email service.');
+						//ns1blankspace.status.error('Can not connect to email service.');
 					}	
 				}
+			}
+			else
+			{
+				ns1blankspace.util.onComplete(oParam);
 			}	
 		},
 
@@ -156,7 +171,7 @@ ns1blankspace.messaging.imap =
 
 		folder:
 		{
-			show: function (oParam)
+			show: 	function (oParam)
 			{
 				if (ns1blankspace.messaging.imap.emailAccount.deletedFolder == undefined)
 				{
@@ -166,7 +181,57 @@ ns1blankspace.messaging.imap =
 				{
 					ns1blankspace.util.onComplete(oParam);
 				}
-			}
+			},
+
+			check:	function (oParam, oResponse)
+			{		
+				var bDeleted = ns1blankspace.util.getParam(oParam, 'deleted', {'default': false}).value;
+				var bArchived = ns1blankspace.util.getParam(oParam, 'archived', {'default': false}).value;
+				var iAccount = ns1blankspace.util.getParam(oParam, 'account', {'default': ns1blankspace.messaging.imap.account}).value;
+				var bFullRefresh = ns1blankspace.util.getParam(oParam, 'fullRefresh', {'default': ns1blankspace.messaging.fullRefresh}).value;
+				
+				if (oResponse == undefined)
+				{	
+					oParam = ns1blankspace.util.setParam(oParam, 'account', iAccount)
+
+					var oData =
+					{
+						account: iAccount
+					}
+
+					if (bFullRefresh) {oData.fullrefresh = 1}
+
+					if (bDeleted)
+					{
+						oData.folder = ns1blankspace.messaging.imap.emailAccount[(bArchived?'archivedFolder':'deletedFolder')];
+						ns1blankspace.status.message('Getting ' + (bArchived?'archived':'deleted') + ' emails...', {timeout: false});
+					}
+						
+					$.ajax(
+					{
+						type: 'POST',
+						url: '/rpc/messaging/?method=MESSAGING_EMAIL_CACHE_CHECK',
+						data: oData,
+						dataType: 'json',
+						success: function(data) {ns1blankspace.messaging.imap.folders.folder.check(oParam, data)}
+					});
+						
+				}
+				else
+				{
+
+					//ns1blankspace.status.clear();
+
+					if (oResponse.status == 'OK' && (iAccount == ns1blankspace.messaging.imap.account))
+					{	
+						ns1blankspace.util.onComplete(oParam)
+					}
+					else
+					{
+						//ns1blankspace.status.error('Can not connect to email service.');
+					}	
+				}
+			},
 		},
 
 		refresh: function (oParam)
@@ -188,6 +253,8 @@ ns1blankspace.messaging.imap =
 	check:		function (oParam, oResponse)
 	{		
 		var bDeleted = ns1blankspace.util.getParam(oParam, 'deleted', {'default': false}).value;
+		var bArchived = ns1blankspace.util.getParam(oParam, 'archived', {'default': false}).value;
+		var iAccount = ns1blankspace.util.getParam(oParam, 'account', {'default': ns1blankspace.messaging.imap.account}).value;
 
 		if (oResponse == undefined)
 		{	
@@ -195,13 +262,24 @@ ns1blankspace.messaging.imap =
 			{
 				ns1blankspace.messaging.checking = true;
 
+				oParam = ns1blankspace.util.setParam(oParam, 'account', iAccount)
+
 				var oData =
 				{
-					account: ns1blankspace.messaging.imap.account
+					account: iAccount
 				}
 
 				if (ns1blankspace.messaging.fullRefresh) {oData.fullrefresh = 1}
-				if (ns1blankspace.messaging.imap.folder != undefined) {oData.folder = ns1blankspace.messaging.imap.folder}
+
+				if (bDeleted)
+				{
+					oData.folder = ns1blankspace.messaging.imap.emailAccount[(bArchived?'archivedFolder':'deletedFolder')];
+					ns1blankspace.status.message('Getting ' + (bArchived?'archived':'deleted') + ' emails...', {timeout: false});
+				}
+				else
+				{
+					ns1blankspace.status.message('Checking for new emails...', {timeout: false});
+				}	
 
 				$.ajax(
 				{
@@ -217,7 +295,9 @@ ns1blankspace.messaging.imap =
 		{
 			ns1blankspace.messaging.checking = false;
 
-			if (oResponse.status == 'OK')
+			ns1blankspace.status.clear();
+
+			if (oResponse.status == 'OK' && (iAccount == ns1blankspace.messaging.imap.account))
 			{	
 				ns1blankspace.status.clear({duration: 2000});
 
@@ -249,9 +329,14 @@ ns1blankspace.messaging.imap =
 			}
 			else
 			{
-				ns1blankspace.status.error('Can not connect to email service.');
+				//ns1blankspace.status.error('Can not connect to email service.');
 			}	
 		}
+
+		$('#ns1blankspaceMessagingIMAPInboxCheck').button(
+		{
+			disabled: ns1blankspace.messaging.checking
+		});
 	},	
 
 
@@ -473,7 +558,7 @@ ns1blankspace.messaging.imap =
 					oParam.refreshInbox = true;
 				}
 
-				if (!bDeleted) {ns1blankspace.messaging.imap.account = aXHTMLElementID[1]};
+				ns1blankspace.messaging.imap.account = aXHTMLElementID[1];
 			}	
 			
 			if (bRefresh)
@@ -507,6 +592,24 @@ ns1blankspace.messaging.imap =
 				
 				if (ns1blankspace.timer.messaging != 0) {clearInterval(ns1blankspace.timer.messaging)};
 		        if (ns1blankspace.messaging.autoCheck && !bDeleted) {ns1blankspace.timer.messaging = setInterval("ns1blankspace.messaging.imap.check()", ns1blankspace.option.messagingCheckForNew)};
+			}	
+
+			if (bDeleted)
+			{
+				$('#ns1blankspaceMessagingIMAPInboxShowDeleted').unbind('click');
+
+				$('#ns1blankspaceMessagingIMAPInboxShowDeleted').button(
+				{
+						label: 'Show Inbox',
+						disabled: false
+				})
+				.click(function(event)
+				{
+					ns1blankspace.messaging.imap.inbox.show(
+					{
+						xhtmlElementID: '-' + ns1blankspace.messaging.imap.account, source: 1, newOnly: false, repaginate: true
+					});
+				});
 			}	
 				
 			if (oResponse == undefined && bRefresh
@@ -550,6 +653,8 @@ ns1blankspace.messaging.imap =
 					aHTML.push('<td class="ns1blankspaceHeader" style="text-align:right;">' +
 									'<span id="ns1blankspaceMessagingIMAPInboxShowDeleted" class="ns1blankspaceAction" style="margin-right:4px;">' +
 										'Show Deleted</span>' +
+									'<span id="ns1blankspaceMessagingIMAPInboxCheck" class="ns1blankspaceAction" style="margin-right:4px;">' +
+										'Check</span>' +	
 									'<span id="ns1blankspaceMessagingIMAPInboxRefresh" class="ns1blankspaceAction" style="margin-right:4px;">' +
 										'Refresh</span></td>');
 
@@ -574,11 +679,29 @@ ns1blankspace.messaging.imap =
 					})
 					.click(function(event)
 					{
-						ns1blankspace.messaging.imap.folders.folder.show(
+						$('#ns1blankspaceMessagingIMAPInboxShowDeleted').button(
 						{
-							xhtmlElementID: '-' + ns1blankspace.messaging.imap.account, source: 1, deleted: true, refreshInbox: true, rebuild: false,
+							disabled: true
+						});
+
+						$('#ns1blankspaceMessagingIMAPInboxContainer').html(ns1blankspace.xhtml.loading);
+						$('#ns1blankspaceMessagingIMAPInboxCount').html('<span class="padding-top:4px;">DELETED EMAILS</span>');
+
+						ns1blankspace.messaging.imap.folders.folder.check(
+						{
+							xhtmlElementID: '-' + ns1blankspace.messaging.imap.account, source: 1, deleted: true, refreshInbox: true, rebuild: false, fullRefresh: true,
 							onComplete: ns1blankspace.messaging.imap.inbox.show
 						});
+					});
+
+					$('#ns1blankspaceMessagingIMAPInboxCheck').button(
+					{
+							label: 'Check',
+							disabled: ns1blankspace.messaging.checking
+					})
+					.click(function(event)
+					{
+						ns1blankspace.messaging.imap.check();
 					});
 				}
 
@@ -586,9 +709,14 @@ ns1blankspace.messaging.imap =
 				
 				aHTML.push('<table id="ns1blankspaceMessagingIMAPInbox" class="ns1blankspaceMessagingIMAPInbox">');
 				
+				if (oResponse.data.rows.length == 0)
+				{
+					aHTML.push('<tr><td class="ns1blankspaceNothing">No emails.</td></tr>')
+				}	
+
 				$.each(oResponse.data.rows, function()
 				{
-					aHTML.push(ns1blankspace.messaging.imap.inbox.row(this));
+					aHTML.push(ns1blankspace.messaging.imap.inbox.row(this, oParam));
 				});
 				
 				aHTML.push('</table>');
@@ -609,70 +737,64 @@ ns1blankspace.messaging.imap =
 			}
 		},
 
-		row:		function (oRow)
+		row:	function (oRow, oParam)
 		{
-			if ((oRow.imapflags).indexOf('\\DELETED') == -1)
+			var aHTML = [];
+			var bDeleted = ns1blankspace.util.getParam(oParam, 'deleted', {'default': false}).value;
+			
+			var sID = oRow.id;
+			
+			var sDate = '';
+			var sTime = '';
+
+			var oDate = Date.parseExact(oRow.date, "d MMM yyyy H:mm:ss");
+
+			if (oDate != null)
+			{ 
+				var sDate = oDate.toString("d MMM yyyy");
+				var sTime = oDate.toString("h:mm tt");
+			}
+				
+			var sClass = '';
+			
+			if ((oRow.imapflags.toUpperCase()).indexOf('\\SEEN') == -1)
 			{
-				var aHTML = [];
-				
-				var sID = oRow.id;
-				
-				var sDate = '';
-				var sTime = '';
+				sClass = " ns1blankspaceNotSeen"
+			}
+			
+			aHTML.push('<tr id="ns1blankspaceMessagingInbox_id-' + sID + '" class="ns1blankspaceRow' + sClass + '" data-cached="' + oRow.detailscached + '">');
+			
+			aHTML.push('<td id="ns1blankspaceMessagingInbox_from-' + sID + 
+								'" style="cursor: pointer;" class="ns1blankspaceRow ns1blankspaceRowSelect' + sClass + '"' +
+								' title="' + oRow.from + '" style="padding-right:5px;" data-cached="' + oRow.detailscached + '">' +
+								oRow.fromname + '</td>');
+								
+			aHTML.push('<td id="ns1blankspaceMessagingInbox_subject-' + sID + 
+								'" style="cursor: pointer; padding-right:5px;" class="ns1blankspaceRow ns1blankspaceMainRowSelect' + sClass + '">' +
+								oRow.subject + '</td>');
+			
+			aHTML.push('<td id="ns1blankspaceMessagingInbox_date-' + sID + '" class="ns1blankspaceRow" style="width:85px; text-align:right;" >' +
+									sDate + '<br /><span class="ns1blankspaceSub">' + sTime + '</span></td>');
+			
+			aHTML.push('<td class="ns1blankspaceRow" style="width:70px;text-align:right;">');
 
-				var oDate = Date.parseExact(oRow.date, "d MMM yyyy H:mm:ss");
-
-				if (oDate != null)
-				{ 
-					var sDate = oDate.toString("d MMM yyyy");
-					var sTime = oDate.toString("h:mm tt");
-				}
-					
-				var sClass = '';
-				
-				if ((oRow.imapflags.toUpperCase()).indexOf('\\SEEN') == -1)
-				{
-					sClass = " ns1blankspaceNotSeen"
-				}
-				
-				aHTML.push('<tr id="ns1blankspaceMessagingInbox_id-' + sID + '" class="ns1blankspaceRow' + sClass + '" data-cached="' + oRow.detailscached + '">');
-				
-				aHTML.push('<td id="ns1blankspaceMessagingInbox_from-' + sID + 
-									'" style="cursor: pointer;" class="ns1blankspaceRow ns1blankspaceRowSelect' + sClass + '"' +
-									' title="' + oRow.from + '" style="padding-right:5px;" data-cached="' + oRow.detailscached + '">' +
-									oRow.fromname + '</td>');
-									
-				aHTML.push('<td id="ns1blankspaceMessagingInbox_subject-' + sID + 
-									'" style="cursor: pointer; padding-right:5px;" class="ns1blankspaceRow ns1blankspaceMainRowSelect' + sClass + '">' +
-									oRow.subject + '</td>');
-				
-				aHTML.push('<td id="ns1blankspaceMessagingInbox_date-' + sID + '" class="ns1blankspaceRow" style="width:85px; text-align:right;" >' +
-										sDate + '<br /><span class="ns1blankspaceSub">' + sTime + '</span></td>');
-				
-				aHTML.push('<td class="ns1blankspaceRow" style="width:70px;text-align:right;">');
-
-				aHTML.push('<span id="ns1blankspaceMessagingInbox_reply-' + sID + '" class="ns1blankspaceRowReply" data-cached="' + oRow.detailscached + '"></span>');
-				
-				if ((oRow.imapflags).indexOf('\\DELETED') == -1)
-				{
-					aHTML.push('<span id="ns1blankspaceMessagingInbox_remove-' + sID + '" class="ns1blankspaceRowRemove"></span>');
-				}
-				else
-				{
-					aHTML.push('<span style="width: 23px;" id="ns1blankspaceMessagingInbox_delete-' + sID +
-									'" class="ns1blankspaceRowRemoveDisabled"></span>');
-				}
-
-				aHTML.push('<span id="ns1blankspaceMessagingInbox_save-' + sID + '" class="ns1blankspaceRowSave" data-messageid="' + oRow.messageid + '"></span>');
-				
-				aHTML.push('</td></tr>');
-				
-				return aHTML.join('');
+			aHTML.push('<span id="ns1blankspaceMessagingInbox_reply-' + sID + '" class="ns1blankspaceRowReply" data-cached="' + oRow.detailscached + '"></span>');
+			
+			if (bDeleted)
+			{
+				aHTML.push('<span style="width: 23px;" id="ns1blankspaceMessagingInbox_delete-' + sID +
+								'" class="ns1blankspaceRowRecover"></span>');
 			}
 			else
 			{
-				return '';
+				aHTML.push('<span id="ns1blankspaceMessagingInbox_remove-' + sID + '" class="ns1blankspaceRowRemove"></span>');
 			}
+			
+			aHTML.push('<span id="ns1blankspaceMessagingInbox_save-' + sID + '" class="ns1blankspaceRowSave" data-messageid="' + oRow.messageid + '"></span>');
+			
+			aHTML.push('</td></tr>');
+			
+			return aHTML.join('');
 		},
 
 		bind:		function (oParam)
@@ -758,6 +880,22 @@ ns1blankspace.messaging.imap =
 			})
 			.css('width', '15px')
 			.css('height', '20px');
+
+			$('#' + sXHTMLContainerID + ' span.ns1blankspaceRowRecover').button(
+			{
+				text: false,
+				label: "Recover",
+				icons:
+				{
+					 primary: "ui-icon-refresh"
+				}
+			})
+			.click(function()
+			{
+				ns1blankspace.messaging.imap.inbox.recover(this.id);
+			})
+			.css('width', '15px')
+			.css('height', '20px');
 		},
 
 		remove: 	function (sXHTMLElementID, oParam)
@@ -766,6 +904,7 @@ ns1blankspace.messaging.imap =
 			var sElementID = aSearch[0];
 			var sSearchContext = aSearch[1];
 			var bConfirmed = ns1blankspace.util.getParam(oParam, 'confirmed', {"default": false}).value;
+			var bArchive = ns1blankspace.util.getParam(oParam, 'archive', {"default": false}).value;
 
 			if (!bConfirmed)
 			{
@@ -802,14 +941,15 @@ ns1blankspace.messaging.imap =
 			}	
 			else
 			{	
+				ns1blankspace.status.working('Removing...');
+
 				$('#' + sXHTMLElementID).parent().parent().css('opacity', '0.5');
 				$('#' + sXHTMLElementID).parent().parent().children().removeClass('ns1blankspaceRowSelect');
 				
-
 				oData = 
 				{
 					id: sSearchContext,
-					destinationFolder: ns1blankspace.messaging.imap.emailAccount.deletedFolder
+					destinationFolder: ns1blankspace.messaging.imap.emailAccount[(bArchive?'archivedFolder':'deletedFolder')]
 				}
 
 				$.ajax(
@@ -830,6 +970,80 @@ ns1blankspace.messaging.imap =
 							{
 								$('#' + sXHTMLElementID).parent().parent().fadeOut(500);
 							}
+						}
+
+						ns1blankspace.status.message('');
+					}
+				});
+
+			}	
+		},
+
+		recover: 	function (sXHTMLElementID, oParam)
+		{
+			var aSearch = sXHTMLElementID.split('-');
+			var sElementID = aSearch[0];
+			var sSearchContext = aSearch[1];
+			var bConfirmed = ns1blankspace.util.getParam(oParam, 'confirmed', {"default": false}).value;
+			var bArchive = ns1blankspace.util.getParam(oParam, 'archive', {"default": false}).value;
+
+			if (!bConfirmed)
+			{
+				if ($(ns1blankspace.xhtml.container).attr('data-initiator') == sXHTMLElementID)
+				{
+					$(ns1blankspace.xhtml.container).slideUp(500);
+					$(ns1blankspace.xhtml.container).attr('data-initiator', '');
+				}
+				else
+				{	
+					$(ns1blankspace.xhtml.container).attr('data-initiator', sXHTMLElementID)
+
+					ns1blankspace.container.position({xhtmlElementID: sXHTMLElementID, leftOffset: -196, topOffset: -20});
+
+					var aHTML = [];
+									
+					aHTML.push('<div style="margin-right:4px;" id="ns1blankspaceMessageRecover" class="ns1blankspaceAction">Recover</div>');
+
+					$(ns1blankspace.xhtml.container).html(aHTML.join(''));
+
+					$('#ns1blankspaceMessageRecover').button(
+					{
+						label: 'Recover to the Inbox'
+					})
+					.click(function()
+					{
+						ns1blankspace.app.options.hide();
+						oParam = ns1blankspace.util.setParam(oParam, 'confirmed', true);
+						ns1blankspace.messaging.imap.inbox.recover(sXHTMLElementID, oParam);
+					})
+					.css('width', '170px')
+					.css('height', '25px');
+				}
+			}	
+			else
+			{	
+				ns1blankspace.status.working('Recovering...');
+
+				$('#' + sXHTMLElementID).parent().parent().css('opacity', '0.5');
+				$('#' + sXHTMLElementID).parent().parent().children().removeClass('ns1blankspaceRowSelect');
+				
+				oData = 
+				{
+					id: sSearchContext,
+					destinationFolder: ns1blankspace.messaging.imap.emailAccount.inboxFolder
+				}
+
+				$.ajax(
+				{
+					type: 'POST',
+					url: '/rpc/messaging/?method=MESSAGING_EMAIL_CACHE_MOVE_FOLDER',
+					data: oData,
+					dataType: 'json',
+					success: function(data)
+					{
+						if (data.status == 'OK')
+						{	
+							$('#' + sXHTMLElementID).parent().parent().fadeOut(500);
 						}
 
 						ns1blankspace.status.message('');
@@ -895,7 +1109,6 @@ ns1blankspace.messaging.imap =
 								'<div style="margin-right:4px;" id="ns1blankspaceMessageMarkAsRead" class="ns1blankspaceAction">Mark as Read</div>' +
 								'<div style="margin-right:4px;" id="ns1blankspaceMessageReplyAll" class="ns1blankspaceAction">Reply All</div>' +
 								'<div style="margin-right:4px;" id="ns1blankspaceMessageForward" class="ns1blankspaceAction">Forward</div>' +
-								'<div style="margin-right:4px;" data-debug="1" id="ns1blankspaceMessageDelete" class="ns1blankspaceAction">Delete</div>' +
 								'</td></tr>');
 				}
 
@@ -1157,6 +1370,9 @@ ns1blankspace.messaging.imap =
 				var sXHTMLElementID = ns1blankspace.util.getParam(oParam, 'xhtmlElementID').value;
 				var bInbox = ns1blankspace.util.getParam(oParam, 'inbox', {"default": true}).value;
 
+				$('#' + sXHTMLElementID).parent().parent().css('opacity', '0.5');
+				$('#' + sXHTMLElementID).parent().parent().children().removeClass('ns1blankspaceRowSelect');
+
 				var oData =
 				{
 					account: ns1blankspace.messaging.imap.account,
@@ -1188,7 +1404,9 @@ ns1blankspace.messaging.imap =
 								$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions);
 
 								sXHTMLElementID = 'ns1blankspaceMessagingInbox_save-' + sCacheID;
-								ns1blankspace.messaging.imap.inbox.remove(sXHTMLElementID);
+								oParam = ns1blankspace.util.setParam(oParam, 'confirmed', true);
+								oParam = ns1blankspace.util.setParam(oParam, 'archive', true);
+								ns1blankspace.messaging.imap.inbox.remove(sXHTMLElementID, oParam);
 							}
 							else
 							{	
@@ -1227,7 +1445,9 @@ ns1blankspace.messaging.imap =
 								ns1blankspace.status.message('Saved as To Do')
 								$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions);
 								sXHTMLElementID = 'ns1blankspaceMessagingInbox_save-' + sCacheID;
-								ns1blankspace.messaging.imap.inbox.remove(sXHTMLElementID);
+								oParam = ns1blankspace.util.setParam(oParam, 'confirmed', true);
+								oParam = ns1blankspace.util.setParam(oParam, 'archive', true);
+								ns1blankspace.messaging.imap.inbox.remove(sXHTMLElementID, oParam);
 							}	
 						}
 					});
@@ -2524,7 +2744,8 @@ ns1blankspace.messaging.imap =
 					{
 						var fFunctionPostSend;
 						var sXHTMLElementID = 'ns1blankspaceMainEdit';
-						
+						var bJustSend = true;
+		
 						if (oParam.object == undefined) {oParam.object = ns1blankspace.object}
 						if (oParam.objectContext == undefined) {oParam.objectContext = ns1blankspace.objectContext}
 						
@@ -2547,54 +2768,61 @@ ns1blankspace.messaging.imap =
 						}
 						else
 						{
-							var oData =
+							if (!bJustSend)
 							{
-								subject: (oParam.subject == undefined ? '' : oParam.subject),
-								message: (oParam.message == undefined ?' ' : oParam.message),
-								priority: (oParam.priority == undefined ? '' : oParam.priority),
-								id: (oParam.contactPersonTo == undefined ? '' : oParam.contactPersonTo),
-								to: (oParam.to==undefined ? '' : oParam.to),
-								cc: (oParam.cc==undefined ? '' : oParam.cc),
-								bcc: (oParam.bcc==undefined ? '' : oParam.bcc),
-								fromemail: ns1blankspace.messaging.imap.data.fromEmail
-							}	
-							
-							//sData += (oParam.otherData == undefined ? '' : oParam.otherData)					
-							//sData += 'object=' + oParam.object;
-							//sData += '&objectcontext=' + oParam.objectContext;
-							//ns1blankspace.util.endpointURI('MESSAGING_EMAIL_SEND')
 
-							if (oData.to == '')
-							{
-								ns1blankspace.status.error('No one to send to');
-							}	
+							}
 							else
 							{	
-								ns1blankspace.messaging.imap.data.lastEmail = oData;
-								$('#ns1blankspaceViewControlAction').button({disabled: true});
-								ns1blankspace.status.working('Sending...');
-								ns1blankspace.show({selector: '#ns1blankspaceMainInbox'});
-
-								$.ajax(
+								var oData =
 								{
-									type: 'POST',
-									url: '/ondemand/messaging/?method=MESSAGING_EMAIL_SEND',
-									data: oData,
-									dataType: 'text',
-									success: function(data) 
+									subject: (oParam.subject == undefined ? '' : oParam.subject),
+									message: (oParam.message == undefined ?' ' : oParam.message),
+									priority: (oParam.priority == undefined ? '' : oParam.priority),
+									id: (oParam.contactPersonTo == undefined ? '' : oParam.contactPersonTo),
+									to: (oParam.to==undefined ? '' : oParam.to),
+									cc: (oParam.cc==undefined ? '' : oParam.cc),
+									bcc: (oParam.bcc==undefined ? '' : oParam.bcc),
+									fromemail: ns1blankspace.messaging.imap.data.fromEmail
+								}	
+								
+								//sData += (oParam.otherData == undefined ? '' : oParam.otherData)					
+								//sData += 'object=' + oParam.object;
+								//sData += '&objectcontext=' + oParam.objectContext;
+								//ns1blankspace.util.endpointURI('MESSAGING_EMAIL_SEND')
+
+								if (oData.to == '')
+								{
+									ns1blankspace.status.error('No one to send to');
+								}	
+								else
+								{	
+									ns1blankspace.messaging.imap.data.lastEmail = oData;
+									$('#ns1blankspaceViewControlAction').button({disabled: true});
+									ns1blankspace.status.working('Sending...');
+									ns1blankspace.show({selector: '#ns1blankspaceMainInbox'});
+
+									$.ajax(
 									{
-										ns1blankspace.status.message('Email has been sent');
-										$('#ns1blankspaceMessagingMessageControlContainer').html('');
-										ns1blankspace.messaging.imap.data.lastEmail = undefined;
-										$('#ns1blankspaceMainEdit').html('');
-										$('#ns1blankspaceMainEdit').attr('data-objectcontext', undefined); 
-										
-										if (fFunctionPostSend != undefined)
+										type: 'POST',
+										url: '/ondemand/messaging/?method=MESSAGING_EMAIL_SEND',
+										data: oData,
+										dataType: 'text',
+										success: function(data) 
 										{
-											fFunctionPostSend()
+											ns1blankspace.status.message('Email has been sent');
+											$('#ns1blankspaceMessagingMessageControlContainer').html('');
+											ns1blankspace.messaging.imap.data.lastEmail = undefined;
+											$('#ns1blankspaceMainEdit').html('');
+											$('#ns1blankspaceMainEdit').attr('data-objectcontext', undefined); 
+											
+											if (fFunctionPostSend != undefined)
+											{
+												fFunctionPostSend()
+											}
 										}
-									}
-								});
+									});
+								}
 							}	
 						}	
 					},
