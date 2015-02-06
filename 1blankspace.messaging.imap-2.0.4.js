@@ -39,7 +39,8 @@ ns1blankspace.messaging.imap =
 				id: 32,
 				caption: 'Person',
 				method: 'CONTACT_PERSON_SEARCH',
-				methodFilter: 'firstname,surname'
+				columns: 'firstname,surname',
+				methodFilter: 'firstname-TEXT_IS_LIKE|surname-TEXT_IS_LIKE'
 			},
 			{
 				id: 12,
