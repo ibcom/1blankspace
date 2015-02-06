@@ -5844,19 +5844,20 @@ ns1blankspace.remove =
 										oXHTMLElement = oXHTMLElement.closest('tr');
 									}
 									
-									oXHTMLElement.fadeOut(500);
-
-									if (oXHTMLElement.siblings().length == 1)
-									{	
-										if (fIfNone)
-										{
-											fIfNone()
+									oXHTMLElement.fadeOut(500, function ()
+									{
+										if (oXHTMLElement.siblings(':visible').length == 1)
+										{	
+											if (fIfNone)
+											{
+												fIfNone()
+											}
+											else
+											{
+												oXHTMLElement.closest('div').html('<div class="ns1blankspaceNothing" style="margin-top:5px;">' + sIfNoneMessage + '</div>');
+											}
 										}
-										else
-										{
-											oXHTMLElement.closest('div').html('<div class="ns1blankspaceNothing" style="margin-top:5px;">' + sIfNoneMessage + '</div>');
-										}
-									}	
+									});
 								}
 								else
 								{

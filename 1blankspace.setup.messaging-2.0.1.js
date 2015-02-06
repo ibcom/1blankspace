@@ -277,10 +277,6 @@ ns1blankspace.setup.messaging =
 						aHTML.push('<tr><td id="ns1blankspaceControlDetails" class="ns1blankspaceControl">' +
 										'Details</td></tr>');
 
-						aHTML.push('</table>');	
-						
-						aHTML.push('<table class="ns1blankspaceControl">');
-
 						aHTML.push('<tr><td id="ns1blankspaceControlFooter" class="ns1blankspaceControl">' +
 										'Footer</td></tr>');
 
@@ -301,6 +297,7 @@ ns1blankspace.setup.messaging =
 					aHTML.push('<div id="ns1blankspaceMainSummary" class="ns1blankspaceControlMain"></div>');
 					aHTML.push('<div id="ns1blankspaceMainDetails" class="ns1blankspaceControlMain"></div>');
 					aHTML.push('<div id="ns1blankspaceMainFooter" class="ns1blankspaceControlMain"></div>');
+					aHTML.push('<div id="ns1blankspaceMainSharing" class="ns1blankspaceControlMain"></div>');
 							
 					$('#ns1blankspaceMain').html(aHTML.join(''));
 
@@ -320,6 +317,12 @@ ns1blankspace.setup.messaging =
 					{
 						ns1blankspace.show({selector: '#ns1blankspaceMainFooter'});
 						ns1blankspace.setup.messaging.footer();
+					});
+
+					$('#ns1blankspaceControlSharing').click(function(event)
+					{
+						ns1blankspace.show({selector: '#ns1blankspaceMainSharing', refresh: true});
+						ns1blankspace.setup.messaging.sharing.show();
 					});
 				},
 
@@ -669,6 +672,222 @@ ns1blankspace.setup.messaging =
 										}
 									});		
 								}
-				}
+				},
+
+	sharing: 	{
+					show:		function (oParam, oResponse)
+								{
+									var iObjectContext = ns1blankspace.objectContext;
+										
+									if (oResponse == undefined)
+									{	
+										var oSearch = new AdvancedSearch();
+										oSearch.method = 'SETUP_MESSAGING_ACCOUNT_SHARE_SEARCH';
+										oSearch.addField('user,usertext');
+										oSearch.addFilter('account', 'EQUAL_TO', ns1blankspace.objectContext);
+										oSearch.getResults(function(data) {ns1blankspace.setup.messaging.sharing.show(oParam, data)});
+									}
+									else
+									{
+										var aHTML = [];
+											
+										aHTML.push('<table class="ns1blankspaceContainer">' +
+														'<tr class="ns1blankspaceContainer">' +
+														'<td id="ns1blankspaceSharingColumn1" class="ns1blankspaceColumn1Flexible"></td>' +
+														'<td id="ns1blankspaceSharingColumn2" class="ns1blankspaceColumn2" style="width:250px;"></td>' +
+														'</tr>' + 
+														'</table>');
+
+										$('#ns1blankspaceMainSharing').html(aHTML.join(''));
+										
+										var aHTML = [];
+											
+										aHTML.push('<table class="ns1blankspaceColumn2">');
+										
+										aHTML.push('<tr><td class="ns1blankspaceAction">' +
+													'<span id="ns1blankspaceMessagingSharingAdd">Add</span>' +
+													'</td></tr>');
+													
+										aHTML.push('<tr><td style="padding-top:20px;" class="ns1blankspaceSubNote">' +
+													'Share this messaging account with other users within your space.' +
+													'</td></tr>');			
+									
+										aHTML.push('</table>');					
+										
+										$('#ns1blankspaceSharingColumn2').html(aHTML.join(''));
+									
+										$('#ns1blankspaceMessagingSharingAdd').button(
+										{
+											label: "Add"
+										})
+										.click(function()
+										{
+											 ns1blankspace.setup.messaging.sharing.add.show(oParam);
+										});
+											
+										var aHTML = [];
+
+										if (oResponse.data.rows.length == 0)
+										{
+											aHTML.push('<table><tr><td class="ns1blankspaceNothing">This account is not shared.</td></tr></table>');
+	
+											$('#ns1blankspaceSharingColumn1').html(aHTML.join(''));
+										}
+										else
+										{
+											aHTML.push('<div><table id="ns1blankspaceSetupMessagingSharing">');
+											aHTML.push('<tr class="ns1blankspaceCaption">');
+											aHTML.push('<td class="ns1blankspaceHeaderCaption">User</td>');
+											aHTML.push('<td class="ns1blankspaceHeaderCaption">&nbsp;</td>');
+											aHTML.push('</tr>');
+		
+											$.each(oResponse.data.rows, function(i, v)
+											{
+												aHTML.push('<tr class="ns1blankspaceRow">');
+																
+												aHTML.push('<td id="ns1blankspaceSetupMessagingSharing_user-' + v.id + '" class="ns1blankspaceRow">' +
+																		v.usertext + '</td>');
+																		
+												aHTML.push('<td style="width:30px; text-align:right;" class="ns1blankspaceRow">');
+													
+												aHTML.push('<span id="ns1blankspaceSetupMessagingSharing_remove-' + v.id + '" class="ns1blankspaceRowRemove"></span>');
+													
+												aHTML.push('</td>');
+																
+												aHTML.push('</tr>');
+											});
+											
+											aHTML.push('</table></div>');
+
+											$('#ns1blankspaceSharingColumn1').html(aHTML.join(''));
+												
+											$('#ns1blankspaceSetupMessagingSharing span.ns1blankspaceRowRemove').button(
+											{
+												text: false,
+												icons:
+												{
+													primary: "ui-icon-close"
+												}
+											})
+											.click(function()
+											{
+												ns1blankspace.remove(
+												{
+													xhtmlElementID: this.id,
+													method: 'SETUP_MESSAGING_ACCOUNT_SHARE_MANAGE',
+													parentLevel: 2,
+													ifNoneMessage: 'This account is not shared.'
+												});
+											})
+											.css('width', '15px')
+											.css('height', '17px');
+										}
+									}
+								},
+
+					add:		{
+									show:		function (oParam, oResponse)
+												{									
+													if (oResponse == undefined)
+													{
+														var sXHTMLElementID;
+
+														if (oParam != undefined)
+														{
+															if (oParam.xhtmlElementID != undefined) {sXHTMLElementID = oParam.xhtmlElementID}
+														}
+														
+														if (sXHTMLElementID != undefined)
+														{
+															var aXHTMLElementID = sXHTMLElementID.split('-');
+															var sID = aXHTMLElementID[1];
+														}	
+														
+														var aHTML = [];
+
+														aHTML.push('<table class="ns1blankspaceColumn2">');
+																
+														aHTML.push('<tr><td class="ns1blankspaceCaption">Search for user</td></tr>');
+													
+														aHTML.push('<tr><td class="ns1blankspaceText">' +
+																	'<input id="ns1blankspaceSetupMessagingSharingUser" style="padding:3px;">' +
+																	'</td></tr>');
+
+														aHTML.push('<tr><td id="ns1blankspaceSetupMessagingSharingUserResults" style="padding-top:8px;">' +
+																	'</td></tr>');
+																		
+														aHTML.push('</table>');	
+					
+														$('#ns1blankspaceSharingColumn2').html(aHTML.join(''));
+
+														$('#ns1blankspaceSetupMessagingSharingUser').focus();
+
+														$('#ns1blankspaceSetupMessagingSharingUser').keyup(function ()
+														{
+															if (ns1blankspace.timer.delayCurrent != 0) {clearTimeout(ns1blankspace.timer.delayCurrent)};
+																ns1blankspace.timer.delayCurrent = setTimeout('ns1blankspace.setup.messaging.sharing.add.search()', ns1blankspace.option.typingWait);
+														});
+													}
+												},
+
+									search:		function (oParam, oResponse)
+												{
+													if (oResponse === undefined)
+													{	
+														$('#ns1blankspaceSetupMessagingSharingUserResults').html(ns1blankspace.xhtml.loadingSmall);
+
+														var sMethod = $('#ns1blankspaceMessageSaveObjectValue :selected').attr('data-method');
+														var sSearchText = $('#ns1blankspaceSetupMessagingSharingUser').val();
+														
+														var oSearch = new AdvancedSearch();
+														oSearch.method = 'SETUP_USER_SEARCH';
+														oSearch.addField('username');
+														oSearch.addFilter('username', 'TEXT_IS_LIKE', sSearchText);
+														oSearch.addOperator('and');
+														oSearch.addFilter('id', 'NOT_EQUAL_TO', ns1blankspace.objectContextData.user);
+														oSearch.rows = 20;
+														oSearch.rf = 'json';
+														oSearch.getResults(function(data) {ns1blankspace.setup.messaging.sharing.add.search(oParam, data)});
+													}
+													else
+													{
+														var aHTML = [];
+									
+														aHTML.push('<table style="font-size:0.875em;">');
+														
+														$.each(oResponse.data.rows, function(i, v) 
+														{
+															aHTML.push('<tr><td id="ns1blankspaceItem_title-' + v.id +'" class="ns1blankspaceRow ns1blankspaceRowSelect">' +
+																			v.username + '</td></tr>');	
+														});
+														
+														aHTML.push('</table>');
+
+														$('#ns1blankspaceSetupMessagingSharingUserResults').html(aHTML.join(''));
+
+														$('#ns1blankspaceSetupMessagingSharingUserResults td.ns1blankspaceRowSelect')
+														.click(function()
+														{
+															var oData = {account: ns1blankspace.objectContext, user: (this.id).split('-')[1]}
+
+															$.ajax(
+															{
+																type: 'POST',
+																url: ns1blankspace.util.endpointURI('SETUP_MESSAGING_ACCOUNT_SHARE_MANAGE'),
+																data: oData,
+																dataType: 'json',
+																success: function(data)
+																{
+																	if (data.status == 'OK')
+																	{
+																		ns1blankspace.setup.messaging.sharing.show();
+																	}	
+																}
+															});
+														});
+													}		
+												}
+								}
+				}											
 }								
 
