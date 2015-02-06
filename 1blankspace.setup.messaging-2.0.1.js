@@ -393,7 +393,7 @@ ns1blankspace.setup.messaging =
 						
 						aHTML.push('<table class="ns1blankspaceColumn2">');
 						
-						aHTML.push('<tr><td id="ns1blankspaceVerificationContainer" class="ns1blankspaceSummaryCaption">' +
+						aHTML.push('<tr><td id="ns1blankspaceVerificationContainer" class="ns1blankspaceSummaryCaption">');
 
 						if (ns1blankspace.objectContextData.verification == '2') {aHTML.push('This email account has been suspended.</td></tr>')}
 						
