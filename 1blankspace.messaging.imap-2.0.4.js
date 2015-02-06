@@ -2670,9 +2670,13 @@ ns1blankspace.messaging.imap =
 																						object: 17,
 																						objectContext: oResponse.id,
 																						label: '',
-																						showUpload: true
+																						showUpload: true,
+																						maxFiles: 5
 																					}) +
 																				'</td></tr>');
+
+																aHTML.push('<tr><td class="ns1blankspaceSubNote">If need to send more files; upload these files and then attach more.</td></tr>');
+
 																aHTML.push('</table>');			
 
 																$(ns1blankspace.xhtml.container).html(aHTML.join(''));	
