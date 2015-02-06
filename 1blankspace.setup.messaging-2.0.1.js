@@ -8,6 +8,10 @@
  
 ns1blankspace.setup.messaging = 
 {
+	data: 		{
+					verificationText: {1: 'Not Verified', 2: 'Suspended', 3: 'Verified'}
+				},
+
 	init: 		function (oParam)
 				{
 					var bShowHome = true
@@ -58,7 +62,7 @@ ns1blankspace.setup.messaging =
 
 						var oSearch = new AdvancedSearch();
 						oSearch.method = 'SETUP_MESSAGING_ACCOUNT_SEARCH';
-						oSearch.addField('email,usertext');
+						oSearch.addField('email,usertext,verification');
 						oSearch.addFilter('type', 'EQUAL_TO', 5);
 						oSearch.rows = 50;
 						oSearch.sort('email', 'asc');
@@ -89,8 +93,13 @@ ns1blankspace.setup.messaging =
 														'</td>');
 
 								aHTML.push('<td id="ns1blankspaceMostLikely_usertext-' + this.id + 
-														'" class="ns1blankspaceSubNote">' +
+														'" class="ns1blankspaceSubNote" style="width:150px;">' +
 														this.usertext +
+														'</td>');
+
+								aHTML.push('<td id="ns1blankspaceMostLikely_usertext-' + this.id + 
+														'" class="ns1blankspaceSubNote">' +
+														ns1blankspace.setup.messaging.data.verificationText[this.verification] +
 														'</td>');
 								
 								aHTML.push('</tr>');
@@ -274,6 +283,13 @@ ns1blankspace.setup.messaging =
 
 						aHTML.push('<tr><td id="ns1blankspaceControlFooter" class="ns1blankspaceControl">' +
 										'Footer</td></tr>');
+
+						aHTML.push('</table>');	
+						
+						aHTML.push('<table class="ns1blankspaceControl">');
+
+						aHTML.push('<tr><td id="ns1blankspaceControlSharing" class="ns1blankspaceControl">' +
+										'Sharing</td></tr>');
 					}	
 					
 					aHTML.push('</table>');					
@@ -365,7 +381,7 @@ ns1blankspace.setup.messaging =
 						aHTML.push('<table class="ns1blankspaceMain">' +
 									'<tr class="ns1blankspaceRow">' +
 									'<td id="ns1blankspaceSummaryColumn1" class="ns1blankspaceColumn1Large"></td>' +
-									'<td id="ns1blankspaceSummaryColumn2" class="ns1blankspaceColumn2Action" style="width:100px;"></td>' +
+									'<td id="ns1blankspaceSummaryColumn2" class="ns1blankspaceColumn2Action" style="width:230px;"></td>' +
 									'</tr>' +
 									'</table>');				
 						
@@ -395,15 +411,21 @@ ns1blankspace.setup.messaging =
 						
 						aHTML.push('<tr><td id="ns1blankspaceVerificationContainer" class="ns1blankspaceSummaryCaption">');
 
-						if (ns1blankspace.objectContextData.verification == '2') {aHTML.push('This email account has been suspended.</td></tr>')}
-						
-						if (ns1blankspace.objectContextData.verification == '3') {aHTML.push('Verified!<br /><br />You can now send emails.</td></tr>')}
-						
-						if (ns1blankspace.objectContextData.verification == '1')
+						if (ns1blankspace.objectContextData.verification == '2')
 						{
-							aHTML.push('This account needs to be verified.')
+							aHTML.push('SUSPENDED</td></tr><tr><td class="ns1blankspaceSubNote" style="padding-top:8px;">This messaging account has been suspended.</td></tr>')
+						}
+						
+						if (ns1blankspace.objectContextData.verification == '3')
+						{
+							aHTML.push('VERIFIED</td></tr><tr><td class="ns1blankspaceSubNote" style="padding-top:8px;">This messaging account can<br />now send emails.</td></tr>')
+						}
+						
+						if (ns1blankspace.objectContextData.verification == '1' || ns1blankspace.objectContextData.verification == undefined)
+						{
+							aHTML.push('NOT VERIFIED')
 							aHTML.push('</td></tr>');
-							aHTML.push('<tr><td class="ns1blankspaceSummary">Send request for verification to <a href="mailto:verify@ibcom.biz">verify@ibcom.biz</a></td></tr>');
+							aHTML.push('<tr><td class="ns1blankspaceSubNote" style="padding-top:8px;">Send a request for verification to <a href="mailto:verify@ibcom.biz">verify@ibcom.biz</a>.</td></tr>');
 						}		
 						
 						aHTML.push('</table>');								
