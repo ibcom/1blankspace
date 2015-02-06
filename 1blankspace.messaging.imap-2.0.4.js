@@ -18,7 +18,44 @@ ns1blankspace.messaging.imap =
 {
 	data: 		
 	{
-		fromEmail: ''
+		fromEmail: '',
+		objects:
+		[
+			{
+				id: 1,
+				caption: 'Project',
+				method: 'PROJECT_SEARCH',
+				columns: 'reference,description',
+				methodFilter: 'reference-TEXT_IS_LIKE|description-TEXT_IS_LIKE'
+			},
+			{
+				id: 5,
+				caption: 'Invoice',
+				method: 'FINANCIAL_INVOICE_SEARCH',
+				columns: 'reference,sentdate,contactbusinesstext',
+				methodFilter: 'reference-TEXT_IS_LIKE|contactbusinesstext-TEXT_IS_LIKE'
+			},
+			{
+				id: 2,
+				caption: 'Expense',
+				method: 'FINANCIAL_EXPENSE_SEARCH',
+				columns: 'reference,sentdate,contactbusinesstext',
+				methodFilter: 'reference-TEXT_IS_LIKE|contactbusinesstext-TEXT_IS_LIKE'
+			},
+			{
+				id: 32,
+				caption: 'Person',
+				method: 'CONTACT_PERSON_SEARCH',
+				methodFilter: 'firstname,surname'
+			},
+			{
+				id: 12,
+				caption: 'Business',
+				method: 'CONTACT_BUSINESS_SEARCH',
+				columns: 'tradename',
+				methodFilter: 'tradename-TEXT_IS_LIKE|legalname-TEXT_IS_LIKE'
+			}
+		]
 	},
 
 	init: 		function (oParam)
@@ -82,6 +119,8 @@ ns1blankspace.messaging.imap =
 		{
 			ns1blankspace.messaging.imap["new"]();
 		});
+
+		ns1blankspace.app.context({inContext: false, action: true, actionOptions: true});
 	},
 
 
@@ -486,6 +525,8 @@ ns1blankspace.messaging.imap =
 						$('.ns1blankspaceInboxMarker').removeClass('ns1blankspaceInboxMarker ui-icon ui-icon-mail-closed');
 						$(this).children('div').addClass('ns1blankspaceInboxMarker ui-icon ui-icon-mail-closed');
 
+						ns1blankspace.app.context({inContext: false, action: true, actionOptions: true});
+
 						if (ns1blankspace.messaging.imap.account != aID[1])
 						{
 							ns1blankspace.messaging.imap.data.fromEmail = $(this).attr('title');
@@ -501,7 +542,7 @@ ns1blankspace.messaging.imap =
 
 				if (iAction != 1 && iAction != 2)
 				{	
-					ns1blankspace.show({selector: '#ns1blankspaceMainInbox'});
+					ns1blankspace.show({selector: '#ns1blankspaceMainInbox', context: {inContext: false, action: true, actionOptions: true}});
 
 					if (ns1blankspace.messaging.imap.account != undefined && bAutoShow)
 					{
@@ -545,6 +586,8 @@ ns1blankspace.messaging.imap =
 			if (iStart == undefined && bNew == undefined) {bNew = true}
 			
 			$('#ns1blankspaceMessagingEmailViewport').html(''); //???
+
+			ns1blankspace.app.context({inContext: false, action: true, actionOptions: true});
 			
 			if (sXHTMLElementID != undefined)
 			{
@@ -1182,26 +1225,18 @@ ns1blankspace.messaging.imap =
 				aHTML.push('<tr class="ns1blankspace">' +
 								'<td class="ns1blankspaceRadio">' +
 								'<input type="checkbox" id="ns1blankspaceMessageSaveObject" />' +
-								'<select id="ns1blankspaceMessageSaveObjectValue" style="width:138px;">' +
-								'<option value="32" data-method="CONTACT_PERSON_SEARCH"' +
-									' data-columns="firstname,surname">' +
-									'Person</option>' +
-								'<option value="12" data-method="CONTACT_BUSINESS_SEARCH"' +
-									' data-columns="tradename,legalname" data-methodFilter="tradename-TEXT_IS_LIKE|legalname-TEXT_IS_LIKE">' +
-									'Business</option>' +
-								'<option value="5" data-method="AUDIT_SEARCH"' +
-									' data-columns="reference,actualdate,contactbusinesstext" data-methodFilter="reference-TEXT_IS_LIKE|contactbusinesstext-TEXT_IS_LIKE">' +
-									'Invoice</option>' +
-								'<option value="1" data-method="PROJECT_SEARCH"' +
-									' data-columns="reference,description" data-methodFilter="reference-TEXT_IS_LIKE|description-TEXT_IS_LIKE">' +
-									'Project</option>' +
-								'<option value="5" data-method="FINANCIAL_INVOICE_SEARCH"' +
-									' data-columns="reference,sentdate,contactbusinesstext" data-methodFilter="reference-TEXT_IS_LIKE|contactbusinesstext-TEXT_IS_LIKE">' +
-									'Invoice</option>' +
-								'<option value="2" data-method="FINANCIAL_EXPENSE_SEARCH"' +
-									' data-columns="reference,sentdate,contactbusinesstext" data-methodFilter="reference-TEXT_IS_LIKE|contactbusinesstext-TEXT_IS_LIKE">' +
-									'>Expense</option>' +
-								'</select>' +
+								'<select id="ns1blankspaceMessageSaveObjectValue" style="width:138px;">');
+
+
+				$.each(ns1blankspace.messaging.imap.data.objects, function(i, v)
+				{
+					aHTML.push('<option value="' + v.id + '" data-method="' + v.method + '"' +
+								(v.columns?' data-columns="' + v.columns + '"':'') +
+								(v.methodFilter?' data-methodfilter="' + v.methodFilter + '"':'') + '>' +
+								v.caption + '</option>');
+				});
+							
+				aHTML.push('</select>' +
 								'</td></tr>');
 
 				aHTML.push('<tr><td style="padding-left:20px;">' +
@@ -2743,11 +2778,11 @@ ns1blankspace.messaging.imap =
 		send:		function (oParam)
 					{
 						var fFunctionPostSend;
-						var sXHTMLElementID = 'ns1blankspaceMainEdit';
-						var bJustSend = true;
+						var sXHTMLElementID = 'ns1blankspaceViewControlAction';
+						var bSendNow = ns1blankspace.util.getParam(oParam, 'sendNow', {"default": false}).value;;
 		
-						if (oParam.object == undefined) {oParam.object = ns1blankspace.object}
-						if (oParam.objectContext == undefined) {oParam.objectContext = ns1blankspace.objectContext}
+						//if (oParam.object == undefined) {oParam.object = ns1blankspace.object}
+						//if (oParam.objectContext == undefined) {oParam.objectContext = ns1blankspace.objectContext}
 						
 						if (oParam != undefined)
 						{
@@ -2768,28 +2803,120 @@ ns1blankspace.messaging.imap =
 						}
 						else
 						{
-							if (!bJustSend)
+							if (!bSendNow)
 							{
+								if ($(ns1blankspace.xhtml.container).attr('data-initiator') == sXHTMLElementID)
+								{
+									$(ns1blankspace.xhtml.container).slideUp(500);
+									$(ns1blankspace.xhtml.container).attr('data-initiator', '');
+								}
+								else
+								{	
+									if (oParam.to == '' && oParam.contactPersonTo == undefined)
+									{
+										ns1blankspace.status.error('No one to send it to')
+									}	
+									else
+									{
+										$(ns1blankspace.xhtml.container).attr('data-initiator', sXHTMLElementID)
+										ns1blankspace.container.position({xhtmlElementID: 'ns1blankspaceViewControlAction', leftOffset: -2, topOffset: 6});
+			
+										var aHTML = [];
 
+										aHTML.push('<table id="ns1blankspaceMessageSaveContainer" class="ns1blankspaceDropDown" style="width:325px; margin-top:0px"><tr><td>');
+
+										aHTML.push('<div style="margin-bottom:6px;"><table>');
+
+										if (oParam.subject == undefined)
+										{
+											aHTML.push('<tr><td class="ns1blankspaceSubNote" style="padding-bottom:8px;">' +
+														'As there is no subject on this email, it might get caught by a SPAM filter and never get received.</td></tr>');
+										}	
+
+										aHTML.push('<tr><td class="ns1blankspaceRadio">' +
+														'<input type="checkbox" checked="checked" id="ns1blankspaceMessageSendSave" /> Save this email</td></tr>');
+
+										aHTML.push('</table></div>');
+
+										aHTML.push('<div id="ns1blankspaceMessageSendSaveObject"><table>');
+
+										aHTML.push('<tr class="ns1blankspace">' +
+													'<td class="ns1blankspaceRadio" style="padding-left:2px;">' +
+													'<select id="ns1blankspaceMessageSendSaveObjectValue" style="width:100%;">');
+
+										$.each(ns1blankspace.messaging.imap.data.objects, function(i, v)
+										{
+											aHTML.push('<option value="' + v.id + '" data-method="' + v.method + '"' +
+														(v.columns?' data-columns="' + v.columns + '"':'') +
+														(v.methodFilter?' data-methodfilter="' + v.methodFilter + '"':'') + '>' +
+														v.caption + '</option>');
+										});
+													
+										aHTML.push('</select>' +
+													'</td></tr>');
+
+										aHTML.push('<tr><td style="padding-left:2px;">' +
+													'<input id="ns1blankspaceMessageSendSaveObjectContext" style="padding:3px; width:96%">' +
+													'</td></tr>');
+
+										aHTML.push('<tr><td style="padding-left:2px; padding-top:4px;" id="ns1blankspaceMessageSendSaveObjectContextSearch"></td></tr>');
+
+										aHTML.push('</table></div>');
+
+										aHTML.push('<div style="margin-top:16px; margin-bottom:6px;" id="ns1blankspaceMessageEditSendNow" class="ns1blankspaceAction">Send Now</div>');
+
+										aHTML.push('</td></<tr></table>');
+
+										$(ns1blankspace.xhtml.container).html(aHTML.join(''));
+
+										$('#ns1blankspaceMessageSendSave').click(function()
+										{
+											$('#ns1blankspaceMessageSendSaveObject').toggle();
+										});	
+
+										$('#ns1blankspaceMessageSendSaveObjectContext').keyup(function ()
+										{
+											if (ns1blankspace.timer.delayCurrent != 0) {clearTimeout(ns1blankspace.timer.delayCurrent)};
+												ns1blankspace.timer.delayCurrent = setTimeout('ns1blankspace.messaging.imap.message.object()', ns1blankspace.option.typingWait);
+										});
+
+										$('#ns1blankspaceMessageEditSendNow').button(
+										{
+											label: 'Send Now'
+										})
+										.click(function()
+										{
+											oParam = ns1blankspace.util.setParam(oParam, 'sendNow', true);
+											oParam = ns1blankspace.util.setParam(oParam, 'save', $('#ns1blankspaceMessageSendSave').prop('checked'));
+
+											if ($('input[name="radioMessageSendObjectContext"]:checked').length != 0)
+											{
+												oParam = ns1blankspace.util.setParam(oParam, 'object', $('#ns1blankspaceMessageSendSaveObjectValue').val());
+												oParam = ns1blankspace.util.setParam(oParam, 'objectContext', $('input[name="radioMessageSendObjectContext"]:checked').val());
+											}
+
+											ns1blankspace.messaging.imap.message.send(oParam);
+										});
+									}	
+								}	
 							}
 							else
 							{	
 								var oData =
 								{
-									subject: (oParam.subject == undefined ? '' : oParam.subject),
+									subject: (oParam.subject == undefined ?'' : oParam.subject),
 									message: (oParam.message == undefined ?' ' : oParam.message),
-									priority: (oParam.priority == undefined ? '' : oParam.priority),
-									id: (oParam.contactPersonTo == undefined ? '' : oParam.contactPersonTo),
 									to: (oParam.to==undefined ? '' : oParam.to),
-									cc: (oParam.cc==undefined ? '' : oParam.cc),
-									bcc: (oParam.bcc==undefined ? '' : oParam.bcc),
 									fromemail: ns1blankspace.messaging.imap.data.fromEmail
-								}	
-								
-								//sData += (oParam.otherData == undefined ? '' : oParam.otherData)					
-								//sData += 'object=' + oParam.object;
-								//sData += '&objectcontext=' + oParam.objectContext;
-								//ns1blankspace.util.endpointURI('MESSAGING_EMAIL_SEND')
+								}
+
+								if (oParam.cc) {oData.cc = oParam.cc}
+								if (oParam.bcc) {oData.bcc = oParam.bcc}
+								if (oParam.contactPersonTo) {oData.id = oParam.contactPersonTo}	
+								if (oParam.priority) {oData.priority = oParam.priority}
+								if (oParam.object) {oData.saveagainstobject = oParam.object}
+								if (oParam.objectContext) {oData.saveagainstobjectcontext = oParam.objectContext}
+								if (oParam.save) {oData.save = (oParam.save?'Y':'N')}					
 
 								if (oData.to == '')
 								{
@@ -2805,27 +2932,122 @@ ns1blankspace.messaging.imap =
 									$.ajax(
 									{
 										type: 'POST',
-										url: '/ondemand/messaging/?method=MESSAGING_EMAIL_SEND',
+										url: ns1blankspace.util.endpointURI('MESSAGING_EMAIL_SEND'),
 										data: oData,
-										dataType: 'text',
+										dataType: 'json',
 										success: function(data) 
 										{
-											ns1blankspace.status.message('Email has been sent');
-											$('#ns1blankspaceMessagingMessageControlContainer').html('');
-											ns1blankspace.messaging.imap.data.lastEmail = undefined;
-											$('#ns1blankspaceMainEdit').html('');
-											$('#ns1blankspaceMainEdit').attr('data-objectcontext', undefined); 
-											
-											if (fFunctionPostSend != undefined)
-											{
-												fFunctionPostSend()
+											if (data.status == 'OK')
+											{	
+												ns1blankspace.status.message('Email has been sent');
+												$('#ns1blankspaceMessagingMessageControlContainer').html('');
+												ns1blankspace.messaging.imap.data.lastEmail = undefined;
+												$('#ns1blankspaceMainEdit').html('');
+												$('#ns1blankspaceMainEdit').attr('data-objectcontext', undefined); 
+												
+												if (fFunctionPostSend != undefined)
+												{
+													fFunctionPostSend()
+												}
 											}
+											else
+											{
+												ns1blankspace.status.error('Email could not be sent')
+											}	
 										}
 									});
 								}
 							}	
 						}	
 					},
+
+		object: 	function (oParam, oResponse)
+		{
+			var iObject = $('#ns1blankspaceMessageSendSaveObjectValue :selected').val();
+			var sColumns = $('#ns1blankspaceMessageSendSaveObjectValue :selected').attr('data-columns');
+			if (sColumns === undefined) {sColumns = 'reference'}
+
+			if (oResponse === undefined)
+			{	
+				$('#ns1blankspaceMessageSendSaveObjectContextSearch').html(ns1blankspace.xhtml.loadingSmall);
+
+				var sMethod = $('#ns1blankspaceMessageSendSaveObjectValue :selected').attr('data-method');
+				var sSearchText = $('#ns1blankspaceMessageSendSaveObjectContext').val();
+				var aSearchFilters = $('#ns1blankspaceMessageSendSaveObjectValue :selected').attr('data-methodFilter');
+				aSearchFilters = (aSearchFilters) ? aSearchFilters.split('|') : undefined;
+
+				var oSearch = new AdvancedSearch();
+				oSearch.method = sMethod;
+				oSearch.addField(sColumns);
+				
+				if (iObject == 32)
+				{	
+					var aSearchText = sSearchText.split(' ');
+
+					if (aSearchText.length > 1)
+					{
+						oSearch.addFilter('firstname', 'TEXT_STARTS_WITH', aSearchText[0]);
+						oSearch.addFilter('surname', 'TEXT_STARTS_WITH', aSearchText[1]);
+					}
+					else
+					{
+						oSearch.addFilter('firstname', 'TEXT_IS_LIKE', sSearchText);
+						oSearch.addOperator('or');
+						oSearch.addFilter('surname', 'TEXT_IS_LIKE', sSearchText);
+					}	
+				}
+				else
+				{
+					if (aSearchFilters && aSearchFilters.length > 0)
+					{
+						$.each(aSearchFilters, function(i, t)
+						{
+							var aFilterOptions = t.split('-');
+							oSearch.addFilter(aFilterOptions[0], 
+									((aFilterOptions.length > 1) ? aFilterOptions[1] : undefined), 
+									((aFilterOptions.length === 2) ? sSearchText : undefined));
+							if (aSearchFilters.length > (i + 1))
+							{
+								oSearch.addOperator('or')
+							}
+						});
+					}
+					else
+					{
+						oSearch.addFilter('reference', 'TEXT_IS_LIKE', sSearchText);
+					}
+				}	
+				
+				oSearch.rows = 15;
+				oSearch.rf = 'json';
+				oSearch.getResults(function(data) {ns1blankspace.messaging.imap.message.object(oParam, data)});
+			}
+			else
+			{
+				var aHTML = [];
+				
+				var aColumns = sColumns.split(',');
+
+				aHTML.push('<table class="ns1blankspace" style="font-size:0.875em;" id="ns1blankspaceMessageSendSaveObjectContextSearchResults">');
+				
+				$.each(oResponse.data.rows, function(i, v) 
+				{ 
+					var sText = '';
+					$.each(aColumns, function(j, k)
+					{	
+						sText += '<div ' + (j!=0?'class="ns1blankspaceSub"':'') + '>' + v[k] + '</div>';
+					});
+
+					aHTML.push('<tr><td id="ns1blankspaceItem_title-' + v.id +'" class="ns1blankspaceRow" style="width:5px; margin-right:0px;">' +
+									'<input type="radio" id="radioMessageSendObjectContext' + v.id + '" name="radioMessageSendObjectContext" value="' + v.id + '"/>' +
+									'</td><td class="ns1blankspaceRow">' + sText + '</td></tr>');	
+				});
+				
+				aHTML.push('</table>');
+
+				$('#ns1blankspaceMessageSendSaveObjectContextSearch').html(aHTML.join(''))
+			}
+		},			
 
 		remove: 	function (oParam)
 		{	
