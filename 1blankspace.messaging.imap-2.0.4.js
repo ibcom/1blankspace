@@ -5,13 +5,6 @@
  * http://creativecommons.org/licenses/by-sa/4.0/
  */
 
-// Based on using the mydigitalstructure caching.
-// So primarily working of the cache object in the model.
-// totals & get details for messages not fully cached.  Show part of message that have and then back fill attachments and message
-// Back update flags for read.
-
-// DELETE Now move to trash
-
 if (ns1blankspace.messaging === undefined) {ns1blankspace.messaging = {}}
 
 ns1blankspace.messaging.imap = 

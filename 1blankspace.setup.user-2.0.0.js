@@ -439,10 +439,7 @@ ns1blankspace.setup.user =
 						
 						$('#ns1blankspaceSummaryColumn2').html(aHTML.join(''));
 						
-						$('#ns1blankspaceResetPassword').button(
-						{
-							
-						})
+						$('#ns1blankspaceResetPassword').button({})
 						.click(function()
 						{	
 							ns1blankspace.status.working();
