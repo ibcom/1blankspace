@@ -111,7 +111,7 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.messaging.imap',
-		source: '/jscripts/1blankspace.messaging.imap-2.0.2.js'
+		source: '/jscripts/1blankspace.messaging.imap-2.0.4.js'
 	},
 	{
 		nameSpace: '1blankspace.document',
@@ -199,7 +199,7 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.setup.messaging',
-		source: '/jscripts/1blankspace.setup.messaging-2.0.0.js'
+		source: '/jscripts/1blankspace.setup.messaging-2.0.1.js'
 	},
 	{
 		nameSpace: '1blankspace.setup.networkGroup',
