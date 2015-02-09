@@ -1170,8 +1170,10 @@ ns1blankspace.financial.invoice =
 					ns1blankspace.financial.invoice.details();
 				},
 
-	copy: 	function (aParam, oResponse)
+	copy: 		function (aParam, oResponse)
 				{		
+					ns1blankspace.container.hide({force: true});
+
 					if (oResponse == undefined)
 					{
 						ns1blankspace.status.working('Copying...');
