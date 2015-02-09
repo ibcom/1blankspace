@@ -1095,7 +1095,14 @@ ns1blankspace.messaging.imap =
 			var aSearch = sXHTMLElementID.split('-');
 			var sElementID = aSearch[0];
 			var sSearchContext = aSearch[1];
-				
+			
+			$('#ns1blankspaceControlDelete').html('Delete');
+
+			$('#ns1blankspaceControlDelete').click(function(event)
+			{
+				ns1blankspace.messaging.imap.message.remove();
+			});
+
 			if ($('#' + sXHTMLElementID).parent().hasClass('ns1blankspaceNotSeen'))	
 			{			
 				$('#' + sXHTMLElementID).parent().removeClass('ns1blankspaceNotSeen');
@@ -1109,16 +1116,16 @@ ns1blankspace.messaging.imap =
 				}	
 						
 				$.ajax(
+				{
+					type: 'POST',
+					url: '/rpc/messaging/?method=MESSAGING_EMAIL_CACHE_MANAGE',
+					data: oData,
+					dataType: 'json',
+					success: function(data)
 					{
-						type: 'POST',
-						url: '/rpc/messaging/?method=MESSAGING_EMAIL_CACHE_MANAGE',
-						data: oData,
-						dataType: 'json',
-						success: function(data)
-						{
-							ns1blankspace.messaging.emailRead.push(sSearchContext);
-						}
-					});
+						ns1blankspace.messaging.emailRead.push(sSearchContext);
+					}
+				});
 			}		
 		},
 
@@ -1659,10 +1666,9 @@ ns1blankspace.messaging.imap =
 		}	
 			
 		aHTML.push('<tr class="ns1blankspaceControl">' +
-						'<td id="ns1blankspaceControlDelete" class="ns1blankspaceControl ns1blankspaceMessageSelect" style="padding-top:18px;">' +
-						'Delete</td>' +
-						'</tr>');
-													
+							'<td id="ns1blankspaceControlDelete" class="ns1blankspaceControl ns1blankspaceMessageSelect" style="padding-top:18px;">' +
+								'</td></tr>');
+											
 		aHTML.push('</table>');					
 					
 		$('#ns1blankspaceMessagingMessageControlContainer').html(aHTML.join(''));
@@ -1725,12 +1731,7 @@ ns1blankspace.messaging.imap =
 				ns1blankspace.messaging.imap.message.edit.show({forward: true});
 			}
 		});
-
-		$('#ns1blankspaceControlDelete').click(function(event)
-		{
-			ns1blankspace.messaging.imap.message.remove();
-		});
-		
+	
 		$('#ns1blankspaceControlActions').click(function(event)
 		{
 			ns1blankspace.show({selector: '#ns1blankspaceMainActions'});
@@ -3063,11 +3064,11 @@ ns1blankspace.messaging.imap =
 				{	
 					$(ns1blankspace.xhtml.container).attr('data-initiator', sXHTMLElementID)
 
-					ns1blankspace.container.position({xhtmlElementID: sXHTMLElementID, leftOffset: 72, topOffset: 25});
+					ns1blankspace.container.position({xhtmlElementID: sXHTMLElementID, leftOffset: 85, topOffset: 25});
 
 					var aHTML = [];
 									
-					aHTML.push('<div style="margin-right:4px;" id="ns1blankspaceMessageRemove" class="ns1blankspaceAction">Delete</div>');
+					aHTML.push('<div style="margin-right:2px;" id="ns1blankspaceMessageRemove" class="ns1blankspaceAction">Delete</div>');
 
 					$(ns1blankspace.xhtml.container).html(aHTML.join(''));
 
@@ -3081,7 +3082,7 @@ ns1blankspace.messaging.imap =
 						oParam = ns1blankspace.util.setParam(oParam, 'confirmed', true);
 						ns1blankspace.messaging.imap.message.remove(oParam);
 					})
-					.css('width', '75px')
+					.css('width', '65px')
 					.css('height', '45px');
 				}
 			}	
