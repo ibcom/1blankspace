@@ -677,7 +677,8 @@ ns1blankspace.views =
 		endpoint: "SETUP_MESSAGING", 
 		show: true,
 		group: 7,
-		type: 2
+		type: 2,
+		subNote: 'Email'
 	},
 	{
 		title: "Websites & Webapps",

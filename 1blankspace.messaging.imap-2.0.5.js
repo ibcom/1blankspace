@@ -412,7 +412,8 @@ ns1blankspace.messaging.imap =
 				oSearch.method = 'SETUP_MESSAGING_ACCOUNT_SEARCH';
 				oSearch.addField('type,port,sslport,email,title,footer');
 				oSearch.addFilter('type', 'EQUAL_TO', '5');
-				oSearch.addFilter('user', 'EQUAL_TO', ns1blankspace.user.id);
+				//oSearch.addFilter('user', 'EQUAL_TO', ns1blankspace.user.id);
+				oSearch.addCustomOption('hasaccess', 'Y');
 				oSearch.getResults(function(data) {ns1blankspace.messaging.imap.home(oParam, data)});
 			}
 			else
@@ -1402,7 +1403,6 @@ ns1blankspace.messaging.imap =
 			send:		function (oParam)
 			{
 				var sCacheID = ns1blankspace.util.getParam(oParam, 'xhtmlElementID', {index: 1}).value;
-				var sMessageID = ns1blankspace.util.getParam(oParam, 'messageID').value;
 				var sXHTMLElementID = ns1blankspace.util.getParam(oParam, 'xhtmlElementID').value;
 				var bInbox = ns1blankspace.util.getParam(oParam, 'inbox', {"default": true}).value;
 
@@ -1412,7 +1412,7 @@ ns1blankspace.messaging.imap =
 				var oData =
 				{
 					account: ns1blankspace.messaging.imap.account,
-					messageid: sMessageID,
+					id: sCacheID,
 					autocreatecontacts: ($('#ns1blankspaceMessageSaveContacts').prop('checked')?'Y':'N'),
 					saveattachments: ($('#ns1blankspaceMessageSaveAttachments').prop('checked')?'Y':'N'),
 					private: ($('#ns1blankspaceMessageSavePrivate').prop('checked')?'Y':'N')
@@ -1427,7 +1427,7 @@ ns1blankspace.messaging.imap =
 				$.ajax(
 				{
 					type: 'POST',
-					url: ns1blankspace.util.endpointURI('MESSAGING_EMAIL_ACTION_MANAGE'),
+					url: ns1blankspace.util.endpointURI('MESSAGING_EMAIL_CACHE_ACTION_CREATE'),
 					data: oData,
 					dataType: 'json',
 					success: function(data)
@@ -2664,19 +2664,20 @@ ns1blankspace.messaging.imap =
 
 																aHTML.push('<div id="ns1blankspaceAttachMethod" style="font-size:0.875em;">');
 
-																aHTML.push('<input type="radio" id="ns1blankspaceAttachMethod-Upload" name="radioAttachMethod" checked="checked" />' +
-																				'<label for="ns1blankspaceAttachMethod-Upload" style="width:100px; margin-right:2px; font-size:0.75em; width:75px;">' +
+																aHTML.push('<input type="radio" id="ns1blankspaceAttachMethod-upload" name="radioAttachMethod" checked="checked" />' +
+																				'<label for="ns1blankspaceAttachMethod-upload" style="width:100px; margin-right:2px; font-size:0.75em; width:75px;">' +
 																				'Upload</label>');
 
-																aHTML.push('<input type="radio" id="ns1blankspaceAttachMethod-Select" name="radioAttachMethod" />' +
-																				'<label for="ns1blankspaceAttachMethod-Select" style="width:100px; margin-right:2px; font-size:0.75em; width:75px;">' +
+																aHTML.push('<input type="radio" id="ns1blankspaceAttachMethod-existing" name="radioAttachMethod" />' +
+																				'<label for="ns1blankspaceAttachMethod-existing" style="width:100px; margin-right:2px; font-size:0.75em; width:75px;">' +
 																				'Existing</label>');
 
 																aHTML.push('</div>');
 
 																aHTML.push('</td></tr>');
 
-																aHTML.push('<tr><td id="ns1blankspaceMessageEditAttachmentUpload" class="ns1blankspace" style="padding:3px; background-color:#ffffff;">' +
+																aHTML.push('<tr><td id="ns1blankspaceMessageEditAttachContainer" class="ns1blankspace" style="padding:3px; background-color:#ffffff;">' +
+																				'<div id="ns1blankspaceMessageEditAttach-upload" class="ns1blankspaceMessageEditAttach">' + 
 																					ns1blankspace.attachments.upload.show(
 																					{
 																						object: 17,
@@ -2684,7 +2685,35 @@ ns1blankspace.messaging.imap =
 																						label: '',
 																						showUpload: true,
 																						maxFiles: 5
-																					}) +
+																					}));
+																				
+																aHTML.push('<div class="ns1blankspaceSubNote">If you need to send more files; upload these files and then attach more.</div>');
+
+																aHTML.push('</div>');
+
+																aHTML.push('<div id="ns1blankspaceMessageEditAttach-existing" class="ns1blankspaceMessageEditAttach">');
+
+																aHTML.push('<tr class="ns1blankspace">' +
+																				'<td class="ns1blankspaceRadio">' +
+																				'<input type="checkbox" id="ns1blankspaceMessageEditAttachObject" />' +
+																				'<select id="ns1blankspaceMessageEditAttachObjectValue" style="width:138px;">');
+
+																$.each(ns1blankspace.messaging.imap.data.objects, function(i, v)
+																{
+																	aHTML.push('<option value="' + v.id + '" data-method="' + v.method + '"' +
+																				(v.columns?' data-columns="' + v.columns + '"':'') +
+																				(v.methodFilter?' data-methodfilter="' + v.methodFilter + '"':'') + '>' +
+																				v.caption + '</option>');
+																});
+																			
+																aHTML.push('</select>' +
+																				'</td></tr>');
+
+																aHTML.push('<tr><td style="padding-left:20px;">' +
+																				'<input id="ns1blankspaceMessageEditAttachObjectContext" style="padding:3px;">' +
+																				'</td></tr>');
+
+																aHTML.push('</div>' + 
 																				'</td></tr>');
 
 																aHTML.push('<tr><td class="ns1blankspaceSubNote">If you need to send more files; upload these files and then attach more.</td></tr>');
@@ -2703,6 +2732,15 @@ ns1blankspace.messaging.imap =
 																});
 
 																$('#ns1blankspaceAttachMethod').buttonset();
+
+																$('#ns1blankspaceAttachMethod :radio').click(function()
+																{
+																	$('div.ns1blankspaceMessageEditAttach').hide();
+
+																	var aID = (this.id).split('-');
+																	
+																	$('#ns1blankspaceMessageEditAttach-' + aID[1]).show();
+																});
 															}					
 														}	
 													},

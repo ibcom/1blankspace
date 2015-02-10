@@ -1402,7 +1402,6 @@ ns1blankspace.messaging.imap =
 			send:		function (oParam)
 			{
 				var sCacheID = ns1blankspace.util.getParam(oParam, 'xhtmlElementID', {index: 1}).value;
-				var sMessageID = ns1blankspace.util.getParam(oParam, 'messageID').value;
 				var sXHTMLElementID = ns1blankspace.util.getParam(oParam, 'xhtmlElementID').value;
 				var bInbox = ns1blankspace.util.getParam(oParam, 'inbox', {"default": true}).value;
 
@@ -1412,7 +1411,7 @@ ns1blankspace.messaging.imap =
 				var oData =
 				{
 					account: ns1blankspace.messaging.imap.account,
-					messageid: sMessageID,
+					id: sCacheID,
 					autocreatecontacts: ($('#ns1blankspaceMessageSaveContacts').prop('checked')?'Y':'N'),
 					saveattachments: ($('#ns1blankspaceMessageSaveAttachments').prop('checked')?'Y':'N'),
 					private: ($('#ns1blankspaceMessageSavePrivate').prop('checked')?'Y':'N')
@@ -1427,7 +1426,7 @@ ns1blankspace.messaging.imap =
 				$.ajax(
 				{
 					type: 'POST',
-					url: ns1blankspace.util.endpointURI('MESSAGING_EMAIL_ACTION_MANAGE'),
+					url: ns1blankspace.util.endpointURI('MESSAGING_EMAIL_CACHE_ACTION_CREATE'),
 					data: oData,
 					dataType: 'json',
 					success: function(data)

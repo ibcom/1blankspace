@@ -709,7 +709,7 @@ ns1blankspace.setup.messaging =
 													'</td></tr>');
 													
 										aHTML.push('<tr><td style="padding-top:20px;" class="ns1blankspaceSubNote">' +
-													'Share this messaging account with other users within your space.' +
+													'Share this messaging (email) account with other users within your space.' +
 													'</td></tr>');			
 									
 										aHTML.push('</table>');					
