@@ -2658,7 +2658,24 @@ ns1blankspace.messaging.imap =
 															
 																ns1blankspace.messaging.action = oResponse.id;
 															
-																aHTML.push('<table style="width:287px;" class="ns1blankspaceViewControlContainer">');
+																aHTML.push('<table style="width:287px; padding-top:0px;" class="ns1blankspaceViewControlContainer">');
+
+																aHTML.push('<tr><td>');
+
+																aHTML.push('<div id="ns1blankspaceAttachMethod" style="font-size:0.875em;">');
+
+																aHTML.push('<input type="radio" id="ns1blankspaceAttachMethod-Upload" name="radioAttachMethod" checked="checked" />' +
+																				'<label for="ns1blankspaceAttachMethod-Upload" style="width:100px; margin-right:2px; font-size:0.75em; width:75px;">' +
+																				'Upload</label>');
+
+																aHTML.push('<input type="radio" id="ns1blankspaceAttachMethod-Select" name="radioAttachMethod" />' +
+																				'<label for="ns1blankspaceAttachMethod-Select" style="width:100px; margin-right:2px; font-size:0.75em; width:75px;">' +
+																				'Existing</label>');
+
+																aHTML.push('</div>');
+
+																aHTML.push('</td></tr>');
+
 																aHTML.push('<tr><td id="ns1blankspaceMessageEditAttachmentUpload" class="ns1blankspace" style="padding:3px; background-color:#ffffff;">' +
 																					ns1blankspace.attachments.upload.show(
 																					{
@@ -2670,19 +2687,22 @@ ns1blankspace.messaging.imap =
 																					}) +
 																				'</td></tr>');
 
-																aHTML.push('<tr><td class="ns1blankspaceSubNote">If need to send more files; upload these files and then attach more.</td></tr>');
+																aHTML.push('<tr><td class="ns1blankspaceSubNote">If you need to send more files; upload these files and then attach more.</td></tr>');
 
 																aHTML.push('</table>');			
 
-																$(ns1blankspace.xhtml.container).html(aHTML.join(''));	
+																$(ns1blankspace.xhtml.container).html(aHTML.join(''));
 																
 																$('#ns1blankspaceUpload').button(
 																{
 																	label: "Upload"
 																})
-																.click(function() {
+																.click(function()
+																{
 																	 ns1blankspace.attachments.upload.process({functionPostUpdate: ns1blankspace.messaging.imap.message.edit.attach.process});
-																})
+																});
+
+																$('#ns1blankspaceAttachMethod').buttonset();
 															}					
 														}	
 													},
