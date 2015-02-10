@@ -73,6 +73,11 @@ $.extend(true, ns1blankspace.setup,
 						
 						if (bAdvancedSearch)
 						{
+							if (ns1blankspace.setup.searchParam == undefined)
+							{
+								ns1blankspace.setup.searchParam = {fields: 'title'}
+							}	
+
 							var oSearch = new AdvancedSearch();
 							oSearch.method = ns1blankspace.setup.method + '_SEARCH';
 							if (ns1blankspace.setup.searchParam.fields)
@@ -94,6 +99,7 @@ $.extend(true, ns1blankspace.setup,
 									}
 								});
 							}
+
 							if (ns1blankspace.setup.searchParam.sort)
 							{
 								$.each(ns1blankspace.setup.searchParam.sort, function()
@@ -182,18 +188,26 @@ $.extend(true, ns1blankspace.setup,
 							ns1blankspace.setup.edit.start(event.target.id);
 						});
 						
-						$('.ns1blankspaceRowRemove').button({
-								text: false,
-								 icons: {
-									 primary: "ui-icon-close"
-								}
-							})
-							.click(function()
+						$('.ns1blankspaceRowRemove').button(
+						{
+							text: false,
+							icons:
 							{
-								ns1blankspace.setup.remove(this.id)
-							})
-							.css('width', '15px')
-							.css('height', '20px');
+								 primary: "ui-icon-close"
+							}
+						})
+						.click(function()
+						{
+							ns1blankspace.remove(
+							{
+								xhtmlElementID: this.id,
+								method: ns1blankspace.setup.method + '_MANAGE',
+								parentLevel: 2,
+								ifNoneMessage: 'No ' + ns1blankspace.setup.name
+							});
+						})
+						.css('width', '15px')
+						.css('height', '20px');
 								
 						$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions);
 					}	
@@ -506,12 +520,20 @@ $.extend(true, ns1blankspace.setup,
 																			 primary: "ui-icon-close"
 																		}
 																	})
-																	.click(function() {
-																		ns1blankspace.setup.remove(this.id)
+																	.click(function()
+																	{
+																		ns1blankspace.remove(
+																		{
+																			xhtmlElementID: this.id,
+																			method: ns1blankspace.setup.method + '_MANAGE',
+																			parentLevel: 2,
+																			ifNoneMessage: 'No ' + ns1blankspace.setup.name
+																		});
 																	})
 																	.css('width', '15px')
-																	.css('height', '20px')
+																	.css('height', '20px');
 															}
+															
 															ns1blankspace.status.message('Saved')
 															$('#ns1blankspaceViewControlNew').button({disabled: false});
 															$('#ns1blankspaceSetupAdd').button({disabled: false});

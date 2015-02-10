@@ -187,7 +187,7 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.setup',
-		source: '/jscripts/1blankspace.setup-2.0.0.js'
+		source: '/jscripts/1blankspace.setup-2.0.1.js'
 	},
 	{
 		nameSpace: '1blankspace.setup.automation',
@@ -462,7 +462,7 @@ ns1blankspace.views =
 		subNote: 'P&L, Debtors..'
 	},
 	{
-		title: "Bank Accounts",
+		title: "Bank&nbsp;Accounts",
 		parentNamespace: "financial",
 		namespace: "bankAccount",
 		endpoint: "FINANCIAL_BANK_ACCOUNT",
@@ -653,7 +653,7 @@ ns1blankspace.views =
 		type: 2
 	},
 	{
-		title: "User Roles",
+		title: "User&nbsp;Roles",
 		parentNamespace: "setup",
 		namespace: "userRole",
 		endpoint: "SETUP_USER_ROLE", 
@@ -662,7 +662,7 @@ ns1blankspace.views =
 		type: 2
 	},
 	{
-		title: "Network Groups",
+		title: "Network&nbsp;Groups",
 		parentNamespace: "setup",
 		namespace: "networkGroup",
 		endpoint: "SETUP_NETWORK_GROUP", 
@@ -715,7 +715,7 @@ ns1blankspace.views =
 		type: 2
 	},
 	{
-		title: 'Person Groups',
+		title: 'Person&nbsp;Groups',
 		namespace: 'setup',
 		namesuffix: 'contactPersonGroup',
 		endpoint: "SETUP", 
@@ -725,7 +725,7 @@ ns1blankspace.views =
 		param: {viewName: 'Person Groups', method: 'SETUP_CONTACT_PERSON_GROUP'}														
 	},
 	{
-		title: 'Business Groups',
+		title: 'Business&nbsp;Groups',
 		namespace: 'setup',
 		namesuffix: 'contactBusinessGroup',
 		endpoint: "SETUP", 
@@ -735,7 +735,7 @@ ns1blankspace.views =
 		param: {viewName: 'Business Groups', method: 'SETUP_CONTACT_BUSINESS_GROUP'}														
 	},
 	{
-		title: 'Product Categories',
+		title: 'Product&nbsp;Categories',
 		namespace: 'setup',
 		namesuffix: 'productCategory',
 		endpoint: "SETUP", 
@@ -745,7 +745,7 @@ ns1blankspace.views =
 		param: {viewName: 'Product Categories', method: 'SETUP_PRODUCT_CATEGORY'}														
 	},
 	{
-		title: "Project Templates",
+		title: "Project&nbsp;Templates",
 		parentNamespace: "setup",
 		namespace: "project",
 		endpoint: "PROJECT", 
@@ -754,7 +754,7 @@ ns1blankspace.views =
 		type: 2
 	},
 	{
-		title: "Project Template Tasks",
+		title: "Project&nbsp;Template&nbsp;Tasks",
 		parentNamespace: "setup",
 		namespace: "projectTask",
 		endpoint: "PROJECT", 
@@ -763,7 +763,7 @@ ns1blankspace.views =
 		type: 2
 	},
 	{
-		title: "My Space & Account",
+		title: "My&nbsp;Space&nbsp;&&nbsp;Account",
 		parentNamespace: "setup",
 		namespace: "space",
 		endpoint: "ADMIN", 
@@ -781,7 +781,7 @@ ns1blankspace.views =
 		type: 2
 	},
 	{
-		title: "Other Spaces",
+		title: "Other&nbsp;Spaces",
 		parentNamespace: "developer",
 		namespace: "space",
 		endpoint: "ADMIN_SPACE_MANAGE", 
@@ -799,7 +799,7 @@ ns1blankspace.views =
 		type: 2
 	},
 	{
-		title: "Support Issues",
+		title: "Support&nbsp;Issues",
 		namespace: "supportIssue",
 		endpoint: "SUPPORT_ISSUE_MANAGE", 
 		show: true,
@@ -853,7 +853,8 @@ ns1blankspace.viewGroups =
 	{
 		id: 9,
 		name: 'Financial',
-		type: 2
+		type: 2,
+		width: '150px'
 	},
 	{
 		id: 10,
@@ -1159,7 +1160,8 @@ ns1blankspace.control =
 																aHTML.push('<td class="ns1blankspaceViewControlColumn">');
 																aHTML.push('<table class="ns1blankspaceViewControlColumn">');
 
-																aHTML.push('<tr><td><div id="ns1blankspaceView' + v.name + '" class="ns1blankspaceViewImage"></div>' +
+																aHTML.push('<tr><td><div id="ns1blankspaceView' + v.name + '" class="ns1blankspaceViewImage"' +
+																				(oViewGroup.width!==undefined?' style="' + oViewGroup.width + '"':'') + '></div>' +
 																				'</td></tr>');	
 
 																$.each(oViewGroup, function(j, k)
@@ -1167,6 +1169,7 @@ ns1blankspace.control =
 																	aHTML.push('<tr class="ns1blankspaceViewControl">' +
 																				'<td class="ns1blankspaceViewControl">' +
 																				'<span id="ns1blankspaceViewControl_' + (k.parentNamespace!==undefined?k.parentNamespace + '_':'') + k.namespace +
+																					(k.namesuffix!==undefined?'_' + k.namesuffix:'') + 
 																				'" class="ns1blankspaceViewControl">' + k.title + '</span>');
 
 																	if (k.subNote !== undefined)
