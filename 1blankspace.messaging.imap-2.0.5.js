@@ -25,15 +25,15 @@ ns1blankspace.messaging.imap =
 				id: 5,
 				caption: 'Invoice',
 				method: 'FINANCIAL_INVOICE_SEARCH',
-				columns: 'reference,sentdate,contactbusinesstext',
-				methodFilter: 'reference-TEXT_IS_LIKE|contactbusinesstext-TEXT_IS_LIKE'
+				columns: 'reference,sentdate,contactbusinesssenttotext,contactpersonsenttotext',
+				methodFilter: 'reference-TEXT_IS_LIKE|invoice.contactbusinesssentto.tradename-TEXT_IS_LIKE|invoice.contactpersonsentto.surname-TEXT_IS_LIKE'
 			},
 			{
 				id: 2,
 				caption: 'Expense',
 				method: 'FINANCIAL_EXPENSE_SEARCH',
-				columns: 'reference,sentdate,contactbusinesstext',
-				methodFilter: 'reference-TEXT_IS_LIKE|contactbusinesstext-TEXT_IS_LIKE'
+				columns: 'reference,sentdate,contactbusinesspaidtotext',
+				methodFilter: 'reference-TEXT_IS_LIKE|expense.contactbusinesspaidto.tradename-TEXT_IS_LIKE'
 			},
 			{
 				id: 32,
@@ -3118,6 +3118,8 @@ ns1blankspace.messaging.imap =
 													'<td class="ns1blankspaceRadio" style="padding-left:2px;">' +
 													'<select id="ns1blankspaceMessageSendSaveObjectValue" style="width:100%;">');
 
+										aHTML.push('<option value="-1">Also save against ...</option>');
+
 										$.each(ns1blankspace.messaging.imap.data.objects, function(i, v)
 										{
 											aHTML.push('<option value="' + v.id + '" data-method="' + v.method + '"' +
@@ -3147,6 +3149,11 @@ ns1blankspace.messaging.imap =
 										{
 											$('#ns1blankspaceMessageSendSaveObject').toggle();
 										});	
+
+										$('#ns1blankspaceMessageSendSaveObjectValue').change(function()
+										{
+											$('#ns1blankspaceMessageSendSaveObjectContextSearch').html('');
+										});
 
 										$('#ns1blankspaceMessageSendSaveObjectContext').keyup(function ()
 										{
