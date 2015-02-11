@@ -1,3 +1,9 @@
+/*!
+ * ibCom Pty Ltd ATF ibCom Unit Trust & contributors
+ * Licensed as Attribution-ShareAlike 4.0 International
+ * http://creativecommons.org/licenses/by-sa/4.0/
+ */
+ 
 // notes @ http://www.mydigitalstructure.com/1blankspace_namespace_experience
 // ns1blankspace.experience.journey.get({routeID: 'ins-invoice'})
 // http://json.parser.online.fr/

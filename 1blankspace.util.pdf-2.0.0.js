@@ -1,8 +1,8 @@
 /*!
- * Copyright 2010, ibCom Pty Ltd ATF ibCom Unit Trust & contributors
- * Licensed under the MIT license.
- * http://1blankspace.com/license
- * 01 FEB 2010
+ * ibCom Pty Ltd ATF ibCom Unit Trust & contributors
+ * Licensed as Attribution-ShareAlike 4.0 International
+ * http://creativecommons.org/licenses/by-sa/4.0/
+	
  * Example code: 	http://jsfiddle.net/xzZ7n/1/
  * 					https://github.com/MrRio/jsPDF/blob/master/examples/basic.html
  *

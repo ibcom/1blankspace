@@ -1,4 +1,3 @@
-
 /*!
  * ibCom Pty Ltd ATF ibCom Unit Trust & contributors
  * Licensed as Attribution-ShareAlike 4.0 International
@@ -33,7 +32,7 @@ ns1blankspace.messaging.imap =
 				caption: 'Expense',
 				method: 'FINANCIAL_EXPENSE_SEARCH',
 				columns: 'reference,sentdate,contactbusinesspaidtotext',
-				methodFilter: 'reference-TEXT_IS_LIKE|expense.contactbusinesspaidto.tradename-TEXT_IS_LIKE'
+				methodFilter: 'reference-TEXT_IS_LIKE|expense.contactbusinesspaidto.tradename-TEXT_IS_LIKE|expense.contactpersonpaidto.surname-TEXT_IS_LIKE'
 			},
 			{
 				id: 32,
