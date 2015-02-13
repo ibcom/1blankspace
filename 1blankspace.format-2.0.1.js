@@ -494,6 +494,7 @@ ns1blankspace.format.render = function (oParam)
 				oSearch.addField('*');
 				oSearch.addFilter('object', 'EQUAL_TO', iObject);
 				oSearch.addFilter('objectcontext', 'EQUAL_TO', iObjectContext);
+				oSearch.sort('id', 'desc');
 
 				var oTmp = {group: this.group};
 				oSearch.getResults(function(oResponse) {ns1blankspace.format.process(oTmp, oResponse.data.rows)});
