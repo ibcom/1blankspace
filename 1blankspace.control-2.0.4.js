@@ -1938,7 +1938,8 @@ ns1blankspace.attachments =
 						{
 							label: "Add"
 						})
-						.click(function() {
+						.click(function()
+						{
 							 ns1blankspace.attachments.add(oParam);
 						})
 					
@@ -1949,7 +1950,7 @@ ns1blankspace.attachments =
 					{	
 						var oSearch = new AdvancedSearch();
 						oSearch.method = 'CORE_ATTACHMENT_SEARCH';
-						oSearch.addField('type,filename,description,download,modifieddate,attachment,createddate');
+						oSearch.addField('type,filename,description,download,modifieddate,attachment,createddate,createdusertext');
 						oSearch.addFilter('object', 'EQUAL_TO', iObject);
 						oSearch.addFilter('objectcontext', 'EQUAL_TO', iObjectContext);
 						oSearch.rows = ns1blankspace.option.defaultRows;
@@ -1992,7 +1993,7 @@ ns1blankspace.attachments =
 
 						$.each(oResponse.data.rows, function()
 						{
-							aHTML.push(ns1blankspace.attachments.row(this));
+							aHTML.push(ns1blankspace.attachments.row(this, oParam));
 						});
 				    	
 						aHTML.push('</table>');
@@ -2016,9 +2017,10 @@ ns1blankspace.attachments =
 					}
 				},
 				
-	row:		function (oRow)
+	row:		function (oRow, oParam)
 				{
 					var aHTML = [];
+					var bShowUser = ns1blankspace.util.getParam(oParam, 'showUser', {"default": false});
 
 					//onClick="ns1blankspace.unloadWarning=false;"
 					
@@ -2028,6 +2030,11 @@ ns1blankspace.attachments =
 										'<a href="' + oRow.download + '" class="ns1blankspaceNoUnloadWarn">' + oRow.filename + '</a></td>');
 										
 					aHTML.push('<td id="ns1blankspaceAttachment_date-' + oRow.id + '" class="ns1blankspaceRow">' + oRow.modifieddate + '</td>');
+
+					if (bShowUser)
+					{
+						aHTML.push('<td id="ns1blankspaceAttachment_user-' + oRow.id + '" class="ns1blankspaceRow">' + oRow.createdusertext + '</td>');
+					}
 					
 					aHTML.push('<td style="width:30px;text-align:right;" class="ns1blankspaceRow">' +
 									'<span id="ns1blankspaceAttachment_options_remove-' + oRow.attachment + 
