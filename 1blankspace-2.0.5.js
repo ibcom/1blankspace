@@ -5622,10 +5622,10 @@ ns1blankspace.pdf =
 							orientation: iOrientation
 						}
 
-						if (iLeftMargin !== undefined) {oData.xhtmlBody_LeftMargin = iLeftMargin}
-						if (iRightMargin !== undefined) {oData.xhtmlBody_RightMargin = iRightMargin}
-						if (iTopMargin !== undefined) {oData.xhtmlBody_TopMargin = iTopMargin}
-						if (iBottomMargin !== undefined) {oData.xhtmlBody_BottomMargin = iBottomMargin}
+						if (iLeftMargin !== undefined) {oData.xhtml_LeftMargin = iLeftMargin}
+						if (iRightMargin !== undefined) {oData.xhtml_RightMargin = iRightMargin}
+						if (iTopMargin !== undefined) {oData.xhtml_TopMargin = iTopMargin}
+						if (iBottomMargin !== undefined) {oData.xhtml_BottomMargin = iBottomMargin}
 						
 						$.ajax(
 						{
