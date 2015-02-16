@@ -5401,7 +5401,8 @@ ns1blankspace.render.page =
 
 					if (fFunctionOnNewPage !== undefined)
 					{
-						fFunctionOnNewPage({xhtmlContainerID: 'ns1blankspaceRenderPage_' + sXHTMLContext + '-0'})
+						oParam = ns1blankspace.util.setParam(oParam, 'xhtmlContainerID', 'ns1blankspaceRenderPage_' + sXHTMLContext + '-0');
+						fFunctionOnNewPage(oParam);
 					}	
 				},
 
@@ -5555,7 +5556,8 @@ ns1blankspace.render.page =
 								
 								if (fFunctionOnNewPage !== undefined)
 								{
-									fFunctionOnNewPage({xhtmlContainerID: 'ns1blankspaceRenderPage_' + sXHTMLContext + '-' + iStartRow})
+									oParam = ns1blankspace.util.setParam(oParam, 'xhtmlContainerID', 'ns1blankspaceRenderPage_' + sXHTMLContext + '-' + iStartRow);
+									fFunctionOnNewPage(oParam);
 								}	
 								else if (sFunctionNewPage != undefined)
 								{
