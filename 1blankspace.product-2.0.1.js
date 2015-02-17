@@ -58,9 +58,9 @@ ns1blankspace.product =
 		
 						var oSearch = new AdvancedSearch();
 						oSearch.method = 'PRODUCT_SEARCH';
-						oSearch.addField('reference,title');
+						oSearch.addField('reference,title,currentretailprice');
 						oSearch.rf = 'json';
-						oSearch.rows = 10;
+						oSearch.rows = 10;  
 						oSearch.sort('modifieddate', 'desc');
 						
 						oSearch.getResults(function (data) {ns1blankspace.product.home(oParam, data)});
@@ -77,7 +77,7 @@ ns1blankspace.product =
 						}
 						else
 						{
-							aHTML.push('<table>');
+							aHTML.push('<table style="width:350px;">');
 							aHTML.push('<tr><td class="ns1blankspaceCaption">MOST LIKELY</td></tr>');
 
 							$.each(oResponse.data.rows, function()
@@ -85,10 +85,17 @@ ns1blankspace.product =
 								aHTML.push('<tr class="ns1blankspaceRow">');
 								
 								aHTML.push('<td id="ns1blankspaceMostLikely_title-' + this.id + 
-														'" class="ns1blankspaceMostLikely">' +
-														this.title +
-														'</td>');
-								
+														'" class="ns1blankspaceMostLikely" style="width:200px;">' +
+														this.title + '</td>');
+
+								aHTML.push('<td id="ns1blankspaceMostLikely_reference-' + this.id + 
+														'" class="ns1blankspaceMostLikelySub" style="width:75px;">' +
+														this.reference + '</td>');
+
+								aHTML.push('<td id="ns1blankspaceMostLikely_currentretailprice-' + this.id + 
+														'" class="ns1blankspaceMostLikelySub" style="width:75px; text-align:right;">' +
+														this.currentretailprice + '</td>');
+
 								aHTML.push('</tr>');
 							});
 							
@@ -134,6 +141,7 @@ ns1blankspace.product =
 										var oSearch = new AdvancedSearch();
 										oSearch.method = 'PRODUCT_SEARCH';
 										oSearch.addField('reference,title,trackinventory,status,statustext,description,financialaccountincome,financialaccountincometext,' +
+															'financialaccountpurchases,financialaccountpurchasestext,financialaccountinventory,financialaccountinventorytext,' +
 															'unittype,unittypetext,units,category,categorytext,currentretailprice,type,minimumstocklevel');
 
 										oSearch.addField(ns1blankspace.option.auditFields);
@@ -163,7 +171,7 @@ ns1blankspace.product =
 											
 											var oSearch = new AdvancedSearch();
 											oSearch.method = 'PRODUCT_SEARCH';
-											oSearch.addField('reference,title');
+											oSearch.addField('reference,title,currentretailprice');
 										
 											if (iSource == ns1blankspace.data.searchSource.browse)
 											{
@@ -291,6 +299,9 @@ ns1blankspace.product =
 							aHTML.push('<tr><td id="ns1blankspaceControlStock" class="ns1blankspaceControl">' +
 											'Stock</td></tr>');
 
+							aHTML.push('<tr><td id="ns1blankspaceControlStockHistory" class="ns1blankspaceControl">' +
+											'History</td></tr>');
+
 							aHTML.push('</table>');					
 						}
 							
@@ -315,6 +326,7 @@ ns1blankspace.product =
 					aHTML.push('<div id="ns1blankspaceMainCategory" class="ns1blankspaceControlMain"></div>');
 					aHTML.push('<div id="ns1blankspaceMainSupplier" class="ns1blankspaceControlMain"></div>');
 					aHTML.push('<div id="ns1blankspaceMainStock" class="ns1blankspaceControlMain"></div>');
+					aHTML.push('<div id="ns1blankspaceMainStockHistory" class="ns1blankspaceControlMain"></div>');
 					aHTML.push('<div id="ns1blankspaceMainActions" class="ns1blankspaceControlMain"></div>');
 					aHTML.push('<div id="ns1blankspaceMainAttachments" class="ns1blankspaceControlMain"></div>');		
 
@@ -354,6 +366,18 @@ ns1blankspace.product =
 					{
 						ns1blankspace.show({selector: '#ns1blankspaceMainAttachments'});
 						ns1blankspace.attachments.show();
+					});
+
+					$('#ns1blankspaceControlStock').click(function(event)
+					{
+						ns1blankspace.show({selector: '#ns1blankspaceMainStock'});
+						ns1blankspace.product.stock.show();
+					});
+
+					$('#ns1blankspaceControlStockHistory').click(function(event)
+					{
+						ns1blankspace.show({selector: '#ns1blankspaceMainStockHistory'});
+						ns1blankspace.product.stock.history.show();
 					});
 				},
 
@@ -446,7 +470,7 @@ ns1blankspace.product =
 						
 						if (ns1blankspace.objectContextData.units != '')
 						{
-							aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Units</td></tr>' +
+							aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Units in stock</td></tr>' +
 										'<tr><td id="ns1blankspaceSummaryUnits" class="ns1blankspaceSummary">' +
 										ns1blankspace.objectContextData.units +
 										'</td></tr>');
@@ -525,20 +549,17 @@ ns1blankspace.product =
 											' data-columns="title">' +
 										'</td></tr>');
 
-						if (ns1blankspace.product.option.manageStock)
-						{
-							aHTML.push('<tr class="ns1blankspaceCaption">' +
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
 										'<td class="ns1blankspaceCaption">' +
-										'Stock (Inventory) Account' +
+										'Product Purchases Account' +
 										'</td></tr>' +
 										'<tr class="ns1blankspace">' +
 										'<td class="ns1blankspaceSelect">' +
-										'<input id="ns1blankspaceDetailsFinancialAccountStock" class="ns1blankspaceSelect"' +
+										'<input id="ns1blankspaceDetailsFinancialAccountProductPurchases" class="ns1blankspaceSelect"' +
 											' data-method="SETUP_FINANCIAL_ACCOUNT_SEARCH"' +
 											' data-columns="title">' +
 										'</td></tr>');
-						}									
-									
+			
 						aHTML.push('</table>');					
 						
 						$('#ns1blankspaceDetailsColumn1').html(aHTML.join(''));
@@ -568,16 +589,6 @@ ns1blankspace.product =
 										'<input type="radio" id="radioProductType1" name="radioProductType" value="1"/>Standard' +
 										'</td></tr>');
 
-						aHTML.push('<tr class="ns1blankspaceCaption">' +
-										'<td class="ns1blankspaceCaption">' +
-										'Stock' +
-										'</td></tr>' +
-										'<tr class="ns1blankspace">' +
-										'<td class="ns1blankspaceRadio">' +
-										'<input type="radio" id="radioStockN" name="radioStock" value="N"/>No Tracking' +
-										'<br /><input type="radio" id="radioStockY" name="radioStock" value="Y"/>Track' +
-										'</td></tr>');
-						
 						aHTML.push('</table>');					
 							
 						$('#ns1blankspaceDetailsColumn2').html(aHTML.join(''));
@@ -592,22 +603,15 @@ ns1blankspace.product =
 							$('#ns1blankspaceDetailsDescription').val((ns1blankspace.objectContextData.description).formatXHTML());
 							$('[name="radioStatus"][value="' + iStatus + '"]').attr('checked', true);
 							$('[name="radioProductType"][value="' + ns1blankspace.objectContextData.type + '"]').attr('checked', true);
-							$('[name="radioStock"][value="' + ns1blankspace.objectContextData.trackinventory + '"]').attr('checked', true);
-
 							$('#ns1blankspaceDetailsFinancialAccountProductSales').val(ns1blankspace.objectContextData.financialaccountincometext);
 							$('#ns1blankspaceDetailsFinancialAccountProductSales').attr("data-id", ns1blankspace.objectContextData.financialaccountincome);
-
-							if (ns1blankspace.objectContextData.trackinventory == 'Y')
-							{
-								$('#ns1blankspaceDetailsFinancialAccountStock').val(ns1blankspace.objectContextData.financialaccountinventorytext);
-								$('#ns1blankspaceDetailsFinancialAccountStock').attr("data-id", ns1blankspace.objectContextData.financialaccountinventory);
-							}	
+							$('#ns1blankspaceDetailsFinancialAccountProductPurchases').val(ns1blankspace.objectContextData.financialaccountpurchasestext);
+							$('#ns1blankspaceDetailsFinancialAccountProductPurchases').attr("data-id", ns1blankspace.objectContextData.financialaccountpurchases);
 						}
 						else
 						{
 							$('[name="radioStatus"][value="2"]').attr('checked', true);
 							$('[name="radioProductType"][value="1"]').attr('checked', true);
-							$('[name="radioStock"][value="' + (ns1blankspace.product.option.manageStock?'Y':'N') + '"]').attr('checked', true);
 						}	
 					}	
 				},
@@ -768,107 +772,216 @@ ns1blankspace.product =
 					}	
 				},
 
-	stock:		function ()
-				{
-					var aHTML = [];
-
-					if ($('#ns1blankspaceMainPricing').attr('data-loading') == '1')
+	stock:		{
+					show: 		function ()
 					{
-						$('#ns1blankspaceMainPricing').attr('data-loading', '');
-						
-						aHTML.push('<table class="ns1blankspaceContainer">' +
-										'<tr class="ns1blankspaceContainer">' +
-										'<td id="ns1blankspaceStockColumn1" class="ns1blankspaceColumn1"></td>' +
-										'<td id="ns1blankspaceStockColumn2" class="ns1blankspaceColumn2"></td>' +
-										'</tr>' + 
-										'</table>');					
-						
-						$('#ns1blankspaceMainStock').html(aHTML.join(''));
-						
 						var aHTML = [];
 
-						aHTML.push('<table class="ns1blankspace">');
-						
-						aHTML.push('<tr class="ns1blankspaceCaption">' +
-										'<td class="ns1blankspaceCaption">' +
-										'Units / Quantity' +
-										'</td></tr>' +
-										'<tr class="ns1blankspace">' +
-										'<td class="ns1blankspaceText">' +
-										'<input id="ns1blankspaceStockUnits" class="ns1blankspaceText">' +
-										'</td></tr>');			
-
-						aHTML.push('<tr class="ns1blankspaceCaption">' +
-										'<td class="ns1blankspaceCaption">' +
-										'Minimum Stock Level' +
-										'</td></tr>' +
-										'<tr class="ns1blankspace">' +
-										'<td class="ns1blankspaceText">' +
-										'<input id="ns1blankspaceMinimumStockLevel" class="ns1blankspaceText">' +
-										'</td></tr>');	
-										
-						aHTML.push('</table>');					
-						
-						$('#ns1blankspaceStockColumn1').html(aHTML.join(''));
-						
-						var aHTML = [];
-					
-						aHTML.push('<table class="interfaceMain">');
-						
-						aHTML.push('<tr class="ns1blankspaceCaption">' +
-										'<td class="ns1blankspaceCaption">' +
-										'Stock Type' +
-										'</td></tr>' +
-										'<tr class="ns1blankspace">' +
-										'<td class="ns1blankspaceRadio">' +
-										'<input type="radio" id="radioStockUnit1" name="radioStockUnit" value="1"/>Each' +
-										'<br /><input type="radio" id="radioStockUnit2" name="radioStockUnit" value="2"/>Packet' +
-										'<br /><input type="radio" id="radioStockUnit6" name="radioStockUnit" value="3"/>Metre' +
-										'<br /><input type="radio" id="radioStockUnit7" name="radioStockUnit" value="4"/>Box' +
-										'<br /><input type="radio" id="radioStockUnit7" name="radioStockUnit" value="5"/>kg' +
-										'<br /><input type="radio" id="radioStockUnit7" name="radioStockUnit" value="6"/>Thousand' +
-										'<br /><input type="radio" id="radioStockUnit7" name="radioStockUnit" value="7"/>Unit' +
-										'<br /><input type="radio" id="radioStockUnit7" name="radioStockUnit" value="8"/>Hour' +
-										'<br /><input type="radio" id="radioStockUnit7" name="radioStockUnit" value="9"/>Pair' +
-										'</td></tr>');
-
-						aHTML.push('<tr class="ns1blankspaceCaption">' +
-										'<td class="ns1blankspaceCaption">' +
-										'Track Stock' +
-										'</td></tr>' +
-										'<tr class="ns1blankspace">' +
-										'<td class="ns1blankspaceRadio">' +
-										'<input type="radio" id="radioTrackStockN" name="radioTrackStock" value="N"/>No' +
-										'</td></tr>');
-						
-						aHTML.push('</table>');					
+						if ($('#ns1blankspaceMainStock').attr('data-loading') == '1')
+						{
+							$('#ns1blankspaceMainStock').attr('data-loading', '');
 							
-						$('#ns1blankspaceStockColumn2').html(aHTML.join(''));
+							aHTML.push('<table class="ns1blankspaceContainer">' +
+											'<tr class="ns1blankspaceContainer">' +
+											'<td id="ns1blankspaceStockColumn1" class="ns1blankspaceColumn2" style="width:65px;"></td>' +
+											'<td id="ns1blankspaceStockColumn2" class="ns1blankspaceColumn1"></td>' +
+											'<td id="ns1blankspaceStockColumn3" class="ns1blankspaceColumn2" style="width:125px;"></td>' +
+											'</tr>' + 
+											'</table>');					
+							
+							$('#ns1blankspaceMainStock').html(aHTML.join(''));
 
-						if (ns1blankspace.objectContextData != undefined)
-						{
-							$('#ns1blankspaceStockUnits').val(ns1blankspace.objectContextData.units);
-							$('#ns1blankspaceMinimumStockLevel').val(ns1blankspace.objectContextData.minimumstocklevel);
-							$('[name="radioStockUnit"][value="' + ns1blankspace.objectContextData.unittype + '"]').attr('checked', true);
-							$('[name="radioTrackStock"][value="' + ns1blankspace.objectContextData.trackinventory + '"]').attr('checked', true);
+							var aHTML = [];
+						
+							aHTML.push('<table class="ns1blankspace">');
+						
+							aHTML.push('<tr class="ns1blankspace">' +
+											'<td class="ns1blankspaceRadio">' +
+											'<input type="radio" id="radioTrackStockN" name="radioTrackStock" value="N"/>No Tracking' +
+											'<br /><input type="radio" id="radioTrackStockY" name="radioTrackStock" value="Y"/>Track Stock' +
+											'</td></tr>');
+						
+							aHTML.push('</table>');
+
+							$('#ns1blankspaceStockColumn1').html(aHTML.join(''));			
+							
+							var aHTML = [];
+
+							aHTML.push('<table class="ns1blankspaceColumn2">');
+							
+							aHTML.push('<tr class="ns1blankspaceCaption">' +
+											'<td class="ns1blankspaceCaption">' +
+											'Units In Stock' +
+											'</td></tr>' +
+											'<tr class="ns1blankspace">' +
+											'<td class="ns1blankspaceText">' +
+											'<input id="ns1blankspaceStockUnits" class="ns1blankspaceText">' +
+											'</td></tr>');			
+
+							aHTML.push('<tr class="ns1blankspaceCaption">' +
+											'<td class="ns1blankspaceCaption">' +
+											'Minimum Stock Level' +
+											'</td></tr>' +
+											'<tr class="ns1blankspace">' +
+											'<td class="ns1blankspaceText">' +
+											'<input id="ns1blankspaceMinimumStockLevel" class="ns1blankspaceText">' +
+											'</td></tr>');
+
+							aHTML.push('<tr class="ns1blankspaceCaption">' +
+											'<td class="ns1blankspaceCaption">' +
+											'Stock (Inventory) Account' +
+											'</td></tr>' +
+											'<tr class="ns1blankspace">' +
+											'<td class="ns1blankspaceSelect">' +
+											'<input id="ns1blankspaceStockFinancialAccountInventory" class="ns1blankspaceSelect"' +
+												' data-method="SETUP_FINANCIAL_ACCOUNT_SEARCH"' +
+												' data-columns="title">' +
+											'</td></tr>');
+											
+							aHTML.push('</table>');					
+							
+							$('#ns1blankspaceStockColumn2').html(aHTML.join(''));
+							
+							var aHTML = [];
+						
+							aHTML.push('<table class="ns1blankspaceColumn2">');
+							
+							aHTML.push('<tr class="ns1blankspaceCaption">' +
+											'<td class="ns1blankspaceCaption">' +
+											'Stock Type' +
+											'</td></tr>' +
+											'<tr class="ns1blankspace">' +
+											'<td class="ns1blankspaceRadio">' +
+											'<input type="radio" id="radioStockUnit1" name="radioStockUnit" value="1"/>Each' +
+											'<br /><input type="radio" id="radioStockUnit2" name="radioStockUnit" value="2"/>Packet' +
+											'<br /><input type="radio" id="radioStockUnit6" name="radioStockUnit" value="3"/>Metre' +
+											'<br /><input type="radio" id="radioStockUnit7" name="radioStockUnit" value="4"/>Box' +
+											'<br /><input type="radio" id="radioStockUnit7" name="radioStockUnit" value="5"/>kg' +
+											'<br /><input type="radio" id="radioStockUnit7" name="radioStockUnit" value="6"/>Thousand' +
+											'<br /><input type="radio" id="radioStockUnit7" name="radioStockUnit" value="7"/>Unit' +
+											'<br /><input type="radio" id="radioStockUnit7" name="radioStockUnit" value="8"/>Hour' +
+											'<br /><input type="radio" id="radioStockUnit7" name="radioStockUnit" value="9"/>Pair' +
+											'</td></tr>');
+
+							aHTML.push('</table>');					
+								
+							$('#ns1blankspaceStockColumn3').html(aHTML.join(''));
+
+							if (ns1blankspace.objectContextData != undefined)
+							{
+								$('#ns1blankspaceStockUnits').val(ns1blankspace.objectContextData.units);
+								$('#ns1blankspaceMinimumStockLevel').val(ns1blankspace.objectContextData.minimumstocklevel);
+								$('[name="radioStockUnit"][value="' + ns1blankspace.objectContextData.unittype + '"]').attr('checked', true);
+								$('#ns1blankspaceStockFinancialAccountInventory').val(ns1blankspace.objectContextData.financialaccountinventorytext);
+								$('#ns1blankspaceStockFinancialAccountInventory').attr("data-id", ns1blankspace.objectContextData.financialaccountinventory);
+								$('[name="radioTrackStock"][value="' + ns1blankspace.objectContextData.trackinventory + '"]').attr('checked', true);
+							}
+							else
+							{
+								$('[name="radioStockUnit"][value="1"]').attr('checked', true);
+								$('[name="radioTrackStock"][value="' + (ns1blankspace.product.option.manageStock?'Y':'N') + '"]').attr('checked', true);
+							}	
 						}
-						else
-						{
-							$('[name="radioStockUnit"][value="1"]').attr('checked', true);
-							$('[name="radioTrackStock"][value="N"]').attr('checked', true);
-						}	
-					}	
-				},
+					},
 
-	new2:		function ()
-				{
-					ns1blankspace.objectContextData = undefined;
-					ns1blankspace.objectContext = -1;
-					ns1blankspace.product.layout();
-					ns1blankspace.show({selector: '#ns1blankspaceMainDetails'});
-					$('#ns1blankspaceViewportControlAction').button({disabled: false});
-					$('#ns1blankspaceViewportControlActionOptions').button({disabled: true});
-					ns1blankspace.product.details();
+					history:
+					{
+						show: 	function (oParam, oResponse)
+								{
+									var sXHTMLElementID = ns1blankspace.util.getParam(oParam, 'xhtmlElementID', {"default": 'ns1blankspaceMainStockHistory'}).value;
+
+									if (oResponse == undefined)
+									{
+										var aHTML = [];
+									
+										aHTML.push('<table>' +
+													'<tr>' +
+													'<td id="ns1blankspaceStockHistoryColumn1" class="ns1blankspaceColumn1Flexible">' + ns1blankspace.xhtml.loading + '</td>' +
+													'<td id="ns1blankspaceStockHistoryColumn2" class="ns1blankspaceColumn2" style="width:100px;"></td></tr>' +
+													'</table>');					
+											
+										$('#' + sXHTMLElementID).html(aHTML.join(''));
+
+										var oSearch = new AdvancedSearch();
+										oSearch.method = 'PRODUCT_STOCK_SEARCH';
+										oSearch.addField('effectivedate,financialaccount,financialaccounttext,notes,objectcontext,object,store,storetext,type,typetext,unitprice,units,modifieddate');
+										oSearch.addFilter('product', 'EQUAL_TO', ns1blankspace.objectContext)
+										oSearch.sort('modifieddate', 'desc');
+										oSearch.getResults(function(data)
+										{
+											ns1blankspace.product.stock.history.show(oParam, data)
+										});
+									}
+									else
+									{
+										var aHTML = [];
+										var h = -1;
+											
+										if (oResponse.data.rows.length === 0)
+										{
+											aHTML.push('<table style="margin-top:5px;">');
+											aHTML.push('<tr>');
+											aHTML.push('<td class="ns1blankspaceNothing">No stock history.</td>');
+											aHTML.push('</tr>');
+											aHTML.push('</table>');
+											
+											$('#ns1blankspaceStockHistoryColumn1').html(aHTML.join(''));
+										}
+										else
+										{
+											aHTML.push('<table id="ns1blankspaceStockHistory">');
+					
+											aHTML.push('<tr class="ns1blankspaceCaption">');
+											aHTML.push('<td class="ns1blankspaceHeaderCaption">Date</td>');
+											aHTML.push('<td class="ns1blankspaceHeaderCaption">Type</td>');
+											aHTML.push('<td class="ns1blankspaceHeaderCaption">Units</td>');
+											aHTML.push('</tr>');
+
+											$.each(oResponse.data.rows, function()
+											{
+												aHTML.push(ns1blankspace.product.stock.history.row(this, oParam));
+											});
+									    	
+											aHTML.push('</table>');
+
+											ns1blankspace.render.page.show(
+											{
+												xhtmlElementID: 'ns1blankspaceStockHistoryColumn1',
+												xhtmlContext: 'StockHistory',
+												xhtml: aHTML.join(''),
+												showMore: (oResponse.morerows === "true"),
+												columns: 'effectivedate',
+												more: oResponse.moreid,
+												rows: ns1blankspace.option.defaultRows,
+												functionSearch: ns1blankspace.attachments.show,
+												functionShowRow: ns1blankspace.attachments.row,
+												functionOnNewPage: ns1blankspace.attachments.bind,
+												type: 'json'
+											}); 	
+												
+											ns1blankspace.product.stock.history.bind();
+										}
+									}	
+								},
+
+						row:	function (oRow, oParam)
+								{
+									var aHTML = [];
+									
+									aHTML.push('<tr class="ns1blankspaceStockHistory">');
+									
+									aHTML.push('<td id="ns1blankspaceStockHistory_effectivedate-' + oRow.id + '" class="ns1blankspaceRow">' +
+														oRow.effectivedate + '</td>');
+														
+									aHTML.push('<td id="ns1blankspaceStockHistory_units-' + oRow.id + '" class="ns1blankspaceRow">' + oRow.typetext + '</td>');
+
+									aHTML.push('<td id="ns1blankspaceStockHistory_units-' + oRow.id + '" class="ns1blankspaceRow">' + oRow.units + '</td>');
+
+									aHTML.push('</tr>');
+									
+									return aHTML.join('');
+								}
+					}	
 				},
 
 	save: 		{			
@@ -876,43 +989,45 @@ ns1blankspace.product =
 								{
 									ns1blankspace.status.working();
 
-									var sData = 'id=' + ((ns1blankspace.objectContext == -1)?'':ns1blankspace.objectContext);
+									var oData = {};
+
+									if (ns1blankspace.objectContext != -1) {oData.id = ns1blankspace.objectContext};
 											
 									if ($('#ns1blankspaceMainDetails').html() != '')
 									{
-										sData += '&reference=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsReference').val());
-										sData += '&title=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsTitle').val());
-										sData += '&description=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsDescription').val());
+										oData.reference = $('#ns1blankspaceDetailsReference').val();
+										oData.title = $('#ns1blankspaceDetailsTitle').val();
+										oData.description = $('#ns1blankspaceDetailsDescription').val();
 										
 										var iStatus = $('input[name="radioStatus"]:checked').val()
 										if (iStatus == '') {iStatus = 1}
 										
-										sData += '&status=' + ns1blankspace.util.fs(iStatus);
-										sData += '&type=' + ns1blankspace.util.fs($('input[name="radioProductType"]:checked').val());
-
-										sData += '&financialaccountincome=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsFinancialAccountProductSales').attr('data-id'));
+										oData.status = iStatus;
+										oData.type = $('input[name="radioProductType"]:checked').val();
+										oData.financialaccountincome =  $('#ns1blankspaceDetailsFinancialAccountProductSales').attr('data-id');
+										oData.financialaccountpurchases =  $('#ns1blankspaceDetailsFinancialAccountProductPurchases').attr('data-id');
 									}
 									
 									if ($('#ns1blankspaceMainStock').html() != '')
 									{
-										sData += '&minimumstocklevel=' + ns1blankspace.util.fs($('#ns1blankspaceMinimumStockLevel').val());
-										sData += '&unittype=' + ns1blankspace.util.fs($('input[name="radioStockUnit"]:checked').val());
-										sData += '&trackinventory=' + ns1blankspace.util.fs($('input[name="radioTrackStock"]:checked').val());
+										if ($('#ns1blankspaceMinimumStockLevel').val() != '') {oData.minimumstocklevel = $('#ns1blankspaceMinimumStockLevel').val()};
+										oData.unittype = $('input[name="radioStockUnit"]:checked').val();
+										oData.trackinventory = $('input[name="radioTrackStock"]:checked').val();
+										oData.financialaccountinventory = $('#ns1blankspaceStockFinancialAccountInventory').attr('data-id');
 									}
 									
 									if ($('#ns1blankspaceMainCategory').html() != '')
 									{
-										var iCategory = ns1blankspace.util.fs($('input[name="radioCategory"]:checked').val());
-										if (iCategory == '') {iCategory = ns1blankspace.util.fs($('input[name="radioCategory"]:first').val())}
-									
-										sData += '&category=' + ns1blankspace.util.fs(iCategory);
+										var iCategory = $('input[name="radioCategory"]:checked').val();
+										if (iCategory == '') {iCategory = $('input[name="radioCategory"]:first').val()}
+										oData.category = iCategory;
 									}
 									
 									$.ajax(
 									{
 										type: 'POST',
 										url: ns1blankspace.util.endpointURI('PRODUCT_MANAGE'),
-										data: sData,
+										data: oData,
 										dataType: 'json',
 										success: ns1blankspace.product.save.process
 									});
@@ -933,7 +1048,10 @@ ns1blankspace.product =
 											
 										if ($('#ns1blankspaceMainStock').html() != '')
 										{
-											ns1blankspace.product.save.units();
+											if ($('#ns1blankspaceStockUnits').val() != ns1blankspace.objectContextData.units)
+											{	
+												ns1blankspace.product.save.units();
+											}	
 										}
 
 										if (bNew)
@@ -965,16 +1083,19 @@ ns1blankspace.product =
 
 					units:		function (oParam)
 								{
-									var sData = 'units=' + ns1blankspace.util.fs($('#ns1blankspaceStockUnits').val());
-									sData += '&product=' + ns1blankspace.util.fs(ns1blankspace.objectContext);
-									sData += '&type=3';
-									sData += '&effectivedate=' + Date.today().toString("dd-MMM-yyyy");
+									var oData =
+									{
+										units: $('#ns1blankspaceStockUnits').val(),
+										product: ns1blankspace.objectContext,
+										type: 3,
+										effectivedate: Date.today().toString("dd-MMM-yyyy")
+									}	
 									
 									$.ajax(
 									{
 										type: 'POST',
 										url: ns1blankspace.util.endpointURI('PRODUCT_STOCK_MANAGE'),
-										data: sData,
+										data: oData,
 										dataType: 'json'
 									});
 								}

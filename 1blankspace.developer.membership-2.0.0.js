@@ -239,8 +239,12 @@ ns1blankspace.developer.membership =
 						aHTML.push('<tr><td id="ns1blankspaceControlEndpoints" class="ns1blankspaceControl">' +
 										'Endpoints</td></tr>');
 
+						aHTML.push('</table>');
+
+						aHTML.push('<table class="ns1blankspaceControl">');
+
 						aHTML.push('<tr><td id="ns1blankspaceControlSubscriptions" class="ns1blankspaceControl">' +
-										'Subscriptions</td></tr>');
+										'Subscribed<br />Spaces</td></tr>');
 
 						aHTML.push('</table>');
 					}				
@@ -751,7 +755,7 @@ ns1blankspace.developer.membership =
 													
 													aHTML.push('<td id="ns1blankspaceMembershipSubscriptions_title-' + this.id +
 																			'" data-contactbusinesstext="' + this.contactbusinesstext +
-																			'" class="ns1blankspaceRow ns1blankspaceRowSelect">' +
+																			'" class="ns1blankspaceRow">' +
 																			this.contactbusinesstext);
 													
 													aHTML.push('<br /><span class="ns1blankspaceSub" id="ns1blankspaceMembershipSubscriptions_startdate-' + this.id + '">' +
@@ -820,7 +824,7 @@ ns1blankspace.developer.membership =
 											$('#ns1blankspaceMembershipSubscriptionsRegistration').keyup(function()
 											{
 												if (ns1blankspace.timer.delayCurrent != 0) {clearTimeout(ns1blankspace.timer.delayCurrent)};
-										        ns1blankspace.timer.delayCurrent = setTimeout("ns1blankspace.developer.membership.subscriptions.search('ns1blankspaceMembershipSubscriptionsRegistration')", giWaitForStop);
+										        ns1blankspace.timer.delayCurrent = setTimeout("ns1blankspace.developer.membership.subscriptions.search('ns1blankspaceMembershipSubscriptionsRegistration')", ns1blankspace.option.typingWait);
 											});	
 												
 											$('#ns1blankspaceMembershipSubscriptionsRegistration').live('blur', function() 
@@ -833,7 +837,7 @@ ns1blankspace.developer.membership =
 										
 											aHTML.push('<table class="ns1blankspaceColumn2" style="font-size:0.875em">');
 													
-											if (!aXHTMLElementID[1])
+											if (aXHTMLElementID[1] != undefined)
 											{
 												aHTML.push('<tr><td class="ns1blankspaceNothing">You need to delete it and then re-add it.</td></tr>');
 											}	
@@ -858,25 +862,7 @@ ns1blankspace.developer.membership =
 											})
 											.click(function() 
 											{
-												ns1blankspace.status.working();
-
-												var sData = 'id=' + ns1blankspace.util.fs(aXHTMLElementID[1]);
-												sData += '&registration=' + ns1blankspace.util.fs($('#ns1blankspaceMembershipSubscriptionsRegistration').attr("data-id"));
-												sData += '&membership=' + ns1blankspace.util.fs(giObjectContext);
-
-												$.ajax(
-												{
-													type: 'POST',
-													url: ns1blankspace.util.endpointURI('ADMIN_MEMBERSHIP_SUBSCRIPTION_MANAGE'),
-													data: sData,
-													dataType: 'json',
-													success: 	function()
-																{
-																	oParam.step = 1;
-																	ns1blankspace.status.message('Saved');
-																	ns1blankspace.developer.membership.subscriptions.show(oParam);
-																}
-												});
+												ns1blankspace.developer.membership.subscriptions.save({id: aXHTMLElementID[1]})
 											})
 											
 											$('#ns1blankspaceMainMembershipSubscriptionEditCancel').button(
@@ -910,6 +896,35 @@ ns1blankspace.developer.membership =
 												success: function(data){$('#' + sXHTMLElementID).parent().parent().fadeOut(500)}
 											});	
 										}	
+								},
+
+					save: 		function (oParam, oResponse)
+								{
+									var sID = ns1blankspace.util.getParam(oParam, 'id').value;
+
+									ns1blankspace.status.working();
+
+									var oData =
+									{
+										registration: $('#ns1blankspaceMembershipSubscriptionsRegistration').attr("data-id"),
+										membership: ns1blankspace.objectContext
+									}
+
+									if (sID != undefined) {oData.id = sID}
+
+									$.ajax(
+									{
+										type: 'POST',
+										url: ns1blankspace.util.endpointURI('ADMIN_MEMBERSHIP_SUBSCRIPTION_MANAGE'),
+										data: oData,
+										dataType: 'json',
+										success: 	function()
+													{
+														oParam.step = 1;
+														ns1blankspace.status.message('Saved');
+														ns1blankspace.developer.membership.subscriptions.show(oParam);
+													}
+									});
 								},		
 
 					search:		function (sXHTMLInputElementID, oResponse)
@@ -936,7 +951,7 @@ ns1blankspace.developer.membership =
 									}
 									else
 									{	
-										aHTML.push('<table id="ns1blankspaceMembershipRegistration" class="ns1blankspaceContainer" style="width: 350px;">');
+										aHTML.push('<table id="ns1blankspaceMembershipRegistration" class="ns1blankspaceDropDown" style="width: 350px;">');
 
 										$(oResponse.data.rows).each(function()
 										{
@@ -955,7 +970,7 @@ ns1blankspace.developer.membership =
 										$(ns1blankspace.xhtml.container).show();
 										$(ns1blankspace.xhtml.container).offset({ top: $('#' + sXHTMLInputElementID).offset().top + $('#' + sXHTMLInputElementID).height(), left: $('#' + sXHTMLInputElementID).offset().left});
 
-										$('#ns1blankspaceMembershipRegistration > td.ns1blankspaceSearch').click(function(event)
+										$('#ns1blankspaceMembershipRegistration td.ns1blankspaceSearch').click(function(event)
 										{
 											var aXHTMLElementID = (event.target.id).split('-');
 											iXHTMLElementContextID = aXHTMLElementID[1];
