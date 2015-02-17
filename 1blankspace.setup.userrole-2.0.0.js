@@ -613,7 +613,7 @@ ns1blankspace.setup.userRole =
 											var oSearch = new AdvancedSearch();
 											oSearch.method = 'SETUP_ENDPOINT_SEARCH';
 											oSearch.addField('title');
-											oSearch.rows = 200;
+											oSearch.rows = 1000;
 											oSearch.sort('title', 'asc');
 											oSearch.getResults(function(data) {ns1blankspace.setup.userRole.access.edit(oParam, data)})	
 										}
