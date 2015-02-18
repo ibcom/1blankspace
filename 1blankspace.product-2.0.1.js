@@ -142,7 +142,7 @@ ns1blankspace.product =
 										oSearch.method = 'PRODUCT_SEARCH';
 										oSearch.addField('reference,title,trackinventory,status,statustext,description,financialaccountincome,financialaccountincometext,' +
 															'financialaccountpurchases,financialaccountpurchasestext,financialaccountinventory,financialaccountinventorytext,' +
-															'unittype,unittypetext,units,category,categorytext,currentretailprice,type,minimumstocklevel');
+															'unittype,unittypetext,units,category,categorytext,currentretailprice,type,minimumstocklevel,unitprice');
 
 										oSearch.addField(ns1blankspace.option.auditFields);
 				
@@ -837,7 +837,16 @@ ns1blankspace.product =
 												' data-method="SETUP_FINANCIAL_ACCOUNT_SEARCH"' +
 												' data-columns="title">' +
 											'</td></tr>');
-											
+				
+							aHTML.push('<tr class="ns1blankspaceCaption">' +
+											'<td class="ns1blankspaceCaption">' +
+											'Current Stock Unit Cost' +
+											'</td></tr>' +
+											'<tr class="ns1blankspace">' +
+											'<td class="ns1blankspaceText">' +
+											'<input id="ns1blankspaceStockUnitPrice" class="ns1blankspaceText">' +
+											'</td></tr>');
+
 							aHTML.push('</table>');					
 							
 							$('#ns1blankspaceStockColumn2').html(aHTML.join(''));
@@ -862,6 +871,14 @@ ns1blankspace.product =
 											'<br /><input type="radio" id="radioStockUnit7" name="radioStockUnit" value="8"/>Hour' +
 											'<br /><input type="radio" id="radioStockUnit7" name="radioStockUnit" value="9"/>Pair' +
 											'</td></tr>');
+		
+							aHTML.push('<tr class="ns1blankspaceCaption">' +
+											'<td class="ns1blankspaceCaption" style="padding-top:12px;">' +
+											'Effective<br />Stock On Hand<br />Unit Cost' +
+											'</td></tr>' +
+											'<tr class="ns1blankspace">' +
+											'<td class="ns1blankspaceSelect" id="ns1blankspaceStockUnitCostPrice">' +
+											'</td></tr>');
 
 							aHTML.push('</table>');					
 								
@@ -875,17 +892,28 @@ ns1blankspace.product =
 								$('#ns1blankspaceStockFinancialAccountInventory').val(ns1blankspace.objectContextData.financialaccountinventorytext);
 								$('#ns1blankspaceStockFinancialAccountInventory').attr("data-id", ns1blankspace.objectContextData.financialaccountinventory);
 								$('[name="radioTrackStock"][value="' + ns1blankspace.objectContextData.trackinventory + '"]').attr('checked', true);
+								$('#ns1blankspaceStockUnitCostPrice').html(ns1blankspace.objectContextData.unitprice);
+								$('#ns1blankspaceStockUnitPrice').val(ns1blankspace.objectContextData.stockunitprice);
 							}
 							else
 							{
 								$('[name="radioStockUnit"][value="1"]').attr('checked', true);
 								$('[name="radioTrackStock"][value="' + (ns1blankspace.product.option.manageStock?'Y':'N') + '"]').attr('checked', true);
+								$('#ns1blankspaceStockUnitCostPrice').html('Unknown');
 							}	
 						}
 					},
 
 					history:
 					{
+						data: 	{
+									sources:
+									{
+										"43": "Order",
+										"126": "Supplier Order"
+									}	
+								},
+
 						show: 	function (oParam, oResponse)
 								{
 									var sXHTMLElementID = ns1blankspace.util.getParam(oParam, 'xhtmlElementID', {"default": 'ns1blankspaceMainStockHistory'}).value;
@@ -935,6 +963,10 @@ ns1blankspace.product =
 											aHTML.push('<td class="ns1blankspaceHeaderCaption">Date</td>');
 											aHTML.push('<td class="ns1blankspaceHeaderCaption">Type</td>');
 											aHTML.push('<td class="ns1blankspaceHeaderCaption">Units</td>');
+											aHTML.push('<td class="ns1blankspaceHeaderCaption" style="text-align:right;">Unit Cost Price</td>');
+											aHTML.push('<td class="ns1blankspaceHeaderCaption">Financial Account</td>');
+											aHTML.push('<td class="ns1blankspaceHeaderCaption">Source</td>');
+											
 											aHTML.push('</tr>');
 
 											$.each(oResponse.data.rows, function()
@@ -959,7 +991,7 @@ ns1blankspace.product =
 												type: 'json'
 											}); 	
 												
-											ns1blankspace.product.stock.history.bind();
+											//ns1blankspace.product.stock.history.bind();
 										}
 									}	
 								},
@@ -976,6 +1008,14 @@ ns1blankspace.product =
 									aHTML.push('<td id="ns1blankspaceStockHistory_units-' + oRow.id + '" class="ns1blankspaceRow">' + oRow.typetext + '</td>');
 
 									aHTML.push('<td id="ns1blankspaceStockHistory_units-' + oRow.id + '" class="ns1blankspaceRow">' + oRow.units + '</td>');
+
+									aHTML.push('<td id="ns1blankspaceStockHistory_unitprice-' + oRow.id + '" class="ns1blankspaceRow" style="text-align:right;">' + oRow.unitprice + '</td>');
+
+									aHTML.push('<td id="ns1blankspaceStockHistory_financialaccount-' + oRow.id + '" class="ns1blankspaceRow">' + oRow.financialaccounttext + '</td>');
+
+									aHTML.push('<td id="ns1blankspaceStockHistory_object-' + oRow.id + '" class="ns1blankspaceRow"' +
+													' data-objectcontext="' + oRow.objectcontext + '"' +
+													'>' + oRow.object + '</td>');
 
 									aHTML.push('</tr>');
 									
@@ -1014,6 +1054,7 @@ ns1blankspace.product =
 										oData.unittype = $('input[name="radioStockUnit"]:checked').val();
 										oData.trackinventory = $('input[name="radioTrackStock"]:checked').val();
 										oData.financialaccountinventory = $('#ns1blankspaceStockFinancialAccountInventory').attr('data-id');
+										oData.stockunitprice = $('#ns1blankspaceStockUnitPrice').val();
 									}
 									
 									if ($('#ns1blankspaceMainCategory').html() != '')
@@ -1086,9 +1127,10 @@ ns1blankspace.product =
 									var oData =
 									{
 										units: $('#ns1blankspaceStockUnits').val(),
+										unitprice: $('#ns1blankspaceStockUnitPrice').val(),
 										product: ns1blankspace.objectContext,
 										type: 3,
-										effectivedate: Date.today().toString("dd-MMM-yyyy")
+										effectivedate: Date.today().toString("dd-MMM-yyyy"),
 									}	
 									
 									$.ajax(
