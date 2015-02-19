@@ -1880,8 +1880,8 @@ ns1blankspace.attachments =
 					var sHelpNotes;
 					var oContext = {inContext: false};
 
-					var sSortBy = ns1blankspace.util.getParam(oParam, 'sortBy', {"default": 'filename'});
-					var sSortDirection = ns1blankspace.util.getParam(oParam, 'sortDirection', {"default": 'asc'});
+					var sSortBy = ns1blankspace.util.getParam(oParam, 'sortBy', {"default": 'filename'}).value;
+					var sSortDirection = ns1blankspace.util.getParam(oParam, 'sortDirection', {"default": 'asc'}).value;
 					
 					if (oParam != undefined)
 					{
@@ -1961,14 +1961,15 @@ ns1blankspace.attachments =
 						}
 						
 						oSearch.sort(sSortBy, sSortDirection);
-						oSearch.getResults(function(data) {ns1blankspace.attachments.process(data, sXHTMLElementID)});
+						oSearch.getResults(function(data) {ns1blankspace.attachments.process(data, oParam)});
 					}
 				},
 
-	process: 	function (oResponse, sXHTMLElementID)
+	process: 	function (oResponse, oParam)
 				{	
+					var sXHTMLElementID = ns1blankspace.util.getParam(oParam, 'xhtmlElementID').value;
+
 					var aHTML = [];
-					var h = -1;
 						
 					if (oResponse.data.rows.length === 0)
 					{
