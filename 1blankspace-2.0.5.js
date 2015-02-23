@@ -204,6 +204,8 @@ ns1blankspace.app =
 							}	
 						});
 
+						ns1blankspace.scriptsLoaded = true;
+						
 						$('#ns1blankspaceHeader').html(ns1blankspace.xhtml.header);
 
 						ns1blankspace.version = 2;

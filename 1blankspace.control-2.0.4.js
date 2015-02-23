@@ -1910,6 +1910,8 @@ ns1blankspace.attachments =
 									'</table>');					
 							
 						$('#' + sXHTMLElementID).html(aHTML.join(''));
+
+						oParam = ns1blankspace.util.setParam(oParam, 'xhtmlElementID', 'ns1blankspaceAttachmentsColumn1');
 						
 						var aHTML = [];
 						
@@ -1968,6 +1970,7 @@ ns1blankspace.attachments =
 	process: 	function (oResponse, oParam)
 				{	
 					var sXHTMLElementID = ns1blankspace.util.getParam(oParam, 'xhtmlElementID').value;
+					var bShowUser = ns1blankspace.util.getParam(oParam, 'showUser', {"default": false});
 
 					var aHTML = [];
 						
@@ -1989,6 +1992,12 @@ ns1blankspace.attachments =
 						aHTML.push('<tr class="ns1blankspaceCaption">');
 						aHTML.push('<td class="ns1blankspaceHeaderCaption">File Name</td>');
 						aHTML.push('<td class="ns1blankspaceHeaderCaption">Date</td>');
+
+						if (bShowUser)
+						{
+							aHTML.push('<td class="ns1blankspaceHeaderCaption">User</td>');
+						}
+
 						aHTML.push('<td class="ns1blankspaceHeaderCaption">&nbsp;</td>');
 						aHTML.push('</tr>');
 

@@ -840,7 +840,7 @@ ns1blankspace.product =
 				
 							aHTML.push('<tr class="ns1blankspaceCaption">' +
 											'<td class="ns1blankspaceCaption">' +
-											'Current Stock Unit Cost' +
+											'Stock Purchase Unit Cost' +
 											'</td></tr>' +
 											'<tr class="ns1blankspace">' +
 											'<td class="ns1blankspaceText">' +
