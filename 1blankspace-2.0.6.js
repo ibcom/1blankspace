@@ -3,7 +3,7 @@
  * Licensed as Attribution-ShareAlike 4.0 International
  * http://creativecommons.org/licenses/by-sa/4.0/
  *
- * https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.min.js
+ * jscripts/modernizr-load.js
  */
 
 "use strict";
