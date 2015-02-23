@@ -2,6 +2,8 @@
  * ibCom Pty Ltd ATF ibCom Unit Trust & contributors
  * Licensed as Attribution-ShareAlike 4.0 International
  * http://creativecommons.org/licenses/by-sa/4.0/
+ *
+ * https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.min.js
  */
 
 "use strict";
@@ -166,15 +168,8 @@ ns1blankspace.app =
 	init: 		function (oParam)
 				{
 					var bInitialise = false;
-
-					if (oParam != undefined)
-					{
-						if (oParam.initialise != undefined) {bInitialise = oParam.initialise}
-					}
-					else
-					{
-						oParam = {}
-					}
+					var bInitialise = ns1blankspace.util.getParam(oParam, 'initialise', {"default": false}).value;
+					var bInitialiseScripts = ns1blankspace.util.getParam(oParam, 'initialiseScripts', {"default": false}).value;
 
 					if ($('#ns1blankspaceContainer').length === 0)
 					{
@@ -194,16 +189,28 @@ ns1blankspace.app =
 					{
 						window.setTimeout('ns1blankspace.app.init({initialise: true})', 100);
 					}
+					else if (!bInitialiseScripts)
+					{
+						if (Modernizr == undefined)
+						{
+							ns1blankspace.debug.message("NEED A REFERENCE TO Modernizr", true)
+						}
+						else
+						{
+							Modernizr.load(
+							{
+								load: $.map(ns1blankspace.scripts, function(a) {return a.source}),
+								complete: 	function()
+											{
+												ns1blankspace.scriptsLoaded = true;
+												oParam = ns1blankspace.util.setParam(oParam, 'initialiseScripts', true);
+												ns1blankspace.app.init(oParam);
+											}
+							});
+						}	
+					}	
 					else
 					{	
-						$.each(ns1blankspace.scripts, function()
-						{
-							if (this.source != '')
-							{
-								ns1blankspace.app.loadScript(this.source);
-							}	
-						});
-
 						$('#ns1blankspaceHeader').html(ns1blankspace.xhtml.header);
 
 						ns1blankspace.version = 2;
