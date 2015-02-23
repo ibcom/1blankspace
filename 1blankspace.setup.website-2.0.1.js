@@ -567,12 +567,12 @@ ns1blankspace.setup.website =
 						{
 							aHTML.push('<tr><td class="ns1blankspaceSummaryColumn2Action" style="width:175px; padding-top:10px;">' +
 										'<a href="' + ns1blankspace.objectContextData.primaryurl + '" target="_blank">' + ns1blankspace.objectContextData.primaryurl + '</a>' +
+										'<br /><hr /><br />' +
 										'</td></tr>');
 						}		
 									
 						aHTML.push('<tr><td class="ns1blankspaceSub" style="font-size:0.75em;">' +
-										'<br /><hr />' +
-										'<br />Use the Attachments link to add your js scripts and update the Scripts section to reference them and any other scripts your app may require.' +
+										'Use the Attachments link to add your js scripts and update the Scripts section to reference them and any other scripts your app may require.' +
 										'</td>' +
 										'</tr>');			
 									
