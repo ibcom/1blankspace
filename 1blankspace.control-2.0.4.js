@@ -1970,7 +1970,7 @@ ns1blankspace.attachments =
 	process: 	function (oResponse, oParam)
 				{	
 					var sXHTMLElementID = ns1blankspace.util.getParam(oParam, 'xhtmlElementID').value;
-					var bShowUser = ns1blankspace.util.getParam(oParam, 'showUser', {"default": false});
+					var bShowUser = ns1blankspace.util.getParam(oParam, 'showUser', {"default": false}).value;
 
 					var aHTML = [];
 						
@@ -2030,7 +2030,7 @@ ns1blankspace.attachments =
 	row:		function (oRow, oParam)
 				{
 					var aHTML = [];
-					var bShowUser = ns1blankspace.util.getParam(oParam, 'showUser', {"default": false});
+					var bShowUser = ns1blankspace.util.getParam(oParam, 'showUser', {"default": false}).value;
 
 					//onClick="ns1blankspace.unloadWarning=false;"
 					
