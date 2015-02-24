@@ -111,11 +111,12 @@ ns1blankspace.financial.invoice =
 						aHTML.push('<tr><td><div id="ns1blankspaceViewFinancialLarge" class="ns1blankspaceViewImageLarge"></div></td></tr>');
 
 						aHTML.push('<tr class="ns1blankspaceControl">' +
-									'<td style="padding-top:15px;" id="ns1blankspaceControlInvoicing" class="ns1blankspaceControl">Bulk<br /><span class="ns1blankspaceSub" style="font-size:0.75em;">Create & Send</span></td>' +
+									'<td style="padding-top:15px;" id="ns1blankspaceControlInvoicing" class="ns1blankspaceControl">Bulk<br />' +
+									'<span class="ns1blankspaceSub" style="font-size:0.75em;">Create &/or<br />send unsent<br />invoices</span></td>' +
 									'</tr>');
 
 						aHTML.push('<tr class="ns1blankspaceControl">' +
-									'<td style="padding-top:15px;" id="ns1blankspaceControlDebtors" class="ns1blankspaceControl">' +
+									'<td style="padding-top:18px;" id="ns1blankspaceControlDebtors" class="ns1blankspaceControl">' +
 										'Owed to you<br /><span class="ns1blankspaceSub" style="font-size:0.75em;">Debtors</span></td>' +
 									'</tr>');
 
