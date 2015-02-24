@@ -1236,24 +1236,36 @@ ns1blankspace.app =
 
 							$('#ns1blankspaceViewControlSearchOptions').click(function(event)
 							{
-								oNS.search.options.show();
+								if ($(this).attr("disabled") != 'disabled')
+								{
+									oNS.search.options.show();
+								}	
 							});
 							
 							$('#ns1blankspaceViewControlNew').click(function(event)
 							{
-								oNS.init({"new": true});
+								if ($(this).attr("disabled") != 'disabled')
+								{
+									oNS.init({"new": true});
+								}	
 							});
 							
 							$('#ns1blankspaceViewControlNew').button({disabled: false});
 
 							$('#ns1blankspaceViewControlNewOptions').click(function(event)
 							{
-								oNS["new"].options();
+								if ($(this).attr("disabled") != 'disabled')
+								{
+									oNS["new"].options();
+								}	
 							});
 							
 							$('#ns1blankspaceViewControlAction').click(function(event)
 							{
-								oNS.save.send();
+								if ($(this).attr("disabled") != 'disabled')
+								{
+									oNS.save.send();
+								}	
 							});
 							
 							$('#ns1blankspaceViewControlAction').button({disabled: true});
