@@ -114,6 +114,11 @@ ns1blankspace.financial.invoice =
 									'<td style="padding-top:15px;" id="ns1blankspaceControlInvoicing" class="ns1blankspaceControl">Bulk<br /><span class="ns1blankspaceSub" style="font-size:0.75em;">Create & Send</span></td>' +
 									'</tr>');
 
+						aHTML.push('<tr class="ns1blankspaceControl">' +
+									'<td style="padding-top:15px;" id="ns1blankspaceControlDebtors" class="ns1blankspaceControl">' +
+										'Owed to you<br /><span class="ns1blankspaceSub" style="font-size:0.75em;">Debtors</span></td>' +
+									'</tr>');
+
 						aHTML.push('</table>');		
 						
 						$('#ns1blankspaceControl').html(aHTML.join(''));
@@ -121,6 +126,13 @@ ns1blankspace.financial.invoice =
 						$('#ns1blankspaceControlInvoicing').click(function(event)
 						{
 							ns1blankspace.financial.invoicing.show();
+						});
+
+						$('#ns1blankspaceControlDebtors').click(function(event)
+						{
+							//ns1blankspace.show({selector: '#ns1blankspaceMainDebtors'});
+							ns1blankspace.financial.debtors.show({xhtmlElementID: 'ns1blankspaceMain'});
+							//ns1blankspace.financial.init({functionDefault: 'ns1blankspace.financial.debtors.show()'});
 						});
 													
 						$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions);

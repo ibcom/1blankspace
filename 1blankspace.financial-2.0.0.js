@@ -232,8 +232,9 @@ ns1blankspace.financial.initWhenDataInitalised = function (oParam)
 						}	
 					}		
 
-ns1blankspace.financial.home = function ()
+ns1blankspace.financial.home = function (oParam)
 					{	
+						var sFunctionDefault = ns1blankspace.util.getParam(oParam, 'functionDefault', {"default": 'ns1blankspace.financial.summary()'}).value;
 						var aHTML = [];
 						
 						aHTML.push('<table id="tableInterfaceViewportMain" class="interfaceViewportMain">');
@@ -377,7 +378,7 @@ ns1blankspace.financial.home = function ()
 
 						$('#ns1blankspaceControlSummary').addClass('ns1blankspaceHighlight');
 
-						ns1blankspace.history.control({functionDefault: 'ns1blankspace.financial.summary()'});
+						ns1blankspace.history.control({functionDefault: sFunctionDefault});
 					}
 
 ns1blankspace.financial.summary = function (oParam, oResponse)
@@ -523,6 +524,7 @@ ns1blankspace.financial.debtors =
 					var iType = ns1blankspace.util.getParam(oParam, 'type', {"default": 1}).value;
 					var iView = ns1blankspace.util.getParam(oParam, 'view', {"default": 2}).value;
 					var sEndDate = ns1blankspace.util.getParam(oParam, 'endDate').value;
+					var sXHTMLElementID = ns1blankspace.util.getParam(oParam, 'xhtmlElementID', {"default": 'ns1blankspaceMainDebtors'}).value;
 
 					if (oResponse == undefined)
 					{
@@ -537,7 +539,7 @@ ns1blankspace.financial.debtors =
 										'</tr>' +
 										'</table>');				
 						
-						$('#ns1blankspaceMainDebtors').html(aHTML.join(''));
+						$('#' + sXHTMLElementID).html(aHTML.join(''));
 
 						var aHTML = [];
 														
@@ -580,7 +582,7 @@ ns1blankspace.financial.debtors =
 							ns1blankspace.financial.debtors.show(oParam);
 						});
 
-							$('input.ns1blankspaceDate').datepicker({dateFormat: ns1blankspace.option.dateFormat});
+						$('input.ns1blankspaceDate').datepicker({dateFormat: ns1blankspace.option.dateFormat});
 
 						$('#ns1blankspaceDebtorsEndDate').change(function()
 						{

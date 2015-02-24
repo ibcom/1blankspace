@@ -1234,7 +1234,7 @@ ns1blankspace.financial.expense.outstanding =
 
 							var aHTML = [];
 
-							aHTML.push('<table id="ns1blankspaceExpenseOutstanding" class="ns1blankspaceColumn2" style="font-size:0.875em;">' +
+							aHTML.push('<table id="ns1blankspaceExpenseOutstanding" class="ns1blankspace" style="font-size:0.875em;">' +
 										'<tr class="ns1blankspaceHeaderCaption">' +
 										'<td class="ns1blankspaceHeaderCaption" style="width:10px;"><span class="ns1blankspaceExpenseOutstandingSelectAll"></span></td>' +
 										'<td class="ns1blankspaceHeaderCaption" style="width:100px;">Contact</td>' +

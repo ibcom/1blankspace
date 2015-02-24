@@ -300,7 +300,7 @@ ns1blankspace.product =
 											'Stock</td></tr>');
 
 							aHTML.push('<tr><td id="ns1blankspaceControlStockHistory" class="ns1blankspaceControl">' +
-											'History</td></tr>');
+											'Adjustments<br /><span class="ns1blankspaceSubNote">history</span></td></tr>');
 
 							aHTML.push('</table>');					
 						}
@@ -845,6 +845,10 @@ ns1blankspace.product =
 											'<tr class="ns1blankspace">' +
 											'<td class="ns1blankspaceText">' +
 											'<input id="ns1blankspaceStockUnitPrice" class="ns1blankspaceText">' +
+											'</td></tr>' +
+											'<tr class="ns1blankspace">' +
+											'<td class="ns1blankspaceSubNote">' +
+											'Stock-on-hand unit cost will be used if this is blank and units-in-stock is changed.' +
 											'</td></tr>');
 
 							aHTML.push('</table>');					
@@ -925,7 +929,7 @@ ns1blankspace.product =
 										aHTML.push('<table>' +
 													'<tr>' +
 													'<td id="ns1blankspaceStockHistoryColumn1" class="ns1blankspaceColumn1Flexible">' + ns1blankspace.xhtml.loading + '</td>' +
-													'<td id="ns1blankspaceStockHistoryColumn2" class="ns1blankspaceColumn2" style="width:100px;"></td></tr>' +
+													'<td id="ns1blankspaceStockHistoryColumn2" class="ns1blankspaceColumn2" style="width:0px;"></td></tr>' +
 													'</table>');					
 											
 										$('#' + sXHTMLElementID).html(aHTML.join(''));
@@ -962,10 +966,10 @@ ns1blankspace.product =
 											aHTML.push('<tr class="ns1blankspaceCaption">');
 											aHTML.push('<td class="ns1blankspaceHeaderCaption">Date</td>');
 											aHTML.push('<td class="ns1blankspaceHeaderCaption">Type</td>');
-											aHTML.push('<td class="ns1blankspaceHeaderCaption">Units</td>');
-											aHTML.push('<td class="ns1blankspaceHeaderCaption" style="text-align:right;">Unit Cost Price</td>');
-											aHTML.push('<td class="ns1blankspaceHeaderCaption">Financial Account</td>');
-											aHTML.push('<td class="ns1blankspaceHeaderCaption">Source</td>');
+											aHTML.push('<td class="ns1blankspaceHeaderCaption" style="text-align:right;">Units</td>');
+											aHTML.push('<td class="ns1blankspaceHeaderCaption" style="text-align:right;">Unit Cost Price ('
+															+ (ns1blankspace.option.currencySymbol||'$') + ')</td>');
+											aHTML.push('<td class="ns1blankspaceHeaderCaption">&nbsp;</td>');
 											
 											aHTML.push('</tr>');
 
@@ -991,7 +995,7 @@ ns1blankspace.product =
 												type: 'json'
 											}); 	
 												
-											//ns1blankspace.product.stock.history.bind();
+											ns1blankspace.product.stock.history.bind();
 										}
 									}	
 								},
@@ -1007,20 +1011,122 @@ ns1blankspace.product =
 														
 									aHTML.push('<td id="ns1blankspaceStockHistory_units-' + oRow.id + '" class="ns1blankspaceRow">' + oRow.typetext + '</td>');
 
-									aHTML.push('<td id="ns1blankspaceStockHistory_units-' + oRow.id + '" class="ns1blankspaceRow">' + oRow.units + '</td>');
+									aHTML.push('<td id="ns1blankspaceStockHistory_units-' + oRow.id + '" class="ns1blankspaceRow" style="text-align:right;">' + oRow.units + '</td>');
 
 									aHTML.push('<td id="ns1blankspaceStockHistory_unitprice-' + oRow.id + '" class="ns1blankspaceRow" style="text-align:right;">' + oRow.unitprice + '</td>');
 
-									aHTML.push('<td id="ns1blankspaceStockHistory_financialaccount-' + oRow.id + '" class="ns1blankspaceRow">' + oRow.financialaccounttext + '</td>');
+									//aHTML.push('<td id="ns1blankspaceStockHistory_financialaccount-' + oRow.id + '" class="ns1blankspaceRow ns1blankspaceNothing">' + oRow.financialaccounttext + '</td>');
 
-									aHTML.push('<td id="ns1blankspaceStockHistory_object-' + oRow.id + '" class="ns1blankspaceRow"' +
-													' data-objectcontext="' + oRow.objectcontext + '"' +
-													'>' + oRow.object + '</td>');
+									aHTML.push('<td style="width:30px;text-align:right;" class="ns1blankspaceRow">' +
+													'<span id="ns1blankspaceStockHistory_more-' + oRow.id + '" class="ns1blankspaceRowMore"' +
+													' data-sourceobject="' + oRow.object + '"' +
+													' data-storetext="' + oRow.storetext + '"></span>' +
+													'</td>');
 
 									aHTML.push('</tr>');
 									
 									return aHTML.join('');
-								}
+								},
+
+						bind: 	function (oParam)
+								{
+									$('#ns1blankspaceStockHistory .ns1blankspaceRowMore').button(
+									{
+										text: false,
+										icons:
+										{
+											primary: "ui-icon-arrowthickstop-1-s"
+										}
+									})
+									.click(function()
+									{
+										ns1blankspace.product.stock.history.more.init(
+										{
+											id: (this.id).split('-')[1],
+											sourceObject: $(this).attr('data-sourceobject'),
+											storeText: $(this).attr('data-storetext')
+										});
+									})
+									.css('width', '15px')
+									.css('height', '20px');
+								},	
+
+						more: 	{
+									init:	function (oParam)
+											{
+												var sID = ns1blankspace.util.getParam(oParam, 'id').value;
+
+												if ($('#ns1blankspaceStockHistory_more_container-' + sID).length != 0)
+												{
+													$('#ns1blankspaceStockHistory_more_container-' + sID).remove();
+												}
+												else
+												{
+													$('#ns1blankspaceStockHistory_more-' + sID).parent().parent().after('<tr id="ns1blankspaceStockHistory_more_container-' + sID + '">' +
+																	'<td colspan=6>' +
+																	'<div style="background-color:#f3f3f3; padding:10px; font-size:0.875em; margin-bottom:10px;" class="ns1blankspaceScale85"' +
+																			' id="ns1blankspaceStockHistory_more_container_more-' + sID + '">' +
+																			'<span class="ns1blankspaceSubNote">loading...</span></div></td></tr>');
+
+													ns1blankspace.product.stock.history.more.show(oParam);
+												}
+											},
+
+									show: 	function (oParam, oResponse)
+											{
+												var sID = ns1blankspace.util.getParam(oParam, 'id').value;
+												var sSourceObject = ns1blankspace.util.getParam(oParam, 'sourceObject').value;
+												var sStoreText = ns1blankspace.util.getParam(oParam, 'storeText').value;
+
+												if (oResponse == undefined)
+												{
+													var oSearch = new AdvancedSearch();
+													oSearch.method = 'FINANCIAL_GENERAL_JOURNAL_ITEM_SEARCH';
+													oSearch.addField('generaljournalitem.debitamount,generaljournalitem.debittax,generaljournalitem.creditamount,' +
+																		'generaljournalitem.credittax,generaljournalitem.financialaccounttext');
+													oSearch.addFilter('generaljournalitem.generaljournal.object','EQUAL_TO', 159)
+													oSearch.addFilter('generaljournalitem.generaljournal.objectContext','EQUAL_TO', sID)
+													oSearch.sort('modifieddate', 'desc');
+													oSearch.getResults(function(data)
+													{
+														ns1blankspace.product.stock.history.more.show(oParam, data)
+													});
+												}
+												else
+												{
+													var aHTML = [];
+
+													aHTML.push('<table id="ns1blankspaceStockHistory">');
+													aHTML.push('<tr class="ns1blankspaceCaption">' +
+																	'<td class="ns1blankspaceHeaderCaption">Source</td>' +
+																	'<td class="ns1blankspaceHeaderCaption">Store</td>');
+
+													$.each(oResponse.data.rows, function (i, v)
+													{
+														aHTML.push('<td class="ns1blankspaceHeaderCaption" style="text-align:right; padding-right:2px;">' + v['generaljournalitem.financialaccounttext'] + ' Account</td>');
+													});
+
+													aHTML.push('</tr>');
+
+													aHTML.push('<tr>' +
+																	'<td class="ns1blankspaceRow1">' + (sSourceObject==''?'This product':ns1blankspace.product.stock.history.data.sources[sSourceObject]) + '</td>' +
+																	'<td class="ns1blankspaceRow1">' + sStoreText + '</td>');
+
+													$.each(oResponse.data.rows, function (i, v)
+													{
+														aHTML.push('<td class="ns1blankspaceRow1" style="text-align:right;">' +
+																	(ns1blankspace.option.currencySymbol||'$') +
+																	(v['generaljournalitem.creditamount']!=0?v['generaljournalitem.creditamount']:v['generaljournalitem.debitamount']) + '</td>');
+													});
+
+													aHTML.push('</tr>');
+
+													aHTML.push('</table>');
+
+													$('#ns1blankspaceStockHistory_more_container_more-' + sID).html(aHTML.join(''));
+												}	
+											}		
+								}						
 					}	
 				},
 
@@ -1089,9 +1195,19 @@ ns1blankspace.product =
 											
 										if ($('#ns1blankspaceMainStock').html() != '')
 										{
-											if ($('#ns1blankspaceStockUnits').val() != ns1blankspace.objectContextData.units)
-											{	
-												ns1blankspace.product.save.units();
+											if ($('#ns1blankspaceStockUnits').val() != '')
+											{
+												var iNewUnits = parseInt($('#ns1blankspaceStockUnits').val());
+												var iExistingUnits = parseInt(ns1blankspace.objectContextData.units);
+
+												if ((iNewUnits - iExistingUnits) != 0)
+												{	
+													ns1blankspace.product.save.units(
+													{
+														units: (iNewUnits - iExistingUnits),
+														price: $('#ns1blankspaceStockUnitPrice').val()
+													});
+												}
 											}	
 										}
 
@@ -1124,10 +1240,13 @@ ns1blankspace.product =
 
 					units:		function (oParam)
 								{
+									var iUnits = ns1blankspace.util.getParam(oParam, 'units').value;
+									var cPrice = ns1blankspace.util.getParam(oParam, 'price').value;
+
 									var oData =
 									{
-										units: $('#ns1blankspaceStockUnits').val(),
-										unitprice: $('#ns1blankspaceStockUnitPrice').val(),
+										units: iUnits,
+										unitprice: cPrice,
 										product: ns1blankspace.objectContext,
 										type: 3,
 										effectivedate: Date.today().toString("dd-MMM-yyyy"),

@@ -37,6 +37,7 @@ ns1blankspace.option.helpURI = 'http://community.mydigitalstructure.com';
 ns1blankspace.option.taxVATCaption = 'GST';
 ns1blankspace.option.taxPayrollCaption = 'Employee';
 ns1blankspace.option.taxBusinessCaption = 'Business';
+ns1blankspace.option.currencySymbol = '$';
 ns1blankspace.option.postInit = undefined;
 ns1blankspace.option.initialiseSpaceTemplate = '/jscripts/1blankspace.setup.space-2.0.0.json';
 
