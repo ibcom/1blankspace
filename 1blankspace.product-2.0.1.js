@@ -376,7 +376,7 @@ ns1blankspace.product =
 
 					$('#ns1blankspaceControlStockHistory').click(function(event)
 					{
-						ns1blankspace.show({selector: '#ns1blankspaceMainStockHistory'});
+						ns1blankspace.show({selector: '#ns1blankspaceMainStockHistory', refresh: true});
 						ns1blankspace.product.stock.history.show();
 					});
 				},
@@ -1009,7 +1009,7 @@ ns1blankspace.product =
 									aHTML.push('<td id="ns1blankspaceStockHistory_effectivedate-' + oRow.id + '" class="ns1blankspaceRow">' +
 														oRow.effectivedate + '</td>');
 														
-									aHTML.push('<td id="ns1blankspaceStockHistory_units-' + oRow.id + '" class="ns1blankspaceRow">' + oRow.typetext + '</td>');
+									aHTML.push('<td id="ns1blankspaceStockHistory_units-' + oRow.id + '" class="ns1blankspaceRow ns1blankspaceNothing">' + oRow.typetext + '</td>');
 
 									aHTML.push('<td id="ns1blankspaceStockHistory_units-' + oRow.id + '" class="ns1blankspaceRow" style="text-align:right;">' + oRow.units + '</td>');
 
