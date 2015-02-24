@@ -196,6 +196,11 @@ ns1blankspace.app =
 					}
 					else
 					{	
+						if ($.type(ns1blankspace.option.preLoad) === 'function')
+						{
+							ns1blankspace.option.preLoad();
+						}
+
 						$.each(ns1blankspace.scripts, function()
 						{
 							if (this.source != '')
@@ -1245,8 +1250,7 @@ ns1blankspace.app =
 							$('#ns1blankspaceViewControlNew').click(function(event)
 							{
 								if ($(this).attr("disabled") != 'disabled')
-								{
-									oNS.init({"new": true});
+								{ 
 								}	
 							});
 							

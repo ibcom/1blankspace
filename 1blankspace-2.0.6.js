@@ -191,6 +191,11 @@ ns1blankspace.app =
 					}
 					else if (!bInitialiseScripts)
 					{
+						if ($.type(ns1blankspace.option.preLoad) === 'function')
+						{
+							ns1blankspace.option.preLoad();
+						}
+						
 						if (Modernizr == undefined)
 						{
 							ns1blankspace.debug.message("NEED A REFERENCE TO Modernizr", true)
