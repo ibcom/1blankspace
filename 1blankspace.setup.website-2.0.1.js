@@ -1300,7 +1300,7 @@ ns1blankspace.setup.website =
 												sData += '&documentcontent=' + ns1blankspace.util.fs($('#ns1blankspaceEditText' + ns1blankspace.counter.editor).val());
 											}
 											
-											sData += '&id=' + ns1blankspace.util.fs(sID);
+											if (sID != undefined) {sData += '&id=' + ns1blankspace.util.fs(sID)};
 											
 											//ns1blankspace.util.endpointURI('SETUP_SITE_DOCUMENT_MANAGE')
 
