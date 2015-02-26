@@ -1250,7 +1250,8 @@ ns1blankspace.app =
 							$('#ns1blankspaceViewControlNew').click(function(event)
 							{
 								if ($(this).attr("disabled") != 'disabled')
-								{ 
+								{
+									oNS.init({"new": true});
 								}	
 							});
 							
@@ -1276,13 +1277,16 @@ ns1blankspace.app =
 							
 							$('#ns1blankspaceViewControlActionOptions').click(function(event)
 							{
-								ns1blankspace.app.options.show($.extend(true, oParam,
+								if ($(this).attr("disabled") != 'disabled')
 								{
-									element: this,
-									xhtml: undefined,
-									namespace: oNS,
-									namespaceText: sNS
-								}));
+									ns1blankspace.app.options.show($.extend(true, oParam,
+									{
+										element: this,
+										xhtml: undefined,
+										namespace: oNS,
+										namespaceText: sNS
+									}));
+								}	
 							});
 							
 							$('#ns1blankspaceViewControlActionOptions').button({disabled: true});
