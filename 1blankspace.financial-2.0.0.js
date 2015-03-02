@@ -3395,7 +3395,7 @@ ns1blankspace.financial.item =
 
 					var oSearch = new AdvancedSearch();
 					oSearch.method = 'FINANCIAL_ITEM_SEARCH';
-					oSearch.addField('financialaccount,financialaccounttext,taxtype,tax,issuedamount,amount,description');
+					oSearch.addField('financialaccount,financialaccounttext,taxtype,tax,issuedamount,amount,description,expenseoutstandingamount');
 					oSearch.addFilter('object', 'EQUAL_TO', iObject);
 					oSearch.addFilter('objectcontext', 'EQUAL_TO', iObjectContext);
 					oSearch.sort('financialaccounttext', 'asc');

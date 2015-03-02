@@ -29,7 +29,7 @@ ns1blankspace.experience =
 				},
 
 	util: 		{
-					toCSS: 		function (oObject)
+					toNV: 		function (oObject)
 								{
 									var sReturn = '';
 
@@ -1592,7 +1592,7 @@ ns1blankspace.experience.journey =
 															if (true)
 															{
 																aHTML.push('<td class="ns1blankspaceExperienceHeader"' +
-																			(v.style?' style="' + ns1blankspace.experience.util.toCSS(v.style) + '"':'') + '">' +
+																			(v.style?' style="' + ns1blankspace.experience.util.toNV(v.style) + '"':'') + '">' +
 																			v.caption + '</td>');
 															}	
 														});
@@ -1680,7 +1680,7 @@ ns1blankspace.experience.journey =
 																		(iPopulateWithID!==undefined?' data-populate-with-id="' + iPopulateWithID + '"':'') +
 																		' data-route-id="' + oJourney.routeID + '-' + thingToSee.id + '"' +
 																		' data-destination-id="' + thingToSee.id + '"' +
-																		(thingToSee.style?' style="' + ns1blankspace.experience.util.toCSS(thingToSee.style) + '"':'') + '">' +
+																		(thingToSee.style?' style="' + ns1blankspace.experience.util.toNV(thingToSee.style) + '"':'') + '">' +
 																		sValue + '</td>');
 														}	
 													});
