@@ -334,10 +334,29 @@ ns1blankspace.experience.journey =
 										ns1blankspace.experience.journey.prepare.affects(nameSpace, true);
 									});
 				  				}
-				},  									
+				}, 
 
-	controller:
-				{
+	population: {
+					get: 		function (oParam)
+								{
+									var oJourney = ns1blankspace.experience.journey.get(oParam);
+									var iPopulationID = ns1blankspace.util.getParam(oParam, 'populationID').value;
+									var oPopulationAtRest = {}
+
+									var oDestinations = $.grep(oJourney.destinations.reverse(), function(a) {return a.type == 'destination' && a.populationAtRest != undefined});
+
+									if (oDestinations.length > 0)
+									{
+										oPopulationAtRest = oDestinations[0].populationAtRest;
+									}
+
+									//var oPopulationAtRest = $.grep(oJourney.populationAtRest, function (a) {a.id == iPopulationID});
+
+									return oPopulationAtRest[0][oJourney.destinationID]
+								}
+				},												
+
+	controller: {
 					data: {messages: []},
 
 					init: 		function (aControls)
@@ -1182,7 +1201,7 @@ ns1blankspace.experience.journey =
 
 												v.value = sValue;
 
-												if (i!==0 && (oJourney.destination.type == 'select' || oJourney.destination.type == 'destination'))
+												if (i!==0 && (oJourney.destination.type == 'select' || oJourney.destination.populateWithSensitivity == 'low'))
 												 {oSearch.addOperator('or');}
 
 												oSearch.addFilter(v.model, v.comparison, sValue);
