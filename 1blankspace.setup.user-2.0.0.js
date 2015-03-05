@@ -149,7 +149,7 @@ ns1blankspace.setup.user =
 										
 										var oSearch = new AdvancedSearch();
 										oSearch.method = 'SETUP_USER_SEARCH';
-										oSearch.addField('username,contactpersontext,contactperson,lastlogon,disabled,disabledreason,unrestrictedaccess,Authenticationlevel,Authenticationdelivery');
+										oSearch.addField('username,contactpersontext,contactperson,lastlogon,disabled,disabledreason,unrestrictedaccess,authenticationlevel,authenticationdelivery,timezoneoffset');
 										oSearch.addFilter('id', 'EQUAL_TO', ns1blankspace.objectContext);
 										oSearch.getResults(function(data) {ns1blankspace.setup.user.show(data)});
 									}
@@ -423,6 +423,14 @@ ns1blankspace.setup.user =
 										'</td></tr>');
 						}
 						
+						if (ns1blankspace.objectContextData.timezoneoffset != '')
+						{
+							aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Time Zone From UTC (hours)</td></tr>' +
+										'<tr><td id="ns1blankspaceSummaryLastLogon" class="ns1blankspaceSummary">' +
+										(ns1blankspace.objectContextData.timezoneoffset) +
+										'</td></tr>');
+						}
+
 						aHTML.push('</table>');					
 						
 						$('#ns1blankspaceSummaryColumn1').html(aHTML.join(''));

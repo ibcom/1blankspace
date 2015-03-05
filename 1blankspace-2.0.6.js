@@ -1764,11 +1764,13 @@ ns1blankspace.logon =
 	send: 		function (oParam)
 				{
 					var iAuthenticationLevel = ns1blankspace.authenticationLevel;
+					var dNow = new Date();
 
 					var oData = 
 					{
 						method: 'LOGON',
-						logon: $('#ns1blankspaceLogonLogonName').val()
+						logon: $('#ns1blankspaceLogonLogonName').val(),
+						localtime: dNow.toString('dd MMM yyyy HH:mm')
 					}	
 
 					if (iAuthenticationLevel == 1)

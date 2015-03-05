@@ -1585,13 +1585,13 @@ ns1blankspace.control =
 											if (oResponse.access_token != undefined)
 											{
 												aHTML.push('<tr><td><br /><b>Example link for future diary events in iCal format:</b><br /><br />' +
-																	window.location.protocol + '//' + window.location.host + '/ondemand/action/' +
+																	window.location.protocol + '//' + window.location.host + '/rpc/action/' +
 																	'<br />?method=ACTION_ICAL_SEARCH' +
-																	'<br />&access_token=' + oResponse.access_token + '<br /><br /></td></tr>');
+																	'<br />&access_token=' + (oResponse.access_token).replace('|', ',') + '<br /><br /></td></tr>');
 																	
 												aHTML.push('<tr><td><a href="' +
-																	window.location.protocol + '//' + window.location.host + '/ondemand/action/?method=ACTION_ICAL_SEARCH' +
-																	'&access_token=' + oResponse.access_token + '" target="_blank" style="font-size:1.2em">Open example link</a>' +
+																	window.location.protocol + '//' + window.location.host + '/rpc/action/?method=ACTION_ICAL_SEARCH' +
+																	'&access_token=' + (oResponse.access_token).replace('|', ',') + '" target="_blank" style="font-size:1.2em">Open example link</a>' +
 																	'<br /><span style="color: #A0A0A0;">(You can then copy & paste it)<br /><br /></span></td></tr>');					
 											}
 											
