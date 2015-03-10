@@ -341,7 +341,7 @@ ns1blankspace.experience.journey =
 								{
 									var oJourney = ns1blankspace.experience.journey.get(oParam);
 									var iPopulationID = ns1blankspace.util.getParam(oParam, 'populationID').value;
-									var oPopulationAtRest = {}
+									var oPopulationAtRest;
 
 									var oDestinations = $.grep(oJourney.destinations.reverse(), function(a) {return a.type == 'destination' && a.populationAtRest != undefined});
 
@@ -350,9 +350,12 @@ ns1blankspace.experience.journey =
 										oPopulationAtRest = oDestinations[0].populationAtRest;
 									}
 
-									//var oPopulationAtRest = $.grep(oJourney.populationAtRest, function (a) {a.id == iPopulationID});
-
-									return oPopulationAtRest[0][oJourney.destinationID]
+									if (oPopulationAtRest.length != 0)
+									{
+										oPopulationAtRest = oPopulationAtRest[0][oJourney.destinationID]
+									}
+										
+									return oPopulationAtRest
 								}
 				},												
 
@@ -716,7 +719,7 @@ ns1blankspace.experience.journey =
 								{
 									var oInitiator = ns1blankspace.util.getParam(oParam, 'initiator', {remove: true}).value;
 
-									ns1blankspace.container.hide();
+									ns1blankspace.container.hide({force: true});
 									
 									ns1blankspace.experience.journey.destinations.destination.travelTo(oParam);
 								},
@@ -1274,7 +1277,7 @@ ns1blankspace.experience.journey =
 												{
 													if ((thingToSee.type == 'destination' && thingToSee.model !== undefined))
 													{
-														aHTML.push('<div><div class="ns1blankspaceCaption" style="width:300px; float:left;">' +
+														aHTML.push('<div><div class="ns1blankspaceCaption" style="width:300px;float:left;">' +
 																	thingToSee.caption + '</div>');
 
 														aHTML.push('<div id="ns1blankspaceExperience-' + oJourney.originID + '-' + oJourney.destinationID + '-' + thingToSee.id + '"' +
@@ -1445,6 +1448,11 @@ ns1blankspace.experience.journey =
 
 															if (thingToSee.type == 'sign')
 															{
+																if (thingToSee.format == 'money')
+																{	
+																	sValue = ns1blankspace.util.formatMoney(sValue, {decimals: 2}).formatted
+																}	
+
 																aHTMLThing.push('<div class="ns1blankspaceCaption"' +
 																				' id="ns1blankspaceExperience-' + oJourney.routeID + '-' + thingToSee.id + '"' +
 																				' data-destination-id="' + thingToSee.id + '"' +
@@ -1549,12 +1557,14 @@ ns1blankspace.experience.journey =
 											{
 												var sClass = 'ns1blankspaceExperiencePopulateWith';
 
-												aHTML.push('<td class="' + sClass + '" style="height:30px;"' +
+												aHTML.push('<td class="' + sClass + '"' +
 																' id="ns1blankspaceExperience-' + oJourney.routeID + '-' + thingToSee.id + '-"' +
 																' data-populate-route-id="' + oJourney.routeID + '"' +
 																' data-populate-id=""' +
 																' data-route-id="' + oJourney.routeID + '-' + thingToSee.id + '"' +
-																' data-destination-id="' + thingToSee.id + '">' +
+																' data-destination-id="' + thingToSee.id + '"' +
+																' style="height:30px; ' +
+																(thingToSee.style?ns1blankspace.experience.util.toNV(thingToSee.style):'') + '">' +
 																'</td>');
 											});
 
@@ -1607,7 +1617,7 @@ ns1blankspace.experience.journey =
 												if (!bCanBeMutable) {bCanBeMutable = bEdit}
 												if (!bCanBeMutable) {bCanBeMutable = (oJourney.destination.type == 'destination' && oJourney.destination.tenancy == 'multi')}
 
-												aHTML.push('<div class="ns1blankspaceExperienceContainer"><table>');
+												aHTML.push('<div class="ns1blankspaceExperienceContainer"><table style="width:100%;">');
 
 												if (oJourney.destination.thingsToSee.length > 1 || (oJourney.destination.populationCanReproduce == 'true' && !bEdit))
 												{	
@@ -1812,6 +1822,7 @@ ns1blankspace.experience.journey =
 									var sRouteID = oPreviousDestination.routeID;
 									var sPopulateID = (oParam.populateID != undefined?'-' + oParam.populateID:'');
 									var sXHTMLElementID = 'ns1blankspaceExperience-' + sRouteID;
+									var bSendMessage = ns1blankspace.util.getParam(oParam)
 
 									for (var key in oPopulationBeingRested)
 							  		{
@@ -1842,6 +1853,11 @@ ns1blankspace.experience.journey =
 							     			
 						     				$('#' + sXHTMLElementID + '-' + key + sPopulateID).html(sValue);
 							     		}
+							     	}
+
+							     	if (bSendMessage)
+							     	{
+							     		ns1blankspace.experience.journey.controller.message(oParam);
 							     	}
 								},			
 
@@ -2295,7 +2311,13 @@ ns1blankspace.experience.journey =
 																		$('#' + oJourney.xhtmlElementID).html(oJourney.destination.populationAtWork[0].text);
 																	}
 
-																	ns1blankspace.experience.journey.thingsToSee.refresh(oParam);
+																	var oRParam = {};
+																	$.extend(oRParam, oParam);
+																	oRParam = ns1blankspace.util.setParam(oRParam, 'sendMessage', true);
+																	oRParam = ns1blankspace.util.setParam(oRParam, 'subject', 'cancel');
+																	oRParam = ns1blankspace.util.setParam(oRParam, 'routeID', oPreviousDestination.routeID);
+																	
+																	ns1blankspace.experience.journey.thingsToSee.refresh(oRParam);
 																}
 															}
 

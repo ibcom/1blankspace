@@ -1578,7 +1578,7 @@ ns1blankspace.control =
 											else
 											{
 												aHTML.push('<tr><td>' +
-																	oResponse.access_token + '<br /><br /></td></tr>');
+																	(oResponse.access_token).replace('|', '-') + '<br /><br /></td></tr>');
 												
 												aHTML.push('<tr><td><span id="ns1blankspaceControlUserCreateSecureKeyDisable">Disable Token</span></td></tr>');								
 												aHTML.push('<tr><td><br />If you generate a new token, the current token will no longer work.<br /><br /></td></tr>');
