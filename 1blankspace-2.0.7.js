@@ -1458,52 +1458,80 @@ ns1blankspace.app =
 
 					remove: 	function (oParam, oResponse)
 								{		
-									var oNS;
+									var oNS = ns1blankspace.util.getParam(oParam, 'namespace').value;
+									var fDoRemove = ns1blankspace.util.getParam(oParam, 'doRemove').value;
 
-									if (oParam != undefined)
-									{
-										if (oParam.namespace != undefined) {oNS = oParam.namespace}
+									if (oNS == undefined)
+									{	
+										if (ns1blankspace.objectParentName)
+										{
+											oNS = ns1blankspace[ns1blankspace.objectParentName][ns1blankspace.objectName];
+										}
+										else
+										{
+											oNS = ns1blankspace[ns1blankspace.objectName];
+										}
 									}	
 
-									var sMethod = ns1blankspace.objectMethod;
-
-									if (sMethod === undefined)
+									if (oResponse === undefined)
 									{
-										var sMethod = ns1blankspace.objectMethod;
+										if (fDoRemove == undefined)
+										{
+											fDoRemove = oNS['remove'];
+										}
 
-										var sParentNamespace = ns1blankspace.objectParentName;
-										var sNamespace = ns1blankspace.objectName;
+										if (fDoRemove !== undefined)
+										{
+											fDoRemove(oParam);
+										}
+										else
+										{
+											var sMethod = ns1blankspace.objectMethod;
 
-										if (sMethod === undefined)
-										{	
-											if (sParentNamespace)
+											if (sMethod === undefined)
 											{
-												sMethod = (sParentNamespace).toUpperCase() + '_' + (sNamespace).toUpperCase();
+												var sMethod = ns1blankspace.objectMethod;
+
+												var sParentNamespace = ns1blankspace.objectParentName;
+												var sNamespace = ns1blankspace.objectName;
+
+												if (sMethod === undefined)
+												{	
+													if (sParentNamespace)
+													{
+														sMethod = (sParentNamespace).toUpperCase() + '_' + (sNamespace).toUpperCase();
+													}
+													else
+													{
+														sMethod = (sNamespace).toUpperCase();
+													}
+												}	
+											}	
+
+											if (sMethod !== undefined)
+											{
+												sMethod += '_MANAGE';
+
+												$('#ns1blankspaceControlActionOptionsRemove').html(ns1blankspace.xhtml.loadingSmall);
+
+												$.ajax(
+												{
+													type: 'POST',
+													url: ns1blankspace.util.endpointURI(sMethod),
+													data: 'remove=1&id=' + ns1blankspace.objectContext,
+													dataType: 'json',
+													success: function(data){ns1blankspace.app.options.remove(oParam, data)}
+												});
+
 											}
 											else
 											{
-												sMethod = (sNamespace).toUpperCase();
+												ns1blankspace.app.options.hide();
+												ns1blankspace.status.error('Cannot delete!')
 											}
-										}	
+										}		
 									}	
-
-									if (oResponse === undefined && sMethod)
-									{
-										sMethod += '_MANAGE';
-
-										$('#ns1blankspaceControlActionOptionsRemove').html(ns1blankspace.xhtml.loadingSmall);
-
-										$.ajax(
-										{
-											type: 'POST',
-											url: ns1blankspace.util.endpointURI(sMethod),
-											data: 'remove=1&id=' + ns1blankspace.objectContext,
-											dataType: 'json',
-											success: function(data){ns1blankspace.app.options.remove(oParam, data)}
-										});
-
-									}
-									else if (oResponse != undefined)
+									else //oResponse
 									{
 										if (oResponse.notes === 'REMOVED')
 										{
@@ -1516,11 +1544,6 @@ ns1blankspace.app =
 										{
 											$('#ns1blankspaceControlActionOptionsRemove').html(oResponse.error.errornotes)
 										}
-									}	
-									else
-									{
-										ns1blankspace.app.options.hide();
-										ns1blankspace.status.error('Cannot delete!')
 									}	
 								}							
 				}										
@@ -5809,20 +5832,7 @@ ns1blankspace.remove =
 	
 					if (!bConfirmed)
 					{
-						if (fDoRemove == undefined)
-						{
-							if (ns1blankspace.objectParentName)
-							{
-								var oNS = ns1blankspace[ns1blankspace.objectParentName][ns1blankspace.objectName];
-							}
-							else
-							{
-								var oNS = ns1blankspace[ns1blankspace.objectName];
-							}
-
-							fDoRemove = oNS['remove'];
-							if (fDoRemove == undefined) {fDoRemove = ns1blankspace.remove}
-						}	
+						if (fDoRemove == undefined) {fDoRemove = ns1blankspace.remove}	
 
 						if ($(ns1blankspace.xhtml.container).attr('data-initiator') == sXHTMLElementID)
 						{

@@ -2358,9 +2358,9 @@ ns1blankspace.experience.journey =
 																		$('#' + oJourney.xhtmlElementID).html(oJourney.destination.populationAtWork[0].text);
 																	}
 
-																	$('#ns1blankspaceExperience-' + oParam.routeID + '-control').html('<div class="ns1blankspaceExperienceAdd"' +
-																		' id="ns1blankspaceExperience-' + oParam.routeID + '-add"' +
-																		' data-route-id="' + oParam.routeID + '">' +
+																	$('#ns1blankspaceExperience-' + oJourney.previousRouteID + '-control').html('<div class="ns1blankspaceExperienceAdd"' +
+																		' id="ns1blankspaceExperience-' + oJourney.previousRouteID + '-add"' +
+																		' data-route-id="' + oJourney.previousRouteID + '">' +
 																		'Add</div>');
 
 																	ns1blankspace.experience.journey.thingsToSee.refresh(oParam);
