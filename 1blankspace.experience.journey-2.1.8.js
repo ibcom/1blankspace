@@ -852,12 +852,13 @@ ns1blankspace.experience.journey =
 
 									var sXHTMLPopulateElementID = sXHTMLElementID + '-populate';
 									var iLength = oXHTMLNextToElement.children().length;
+									var bExists = ($('#' + sXHTMLPopulateElementID).length != 0);
 
 									if (bRelease)
 									{	
 										oXHTMLNextToElement.next().remove();
 									}	
-									else if ($('#' + sXHTMLPopulateElementID).length == 0)
+									else if (!bExists)
 									{	
 										if (sType !== 'div')
 										{
@@ -872,7 +873,7 @@ ns1blankspace.experience.journey =
 										}	
 									}
 
-									return {xhtmlElementID: sXHTMLPopulateElementID}
+									return {xhtmlElementID: sXHTMLPopulateElementID, exists: bExists}
 								},
 
 					release:	function(oParam)
@@ -1967,8 +1968,8 @@ ns1blankspace.experience.journey =
 														oParam.populationAtWorkToBeRested.type = 'select';
 													}	
 
-													$('#' + sXHTMLPopulateElementID + '-populate').slideUp(500);
-													$('#' + sXHTMLPopulateElementID + '-input-populate').slideUp(500);
+													$('#' + sXHTMLPopulateElementID + '-populate').slideUp(500, function() {$('#' + sXHTMLPopulateElementID + '-populate').remove()});
+													$('#' + sXHTMLPopulateElementID + '-input-populate').slideUp(500, function() {$('#' + sXHTMLPopulateElementID + '-input-populate').remove()});
 
 													oParam.xhtmlElementID = sXHTMLPopulateElementID;
 
@@ -2056,55 +2057,62 @@ ns1blankspace.experience.journey =
 
 													var oPopulation = $.grep(oJourney.previousDestination.populationAtRest, function (a) {return a.id == oParam.populateID})[0];
 													
-													sXHTMLElementID = ns1blankspace.experience.journey.space.lease(
+													var oXHTMLElement = ns1blankspace.experience.journey.space.lease(
 													{
 														nextTo: 2,
 														xhtmlElementID: sXHTMLElementID
-													})
-													.xhtmlElementID;
-
-													var aHTML = [];
-
-													aHTML.push('<div class="ns1blankspaceExperienceContainer"><table><tr>');
-
-													$.each(oJourney.destination.thingsToSee, function (i, thingToSee)
-													{
-														//aHTML.push('<td>' + thingToSee.caption + '</td>');
-
-														if (oPopulation !== undefined)
-														{
-															var sPopulationValue = oPopulation[thingToSee.model];
-															var oPopulationData = $.grep(thingToSee.populationAtRest, function (a) {return a.id == sPopulationValue})[0];
-														}	
-
-														$.each(thingToSee.populationAtRest, function (i, populationData)
-														{
-															sClass = '';
-
-															//if (populationData.id != (oPopulationData?oPopulationData.id:''))
-															if (populationData.id == sPopulationValue)	
-															{	
-																sClass = ' ns1blankspaceSelected';
-															}
-
-															aHTML.push('<td class="ns1blankspaceExperiencePopulate' + sClass + '" id="ns1blankspaceExperience-ins-invoice-items-tax-taxtype-' + oParam.populateID + '-' + populationData.id + '" ' +
-																				' style="text-align:center; width:' + (100/thingToSee.populationAtRest.length) + '%"' +
-																				' data-populate-id="' + oParam.populateID + '" ' +
-																				' data-populate-with-id="' + populationData.id + '" data-route-id="ins-invoice-items-tax-taxtype" data-destination-id="taxtype">')
-
-															$.each(thingToSee.thingsToSee, function (i, thingToSeeThingToSee)
-															{		
-																aHTML.push(populationData[thingToSeeThingToSee.id]);
-															});
-
-															aHTML.push('</td>');
-														});
 													});
 
-													aHTML.push('</tr></table></div>');
+													sXHTMLElementID = oXHTMLElement.xhtmlElementID;
 
-													$('#' + sXHTMLElementID).html(aHTML.join(''));
-													$('#' + sXHTMLElementID).show();
+													if (oXHTMLElement.exists)
+													{
+														$('#' + sXHTMLElementID).slideUp(500, function() {$('#' + sXHTMLElementID).remove()});
+													}
+													else
+													{
+														var aHTML = [];
+
+														aHTML.push('<div class="ns1blankspaceExperienceContainer"><table><tr>');
+
+														$.each(oJourney.destination.thingsToSee, function (i, thingToSee)
+														{
+															//aHTML.push('<td>' + thingToSee.caption + '</td>');
+
+															if (oPopulation !== undefined)
+															{
+																var sPopulationValue = oPopulation[thingToSee.model];
+																var oPopulationData = $.grep(thingToSee.populationAtRest, function (a) {return a.id == sPopulationValue})[0];
+															}	
+
+															$.each(thingToSee.populationAtRest, function (i, populationData)
+															{
+																sClass = '';
+
+																if (populationData.id == sPopulationValue)	
+																{	
+																	sClass = ' ns1blankspaceSelected';
+																}
+
+																aHTML.push('<td class="ns1blankspaceExperiencePopulate' + sClass + '" id="ns1blankspaceExperience-ins-invoice-items-tax-taxtype-' + oParam.populateID + '-' + populationData.id + '" ' +
+																					' style="text-align:center; width:' + (100/thingToSee.populationAtRest.length) + '%"' +
+																					' data-populate-id="' + oParam.populateID + '" ' +
+																					' data-populate-with-id="' + populationData.id + '" data-route-id="ins-invoice-items-tax-taxtype" data-destination-id="taxtype">')
+
+																$.each(thingToSee.thingsToSee, function (i, thingToSeeThingToSee)
+																{		
+																	aHTML.push(populationData[thingToSeeThingToSee.id]);
+																});
+
+																aHTML.push('</td>');
+															});
+														});
+
+														aHTML.push('</tr></table></div>');
+
+														$('#' + sXHTMLElementID).html(aHTML.join(''));
+														$('#' + sXHTMLElementID).show();
+													}	
 												},
 
 									rest: 		function (oParam, oResponse) 
