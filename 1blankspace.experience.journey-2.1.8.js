@@ -511,7 +511,7 @@ ns1blankspace.experience.journey =
 											' data-route-id="' + oParam.routeID + '">' +
 											'Add</div>');
 
-									$('#ns1blankspaceExperience-' + oParam.routeID + '-new-container').hide();
+									$('#ns1blankspaceExperience-' + oParam.routeID + '-new-container').slideUp(500, function() {$('#ns1blankspaceExperience-' + oParam.routeID + '-new-container').remove()});
 								},
 
 					populateDestinationWith: 	
@@ -1558,7 +1558,7 @@ ns1blankspace.experience.journey =
 
 											if (oJourney.destination.type == 'destination')
 											{	
-												aHTML.push('<table>');	
+												//aHTML.push('<table>');	
 											}
 												
 											if ($('#ns1blankspaceExperience-' + oJourney.routeID + '-header').length == 0 || oJourney.destination.type == 'select')

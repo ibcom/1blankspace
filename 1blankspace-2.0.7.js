@@ -196,9 +196,9 @@ ns1blankspace.app =
 							ns1blankspace.option.preLoad();
 						}
 						
-						if (Modernizr == undefined)
+						if (window.Modernizr == undefined)
 						{
-							ns1blankspace.debug.message("NEED A REFERENCE TO Modernizr", true)
+							ns1blankspace.debug.message("NEED A REFERENCE TO Modernizr - /jscripts/modernizr-load.js", true)
 						}
 						else
 						{
