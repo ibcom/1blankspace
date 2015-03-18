@@ -111,6 +111,11 @@ ns1blankspace.experience.journey =
 							subject: 'rest'
 						},
 						{
+							what: 'keyup',
+							where: 'input.ns1blankspaceExperiencePopulation',
+							subject: 'prerest'
+						},
+						{
 							what: 'change',
 							where: 'input.ns1blankspaceExperiencePopulationDate',
 							subject: 'rest'
@@ -350,9 +355,13 @@ ns1blankspace.experience.journey =
 										oPopulationAtRest = oDestinations[0].populationAtRest;
 									}
 
-									if (oPopulationAtRest.length != 0)
+									if (oPopulationAtRest.length == 0)
 									{
-										oPopulationAtRest = oPopulationAtRest[0][oJourney.destinationID]
+										oPopulationAtRest = undefined;
+									}
+									else
+									{
+										oPopulationAtRest = oPopulationAtRest[0][oJourney.destinationID];
 									}
 										
 									return oPopulationAtRest
@@ -662,7 +671,15 @@ ns1blankspace.experience.journey =
 									{
 										ns1blankspace.util.execute(oJourney.previousDestination.onArrival)
 									}
-								},			
+								},	
+
+					prerest: 	function (oParam)
+								{
+									if (oParam.event.which == 13)
+									{
+										ns1blankspace.experience.journey.controller.rest(oParam);
+									}
+								},				
 
 					rest: 		function (oParam)
 								{
