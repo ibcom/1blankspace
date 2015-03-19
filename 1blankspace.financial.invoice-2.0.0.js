@@ -1172,16 +1172,6 @@ ns1blankspace.financial.invoice =
 					}	
 				},
 
-	new2:		function (oParam)
-				{
-					ns1blankspace.objectContextData = undefined
-					ns1blankspace.objectContext = -1;
-					ns1blankspace.financial.invoice.init();
-					$('#ns1blankspaceViewControlAction').button({disabled: false});
-					ns1blankspace.show({selector: '#ns1blankspaceMainDetails'});
-					ns1blankspace.financial.invoice.details();
-				},
-
 	copy: 		function (aParam, oResponse)
 				{		
 					ns1blankspace.container.hide({force: true});

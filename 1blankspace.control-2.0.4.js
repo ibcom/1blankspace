@@ -155,7 +155,7 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.financial.expense',
-		source: '/jscripts/1blankspace.financial.expense-2.0.0.js'
+		source: '/jscripts/1blankspace.financial.expense-2.0.1.js'
 	},
 	{
 		nameSpace: '1blankspace.financial.receipt',
