@@ -103,7 +103,7 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.action',
-		source: '/jscripts/1blankspace.action-2.0.0.js'
+		source: '/jscripts/1blankspace.action-2.0.1.js'
 	},
 	{
 		nameSpace: '1blankspace.messaging.conversation',
