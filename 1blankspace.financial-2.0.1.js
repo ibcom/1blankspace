@@ -1270,6 +1270,8 @@ ns1blankspace.financial.creditors =
 
 ns1blankspace.financial.profitLoss =
 {
+	data: 		{},
+
 	show: 		function (oParam, oResponse)
 				{
 					var sStartDate;
@@ -1477,6 +1479,14 @@ ns1blankspace.financial.profitLoss =
 							}
 							
 							oParam = ns1blankspace.util.setParam(oParam, 'onLastChild', ns1blankspace.financial.profitLoss.transactions);
+
+							ns1blankspace.financial.profitLoss.data = 
+							{
+								amounts: oParam.dataBranch,
+								accounts: oParam.dataTree,
+								root: oParam.dataRoot
+							}
+								
 							ns1blankspace.format.tree.init(oParam);
 						}	
 					}	
@@ -1511,6 +1521,8 @@ ns1blankspace.financial.profitLoss =
 
 ns1blankspace.financial.balanceSheet =
 {
+	data: 		{},
+
 	show: 		function (oParam, oResponse)
 				{
 					var sStartDate;
@@ -1658,6 +1670,14 @@ ns1blankspace.financial.balanceSheet =
 							]	
 	
 							oParam = ns1blankspace.util.setParam(oParam, 'onLastChild', ns1blankspace.financial.balanceSheet.transactions);
+
+							ns1blankspace.financial.balanceSheet.data = 
+							{
+								amounts: oParam.dataBranch,
+								accounts: oParam.dataTree,
+								root: oParam.dataRoot
+							}
+
 							ns1blankspace.format.tree.init(oParam);
 						}	
 					}	
