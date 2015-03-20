@@ -1321,7 +1321,6 @@ ns1blankspace.financial.profitLoss =
 										'<span class="ns1blankspaceAction" style="width:95px;" id="ns1blankspacePLShowAll">Show All</span>' +
 										'</td></tr>');
 						
-						
 						aHTML.push('</table>');					
 						
 						$('#ns1blankspacePLColumn1').html(aHTML.join(''));
@@ -1347,7 +1346,7 @@ ns1blankspace.financial.profitLoss =
 						{
 							label: 'Show All',
 							icons: {
-								primary: "ui-icon-arrowrefresh-1-e"
+								primary: "ui-icon-document"
 							}
 						})
 						.click(function() {
@@ -1390,7 +1389,7 @@ ns1blankspace.financial.profitLoss =
 						}
 						else
 						{
-							var oParam = {};
+							if (oParam == undefined) {oParam = {}};
 							oParam.dataTree = ns1blankspace.financial.data.accounts;
 							oParam.dataBranch = oResponse.data.rows;
 							oParam.branchDetailName = 'total';
@@ -1557,6 +1556,10 @@ ns1blankspace.financial.balanceSheet =
 										'<span class="ns1blankspaceAction" style="width:95px;" id="ns1blankspaceBSRefresh">Refresh</span>' +
 										'</td></tr>');
 						
+						aHTML.push('<tr><td style="padding-top:5px;">' +
+										'<span class="ns1blankspaceAction" style="width:95px;" id="ns1blankspaceBSShowAll">Show All</span>' +
+										'</td></tr>');
+
 						aHTML.push('</table>');					
 						
 						$('#ns1blankspaceBSColumn1').html(aHTML.join(''));
@@ -1575,6 +1578,22 @@ ns1blankspace.financial.balanceSheet =
 							{
 								startDate: $('#ns1blankspaceBSStartDate').val(),
 								endDate: $('#ns1blankspaceBSEndDate').val()
+							})
+						});
+
+						$('#ns1blankspaceBSShowAll').button(
+						{
+							label: 'Show All',
+							icons: {
+								primary: "ui-icon-document"
+							}
+						})
+						.click(function() {
+							ns1blankspace.financial.balanceSheet.show(
+							{
+								startDate: $('#ns1blankspacePLStartDate').val(),
+								endDate: $('#ns1blankspacePLEndDate').val(),
+								showAll: true
 							})
 						});
 
