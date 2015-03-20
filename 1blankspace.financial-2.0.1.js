@@ -1628,7 +1628,7 @@ ns1blankspace.financial.balanceSheet =
 						}
 						else
 						{
-							var oParam = {};
+							if (oParam == undefined) {oParam = {}};
 							oParam.dataTree = ns1blankspace.financial.data.accounts;
 							oParam.dataBranch = oResponse.data.rows;
 							oParam.xhtmlElementID = 'ns1blankspaceBSColumn2';
