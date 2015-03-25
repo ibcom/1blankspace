@@ -1423,6 +1423,8 @@ ns1blankspace.messaging.imap =
 				{
 					oData.object = $('#ns1blankspaceMessageSaveObjectContext').attr('data-object');
 					oData.objectContext = $('#ns1blankspaceMessageSaveObjectContext').attr('data-id');
+					if (oData.object === '12') {oData.contactbusiness = $('#ns1blankspaceMessageSaveObjectContext').attr('data-id')}
+					if (oData.object === '32') {oData.contactperson = $('#ns1blankspaceMessageSaveObjectContext').attr('data-id')}
 				}
 				
 				$.ajax(
