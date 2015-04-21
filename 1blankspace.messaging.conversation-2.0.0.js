@@ -112,6 +112,7 @@ ns1blankspace.messaging.conversation =
 						oSearch.method = 'MESSAGING_CONVERSATION_SEARCH';
 						oSearch.addField('title');
 						oSearch.rows = 20;
+						oSearch.addFilter('status', 'NOT_EQUAL_TO', 2);
 						oSearch.sort('modifieddate', 'desc');
 						oSearch.getResults(function (data) {ns1blankspace.messaging.conversation.home(oParam, data)});
 					}
