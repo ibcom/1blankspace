@@ -79,7 +79,7 @@ ns1blankspace.setup.messaging =
 						else
 						{
 							aHTML.push('<table>');
-							aHTML.push('<tr><td class="ns1blankspaceCaption">MOST LIKELY</td></tr>');
+							aHTML.push('<tr><td class="ns1blankspaceCaption">MOST LIKELY</td><td class="ns1blankspaceCaption">User</td><td class="ns1blankspaceCaption">Sending Status</td></tr>');
 
 							$.each(oResponse.data.rows, function()
 							{
@@ -144,7 +144,7 @@ ns1blankspace.setup.messaging =
 									
 										var oSearch = new AdvancedSearch();
 										oSearch.method = 'SETUP_MESSAGING_ACCOUNT_SEARCH';
-										oSearch.addField('email,type,typetext,authtype,authtypetext,accountname,server,port,sslport,title,user,usertext,footer,smtpserver,smtpserver,smtpserverport,verification,verificationtext');
+										oSearch.addField('email,type,typetext,authtype,authtypetext,accountname,server,port,sslport,title,user,usertext,footer,smtpserver,smtpserverport,smtpaccountname,verification,verificationtext');
 										oSearch.addFilter('id', 'EQUAL_TO', ns1blankspace.objectContext);
 										oSearch.getResults(function(data) {ns1blankspace.setup.messaging.show(data)});
 									}
@@ -521,9 +521,6 @@ ns1blankspace.setup.messaging =
 										'<input id="ns1blankspaceDetailsSSLPort" class="ns1blankspaceText">' +
 										'</td></tr>');
 
-						aHTML.push('<tr><td class="ns1blankspaceSubNote">' +
-										'If you leave incoming server, port or SSL port blank; defaults will be used.</td></tr>');
-
 						aHTML.push('<tr class="ns1blankspaceCaption">' +
 										'<td class="ns1blankspaceCaption">' +
 										'Outgoing Server (SMTP)' +
@@ -541,6 +538,27 @@ ns1blankspace.setup.messaging =
 										'<td class="ns1blankspaceText">' +
 										'<input id="ns1blankspaceDetailsSMTPPort" class="ns1blankspaceText">' +
 										'</td></tr>');
+
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
+										'Outgoing Account Name' +
+										'</td></tr>' +
+										'<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceText">' +
+										'<input id="ns1blankspaceDetailsSMTPAccountName" class="ns1blankspaceText">' +
+										'</td></tr>');
+
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
+										'Outgoing Account Password' +
+										'</td></tr>' +
+										'<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceText">' +
+										'<input id="ns1blankspaceDetailsSMTPAccountPassword" class="ns1blankspaceText" type="password">' +
+										'</td></tr>');
+
+						aHTML.push('<tr><td class="ns1blankspaceSubNote">' +
+										'If you leave server details blank; defaults will be used.</td></tr>');
 		
 						aHTML.push('</table>');					
 						
@@ -575,6 +593,7 @@ ns1blankspace.setup.messaging =
 							$('#ns1blankspaceDetailsSSLPort').val(ns1blankspace.objectContextData.sslport);
 							$('#ns1blankspaceDetailsSMTPServer').val(ns1blankspace.objectContextData.smtpserver);
 							$('#ns1blankspaceDetailsSMTPPort').val(ns1blankspace.objectContextData.smtpserverport);
+							$('#ns1blankspaceDetailsSMTPAccountName').val(ns1blankspace.objectContextData.smtpaccountname);
 						}
 						else
 						{
@@ -648,6 +667,12 @@ ns1blankspace.setup.messaging =
 										if ($('#ns1blankspaceDetailsAccountPassword').val() != '')
 										{
 											sData += '&accountpassword=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsAccountPassword').val());
+										}
+
+										if ($('#ns1blankspaceDetailsSMTPAccountPassword').val() != '')
+										{
+											sData += '&smtpaccountname=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsSMTPAccountName').val());
+											sData += '&smtpaccountpassword=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsSMTPAccountPassword').val());
 										}
 									};
 

@@ -1022,8 +1022,6 @@ ns1blankspace.financial.bankAccount =
 
 					show:		function (oParam, oResponse)
 								{
-
-
 									if (oResponse == undefined)
 									{
 										var aHTML = [];
@@ -1233,6 +1231,75 @@ ns1blankspace.financial.bankAccount =
 										}
 									}	
 								},
+
+					move: 		{
+
+									init:		function (oParam)
+												{
+													var iFileSource = ns1blankspace.util.getParam(oParam, 'fileSource').value;
+													var iToBankAccount = ns1blankspace.util.getParam(oParam, 'toBankAccount').value;
+
+													$.ajax(
+													{
+														type: 'POST',
+														url: ns1blankspace.util.endpointURI('FINANCIAL_BANK_ACCOUNT_TRANSACTION_SOURCE_MANAGE'),
+														data: {id: iFileSource, bankaccount: iToBankAccount},
+														dataType: 'json',
+														success: function(data)
+														{
+															if (data.status = 'OK')
+															{
+																var oSearch = new AdvancedSearch();
+																oSearch.method = 'FINANCIAL_BANK_ACCOUNT_TRANSACTION_SEARCH';
+																oSearch.addField('status');
+																oSearch.addFilter('bankaccount', 'EQUAL_TO', ns1blankspace.objectContext);
+																if (iFileSource) {oSearch.addFilter('source', 'EQUAL_TO', iFileSource);}
+																oSearch.rows = 1000;
+																oSearch.getResults(function(oResponse)
+																{
+																	oParam.itemIDs = $.map(oResponse.data.rows, function (v) {return v.id});
+																	oParam.itemIndex = 0;
+																	ns1blankspace.financial.bankAccount["import"].move.items(oParam)
+																});
+															}	
+														}
+													});
+
+												},
+
+									items:		function (oParam)
+												{
+													var iFileSource = ns1blankspace.util.getParam(oParam, 'fileSource').value;
+													var aItemIDs = ns1blankspace.util.getParam(oParam, 'itemIDs').value;
+													var iItemIndex = ns1blankspace.util.getParam(oParam, 'itemIndex').value;
+													var iToBankAccount = ns1blankspace.util.getParam(oParam, 'toBankAccount').value;
+
+													if (iItemIndex < (aItemIDs.length - 1))
+													{
+														$.ajax(
+														{
+															type: 'POST',
+															url: ns1blankspace.util.endpointURI('FINANCIAL_BANK_ACCOUNT_TRANSACTION_MANAGE'),
+															data: {id: aItemIDs[iItemIndex], bankaccount: iToBankAccount},
+															dataType: 'json',
+															success: function(data)
+															{
+																if (data.status == 'OK')
+																{
+																	ns1blankspace.status.message('Moving (' + (iItemIndex + 1) + '/' + aItemIDs.length + ')');
+																	oParam.itemIndex = oParam.itemIndex + 1;
+																	ns1blankspace.financial.bankAccount["import"].move.items(oParam);
+																}
+															}
+														});
+													}
+													else
+													{
+														ns1blankspace.status.message('Move completed');
+														ns1blankspace.financial.bankAccount.init();
+													}
+												}				
+								},					
 
 					items:   	{
 									data: 		{},
@@ -1539,7 +1606,6 @@ ns1blankspace.financial.bankAccount =
 																	}
 																}
 															});
-
 														});
 													}		
 												},		
