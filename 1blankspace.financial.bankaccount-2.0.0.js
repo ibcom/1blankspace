@@ -1252,7 +1252,6 @@ ns1blankspace.financial.bankAccount =
 																var oSearch = new AdvancedSearch();
 																oSearch.method = 'FINANCIAL_BANK_ACCOUNT_TRANSACTION_SEARCH';
 																oSearch.addField('status');
-																oSearch.addFilter('bankaccount', 'EQUAL_TO', ns1blankspace.objectContext);
 																if (iFileSource) {oSearch.addFilter('source', 'EQUAL_TO', iFileSource);}
 																oSearch.rows = 1000;
 																oSearch.getResults(function(oResponse)
@@ -1274,7 +1273,7 @@ ns1blankspace.financial.bankAccount =
 													var iItemIndex = ns1blankspace.util.getParam(oParam, 'itemIndex').value;
 													var iToBankAccount = ns1blankspace.util.getParam(oParam, 'toBankAccount').value;
 
-													if (iItemIndex < (aItemIDs.length - 1))
+													if (iItemIndex < (aItemIDs.length))
 													{
 														$.ajax(
 														{
