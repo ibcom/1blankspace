@@ -2622,6 +2622,7 @@ ns1blankspace.messaging.imap =
 					if (ns1blankspace.objectContextData != undefined && iSource == 1)
 					{
 						var sTo = '';
+						var sCC;
 					
 						var aHTML = [];
 
@@ -2674,7 +2675,7 @@ ns1blankspace.messaging.imap =
 									$.each(aTo, function(i)
 									{
 										aToDetails = (this).split('|');
-										sToEmail = aToDetails[1];
+										sToEmail = aToDetails.pop();
 										
 										if (sToEmail != ns1blankspace.messaging.imap.data.fromEmail && sToEmail != sFrom)
 										{	
@@ -2684,12 +2685,33 @@ ns1blankspace.messaging.imap =
 								}
 					
 								sTo = sFrom + '; ' + sTo;
+								// v2.0.6 Was not including cc'd recipients when replyAll
+								if (ns1blankspace.objectContextData.cc != '' && bReplyAll)
+								{		
+									var aCCDetails;
+									var sCCEmail;	
+
+									sCC = ns1blankspace.objectContextData.cc;
+									var aCC = sCC.split('#');
+									sCC = '';
+								
+									$.each(aCC, function(i)
+									{
+										aCCDetails = (this).split('|');
+										sCCEmail = aCCDetails.pop();
+										
+										if (sCCEmail != ns1blankspace.messaging.imap.data.fromEmail && sCCEmail != sFrom)
+										{	
+											sCC += sCCEmail + '; ';
+										}
+									});	
+								}
+					
 							}	
 							else if (oParam.draft === true)			// v2.0.6 Handle draft email
 							{
 								var aToDetails;
 								var sToEmail;	
-								var sCC = '';
 								var sBCC = '';
 								sTo = '';
 							
@@ -2705,6 +2727,7 @@ ns1blankspace.messaging.imap =
 
 								if (ns1blankspace.objectContextData.cc != '')
 								{
+									sCC = '';
 									$.each(ns1blankspace.objectContextData.cc.split('#'), function(i)
 									{
 										aToDetails = (this).split('|');
@@ -2723,11 +2746,14 @@ ns1blankspace.messaging.imap =
 									});	
 								}
 
-								$('#ns1blankspaceEditMessageCc').val(sCC)
 								$('#ns1blankspaceEditMessageBcc').val(sBCC)
 							}		
 
 							$('#ns1blankspaceEditMessageTo').val(sTo)
+							if (sCC)
+							{
+								$('#ns1blankspaceEditMessageCc').val(sCC)
+							}
 				
 							if (ns1blankspace.objectContextData.attachments != '' && bForward && ns1blankspace.messaging.action == -1)
 							{
@@ -4233,6 +4259,7 @@ ns1blankspace.messaging.imap =
 								ns1blankspace.objectContextData.message = oRow.message;
 								ns1blankspace.objectContextData.date = oRow.createddatetime;
 								ns1blankspace.objectContextData.imapflags = '';
+								ns1blankspace.objectContextData.actiontype = oRow.actiontype;
 								ns1blankspace.objectContextData.detailscached = 'Y';
 								ns1blankspace.objectContextData.sourcetypetext = 'ACTION';
 								ns1blankspace.messaging.imap.actions.search.recipients(oParam, oResponse);
@@ -4402,6 +4429,25 @@ ns1blankspace.messaging.imap =
 				}	
 				
 				ns1blankspace.messaging.imap.layout(oParam);
+
+				// v2.0.6 If current account hasn't been defined, do it here based on from or to
+				if (ns1blankspace.messaging.imap.account === undefined)
+				{
+					var sSource = (ns1blankspace.objectContextData.actiontype === '5') ? ns1blankspace.objectContextData.from : ns1blankspace.objectContextData.to;
+					if (sSource)
+					{
+						$.each(sSource.split('#'), function()
+						{
+							var sEmail = this.split('|').pop();
+							var aAccounts = $.map($.grep(ns1blankspace.messaging.imap.emailAccounts, function(x) {return x.email == sEmail}), function(y) {return y.id});
+							if (aAccounts && aAccounts.length > 0)
+							{
+								ns1blankspace.messaging.imap.account = aAccounts.shift();
+								return false;
+							}
+						});
+					}
+				}
 				
 				ns1blankspace.objectContextData.sourcetypetext = 'ACTION';
 										
