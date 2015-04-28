@@ -1833,8 +1833,26 @@ ns1blankspace.experience.journey =
 												}
 											});
 										
-
 											aHTML.push('</tr></table></div>');
+
+											if (oJourney.destination.thingsToDo != undefined)
+											{
+												aHTML.push('<div><table>');
+
+												$.each(oJourney.destination.thingsToDo, function (i, thingToDo)
+												{
+													var sStyle = (thingToDo.backgroundColor?'background-color:' + thingToDo.backgroundColor + ';':'');
+
+													sStyle = 'style="' + sStyle + ' padding:8px;"';
+
+													aHTML.push('<div class="ns1blankspaceExperienceDoIt"' +
+																' id="ns1blankspaceExperienceJourneyDoIt-' + oJourney.routeID + '-' + thingToDo.id + '"' +
+																' data-do-it-id="' + thingToDo.id + '"' +
+																' data-route-id="' + oJourney.routeID + '">' + thingToDo.caption + '</div>');
+												});
+
+												aHTML.push('</table></div>');
+											}	
 
 											$('#' + sXHTMLElementID).html(aHTML.join(''));
 											$('#' + sXHTMLElementID).show();
