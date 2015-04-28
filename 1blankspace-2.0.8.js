@@ -151,6 +151,7 @@ window.onbeforeunload = function(event)
 
 $(function()
 {
+	window.$vq = ns1blankspace.util.view.queue;
 	ns1blankspace.app.init();
 });
 
@@ -4692,7 +4693,38 @@ ns1blankspace.util =
 
 									return sData
 								}
-				}							
+				},
+
+	view:		{
+					data: {base: []},
+					queue:
+					{
+						clear: function (oParam)
+						{
+							var sQueueID = ns1blankspace.util.getParam(oParam, 'queue', {"default": 'base'}).value;
+							ns1blankspace.util.view.data[sQueueID] = [];
+						},
+						add: function (sData, oParam)
+						{
+							var sQueueID = ns1blankspace.util.getParam(oParam, 'queue', {"default": 'base'}).value;
+							ns1blankspace.util.view.data[sQueueID].push(sData);
+						},
+						show: function (sElementSelector, oParam)
+						{
+							var sQueueID = ns1blankspace.util.getParam(oParam, 'queue', {"default": 'base'}).value;
+
+							if (sElementSelector == undefined)
+							{
+								console.log(ns1blankspace.util.view.data[sQueueID].join(''));
+							}
+							else
+							{
+								$(sElementSelector).html(ns1blankspace.util.view.data[sQueueID].join(''));
+								ns1blankspace.util.view.queue.clear();
+							}	
+						}
+					}	
+				}									
 }
 
 ns1blankspace.debug = 
