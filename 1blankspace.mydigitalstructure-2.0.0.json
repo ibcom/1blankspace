@@ -400,7 +400,6 @@
 		{"title":"SITE_URL_GET"},
 		{"title":"SITE_USER_ACCESS_RIGHTS_SEARCH"},
 		{"title":"SITE_USER_IS_LOGGED_ON"},
-		{"title":"SITE_USER_PASSWORD_MANAGE"},
 		{"title":"SITE_USER_SEARCH"},		
 		{"title":"STRUCTURE_ELEMENT_DATA_SEARCH"},
 		{"title":"STRUCTURE_ELEMENT_DATA_SEARCH"},
