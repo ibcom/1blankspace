@@ -4724,7 +4724,12 @@ ns1blankspace.util =
 							}	
 						}
 					}	
-				}									
+				},
+
+	copy: 		function (oObject)
+				{
+					return $.extend(true, [], oObject)
+				}											
 }
 
 ns1blankspace.debug = 
