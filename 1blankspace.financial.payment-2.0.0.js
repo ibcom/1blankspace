@@ -402,7 +402,7 @@ ns1blankspace.financial.payment =
 					$('#ns1blankspaceControlItem').click(function(event)
 					{
 						ns1blankspace.show({selector: '#ns1blankspaceMainItem', refresh: true});
-						ns1blankspace.financial.item.show({namespace: 'receipt'});
+						ns1blankspace.financial.item.show({namespace: 'payment'});
 					});
 
 					$('#ns1blankspaceControlCredit').click(function(event)

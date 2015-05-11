@@ -22,7 +22,23 @@ ns1blankspace.util.financial.init.accounts({
 
 ns1blankspace.util.financial =
 {
-	data: 		{transactions: {}, objects: []},
+	data: 		{transactions: {totals: {}}, objects: [], results: []},
+
+	rules: 		{
+					AccountIsDebitIfAmountGreaterZeroAndType: [1,3],
+					AccountIsDebitIfAmountLessZeroAndType: [2,4,5]
+				},
+
+	side:
+				function (account)
+				{
+					account.side = 'credit';
+					if (account.financialaccount.type == 1 && accounting.unformat(account.amount) > 0) {account.side = 'debit'}
+					if (account.financialaccount.type == 3 && accounting.unformat(account.amount) > 0) {account.side = 'debit'}
+					if (account.financialaccount.type == 4 && accounting.unformat(account.amount) < 0) {account.side = 'debit'}
+					if (account.financialaccount.type == 2 && accounting.unformat(account.amount) < 0) {account.side = 'debit'}
+					if (account.financialaccount.type == 5 && accounting.unformat(account.amount) < 0) {account.side = 'debit'}	
+				},		
 
 	init: 		{
 					accounts: 		function (oParam)
@@ -48,7 +64,7 @@ ns1blankspace.util.financial =
 
 										var oSearch = new AdvancedSearch();
 										oSearch.method = 'FINANCIAL_TRANSACTION_SEARCH';
-										oSearch.addField('financialaccount,amount,date,object,objectcontext,modifieddate,createddate');
+										oSearch.addField('financialaccount,amount,date,object,objectcontext,modifieddate,createddate,description');
 										
 										oSearch.addFilter('date', 'GREATER_THAN_OR_EQUAL_TO', sStartDate);
 										oSearch.addFilter('date', 'LESS_THAN_OR_EQUAL_TO', sEndDate);
@@ -63,12 +79,52 @@ ns1blankspace.util.financial =
 												ns1blankspace.util.onComplete(oParam);
 											}	
 										});
+									},
+
+					balances: 		function (oParam)
+									{
+										var sStartDate = ns1blankspace.util.getParam(oParam, 'startDate').value;
+										var sEndDate = ns1blankspace.util.getParam(oParam, 'endDate').value;
+
+										var oSearch = new AdvancedSearch();
+										oSearch.method = 'FINANCIAL_TRANSACTION_SEARCH';
+										oSearch.addField('financialaccount,sum(amount) amount');
+										
+										oSearch.addFilter('date', 'GREATER_THAN_OR_EQUAL_TO', sStartDate);
+										oSearch.addFilter('date', 'LESS_THAN_OR_EQUAL_TO', sEndDate);
+
+										oSearch.rows = 1000;
+										oSearch.getResults(function(oResponse)
+										{
+											if (oResponse.morerows != "true")
+											{
+												ns1blankspace.util.financial.data.transactions.balances = oResponse.data.rows;
+												ns1blankspace.util.financial.data.transactions.totals.debit = 0;
+												ns1blankspace.util.financial.data.transactions.totals.credit = 0;
+
+												$.each(ns1blankspace.util.financial.data.transactions.balances, function (i, account)
+												{
+													account.financialaccount = $.grep(ns1blankspace.util.financial.data.accounts, function (a) {return a.id == account.financialaccount})[0];
+													ns1blankspace.util.financial.side(account);
+													ns1blankspace.util.financial.data.transactions.totals[account.side] += +Math.abs(accounting.unformat(account.amount)).toFixed(2);
+												});
+
+												ns1blankspace.util.financial.data.transactions.totals.credit = ns1blankspace.util.financial.data.transactions.totals.credit.toFixed(2);
+												ns1blankspace.util.financial.data.transactions.totals.debit = ns1blankspace.util.financial.data.transactions.totals.debit.toFixed(2);
+												ns1blankspace.util.onComplete(oParam);
+											}
+											else
+											{	
+												console.log('Too many records')
+											}	
+										});
 									}
 				},
 
 	prepare: 	function (oParam)
 				{
 					var iObject = ns1blankspace.util.getParam(oParam, 'object').value;
+					var bProcess = ns1blankspace.util.getParam(oParam, 'process', {"default": false}).value;
 					
 					ns1blankspace.util.financial.data.transactions.current = $.extend(true, [], ns1blankspace.util.financial.data.transactions.raw);
 
@@ -77,13 +133,18 @@ ns1blankspace.util.financial =
 					
 					$.each(ns1blankspace.util.financial.data.transactions.current, function (i, v)
 					{
-						v.financialaccount = $.grep(ns1blankspace.util.financial.data.accounts, function (a) {return a.id = v.financialaccount})[0];
+						v.financialaccount = $.grep(ns1blankspace.util.financial.data.accounts, function (a) {return a.id == v.financialaccount})[0];
 					});
+
+					console.log('Prepared');
+
+					if (bProcess) {ns1blankspace.util.financial.process(oParam)}
 				},
 
 	process: 	function (oParam)
 				{
 					ns1blankspace.util.financial.data.objects.length = 0;
+					ns1blankspace.util.financial.data.results.length = 0;
 
 					$.each(ns1blankspace.util.financial.data.transactions.current, function (i, v)
 					{
@@ -101,8 +162,42 @@ ns1blankspace.util.financial =
 
 						$.each(object.transactions, function (j, transaction)
 						{
-							object.total = object.total + parseFloat(transaction.amount);
+							transaction.factor = 1;
+							ns1blankspace.util.financial.side(transaction);
+							if (transaction.side == 'credit') {transaction.factor = -1}
+							object.total = object.total + +(Math.abs(accounting.unformat(transaction.amount)) * transaction.factor).toFixed(2);
 						});
+
+						object.total = + object.total.toFixed(2);
+
+						if (object.total != 0)
+						{
+							ns1blankspace.util.financial.data.results.push(object);
+						}	
+
+						
 					});
-				}
+
+					console.log('Processed');
+				},
+
+	show: 		{
+					balances: 	function (oParam)
+								{
+									var sShow = '\n';
+
+									$.each(ns1blankspace.util.financial.data.transactions.balances, function (i, balance)
+									{
+										sShow += balance.financialaccount.title + '\t' + (balance.side=='debit'?balance.amount:'') + '\t' + (balance.side=='credit'?balance.amount:'') + '\n'
+									});
+
+									sShow += 'TOTAL:\t' + ns1blankspace.util.financial.data.transactions.totals.debit + '\t' + ns1blankspace.util.financial.data.transactions.totals.credit + '\n';
+
+									sShow += 'DIFF:\t' + (ns1blankspace.util.financial.data.transactions.totals.debit - ns1blankspace.util.financial.data.transactions.totals.credit) + '\n';
+
+									return sShow
+								}
+
+				}			
+
 }	
