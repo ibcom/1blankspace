@@ -2117,7 +2117,7 @@ ns1blankspace.messaging.imap =
 			aHTML.push(ns1blankspace.xhtml.loading);
 			
 			aHTML.push('<div class="ns1blankspaceMessageContainer" id="ns1blankspaceMessageFrameContainer"><iframe class="ns1blankspaceMessageContainer" name="ifMessage" ' +
-								'id="ifMessage" frameborder="0" border="0" scrolling="no"></iframe></div>');
+								'id="ifMessage" frameborder="0" border="0" scrolling="no" sandbox></iframe></div>');
 							
 			//$('div.ns1blankspaceMessageContainer').remove();
 							
