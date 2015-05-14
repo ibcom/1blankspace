@@ -22,7 +22,7 @@ ns1blankspace.util.financial.init.accounts({
 
 ns1blankspace.util.financial =
 {
-	data: 		{transactions: {totals: {}}, objects: [], results: []},
+	data: 		{transactions: {totals: {}, raw: []}, objects: [], results: {outOfBalance: [], notReconciled: []}},
 
 	rules: 		{
 					AccountIsDebitIfAmountGreaterZeroAndType: [1,3],
@@ -61,23 +61,63 @@ ns1blankspace.util.financial =
 									{
 										var sStartDate = ns1blankspace.util.getParam(oParam, 'startDate').value;
 										var sEndDate = ns1blankspace.util.getParam(oParam, 'endDate').value;
+										var iFinancialAccount = ns1blankspace.util.getParam(oParam, 'financialAccount').value;
+										var iID = ns1blankspace.util.getParam(oParam, 'id').value;
+										var bInitialised = ns1blankspace.util.getParam(oParam, 'initialised', {"default": false}).value;
+
+										if (!bInitialised)
+										{
+											oParam.initialised = true;
+											ns1blankspace.util.financial.data.transactions.raw = [];
+										}
 
 										var oSearch = new AdvancedSearch();
 										oSearch.method = 'FINANCIAL_TRANSACTION_SEARCH';
 										oSearch.addField('financialaccount,amount,date,object,objectcontext,modifieddate,createddate,description');
 										
-										oSearch.addFilter('date', 'GREATER_THAN_OR_EQUAL_TO', sStartDate);
-										oSearch.addFilter('date', 'LESS_THAN_OR_EQUAL_TO', sEndDate);
+										if (sStartDate != undefined)
+										{
+											oSearch.addFilter('date', 'GREATER_THAN_OR_EQUAL_TO', sStartDate);
+										}	
 
-										oSearch.rows = 1000;
+										if (sEndDate != undefined)
+										{
+											oSearch.addFilter('date', 'LESS_THAN_OR_EQUAL_TO', sEndDate);
+										}
+
+										if (iFinancialAccount != undefined)
+										{
+											oSearch.addFilter('financialaccount', 'EQUAL_TO', iFinancialAccount);
+										}
+
+										if (iID != undefined)
+										{
+											oSearch.addFilter('id', 'GREATER_THAN', iID);
+										}
+
+
+										oSearch.rows = 500;
+										oSearch.sort('id', 'asc');
+
 										oSearch.getResults(function(oResponse)
 										{
-											if (oResponse.morerows != "true")
+											if (oResponse.data.rows.length > 0)
+											{	
+												oParam.id = oResponse.data.rows[oResponse.data.rows.length-1].id;
+
+												ns1blankspace.util.financial.data.transactions.raw =
+													ns1blankspace.util.financial.data.transactions.raw.concat(oResponse.data.rows);
+											}		
+
+											if (oResponse.morerows == "false")
 											{
-												ns1blankspace.util.financial.data.transactions.raw = oResponse.data.rows;
 												ns1blankspace.util.financial.data.transactions.raw.sort(ns1blankspace.util.sortBy('id'));
 												ns1blankspace.util.onComplete(oParam);
-											}	
+											}
+											else
+											{
+												ns1blankspace.util.financial.init.transactions(oParam);
+											}
 										});
 									},
 
@@ -124,7 +164,8 @@ ns1blankspace.util.financial =
 	prepare: 	function (oParam)
 				{
 					var iObject = ns1blankspace.util.getParam(oParam, 'object').value;
-					var bProcess = ns1blankspace.util.getParam(oParam, 'process', {"default": false}).value;
+					var bCheckOutOfBalance = ns1blankspace.util.getParam(oParam, 'checkOutOfBalance', {"default": false}).value;
+					var bCheckReconciliation = ns1blankspace.util.getParam(oParam, 'checkReconciliation', {"default": false}).value;
 					
 					ns1blankspace.util.financial.data.transactions.current = $.extend(true, [], ns1blankspace.util.financial.data.transactions.raw);
 
@@ -138,13 +179,14 @@ ns1blankspace.util.financial =
 
 					console.log('Prepared');
 
-					if (bProcess) {ns1blankspace.util.financial.process(oParam)}
+					if (bCheckOutOfBalance) {ns1blankspace.util.financial.outOfBalance(oParam)}
+					if (bCheckReconciliation) {ns1blankspace.util.financial.notReconciled.init(oParam)}
 				},
 
-	process: 	function (oParam)
+	outOfBalance: 	function (oParam)
 				{
 					ns1blankspace.util.financial.data.objects.length = 0;
-					ns1blankspace.util.financial.data.results.length = 0;
+					ns1blankspace.util.financial.data.results.outOfBalance.length = 0;
 
 					$.each(ns1blankspace.util.financial.data.transactions.current, function (i, v)
 					{
@@ -172,15 +214,101 @@ ns1blankspace.util.financial =
 
 						if (object.total != 0)
 						{
-							ns1blankspace.util.financial.data.results.push(object);
-						}	
-
-						
+							ns1blankspace.util.financial.data.results.outOfBalance.push(object);
+						}
 					});
 
-					console.log('Processed');
+					console.log('Out of balance check complete');
 				},
 
+	notReconciled: 	
+				{
+					data: 		{
+									methods:
+									{
+										2: 'EXPENSE',
+										3: 'PAYMENT',
+										5: 'INVOICE',
+										6: 'RECEIPT',
+										122: 'GENERAL_JOURNAL_ITEM'
+									}
+								},
+
+					init:		function (oParam)
+								{
+									ns1blankspace.util.financial.data.objects.length = 0;
+									ns1blankspace.util.financial.data.results.notReconciled.length = 0;
+
+									ns1blankspace.util.financial.notReconciled.data.types =
+										$.map(ns1blankspace.util.unique({data: ns1blankspace.util.financial.data.transactions.raw, key: 'object'}), function (a) {return a.object});
+									ns1blankspace.util.financial.notReconciled.data.objectContexts = [];
+									ns1blankspace.util.financial.notReconciled.process(oParam);
+								},
+
+					process: 	function (oParam)
+								{
+									var iTypeIndex = ns1blankspace.util.getParam(oParam, 'typeIndex', {"default": 0}).value;
+									oParam.typeIndex = iTypeIndex;
+
+									if (iTypeIndex < ns1blankspace.util.financial.notReconciled.data.types.length)
+									{
+										var aObjectContexts = $.map(
+													ns1blankspace.util.unique(
+													{
+														data: $.grep(ns1blankspace.util.financial.data.transactions.raw, function (v)
+																{
+																	return (v.object == ns1blankspace.util.financial.notReconciled.data.types[iTypeIndex])
+																}),
+														key: 'objectcontext'
+													}),
+													function (v) {return v.objectcontext});
+
+										ns1blankspace.util.financial.notReconciled.data.objectContexts.push(
+										{
+											object: ns1blankspace.util.financial.notReconciled.data.types[iTypeIndex],
+											objectContexts: aObjectContexts
+										});
+
+										if (aObjectContexts.length == 0)
+										{
+											oParam.typeIndex++;
+											ns1blankspace.util.financial.notReconciled.process(oParam);
+										}	
+										else
+										{
+											var oSearch = new AdvancedSearch();
+											oSearch.method = 'FINANCIAL_' + ns1blankspace.util.financial.notReconciled.data.methods[ns1blankspace.util.financial.notReconciled.data.types[iTypeIndex]] + '_SEARCH';
+											oSearch.addField('id');
+											oSearch.rows = 1000;
+											oSearch.addFilter('reconciliation', 'IS_NULL');
+											oSearch.addFilter('id', 'IN_LIST', aObjectContexts.join(','));
+
+											oSearch.getResults(function(oResponse)
+											{
+												if (oResponse.status == 'OK')
+												{	
+													$.each(oResponse.data.rows, function (i, item)
+													{
+														$.each($.grep(ns1blankspace.util.financial.data.transactions.raw, function (a)
+														{
+															return (a.object == ns1blankspace.util.financial.notReconciled.data.types[iTypeIndex] && a.objectcontext == item.id)
+														}),
+														function (j, transaction) {transaction.notReconciled = true});
+													});
+												}	
+
+												oParam.typeIndex++;
+												ns1blankspace.util.financial.notReconciled.process(oParam);
+											});
+										}		
+									}
+									else
+									{	
+										console.log('Not reconciled check completed');
+									}
+								}
+				},			
+	
 	show: 		{
 					balances: 	function (oParam)
 								{
