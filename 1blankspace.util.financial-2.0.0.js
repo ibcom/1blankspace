@@ -95,8 +95,7 @@ ns1blankspace.util.financial =
 											oSearch.addFilter('id', 'GREATER_THAN', iID);
 										}
 
-
-										oSearch.rows = 500;
+										oSearch.rows = 250;
 										oSearch.sort('id', 'asc');
 
 										oSearch.getResults(function(oResponse)
@@ -172,9 +171,10 @@ ns1blankspace.util.financial =
 					ns1blankspace.util.financial.data.transactions.current =
 							$.grep(ns1blankspace.util.financial.data.transactions.current, function (a) {return (iObject==undefined?true:a.object==iObject)});
 					
-					$.each(ns1blankspace.util.financial.data.transactions.current, function (i, v)
+					$.each(ns1blankspace.util.financial.data.transactions.current, function (i, transaction)
 					{
-						v.financialaccount = $.grep(ns1blankspace.util.financial.data.accounts, function (a) {return a.id == v.financialaccount})[0];
+						transaction.financialaccount = $.grep(ns1blankspace.util.financial.data.accounts, function (a) {return a.id == transaction.financialaccount})[0];
+						ns1blankspace.util.financial.side(transaction);
 					});
 
 					console.log('Prepared');
@@ -240,7 +240,7 @@ ns1blankspace.util.financial =
 									ns1blankspace.util.financial.data.results.notReconciled.length = 0;
 
 									ns1blankspace.util.financial.notReconciled.data.types =
-										$.map(ns1blankspace.util.unique({data: ns1blankspace.util.financial.data.transactions.raw, key: 'object'}), function (a) {return a.object});
+										$.map(ns1blankspace.util.unique({data: ns1blankspace.util.financial.data.transactions.current, key: 'object'}), function (a) {return a.object});
 									ns1blankspace.util.financial.notReconciled.data.objectContexts = [];
 									ns1blankspace.util.financial.notReconciled.process(oParam);
 								},
@@ -255,7 +255,7 @@ ns1blankspace.util.financial =
 										var aObjectContexts = $.map(
 													ns1blankspace.util.unique(
 													{
-														data: $.grep(ns1blankspace.util.financial.data.transactions.raw, function (v)
+														data: $.grep(ns1blankspace.util.financial.data.transactions.current, function (v)
 																{
 																	return (v.object == ns1blankspace.util.financial.notReconciled.data.types[iTypeIndex])
 																}),
@@ -269,7 +269,7 @@ ns1blankspace.util.financial =
 											objectContexts: aObjectContexts
 										});
 
-										if (aObjectContexts.length == 0)
+										if (aObjectContexts.length == 0 || ns1blankspace.util.financial.notReconciled.data.types[iTypeIndex] == '')
 										{
 											oParam.typeIndex++;
 											ns1blankspace.util.financial.notReconciled.process(oParam);
@@ -289,7 +289,7 @@ ns1blankspace.util.financial =
 												{	
 													$.each(oResponse.data.rows, function (i, item)
 													{
-														$.each($.grep(ns1blankspace.util.financial.data.transactions.raw, function (a)
+														$.each($.grep(ns1blankspace.util.financial.data.transactions.current, function (a)
 														{
 															return (a.object == ns1blankspace.util.financial.notReconciled.data.types[iTypeIndex] && a.objectcontext == item.id)
 														}),
@@ -305,6 +305,7 @@ ns1blankspace.util.financial =
 									else
 									{	
 										console.log('Not reconciled check completed');
+										console.log($.grep(ns1blankspace.util.financial.data.transactions.current, function (a) {return a.notReconciled}));
 									}
 								}
 				},			
