@@ -73,7 +73,7 @@ ns1blankspace.util.financial =
 
 										var oSearch = new AdvancedSearch();
 										oSearch.method = 'FINANCIAL_TRANSACTION_SEARCH';
-										oSearch.addField('financialaccount,amount,date,object,objectcontext,modifieddate,createddate,description');
+										oSearch.addField('financialaccount,amount,date,object,objectcontext,lineitem,modifieddate,createddate,description');
 										
 										if (sStartDate != undefined)
 										{
@@ -111,6 +111,14 @@ ns1blankspace.util.financial =
 											if (oResponse.morerows == "false")
 											{
 												ns1blankspace.util.financial.data.transactions.raw.sort(ns1blankspace.util.sortBy('id'));
+
+												$.each($.grep(ns1blankspace.util.financial.data.transactions.raw, function(a) {return a.object == '122'}),
+												function (i, transaction)
+												{
+													transaction.parentobjectContext = transaction.objectoontext;
+													transaction.objectcontext = transaction.lineitem;
+												});
+
 												ns1blankspace.util.onComplete(oParam);
 											}
 											else
