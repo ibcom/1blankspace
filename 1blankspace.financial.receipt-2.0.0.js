@@ -204,7 +204,7 @@ ns1blankspace.financial.receipt =
 											oSearch.method = 'FINANCIAL_RECEIPT_SEARCH';
 											oSearch.addField('contactbusinessreceivedfromtext,contactbusinessreceivedfrom,' +
 																'contactpersonreceivedfromtext,contactpersonreceivedfrom,' +
-																'reference,receiveddate,description,amount');
+																'reference,receiveddate,description,amount,reconciliation,reconciliationtext');
 
 											oSearch.addBracket('(');
 											oSearch.addFilter('reference', 'TEXT_IS_LIKE', sSearchText);

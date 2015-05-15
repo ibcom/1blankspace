@@ -203,7 +203,7 @@ ns1blankspace.financial.payment =
 											var oSearch = new AdvancedSearch();
 											oSearch.method = 'FINANCIAL_PAYMENT_SEARCH';
 											oSearch.addField('contactbusinesspaidtotext,contactbusinesspaidto,contactpersonpaidtotext,contactpersonpaidto,' +
-																'reference,paiddate,amount');
+																'reference,paiddate,amount,reconciliation,reconciliationtext');
 
 											oSearch.addBracket('(');
 											oSearch.addFilter('reference', 'TEXT_IS_LIKE', sSearchText);
