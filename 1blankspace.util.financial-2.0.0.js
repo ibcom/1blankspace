@@ -115,7 +115,7 @@ ns1blankspace.util.financial =
 												$.each($.grep(ns1blankspace.util.financial.data.transactions.raw, function(a) {return a.object == '122'}),
 												function (i, transaction)
 												{
-													transaction.parentobjectContext = transaction.objectoontext;
+													transaction.parentobjectcontext = transaction.objectcontext;
 													transaction.objectcontext = transaction.lineitem;
 												});
 
@@ -269,7 +269,7 @@ ns1blankspace.util.financial =
 																}),
 														key: 'objectcontext'
 													}),
-													function (v) {return v.objectcontext});
+													function (v) {return (v.objectcontext!=''?v.objectcontext:undefined)});
 
 										ns1blankspace.util.financial.notReconciled.data.objectContexts.push(
 										{
@@ -303,6 +303,12 @@ ns1blankspace.util.financial =
 														}),
 														function (j, transaction) {transaction.notReconciled = true});
 													});
+
+													$.each($.grep(ns1blankspace.util.financial.data.transactions.current, function (a)
+													{
+														return (a.objectcontext == '')
+													}),
+													function (j, transaction) {transaction.notReconciled = true});
 												}	
 
 												oParam.typeIndex++;
@@ -314,9 +320,215 @@ ns1blankspace.util.financial =
 									{	
 										console.log('Not reconciled check completed');
 										console.log($.grep(ns1blankspace.util.financial.data.transactions.current, function (a) {return a.notReconciled}));
+										console.log(ns1blankspace.util.financial.show.notReconciled());
 									}
 								}
-				},			
+				},
+
+	source: 	
+				{
+					data: 		{
+									objects:
+									[
+										{
+											id: 2,
+											method: 'EXPENSE',
+											date: 'accrueddate',
+											contactBusiness: 'contactbusinesspaidto'
+										},
+										{
+											id: 3,
+											method: 'PAYMENT',
+											date: 'paiddate',
+											contactBusiness: 'contactbusinesspaidto'
+										},
+										{
+											id: 5,
+											method: 'INVOICE',
+											date: 'sentdate',
+											contactBusiness: 'contactbusinesssentto'
+										},
+										{
+											id: 6,
+											method: 'RECEIPT',
+											date: 'receiveddate',
+											contactBusiness: 'contactbusinessreceivedfrom'
+										}
+									],
+									objectContexts: {},
+									totals: {}
+								},
+
+					init:		function (oParam)
+								{
+									ns1blankspace.util.financial.source.data.balances = [];
+									ns1blankspace.util.financial.data.objectContexts = {};
+									ns1blankspace.util.financial.source.objectContexts(oParam);
+								},
+
+					objectContexts:
+								function (oParam)
+								{
+									var sStartDate = ns1blankspace.util.getParam(oParam, 'startDate').value;
+									var sEndDate = ns1blankspace.util.getParam(oParam, 'endDate').value;
+									var iContactBusiness = ns1blankspace.util.getParam(oParam, 'contactBusiness').value;
+									var iID = ns1blankspace.util.getParam(oParam, 'id').value;
+									var bInitialised = ns1blankspace.util.getParam(oParam, 'initialised', {"default": false}).value;
+									var iObject = ns1blankspace.util.getParam(oParam, 'object', {"default": 2}).value;
+									var iObjectIndex = ns1blankspace.util.getParam(oParam, 'objectIndex', {"default": 0, set: true}).value;
+									oParam.objectIndex = iObjectIndex;
+
+									if (iObjectIndex < ns1blankspace.util.financial.source.data.objects.length)
+									{
+										var oObject = ns1blankspace.util.financial.source.data.objects[iObjectIndex];
+
+										if (!bInitialised)
+										{
+											oParam.initialised = true;
+											ns1blankspace.util.financial.source.data.objectContexts[oObject.id] = [];
+										}
+
+										var oSearch = new AdvancedSearch();
+										oSearch.method = 'FINANCIAL_' + oObject.method + '_SEARCH';
+										oSearch.addField('reference');
+										
+										if (sStartDate != undefined)
+										{
+											oSearch.addFilter(oObject.date, 'GREATER_THAN_OR_EQUAL_TO', sStartDate);
+										}	
+
+										if (sEndDate != undefined)
+										{
+											oSearch.addFilter(oObject.date, 'LESS_THAN_OR_EQUAL_TO', sEndDate);
+										}
+
+										if (iContactBusiness != undefined)
+										{
+											oSearch.addFilter(oObject.contactBusiness, 'EQUAL_TO', iContactBusiness);
+										}
+
+										if (iID != undefined)
+										{
+											oSearch.addFilter('id', 'GREATER_THAN', iID);
+										}
+
+										oSearch.rows = 250;
+										oSearch.sort('id', 'asc');
+
+										oSearch.getResults(function(oResponse)
+										{
+											if (oResponse.data.rows.length > 0)
+											{	
+												oParam.id = oResponse.data.rows[oResponse.data.rows.length-1].id;
+
+												ns1blankspace.util.financial.source.data.objectContexts[oObject.id] =
+													ns1blankspace.util.financial.source.data.objectContexts[oObject.id].concat(oResponse.data.rows);
+											}		
+
+											if (oResponse.morerows == "false")
+											{
+												oParam.objectIndex++;
+												oParam.initialised = false;
+												ns1blankspace.util.financial.source.objectContexts(oParam);
+												
+											}
+											else
+											{
+												ns1blankspace.util.financial.source.objectContexts(oParam);
+											}
+										});
+									}
+									else
+									{
+										delete oParam.id;
+										delete oParam.objectIndex;
+										ns1blankspace.util.onComplete(oParam);
+									}
+								},
+
+					transactions: 	
+								function (oParam)
+								{
+									var sStartDate = ns1blankspace.util.getParam(oParam, 'startDate').value;
+									var sEndDate = ns1blankspace.util.getParam(oParam, 'endDate').value;
+									var iID = ns1blankspace.util.getParam(oParam, 'id').value;
+									var iObject = ns1blankspace.util.getParam(oParam, 'object', {"default": 2}).value;
+									var iObjectIndex = ns1blankspace.util.getParam(oParam, 'objectIndex', {"default": 0, set: true}).value;
+									oParam.objectIndex = iObjectIndex;
+
+									if (iObjectIndex < ns1blankspace.util.financial.source.data.objects.length)
+									{
+										var oObject = ns1blankspace.util.financial.source.data.objects[iObjectIndex];
+
+										var aIDs = $.map(
+													ns1blankspace.util.unique(
+													{
+														data: ns1blankspace.util.financial.source.data.objectContexts[oObject.id],
+														key: 'id'
+													}),
+													function (v) {return (v.id!=''?v.id:undefined)});
+
+										if (aIDs.length == 0)
+										{
+											delete oParam.id; 
+											oParam.objectIndex++;
+											ns1blankspace.util.financial.source.transactions(oParam);
+										}	
+										else
+										{
+											var oSearch = new AdvancedSearch();
+											oSearch.method = 'FINANCIAL_TRANSACTION_SEARCH';
+											oSearch.addField('financialaccount,sum(amount) amount');
+											oSearch.addFilter('object', 'EQUAL_TO', oObject.id);
+											oSearch.addFilter('objectcontext', 'IN_LIST', aIDs.join(','));
+
+											if (iID != undefined)
+											{
+												oSearch.addFilter('id', 'GREATER_THAN', iID);
+											}
+
+											oSearch.sort('id', 'asc');
+											oSearch.rows = 1000;
+											oSearch.getResults(function(oResponse)
+											{
+												if (oResponse.data.rows.length > 0)
+												{
+													oParam.id = oResponse.data.rows[oResponse.data.rows.length-1].id;
+
+													ns1blankspace.util.financial.source.data.balances =
+														ns1blankspace.util.financial.source.data.balances.concat(oResponse.data.rows);
+												}
+
+												if (oResponse.morerows == "false")
+												{
+													delete oParam.id; 
+													oParam.objectIndex++;
+													ns1blankspace.util.financial.source.transactions(oParam);
+												}
+												else
+												{	
+													ns1blankspace.util.financial.source.transactions(oParam);
+												}	
+											});
+										}	
+									}
+									else
+									{
+										ns1blankspace.util.financial.source.data.totals.debit = 0;
+										ns1blankspace.util.financial.source.data.totals.credit = 0;
+
+										$.each(ns1blankspace.util.financial.source.data.balances, function (i, account)
+										{
+											account.financialaccount = $.grep(ns1blankspace.util.financial.data.accounts, function (a) {return a.id == account.financialaccount})[0];
+											ns1blankspace.util.financial.side(account);
+											ns1blankspace.util.financial.source.data.totals[account.side] += +Math.abs(accounting.unformat(account.amount)).toFixed(2);
+										});
+
+										ns1blankspace.util.financial.source.data.totals.credit = ns1blankspace.util.financial.source.data.totals.credit.toFixed(2);
+										ns1blankspace.util.financial.source.data.totals.debit = ns1blankspace.util.financial.source.data.totals.debit.toFixed(2);
+									}
+								}					
+				},						
 	
 	show: 		{
 					balances: 	function (oParam)
@@ -333,8 +545,27 @@ ns1blankspace.util.financial =
 									sShow += 'DIFF:\t' + (ns1blankspace.util.financial.data.transactions.totals.debit - ns1blankspace.util.financial.data.transactions.totals.credit) + '\n';
 
 									return sShow
+								},
+
+					notReconciled: 	function (oParam)
+								{
+									var sShow = '\n';
+									var cTotalCredit = 0;
+									var cTotalDebit = 0;
+
+									$.each($.grep(ns1blankspace.util.financial.data.transactions.current, function (a) {return a.notReconciled}), function (i, transaction)
+									{
+										sShow += transaction.date + '\t' + (transaction.side=='debit'?Math.abs(accounting.unformat(transaction.amount)):'') + '\t' + (transaction.side=='credit'?Math.abs(accounting.unformat(transaction.amount)):'') + '\n'
+
+										if (transaction.side=='credit') {cTotalCredit = cTotalCredit + +Math.abs(accounting.unformat(transaction.amount)).toFixed(2)};
+										if (transaction.side=='debit') {cTotalDebit = cTotalDebit + +Math.abs(accounting.unformat(transaction.amount)).toFixed(2)};
+									});
+
+									sShow += 'TOTAL:\t' + cTotalDebit + '\t' + cTotalCredit + '\n';
+
+									sShow += 'DIFF:\t' + (cTotalDebit - cTotalCredit) + '\n';
+
+									return sShow
 								}
-
-				}			
-
+				}					
 }	

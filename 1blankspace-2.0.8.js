@@ -3780,7 +3780,11 @@ ns1blankspace.util =
 							}
 
 							if (bRemove) {delete oParam[sParam]};
-						}	
+							if (bSet) {oParam[sParam] = oReturn.value}
+						}
+
+						
+
 					}	
 
 					return oReturn;
