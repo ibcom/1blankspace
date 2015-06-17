@@ -341,7 +341,7 @@ ns1blankspace.advancedSearch.data.searchComparison =
 	{title: "Has been set", code: "IS_NOT_NULL", dataType: "all", inputCount: 0},
 	{title: "Approximately equal to", code: "APPROX_EQUAL_TO", dataType: "all", inputCount: 1},
 	{title: "Contains", code: "TEXT_IS_LIKE", dataType: "text", inputCount: 1},
-	{title: "Noes Not Contain", code: "TEXT_IS_NOT_LIKE", dataType: "text", inputCount: 1},
+	{title: "Does Not Contain", code: "TEXT_IS_NOT_LIKE", dataType: "text", inputCount: 1},
 	{title: "Starts with", code: "TEXT_STARTS_WITH", dataType: "text", inputCount: 1},
 	{title: "Is empty", code: "TEXT_IS_EMPTY", dataType: "text", inputCount: 0},
 	{title: "Is not empty", code: "TEXT_IS_NOT_EMPTY", dataType: "text", inputCount: 0},
