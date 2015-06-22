@@ -286,10 +286,10 @@ ns1blankspace.setup.structure =
 						aHTML.push('<tr><td id="ns1blankspaceControlElement" class="ns1blankspaceControl">' +
 										'Elements</td></tr>');
 
-						//aHTML.push('<tr><td>&nbsp;</td></tr>');
+						aHTML.push('<tr><td>&nbsp;</td></tr>');
 
-						//aHTML.push('<tr><td id="ns1blankspaceControlGrouping" class="ns1blankspaceControl">' +
-						//				'Grouping</td></tr>');
+						aHTML.push('<tr><td id="ns1blankspaceControlGrouping" class="ns1blankspaceControl">' +
+										'Grouping</td></tr>');
 
 						aHTML.push('</table>');	
 

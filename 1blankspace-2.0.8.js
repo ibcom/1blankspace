@@ -1856,7 +1856,16 @@ ns1blankspace.logon =
 				{		
 					if (oResponse.status === 'ER')
 					{
-						$('#ns1blankspaceLogonStatus').html('Logon name or password is incorrect.');
+						if (oResponse.error.errornotes == 'Can only call the LOGON Method via https')
+						{
+							$('#ns1blankspaceLogonStatus').html('Insecure connection!<br /><a href="' +
+									window.location.href.replace('http', 'https') + '">Go to secure logon</a>');
+						}
+						else
+						{	
+							$('#ns1blankspaceLogonStatus').html('Logon name or password is incorrect.');
+						}
+
 						$('#ns1blankspaceContainer').effect("shake", { times:2 }, 100);
 					}
 					else 
@@ -3736,6 +3745,7 @@ ns1blankspace.util =
 					var sSplit;
 					var iIndex;
 					var bRemove = ns1blankspace.util.param(oOption, 'remove').value;
+					var bSet = ns1blankspace.util.param(oOption, 'set').value;
 
 					var oReturn = {exists: false};
 
