@@ -4283,6 +4283,13 @@ ns1blankspace.util =
 					}
 				},
 
+	sortByDate: function (prop)
+				{
+					//yourArray.sort(ns1blankspace.util.sortByDate('date'))
+
+					return function(a,b) { return new Date(a[prop]) - new Date(b[prop]) }
+				},			
+
 	remove:		function (array, property, value)
 				{
 					return $.grep(array, function (a)
