@@ -152,7 +152,15 @@ window.onbeforeunload = function(event)
 $(function()
 {
 	window.$vq = ns1blankspace.util.view.queue;
-	ns1blankspace.app.init();
+
+	if (ns1blankspace.option.httpsOnly && window.location.protocol == 'http:')
+	{
+		window.location.href = window.location.href.replace('http', 'https')
+	}
+	else
+	{
+		ns1blankspace.app.init();
+	}	
 });
 
 ns1blankspace.app =
@@ -289,6 +297,7 @@ ns1blankspace.app =
 							cache: false,
 							dataType: 'json',
 							global: true,
+							headers: {"cache-control": "no-cache"},
 							beforeSend: function (oRequest)
 										{
 					            			oRequest.setRequestHeader("X-HTTP-myds-rest-level", ns1blankspace.option.restLevel);

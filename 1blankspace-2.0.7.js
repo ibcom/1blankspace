@@ -288,6 +288,7 @@ ns1blankspace.app =
 							cache: false,
 							dataType: 'json',
 							global: true,
+							headers: {"cache-control": "no-cache"},
 							beforeSend: function (oRequest)
 										{
 					            			oRequest.setRequestHeader("X-HTTP-myds-rest-level", ns1blankspace.option.restLevel);

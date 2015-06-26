@@ -18,6 +18,7 @@ ns1blankspace.option.passwordhash = true;
 ns1blankspace.option.formFactor.size.value = ns1blankspace.option.formFactor.size.options.medium;
 ns1blankspace.option.classic = true;
 ns1blankspace.option.loadControl = false;
+ns1blankspace.option.httpsOnly = true;
 
 ns1blankspace.data.object = {person: 32, business: 12, opportunity: 35};
 ns1blankspace.data.attachmentTypes = [];

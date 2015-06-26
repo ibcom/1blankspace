@@ -555,7 +555,7 @@ ns1blankspace.setup.structure =
 										oSearch.addField('backgroundcolour,description,document,documenttext,groupingfactor,' +
 															'maximumpoints,minimumpoints,structure,structuretext,textcolour,title,type,typetext');
 										oSearch.addFilter('structure', 'EQUAL_TO', ns1blankspace.objectContext)
-										oSearch.sort('title', 'asc');
+										oSearch.sort('minimumpoints', 'asc');
 										oSearch.getResults(function(data) {ns1blankspace.setup.structure.grouping.show(oParam, data)});
 									}
 									else
@@ -593,7 +593,8 @@ ns1blankspace.setup.structure =
 											{
 												label: "Add"
 											})
-											.click(function() {
+											.click(function()
+											{
 												 ns1blankspace.setup.structure.grouping.edit(oParam);
 											})
 										}	
@@ -611,6 +612,8 @@ ns1blankspace.setup.structure =
 											aHTML.push('<table id="ns1blankspaceSetupStructureGrouping" class="ns1blankspace">');
 											aHTML.push('<tr class="ns1blankspaceCaption">');
 											aHTML.push('<td class="ns1blankspaceHeaderCaption">Title</td>');
+											aHTML.push('<td class="ns1blankspaceHeaderCaption" style="text-align:right;">Minimum Points</td>');
+											aHTML.push('<td class="ns1blankspaceHeaderCaption" style="text-align:right;">Maximum Points</td>');
 											aHTML.push('<td class="ns1blankspaceHeaderCaption">&nbsp;</td>');
 											aHTML.push('</tr>');
 											
@@ -618,21 +621,19 @@ ns1blankspace.setup.structure =
 											{
 												aHTML.push('<tr class="ns1blankspaceRow">');
 																
-												aHTML.push('<td id="ns1blankspaceSetupStructureGrouping_title-' + this.id + '" class="ns1blankspaceRow">' +
+												aHTML.push('<td id="ns1blankspaceSetupStructureGrouping_title-' + this.id + '" class="ns1blankspaceRow ns1blankspaceRowSelect">' +
 																		this.title + '</td>');
 																		
+												aHTML.push('<td id="ns1blankspaceSetupStructureGrouping_minimumpoints-' + this.id + '" style="text-align:right;" class="ns1blankspaceRow ns1blankspaceRowSelect">' +
+																		this.minimumpoints + '</td>');
+
+												aHTML.push('<td id="ns1blankspaceSetupStructureGrouping_maximumpoints-' + this.id + '" style="text-align:right;" class="ns1blankspaceRow ns1blankspaceRowSelect">' +
+																		this.maximumpoints + '</td>');
+																								
 												aHTML.push('<td style="width:60px;text-align:right;" class="ns1blankspaceRow">');
 													
-												if (oOptions.remove)
-												{	
-													aHTML.push('<span id="ns1blankspaceSetupStructureGrouping_options_remove-' + this.id + '" class="ns1blankspaceRowRemove"></span>');
-												};	
-													
-												if (oOptions.view)
-												{	
-													aHTML.push('<span id="ns1blankspaceSetupStructureGrouping_options_view-' + this.id + '" class="ns1blankspaceRowView"></span>');
-												};	
-													
+												aHTML.push('<span id="ns1blankspaceSetupStructureGrouping_options_remove-' + this.id + '" class="ns1blankspaceRowRemove"></span>');
+														
 												aHTML.push('</td>');
 																
 												aHTML.push('</tr>');
@@ -642,35 +643,26 @@ ns1blankspace.setup.structure =
 
 											$('#ns1blankspaceGroupingColumn1').html(aHTML.join(''));
 											
-											if (oOptions.view) 
+											$('#ns1blankspaceSetupStructureGrouping .ns1blankspaceRowRemove').button(
 											{
-												$('#ns1blankspaceGroupingColumn .ns1blankspaceRowRemove').button( {
-													text: false,
-													icons: {
-														primary: "ui-icon-close"
-													}
-												})
-												.click(function() {
-													ns1blankspace.setup.structure.grouping.remove({xhtmlElementID: this.id});
-												})
-												.css('width', '15px')
-												.css('height', '17px');
-											}
+												text: false,
+												icons:
+												{
+													primary: "ui-icon-close"
+												}
+											})
+											.click(function()
+											{
+												ns1blankspace.setup.structure.grouping.remove({xhtmlElementID: this.id});
+											})
+											.css('width', '15px')
+											.css('height', '17px');
 											
-											if (oOptions.remove) 
+											$('#ns1blankspaceSetupStructureGrouping .ns1blankspaceRowSelect')
+											.click(function()
 											{
-												$('#ns1blankspaceGroupingColumn .ns1blankspaceRowOptionsView').button( {
-													text: false,
-													icons: {
-														primary: "ui-icon-play"
-													}
-												})
-												.click(function() {
-													ns1blankspace.setup.structure.grouping.add({xhtmlElementID: this.id})
-												})
-												.css('width', '15px')
-												.css('height', '17px');
-											}	
+												ns1blankspace.setup.structure.grouping.edit({xhtmlElementID: this.id})
+											});
 										}
 									}	
 								},
@@ -704,30 +696,73 @@ ns1blankspace.setup.structure =
 														'</td></tr>' +
 														'<tr class="ns1blankspaceText">' +
 														'<td class="ns1blankspaceText">' +
-														'<input id="ns1blankspaceSetupStructureGroupingTitle" class="inputns1blankspaceText">' +
+														'<input id="ns1blankspaceSetupStructureGroupingTitle" class="ns1blankspaceText">' +
 														'</td></tr>');
-										
+
+										aHTML.push('<tr class="ns1blankspaceCaption">' +
+														'<td class="ns1blankspaceCaption">' +
+														'Minimum Points' +
+														'</td></tr>' +
+														'<tr class="ns1blankspaceText">' +
+														'<td class="ns1blankspaceText">' +
+														'<input id="ns1blankspaceSetupStructureGroupingMinimumPoints" class="ns1blankspaceText">' +
+														'</td></tr>');
+
+										aHTML.push('<tr class="ns1blankspaceCaption">' +
+														'<td class="ns1blankspaceCaption">' +
+														'Maximum Points' +
+														'</td></tr>' +
+														'<tr class="ns1blankspaceText">' +
+														'<td class="ns1blankspaceText">' +
+														'<input id="ns1blankspaceSetupStructureGroupingMaximumPoints" class="ns1blankspaceText">' +
+														'</td></tr>');
+
+										aHTML.push('<tr class="ns1blankspaceCaption">' +
+														'<td class="ns1blankspaceCaption">' +
+														'Grouping Factor' +
+														'</td></tr>' +
+														'<tr class="ns1blankspaceText">' +
+														'<td class="ns1blankspaceText">' +
+														'<input id="ns1blankspaceSetupStructureGroupingFactor" class="ns1blankspaceText">' +
+														'</td></tr>');
+
+										aHTML.push('<tr class="ns1blankspaceCaption">' +
+														'<td class="ns1blankspaceCaption">' +
+														'Text Colour' +
+														'</td></tr>' +
+														'<tr class="ns1blankspaceText">' +
+														'<td class="ns1blankspaceText">' +
+														'<input id="ns1blankspaceSetupStructureGroupingTextColour" class="ns1blankspaceText">' +
+														'</td></tr>');
+
+										aHTML.push('<tr class="ns1blankspaceCaption">' +
+														'<td class="ns1blankspaceCaption">' +
+														'Background Colour' +
+														'</td></tr>' +
+														'<tr class="ns1blankspaceText">' +
+														'<td class="ns1blankspaceText">' +
+														'<input id="ns1blankspaceSetupStructureGroupingBackgroundColour" class="ns1blankspaceText">' +
+														'</td></tr>');
+
 										aHTML.push('</table>');					
 										
-										$('#ns1blankspaceSetupStructureGroupingColumn1').html(aHTML.join(''));
+										$('#ns1blankspaceGroupingColumn1').html(aHTML.join(''));
 										
 										var aHTML = [];
 										
-										aHTML.push('<table class="ns1blankspace">');
+										aHTML.push('<table class="ns1blankspaceColumn2">');
 												
-										aHTML.push('<tr class="ns1blankspaceAction">' +
-														'<td class="ns1blankspaceAction">' +
-														'<span style="width:80px;" id="ns1blankspaceSetupStructureGroupingSave">Save</span>' +
+										aHTML.push('<tr><td>' +
+														'<span class="ns1blankspaceAction" style="width:70px;" id="ns1blankspaceSetupStructureGroupingSave">Save</span>' +
 														'</td></tr>');
 									
-										aHTML.push('<trclass="ns1blankspaceAction">' +
-														'<td class="ns1blankspaceAction">' +
-														'<span style="width:80px;" id="ns1blankspaceSetupStructureGroupingCancel">Cancel</span>' +
+										aHTML.push('<tr><td>' +
+														'<span class="ns1blankspaceAction" style="width:70px;" id="ns1blankspaceSetupStructureGroupingCancel">Cancel</span>' +
 														'</td></tr>');
 														
 										aHTML.push('</table>');					
 										
-										$('#ns1blankspaceSetupStructureGroupingColumn2').html(aHTML.join(''));
+										$('#ns1blankspaceGroupingColumn2').html(aHTML.join(''));
 										
 										$('#ns1blankspaceSetupStructureGroupingSave').button(
 										{
@@ -735,17 +770,26 @@ ns1blankspace.setup.structure =
 										})
 										.click(function() 
 										{
-											var sData = 'structure=' + ns1blankspace.util.fs(ns1blankspace.objectContext);
-											sData += '&id=' + ns1blankspace.util.fs(sID);
-											sData += '&title=' + ns1blankspace.util.fs($('#ins1blankspaceSetupStructureGroupingTitle').val());
+											var oData =
+											{
+												structure: ns1blankspace.objectContext,
+												id: sID,
+												title: $('#ns1blankspaceSetupStructureGroupingTitle').val(),
+												minimumpoints: $('#ns1blankspaceSetupStructureGroupingMinimumPoints').val(),
+												maximumpoints: $('#ns1blankspaceSetupStructureGroupingMaximumPoints').val(),
+												groupingfactor: $('#ns1blankspaceSetupStructureGroupingFactor').val(),
+												textcolour: $('#ns1blankspaceSetupStructureGroupingTextColour').val(),
+												backgroundcolour: $('#ns1blankspaceSetupStructureGroupingBackgroundColour').val()
+											}	
 											
 											$.ajax(
 											{
 												type: 'POST',
 												url: ns1blankspace.util.endpointURI('SETUP_STRUCTURE_DATA_GROUP_MANAGE'),
-												data: sData,
+												data: oData,
 												dataType: 'json',
-												success: function() {
+												success: function()
+												{
 													ns1blankspace.setup.structure.grouping.show();
 												}
 											});
@@ -762,14 +806,13 @@ ns1blankspace.setup.structure =
 										
 										if (sID != undefined)
 										{
-											$.ajax(
-											{
-												type: 'POST',
-												url: ns1blankspace.util.endpointURI('SETUP_STRUCTURE_DATA_GROUP_SEARCH'),
-												data: 'id=' + sID,
-												dataType: 'json',
-												success: function(data) {ns1blankspace.setup.structure.grouping.edit(oParam, data)}
-											});
+											var oSearch = new AdvancedSearch();
+											oSearch.method = 'SETUP_STRUCTURE_DATA_GROUP_SEARCH';
+											oSearch.addField('backgroundcolour,description,document,documenttext,groupingfactor,' +
+																'maximumpoints,minimumpoints,structure,structuretext,textcolour,title,type,typetext');
+											oSearch.addFilter('id', 'EQUAL_TO', sID)
+											oSearch.sort('title', 'asc');
+											oSearch.getResults(function(data) {ns1blankspace.setup.structure.grouping.edit(oParam, data)});
 										}
 										else
 										{
@@ -783,6 +826,11 @@ ns1blankspace.setup.structure =
 											var oObjectContext = oResponse.data.rows[0];
 											$('#ns1blankspaceSetupStructureGroupingTitle').val(oObjectContext.title)
 											$('#ns1blankspaceSetupStructureGroupingTitle').focus();
+											$('#ns1blankspaceSetupStructureGroupingMinimumPoints').val(oObjectContext.minimumpoints)
+											$('#ns1blankspaceSetupStructureGroupingMaximumPoints').val(oObjectContext.maximumpoints)
+											$('#ns1blankspaceSetupStructureGroupingFactor').val(oObjectContext.groupingfactor)
+											$('#ns1blankspaceSetupStructureGroupingTextColour').val(oObjectContext.textcolour)
+											$('#ns1blankspaceSetupStructureGroupingBackgroundColour').val(oObjectContext.backgroundcolour);
 										}
 									}		
 								},
@@ -806,10 +854,10 @@ ns1blankspace.setup.structure =
 										$.ajax(
 										{
 											type: 'DELETE',
-											url: ns1blankspace.util.endpointURI('SETUP_STRUCTURE_DATA_MANAGE'),
+											url: ns1blankspace.util.endpointURI('SETUP_STRUCTURE_DATA_GROUP_MANAGE'),
 											data: sData,
 											dataType: 'json',
-											success: function(data){ns1blankspaceSetupStructureGroupingRemove(oParam, data)}
+											success: function(data){ns1blankspace.setup.structure.grouping.remove(oParam, data)}
 										});
 									}	
 									else
