@@ -88,7 +88,7 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.format',
-		source: '/jscripts/1blankspace.format-2.0.2.js'
+		source: '/jscripts/1blankspace.format-2.0.3.js'
 	},
 	{
 		nameSpace: '1blankspace.contactPerson',
@@ -152,7 +152,7 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.financial.invoice',
-		source: '/jscripts/1blankspace.financial.invoice-2.0.0.js'
+		source: '/jscripts/1blankspace.financial.invoice-2.0.1.js'
 	},
 	{
 		nameSpace: '1blankspace.financial.expense',
