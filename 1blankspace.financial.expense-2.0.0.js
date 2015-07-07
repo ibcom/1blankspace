@@ -100,6 +100,7 @@ ns1blankspace.financial.expense =
 
 										var oData = ns1blankspace.objectContextData;
 										delete oData.id;
+										delete oData.reference;
 
 										$.ajax(
 										{
@@ -107,7 +108,7 @@ ns1blankspace.financial.expense =
 											url: ns1blankspace.util.endpointURI('FINANCIAL_EXPENSE_MANAGE'),
 											data: oData,
 											dataType: 'json',
-											success: function(data){ns1blankspace.financial.expense.copy(oParam, data)}
+											success: function(data){ns1blankspace.financial.expense.copy.init(oParam, data)}
 										});
 
 									}
@@ -132,8 +133,8 @@ ns1blankspace.financial.expense =
 										var oSearch = new AdvancedSearch();
 										oSearch.method = 'FINANCIAL_ITEM_SEARCH';
 										oSearch.addField('financialaccount,taxtype,tax,amount,description');
-										oSearch.addFilter('object', 'EQUAL_TO', iObject);
-										oSearch.addFilter('objectcontext', 'EQUAL_TO', iObjectContext);
+										oSearch.addFilter('object', 'EQUAL_TO', ns1blankspace.object);
+										oSearch.addFilter('objectcontext', 'EQUAL_TO', ns1blankspace.objectContext);
 										oSearch.sort('financialaccounttext', 'asc');
 					
 										oSearch.getResults(function(data) {ns1blankspace.financial.expense.copy.process(oParam, data)});
@@ -146,6 +147,7 @@ ns1blankspace.financial.expense =
 										{
 											var oData = oResponse.data.rows[oParam.index];
 											delete oData.id;
+											oData.object = ns1blankspace.object;
 											oData.objectContext = oParam.id;
 
 											$.ajax(
@@ -154,19 +156,22 @@ ns1blankspace.financial.expense =
 												url: ns1blankspace.util.endpointURI('FINANCIAL_ITEM_MANAGE'),
 												data: oData,
 												dataType: 'json',
-												success: function(oResponse)
+												success: function(oItemResponse)
 												{
 													ns1blankspace.financial.expense.copy.process(oParam, oResponse)
 												}
 											});	
 										}
-									}
-									else
-									{
-										ns1blankspace.status.message("Copied");
+										else
+										{
+											ns1blankspace.status.message("Copied");
+											ns1blankspace.objectContext = oParam.id;
+											ns1blankspace.inputDetected = false;
+											ns1blankspace.financial.expense.search.send('-' + ns1blankspace.objectContext, {source: 1});
+										}
 									}
 								}		
-				},			
+				},
 
 	home: 		function (oParam, oResponse)
 				{

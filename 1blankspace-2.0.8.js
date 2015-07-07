@@ -4284,7 +4284,7 @@ ns1blankspace.util =
 					return (toClass.call(sValue) == '[object Date]')
 				},		
 
-	sortBy: 	function (prop)
+	sortBy: 	function (prop, direction)
 				{
 					//yourArray.sort(ns1blankspace.util.sortBy('firstname'))
 
@@ -4292,11 +4292,11 @@ ns1blankspace.util =
 					{
 						if(a[prop] > b[prop])
 						{
-							return 1;
+							return (direction.toLowerCase()=='desc'?-1:1);
 						}
 						else if(a[prop] < b[prop])
 						{
-							return -1;
+							return (direction.toLowerCase()=='desc'?1:-1);
 						}
 						return 0;
 					}
@@ -4731,27 +4731,41 @@ ns1blankspace.util =
 					{
 						clear: function (oParam)
 						{
+							var sType = ns1blankspace.util.getParam(oParam, 'type', {"default": 'data'}).value;
 							var sQueueID = ns1blankspace.util.getParam(oParam, 'queue', {"default": 'base'}).value;
-							ns1blankspace.util.view.data[sQueueID] = [];
+							
+							ns1blankspace.util.view[sType][sQueueID] = [];
 						},
 						add: function (sData, oParam)
 						{
+							var sType = ns1blankspace.util.getParam(oParam, 'type', {"default": 'data'}).value;
 							var sQueueID = ns1blankspace.util.getParam(oParam, 'queue', {"default": 'base'}).value;
-							ns1blankspace.util.view.data[sQueueID].push(sData);
+							var bClear = ns1blankspace.util.getParam(oParam, 'clear', {"default": false}).value;
+							
+							if (bClear) {$.vq.clear(oParam)}
+							if (ns1blankspace.util.view[sType][sQueueID] == undefined) {ns1blankspace.util.view.data[sQueueID] = []}
+							ns1blankspace.util.view[sType][sQueueID].push(sData);
 						},
-						show: function (sElementSelector, oParam)
+						render: function (sElementSelector, oParam)
 						{
+							var sType = ns1blankspace.util.getParam(oParam, 'type', {"default": 'data'}).value;
 							var sQueueID = ns1blankspace.util.getParam(oParam, 'queue', {"default": 'base'}).value;
 
 							if (sElementSelector == undefined)
 							{
-								console.log(ns1blankspace.util.view.data[sQueueID].join(''));
+								console.log(ns1blankspace.util.view[sType][sQueueID].join(''));
 							}
 							else
 							{
-								$(sElementSelector).html(ns1blankspace.util.view.data[sQueueID].join(''));
+								$(sElementSelector).html(ns1blankspace.util.view[sType][sQueueID].join(''));
 								ns1blankspace.util.view.queue.clear();
 							}	
+						},
+						show: function (sElementSelector, sData, oParam)
+						{
+							this.clear(oParam);
+							this.add(sData, oParam);
+							this.render(sElementSelector, oParam);
 						}
 					}	
 				},
