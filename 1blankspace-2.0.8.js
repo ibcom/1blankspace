@@ -4736,6 +4736,7 @@ ns1blankspace.util =
 							
 							ns1blankspace.util.view[sType][sQueueID] = [];
 						},
+
 						add: function (sData, oParam)
 						{
 							var sType = ns1blankspace.util.getParam(oParam, 'type', {"default": 'data'}).value;
@@ -4746,6 +4747,7 @@ ns1blankspace.util =
 							if (ns1blankspace.util.view[sType][sQueueID] == undefined) {ns1blankspace.util.view.data[sQueueID] = []}
 							ns1blankspace.util.view[sType][sQueueID].push(sData);
 						},
+
 						render: function (sElementSelector, oParam)
 						{
 							var sType = ns1blankspace.util.getParam(oParam, 'type', {"default": 'data'}).value;
@@ -4758,8 +4760,18 @@ ns1blankspace.util =
 							else
 							{
 								$(sElementSelector).html(ns1blankspace.util.view[sType][sQueueID].join(''));
-								ns1blankspace.util.view.queue.clear();
+								ns1blankspace.util.view.queue.clear(oParam);
 							}	
+						},
+
+						get: function (sElementSelector, oParam)
+						{
+							var sType = ns1blankspace.util.getParam(oParam, 'type', {"default": 'data'}).value;
+							var sQueueID = ns1blankspace.util.getParam(oParam, 'queue', {"default": 'base'}).value;
+							var sReturn = ns1blankspace.util.view[sType][sQueueID].join('');
+							ns1blankspace.util.view.queue.clear(oParam);
+
+							return sReturn	
 						},
 						show: function (sElementSelector, sData, oParam)
 						{
