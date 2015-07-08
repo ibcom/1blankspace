@@ -4764,7 +4764,7 @@ ns1blankspace.util =
 							}	
 						},
 
-						get: function (sElementSelector, oParam)
+						get: function (oParam)
 						{
 							var sType = ns1blankspace.util.getParam(oParam, 'type', {"default": 'data'}).value;
 							var sQueueID = ns1blankspace.util.getParam(oParam, 'queue', {"default": 'base'}).value;
