@@ -308,8 +308,11 @@ ns1blankspace.advancedSearch.getResults = function (aoParm1, aoParm2)
 		}	
 	}
 	
-	ns1blankspace.debug.message(sCriteria);
-
+	if (ns1blankspace.debug != undefined)
+	{	
+		ns1blankspace.debug.message(sCriteria);
+	}
+	
 	$.ajax(
 	{
 		type: 'POST',
