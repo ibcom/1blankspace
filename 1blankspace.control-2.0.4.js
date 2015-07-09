@@ -1633,7 +1633,7 @@ ns1blankspace.control =
 														data: 'remove=1&rf=TEXT',
 														dataType: 'text',
 														async: false,
-														success: function(data) {ns1blankspace.control.user.createSecureKey({setPosition: false})}
+														success: function(data) {ns1blankspace.control.user.key({setPosition: false})}
 													})
 												}		
 											})
@@ -1651,7 +1651,7 @@ ns1blankspace.control =
 														data: 'rf=TEXT',
 														dataType: 'text',
 														async: false,
-														success: function(data) {ns1blankspace.control.user.createSecureKey({setPosition: false})}
+														success: function(data) {ns1blankspace.control.user.key({setPosition: false})}
 													})
 												}		
 											})
