@@ -818,6 +818,7 @@ ns1blankspace.app =
 							ns1blankspace.user.systemAdmin = (oResponse.systemadmin == "true");
 							ns1blankspace.user.roles = oResponse.roles.rows;
 							ns1blankspace.user.site = parseInt(oResponse.site);
+							ns1blankspace.user.instance = oResponse.instance;
 
 							ns1blankspace.spaceText = oResponse.spacename;
 							ns1blankspace.space = oResponse.space;
@@ -2004,7 +2005,7 @@ ns1blankspace.logon.changePassword =
 						var sCurrentPassword = $('#ns1blankspaceLogonCurrentPassword').val();
 
 						var sData = 'expiredays=36500' +
-										'&site=1533' +
+										'&site=' + (ns1blankspace.user.instance.indexOf('lab') != -1?ns1blankspace.user.site:'1533') +
 										'&currentpassword=' + sCurrentPassword + 
 										'&newpassword=' + sNewPassword +
 										'&newpasswordconfirm=' + sNewPasswordConfirm;

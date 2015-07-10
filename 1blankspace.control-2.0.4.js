@@ -1579,7 +1579,7 @@ ns1blankspace.control =
 											else
 											{
 												aHTML.push('<tr><td>' +
-																	(oResponse.access_token).replace('|', '-') + '<br /><br /></td></tr>');
+																	(oResponse.access_token).replace('|x', '-') + '<br /><br /></td></tr>');
 												
 												aHTML.push('<tr><td><span id="ns1blankspaceControlUserCreateSecureKeyDisable">Disable Token</span></td></tr>');								
 												aHTML.push('<tr><td><br />If you generate a new token, the current token will no longer work.<br /><br /></td></tr>');
@@ -1592,11 +1592,11 @@ ns1blankspace.control =
 												aHTML.push('<tr><td><br /><b>Example link for future diary events in iCal format:</b><br /><br />' +
 																	window.location.protocol + '//' + window.location.host + '/rpc/action/' +
 																	'<br />?method=ACTION_ICAL_SEARCH' +
-																	'<br />&access_token=' + (oResponse.access_token).replace('|', '-') + '<br /><br /></td></tr>');
+																	'<br />&access_token=' + (oResponse.access_token).replace('|x', '-') + '<br /><br /></td></tr>');
 																	
 												aHTML.push('<tr><td><a href="' +
 																	window.location.protocol + '//' + window.location.host + '/rpc/action/?method=ACTION_ICAL_SEARCH' +
-																	'&access_token=' + (oResponse.access_token).replace('|', '-') + '" target="_blank" style="font-size:1.2em">Open example link</a>' +
+																	'&access_token=' + (oResponse.access_token).replace('|x', '-') + '" target="_blank" style="font-size:1.2em">Open example link</a>' +
 																	'<br /><span style="color: #A0A0A0;">(You can then copy & paste it)<br /><br /></span></td></tr>');					
 											}
 											
@@ -1630,8 +1630,8 @@ ns1blankspace.control =
 													{
 														type: 'POST',
 														url: ns1blankspace.util.endpointURI('CORE_SECURE_TOKEN_MANAGE'),
-														data: 'remove=1&rf=TEXT',
-														dataType: 'text',
+														data: 'remove=1',
+														dataType: 'json',
 														async: false,
 														success: function(data) {ns1blankspace.control.user.key({setPosition: false})}
 													})
@@ -1648,8 +1648,8 @@ ns1blankspace.control =
 													{
 														type: 'POST',
 														url: ns1blankspace.util.endpointURI('CORE_SECURE_TOKEN_MANAGE'),
-														data: 'rf=TEXT',
-														dataType: 'text',
+														data: '',
+														dataType: 'json',
 														async: false,
 														success: function(data) {ns1blankspace.control.user.key({setPosition: false})}
 													})

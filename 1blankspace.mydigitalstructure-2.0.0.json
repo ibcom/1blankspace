@@ -98,8 +98,6 @@
 		{"title":"CORE_PROFILE_MANAGE"},
 		{"title":"CORE_PROFILE_SEARCH"},
 		{"title":"CORE_SEARCH_MORE"},
-		{"title":"CORE_SECURE_TOKEN_MANAGE"},
-		{"title":"CORE_SECURE_TOKEN_SEARCH"},
 		{"title":"CORE_SET_RESPONSE_FORMAT"},
 		{"title":"CORE_SET_SESSION_VARIABLE"},
 		{"title":"CORE_SID_SEARCH"},
