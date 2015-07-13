@@ -1727,6 +1727,7 @@ ns1blankspace.control =
 																{	
 																	ns1blankspace.space = ns1blankspace.user.space;
 																	ns1blankspace.spaceText = ns1blankspace.user.spaceText;
+																	ns1blankspace.spaceContactBusiness = ns1blankspace.user.contactBusiness;
 																	ns1blankspace.financial.data = undefined;
 																	ns1blankspace.financial.initStatus = undefined;
 																	ns1blankspace.extend.structure = undefined;
@@ -1792,16 +1793,17 @@ ns1blankspace.control =
 												var aID = (event.target.id).split('-')
 												$.ajax(
 												{
-													type: 'GET',
+													type: 'POST',
 													url: ns1blankspace.util.endpointURI('CORE_SPACE_MANAGE'),
 													data: 'switch=1&id=' + aID[1],
 													dataType: 'json',
-													success: function(data)
+													success: function(oResponse)
 													{
 														if (data.status == 'OK')
 														{	
-															ns1blankspace.space = aID[1];
-															ns1blankspace.spaceText = $('#' + event.target.id).html();
+															ns1blankspace.space = oResponse.TargetSpace;
+															ns1blankspace.spaceText = oResponse.TargetSpaceName;
+															ns1blankspace.spaceContactBusiness = oResponse.TargetContactBusiness;
 															ns1blankspace.financial.data = undefined;
 															ns1blankspace.financial.initStatus = undefined;
 															ns1blankspace.extend.structure = undefined;
@@ -1859,16 +1861,17 @@ ns1blankspace.control =
 												var aID = (event.target.id).split('-')
 												$.ajax(
 												{
-													type: 'GET',
+													type: 'POST',
 													url: ns1blankspace.util.endpointURI('CORE_SPACE_MANAGE'),
 													data: 'switch=1&id=' + aID[1],
 													dataType: 'json',
-													success: function(data)
+													success: function(oResponse)
 													{
 														if (data.status == 'OK')
 														{	
-															ns1blankspace.space = aID[1];
-															ns1blankspace.spaceText = $('#' + event.target.id).html();
+															ns1blankspace.space = oResponse.TargetSpace;
+															ns1blankspace.spaceText = oResponse.TargetSpaceName;
+															ns1blankspace.spaceContactBusiness = oResponse.TargetContactBusiness;
 															ns1blankspace.financial.data = undefined;
 															ns1blankspace.financial.initStatus = undefined;
 															ns1blankspace.extend.structure = undefined;

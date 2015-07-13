@@ -101,8 +101,6 @@
 		{"title":"CORE_SET_RESPONSE_FORMAT"},
 		{"title":"CORE_SET_SESSION_VARIABLE"},
 		{"title":"CORE_SID_SEARCH"},
-		{"title":"CORE_SPACE_MANAGE"},
-		{"title":"CORE_SPACE_SEARCH"},
 		{"title":"CORE_STRUCTURE_DATA_MANAGE"},
 		{"title":"CORE_STRUCTURE_DATA_SEARCH"},
 		{"title":"CORE_SURVEY_RESULT_MANAGE"},

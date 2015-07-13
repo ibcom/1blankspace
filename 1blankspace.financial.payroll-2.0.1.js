@@ -3941,7 +3941,7 @@ ns1blankspace.financial.payroll.totals =
 													oSearch.addField('tradename,legalname,abn,phonenumber,faxnumber,email,streetaddress1,streetaddress2,streetsuburb,streetstate,streetpostcode,' +
 																			'mailingaddress1,mailingaddress2,mailingsuburb,mailingstate,mailingpostcode');
 													oSearch.rows = 1;
-													oSearch.addFilter('id', 'EQUAL_TO', ns1blankspace.user.contactBusiness)
+													oSearch.addFilter('id', 'EQUAL_TO', (ns1blankspace.spaceContactBusiness || ns1blankspace.user.contactBusiness))
 													
 													oSearch.getResults(function(oResponse)
 													{
