@@ -19,6 +19,7 @@ ns1blankspace.option.formFactor.size.value = ns1blankspace.option.formFactor.siz
 ns1blankspace.option.classic = true;
 ns1blankspace.option.loadControl = false;
 ns1blankspace.option.httpsOnly = true;
+ns1blankspace.option.viewShowSearch = true;
 
 ns1blankspace.data.object = {person: 32, business: 12, opportunity: 35};
 ns1blankspace.data.attachmentTypes = [];
@@ -1085,13 +1086,18 @@ ns1blankspace.control =
 
 											aHTML.push('</tr>');
 
-											aHTML.push('<tr class="ns1blankspaceViewControl">');
+											if (ns1blankspace.option.viewShowSearch)
+											{	
+												aHTML.push('<tr class="ns1blankspaceViewControl">');
 
-											aHTML.push('<td class="ns1blankspaceViewControl" colspan=' + ns1blankspace.viewGroups.length + ' style="text-align: right; color: #999999; font-size:0.825em; padding-top:6px;">' +
+												aHTML.push('<td class="ns1blankspaceViewControl" colspan=' + ns1blankspace.viewGroups.length + ' style="text-align: right; color: #999999; font-size:0.825em; padding-top:6px;">' +
 															'<span id="ns1blankspaceViewControl_report" class="ns1blankspaceViewControl">' +
 															'Search... report, export, update, email & SMS</span></td>');
 
-											aHTML.push('</tr></table>');
+												aHTML.push('</tr>');
+											}	
+
+											aHTML.push('</table>');
 											
 											ns1blankspace.xhtml.viewControl = aHTML.join('');
 										}
