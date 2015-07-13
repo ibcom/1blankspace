@@ -1,8 +1,7 @@
 /*!
- * Copyright 2010, ibCom Pty Ltd ATF ibCom Unit Trust & contributors
- * Licensed under the MIT license.
- * http://1blankspace.com/license
- * 01 FEB 2010
+ * ibCom Pty Ltd ATF ibCom Unit Trust & contributors
+ * Licensed as Attribution-ShareAlike 4.0 International
+ * http://creativecommons.org/licenses/by-sa/4.0/
  */
 
 ns1blankspace.xhtml.loading = '<img class="ns1blankspaceLoading" id="ns1blankspaceLoading" src="/jscripts/images/1blankspace.loading.square.20.gif">';
@@ -19,6 +18,7 @@ ns1blankspace.option.passwordhash = true;
 ns1blankspace.option.formFactor.size.value = ns1blankspace.option.formFactor.size.options.medium;
 ns1blankspace.option.classic = true;
 ns1blankspace.option.loadControl = false;
+ns1blankspace.option.httpsOnly = true;
 
 ns1blankspace.data.object = {person: 32, business: 12, opportunity: 35};
 ns1blankspace.data.attachmentTypes = [];
@@ -38,6 +38,7 @@ ns1blankspace.option.helpURI = 'http://community.mydigitalstructure.com';
 ns1blankspace.option.taxVATCaption = 'GST';
 ns1blankspace.option.taxPayrollCaption = 'Employee';
 ns1blankspace.option.taxBusinessCaption = 'Business';
+ns1blankspace.option.currencySymbol = '$';
 ns1blankspace.option.postInit = undefined;
 ns1blankspace.option.initialiseSpaceTemplate = '/jscripts/1blankspace.setup.space-2.0.0.json';
 
@@ -87,7 +88,7 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.format',
-		source: '/jscripts/1blankspace.format-2.0.0.js'
+		source: '/jscripts/1blankspace.format-2.0.3.js'
 	},
 	{
 		nameSpace: '1blankspace.contactPerson',
@@ -103,7 +104,7 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.action',
-		source: '/jscripts/1blankspace.action-2.0.0.js'
+		source: '/jscripts/1blankspace.action-2.0.1.js'
 	},
 	{
 		nameSpace: '1blankspace.messaging.conversation',
@@ -111,7 +112,7 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.messaging.imap',
-		source: '/jscripts/1blankspace.messaging.imap-2.0.1.js'
+		source: '/jscripts/1blankspace.messaging.imap-2.0.6.js'
 	},
 	{
 		nameSpace: '1blankspace.document',
@@ -143,7 +144,7 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.financial',
-		source: '/jscripts/1blankspace.financial-2.0.0.js'
+		source: '/jscripts/1blankspace.financial-2.0.1.js'
 	},
 	{
 		nameSpace: '1blankspace.financial.bankAccount',
@@ -151,11 +152,11 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.financial.invoice',
-		source: '/jscripts/1blankspace.financial.invoice-2.0.0.js'
+		source: '/jscripts/1blankspace.financial.invoice-2.0.1.js'
 	},
 	{
 		nameSpace: '1blankspace.financial.expense',
-		source: '/jscripts/1blankspace.financial.expense-2.0.0.js'
+		source: '/jscripts/1blankspace.financial.expense-2.0.1.js'
 	},
 	{
 		nameSpace: '1blankspace.financial.receipt',
@@ -179,7 +180,7 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.financial.payroll',
-		source: '/jscripts/1blankspace.financial.payroll-2.0.0.js'
+		source: '/jscripts/1blankspace.financial.payroll-2.0.1.js'
 	},
 	{
 		nameSpace: '1blankspace.report',
@@ -187,7 +188,7 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.setup',
-		source: '/jscripts/1blankspace.setup-2.0.0.js'
+		source: '/jscripts/1blankspace.setup-2.0.1.js'
 	},
 	{
 		nameSpace: '1blankspace.setup.automation',
@@ -195,11 +196,11 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.setup.financial',
-		source: '/jscripts/1blankspace.setup.financial-2.0.0.js'
+		source: '/jscripts/1blankspace.setup.financial-2.0.1.js'
 	},
 	{
 		nameSpace: '1blankspace.setup.messaging',
-		source: '/jscripts/1blankspace.setup.messaging-2.0.0.js'
+		source: '/jscripts/1blankspace.setup.messaging-2.0.1.js'
 	},
 	{
 		nameSpace: '1blankspace.setup.networkGroup',
@@ -231,7 +232,7 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.setup.website',
-		source: '/jscripts/1blankspace.setup.website-2.0.0.js'
+		source: '/jscripts/1blankspace.setup.website-2.0.1.js'
 	},
 	{
 		nameSpace: '1blankspace.setup.websiteForm',
@@ -268,6 +269,14 @@ ns1blankspace.scripts.concat(
 	{
 		nameSpace: '1blankspace.connect',
 		source: '/jscripts/1blankspace.connect-2.0.0.js'
+	},
+	{
+		nameSpace: '1blankspace.util.whenDone',
+		source: '/jscripts/1blankspace.util.whendone-2.0.0.js'
+	},
+	{
+		nameSpace: '1blankspace.util.pdf',
+		source: '/jscripts/1blankspace.util.pdf-2.0.0.js'
 	}
 ])
 
@@ -458,7 +467,7 @@ ns1blankspace.views =
 		subNote: 'P&L, Debtors..'
 	},
 	{
-		title: "Bank Accounts",
+		title: "Bank&nbsp;Accounts",
 		parentNamespace: "financial",
 		namespace: "bankAccount",
 		endpoint: "FINANCIAL_BANK_ACCOUNT",
@@ -645,25 +654,25 @@ ns1blankspace.views =
 		namespace: "user",
 		endpoint: "SETUP_USER", 
 		show: true,
-		group: 1,
+		group: 7,
 		type: 2
 	},
 	{
-		title: "User Roles",
+		title: "User&nbsp;Roles",
 		parentNamespace: "setup",
 		namespace: "userRole",
 		endpoint: "SETUP_USER_ROLE", 
 		show: true,
-		group: 1,
+		group: 7,
 		type: 2
 	},
 	{
-		title: "Network Groups",
+		title: "Network&nbsp;Groups",
 		parentNamespace: "setup",
 		namespace: "networkGroup",
 		endpoint: "SETUP_NETWORK_GROUP", 
 		show: true,
-		group: 1,
+		group: 7,
 		type: 2
 	},
 	{
@@ -672,8 +681,9 @@ ns1blankspace.views =
 		namespace: "messaging",
 		endpoint: "SETUP_MESSAGING", 
 		show: true,
-		group: 1,
-		type: 2
+		group: 7,
+		type: 2,
+		subNote: 'Email'
 	},
 	{
 		title: "Websites & Webapps",
@@ -681,7 +691,7 @@ ns1blankspace.views =
 		namespace: "website",
 		endpoint: "SETUP_SITE", 
 		show: true,
-		group: 2,
+		group: 8,
 		type: 2
 	},
 	{
@@ -689,7 +699,7 @@ ns1blankspace.views =
 		namespace: "connect",
 		endpoint: "CORE_URL", 
 		show: true,
-		group: 2,
+		group: 8,
 		type: 2
 	},
 	{
@@ -698,7 +708,7 @@ ns1blankspace.views =
 		namespace: "automation",
 		endpoint: "SETUP_AUTOMATION", 
 		show: true,
-		group: 2,
+		group: 8,
 		type: 2
 	},
 	{
@@ -707,64 +717,64 @@ ns1blankspace.views =
 		namespace: "financial",
 		endpoint: "SETUP_FINANCIAL", 
 		show: true,
-		group: 3,
+		group: 9,
 		type: 2
 	},
 	{
-		title: 'Person Groups',
+		title: 'Person&nbsp;Groups',
 		namespace: 'setup',
 		namesuffix: 'contactPersonGroup',
 		endpoint: "SETUP", 
 		show: true,
-		group: 4,
+		group: 9,
 		type: 2,
 		param: {viewName: 'Person Groups', method: 'SETUP_CONTACT_PERSON_GROUP'}														
 	},
 	{
-		title: 'Business Groups',
+		title: 'Business&nbsp;Groups',
 		namespace: 'setup',
 		namesuffix: 'contactBusinessGroup',
 		endpoint: "SETUP", 
 		show: true,
-		group: 4,
+		group: 9,
 		type: 2,
 		param: {viewName: 'Business Groups', method: 'SETUP_CONTACT_BUSINESS_GROUP'}														
 	},
 	{
-		title: 'Product Categories',
+		title: 'Product&nbsp;Categories',
 		namespace: 'setup',
 		namesuffix: 'productCategory',
 		endpoint: "SETUP", 
 		show: true,
-		group: 4,
+		group: 9,
 		type: 2,
 		param: {viewName: 'Product Categories', method: 'SETUP_PRODUCT_CATEGORY'}														
 	},
 	{
-		title: "Project Templates",
+		title: "Project&nbsp;Templates",
 		parentNamespace: "setup",
 		namespace: "project",
 		endpoint: "PROJECT", 
 		show: false,
-		group: 3,
+		group: 9,
 		type: 2
 	},
 	{
-		title: "Project Template Tasks",
+		title: "Project&nbsp;Template&nbsp;Tasks",
 		parentNamespace: "setup",
 		namespace: "projectTask",
 		endpoint: "PROJECT", 
 		show: false,
-		group: 3,
+		group: 9,
 		type: 2
 	},
 	{
-		title: "My Account",
+		title: "My&nbsp;Space&nbsp;&&nbsp;Account",
 		parentNamespace: "setup",
 		namespace: "space",
 		endpoint: "ADMIN", 
 		show: true,
-		group: 4,
+		group: 10,
 		type: 2
 	},
 	{
@@ -773,16 +783,16 @@ ns1blankspace.views =
 		namespace: "file",
 		endpoint: "SETUP_IMPORT_MANAGE", 
 		show: true,
-		group: 4,
+		group: 10,
 		type: 2
 	},
 	{
-		title: "Other Spaces",
+		title: "Other&nbsp;Spaces",
 		parentNamespace: "developer",
 		namespace: "space",
 		endpoint: "ADMIN_SPACE_MANAGE", 
 		show: true,
-		group: 4,
+		group: 10,
 		type: 2
 	},
 	{
@@ -791,15 +801,15 @@ ns1blankspace.views =
 		namespace: "structure",
 		endpoint: "SETUP_STRUCTURE_MANAGE", 
 		show: true,
-		group: 4,
+		group: 10,
 		type: 2
 	},
 	{
-		title: "Support Issues",
+		title: "Support&nbsp;Issues",
 		namespace: "supportIssue",
 		endpoint: "SUPPORT_ISSUE_MANAGE", 
 		show: true,
-		group: 4,
+		group: 10,
 		type: 2
 	}
 ]
@@ -808,27 +818,54 @@ ns1blankspace.viewGroups =
 [
 	{
 		id: 1,
-		name: 'Contact'
+		name: 'Contact',
+		type: 1
 	},
 	{
 		id: 2,
-		name: 'Project'
+		name: 'Project',
+		type: 1
 	},
 	{
 		id: 3,
-		name: 'Document'
+		name: 'Document',
+		type: 1
 	},
 	{
 		id: 4,
-		name: 'Product'
+		name: 'Product',
+		type: 1
 	},
 	{
 		id: 5,
-		name: 'Financial'
+		name: 'Financial',
+		type: 1
 	},
 	{
 		id: 6,
-		name: ''
+		name: '',
+		type: 1
+	},
+	{
+		id: 7,
+		name: 'SetupUser',
+		type: 2
+	},
+	{
+		id: 8,
+		name: 'SetupWebsite',
+		type: 2
+	},
+	{
+		id: 9,
+		name: 'Financial',
+		type: 2,
+		width: '150px'
+	},
+	{
+		id: 10,
+		name: 'SetupSpace',
+		type: 2
 	}
 ]
 
@@ -1011,7 +1048,7 @@ ns1blankspace.control =
 											aHTML.push('<table class="ns1blankspaceViewControlContainer">');
 											aHTML.push('<tr class="ns1blankspaceViewControl">');
 
-											$.each(ns1blankspace.viewGroups, function(i, v)
+											$.each($.grep(ns1blankspace.viewGroups, function (a) {return a.type == 1;}), function(i, v)
 											{
 												var oViewGroup = $.grep(ns1blankspace.views, function (a) {return a.group == v.id && a.show == true && a.type == 1;});
 
@@ -1112,233 +1149,49 @@ ns1blankspace.control =
 										show:		function ()
 													{
 														var aHTML = [];
-
+				
 														aHTML.push('<table class="ns1blankspaceViewControlContainer">');
 														aHTML.push('<tr class="ns1blankspaceViewControl">');
 														
 														var aHTMLViewport = [];
 
-														aHTMLViewport.push('<tr class="ns1blankspaceViewControl">' +
-																				'<td class="ns1blankspaceViewControl">' +
-																				'<span id="ns1blankspaceViewControl_setup_user" class="ns1blankspaceViewControl">' +
-																				'Users</span></td></tr>');
-
-														aHTMLViewport.push('<tr class="ns1blankspaceViewControl">' +
-																				'<td class="ns1blankspaceViewControl">' +
-																				'<span id="ns1blankspaceViewControl_setup_userRole" class="ns1blankspaceViewControl">' +
-																				'User&nbsp;Roles</span></td></tr>');
-
-														aHTMLViewport.push('<tr class="ns1blankspaceViewControl">' +
-																				'<td class="ns1blankspaceViewControl">' +
-																				'<span id="ns1blankspaceViewControl_setup_networkGroup" class="ns1blankspaceViewControl">' +
-																				'Network&nbsp;Groups</span></td></tr>');
-
-														aHTMLViewport.push('<tr class="ns1blankspaceViewControl">' +
-																				'<td class="ns1blankspaceViewControl">' +
-																				'<span id="ns1blankspaceViewControl_setup_messaging" class="ns1blankspaceViewControl">' +
-																				'Messaging</span></td></tr>');
-
-														if (aHTMLViewport.length > 0)
+														$.each($.grep(ns1blankspace.viewGroups, function (a) {return a.type == 2;}), function(i, v)
 														{
-															aHTML.push('<td class="ns1blankspaceViewControlColumn">');
-															aHTML.push('<table class="ns1blankspaceViewControlColumn">');
+															var oViewGroup = $.grep(ns1blankspace.views, function (a) {return a.group == v.id && a.show == true && a.type == 2;});
 
-															aHTML.push('<tr><td>' +
-																'<div id="ns1blankspaceViewSetupUser" class="ns1blankspaceViewImage"></div>' +
-																'</td></tr>');
+															if (oViewGroup.length > 0)
+															{
+																oViewGroup.sort(ns1blankspace.util.sortBy('order'))
 
-															aHTML.push(aHTMLViewport.join(''))
+																aHTML.push('<td class="ns1blankspaceViewControlColumn">');
+																aHTML.push('<table class="ns1blankspaceViewControlColumn">');
 
-															aHTML.push('</table>');
-															aHTML.push('</td>');
-														}	
+																aHTML.push('<tr><td><div id="ns1blankspaceView' + v.name + '" class="ns1blankspaceViewImage"' +
+																				(oViewGroup.width!==undefined?' style="' + oViewGroup.width + '"':'') + '></div>' +
+																				'</td></tr>');	
 
-														var aHTMLViewport = [];
-
-														var oViewport = $.grep(ns1blankspace.views, function (a) {return a.title == 'Websites & Webapps';})[0];
-														if (oViewport ? oViewport.show : false)
-														{
-															aHTMLViewport.push('<tr class="ns1blankspaceViewControl">' +
+																$.each(oViewGroup, function(j, k)
+																{
+																	aHTML.push('<tr class="ns1blankspaceViewControl">' +
 																				'<td class="ns1blankspaceViewControl">' +
-																				'<span id="ns1blankspaceViewControl_setup_website" class="ns1blankspaceViewControl">' +
-																				'Websites & Webapps</span></td></tr>');
-														}
+																				'<span id="ns1blankspaceViewControl_' + (k.parentNamespace!==undefined?k.parentNamespace + '_':'') + k.namespace +
+																					(k.namesuffix!==undefined?'_' + k.namesuffix:'') + 
+																				'" class="ns1blankspaceViewControl">' + k.title + '</span>');
 
-														var oViewport = $.grep(ns1blankspace.views, function (a) {return a.title == 'Connections';})[0];
-														if (oViewport ? oViewport.show : false)
-														{
-															aHTMLViewport.push('<tr class="ns1blankspaceViewControl">' +
-																				'<td class="ns1blankspaceViewControl">' +
-																				'<span id="ns1blankspaceViewControl_connect" class="ns1blankspaceViewControl">' +
-																				'Connections</span></td></tr>');
-														}
+																	if (k.subNote !== undefined)
+																	{	
+																		aHTML.push('<br /><div class="ns1blankspaceSubNote" style="margin-top:2px;">' + 
+																				 k.subNote + '</div>');
+																	}	
 
-														var oViewport = $.grep(ns1blankspace.views, function (a) {return a.title == 'Automation';})[0];
-														if (oViewport ? oViewport.show : false)
-														{
-															aHTMLViewport.push('<tr class="ns1blankspaceViewControl">' +
-																				'<td class="ns1blankspaceViewControl">' +
-																				'<span id="ns1blankspaceViewControl_setup_automation" class="ns1blankspaceViewControl">' +
-																				'Automation</span></td></tr>');
-														}
+																	aHTML.push('</td></tr>');
+																});
 
-														var oViewport = $.grep(ns1blankspace.views, function (a) {return a.title == 'Imports';})[0];
-														if (oViewport ? oViewport.show : false)
-														{
-															aHTMLViewport.push('<tr class="ns1blankspaceViewControl">' +
-																				'<td class="ns1blankspaceViewControl">' +
-																				'<span id="ns1blankspaceViewControl_setup_import" class="ns1blankspaceViewControl">' +
-																				'Imports</span></td></tr>');
-														}
+																aHTML.push('</table>');
+																aHTML.push('</td>');
+															}	
+														});
 
-														if (aHTMLViewport.length > 0)
-														{
-															aHTML.push('<td class="ns1blankspaceViewControlColumn">');
-															aHTML.push('<table class="ns1blankspaceViewControlColumn">');
-
-															aHTML.push('<tr><td>' +
-																'<div id="ns1blankspaceViewSetupWebsite" class="ns1blankspaceViewImage"></div>' +
-																'</td></tr>');
-														
-															aHTML.push(aHTMLViewport.join(''))
-
-															aHTML.push('</table>');
-															aHTML.push('</td>');
-														}		
-
-														var aHTMLViewport = [];
-
-														var oViewport = $.grep(ns1blankspace.views, function (a) {return a.title == 'Financials';})[0];
-														if (oViewport ? oViewport.show : false)
-														{
-															aHTMLViewport.push('<tr class="ns1blankspaceViewControl">' +
-																				'<td class="ns1blankspaceViewControl">' +
-																				'<span id="ns1blankspaceViewControl_setup_financial" class="ns1blankspaceViewControl">' +
-																				'Financials</span></td></tr>');
-														}
-
-														var oViewport = $.grep(ns1blankspace.views, function (a) {return a.title == 'Business Groups';})[0];
-														if (oViewport ? oViewport.show : false)
-														{
-															aHTMLViewport.push('<tr class="ns1blankspaceViewControl">' +
-																				'<td class="ns1blankspaceViewControl">' +
-																				'<span id="ns1blankspaceViewControl_setup_contactBusinessGroup" class="ns1blankspaceViewControl">' +
-																				'Business&nbsp;Groups</span></td></tr>');
-														}
-
-														var oViewport = $.grep(ns1blankspace.views, function (a) {return a.title == 'Person Groups';})[0];
-														if (oViewport ? oViewport.show : false)
-														{
-															aHTMLViewport.push('<tr class="ns1blankspaceViewControl">' +
-																				'<td class="ns1blankspaceViewControl">' +
-																				'<span id="ns1blankspaceViewControl_setup_contactPersonGroup" class="ns1blankspaceViewControl">' +
-																				'Person&nbsp;Groups</span></td></tr>');
-														}
-
-														var oViewport = $.grep(ns1blankspace.views, function (a) {return a.title == 'Product Categories';})[0];
-														if (oViewport ? oViewport.show : false)
-														{
-															aHTMLViewport.push('<tr class="ns1blankspaceViewControl">' +
-																				'<td class="ns1blankspaceViewControl">' +
-																				'<span id="ns1blankspaceViewControl_setup_productCategory" class="ns1blankspaceViewControl">' +
-																				'Product&nbsp;Categories</span></td></tr>');
-														}
-
-														var oViewport = $.grep(ns1blankspace.views, function (a) {return a.title == 'Project Templates';})[0];
-														if (oViewport ? oViewport.show : false)
-														{
-															aHTMLViewport.push('<tr class="ns1blankspaceViewControl">' +
-																				'<td class="ns1blankspaceViewControl">' +
-																				'<span id="ns1blankspaceViewControl_setup_project" class="ns1blankspaceViewControl">' +
-																				'Project&nbsp;Templates</span></td></tr>');
-														}
-
-														var oViewport = $.grep(ns1blankspace.views, function (a) {return a.title == 'Project Template Tasks';})[0];
-														if (oViewport ? oViewport.show : false)
-														{
-															aHTMLViewport.push('<tr class="ns1blankspaceViewControl">' +
-																				'<td class="ns1blankspaceViewControl">' +
-																				'<span id="ns1blankspaceViewControl_setup_projectTask" class="ns1blankspaceViewControl">' +
-																				'Project&nbsp;Template&nbsp;Tasks</span></td></tr>');
-														}
-
-														if (aHTMLViewport.length > 0)
-														{
-															aHTML.push('<td class="ns1blankspaceViewControlColumn">');
-															aHTML.push('<table class="ns1blankspaceViewControlColumn">');
-
-															aHTML.push('<tr><td>' +
-																'<div id="ns1blankspaceViewFinancial" class="ns1blankspaceViewImage"></div>' +
-																'</td></tr>');		
-														
-															aHTML.push(aHTMLViewport.join(''))
-
-															aHTML.push('</table>');
-															aHTML.push('</td>');
-														}		
-														
-														var aHTMLViewport = [];
-																		
-														var oViewport = $.grep(ns1blankspace.views, function (a) {return a.title == 'My Account';})[0];
-														if (oViewport ? oViewport.show : false)
-														{
-															aHTMLViewport.push('<tr class="ns1blankspaceViewControl">' +
-																				'<td class="ns1blankspaceViewControl">' +
-																				'<span id="ns1blankspaceViewControl_setup_space" class="ns1blankspaceViewControl">' +
-																				'My&nbsp;Space&nbsp;/&nbsp;Account</span></td></tr>');
-														}
-
-														var oViewport = $.grep(ns1blankspace.views, function (a) {return a.title == 'Other Spaces';})[0];
-														if (oViewport ? oViewport.show : false)
-														{
-															aHTMLViewport.push('<tr class="ns1blankspaceViewControl">' +
-																				'<td class="ns1blankspaceViewControl">' +
-																				'<span id="ns1blankspaceViewControl_developer_space" class="ns1blankspaceViewControl">' +
-																				'Other&nbsp;Spaces</span></td></tr>');
-														}
-
-														var oViewport = $.grep(ns1blankspace.views, function (a) {return a.title == 'File Import';})[0];
-														if (oViewport ? oViewport.show : false)
-														{
-															aHTMLViewport.push('<tr class="ns1blankspaceViewControl">' +
-																				'<td class="ns1blankspaceViewControl">' +
-																				'<span id="ns1blankspaceViewControl_setup_file" class="ns1blankspaceViewControl">' +
-																				'File&nbsp;Import</span></td></tr>');
-														}
-
-														var oViewport = $.grep(ns1blankspace.views, function (a) {return a.title == 'Structures' && a.type == 2;})[0];
-														if (oViewport ? oViewport.show : false)
-														{		
-															aHTMLViewport.push('<tr class="ns1blankspaceViewControl">' +
-																					'<td class="ns1blankspaceViewControl">' +
-																					'<span id="ns1blankspaceViewControl_setup_structure" class="ns1blankspaceViewControl">' +
-																					'Structures</span></td></tr>');
-														}
-
-														var oViewport = $.grep(ns1blankspace.views, function (a) {return a.title == 'Support Issues' && a.type == 2;})[0];
-														if (oViewport ? oViewport.show : false)
-														{		
-															aHTMLViewport.push('<tr class="ns1blankspaceViewControl">' +
-																					'<td class="ns1blankspaceViewControl">' +
-																					'<span id="ns1blankspaceViewControl_supportIssue" class="ns1blankspaceViewControl">' +
-																					'Support Issues</span></td></tr>');
-														}
-
-														if (aHTMLViewport.length > 0)
-														{
-															aHTML.push('<td class="ns1blankspaceViewControlColumn">');
-															aHTML.push('<table class="ns1blankspaceViewControlColumn">');
-
-															aHTML.push('<tr><td>' +
-																'<div id="ns1blankspaceViewSetupSpace" class="ns1blankspaceViewImage"></div>' +
-																'</td></tr>');		
-														
-															aHTML.push(aHTMLViewport.join(''))
-
-															aHTML.push('</table>');
-															aHTML.push('</td>');
-														}	
-														
 														aHTML.push('</tr></table>');
 														
 														ns1blankspace.container.show(
@@ -1347,7 +1200,7 @@ ns1blankspace.control =
 															xhtml: aHTML.join('')
 														});	
 
-														ns1blankspace.control.setup.views.bind();
+														ns1blankspace.control.setup.views.bind();	
 													},
 
 										bind:		function ()
@@ -1691,7 +1544,7 @@ ns1blankspace.control =
 											$.ajax(
 											{
 												type: 'POST',
-												url: '/rpc/core/?method=CORE_SECURE_TOKEN_SEARCH',
+												url: ns1blankspace.util.endpointURI('CORE_SECURE_TOKEN_SEARCH'),
 												dataType: 'json',
 												success: function(data) {ns1blankspace.control.user.key(oParam, data)}
 											})
@@ -1725,8 +1578,7 @@ ns1blankspace.control =
 											}
 											else
 											{
-												aHTML.push('<tr><td>' +
-																	oResponse.access_token + '<br /><br /></td></tr>');
+												aHTML.push('<tr><td>' +	oResponse.access_token + '<br /><br /></td></tr>');
 												
 												aHTML.push('<tr><td><span id="ns1blankspaceControlUserCreateSecureKeyDisable">Disable Token</span></td></tr>');								
 												aHTML.push('<tr><td><br />If you generate a new token, the current token will no longer work.<br /><br /></td></tr>');
@@ -1736,10 +1588,11 @@ ns1blankspace.control =
 											
 											if (oResponse.access_token != undefined)
 											{
-												aHTML.push('<tr><td><br /><b>Example link for future diary events in iCal format:</b><br /><br />' +
-																	window.location.protocol + '//' + window.location.host + '/rpc/action/' +
+												aHTML.push('<tr><td><br /><b>Example link for future diary events in iCal format:</b>');
+
+												aHTML.push('<tr><td>' + window.location.protocol + '//' + window.location.host + '/rpc/action/' +
 																	'<br />?method=ACTION_ICAL_SEARCH' +
-																	'<br />&access_token=' + oResponse.access_token + '<br /><br /></td></tr>');				
+																	'<br />&access_token=' + oResponse.access_token + '<br /><br /></td></tr>');			
 											}
 
 											aHTML.push('<tr><td><b>Security Note</b></td></tr>');
@@ -1747,9 +1600,10 @@ ns1blankspace.control =
 															' make sure you protect this token and be wary of using it in the URL query string,' +
 															' as data in the query string is not encrypted during transmission (even if using SSL).' + 
 															' It is recommended that the user associated with this token has limited access to methods.</td></tr>');
-											
+
 											aHTML.push('<tr><td><a href="http://mydigitalstructure.com/gettingstarted_authentication" target="_blank">More on authentication...</a></td></tr>');
 
+											
 											aHTML.push('</table>');
 											
 											aHTML.push('</td></tr></table>');
@@ -1779,7 +1633,7 @@ ns1blankspace.control =
 													$.ajax(
 													{
 														type: 'POST',
-														url: '/rpc/core/?method=CORE_SECURE_TOKEN_MANAGE',
+														url: ns1blankspace.util.endpointURI('CORE_SECURE_TOKEN_MANAGE'),
 														data: 'remove=1',
 														dataType: 'json',
 														async: false,
@@ -1797,7 +1651,7 @@ ns1blankspace.control =
 													$.ajax(
 													{
 														type: 'POST',
-														url: '/rpc/core/?method=CORE_SECURE_TOKEN_MANAGE',
+														url: ns1blankspace.util.endpointURI('CORE_SECURE_TOKEN_MANAGE'),
 														data: '',
 														dataType: 'json',
 														async: false,
@@ -2035,6 +1889,9 @@ ns1blankspace.attachments =
 					var oActions = {add: true};
 					var sHelpNotes;
 					var oContext = {inContext: false};
+
+					var sSortBy = ns1blankspace.util.getParam(oParam, 'sortBy', {"default": 'filename'}).value;
+					var sSortDirection = ns1blankspace.util.getParam(oParam, 'sortDirection', {"default": 'asc'}).value;
 					
 					if (oParam != undefined)
 					{
@@ -2063,6 +1920,8 @@ ns1blankspace.attachments =
 									'</table>');					
 							
 						$('#' + sXHTMLElementID).html(aHTML.join(''));
+
+						oParam = ns1blankspace.util.setParam(oParam, 'xhtmlElementID', 'ns1blankspaceAttachmentsColumn1');
 						
 						var aHTML = [];
 						
@@ -2091,7 +1950,8 @@ ns1blankspace.attachments =
 						{
 							label: "Add"
 						})
-						.click(function() {
+						.click(function()
+						{
 							 ns1blankspace.attachments.add(oParam);
 						})
 					
@@ -2102,7 +1962,7 @@ ns1blankspace.attachments =
 					{	
 						var oSearch = new AdvancedSearch();
 						oSearch.method = 'CORE_ATTACHMENT_SEARCH';
-						oSearch.addField('type,filename,description,download,modifieddate,attachment');
+						oSearch.addField('type,filename,description,download,modifieddate,attachment,createddate,createdusertext');
 						oSearch.addFilter('object', 'EQUAL_TO', iObject);
 						oSearch.addFilter('objectcontext', 'EQUAL_TO', iObjectContext);
 						oSearch.rows = ns1blankspace.option.defaultRows;
@@ -2112,16 +1972,17 @@ ns1blankspace.attachments =
 							oSearch.addFilter('type', 'EQUAL_TO', iAttachmentType);
 						}
 						
-						oSearch.sort('filename', 'asc');
-						oSearch.getResults(function(data) {ns1blankspace.attachments.process(data, sXHTMLElementID)});
+						oSearch.sort(sSortBy, sSortDirection);
+						oSearch.getResults(function(data) {ns1blankspace.attachments.process(data, oParam)});
 					}
-
 				},
 
-	process: 	function (oResponse, sXHTMLElementID)
+	process: 	function (oResponse, oParam)
 				{	
+					var sXHTMLElementID = ns1blankspace.util.getParam(oParam, 'xhtmlElementID').value;
+					var bShowUser = ns1blankspace.util.getParam(oParam, 'showUser', {"default": false}).value;
+
 					var aHTML = [];
-					var h = -1;
 						
 					if (oResponse.data.rows.length === 0)
 					{
@@ -2141,12 +2002,18 @@ ns1blankspace.attachments =
 						aHTML.push('<tr class="ns1blankspaceCaption">');
 						aHTML.push('<td class="ns1blankspaceHeaderCaption">File Name</td>');
 						aHTML.push('<td class="ns1blankspaceHeaderCaption">Date</td>');
+
+						if (bShowUser)
+						{
+							aHTML.push('<td class="ns1blankspaceHeaderCaption">User</td>');
+						}
+
 						aHTML.push('<td class="ns1blankspaceHeaderCaption">&nbsp;</td>');
 						aHTML.push('</tr>');
 
 						$.each(oResponse.data.rows, function()
 						{
-							aHTML.push(ns1blankspace.attachments.row(this));
+							aHTML.push(ns1blankspace.attachments.row(this, oParam));
 						});
 				    	
 						aHTML.push('</table>');
@@ -2170,9 +2037,10 @@ ns1blankspace.attachments =
 					}
 				},
 				
-	row:		function (oRow)
+	row:		function (oRow, oParam)
 				{
 					var aHTML = [];
+					var bShowUser = ns1blankspace.util.getParam(oParam, 'showUser', {"default": false}).value;
 
 					//onClick="ns1blankspace.unloadWarning=false;"
 					
@@ -2182,6 +2050,11 @@ ns1blankspace.attachments =
 										'<a href="' + oRow.download + '" class="ns1blankspaceNoUnloadWarn">' + oRow.filename + '</a></td>');
 										
 					aHTML.push('<td id="ns1blankspaceAttachment_date-' + oRow.id + '" class="ns1blankspaceRow">' + oRow.modifieddate + '</td>');
+
+					if (bShowUser)
+					{
+						aHTML.push('<td id="ns1blankspaceAttachment_user-' + oRow.id + '" class="ns1blankspaceRow">' + oRow.createdusertext + '</td>');
+					}
 					
 					aHTML.push('<td style="width:30px;text-align:right;" class="ns1blankspaceRow">' +
 									'<span id="ns1blankspaceAttachment_options_remove-' + oRow.attachment + 

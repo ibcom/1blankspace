@@ -1578,8 +1578,7 @@ ns1blankspace.control =
 											}
 											else
 											{
-												aHTML.push('<tr><td>' +
-																	(oResponse.access_token).replace('|x', '-') + '<br /><br /></td></tr>');
+												aHTML.push('<tr><td>' +	oResponse.access_token + '<br /><br /></td></tr>');
 												
 												aHTML.push('<tr><td><span id="ns1blankspaceControlUserCreateSecureKeyDisable">Disable Token</span></td></tr>');								
 												aHTML.push('<tr><td><br />If you generate a new token, the current token will no longer work.<br /><br /></td></tr>');
@@ -1589,16 +1588,21 @@ ns1blankspace.control =
 											
 											if (oResponse.access_token != undefined)
 											{
-												aHTML.push('<tr><td><br /><b>Example link for future diary events in iCal format:</b><br /><br />' +
-																	window.location.protocol + '//' + window.location.host + '/rpc/action/' +
+												aHTML.push('<tr><td><br /><b>Example link for future diary events in iCal format:</b>');
+
+												aHTML.push('<tr><td>' + window.location.protocol + '//' + window.location.host + '/rpc/action/' +
 																	'<br />?method=ACTION_ICAL_SEARCH' +
-																	'<br />&access_token=' + (oResponse.access_token).replace('|x', '-') + '<br /><br /></td></tr>');
-																	
-												aHTML.push('<tr><td><a href="' +
-																	window.location.protocol + '//' + window.location.host + '/rpc/action/?method=ACTION_ICAL_SEARCH' +
-																	'&access_token=' + (oResponse.access_token).replace('|x', '-') + '" target="_blank" style="font-size:1.2em">Open example link</a>' +
-																	'<br /><span style="color: #A0A0A0;">(You can then copy & paste it)<br /><br /></span></td></tr>');					
+																	'<br />&access_token=' + oResponse.access_token + '<br /><br /></td></tr>');			
 											}
+
+											aHTML.push('<tr><td><b>Security Note</b></td></tr>');
+											aHTML.push('<tr><td>Given that this token gives privileged access (outside of the multi-token authorisation process),' +
+															' make sure you protect this token and be wary of using it in the URL query string,' +
+															' as data in the query string is not encrypted during transmission (even if using SSL).' + 
+															' It is recommended that the user associated with this token has limited access to methods.</td></tr>');
+
+											aHTML.push('<tr><td><a href="http://mydigitalstructure.com/gettingstarted_authentication" target="_blank">More on authentication...</a></td></tr>');
+
 											
 											aHTML.push('</table>');
 											
