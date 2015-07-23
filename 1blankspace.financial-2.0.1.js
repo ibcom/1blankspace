@@ -378,7 +378,14 @@ ns1blankspace.financial.home = function (oParam)
 
 						$('#ns1blankspaceControlSummary').addClass('ns1blankspaceHighlight');
 
-						ns1blankspace.history.control({functionDefault: sFunctionDefault});
+						//ns1blankspace.history.control({functionDefault: sFunctionDefault});
+
+						if (!ns1blankspace.util.getParam(oParam, 'functionDefault').exists)
+						{
+							oParam = ns1blankspace.util.setParam(oParam, 'functionDefault', 'ns1blankspace.financial.summary()')
+						}
+
+						ns1blankspace.history.control(oParam);
 					}
 
 ns1blankspace.financial.summary = function (oParam, oResponse)
@@ -528,6 +535,8 @@ ns1blankspace.financial.debtors =
 
 					if (oResponse == undefined)
 					{
+						ns1blankspace.show({selector: '#ns1blankspaceMainDebtors'});
+
 						ns1blankspace.financial.data.debtors = [];
 
 						var aHTML = [];

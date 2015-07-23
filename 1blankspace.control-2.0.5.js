@@ -1060,7 +1060,7 @@ ns1blankspace.control =
 													aHTML.push('<td class="ns1blankspaceViewControlColumn">');
 													aHTML.push('<table class="ns1blankspaceViewControlColumn">');
 
-													aHTML.push('<tr><td><div id="ns1blankspaceView' + v.name + '" class="ns1blankspaceViewImage"></div>' +
+													aHTML.push('<tr><td><div id="ns1blankspaceView' + (v.imageName || v.name) + '" class="ns1blankspaceViewImage"></div>' +
 																	'</td></tr>');	
 
 													$.each(oViewGroup, function(j, k)

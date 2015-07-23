@@ -1968,7 +1968,7 @@ ns1blankspace.logon.changePassword =
 						$.ajax(
 						{
 							type: 'POST',
-							url: ns1blankspace.util.endpointURI('SITE_USER_PASSWORD_MANAGE'),
+							url: '/rpc/site/?method=SITE_USER_PASSWORD_MANAGE',
 							data: sData,
 							dataType: 'json',
 							success: this.process
