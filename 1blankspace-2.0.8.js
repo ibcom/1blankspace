@@ -818,7 +818,6 @@ ns1blankspace.app =
 							ns1blankspace.user.systemAdmin = (oResponse.systemadmin == "true");
 							ns1blankspace.user.roles = oResponse.roles.rows;
 							ns1blankspace.user.site = parseInt(oResponse.site);
-							ns1blankspace.user.instance = oResponse.instance;
 
 							ns1blankspace.spaceText = oResponse.spacename;
 							ns1blankspace.space = oResponse.space;
@@ -838,7 +837,7 @@ ns1blankspace.app =
 					var aHTML = [];
 					var sSpaceText = ns1blankspace.user.spaceText;
 					var sSpaceTextExtra;
-					if (ns1blankspace.user.spaceText.length > 20) 
+					if (ns1blankspace.user.spaceText.length > (ns1blankspace.option.spaceTextMaximumLength || 20)) 
 					{
 						var aSpaceText = ns1blankspace.user.spaceText.substr(0,20).split(' ');
 						aSpaceText.pop();
@@ -937,7 +936,7 @@ ns1blankspace.app =
 								}})
 						.click(function(event)
 						{
-							ns1blankspace.home.show();
+							ns1blankspace.home.init();
 						})
 								
 						.next()
@@ -2005,7 +2004,7 @@ ns1blankspace.logon.changePassword =
 						var sCurrentPassword = $('#ns1blankspaceLogonCurrentPassword').val();
 
 						var sData = 'expiredays=36500' +
-										'&site=' + (ns1blankspace.user.instance.indexOf('lab') != -1?ns1blankspace.user.site:'1533') +
+										'&site=1533' +
 										'&currentpassword=' + sCurrentPassword + 
 										'&newpassword=' + sNewPassword +
 										'&newpasswordconfirm=' + sNewPasswordConfirm;
@@ -4662,7 +4661,7 @@ ns1blankspace.util =
 					var sNumber = ns1blankspace.util.getParam(oParam, 'number').value;
 					var bUpper = ns1blankspace.util.getParam(oParam, 'upper', {"default": false}).value;
 
-					var sWords = toWords(sNumber);
+					var sWords = toWords(String(sNumber);
 					if (bUpper) {sWords = (sWords).toUpperCase()}
 
 					return sWords;
@@ -4760,8 +4759,13 @@ ns1blankspace.util =
 							}
 							else
 							{
-								$(sElementSelector).html(ns1blankspace.util.view[sType][sQueueID].join(''));
+								if (ns1blankspace.util.view[sType][sQueueID] != undefined)
+								{	
+									$(sElementSelector).html(ns1blankspace.util.view[sType][sQueueID].join(''));
+								}
+									
 								ns1blankspace.util.view.queue.clear(oParam);
+
 							}	
 						},
 
