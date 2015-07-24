@@ -6,6 +6,8 @@
  
 ns1blankspace.financial.budget =
 {
+	data: 		{},
+
 	init: 		function (oParam)
 				{
 					var bInitialised = ns1blankspace.util.getParam(oParam, 'initialised', {"default": false}).value;
@@ -107,7 +109,7 @@ ns1blankspace.financial.budget =
 								aHTML.push('<td id="ns1blankspaceMostLikely_startdate-' + row.id + '" class="ns1blankspaceMostLikely" style="width:125px;">' +
 														row.startdate + '</td>');
 
-								aHTML.push('<td id="ns1blankspaceMostLikely_startdate-' + row.id + '" class="ns1blankspaceMostLikely" style="width:125px;">' +
+								aHTML.push('<td id="ns1blankspaceMostLikely_enddate-' + row.id + '" class="ns1blankspaceMostLikely" style="width:125px;">' +
 														row.enddate + '</td>');
 								
 								aHTML.push('<td id="ns1blankspaceMostLikely_notes-' + row.id + '" class="ns1blankspaceMostLikelySub" style="">' +
@@ -404,41 +406,70 @@ ns1blankspace.financial.budget =
 						ns1blankspace.history.control({functionDefault: 'ns1blankspace.financial.budget.summary()'});
 					}	
 				},		
-		
-	summary: 	function ()
-				{
-					$vq.clear({queue: 'summary'});
+	
+	totals: 	{
+					planned: 	function (oParam, oResponse)
+								{
+									if (oResponse == undefined)
+									{	
+										var oSearch = new AdvancedSearch();
+										oSearch.method = 'FINANCIAL_BUDGET_ITEM_SEARCH';
+										oSearch.addField('sum(amount) totalamount');
+										oSearch.addFilter('budget', 'EQUAL_TO', ns1blankspace.objectContext);
+										
+										oSearch.getResults(function(data) {ns1blankspace.financial.budget.totals.planned(oParam, data)});
+									}
+									else
+									{
+										ns1blankspace.financial.budget.data.totals = {planned: oResponse.data.rows[0].totalamount}
 
-					if (ns1blankspace.objectContextData == undefined)
+										oParam = ns1blankspace.util.setParam(oParam, 'refresh', false);
+										ns1blankspace.util.onComplete(oParam);
+									}
+								}
+				},		
+
+	summary: 	function (oParam)
+				{
+					var bRefresh = ns1blankspace.util.getParam(oParam, 'refresh', {"default":true}).value;
+
+					if (bRefresh)
 					{
-						$vq.add('<table><tr><td class="ns1blankspaceNothing">Sorry can\'t find the budget.</td></tr></table>', {queue: 'summary'});
-								
-						$vq.render('#ns1blankspaceMainSummary', {queue: 'summary'});
+						oParam = ns1blankspace.util.setParam(oParam, 'onComplete', ns1blankspace.financial.budget.summary)
+						ns1blankspace.financial.budget.totals.planned(oParam);
 					}
 					else
 					{
-						$vq.add('<table class="ns1blankspaceMain">' +
-										'<tr class="ns1blankspaceRow">' +
-										'<td id="ns1blankspaceSummaryColumn1" class="ns1blankspaceColumn1Flexible"></td>' +
-										'<td id="ns1blankspaceSummaryColumn2" class="ns1blankspaceColumn2Action" style="width:250px;"></td>' +
-										'</tr>' +
-										'</table>');				
-						
-						$vq.render('#ns1blankspaceMainSummary', {queue: 'summary'});
-						
-						$vq.add('<table class="ns1blankspace">', {queue: 'summary'});
+						$vq.clear({queue: 'summary'});
 
-						if (ns1blankspace.objectContextData.notes != '')
+						if (ns1blankspace.objectContextData == undefined)
 						{
-							$vq.add('<tr><td class="ns1blankspaceSummaryCaption">Notes</td></tr>' +
-											'<tr><td id="ns1blankspaceSummaryNotes" class="ns1blankspaceSummary">' +
-											ns1blankspace.objectContextData.notes +
-											'</td></tr>', {queue: 'summary'});
+							$vq.add('<table><tr><td class="ns1blankspaceNothing">Sorry can\'t find the budget.</td></tr></table>', {queue: 'summary'});
+									
+							$vq.render('#ns1blankspaceMainSummary', {queue: 'summary'});
 						}
-						
-						$vq.add('</table>', {queue: 'summary'});
+						else
+						{
+							$vq.add('<table class="ns1blankspaceMain">' +
+											'<tr class="ns1blankspaceRow">' +
+											'<td id="ns1blankspaceSummaryColumn1" class="ns1blankspaceColumn1Flexible"></td>' +
+											'<td id="ns1blankspaceSummaryColumn2" class="ns1blankspaceColumn2Action" style="width:250px;"></td>' +
+											'</tr>' +
+											'</table>');				
+							
+							$vq.render('#ns1blankspaceMainSummary', {queue: 'summary'});
+							
+							$vq.add('<table class="ns1blankspace">', {queue: 'summary'});
 
-						$vq.render('#ns1blankspaceSummaryColumn1', {queue: 'summary'});
+							$vq.add('<tr><td class="ns1blankspaceSummaryCaption">Planned Total</td></tr>' +
+												'<tr><td id="ns1blankspaceSummaryNotes" class="ns1blankspaceSummary">$' +
+												ns1blankspace.financial.budget.data.totals +
+												'</td></tr>', {queue: 'summary'});
+						
+							$vq.add('</table>', {queue: 'summary'});
+
+							$vq.render('#ns1blankspaceSummaryColumn1', {queue: 'summary'});
+						}	
 					}	
 				},
 
