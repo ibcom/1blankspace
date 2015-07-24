@@ -4661,7 +4661,7 @@ ns1blankspace.util =
 					var sNumber = ns1blankspace.util.getParam(oParam, 'number').value;
 					var bUpper = ns1blankspace.util.getParam(oParam, 'upper', {"default": false}).value;
 
-					var sWords = toWords(String(sNumber);
+					var sWords = toWords(String(sNumber));
 					if (bUpper) {sWords = (sWords).toUpperCase()}
 
 					return sWords;
@@ -4763,9 +4763,13 @@ ns1blankspace.util =
 								{	
 									$(sElementSelector).html(ns1blankspace.util.view[sType][sQueueID].join(''));
 								}
+
+								if ($.fn.datepicker != undefined)
+								{
+									$('input.ns1blankspaceDate').datepicker({dateFormat: 'dd M yy'});
+								}	
 									
 								ns1blankspace.util.view.queue.clear(oParam);
-
 							}	
 						},
 

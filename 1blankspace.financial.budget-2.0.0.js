@@ -8,7 +8,7 @@ ns1blankspace.financial.budget =
 {
 	init: 		function (oParam)
 				{
-					var bInitialised = ns1blankspace.util.getParam(oParam, 'initialised', {"default": true})
+					var bInitialised = ns1blankspace.util.getParam(oParam, 'initialised', {"default": false}).value;
 
 					ns1blankspace.app.reset();
 
@@ -21,7 +21,7 @@ ns1blankspace.financial.budget =
 					
 					if (!bInitialised)
 					{
-						
+						ns1blankspace.financial.initData(oParam)
 					}
 					else
 					{
@@ -36,7 +36,7 @@ ns1blankspace.financial.budget =
 						//$('#ns1blankspaceControlSubContext_amount').html(ns1blankspace.xhtml.loadingSmall);
 							
 						var oSearch = new AdvancedSearch();
-						oSearch.method = 'FINANCIAL_BUDGET_SEARCH';
+						oSearch.method = 'FINANCIAL_BUDGET_PROCESS_SEARCH';
 						oSearch.addField('enddate');
 						oSearch.rf = 'json';
 						oSearch.addFilter('id', 'EQUAL_TO', ns1blankspace.objectContext);
@@ -71,7 +71,7 @@ ns1blankspace.financial.budget =
 						var aHTML = [];
 
 						aHTML.push('<table>');
-						aHTML.push('<tr><td><div id="ns1blankspaceViewFinancialLarge" class="ns1blankspaceViewImageLarge"></div></td></tr>');
+						aHTML.push('<tr><td><div id="ns1blankspaceViewReportLarge" class="ns1blankspaceViewImageLarge"></div></td></tr>');
 						aHTML.push('</table>');		
 						
 						$('#ns1blankspaceControl').html(aHTML.join(''));	
@@ -80,7 +80,7 @@ ns1blankspace.financial.budget =
 						
 						var oSearch = new AdvancedSearch();
 						oSearch.method = 'FINANCIAL_BUDGET_SEARCH';
-						oSearch.addField('reference,notes,startdate,enddate');
+						oSearch.addField('notes,startdate,enddate');
 						oSearch.rows = 10;
 						oSearch.sort('enddate', 'desc');
 						oSearch.getResults(function (data) {ns1blankspace.financial.budget.home(oParam, data)});
@@ -104,11 +104,14 @@ ns1blankspace.financial.budget =
 							{					
 								aHTML.push('<tr class="ns1blankspaceRow">');
 							
-								aHTML.push('<td id="ns1blankspaceMostLikely_startdate-' + row.id + '" class="ns1blankspaceMostLikely" style="width:50px;">' +
+								aHTML.push('<td id="ns1blankspaceMostLikely_startdate-' + row.id + '" class="ns1blankspaceMostLikely" style="width:125px;">' +
 														row.startdate + '</td>');
-								
-								aHTML.push('<td id="ns1blankspaceMostLikely_Amount-' + this.id + '" class="ns1blankspaceMostLikelySub" style="width:50px;text-align:right;">' +
+
+								aHTML.push('<td id="ns1blankspaceMostLikely_startdate-' + row.id + '" class="ns1blankspaceMostLikely" style="width:125px;">' +
 														row.enddate + '</td>');
+								
+								aHTML.push('<td id="ns1blankspaceMostLikely_notes-' + row.id + '" class="ns1blankspaceMostLikelySub" style="">' +
+														row.notes + '</td>');
 																		
 								aHTML.push('</tr>');
 							});
@@ -297,8 +300,11 @@ ns1blankspace.financial.budget =
 						{
 							aHTML.push('<table class="ns1blankspaceControl">');
 
-							aHTML.push('<tr><td id="ns1blankspaceControlItem" class="ns1blankspaceControl">' +
-										'Items</td></tr>');
+							aHTML.push('<tr><td id="ns1blankspaceControlPlan" class="ns1blankspaceControl">' +
+										'Plan</td></tr>');
+
+							aHTML.push('<tr><td id="ns1blankspaceControlActual" class="ns1blankspaceControl">' +
+										'Actual</td></tr>');
 
 							aHTML.push('</table>');
 						}	
@@ -320,7 +326,8 @@ ns1blankspace.financial.budget =
 
 					aHTML.push('<div id="ns1blankspaceMainSummary" class="ns1blankspaceControlMain"></div>');
 					aHTML.push('<div id="ns1blankspaceMainDetails" class="ns1blankspaceControlMain"></div>');
-					aHTML.push('<div id="ns1blankspaceMainItem" class="ns1blankspaceControlMain"></div>');
+					aHTML.push('<div id="ns1blankspaceMainPlan" class="ns1blankspaceControlMain"></div>');
+					aHTML.push('<div id="ns1blankspaceMainActual" class="ns1blankspaceControlMain"></div>');
 					aHTML.push('<div id="ns1blankspaceMainActions" class="ns1blankspaceControlMain"></div>');
 					aHTML.push('<div id="ns1blankspaceMainAttachments" class="ns1blankspaceControlMain"></div>');
 					
@@ -338,10 +345,16 @@ ns1blankspace.financial.budget =
 						ns1blankspace.financial.budget.details();
 					});
 					
-					$('#ns1blankspaceControlItem').click(function(event)
+					$('#ns1blankspaceControlPlan').click(function(event)
 					{
-						ns1blankspace.show({selector: '#ns1blankspaceMainItem', refresh: true});
-						ns1blankspace.financial.budget.item.show({namespace: 'payment'});
+						ns1blankspace.show({selector: '#ns1blankspaceMainPlan', refresh: true});
+						ns1blankspace.financial.budget.plan.show();
+					});
+
+					$('#ns1blankspaceControlActual').click(function(event)
+					{
+						ns1blankspace.show({selector: '#ns1blankspaceMainActual', refresh: true});
+						ns1blankspace.financial.budget.actual.show();
 					});
 
 					$('#ns1blankspaceControlActions').click(function(event)
@@ -379,8 +392,8 @@ ns1blankspace.financial.budget =
 						$('#ns1blankspaceViewControlAction').button({disabled: false});
 						$('#ns1blankspaceViewControlActionOptions').button({disabled: false});
 								
-						$('#ns1blankspaceControlContext').html('<br /><span id="ns1blankspaceControlContext_startdate" class="ns1blankspaceSub">' + ns1blankspace.objectContextData.startdate + '</span>' +
-							'<br /><span id="ns1blankspaceControlContext_enddate" class="ns1blankspaceSub">' + ns1blankspace.objectContextData.enddate + '</span>');
+						$('#ns1blankspaceControlContext').html(ns1blankspace.objectContextData.startdate +
+							'<br />' + ns1blankspace.objectContextData.enddate);
 							
 						ns1blankspace.history.view(
 						{
@@ -465,78 +478,28 @@ ns1blankspace.financial.budget =
 										'<input id="ns1blankspaceDetailsEndDate" class="ns1blankspaceDate">' +
 										'</td></tr>', {queue: 'details'});
 
-						$vq.add('</table>', {queue: 'details'});									
-						
-						$vq.render('#ns1blankspaceMainDetails', {queue: 'details'});	
-						
-						$('#ns1blankspaceDetailsColumn1').html(aHTML.join(''));
-						
-						$('input.ns1blankspaceDate').datepicker({dateFormat: 'dd M yy'});
-
-						ns1blankspace.financial.util.tax.codes(
-						{
-							xhtmlElementID: 'ns1blankspaceDetailsTaxCode',
-							id: 1,
-							type: 2
-						});
-
-						$('#ns1blankspaceDetailsAmount').keyup(function()
-						{
-							ns1blankspace.financial.util.tax.calculate(
-							{
-								amountXHTMLElementID: 'ns1blankspaceDetailsAmount',
-								taxXHTMLElementID: 'ns1blankspaceDetailsTax'
-							});
-						});
-
-						$('[name="radioTaxCode"]').click(function()
-						{
-							ns1blankspace.financial.util.tax.calculate(
-							{
-								amountXHTMLElementID: 'ns1blankspaceDetailsAmount',
-								taxXHTMLElementID: 'ns1blankspaceDetailsTax'
-							});
-						});
-
-						$('#ns1blankspaceItemAccount').keyup(function()
-						{
-							if (ns1blankspace.timer.delayCurrent != 0) {clearTimeout(ns1blankspace.timer.delayCurrent)};
-					        ns1blankspace.timer.delayCurrent = setTimeout('ns1blankspace.financial.item.edit({step: 2, type: 2})', ns1blankspace.option.typingWait);
-						});
-						
-						var aHTML = [];
-						
-						aHTML.push('<table class="ns1blankspace">');
-							
-						aHTML.push('<tr class="ns1blankspaceCaption">' +
+						$vq.add('<tr class="ns1blankspaceCaption">' +
 										'<td class="ns1blankspaceCaption">' +
 										'Description' +
 										'</td></tr>' +
 										'<tr class="ns1blankspace">' +
 										'<td class="ns1blankspaceTextMulti">' +
-										'<textarea id="ns1blankspaceDetailsDescription" class="ns1blankspaceTextMulti" rows="10" cols="35" ></textarea>' +
-										'</td></tr>');		
-										
-						aHTML.push('</table>');					
-							
-						$('#ns1blankspaceDetailsColumn2').html(aHTML.join(''));
+										'<textarea id="ns1blankspaceDetailsNotes" class="ns1blankspaceTextMulti" style="height:125px; width:100%;"></textarea>' +
+										'</td></tr>', {queue: 'details'});		
+
+						$vq.add('</table>', {queue: 'details'});									
+						
+						$vq.render('#ns1blankspaceDetailsColumn1', {queue: 'details'});	
 
 						if (ns1blankspace.objectContextData != undefined)
 						{
-							$('#ns1blankspaceDetailsReference').val(ns1blankspace.objectContextData.reference);
-							$('#ns1blankspaceDetailsPaidDate').val(ns1blankspace.objectContextData.paiddate);
-							$('#ns1blankspaceDetailsContactBusinessPaidTo').attr('data-id', ns1blankspace.objectContextData.contactbusinesspaidto);
-							$('#ns1blankspaceDetailsContactBusinessPaidTo').val(ns1blankspace.objectContextData.contactbusinesspaidtotext);
-							$('#ns1blankspaceDetailsContactPersonPaidTo').attr('data-id', ns1blankspace.objectContextData.contactpersonpaidto);
-							$('#ns1blankspaceDetailsContactPersonPaidTo').val(ns1blankspace.objectContextData.contactpersonpaidtotext);	
-							$('#ns1blankspaceDetailsAmount').val(ns1blankspace.objectContextData.amount);
-							$('[name="radioTaxCode"][value="' + ns1blankspace.objectContextData.taxtype + '"]').attr('checked', true);
-							$('#ns1blankspaceDetailsTax').val(ns1blankspace.objectContextData.tax);	
-							$('#ns1blankspaceDetailsDescription').val(ns1blankspace.objectContextData.description);
+							$('#ns1blankspaceDetailsStartDate').val(ns1blankspace.objectContextData.startdate);
+							$('#ns1blankspaceDetailsEndDate').val(ns1blankspace.objectContextData.enddate);
+							$('#ns1blankspaceDetailsNotes').val(ns1blankspace.objectContextData.notes);
 						}
 						else
 						{
-							$('#ns1blankspaceDetailsPaidDate').val(Date.today().toString("dd MMM yyyy"));
+							$('#ns1blankspaceDetailsStartDate').val(Date.today().toString("dd MMM yyyy"));
 						}
 					}	
 				},
@@ -546,22 +509,22 @@ ns1blankspace.financial.budget =
 								{
 									ns1blankspace.status.working();
 										
-									var sData = (ns1blankspace.objectContext == -1)?'':'id=' + ns1blankspace.objectContext;
+									var oData = {}
+
+									if (ns1blankspace.objectContext != -1) {oData.id = ns1blankspace.objectContext};
 										
 									if ($('#ns1blankspaceMainDetails').html() != '')
 									{
-										sData += '&reference=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsReference').val());
-										sData += '&paiddate=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsPaidDate').val());
-										sData += '&description=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsDescription').val());
-										sData += '&contactbusinesspaidto=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsContactBusinessPaidTo').attr("data-id"));
-										sData += '&contactpersonpaidto=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsContactPersonPaidTo').attr("data-id"));
+										oData.startdate = $('#ns1blankspaceDetailsStartDate').val();
+										oData.enddate = $('#ns1blankspaceDetailsEndDate').val();
+										oData.notes = $('#ns1blankspaceDetailsNotes').val();
 									}
 									
 									$.ajax(
 									{
 										type: 'POST',
-										url: ns1blankspace.util.endpointURI('FINANCIAL_PAYMENT_MANAGE'),
-										data: sData,
+										url: ns1blankspace.util.endpointURI('FINANCIAL_BUDGET_MANAGE'),
+										data: oData,
 										dataType: 'json',
 										success: function(data) {ns1blankspace.financial.budget.save.process(oParam, data)}
 									});	
@@ -575,10 +538,8 @@ ns1blankspace.financial.budget =
 										oParam = ns1blankspace.util.setParam(oParam, 'new', (ns1blankspace.objectContext == -1));
 										ns1blankspace.objectContext = oResponse.id;	
 										
-										if ($('#ns1blankspaceMainDetails').html() != '')
-										{
-											ns1blankspace.financial.budget.save.amount(oParam);
-										}
+										ns1blankspace.inputDetected = false;
+										ns1blankspace.financial.budget.search.send('-' + ns1blankspace.objectContext, {source: 1});
 									}
 									else
 									{
@@ -649,172 +610,575 @@ ns1blankspace.financial.budget =
 										});
 									}	
 								}
-				},
-
-	expense: 	{
-					show:		function (oParam, oResponse)
-								{
-									var iObjectContext = ns1blankspace.objectContext;
-									var oOptions = {view: true, remove: true};
-									var oActions = {add: true};
-									
-									if (oParam != undefined)
-									{
-										if (oParam.objectContext != undefined) {iObjectContext = oParam.objectContext}
-										if (oParam.options != undefined) {oOptions = oParam.options}
-										if (oParam.actions != undefined) {oActions = oParam.actions}
-									}		
-										
-									if (oResponse == undefined)
-									{	
-										var aHTML = [];
-
-										aHTML.push('<table class="ns1blankspaceContainer">');
-										aHTML.push('<tr class="ns1blankspaceContainer">' +
-														'<td id="ns1blankspaceExpenseColumn1" class="ns1blankspaceColumn1Flexible"></td>' +
-														'<td id="ns1blankspaceExpenseColumn2" class="ns1blankspaceColumn2" style="width: 200px;></td>' +
-														'</tr>');
-										aHTML.push('</table>');					
-														
-										$('#ns1blankspaceMainExpense').html(aHTML.join(''));
-										
-										if (oActions != undefined)
-										{
-											var aHTML = [];
-																			
-											aHTML.push('<table class="ns1blankspaceColumn2">');
-											
-											if (oActions.add)
-											{
-												aHTML.push('<tr><td class="ns1blankspaceAction">' +
-															'<span id="ns1blankspaceExpenseAdd">Add</span>' +
-															'</td></tr>');
-											}
-											
-											aHTML.push('</table>');					
-											
-											$('#ns1blankspaceExpenseColumn2').html(aHTML.join(''));
-										
-											$('#ns1blankspaceExpenseAdd').button(
-											{
-												label: "Add"
-											})
-											.click(function() {
-												 ns1blankspace.financial.budget.expense.edit(oParam);
-											})
-										}
-										
-										var oSearch = new AdvancedSearch();
-										oSearch.method = 'FINANCIAL_PAYMENT_EXPENSE_SEARCH';
-										oSearch.addField('expense,expensetext,appliesdate,amount,tax');
-										oSearch.addFilter('payment', 'EQUAL_TO', iObjectContext);
-										oSearch.sort('appliesdate', 'asc');
-										oSearch.rows = 100;
-										oSearch.getResults(function(data) {ns1blankspace.financial.budget.expense.show(oParam, data)});
-									}
-									else
-									{
-										var aHTML = [];
-													
-										if (oResponse.data.rows.length == 0)
-										{
-											aHTML.push('<table class="ns1blankspace">' +
-															'<tr><td class="ns1blankspaceNothing">No expenses.</td></tr>' + 
-															'</table>');
-
-											$('#ns1blankspaceExpenseColumn1').html(aHTML.join(''));
-										}
-										else
-										{
-											aHTML.push('<table class="ns1blankspace">');
-											aHTML.push('<td class="ns1blankspaceHeaderCaption">Reference</td>');
-											aHTML.push('<td class="ns1blankspaceHeaderCaption">Date</td>');
-											aHTML.push('<td class="ns1blankspaceHeaderCaption" style="text-align:right;">Amount</td>');
-											aHTML.push('<td class="ns1blankspaceHeaderCaption" style="text-align:right;">Tax</td>');
-											aHTML.push('<td class="ns1blankspaceHeaderCaption">&nbsp;</td>');
-											aHTML.push('</tr>');
-											
-											$.each(oResponse.data.rows, function()
-											{
-												aHTML.push('<tr class="ns1blankspaceRow">');
-																							
-												aHTML.push('<td id="ns1blankspaceReceipt_reference-' + this.id + '" class="ns1blankspaceRow">' +
-																this.expensetext + '</td>');
-																											
-												aHTML.push('<td id="ns1blankspaceReceipt_date-' + this.id + '" class="ns1blankspaceRow">' +
-																this.appliesdate + '</td>');
-
-												aHTML.push('<td id="ns1blankspaceReceipt_amount-' + this.id + '" class="ns1blankspaceRow" style="text-align:right;">' +
-																this.amount + '</td>');
-
-												aHTML.push('<td id="ns1blankspaceReceipt_tax-' + this.id + '" class="ns1blankspaceRow" style="text-align:right;">' +
-																this.tax + '</td>');
-
-												aHTML.push('<td style="width:60px;text-align:right;" class="ns1blankspaceRow">');
-													
-												if (oOptions.remove)
-												{	
-													aHTML.push('<span id="ns1blankspaceExpense_options_remove-' + this.id + '" class="ns1blankspaceExpenseRemove"></span>');
-												};
-
-												aHTML.push('<span id="ns1blankspaceExpense_options_view-' + this.expense + '" class="ns1blankspaceExpenseView"></span>');
-													
-												aHTML.push('</td></tr>');
-											});
-											
-											aHTML.push('</table>');
-
-											$('#ns1blankspaceExpenseColumn1').html(aHTML.join(''));
-											
-											if (oOptions.remove) 
-											{
-												$('.ns1blankspaceExpenseRemove').button(
-												{
-													text: false,
-													icons:
-													{
-														primary: "ui-icon-close"
-													}
-												})
-												.click(function() {
-													ns1blankspace.financial.budget.expense.remove({xhtmlElementID: this.id});
-												})
-												.css('width', '15px')
-												.css('height', '17px')
-											}
-									
-											$('span.ns1blankspaceExpenseView').button(
-											{
-												text: false,
-												icons:
-												{
-													primary: "ui-icon-play"
-												}
-											})
-											.click(function()
-											{
-												ns1blankspace.financial.expense.init({id: (this.id).split('-')[1]});
-											})
-											.css('width', '15px')
-											.css('height', '17px');
-										}
-									}	
-								},
-
-					remove: 	function (oParam)
-								{
-									var sXHTMLElementID = ns1blankspace.util.getParam(oParam, 'xhtmlElementID').value;
-									var sData = 'remove=1&id=' + ns1blankspace.util.getParam(oParam, 'xhtmlElementID', {index: 1}).value;
-												
-									$.ajax(
-									{
-										type: 'POST',
-										url: ns1blankspace.util.endpointURI('FINANCIAL_PAYMENT_EXPENSE_MANAGE'),
-										data: sData,
-										dataType: 'json',
-										success: function(data){$('#' + sXHTMLElementID).parent().parent().fadeOut(500)}
-									});
-										
-								}
-				}														
+				}													
 }
+
+ns1blankspace.financial.budget.plan =
+{
+	data: 	{},
+
+	show:	function (oParam, oResponse)
+			{
+				var iBudget = ns1blankspace.objectContext;
+				var bRefresh = ns1blankspace.util.getParam(oParam, 'refresh', {"default": false}).value;
+
+				if (oResponse == undefined)
+				{	
+					if (!bRefresh)
+					{	
+						var aHTML = [];
+
+						aHTML.push('<table class="ns1blankspaceContainer">');
+
+						aHTML.push('<tr class="ns1blankspaceContainer">' +
+										'<td id="ns1blankspacePlanColumn1" class="ns1blankspaceColumn1Flexible">' +
+										ns1blankspace.xhtml.loading + '</td>' +
+										'<td id="ns1blankspacePlanColumn2" class="ns1blankspaceColumn2" style="width:275px;"></td>' +
+										'</tr>');
+
+						aHTML.push('</table>');					
+						
+						$('#ns1blankspaceMainPlan').html(aHTML.join(''));
+						
+						var aHTML = [];
+						
+						aHTML.push('<table class="ns1blankspaceColumn2">' +
+										'<tr><td class="ns1blankspaceAction">' +
+										'<span id="ns1blankspacePlanAdd">Add</span>' +
+										'</td></tr></table>');					
+						
+						$('#ns1blankspacePlanColumn2').html(aHTML.join(''));
+					
+						$('#ns1blankspacePlanAdd').button(
+						{
+							label: "Add"
+						})
+						.click(function()
+						{
+							oParam = ns1blankspace.util.setParam(oParam, 'xhtmlElementID', undefined);
+							oParam = ns1blankspace.util.setParam(oParam, 'step', 1);
+							ns1blankspace.financial.budget.plan.edit(oParam);
+						});										
+					}
+
+					var oSearch = new AdvancedSearch();
+					oSearch.method = 'FINANCIAL_BUDGET_ITEM_SEARCH';
+					oSearch.addField('amount,budget,budgettext,id,financialaccount,financialaccounttext,month,monthtext,notes');
+					oSearch.addFilter('budget', 'EQUAL_TO', iBudget);
+					oSearch.sort('month', 'asc');
+					
+					oSearch.getResults(function(data) {ns1blankspace.financial.budget.plan.show(oParam, data)});
+				}
+				else
+				{
+					var aHTML = [];
+					var h = -1;
+
+					ns1blankspace.financial.budget.plan.data.items = oResponse.data.rows;
+					
+					if (oResponse.data.rows.length == 0)
+					{
+						aHTML.push('<table><tr><td class="ns1blankspaceNothing">No plan.</td></tr></table>');
+
+						$('#ns1blankspacePlanColumn1').html(aHTML.join(''));
+					}
+					else
+					{
+						aHTML.push('<table class="ns1blankspace">');
+
+						aHTML.push('<tr>');
+						aHTML.push('<td class="ns1blankspaceHeaderCaption">Month</td>');
+						aHTML.push('<td class="ns1blankspaceHeaderCaption style="width:125px;">Account</td>');
+						aHTML.push('<td class="ns1blankspaceHeaderCaption" style="text-align:right;">Amount</td>');
+						aHTML.push('<td class="ns1blankspaceHeaderCaption">&nbsp;</td>');
+						aHTML.push('</tr>');
+
+						$.each(oResponse.data.rows, function(r, row)
+						{
+							aHTML.push('<tr class="ns1blankspaceRow">');
+													
+							aHTML.push('<td id="ns1blankspaceItem_month-' + row.id + '" class="ns1blankspaceRow ns1blankspaceRowSelect ns1blankspacePlanEdit">' +
+											row.monthtext.replace('[All Months]', 'Every Month') + '</td>');
+																		
+							aHTML.push('<td id="ns1blankspaceItem_financialaccounttext-' + row.id + '" class="ns1blankspaceRow">' +
+											row.financialaccounttext + '</td>');
+							
+							aHTML.push('<td id="ns1blankspaceItem_amount-' + row.id + '" class="ns1blankspaceRow" style="text-align:right;">' +
+											row.amount + '</td>');
+
+							aHTML.push('<td style="width:30px;text-align:right;" class="ns1blankspaceRow">');
+							aHTML.push('<span id="ns1blankspaceRowPlan_options_remove-' + row.id + '" class="ns1blankspacePlanRemove"></span>');
+							aHTML.push('</td></tr>');
+						});
+						
+						aHTML.push('</table>');
+
+						$('#ns1blankspacePlanColumn1').html(aHTML.join(''));
+						
+						$('.ns1blankspacePlanRemove').button(
+						{
+							text: false,
+							icons: {
+								primary: "ui-icon-close"
+							}
+						})
+						.click(function()
+						{
+							oParam.xhtmlElementID = this.id;
+
+							ns1blankspace.remove(
+							{
+								xhtmlElementID: this.id,
+								method: 'FINANCIAL_BUDGET_ITEM_MANAGE',
+								ifNoneMessage: 'No plan items.'
+							});
+						})
+						.css('width', '15px')
+						.css('height', '17px');
+				
+						$('.ns1blankspacePlanEdit').click(function()
+						{
+							oParam = ns1blankspace.util.setParam(oParam, 'xhtmlElementID', this.id);
+							oParam = ns1blankspace.util.setParam(oParam, 'step', 1);
+							ns1blankspace.financial.budget.plan.edit(oParam)
+						});
+					}
+				}	
+			},
+
+	edit:	function (oParam, oResponse)
+			{
+				var iFinancialAccountType;
+
+				var iType = ns1blankspace.util.getParam(oParam, 'type').value;		
+				var iStep = ns1blankspace.util.getParam(oParam, 'step', {"default": 1}).value;
+				var sNamespace = ns1blankspace.util.getParam(oParam, 'namespace').value;
+				var iID = ns1blankspace.util.getParam(oParam, 'xhtmlElementID', {index: 1}).value;
+				
+				if (oResponse == undefined)
+				{
+					if (iStep == 1)
+					{
+						var aHTML = [];
+
+						aHTML.push('<table class="ns1blankspaceContainer">');
+
+						aHTML.push('<tr class="ns1blankspaceContainer">' +
+										'<td id="ns1blankspacePlanEditColumn1"></td>' +
+										'<td id="ns1blankspacePlanEditColumn2" style="width:50px;"></td>' +
+										'</tr>');
+
+						aHTML.push('</table>');					
+						
+						$('#ns1blankspacePlanColumn2').html(aHTML.join(''));
+
+						var aHTML = [];
+									
+						aHTML.push('<table class="ns1blankspaceColumn2a">' +
+										'<tr><td><span id="ns1blankspacePlanEditSave" class="ns1blankspaceAction">' +
+										'Save</span></td></tr>' +
+										'<tr><td><span id="ns1blankspacePlanEditCancel" class="ns1blankspaceAction">' +
+										'Cancel</span></td></tr>' +
+										'</table>');					
+						
+						$('#ns1blankspacePlanEditColumn2').html(aHTML.join(''));
+						
+						$('#ns1blankspacePlanEditSave').button(
+						{
+							text: "Save"
+						})
+						.click(function()
+						{
+							ns1blankspace.financial.budget.plan.save(oParam)
+						})
+						.css('width', '65px');
+
+						$('#ns1blankspacePlanEditCancel').button(
+						{
+							text: "Cancel"
+						})
+						.click(function()
+						{
+							var aHTML = [];
+						
+							aHTML.push('<table class="ns1blankspaceColumn2">' +
+											'<tr><td class="ns1blankspaceAction">' +
+											'<span id="ns1blankspacePlanAdd">Add</span>' +
+											'</td></tr></table>');					
+							
+							$('#ns1blankspacePlanColumn2').html(aHTML.join(''));
+						
+							$('#ns1blankspacePlanAdd').button(
+							{
+								label: "Add"
+							})
+							.click(function()
+							{
+								oParam = ns1blankspace.util.setParam(oParam, 'xhtmlElementID', undefined);
+								oParam = ns1blankspace.util.setParam(oParam, 'step', 1);
+								ns1blankspace.financial.budget.plan.edit(oParam);
+							});						
+						})
+						.css('width', '65px');
+
+						var aHTML = [];
+						
+						aHTML.push('<table class="ns1blankspaceColumn2" style="width:200px;">');
+				
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
+									'<td class="ns1blankspaceCaption">' +
+									'Account' +
+									'</td></tr>' +
+									'<tr class="ns1blankspace">' +
+									'<td class="ns1blankspaceText">' +
+									'<input id="ns1blankspacePlanAccount" class="ns1blankspaceText">' +
+									'</td></tr>');
+						
+						aHTML.push('<tr><td style="padding-bottom:5px;" id="ns1blankspacePlanAddSearchResults">' +
+											'<span class="ns1blankspaceSub" style="font-size:0.75em;">Press <i>enter</i> to see all<br />or just start typing.</span></td></tr>');
+						
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
+										'Amount' +
+										'</td></tr>' +
+										'<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceText">' +
+										'<input id="ns1blankspacePlanAmount" class="ns1blankspaceText">' +
+										'</td></tr>');
+
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
+										'Month' +
+										'</td></tr>' +
+										'<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceRadio">' +
+										'<input type="radio" id="radioMonth-1" name="radioMonth" value="-1"/>Every Month' +
+										'<br /><input type="radio" id="radioMonth1" name="radioMonth" value="1"/>January' +
+										'<br /><input type="radio" id="radioMonth2" name="radioMonth" value="2"/>February' +
+										'<br /><input type="radio" id="radioMonth3" name="radioMonth" value="3"/>March' +
+										'<br /><input type="radio" id="radioMonth4" name="radioMonth" value="4"/>April' +
+										'<br /><input type="radio" id="radioMonth5" name="radioMonth" value="5"/>May' +
+										'<br /><input type="radio" id="radioMonth6" name="radioMonth" value="6"/>June' +
+										'<br /><input type="radio" id="radioMonth7" name="radioMonth" value="7"/>July' +
+										'<br /><input type="radio" id="radioMonth8" name="radioMonth" value="8"/>August' +
+										'<br /><input type="radio" id="radioMonth9" name="radioMonth" value="9"/>September' +
+										'<br /><input type="radio" id="radioMonth10" name="radioMonth" value="10"/>October' +
+										'<br /><input type="radio" id="radioMonth11" name="radioMonth" value="11"/>November' +
+										'<br /><input type="radio" id="radioMonth12" name="radioMonth" value="12"/>December' +
+										'</td></tr>');
+
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
+										'Notes' +
+										'</td></tr>' +
+										'<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceTextMulti">' +
+										'<textarea id="ns1blankspacePlanNotes" class="ns1blankspaceTextMulti" style="height:50px; width:200px;" rows="3" cols="35" ></textarea>' +
+										'</td></tr>');		
+		
+						aHTML.push('</table>');		
+						
+						$('#ns1blankspacePlanEditColumn1').html(aHTML.join(''));
+
+						if (iID !== undefined)
+						{
+							var oItem = $.grep(ns1blankspace.financial.budget.plan.data.items, function (item) {return item.id == iID})[0];
+
+							$('#ns1blankspacePlanAmount').val(oItem.amount);
+							$('#ns1blankspacePlanNotes').val(oItem.notes);
+							$('#ns1blankspacePlanAccount').val(oItem.financialaccounttext);
+							$('#ns1blankspacePlanAccount').attr('data-id', oItem.financialaccount);
+							$('[name="radioMonth"][value="' + oItem.month + '"]').attr('checked', true);
+						}
+						else
+						{
+							$('[name="radioMonth"][value="-1"]').attr('checked', true);
+						}
+	
+						$('#ns1blankspacePlanAccount').keyup(function()
+						{
+							oParam = ns1blankspace.util.setParam(oParam, 'step', 2);
+							if (ns1blankspace.timer.delayCurrent != 0) {clearTimeout(ns1blankspace.timer.delayCurrent)};
+					        ns1blankspace.timer.delayCurrent = setTimeout('ns1blankspace.financial.budget.plan.edit(' + JSON.stringify(oParam) + ')', ns1blankspace.option.typingWait);
+						});
+		
+						$('#ns1blankspacePlanAccount').focus();
+
+						if (iID === undefined)
+						{
+							var iFinancialAccountType = (iType==1?2:1);
+							var oData = $.grep(ns1blankspace.financial.data.accounts, function (a)
+							{ 
+								return ((iType?a.type == (iType==1?2:1):true) && a.postable == 'Y')
+							});
+
+							if (oData.length < 21)
+							{	
+								oParam = ns1blankspace.util.setParam(oParam, 'step', 3);
+								ns1blankspace.financial.budget.plan.edit(oParam, oData);
+							}	
+						}	
+					}
+
+					if (iStep == 2)
+					{	
+						ns1blankspace.status.working();
+
+						var sSearch = $('#ns1blankspacePlanAccount').val()
+
+						if (sSearch == '')
+						{
+							var oData = $.grep(ns1blankspace.financial.data.accounts, function (a)
+							{ 
+								return ((iType?a.type == (iType==1?2:1):true) && a.postable == 'Y')
+							});
+						}
+						else
+						{
+							sSearch = sSearch.toLowerCase();
+							var oData = $.grep(ns1blankspace.financial.data.accounts, function (a)
+							{
+								return (((iType?a.type == (iType==1?2:1):true) && a.postable == 'Y') && (a.title).toLowerCase().indexOf(sSearch) != -1)
+							});
+						}	
+
+						oParam = ns1blankspace.util.setParam(oParam, 'step', 3);
+						ns1blankspace.financial.budget.plan.edit(oParam, oData);
+					}
+				}
+				else
+				{
+					ns1blankspace.status.message('');
+
+					var aHTML = [];
+					
+					if (oResponse.length == 0)	
+					{
+						aHTML.push('<table class="ns1blankspace">' +
+										'<tr><td class="ns1blankspaceNothing">No accounts.</td></tr>' + 
+										'</table>');
+
+						$('#ns1blankspacePlanAddSearchResults').html(aHTML.join(''));		
+					}
+					else
+					{	
+						aHTML.push('<table class="ns1blankspace" style="font-size:0.875em;">');
+						
+						$.each(oResponse, function() 
+						{ 
+							aHTML.push('<tr class="ns1blankspaceRow">'+ 
+											'<td id="ns1blankspacePlan_title-' + this.id + '-' + this.taxtype + '" class="ns1blankspaceRow ns1blankspaceRowSelect">' +
+											this.title + '</td></tr>');	
+						});
+						
+						aHTML.push('</table>');
+
+						$('#ns1blankspacePlanAddSearchResults').html(aHTML.join(''))
+						
+						$('.ns1blankspaceRowSelect')
+						.click(function()
+						{
+							var sID = this.id;
+							var aID = sID.split('-');
+
+							$('#ns1blankspacePlanAccount').attr('data-id', aID[1]);
+							$('#ns1blankspacePlanAccount').val($(this).html());
+							$('#ns1blankspacePlanAddSearchResults').html('');
+
+							if (aID[2] != '')
+							{
+								$('#ns1blankspacePlanAmount').focus();
+							}
+						});
+					}
+				}	
+			},
+
+	save:	function(oParam)
+			{
+				var sNamespace = ns1blankspace.util.getParam(oParam, 'namespace').value;
+
+				ns1blankspace.status.working();
+
+				var iAccount = ns1blankspace.util.getParam(oParam, 'account').value;
+				var iID = ns1blankspace.util.getParam(oParam, 'xhtmlElementID', {index: 1}).value;
+				var cAmount = $('#ns1blankspacePlanAmount').val();
+				if (cAmount == '') {cAmount = 0};
+				
+				var oData = {}
+				
+				if (iID !== undefined) {oData.id = iID}
+				if (iAccount === undefined) {iAccount = $('#ns1blankspacePlanAccount').attr('data-id')}
+
+				oData.budget = ns1blankspace.objectContext;
+				oData.financialaccount = iAccount;
+				oData.amount = cAmount;
+				oData.notes = $('#ns1blankspacePlanNotes').val();
+				oData.month = $('input[name="radioMonth"]:checked').val();
+					
+				$.ajax(
+				{
+					type: 'POST',
+					url: ns1blankspace.util.endpointURI('FINANCIAL_BUDGET_ITEM_MANAGE'),
+					data: oData,
+					dataType: 'json',
+					success: function(oResponse)
+					{
+						ns1blankspace.status.message('Saved');
+						ns1blankspace.financial.budget.plan.show({refresh: false});
+					}
+				});
+			}	
+}				
+
+ns1blankspace.financial.budget.actual = 
+{
+	data: 	{},
+
+	show:	function (oParam, oResponse)
+			{
+				var iBudget = ns1blankspace.objectContext;
+				var bRefresh = ns1blankspace.util.getParam(oParam, 'refresh', {"default": false}).value;
+
+				if (oResponse == undefined)
+				{	
+					if (!bRefresh)
+					{	
+						var aHTML = [];
+
+						aHTML.push('<table class="ns1blankspaceContainer">');
+
+						aHTML.push('<tr class="ns1blankspaceContainer">' +
+										'<td id="ns1blankspaceActualColumn1" class="ns1blankspaceColumn1Flexible">' +
+										ns1blankspace.xhtml.loading + '</td>' +
+										'<td id="ns1blankspaceActualColumn2" class="ns1blankspaceColumn2" style="width:175px;"></td>' +
+										'</tr>');
+
+						aHTML.push('</table>');					
+						
+						$('#ns1blankspaceMainActual').html(aHTML.join(''));
+					}
+
+					var aHTML = [];
+						
+					aHTML.push('<table class="ns1blankspaceColumn2">');
+					
+					aHTML.push('<tr><td style="padding-top:2px;" class="ns1blankspaceAction">' +
+									'<span id="ns1blankspaceSummaryRefresh" class="ns1blankspaceAction" style="font-size:0.875em; width:100px;">Refresh</span>' +
+									'</td></tr>');
+
+					aHTML.push('</table>');					
+
+					$('#ns1blankspaceActualColumn2').html(aHTML.join(''));
+
+					$('#ns1blankspaceSummaryRefresh').button({})
+					.click(function()
+					{
+						var oData = {budget: ns1blankspace.objectContext}
+
+						$.ajax(
+						{
+							type: 'POST',
+							url: ns1blankspace.util.endpointURI('FINANCIAL_BUDGET_PROCESS_MANAGE'),
+							data: oData,
+							dataType: 'json',
+							success: function(oResponse)
+							{
+								ns1blankspace.status.message('Processed');
+								ns1blankspace.financial.budget.actual.show({refresh: false});
+							}
+						});
+					});
+
+					var oSearch = new AdvancedSearch();
+					oSearch.method = 'FINANCIAL_BUDGET_PROCESS_SEARCH';
+					oSearch.addField('asat,budget,budgettext,periodpercentage,title');
+					oSearch.addFilter('budget', 'EQUAL_TO', iBudget);
+					oSearch.sort('id', 'desc');
+					
+					oSearch.getResults(function(oResponse)
+					{
+						if (oResponse.data.rows.length == 0)
+						{
+							var oData = {budget: ns1blankspace.objectContext}
+
+							$.ajax(
+							{
+								type: 'POST',
+								url: ns1blankspace.util.endpointURI('FINANCIAL_BUDGET_PROCESS_MANAGE'),
+								data: oData,
+								dataType: 'json',
+								success: function(oResponse)
+								{
+									ns1blankspace.status.message('Processed');
+									//ns1blankspace.financial.budget.plan.show({refresh: false});
+								}
+							});
+						}
+						else	
+						{	
+							ns1blankspace.financial.budget.actual.data.process = oResponse.data.rows[0];
+
+							var oSearch = new AdvancedSearch();
+							oSearch.method = 'FINANCIAL_BUDGET_PROCESS_ITEM_SEARCH';
+							oSearch.addField('actualamount,financialaccount,financialaccounttext,plannedamount,process,processtext');
+							oSearch.addFilter('process', 'EQUAL_TO', ns1blankspace.financial.budget.actual.data.process.id);
+							oSearch.addFilter('plannedamount', 'NOT_EQUAL_TO', 0);
+							oSearch.sort('financialaccounttext', 'asc');
+							oSearch.getResults(function(oResponse)
+							{
+								ns1blankspace.financial.budget.actual.show(oParam, oResponse)
+							});
+						}	
+					});
+				}
+				else
+				{
+					var aHTML = [];
+					var h = -1;
+
+					ns1blankspace.financial.budget.actual.data.items = oResponse.data.rows;
+					
+					if (oResponse.data.rows.length == 0)
+					{
+						aHTML.push('<table><tr><td class="ns1blankspaceNothing">No actuals.</td></tr></table>');
+
+						$('#ns1blankspaceActualColumn1').html(aHTML.join(''));
+					}
+					else
+					{
+						aHTML.push('<table class="ns1blankspace">');
+
+						aHTML.push('<tr>');
+						aHTML.push('<td class="ns1blankspaceHeaderCaption style="width:125px;">Account</td>');
+						aHTML.push('<td class="ns1blankspaceHeaderCaption" style="text-align:right;">Planned Amount</td>');
+						aHTML.push('<td class="ns1blankspaceHeaderCaption" style="text-align:right;">Actual Amount</td>');
+						aHTML.push('</tr>');
+
+						$.each(oResponse.data.rows, function(r, row)
+						{
+							aHTML.push('<tr class="ns1blankspaceRow">');
+																		
+							aHTML.push('<td id="ns1blankspaceItem_financialaccounttext-' + row.id + '" class="ns1blankspaceRow">' +
+											row.financialaccounttext + '</td>');
+							
+							aHTML.push('<td id="ns1blankspaceItem_amount-' + row.id + '" class="ns1blankspaceRow" style="text-align:right;">' +
+											row.plannedamount + '</td>');
+
+							aHTML.push('<td id="ns1blankspaceItem_amount-' + row.id + '" class="ns1blankspaceRow" style="text-align:right;">' +
+											row.actualamount + '</td>');
+
+							aHTML.push('</tr>');
+						});
+						
+						aHTML.push('</table>');
+
+						$('#ns1blankspaceActualColumn1').html(aHTML.join(''));
+
+						$('#ns1blankspaceActualColumn2').html(ns1blankspace.financial.budget.actual.data.process.asat);
+					}
+				}	
+			}
+}
+
+
