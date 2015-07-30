@@ -6,7 +6,7 @@ html
 body 
 {
 	font-size: 100%;
-	font-family: "Verdana", "Arial", "Helvetica", "Sans-Serif";
+	font-family: "Europa", "Verdana", "Arial", "Helvetica", "Sans-Serif";
 	margin: 0px;
 	margin-top: 10px;
 	background-color: transparent;
@@ -21,7 +21,7 @@ input, textarea
 
 span, div, textarea, input, td
 {
-	font-family: "Verdana", "Arial", "Helvetica", "Sans-Serif";
+	font-family: "Europa", "Verdana", "Arial", "Helvetica", "Sans-Serif";
 	vertical-align: top;
 }
 
@@ -40,14 +40,14 @@ td
 
 a:link, a:visited, a:active
 {
-	font-family: "Verdana", "Arial", "Helvetica", "Sans-Serif";
+	font-family: "Europa", "Verdana", "Arial", "Helvetica", "Sans-Serif";
 	color: #ee8f00; 
 	text-decoration: none;
 }
 
 a:hover
 {
-	font-family: "Verdana", "Arial", "Helvetica", "Sans-Serif";
+	font-family: "Europa", "Verdana", "Arial", "Helvetica", "Sans-Serif";
 	color: #006EBA;
 }
 

@@ -53,7 +53,7 @@ ns1blankspace.financial.payroll =
 
 					$('#ns1blankspaceViewControlNew').click(function(event)
 					{
-						ns1blankspace.financial.payroll.home({"new": true});
+						ns1blankspace.financial.payroll["new"].show()
 					});
 				},
 
@@ -638,88 +638,96 @@ ns1blankspace.financial.payroll =
 				},				
 
 	"new": 		{
-					show: 		function ()
+					show: 		function (oParam)
 								{
-									var aHTML = [];
-							
-									ns1blankspace.show({selector: '#ns1blankspaceMainNew'});
+									var bJustSave = ns1blankspace.util.getParam(oParam, 'justSave', {"default": true});
 
-									aHTML.push('<table class="ns1blankspaceContainer">' +
-													'<tr class="ns1blankspaceContainer">' +
-													'<td id="ns1blankspaceNewColumn1" class="ns1blankspaceColumn1" style="width:50%"></td>' +
-													'<td id="ns1blankspaceNewColumn2" class="ns1blankspaceColumn2" style="font-size:0.75em"></td>' +
-													'</tr>' + 
-													'</table>');		
-
-									$('#ns1blankspaceMainNew').html(aHTML.join(''));
-
-									var aHTML = [];
-
-									aHTML.push('<table class="ns1blankspaceColumn2" style="font-size:0.875em">' +
-														'<tr><td>' +
-														'<span style="width:70px;" id="ns1blankspacePayrollNew_options_save">Next</span>' +
-														'</td></tr>' +
-														'<tr><td>' +
-														'<span style="width:70px;" id="ns1blankspacePayrollNew_options_cancel">Cancel</span>' +
-														'</td></tr>' +
-														'</table>');	
-
-									$('#ns1blankspaceNewColumn2').html(aHTML.join(''));
-
-									$('#ns1blankspacePayrollNew_options_save').button(
-									{
-										text: "Next"
-									})
-									.click(function() 
+									if (bJustSave)
 									{
 										ns1blankspace.financial.payroll["new"].save();
-									});
-
-									$('#ns1blankspacePayrollNew_options_cancel').button(
-									{
-										text: "Cancel"
-									})
-									.click(function() 
-									{
-										$('td.ns1blankspaceHighlight :first').click();
-									});
-
-									var aHTML = [];
-									var h = -1;
-
-									if (ns1blankspace.financial.payroll.data.context == 'pays')
-									{
-										aHTML.push('<table><tr>' + 
-														'<td class="ns1blankspaceNothing">Click <b>Next</b> to create the pay period.</td>' + 
-														'</tr>' +
-														'</table>');
 									}
 									else
-									{	
-										aHTML.push('<table class="ns1blankspace" style="padding-right:15px;">');
+									{
+										var aHTML = [];
+								
+										ns1blankspace.show({selector: '#ns1blankspaceMainNew'});
 
-										aHTML.push('<tr class="ns1blankspaceCaption">' +
-														'<td class="ns1blankspaceCaption">' +
-														'First Name' +
-														'</td></tr>' +
-														'<tr><td class="ns1blankspaceText">' +
-														'<input id="ns1blankspaceDetailsFirstName" class="ns1blankspaceText">' +
-														'</td></tr>');
+										aHTML.push('<table class="ns1blankspaceContainer">' +
+														'<tr class="ns1blankspaceContainer">' +
+														'<td id="ns1blankspaceNewColumn1" class="ns1blankspaceColumn1" style="width:50%"></td>' +
+														'<td id="ns1blankspaceNewColumn2" class="ns1blankspaceColumn2" style="font-size:0.75em"></td>' +
+														'</tr>' + 
+														'</table>');		
 
-										aHTML.push('<tr class="ns1blankspaceCaption">' +
-														'<td class="ns1blankspaceCaption">' +
-														'Last Name' +
-														'</td></tr>' +
-														'<tr class="ns1blankspace">' +
-														'<td class="ns1blankspaceText">' +
-														'<input id="ns1blankspaceDetailsLastName" class="ns1blankspaceText">' +
-														'</td></tr>');			
-										
-										aHTML.push('</table>');					
+										$('#ns1blankspaceMainNew').html(aHTML.join(''));
+
+										var aHTML = [];
+
+										aHTML.push('<table class="ns1blankspaceColumn2" style="font-size:0.875em">' +
+															'<tr><td>' +
+															'<span style="width:70px;" id="ns1blankspacePayrollNew_options_save">Next</span>' +
+															'</td></tr>' +
+															'<tr><td>' +
+															'<span style="width:70px;" id="ns1blankspacePayrollNew_options_cancel">Cancel</span>' +
+															'</td></tr>' +
+															'</table>');	
+
+										$('#ns1blankspaceNewColumn2').html(aHTML.join(''));
+
+										$('#ns1blankspacePayrollNew_options_save').button(
+										{
+											text: "Next"
+										})
+										.click(function() 
+										{
+											ns1blankspace.financial.payroll["new"].save();
+										});
+
+										$('#ns1blankspacePayrollNew_options_cancel').button(
+										{
+											text: "Cancel"
+										})
+										.click(function() 
+										{
+											$('td.ns1blankspaceHighlight :first').click();
+										});
+
+										var aHTML = [];
+										var h = -1;
+
+										if (ns1blankspace.financial.payroll.data.context == 'pays')
+										{
+											aHTML.push('<table><tr>' + 
+															'<td class="ns1blankspaceNothing">Click <b>Next</b> to create the pay period.</td>' + 
+															'</tr>' +
+															'</table>');
+										}
+										else
+										{	
+											aHTML.push('<table class="ns1blankspace" style="padding-right:15px;">');
+
+											aHTML.push('<tr class="ns1blankspaceCaption">' +
+															'<td class="ns1blankspaceCaption">' +
+															'First Name' +
+															'</td></tr>' +
+															'<tr><td class="ns1blankspaceText">' +
+															'<input id="ns1blankspaceDetailsFirstName" class="ns1blankspaceText">' +
+															'</td></tr>');
+
+											aHTML.push('<tr class="ns1blankspaceCaption">' +
+															'<td class="ns1blankspaceCaption">' +
+															'Last Name' +
+															'</td></tr>' +
+															'<tr class="ns1blankspace">' +
+															'<td class="ns1blankspaceText">' +
+															'<input id="ns1blankspaceDetailsLastName" class="ns1blankspaceText">' +
+															'</td></tr>');			
+											
+											aHTML.push('</table>');					
+										}
+
+										$('#ns1blankspaceNewColumn1').html(aHTML.join(''));
 									}
-
-									$('#ns1blankspaceNewColumn1').html(aHTML.join(''));
-
 								},
 
 					save: 		function (oParam, oResponse)

@@ -292,16 +292,15 @@ ns1blankspace.financial.budget =
 
 							aHTML.push('<tr><td id="ns1blankspaceControlPlan" class="ns1blankspaceControl">' +
 										'Plan</td></tr>');
-
-							aHTML.push('<tr><td id="ns1blankspaceControlActual" class="ns1blankspaceControl">' +
+							/*
+							aHTML.push('<tr><td id="ns1blankspaceControlActual" class="ns1blankspaceControl" style="padding-top:8px;">' +
 										'Actual</td></tr>');
+							*/
+							aHTML.push('<tr><td id="ns1blankspaceControlToday" class="ns1blankspaceControl" style="padding-top:8px;">' +
+											'Today</td></tr>');
 
-							aHTML.push('</table>');
-							
-							aHTML.push('<table class="ns1blankspaceControl">');
-						
-							aHTML.push('<tr><td id="ns1blankspaceControlProgress" class="ns1blankspaceControl">' +
-											'Progress</td></tr>');
+							aHTML.push('<tr><td id="ns1blankspaceControlProgress" class="ns1blankspaceControl" style="padding-top:8px;">' +
+											'Month&nbsp;By<br />Month</td></tr>');
 										
 							aHTML.push('<table class="ns1blankspaceControl">');
 						
@@ -323,7 +322,8 @@ ns1blankspace.financial.budget =
 					aHTML.push('<div id="ns1blankspaceMainDetails" class="ns1blankspaceControlMain"></div>');
 					aHTML.push('<div id="ns1blankspaceMainPlan" class="ns1blankspaceControlMain"></div>');
 					aHTML.push('<div id="ns1blankspaceMainActual" class="ns1blankspaceControlMain"></div>');
-					aHTML.push('<div id="ns1blankspaceMainProgress" class="ns1blankspaceControlMain"></div>');
+					aHTML.push('<div id="ns1blankspaceMainToday" class="ns1blankspaceControlMain" style="overflow:auto;"></div>');
+					aHTML.push('<div id="ns1blankspaceMainProgress" class="ns1blankspaceControlMain" style="overflow:auto;"></div>');
 					aHTML.push('<div id="ns1blankspaceMainActions" class="ns1blankspaceControlMain"></div>');
 					aHTML.push('<div id="ns1blankspaceMainAttachments" class="ns1blankspaceControlMain"></div>');
 					
@@ -351,6 +351,12 @@ ns1blankspace.financial.budget =
 					{
 						ns1blankspace.show({selector: '#ns1blankspaceMainActual', refresh: true});
 						ns1blankspace.financial.budget.actual.show();
+					});
+
+					$('#ns1blankspaceControlToday').click(function(event)
+					{
+						ns1blankspace.show({selector: '#ns1blankspaceMainToday', refresh: true});
+						ns1blankspace.financial.budget.today.show();
 					});
 
 					$('#ns1blankspaceControlProgress').click(function(event)
@@ -422,7 +428,7 @@ ns1blankspace.financial.budget =
 									if (iStep==2)
 									{
 										oParam.step = 3
-										ns1blankspace.financial.budget.process.items(oParam);
+										ns1blankspace.financial.budget.process.totals(oParam);
 									}
 
 									if (iStep==3)
@@ -437,9 +443,8 @@ ns1blankspace.financial.budget =
 									if (iStep==4)
 									{
 										oParam.step = 5
-										ns1blankspace.financial.budget.process.items(oParam);
+										ns1blankspace.financial.budget.process.totals(oParam);
 									}
-
 
 									if (iStep==5)
 									{
@@ -450,10 +455,17 @@ ns1blankspace.financial.budget =
 									if (iStep==6)
 									{
 										oParam.step = 7
-										ns1blankspace.financial.budget.process.complete(oParam);
+										oParam.namespace = 'today';
+										ns1blankspace.financial.budget.process.items(oParam);
 									}
 
 									if (iStep==7)
+									{
+										oParam.step = 8
+										ns1blankspace.financial.budget.process.complete(oParam);
+									}
+
+									if (iStep==8)
 									{
 										ns1blankspace.status.clear();
 										ns1blankspace.util.onComplete(oParam);
@@ -466,6 +478,12 @@ ns1blankspace.financial.budget =
 									var bAnyBefore = ns1blankspace.util.getParam(oParam, 'anyBefore', {"default": false}).value;
 									var sNamespace = ns1blankspace.util.getParam(oParam, 'namespace', {"default": 'today'}).value;
 									var bRefresh = ns1blankspace.util.getParam(oParam, 'refresh', {"default": true}).value;
+									var iMonthIndex = ns1blankspace.util.getParam(oParam, 'monthIndex').value;
+
+									if (iMonthIndex !== undefined)
+									{
+										dAsAt = ns1blankspace.financial.budget.data.months[iMonthIndex].end;
+									}	
 
 									var oSearch = new AdvancedSearch();
 									oSearch.method = 'FINANCIAL_BUDGET_PROCESS_SEARCH';
@@ -485,8 +503,16 @@ ns1blankspace.financial.budget =
 
 										if (oResponse.data.rows.length !== 0)
 										{
-											ns1blankspace.financial.budget.data.process[sNamespace] = oResponse.data.rows[0];
-											oData.id = ns1blankspace.financial.budget.data.process[sNamespace].id;
+											if (iMonthIndex != undefined)
+											{
+												ns1blankspace.financial.budget.data.months[iMonthIndex].process = oResponse.data.rows[0];
+												oData.id = ns1blankspace.financial.budget.data.months[iMonthIndex].process.id;
+											}
+											else
+											{
+												ns1blankspace.financial.budget.data.process[sNamespace] = oResponse.data.rows[0];
+												oData.id = ns1blankspace.financial.budget.data.process[sNamespace].id;
+											}	
 										}
 
 										if (bRefresh)
@@ -507,26 +533,38 @@ ns1blankspace.financial.budget =
 										else	
 										{	
 											delete oParam.refresh;
-											ns1blankspace.financial.budget.process.init(oParam);
+
+											if (iMonthIndex != undefined && ns1blankspace.util.getParam(oParam, 'onComplete') != undefined)
+											{
+												ns1blankspace.util.onComplete(oParam);
+											}	
+											else
+											{	
+												ns1blankspace.financial.budget.process.init(oParam);
+											}	
 										}
 									});
 								},
 
-					items:		function (oParam, oResponse)
+					totals:		function (oParam, oResponse)
 								{
 									var sNamespace = ns1blankspace.util.getParam(oParam, 'namespace', {"default": 'today'}).value;
+									var iMonthIndex = ns1blankspace.util.getParam(oParam, 'monthIndex').value;
+									var iProcessID;
 
+									var oNamespace = (iMonthIndex != undefined?ns1blankspace.financial.budget.data.months[iMonthIndex]:ns1blankspace.financial.budget.data.process[sNamespace])
+									
 									var oSearch = new AdvancedSearch();
 									oSearch.method = 'FINANCIAL_BUDGET_PROCESS_ITEM_SEARCH';
 									oSearch.addField('sum(plannedamount) totalplannedamount');
 									oSearch.addField('sum(actualamount) totalactualamount');
-									oSearch.addFilter('process', 'EQUAL_TO', ns1blankspace.financial.budget.data.process[sNamespace].id);
+									oSearch.addFilter('process', 'EQUAL_TO', oNamespace.id);
 									oSearch.getResults(function(oResponse)
 									{
 										if (oResponse.data.rows.length !== 0)
 										{	
-											ns1blankspace.financial.budget.data.process[sNamespace] = 
-												$.extend(true, ns1blankspace.financial.budget.data.process[sNamespace], oResponse.data.rows[0]);	
+											
+											oNamespace = $.extend(true, oNamespace, oResponse.data.rows[0]);	
 										}
 
 										ns1blankspace.financial.budget.process.init(oParam);
@@ -549,27 +587,133 @@ ns1blankspace.financial.budget =
 									});
 								},	
 
+					items: 		function (oParam)
+								{
+									var sNamespace = ns1blankspace.util.getParam(oParam, 'namespace', {"default": 'today'}).value;
+									var iMonthIndex = ns1blankspace.util.getParam(oParam, 'monthIndex').value;
+
+									var oNamespace = (iMonthIndex != undefined?ns1blankspace.financial.budget.data.months[iMonthIndex].process:ns1blankspace.financial.budget.data.process[sNamespace])
+
+									var oSearch = new AdvancedSearch();
+									oSearch.method = 'FINANCIAL_BUDGET_PROCESS_ITEM_SEARCH';
+									oSearch.addField('actualamount,financialaccount,financialaccounttext,plannedamount,process,processtext,' +
+														'budgetprocessitem.financialaccount.type');
+
+									oSearch.addFilter('process', 'EQUAL_TO', oNamespace.id);
+									oSearch.addFilter('budgetprocessitem.financialaccount.type', 'IN_LIST', '1,2');
+
+									oSearch.addBracket('(');
+									oSearch.addFilter('plannedamount', 'NOT_EQUAL_TO', 0);
+									oSearch.addOperator('or');
+									oSearch.addFilter('actualamount', 'NOT_EQUAL_TO', 0);
+									oSearch.addBracket(')');
+
+									oSearch.sort('financialaccounttext', 'asc');
+									oSearch.getResults(function(oResponse)
+									{
+										oNamespace.items = oResponse.data.rows;
+
+										if (iMonthIndex != undefined && ns1blankspace.util.getParam(oParam, 'onComplete').exists)
+										{
+											ns1blankspace.util.onComplete(oParam);
+										}
+										else
+										{	
+											ns1blankspace.financial.budget.process.init(oParam);
+										}	
+									});
+								},
+
+					months: 	function (oParam)
+								{
+									var iMonthIndex = ns1blankspace.util.getParam(oParam, 'monthIndex', {"default": -1}).value;
+
+									if (ns1blankspace.financial.budget.data.months==undefined)
+									{	
+										ns1blankspace.financial.budget.data.months = 
+										ns1blankspace.visualise.util.months(
+										{
+											startDate: ns1blankspace.objectContextData.startdate,
+											endDate: ns1blankspace.objectContextData.enddate
+										});
+									}
+
+									++iMonthIndex;
+									
+									if (iMonthIndex < ns1blankspace.financial.budget.data.months.length)
+									{
+										ns1blankspace.status.message(ns1blankspace.financial.budget.data.months[iMonthIndex].name +
+													' ' + ns1blankspace.financial.budget.data.months[iMonthIndex].year);
+
+										oParam = ns1blankspace.util.setParam(oParam, 'monthIndex', iMonthIndex)
+										oParam.month = ns1blankspace.financial.budget.data.months[iMonthIndex];
+										oParam.refresh = true;
+										oParam.onCompleteWhenCan = ns1blankspace.financial.budget.process.months;
+										oParam.onComplete = ns1blankspace.financial.budget.process.items;
+										ns1blankspace.financial.budget.process.asat(oParam);
+									}
+									else
+									{
+										var oPlannedAccumulatedTotal = {planned: {revenue: 0, expenses: 0}, actual: {revenue: 0, expenses: 0}} ;
+
+										$.each(ns1blankspace.financial.budget.data.months, function (m, budgetmonth)
+										{
+											budgetmonth.process.totals = {month: {planned: {}, actual: {}}};
+
+											var aAccounts = $.grep(budgetmonth.process.items, function (account) {return account['budgetprocessitem.financialaccount.type'] == 2});
+											budgetmonth.process.totals.month.planned.revenue = _.reduce($.map(aAccounts, function (p) {return accounting.unformat(p.plannedamount)}), function(memo, num) {return memo + num;}, 0);
+											budgetmonth.process.totals.month.actual.revenue = _.reduce($.map(aAccounts, function (p) {return accounting.unformat(p.actualamount)}), function(memo, num) {return memo + num;}, 0);
+
+											var aAccounts = $.grep(budgetmonth.process.items, function (account) {return account['budgetprocessitem.financialaccount.type'] == 1});
+											budgetmonth.process.totals.month.planned.expenses = _.reduce($.map(aAccounts, function (p) {return accounting.unformat(p.plannedamount)}), function(memo, num) {return memo + num;}, 0);
+											budgetmonth.process.totals.month.actual.expenses = _.reduce($.map(aAccounts, function (p) {return accounting.unformat(p.actualamount)}), function(memo, num) {return memo + num;}, 0);
+	
+											oPlannedAccumulatedTotal.planned.revenue = budgetmonth.process.totals.month.planned.revenue;
+											oPlannedAccumulatedTotal.planned.expenses = budgetmonth.process.totals.month.planned.expenses;
+											oPlannedAccumulatedTotal.actual.revenue = budgetmonth.process.totals.month.actual.revenue;
+											oPlannedAccumulatedTotal.actual.expenses = budgetmonth.process.totals.month.actual.expenses;
+
+											budgetmonth.process.totals.accumulated = $.extend(true, {}, oPlannedAccumulatedTotal);
+										});
+
+										oParam.onComplete = oParam.onCompleteAtEnd;
+										delete oParam.onCompleteAtEnd;
+										ns1blankspace.util.onComplete(oParam);
+									}
+								},			
+
 					complete: 	function (oParam)
 								{
 									ns1blankspace.financial.budget.data.months = 
-									ns1blankspace.visualise.util.months(
-									{
-										startDate: ns1blankspace.objectContextData.startdate,
-										endDate: ns1blankspace.objectContextData.enddate
-									});
+										ns1blankspace.visualise.util.months(
+										{
+											startDate: ns1blankspace.objectContextData.startdate,
+											endDate: ns1blankspace.objectContextData.enddate
+										});
 
-									var cPlannedAccumulatedTotal = 0;
+									var oPlannedAccumulatedTotal = {revenue: 0, expenses: 0};
 
 									$.each(ns1blankspace.financial.budget.data.months, function (m, budgetmonth)
 									{
-										budgetmonth.data.totals = {};
+										budgetmonth.data.totals = {month: {}, accumulated: {}};
 
 										budgetmonth.data.planned = $.extend(true, [], $.grep(ns1blankspace.financial.budget.data.planned, function (planned) {return planned.month==budgetmonth.month}));
 										budgetmonth.data.planned = budgetmonth.data.planned.concat($.grep(ns1blankspace.financial.budget.data.planned, function (planned) {return planned.month==-1}));
 
-										budgetmonth.data.totals.planned = _.reduce($.map(budgetmonth.data.planned, function (p) {return accounting.unformat(p.amount)}), function(memo, num) {return memo + num;}, 0);
-										cPlannedAccumulatedTotal += budgetmonth.data.totals.planned;
-										budgetmonth.data.totals.accumulatedplanned = +(cPlannedAccumulatedTotal);
+										budgetmonth.data.totals.month.planned = {}
+
+										//Revenue
+										var aAccounts = $.grep(budgetmonth.data.planned, function (account) {return account['budgetitem.financialaccount.type'] == 2});
+										budgetmonth.data.totals.month.planned.revenue = _.reduce($.map(aAccounts, function (p) {return accounting.unformat(p.amount)}), function(memo, num) {return memo + num;}, 0);
+
+										//Expenses
+										var aAccounts = $.grep(budgetmonth.data.planned, function (account) {return account['budgetitem.financialaccount.type'] == 1});
+										budgetmonth.data.totals.month.planned.expenses = _.reduce($.map(aAccounts, function (p) {return accounting.unformat(p.amount)}), function(memo, num) {return memo + num;}, 0);
+
+										oPlannedAccumulatedTotal.revenue += budgetmonth.data.totals.month.planned.revenue;
+										oPlannedAccumulatedTotal.expenses += budgetmonth.data.totals.month.planned.expenses;
+
+										budgetmonth.data.totals.accumulated.planned = $.extend(true, {}, oPlannedAccumulatedTotal);
 									});
 
 									ns1blankspace.financial.budget.process.init(oParam);
@@ -1129,7 +1273,7 @@ ns1blankspace.financial.budget.plan =
 
 						if (iID !== undefined)
 						{
-							var oItem = $.grep(ns1blankspace.financial.budget.plan.data.items, function (item) {return item.id == iID})[0];
+							var oItem = $.grep(ns1blankspace.financial.budget.data.planned, function (item) {return item.id == iID})[0];
 
 							$('#ns1blankspacePlanAmount').val(oItem.amount);
 							$('#ns1blankspacePlanNotes').val(oItem.notes);
@@ -1359,7 +1503,7 @@ ns1blankspace.financial.budget.actual =
 				{
 					var aHTML = [];
 
-					ns1blankspace.financial.budget.actual.data.items = oResponse.data.rows;
+					ns1blankspace.financial.budget.data.today = oResponse.data.rows;
 					
 					if (oResponse.data.rows.length == 0)
 					{
@@ -1401,117 +1545,359 @@ ns1blankspace.financial.budget.actual =
 			}
 }
 
-ns1blankspace.financial.budget.progress = 
+ns1blankspace.financial.budget.today = 
 {
 	data: 	{
-				format:
+				type:
 				{
-					chart: 1,
-					list: 2
+					expenses: 1,
+					revenue: 2,
+					margin: 3
 				}	
 			},
 
 	show: 	function (oParam)
 			{
-				var iFormat = ns1blankspace.util.getParam(oParam, 'format', {"default": ns1blankspace.financial.budget.progress.data.format.chart}).value;
-				//month by month
-				//actual
-				//planned
-
-				$vq.clear({queue: 'progress-show'});
-
-				$vq.add('<table class="ns1blankspaceMain">' +
-							'<tr class="ns1blankspaceRow">' +
-							'<td id="ns1blankspaceProgressColumn1" class="ns1blankspaceColumn1Flexible"></td>' +
-							'<td id="ns1blankspaceProgressColumn2" class="ns1blankspaceColumn2Action" style="width:100px; padding-left:10px;"></td>' +
-							'</tr>' +
-							'</table>', {queue: 'progress-show'});				
+				var iType = ns1blankspace.util.getParam(oParam, 'type', {"default": ns1blankspace.financial.budget.today.data.type.revenue}).value;
+			
+				$vq.clear({queue: 'today-show'});
+	
+				$vq.add('<div id="ns1blankspaceTodayType" style="overflow:auto;"></div>', {queue: 'progress-show'});
+				$vq.add('<div id="ns1blankspaceTodayMain" style="overflow:auto;"></div>', {queue: 'progress-show'});			
 							
-				$vq.render('#ns1blankspaceMainProgress', {queue: 'progress-show'});
+				$vq.render('#ns1blankspaceMainToday', {queue: 'progress-show'});
 
-				$vq.add('<div id="ns1blankspaceProgressFormat" class="ns1blankspaceMarker" style="text-align:right; margin-left:5px; margin-right:3px; margin-bottom:5px;">' +
-							'<input style="width: 100%;" type="radio" id="ns1blankspaceProgressFormat-1" name="radioFormat" checked="checked" /><label for="ns1blankspaceProgressFormat-1" style="width:75px; margin-bottom:4px; font-size:0.75em;">' +
-								'Chart</label>' +
-							'<input style="width: 100%;" type="radio" id="ns1blankspaceProgressFormat-2" name="radioFormat" /><label for="ns1blankspaceProgressFormat-2" style="width:75px; font-size:0.75em;">' +
-								'List</label>' +
+				$vq.add('<div id="ns1blankspaceProgressType" style="margin-left:0px; margin-right:3px; margin-bottom:5px;">' +
+							'<input style="width: 100%;" type="radio" id="ns1blankspaceProgressType-2" name="radioType" /><label for="ns1blankspaceProgressType-2" style="width:85px; font-size:0.75em;">' +
+								'Revenue</label>' +
+							'<input style="width: 100%;" type="radio" id="ns1blankspaceProgressType-1" name="radioType" /><label for="ns1blankspaceProgressType-1" style="width:95px; font-size:0.75em;">' +
+								'Expenses</label>' +
 							'</div>', {queue: 'progress-show'});
 														
-				$vq.render('#ns1blankspaceProgressColumn2', {queue: 'progress-show'});
+				$vq.render('#ns1blankspaceTodayType', {queue: 'progress-show'});
 
-				$('#ns1blankspaceProgressFormat').buttonset();
+				$('#ns1blankspaceProgressType-' + iType).attr('checked', true);
+
+				$('#ns1blankspaceProgressType').buttonset();
 										
-				$('#ns1blankspaceProgressFormat :radio').click(function()
+				$('#ns1blankspaceProgressType :radio').click(function()
 				{
-					oParam = ns1blankspace.util.setParam(oParam, 'format', (this.id).split('-')[1]);
-					ns1blankspace.financial.budget.progress.show(oParam);
+					oParam = ns1blankspace.util.setParam(oParam, 'type', (this.id).split('-')[1]);
+					ns1blankspace.financial.budget.today.show(oParam);
 				});
 
-				var aMonths = $.extend(true, [], ns1blankspace.financial.budget.data.months);
+				var aLabels = [];
+				var aDataSets = [{label: 'Planned'}, {label: 'Actual'}];
+				$.each(aDataSets, function (ds, dataset) {dataset.data = []});
 
-				if (iFormat == ns1blankspace.financial.budget.progress.data.format.chart)
-				{	
-					var aLabels = [];
-					var aDataSets = [{label: 'Planned'}, {label: 'Actual'}];
-					$.each(aDataSets, function (ds, dataset) {dataset.data = []});
+				var aToday = $.grep(ns1blankspace.financial.budget.data.process.today.items, function(today) {return today['budgetprocessitem.financialaccount.type'] == iType})
 
-					$.each(aMonths, function (i, month)
-					{
-						aLabels.push(month.name);
-						aDataSets[0].data.push(month.data.totals.accumulatedplanned);
-					});
+				$.each(aToday, function (t, today)
+				{
+					aLabels.push(today.financialaccounttext);
 
-					if (oParam == undefined) {oParam = {}}
+					aDataSets[0].data.push(accounting.unformat(today.plannedamount));
+					aDataSets[1].data.push(accounting.unformat(today.actualamount));
+				});
 
-					oParam.xhtmlElementContainerID = 'ns1blankspaceProgressColumn1';
-					oParam.width = '550px;'
-					oParam.height = '500px;'
-					oParam.legend = true;
-					oParam.datasets = aDataSets;
-					oParam.labels = aLabels;
-					oParam.type = 'Line';
-					oParam.options = {datasetFill: false, scaleBeginAtZero: true, bezierCurve: false}
+				if (oParam == undefined) {oParam = {}}
 
-					ns1blankspace.visualise.provider.chartjs.render(oParam);
+				oParam.xhtmlElementContainerID = 'ns1blankspaceTodayMain';
+				oParam.width = '700px;'
+				oParam.height = String(aLabels.length * 75) + 'px;'
+				oParam.legend = true;
+				oParam.datasets = aDataSets;
+				oParam.labels = aLabels;
+				oParam.type = 'HorizontalBar';
+				oParam.options = {}
+
+				ns1blankspace.visualise.provider.chartjs.render(oParam);
+			}
+}				
+
+ns1blankspace.financial.budget.progress = 
+{
+	data: 	{
+				format:
+				{
+					overview: 1,
+					detailed: 2
+				}	
+			},
+
+	show: 	function (oParam)
+			{
+				var bRefresh = ns1blankspace.util.getParam(oParam, 'refresh', {"default": true}).value;
+
+				if (bRefresh)
+				{
+					oParam = ns1blankspace.util.setParam(oParam, 'refresh', false);
+					oParam = ns1blankspace.util.setParam(oParam, 'onCompleteAtEnd', ns1blankspace.financial.budget.progress.show);
+					ns1blankspace.financial.budget.process.months(oParam);
 				}
 				else
-				{
-					$vq.add('<table class="ns1blankspaceMain">' +
-							'<tr class="ns1blankspaceHeaderCaption"><td class="ns1blankspaceHeaderCaption">&nbsp;</td>', {queue: 'progress-show'});
+				{	
+					var iFormat = ns1blankspace.util.getParam(oParam, 'format', {"default": ns1blankspace.financial.budget.progress.data.format.overview}).value;
+				
+					$vq.clear({queue: 'progress-show'});
+		
+					$vq.add('<div id="ns1blankspaceProgressColumn2" style="overflow:auto;"></div>', {queue: 'progress-show'});
+					$vq.add('<div id="ns1blankspaceProgressColumn1" style="overflow:auto;"></div>', {queue: 'progress-show'});			
+								
+					$vq.render('#ns1blankspaceMainProgress', {queue: 'progress-show'});
 
-					$.each(aMonths, function (i, month)
+					$vq.add('<div id="ns1blankspaceProgressFormat" style="margin-left:0px; margin-right:3px; margin-bottom:5px;">' +
+								'<input style="width: 100%;" type="radio" id="ns1blankspaceProgressFormat-1" name="radioFormat" checked="checked" /><label for="ns1blankspaceProgressFormat-1" style="width:95px; margin-bottom:4px; font-size:0.75em;">' +
+									'Overview</label>' +
+								'<input style="width: 100%;" type="radio" id="ns1blankspaceProgressFormat-2" name="radioFormat" /><label for="ns1blankspaceProgressFormat-2" style="width:80px; font-size:0.75em;">' +
+									'Detailed</label>' +
+								'</div>', {queue: 'progress-show'});
+															
+					$vq.render('#ns1blankspaceProgressColumn2', {queue: 'progress-show'});
+
+					$('#ns1blankspaceProgressFormat-' + iFormat).attr('checked', true);
+
+					$('#ns1blankspaceProgressFormat').buttonset();
+											
+					$('#ns1blankspaceProgressFormat :radio').click(function()
 					{
-						$vq.add('<td class="ns1blankspaceHeaderCaption">' + month.name + '</td>', {queue: 'progress-show'});
+						oParam = ns1blankspace.util.setParam(oParam, 'format', (this.id).split('-')[1]);
+						ns1blankspace.financial.budget.progress.show(oParam);
 					});
 
-					$vq.add('</tr>', {queue: 'progress-show'});
+					var aMonths = $.extend(true, [], ns1blankspace.financial.budget.data.months);
 
-					//Revenue
-					var iRootAccount = $grep(ns1blankspace.financial.data.rootAccounts, function (account) {return account.type == 2})[0];
-
-					var aAccounts = $grep(ns1blankspace.financial.data.accounts, function (account) {return account.type == 2 && account.parentaccount == iRootAccount});
-					aAccounts.sort(ns1blankspace.util.sortBy('title', 'asc'));
-
-					$.each(aAccounts, function (a, account)
-					{
-						$vq.add('<tr><td class="ns1blankspaceHeaderCaption">' + account.title + '</td>', {queue: 'progress-show'});
+					if (iFormat == ns1blankspace.financial.budget.progress.data.format.overview)
+					{	
+						var aLabels = [];
+						var aDataSets = [{label: 'Planned Revenue'}, {label: 'Planned Expenses'}, {label: 'Planned Margin'}];
+						$.each(aDataSets, function (ds, dataset) {dataset.data = []});
 
 						$.each(aMonths, function (i, month)
 						{
-							var aMonthAccounts = $grep(month.data.planned, function (planned) {return plannedfinancialaccount == account.id});
-							$vq.add('<td class="ns1blankspaceRow">' +
-									_.reduce($.map(aMonthAccounts, function (p) {return accounting.unformat(p.amount)}), function(memo, num) {return memo + num;}, 0);
-									 + '</td>', {queue: 'progress-show'});
+							aLabels.push(month.shortName);
+							aDataSets[0].data.push(month.data.totals.accumulated.planned.revenue);
+							aDataSets[1].data.push(month.data.totals.accumulated.planned.expenses);
+							aDataSets[2].data.push(month.data.totals.accumulated.planned.revenue - month.data.totals.accumulated.planned.expenses);
+						});
+
+						if (oParam == undefined) {oParam = {}}
+
+						oParam.xhtmlElementContainerID = 'ns1blankspaceProgressColumn1';
+						oParam.width = '700px;'
+						oParam.height = '500px;'
+						oParam.legend = true;
+						oParam.datasets = aDataSets;
+						oParam.labels = aLabels;
+						oParam.type = 'Line';
+						oParam.options = {datasetFill: false, scaleBeginAtZero: true, bezierCurve: false}
+
+						ns1blankspace.visualise.provider.chartjs.render(oParam);
+					}
+					else
+					{
+						$vq.add('<table class="ns1blankspaceMain" style="font-size:0.75em;">' +
+								'<tr><td class="ns1blankspaceHeaderCaption ns1blankspaceRowShadedHighlight">REVENUE</td>', {queue: 'progress-show'});
+
+						$.each(aMonths, function (i, month)
+						{
+							$vq.add('<td class="ns1blankspaceHeaderCaption ns1blankspaceRowShadedHighlight" style="text-align:right;">' + month.shortName + '</td>', {queue: 'progress-show'});
 						});
 
 						$vq.add('</tr>', {queue: 'progress-show'});
 
-					});
+						//Revenue
+						var oRootAccount = $.grep(ns1blankspace.financial.data.rootAccounts, function (account) {return account.type == 2})[0];
+						var aAccounts = $.grep(ns1blankspace.financial.data.accounts, function (account) {return account.type == 2 && account.parentaccount == oRootAccount.id});
+						aAccounts.sort(ns1blankspace.util.sortBy('title', 'asc'));
 
-					$vq.add('</table>', {queue: 'progress-show'});
+						$.each(aAccounts, function (a, account)
+						{
+							var oAccumulatedTotal = {planned: 0, expenses:0}
 
-					$vq.render('#ns1blankspaceProgressColumn1', {queue: 'progress-show'});
-				}	
-			}	
+							$vq.add('<tr><td class="ns1blankspaceHeaderCaption" style="border-width:0px;">' + account.title + '</td>', {queue: 'progress-show'});
+
+							$.each(aMonths, function (i, month)
+							{
+								var aMonthAccountsPlanned = $.grep(month.process.items, function (item) {return item.financialaccount == account.id});
+								var cAmountPlanned = _.reduce($.map(aMonthAccountsPlanned, function (p) {return accounting.unformat(p.plannedamount)}), function(memo, num) {return memo + num;}, 0);
+
+								oAccumulatedTotal.planned = cAmountPlanned;
+
+								$vq.add('<td class="ns1blankspaceRowx ns1blankspaceSub" style="text-align:right; padding-right:8px; font-size:0.875em; color:#46BFBD;">' +
+										(cAmountPlanned==0?'':(cAmountPlanned).formatMoney(0)) +
+										'</td>', {queue: 'progress-show'});
+							});
+
+							$vq.add('</tr>', {queue: 'progress-show'});
+
+							$vq.add('<tr><td class="ns1blankspaceHeaderCaption">&nbsp;</td>', {queue: 'progress-show'});
+
+							$.each(aMonths, function (i, month)
+							{
+								var aMonthAccountsActual = $.grep(month.process.items, function (item) {return item.financialaccount == account.id});
+								var cAmountActual = _.reduce($.map(aMonthAccountsActual, function (p) {return accounting.unformat(p.actualamount)}), function(memo, num) {return memo + num;}, 0);
+
+								oAccumulatedTotal.actual = cAmountActual;
+
+								if (!moment(month.start, "DD MMM YYYY").isAfter())
+								{
+									$vq.add('<td class="ns1blankspaceRow" style="text-align:right;">' +
+										(cAmountActual==0?'':(cAmountActual).formatMoney(0)) +
+										'</td>', {queue: 'progress-show'});
+								}	
+								else
+								{
+									$vq.add('<td class="ns1blankspaceRow" style="text-align:right;"></td>', {queue: 'progress-show'});
+								}
+							});
+
+							$vq.add('</tr>', {queue: 'progress-show'});
+						});
+
+						$vq.add('<tr><td class="ns1blankspaceHeaderCaptionx" style="font-weight:bold;">Total Revenue</td>', {queue: 'progress-show'});
+
+						$.each(aMonths, function (i, month)
+						{
+							$vq.add('<td class="ns1blankspaceHeaderCaptionx" style="text-align:right; color:#46BFBD; font-weight:bold;">' +
+										(month.process.totals.accumulated.planned.revenue).formatMoney(0) +
+										'</td>', {queue: 'progress-show'});
+						});
+
+						$vq.add('</tr>', {queue: 'progress-show'});
+
+						$vq.add('<tr><td class="ns1blankspaceHeaderCaption">&nbsp;</td>', {queue: 'progress-show'});
+
+						$.each(aMonths, function (i, month)
+						{
+							if (!moment(month.start, "DD MMM YYYY").isAfter())
+							{
+								$vq.add('<td class="ns1blankspaceRow" style="text-align:right; font-weight:bold;">' +
+										(month.process.totals.accumulated.actual.revenue).formatMoney(0) +
+										'</td>', {queue: 'progress-show'});
+							}
+							else
+							{
+								$vq.add('<td class="ns1blankspaceRow" style="text-align:right;"></td>', {queue: 'progress-show'});
+							}	
+						});
+
+						$vq.add('</tr>', {queue: 'progress-show'});
+
+						//Expenses
+						var oRootAccount = $.grep(ns1blankspace.financial.data.rootAccounts, function (account) {return account.type == 1})[0];
+						var aAccounts = $.grep(ns1blankspace.financial.data.accounts, function (account) {return account.type == 1 && account.parentaccount == oRootAccount.id});
+						aAccounts.sort(ns1blankspace.util.sortBy('title', 'asc'));
+
+						$vq.add('<tr><td class="ns1blankspaceHeaderCaption ns1blankspaceRowShadedHighlight">EXPENSES</td>', {queue: 'progress-show'});
+
+						$.each(aMonths, function (i, month)
+						{
+							$vq.add('<td class="ns1blankspaceHeaderCaption ns1blankspaceRowShadedHighlight">&nbsp;</td>', {queue: 'progress-show'});
+						});
+
+						$vq.add('</tr>');
+
+						$.each(aAccounts, function (a, account)
+						{
+							var oAccumulatedTotal = {planned: 0, expenses:0}
+
+							$vq.add('<tr><td class="ns1blankspaceHeaderCaption" style="border-width:0px;">' + account.title + '</td>', {queue: 'progress-show'});
+
+							$.each(aMonths, function (i, month)
+							{
+								var aMonthAccountsPlanned = $.grep(month.process.items, function (item) {return item.financialaccount == account.id});
+								var cAmountPlanned = _.reduce($.map(aMonthAccountsPlanned, function (p) {return accounting.unformat(p.plannedamount)}), function(memo, num) {return memo + num;}, 0);
+
+								oAccumulatedTotal.planned += cAmountPlanned;
+
+								$vq.add('<td class="ns1blankspaceRowx ns1blankspaceSub" style="text-align:right; padding-right:8px; font-size:0.875em; color:#46BFBD;">' +
+										(cAmountPlanned==0?'':(cAmountPlanned).formatMoney(0)) +
+										'</td>', {queue: 'progress-show'});
+							});
+
+							$vq.add('</tr>', {queue: 'progress-show'});
+
+							$vq.add('<tr><td class="ns1blankspaceHeaderCaption">&nbsp;</td>', {queue: 'progress-show'});
+
+							$.each(aMonths, function (i, month)
+							{
+								var aMonthAccountsActual = $.grep(month.process.items, function (item) {return item.financialaccount == account.id});
+								var cAmountActual = _.reduce($.map(aMonthAccountsActual, function (p) {return accounting.unformat(p.actualamount)}), function(memo, num) {return memo + num;}, 0);
+
+								if (!moment(month.start, "DD MMM YYYY").isAfter())
+								{
+									$vq.add('<td class="ns1blankspaceRow" style="text-align:right;">' +
+										(cAmountActual==0?'':(cAmountActual).formatMoney(0)) +
+										'</td>', {queue: 'progress-show'});
+								}	
+								else
+								{
+									$vq.add('<td class="ns1blankspaceRow" style="text-align:right;"></td>', {queue: 'progress-show'});
+								}
+							});
+
+							$vq.add('</tr>', {queue: 'progress-show'});
+						});
+
+						$vq.add('<tr><td class="ns1blankspaceHeaderCaptionx" style="font-weight:bold;">Total Expenses</td>', {queue: 'progress-show'});
+
+						$.each(aMonths, function (i, month)
+						{
+							$vq.add('<td class="ns1blankspaceHeaderCaptionx" style="text-align:right; color:#46BFBD; font-weight:bold;">' +
+										(month.process.totals.accumulated.planned.expenses).formatMoney(0) +
+										'</td>', {queue: 'progress-show'});
+						});
+
+						$vq.add('</tr>', {queue: 'progress-show'});
+
+						$vq.add('<tr><td class="ns1blankspaceHeaderCaption">&nbsp;</td>', {queue: 'progress-show'});
+
+						$.each(aMonths, function (i, month)
+						{
+							if (!moment(month.start, "DD MMM YYYY").isAfter())
+							{
+								$vq.add('<td class="ns1blankspaceRow" style="text-align:right; font-weight:bold;">' +
+										(month.process.totals.accumulated.actual.expenses).formatMoney(0) +
+										'</td>', {queue: 'progress-show'});
+							}
+							else
+							{
+								$vq.add('<td class="ns1blankspaceRow" style="text-align:right;"></td>', {queue: 'progress-show'});
+							}	
+						});
+
+						$vq.add('</tr>', {queue: 'progress-show'});
+
+
+						$vq.add('<tr><td class="ns1blankspaceHeaderCaptionx ns1blankspaceRowShadedHighlight">MARGIN</td>', {queue: 'progress-show'});
+
+						$.each(aMonths, function (i, month)
+						{
+							$vq.add('<td class="ns1blankspaceHeaderCaptionx ns1blankspaceRowShadedHighlight" style="text-align:right; color:#46BFBD;">' +
+										(month.process.totals.accumulated.planned.revenue - month.process.totals.accumulated.planned.expenses).formatMoney(0) +
+										'</td>', {queue: 'progress-show'});
+						});
+
+						$vq.add('</tr>', {queue: 'progress-show'});
+
+						$vq.add('<tr><td class="ns1blankspaceHeaderCaption ns1blankspaceRowShadedHighlight"></td>', {queue: 'progress-show'});
+
+						$.each(aMonths, function (i, month)
+						{
+							$vq.add('<td class="ns1blankspaceHeaderCaption ns1blankspaceRowShadedHighlight" style="text-align:right;">' +
+										(month.process.totals.accumulated.actual.revenue - month.process.totals.accumulated.actual.expenses).formatMoney(0) +
+										'</td>', {queue: 'progress-show'});
+						});
+
+						$vq.add('</tr>', {queue: 'progress-show'});
+
+						$vq.add('</table>', {queue: 'progress-show'});
+
+						$vq.render('#ns1blankspaceProgressColumn1', {queue: 'progress-show'});
+					}	
+				}
+			}		
 }
 
 

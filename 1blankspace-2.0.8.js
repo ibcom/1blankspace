@@ -872,8 +872,15 @@ ns1blankspace.app =
 										'</div>');
 										
 						aHTML.push('<div id="ns1blankspaceViewControlSearchContainer">' +
-										'<input id="ns1blankspaceViewControlSearch">' +
-										'</div>');
+										'<input id="ns1blankspaceViewControlSearch"')
+
+						if (ns1blankspace.option.searchWatermark != undefined)
+						{	
+							aHTML.push(' class="ns1blankspaceWatermark" value="' + ns1blankspace.option.searchWatermark + '"');
+						}
+
+						aHTML.push('></div>');
+
 										
 						aHTML.push('<div id="ns1blankspaceViewControlSearchStatus"></div>');
 										
@@ -2338,7 +2345,7 @@ ns1blankspace.history.view =
 									$.ajax(
 									{
 										type: 'POST',
-										url: ns1blankspace.util.endpointURI('CORE_PROFILE_MANAGE'),
+										url: '/ondemand/core/?method=CORE_PROFILE_MANAGE',
 										data: sData,
 										dataType: 'json'
 									});
@@ -3801,9 +3808,6 @@ ns1blankspace.util =
 							if (bRemove) {delete oParam[sParam]};
 							if (bSet) {oParam[sParam] = oReturn.value}
 						}
-
-						
-
 					}	
 
 					return oReturn;
@@ -4288,6 +4292,8 @@ ns1blankspace.util =
 				{
 					//yourArray.sort(ns1blankspace.util.sortBy('firstname'))
 
+					if (direction==undefined) {direction = 'asc'}
+
 					return function(a,b)
 					{
 						if(a[prop] > b[prop])
@@ -4727,6 +4733,7 @@ ns1blankspace.util =
 
 	view:		{
 					data: {base: []},
+
 					queue:
 					{
 						clear: function (oParam)
@@ -4782,6 +4789,7 @@ ns1blankspace.util =
 
 							return sReturn	
 						},
+
 						show: function (sElementSelector, sData, oParam)
 						{
 							this.clear(oParam);

@@ -42,6 +42,7 @@ ns1blankspace.option.taxBusinessCaption = 'Business';
 ns1blankspace.option.currencySymbol = '$';
 ns1blankspace.option.postInit = undefined;
 ns1blankspace.option.initialiseSpaceTemplate = '/jscripts/1blankspace.setup.space-2.0.0.json';
+ns1blankspace.option.searchWatermark = 'search';
 
 if (ns1blankspace.financial === undefined) {ns1blankspace.financial = {}}
 if (ns1blankspace.control === undefined) {ns1blankspace.control = {}}
@@ -185,7 +186,7 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.financial.budget',
-		source: '/jscripts/1blankspace.financial.budget-2.0.0.js'
+		source: '/jscripts/1blankspace.financial.budget-2.0.1.js'
 	},
 	{
 		nameSpace: '1blankspace.report',
