@@ -2345,7 +2345,7 @@ ns1blankspace.history.view =
 									$.ajax(
 									{
 										type: 'POST',
-										url: '/ondemand/core/?method=CORE_PROFILE_MANAGE',
+										url: ns1blankspace.util.endpointURI('CORE_PROFILE_MANAGE'),
 										data: sData,
 										dataType: 'json'
 									});

@@ -66,6 +66,7 @@
 		{"title": "CORE_NETWORK_GROUPS"},
 		{"title": "CORE_OAUTH2_MANAGE"},
 		{"title": "CORE_PDF_CREATE"},
+		{"title": "CORE_PROFILE_MANAGE"},
 		{"title": "CORE_STRUCTURE_DATA_MANAGE"},
 		{"title": "CORE_STRUCTURE_DATA_SEARCH"},
 		{"title": "CORE_SURVEY_RESULT_MANAGE"},
