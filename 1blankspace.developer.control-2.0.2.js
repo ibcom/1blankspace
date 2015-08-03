@@ -111,9 +111,9 @@ ns1blankspace.xhtml.homeNotes =
 	'</td></tr></table>';
 
 ns1blankspace.xhtml.header =
-	'<div id="ns1blankspaceLogo" style="width:265px; float:left; "><img src="/jscripts/images/mydigitalstructure.console-2.0.0.png"></div>' +
+	'<div id="ns1blankspaceLogo" style="width:265px; float:left;"><img src="/jscripts/images/mydigitalstructure.console-2.0.0.png" style="height:45px;"></div>' +
 	'<div id="ns1blankspaceHeaderControl" style="float:right; margin-right:3px;">' +
-	'<div id="ns1blankspaceSpaceText" style="width:450px;"></div>' +
+	'<div id="ns1blankspaceSpaceText" style="width:450px; margin-top:-2px; margin-bottom:0px;"></div>' +
 	'<div id="ns1blankspaceLogonName" style="width:450px;"></div></div>';
 
 ns1blankspace.themes = 
@@ -121,7 +121,7 @@ ns1blankspace.themes =
 	{
 		title: 				'Standard',
 		cssURI: 			'', 
-		xhtmlHeaderLogo: 	'<img src="/jscripts/images/mydigitalstructure.console-2.0.0.png">',
+		xhtmlHeaderLogo: 	'<img src="/jscripts/images/mydigitalstructure.console-2.0.0.png" style="height:45px;">',
 		default: 			true
 	}
 ]

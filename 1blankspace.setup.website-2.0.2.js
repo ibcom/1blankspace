@@ -1562,7 +1562,6 @@ ns1blankspace.setup.website =
 							aHTML.push('<table id="ns1blankspaceSetupWebsiteForms" class="ns1blankspace">');
 							aHTML.push('<tr class="ns1blankspaceCaption">');
 							aHTML.push('<td class="ns1blankspaceHeaderCaption">Form</td>');
-							aHTML.push('<td class="ns1blankspaceHeaderCaption">&nbsp;</td>');
 							aHTML.push('</tr>');
 							
 							$.each(oResponse.data.rows, function()
@@ -1840,13 +1839,16 @@ ns1blankspace.setup.website =
 										
 										if (sID != undefined)
 										{
-											$.ajax(
+											var oSearch = new AdvancedSearch();
+											oSearch.method = 'SETUP_SITE_URL_SEARCH';
+											oSearch.addField('primary,status,statustext,url');
+											oSearch.addFilter('id', 'EQUAL_TO', sID)
+											oSearch.rf = 'json';
+											oSearch.sort('url', 'asc');
+											
+											oSearch.getResults(function(oResponse)
 											{
-												type: 'POST',
-												url: ns1blankspace.util.endpointURI('SETUP_SITE_URL_SEARCH'),
-												data: 'id=' + sID,
-												dataType: 'json',
-												success: function(data) {ns1blankspace.setup.website.urls.add(oParam, data)}
+												ns1blankspace.setup.website.urls.add(oParam, oResponse)
 											});
 										}
 									}
