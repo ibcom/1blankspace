@@ -110,7 +110,7 @@ ns1blankspace.setup.website =
 										'<tr class="ns1blankspaceMain">' +
 										'<td id="ns1blankspaceMostLikely">' +
 										ns1blankspace.xhtml.loading + '</td>' +
-										'<td id="ns1blankspaceHomeAction" style="width:175px;"></td>' +
+										'<td id="ns1blankspaceHomeAction" style="width:270px;"></td>' +
 										'</tr></table>');					
 						
 						$('#ns1blankspaceMain').html(aHTML.join(''));
@@ -129,21 +129,23 @@ ns1blankspace.setup.website =
 						
 						aHTML.push('<tr><td style="width:200px; font-size:0.875em;" >' +
 										'<a href="/site/1262/mydigitalspace_attachment_loader.zip"' +
-										' id="ns1blankspaceAttachmentUploader">Get the file attachment uploader for Windows</a>' +
+										' id="ns1blankspaceAttachmentUploader">Get the file attachment uploader<br />for Windows</a>' +
 										'</td></tr>');	
 														
 						aHTML.push('</td></tr></table>');					
 
 						$('#ns1blankspaceHomeAction').html(aHTML.join(''));	
 						
-						$.ajax(
-						{
-							type: 'GET',
-							url: ns1blankspace.util.endpointURI('SETUP_SITE_SEARCH') + '&rows=50',
-							dataType: 'json',
-							success: function (data) {ns1blankspace.setup.website.home(oParam, data)}
-						});
+						var oSearch = new AdvancedSearch();
+						oSearch.method = 'SETUP_SITE_SEARCH';
+						oSearch.addField('title,reference');
+						oSearch.sort('title', 'asc');
+						oSearch.rows = 50;
 						
+						oSearch.getResults(function(oResponse)
+						{
+							ns1blankspace.setup.website.home(oParam, oResponse)
+						});
 					}
 					else
 					{
@@ -158,16 +160,21 @@ ns1blankspace.setup.website =
 						else
 						{
 						
-							aHTML.push('<table>');
+							aHTML.push('<table style="padding-right:20px;">');
 							
-							$.each(oResponse.data.rows, function()
+							$.each(oResponse.data.rows, function(r, row)
 							{	
 								aHTML.push('<tr class="ns1blankspaceRow">');
 								
-								aHTML.push('<td id="ns1blankspaceSetupWebsiteMostLikely_title-' + this.id + 
-														'" class="ns1blankspaceMostLikely">' +
-														this.title +
-														'</td>');
+								aHTML.push('<td id="ns1blankspaceSetupWebsiteMostLikely_title-' + row.id + 
+												'" class="ns1blankspaceMostLikely ns1blankspaceRow" style="border-color:#F5F5F5; padding:6px;">' +
+												row.title +
+												'</td>');
+
+								aHTML.push('<td id="ns1blankspaceSetupWebsiteMostLikely_title-' + row.id + 
+												'" class="ns1blankspaceSubNote  ns1blankspaceRow" style="text-align:right; font-size:0.75em; font-weight:100; border-color:#F5F5F5; padding:6px;">' +
+												row.id +
+												'</td>');
 								
 								aHTML.push('</tr>');
 							});
@@ -778,7 +785,6 @@ ns1blankspace.setup.website =
 								{
 									var oSearch = new AdvancedSearch();
 									oSearch.method = 'CORE_ATTACHMENT_SEARCH';
-									
 									oSearch.addField('filename,attachment');
 									oSearch.addFilter('filename', 'TEXT_IS_LIKE', 'css')
 									oSearch.addFilter('object', 'EQUAL_TO', 40);
