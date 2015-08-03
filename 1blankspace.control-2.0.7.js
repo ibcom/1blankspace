@@ -78,8 +78,8 @@ ns1blankspace.xhtml.logonNotes =
 ns1blankspace.xhtml.header =
 	'<div id="ns1blankspaceLogo" style="width:250px; float:left; "><img src="/jscripts/images/1blankspace.aoe-2.0.0.png"></div>' +
 	'<div style="float:right; margin-right:3px;">' +
-	'<div id="ns1blankspaceSpaceText" style="width:450px;"></div>' +
-	'<div id="ns1blankspaceLogonName" style="width:450px;"></div></div>';
+	'<div id="ns1blankspaceSpaceText" style="width:450px; margin-top:-3px; margin-bottom:0px;"></div>' +
+	'<div id="ns1blankspaceLogonName" style="width:450px; margin-top:-2px;"></div></div>';
 
 ns1blankspace.scripts =
 ns1blankspace.scripts.concat(
@@ -94,11 +94,11 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.contactPerson',
-		source: '/jscripts/1blankspace.contactperson-2.0.0.js'
+		source: '/jscripts/1blankspace.contactperson-2.0.1.js'
 	},
 	{
 		nameSpace: '1blankspace.contactBusiness',
-		source: '/jscripts/1blankspace.contactbusiness-2.0.0.js'
+		source: '/jscripts/1blankspace.contactbusiness-2.0.1.js'
 	},
 	{
 		nameSpace: '1blankspace.opportunity',
@@ -122,7 +122,7 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.news',
-		source: '/jscripts/1blankspace.news-2.0.0.js'
+		source: '/jscripts/1blankspace.news-2.0.1.js'
 	},
 	{
 		nameSpace: '1blankspace.event',
