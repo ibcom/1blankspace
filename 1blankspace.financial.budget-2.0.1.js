@@ -723,22 +723,22 @@ ns1blankspace.financial.budget =
 	totals: 	{
 					planned: 	function (oParam, oResponse)
 								{
-									if (oResponse == undefined)
-									{	
-										var oSearch = new AdvancedSearch();
-										oSearch.method = 'FINANCIAL_BUDGET_ITEM_SEARCH';
-										oSearch.addField('sum(amount) totalamount');
-										oSearch.addFilter('budget', 'EQUAL_TO', ns1blankspace.objectContext);
-										
-										oSearch.getResults(function(data) {ns1blankspace.financial.budget.totals.planned(oParam, data)});
-									}
-									else
+									var oData = ns1blankspace.financial.budget.data;
+									
+									var aAccounts;
+									oData.totals = {planned: {revenue: 0, expenses: 0}}
+									
+									$.each(oData.months, function (m, month)
 									{
-										ns1blankspace.financial.budget.data.totals = {planned: oResponse.data.rows[0].totalamount}
+										aAccounts = $.grep(month.data.planned, function (account) {return account['budgetitem.financialaccount.type'] == 2});
+										oData.totals.planned.revenue += _.reduce($.map(aAccounts, function (p) {return accounting.unformat(p.amount)}), function(memo, num) {return memo + num;}, 0);
 
-										oParam = ns1blankspace.util.setParam(oParam, 'refresh', false);
-										ns1blankspace.util.onComplete(oParam);
-									}
+										aAccounts = $.grep(month.data.planned, function (account) {return account['budgetitem.financialaccount.type'] == 1});
+										oData.totals.planned.expenses += _.reduce($.map(aAccounts, function (p) {return accounting.unformat(p.amount)}), function(memo, num) {return memo + num;}, 0);
+									});
+
+									oParam = ns1blankspace.util.setParam(oParam, 'refresh', false);
+									ns1blankspace.util.onComplete(oParam);									
 								}
 				},		
 
@@ -775,9 +775,14 @@ ns1blankspace.financial.budget =
 							
 							$vq.add('<table class="ns1blankspace">', {queue: 'summary'});
 
-							$vq.add('<tr><td class="ns1blankspaceSummaryCaption">Planned Total</td></tr>' +
+							$vq.add('<tr><td class="ns1blankspaceSummaryCaption">Planned Revenue</td></tr>' +
 												'<tr><td id="ns1blankspaceSummaryNotes" class="ns1blankspaceSummary">$' +
-												ns1blankspace.financial.budget.data.process.end.totalplannedamount +
+												ns1blankspace.financial.budget.data.totals.planned.revenue +
+												'</td></tr>', {queue: 'summary'});
+
+							$vq.add('<tr><td class="ns1blankspaceSummaryCaption">Planned Expenses</td></tr>' +
+												'<tr><td id="ns1blankspaceSummaryNotes" class="ns1blankspaceSummary">$' +
+												ns1blankspace.financial.budget.data.totals.planned.expenses +
 												'</td></tr>', {queue: 'summary'});
 
 							$vq.add('</table>', {queue: 'summary'});

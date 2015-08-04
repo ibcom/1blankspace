@@ -3171,6 +3171,16 @@ ns1blankspace.search =
 										}
 									}
 
+									
+
+									var sCustomOption = $('#' + sXHTMLInputElementID).attr("data-customoption");
+
+									if (sCustomOption != undefined)
+									{
+										var aCustomOption = sCustomOption.split('-');
+										oSearch.addCustomOption(aCustomOption[0], aCustomOption[1]);
+									}
+
 									var iRows = $('#' + sXHTMLInputElementID).attr("data-rows");
 									if (iRows == undefined) {iRows = 100}
 

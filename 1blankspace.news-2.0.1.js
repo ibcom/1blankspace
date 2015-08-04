@@ -549,8 +549,9 @@ search: 		{
 										'<tr class="ns1blankspaceSelect">' +
 										'<td class="ns1blankspaceSelect">' +
 										'<input id="ns1blankspaceDetailsFromEmailAccount" class="ns1blankspaceSelect"' +
-											' data-method="SETUP_MESSAGING_ACCOUNT_SEARCH" data-methodFilter="type-EQUAL_TO-5|email-TEXT_IS_LIKE">' +
-										'</td></tr>');		
+											' data-method="SETUP_MESSAGING_ACCOUNT_SEARCH" data-methodFilter="type-EQUAL_TO-5|email-TEXT_IS_LIKE"' +
+											' data-customoption="hasaccess-Y">' +
+										'</td></tr>');
 					
 						aHTML.push('<tr class="ns1blankspaceCaption">' +
 										'<td class="ns1blankspaceCaption">' +
