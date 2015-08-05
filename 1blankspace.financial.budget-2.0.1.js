@@ -585,11 +585,12 @@ ns1blankspace.financial.budget =
 									oSearch.addField('sum(plannedamount) totalplannedamount');
 									oSearch.addField('sum(actualamount) totalactualamount');
 									oSearch.addFilter('process', 'EQUAL_TO', oNamespace.id);
+									oSearch.rows = 250;
 									oSearch.getResults(function(oResponse)
 									{
 										if (oResponse.data.rows.length !== 0)
 										{	
-											
+											if (oResponse.morerows=='true') {ns1blankspace.status.error("Rows missing")}
 											oNamespace = $.extend(true, oNamespace, oResponse.data.rows[0]);	
 										}
 
@@ -634,9 +635,11 @@ ns1blankspace.financial.budget =
 									oSearch.addFilter('actualamount', 'NOT_EQUAL_TO', 0);
 									oSearch.addBracket(')');
 
+									oSearch.rows = 250;
 									oSearch.sort('financialaccounttext', 'asc');
 									oSearch.getResults(function(oResponse)
 									{
+										if (oResponse.morerows=='true') {ns1blankspace.status.error("Rows missing")}
 										oNamespace.items = oResponse.data.rows;
 
 										if (iMonthIndex != undefined && ns1blankspace.util.getParam(oParam, 'onComplete').exists)
@@ -1578,8 +1581,10 @@ ns1blankspace.financial.budget.actual =
 					oSearch.addFilter('process', 'EQUAL_TO', ns1blankspace.financial.budget.data.process.today.id);
 					oSearch.addFilter('plannedamount', 'NOT_EQUAL_TO', 0);
 					oSearch.sort('financialaccounttext', 'asc');
+					oSearch.rows = 250;
 					oSearch.getResults(function(oResponse)
 					{
+						if (oResponse.morerows=='true') {ns1blankspace.status.error("Rows missing")}
 						ns1blankspace.financial.budget.actual.show(oParam, oResponse)
 					});
 				}

@@ -231,7 +231,7 @@ ns1blankspace.setup.financial =
 						aHTML.push('<table class="ns1blankspaceMain">' +
 									'<tr class="ns1blankspaceRow">' +
 									'<td id="ns1blankspaceSummaryColumn1" class="ns1blankspaceColumn1Large"></td>' +
-									'<td id="ns1blankspaceSummaryColumn2" class="ns1blankspaceColumn2Action" style="width:100px;"></td>' +
+									'<td id="ns1blankspaceSummaryColumn2" class="ns1blankspaceColumn2Action" style="width:345px;"></td>' +
 									'</tr>' +
 									'</table>');		
 						
@@ -250,27 +250,33 @@ ns1blankspace.setup.financial =
 										'</td></tr>');
 						
 						aHTML.push('</table>');
+
+						$('#ns1blankspaceSummaryColumn1').html(aHTML.join(''));
+
+						var aHTML = [];
 				
-						aHTML.push('<table class="ns1blankspace">');
+						aHTML.push('<table class="ns1blankspaceColumn2" style="width:250px;">');
 						
-						aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Debtors Locked Before</td></tr>' +
+						aHTML.push('<tr><td class="ns1blankspaceHeaderCaption">ACCOUNTS LOCKING</td></tr>');
+
+						aHTML.push('<tr><td class="ns1blankspaceSummaryCaption" style="padding-top:10px;">Debtors</td></tr>' +
 										'<tr><td class="ns1blankspaceSummary">' +
 										(ns1blankspace.financial.data.settings.lockeddatedebtors != ''?ns1blankspace.financial.data.settings.lockeddatedebtors:'Not locked') +
 										'</td></tr>');
 
-						aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Creditors Locked Before</td></tr>' +
+						aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Creditors</td></tr>' +
 										'<tr><td class="ns1blankspaceSummary">' +
 										(ns1blankspace.financial.data.settings.lockeddatecreditors != ''?ns1blankspace.financial.data.settings.lockeddatecreditors:'Not locked')+
 										'</td></tr>');
 						
-						aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Journals (General) Locked Before</td></tr>' +
+						aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Journals (General)</td></tr>' +
 										'<tr><td class="ns1blankspaceSummary">' +
 										(ns1blankspace.financial.data.settings.lockeddatejournals != ''?ns1blankspace.financial.data.settings.lockeddatejournals:'Not locked') +
 										'</td></tr>');
 						
 						aHTML.push('</table>');					
 						
-						$('#ns1blankspaceSummaryColumn1').html(aHTML.join(''));
+						$('#ns1blankspaceSummaryColumn2').html(aHTML.join(''));
 					}	
 				},
 
@@ -323,18 +329,60 @@ ns1blankspace.setup.financial =
 										'<td class="ns1blankspaceRadio">' +
 										'<input type="radio" id="radioDefaultInvoiceSentValueY" name="radioDefaultInvoiceSentValue" value="Y"/>Mark as sent' +
 										'<br /><input type="radio" id="radioDefaultInvoiceSentValue2" name="radioDefaultInvoiceSentValue" value="N"/>Leave as unsent' +
-										'</td></tr>');	
+										'</td></tr>');
 
-																		
-						aHTML.push('</table>');					
+						aHTML.push('</table>');			
 						
 						$('#ns1blankspaceGeneralColumn1').html(aHTML.join(''));
+
+						var aHTML = [];
+						
+						aHTML.push('<table class="ns1blankspaceColumn2">');
+
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
+										'Debtors Locked Date' +
+										'</td></tr>' +
+										'<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceDate">' +
+										'<input id="ns1blankspaceGeneralLockedDateDebtors" class="ns1blankspaceDate">' +
+										'</td></tr>' +
+										'</tr>');
+
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
+										'Creditors Locked Date' +
+										'</td></tr>' +
+										'<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceDate">' +
+										'<input id="ns1blankspaceGeneralLockedDateCreditors" class="ns1blankspaceDate">' +
+										'</td></tr>' +
+										'</tr>');
+
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
+										'Journals (General) Locked Date' +
+										'</td></tr>' +
+										'<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceDate">' +
+										'<input id="ns1blankspaceGeneralLockedDateJournals" class="ns1blankspaceDate">' +
+										'</td></tr>' +
+										'</tr>');
+
+						aHTML.push('</table>');			
+						
+						$('#ns1blankspaceGeneralColumn2').html(aHTML.join(''));
+
+						$('input.ns1blankspaceDate').datepicker({dateFormat: 'dd M yy'});
 
 						if (ns1blankspace.objectContextData != undefined)
 						{
 							$('[name="radioTaxationMethod"][value="' + ns1blankspace.objectContextData.taxreportcalculationmethod + '"]').attr('checked', true);	
 							$('#ns1blankspaceGeneralAccountingYear').val(ns1blankspace.objectContextData.endoffinancialyear);
 							$('[name="radioDefaultInvoiceSentValue"][value="' + ns1blankspace.objectContextData.defaultinvoicesentvalue + '"]').attr('checked', true);
+							$('#ns1blankspaceGeneralLockedDateDebtors').val(ns1blankspace.objectContextData.lockeddatedebtors);
+							$('#ns1blankspaceGeneralLockedDateCreditors').val(ns1blankspace.objectContextData.lockeddatecreditors);
+							$('#ns1blankspaceGeneralLockedDateJournals').val(ns1blankspace.objectContextData.lockeddatejournals);
 						}
 
 					}	
@@ -2130,6 +2178,10 @@ ns1blankspace.setup.financial =
 										sData += '&taxreportcalculationmethod=' + ns1blankspace.util.fs($('input[name="radioTaxationMethod"]:checked').val());
 										sData += '&endoffinancialyear=' + ns1blankspace.util.fs($('input[name="inputns1blankspaceGeneralAccountingYear"]:checked').val());
 										sData += '&defaultinvoicesentvalue=' + ns1blankspace.util.fs($('input[name="radioDefaultInvoiceSentValue"]:checked').val());
+
+										sData += '&lockeddatedebtors=' + ns1blankspace.util.fs($('#ns1blankspaceGeneralLockedDateDebtors').val());
+										sData += '&lockeddatecreditors=' + ns1blankspace.util.fs($('#ns1blankspaceGeneralLockedDateCreditors').val());
+										sData += '&lockeddatejournals=' + ns1blankspace.util.fs($('#ns1blankspaceGeneralLockedDateJournals').val());
 									};
 									
 									if ($('#ns1blankspaceMainTax').html() != '')
