@@ -429,7 +429,7 @@ ns1blankspace.financial.receipt =
 						ns1blankspace.actions.show({xhtmlElementID: 'ns1blankspaceMainActions'});
 					});
 
-					$('#ns1blankspaceControlControlAttachments').click(function(event)
+					$('#ns1blankspaceControlAttachments').click(function(event)
 					{
 						ns1blankspace.show({selector: '#ns1blankspaceMainAttachments', refresh: true});
 						ns1blankspace.attachments.show({xhtmlElementID: 'ns1blankspaceMainAttachments'});

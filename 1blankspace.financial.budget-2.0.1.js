@@ -15,6 +15,25 @@ ns1blankspace.financial.budget =
 					ns1blankspace.financial.budget.data.refresh.summary = true;
 					ns1blankspace.financial.budget.data.refresh.progress = true;
 
+					ns1blankspace.visualise.data.styles.budget =
+					[
+					    {
+					        color: "#949FB1",
+					        highlight: "#A8B3C5",
+					        series: "2"
+					    },
+					    {
+					        color: "#46BFBD",
+					        highlight: "#5AD3D1",
+					        series: "2"
+					    },
+						{
+					        color:"#F7464A",
+					        highlight: "#FF5A5E",
+					       	series: "1"
+					    }
+					  ]  
+
 					ns1blankspace.app.reset();
 
 					ns1blankspace.object = 284;
@@ -39,7 +58,7 @@ ns1blankspace.financial.budget =
 					if (oResponse == undefined)
 					{
 						var oSearch = new AdvancedSearch();
-						oSearch.method = 'FINANCIAL_BUDGET_PROCESS_SEARCH';
+						oSearch.method = 'FINANCIAL_BUDGET_SEARCH';
 						oSearch.addField('enddate');
 						oSearch.rf = 'json';
 						oSearch.addFilter('id', 'EQUAL_TO', ns1blankspace.objectContext);
@@ -374,7 +393,7 @@ ns1blankspace.financial.budget =
 						ns1blankspace.actions.show({xhtmlElementID: 'ns1blankspaceMainActions'});
 					});
 
-					$('#ns1blankspaceControlControlAttachments').click(function(event)
+					$('#ns1blankspaceControlAttachments').click(function(event)
 					{
 						ns1blankspace.show({selector: '#ns1blankspaceMainAttachments', refresh: true});
 						ns1blankspace.attachments.show({xhtmlElementID: 'ns1blankspaceMainAttachments'});
@@ -805,32 +824,11 @@ ns1blankspace.financial.budget =
 							
 							$vq.add('<table class="ns1blankspace">', {queue: 'summary'});
 
-							$vq.add('<tr><td class="ns1blankspaceSummaryCaption">Planned Revenue</td></tr>' +
-												'<tr><td class="ns1blankspaceSummary">$' +
-												(ns1blankspace.financial.budget.data.totals.planned.revenue).formatMoney(0) +
-												'</td></tr>', {queue: 'summary'});
-
-							$vq.add('<tr><td class="ns1blankspaceSummaryCaption">Planned Expenses</td></tr>' +
-												'<tr><td class="ns1blankspaceSummary">$' +
-												(ns1blankspace.financial.budget.data.totals.planned.expenses).formatMoney(0) +
-												'</td></tr>', {queue: 'summary'});
-
-							$vq.add('<tr><td class="ns1blankspaceSummaryCaption">Planned Margin</td></tr>' +
-												'<tr><td class="ns1blankspaceSummary">$' +
-												(ns1blankspace.financial.budget.data.totals.planned.revenue - ns1blankspace.financial.budget.data.totals.planned.expenses).formatMoney(0) +
-												'</td></tr>', {queue: 'summary'});
-
-							$vq.add('</table>', {queue: 'summary'});
-
-							$vq.render('#ns1blankspaceSummaryColumn1', {queue: 'summary'});
-
-							$vq.add('<table class="ns1blankspaceColumn2">', {queue: 'summary'});
-
 							$vq.add('<tr><td class="ns1blankspaceSummaryCaption">' +
 												ns1blankspace.financial.budget.data.process.today.asat +
 												'</td></tr>' +
 												'<tr><td id="ns1blankspaceSummaryProcessAsAtPercentage" class="ns1blankspaceSubNote" style="padding-bottom:10px;">' +
-												ns1blankspace.financial.budget.data.process.today.periodpercentage + '% through the budget.' +
+												parseFloat(ns1blankspace.financial.budget.data.process.today.periodpercentage).toFixed(1) + '% through the budget plan.' +
 												'</td></tr>', {queue: 'summary'});
 
 							$vq.add('<tr><td class="ns1blankspaceSummaryCaption">Planned Margin</td></tr>' +
@@ -844,6 +842,35 @@ ns1blankspace.financial.budget =
 												(ns1blankspace.financial.budget.data.process.today.totals.actual.revenue -
 													ns1blankspace.financial.budget.data.process.today.totals.actual.expenses).formatMoney(0) +
 												'</td></tr>', {queue: 'summary'});
+
+							$vq.add('</table>', {queue: 'summary'});
+
+							$vq.render('#ns1blankspaceSummaryColumn1', {queue: 'summary'});
+
+							$vq.add('<table class="ns1blankspaceColumn2">', {queue: 'summary'});
+
+							$vq.add('<tr><td class="ns1blankspaceSummaryCaption">' +
+												'TARGET' +
+												'</td></tr>' +
+												'<tr><td class="ns1blankspaceSubNote" style="padding-bottom:10px;">' +
+												ns1blankspace.objectContextData.enddate +
+												'</td></tr>', {queue: 'summary'});
+
+							$vq.add('<tr><td class="ns1blankspaceSummaryCaption">Revenue</td></tr>' +
+												'<tr><td class="ns1blankspaceSummary">$' +
+												(ns1blankspace.financial.budget.data.totals.planned.revenue).formatMoney(0) +
+												'</td></tr>', {queue: 'summary'});
+
+							$vq.add('<tr><td class="ns1blankspaceSummaryCaption">Expenses</td></tr>' +
+												'<tr><td class="ns1blankspaceSummary">$' +
+												(ns1blankspace.financial.budget.data.totals.planned.expenses).formatMoney(0) +
+												'</td></tr>', {queue: 'summary'});
+
+							$vq.add('<tr><td class="ns1blankspaceSummaryCaption">Margin</td></tr>' +
+												'<tr><td class="ns1blankspaceSummary">$' +
+												(ns1blankspace.financial.budget.data.totals.planned.revenue - ns1blankspace.financial.budget.data.totals.planned.expenses).formatMoney(0) +
+												'</td></tr>', {queue: 'summary'});
+
 
 							$vq.add('</table>', {queue: 'summary'});
 
@@ -1031,24 +1058,55 @@ ns1blankspace.financial.budget.plan =
 			{
 				var iBudget = ns1blankspace.objectContext;
 				var bRefresh = ns1blankspace.util.getParam(oParam, 'refresh', {"default": false}).value;
+				var sAccountType = ns1blankspace.util.getParam(oParam, 'accountType', {"default": 'revenue'}).value;
 
 				if (oResponse == undefined)
 				{	
 					if (!bRefresh)
 					{	
-						var aHTML = [];
+						$vq.clear({queue: 'plan'});
 
-						aHTML.push('<table class="ns1blankspaceContainer">');
+						$vq.add('<table class="ns1blankspaceContainer">', {queue: 'plan'});
 
-						aHTML.push('<tr class="ns1blankspaceContainer">' +
-										'<td id="ns1blankspacePlanColumn1" class="ns1blankspaceColumn1Flexible">' +
-										ns1blankspace.xhtml.loading + '</td>' +
-										'<td id="ns1blankspacePlanColumn2" class="ns1blankspaceColumn2" style="width:275px;"></td>' +
-										'</tr>');
+						$vq.add('<tr class="ns1blankspaceContainer">' +
+										'<td id="ns1blankspacePlanColumn1Container" class="ns1blankspaceColumn1Flexible">', {queue: 'plan'});
 
-						aHTML.push('</table>');					
+							$vq.add('<table>', {queue: 'plan'});
+
+							$vq.add('<tr><td id="ns1blankspacePlanColumnType">', {queue: 'plan'});
+
+							$vq.add('<div style="width:370px;"><div id="ns1blankspaceBudgetPlanType" style="margin-left:0px; margin-right:3px; margin-bottom:5px; width:350px; float:left;">' +
+									'<input style="width: 100%;" type="radio" id="ns1blankspaceBudgetPlanType-revenue" name="radioPlanType" /><label for="ns1blankspaceBudgetPlanType-revenue" style="width:80px; font-size:0.75em;">' +
+										'Revenue</label>' +
+									'<input style="width: 100%;" type="radio" id="ns1blankspaceBudgetPlanType-expenses" name="radioPlanType" /><label for="ns1blankspaceBudgetPlanType-expenses" style="width:80px; font-size:0.75em;">' +
+										'Expenses</label>' +	
+									'</div>', {queue: 'plan'});
+
+							$vq.add('</td></tr>', {queue: 'plan'})
+
+							$vq.add('<tr><td id="ns1blankspacePlanColumn1" class="ns1blankspaceColumn1Flexible">' +
+										ns1blankspace.xhtml.loading + '</td></tr>', {queue: 'plan'});
+
+							$vq.add('</table>', {queue: 'plan'});
+
+						$vq.add('</td>', {queue: 'plan'});	
+										
+						$vq.add('<td id="ns1blankspacePlanColumn2" class="ns1blankspaceColumn2" style="width:275px;"></td>' +
+										'</tr>', {queue: 'plan'});
+
+						$vq.add('</table>', {queue: 'plan'});					
 						
-						$('#ns1blankspaceMainPlan').html(aHTML.join(''));
+						$vq.render('#ns1blankspaceMainPlan', {queue: 'plan'});
+
+						$('#ns1blankspaceBudgetPlanType-' + sAccountType).attr('checked', true);
+
+						$('#ns1blankspaceBudgetPlanType').buttonset();
+											
+						$('#ns1blankspaceBudgetPlanType :radio').click(function()
+						{
+							oParam = ns1blankspace.util.setParam(oParam, 'accountType', (this.id).split('-')[1]);
+							ns1blankspace.financial.budget.plan.show(oParam);
+						});
 						
 						var aHTML = [];
 						
@@ -1075,8 +1133,10 @@ ns1blankspace.financial.budget.plan =
 					oSearch.method = 'FINANCIAL_BUDGET_ITEM_SEARCH';
 					oSearch.addField('amount,budget,budgettext,id,financialaccount,financialaccounttext,month,monthtext,notes');
 					oSearch.addFilter('budget', 'EQUAL_TO', iBudget);
+					oSearch.addFilter('budgetitem.financialaccount.type', 'EQUAL_TO', (sAccountType=='revenue'?'2':'1'));
 					oSearch.rows = 100;
 					oSearch.sort('financialaccounttext', 'asc');
+					oSearch.sort('month', 'asc');
 					
 					oSearch.getResults(function(data) {ns1blankspace.financial.budget.plan.show(oParam, data)});
 				}
@@ -1158,11 +1218,12 @@ ns1blankspace.financial.budget.plan =
 			{
 				var iFinancialAccountType;
 
-				var iType = ns1blankspace.util.getParam(oParam, 'type').value;		
+				var sAccountType = ns1blankspace.util.getParam(oParam, 'accountType', {"default": 'revenue'}).value;
+				var iType = ns1blankspace.util.getParam(oParam, 'type', {"default": (sAccountType=='revenue'?1:2)}).value;		
 				var iStep = ns1blankspace.util.getParam(oParam, 'step', {"default": 1}).value;
 				var sNamespace = ns1blankspace.util.getParam(oParam, 'namespace').value;
 				var iID = ns1blankspace.util.getParam(oParam, 'xhtmlElementID', {index: 1}).value;
-				
+	
 				if (oResponse == undefined)
 				{
 					if (iStep == 1)
@@ -1613,7 +1674,7 @@ ns1blankspace.financial.budget.today =
 
 				$.each(aToday, function (t, today)
 				{
-					aLabels.push(today.financialaccounttext);
+					aLabels.push((today.financialaccounttext).formatXHTML());
 
 					aDataSets[0].data.push(accounting.unformat(today.plannedamount));
 					aDataSets[1].data.push(accounting.unformat(today.actualamount));
@@ -1629,6 +1690,7 @@ ns1blankspace.financial.budget.today =
 				oParam.labels = aLabels;
 				oParam.type = 'HorizontalBar';
 				oParam.options = {}
+				oParam.style = 'budget';
 
 				ns1blankspace.visualise.provider.chartjs.render(oParam);
 			}
@@ -1719,9 +1781,9 @@ ns1blankspace.financial.budget.progress =
 						var aDataSets = [{label: 'Planned'}, {label: 'Actual'}];
 						$.each(aDataSets, function (ds, dataset) {dataset.data = []});
 
-						$.each(aMonths, function (i, month)
+						$.each(aMonths, function (m, month)
 						{
-							aLabels.push(month.shortName);
+							aLabels.push((m==aMonths.length-1?'TARGET':month.endName));
 							aDataSets[0].data.push(month.process.totals.accumulated.planned[sFormatOption]);
 							aDataSets[1].data.push(month.process.totals.accumulated.actual[sFormatOption]);
 						});
@@ -1735,7 +1797,15 @@ ns1blankspace.financial.budget.progress =
 						oParam.datasets = aDataSets;
 						oParam.labels = aLabels;
 						oParam.type = 'Line';
-						oParam.options = {datasetFill: false, scaleBeginAtZero: true, bezierCurve: false}
+						oParam.style = 'budget';
+						oParam.options =
+						{
+							datasetFill: false,
+							bezierCurve: false,
+							responsive: true,
+        					scaleBeginAtZero: false,
+        					barBeginAtOrigin: true
+        				}
 
 						ns1blankspace.visualise.provider.chartjs.render(oParam);
 					}
@@ -1755,19 +1825,19 @@ ns1blankspace.financial.budget.progress =
 
 						$('#ns1blankspaceProgressFormatOptionsShowZero').attr('checked', bShowZero);
 
-						$vq.add('<table class="ns1blankspaceMain" style="font-size:0.75em;">' +
+						$vq.add('<div><table class="ns1blankspaceMain" style="font-size:0.75em;">' +
 								'<tr><td class="ns1blankspaceHeaderCaption ns1blankspaceRowShadedHighlight">REVENUE</td>', {queue: 'progress-show'});
 
-						$.each(aMonths, function (i, month)
+						$.each(aMonths, function (m, month)
 						{
-							$vq.add('<td class="ns1blankspaceHeaderCaption ns1blankspaceRowShadedHighlight" style="text-align:right;">' + month.shortName + '</td>', {queue: 'progress-show'});
+							$vq.add('<td class="ns1blankspaceHeaderCaption ns1blankspaceRowShadedHighlight" style="text-align:right;">' + (m==aMonths.length-1?'TARGET':month.endName) + '</td>', {queue: 'progress-show'});
 						});
 
 						$vq.add('</tr>', {queue: 'progress-show'});
 
 						//Revenue
 						var oRootAccount = $.grep(ns1blankspace.financial.data.rootAccounts, function (account) {return account.type == 2})[0];
-						var aAccounts = $.grep(ns1blankspace.financial.data.accounts, function (account) {return account.type == 2 && account.parentaccount == oRootAccount.id});
+						var aAccounts = $.grep(ns1blankspace.financial.data.accounts, function (account) {return account.type == 2}); //&& account.parentaccount == oRootAccount.id
 						aAccounts.sort(ns1blankspace.util.sortBy('title', 'asc'));
 
 						var bHasNonZero;
@@ -1779,7 +1849,7 @@ ns1blankspace.financial.budget.progress =
 							$vq.clear({queue: 'progress-show-row'});
 							bHasNonZero = false;
 
-							$vq.add('<tr><td class="ns1blankspaceHeaderCaption" style="border-width:0px;">' + account.title + '</td>', {queue: 'progress-show-row'});
+							$vq.add('<tr><td class="ns1blankspaceHeaderCaption" rowspan="2">' + account.title + '</td>', {queue: 'progress-show-row'});
 
 							$.each(aMonths, function (i, month)
 							{
@@ -1789,19 +1859,22 @@ ns1blankspace.financial.budget.progress =
 								oAccumulatedTotal.planned = cAmountPlanned;
 								if (!bHasNonZero && cAmountPlanned !=0) {bHasNonZero = true}
 
-								$vq.add('<td class="ns1blankspaceRowx ns1blankspaceSub" style="text-align:right; padding-right:8px; font-size:0.875em; color:#46BFBD;">' +
-										(cAmountPlanned==0?'':(cAmountPlanned).formatMoney(0)) +
+								$vq.add('<td class="ns1blankspaceRowx ns1blankspaceSub" style="text-align:right; padding-right:8px; font-size:0.875em; color:#949FB1;">' +
+										(cAmountPlanned==0?'-':(cAmountPlanned).formatMoney(0)) +
 										'</td>', {queue: 'progress-show-row'});
 							});
 
 							$vq.add('</tr>', {queue: 'progress-show-row'});
 
-							$vq.add('<tr><td class="ns1blankspaceHeaderCaption">&nbsp;</td>', {queue: 'progress-show-row'});
+							$vq.add('<tr>', {queue: 'progress-show-row'});
+
+							//<td class="ns1blankspaceHeaderCaption">&nbsp;</td>
 
 							$.each(aMonths, function (i, month)
 							{
 								var aMonthAccountsActual = $.grep(month.process.items, function (item) {return item.financialaccount == account.id});
 								var cAmountActual = _.reduce($.map(aMonthAccountsActual, function (p) {return accounting.unformat(p.actualamount)}), function(memo, num) {return memo + num;}, 0);
+								var cAmountPlanned = _.reduce($.map(aMonthAccountsActual, function (p) {return accounting.unformat(p.plannedamount)}), function(memo, num) {return memo + num;}, 0);
 
 								oAccumulatedTotal.actual = cAmountActual;
 
@@ -1809,8 +1882,9 @@ ns1blankspace.financial.budget.progress =
 
 								if (!moment(month.start, "DD MMM YYYY").isAfter())
 								{
-									$vq.add('<td class="ns1blankspaceRow" style="text-align:right; padding-right:8px;">' +
-										(cAmountActual==0?'':(cAmountActual).formatMoney(0)) +
+									$vq.add('<td class="ns1blankspaceRow" style="text-align:right; padding-right:8px;' +
+										' color:' + (cAmountActual >= cAmountPlanned?'#46BFBD':'red') + ';">' +
+										(cAmountActual==0?'-':(cAmountActual).formatMoney(0)) +
 										'</td>', {queue: 'progress-show-row'});
 								}	
 								else
@@ -1831,7 +1905,7 @@ ns1blankspace.financial.budget.progress =
 
 						$.each(aMonths, function (i, month)
 						{
-							$vq.add('<td class="ns1blankspaceHeaderCaptionx" style="text-align:right; color:#46BFBD; font-weight:bold; padding-right:8px;">' +
+							$vq.add('<td class="ns1blankspaceHeaderCaptionx" style="text-align:right; color:#949FB1; font-weight:bold; padding-right:8px;">' +
 										(month.process.totals.accumulated.planned.revenue).formatMoney(0) +
 										'</td>', {queue: 'progress-show'});
 						});
@@ -1844,7 +1918,8 @@ ns1blankspace.financial.budget.progress =
 						{
 							if (!moment(month.start, "DD MMM YYYY").isAfter())
 							{
-								$vq.add('<td class="ns1blankspaceRow" style="text-align:right; font-weight:bold; padding-right:8px;">' +
+								$vq.add('<td class="ns1blankspaceRow" style="text-align:right; font-weight:bold; padding-right:8px;' +
+										' color:' + (month.process.totals.accumulated.actual.revenue >= month.process.totals.accumulated.planned.revenue?'#46BFBD':'red') + ';">' +
 										(month.process.totals.accumulated.actual.revenue).formatMoney(0) +
 										'</td>', {queue: 'progress-show'});
 							}
@@ -1858,7 +1933,7 @@ ns1blankspace.financial.budget.progress =
 
 						//Expenses
 						var oRootAccount = $.grep(ns1blankspace.financial.data.rootAccounts, function (account) {return account.type == 1})[0];
-						var aAccounts = $.grep(ns1blankspace.financial.data.accounts, function (account) {return account.type == 1 && account.parentaccount == oRootAccount.id});
+						var aAccounts = $.grep(ns1blankspace.financial.data.accounts, function (account) {return account.type == 1}); // && account.parentaccount == oRootAccount.id
 						aAccounts.sort(ns1blankspace.util.sortBy('title', 'asc'));
 
 						$vq.add('<tr><td class="ns1blankspaceHeaderCaption ns1blankspaceRowShadedHighlight">EXPENSES</td>', {queue: 'progress-show'});
@@ -1877,7 +1952,7 @@ ns1blankspace.financial.budget.progress =
 							$vq.clear({queue: 'progress-show-row'});
 							bHasNonZero = false
 
-							$vq.add('<tr><td class="ns1blankspaceHeaderCaption" style="border-width:0px;">' + account.title + '</td>', {queue: 'progress-show-row'});
+							$vq.add('<tr><td class="ns1blankspaceHeaderCaption" rowspan="2">' + account.title + '</td>', {queue: 'progress-show-row'});
 
 							$.each(aMonths, function (i, month)
 							{
@@ -1888,26 +1963,28 @@ ns1blankspace.financial.budget.progress =
 
 								if (!bHasNonZero && cAmountPlanned !=0) {bHasNonZero = true}
 
-								$vq.add('<td class="ns1blankspaceRowx ns1blankspaceSub" style="text-align:right; padding-right:8px; font-size:0.875em; color:#46BFBD;">' +
+								$vq.add('<td class="ns1blankspaceRowx ns1blankspaceSub" style="text-align:right; padding-right:8px; font-size:0.875em; color:#949FB1;">' +
 										(cAmountPlanned==0?'':(cAmountPlanned).formatMoney(0)) +
 										'</td>', {queue: 'progress-show-row'});
 							});
 
 							$vq.add('</tr>', {queue: 'progress-show'});
 
-							$vq.add('<tr><td class="ns1blankspaceHeaderCaption">&nbsp;</td>', {queue: 'progress-show-row'});
+							$vq.add('<tr>', {queue: 'progress-show-row'});
 
 							$.each(aMonths, function (i, month)
 							{
 								var aMonthAccountsActual = $.grep(month.process.items, function (item) {return item.financialaccount == account.id});
 								var cAmountActual = _.reduce($.map(aMonthAccountsActual, function (p) {return accounting.unformat(p.actualamount)}), function(memo, num) {return memo + num;}, 0);
+								var cAmountPlanned = _.reduce($.map(aMonthAccountsActual, function (p) {return accounting.unformat(p.plannedamount)}), function(memo, num) {return memo + num;}, 0);
 
 								if (!bHasNonZero && cAmountActual !=0) {bHasNonZero = true}
 
 								if (!moment(month.start, "DD MMM YYYY").isAfter())
 								{
-									$vq.add('<td class="ns1blankspaceRow" style="text-align:right;">' +
-										(cAmountActual==0?'':(cAmountActual).formatMoney(0)) +
+									$vq.add('<td class="ns1blankspaceRow" style="text-align:right;' +
+										' color:' + (cAmountActual <= cAmountPlanned?'#46BFBD':'red') + ';">' +
+										(cAmountActual==0?'-':(cAmountActual).formatMoney(0)) +
 										'</td>', {queue: 'progress-show-row'});
 								}	
 								else
@@ -1928,7 +2005,7 @@ ns1blankspace.financial.budget.progress =
 
 						$.each(aMonths, function (i, month)
 						{
-							$vq.add('<td class="ns1blankspaceHeaderCaptionx" style="text-align:right; color:#46BFBD; font-weight:bold; padding-right:8px;">' +
+							$vq.add('<td class="ns1blankspaceHeaderCaptionx" style="text-align:right; color:#949FB1; font-weight:bold; padding-right:8px;">' +
 										(month.process.totals.accumulated.planned.expenses).formatMoney(0) +
 										'</td>', {queue: 'progress-show'});
 						});
@@ -1941,7 +2018,8 @@ ns1blankspace.financial.budget.progress =
 						{
 							if (!moment(month.start, "DD MMM YYYY").isAfter())
 							{
-								$vq.add('<td class="ns1blankspaceRow" style="text-align:right; font-weight:bold; padding-right:8px;">' +
+								$vq.add('<td class="ns1blankspaceRow" style="text-align:right; font-weight:bold; padding-right:8px;' +
+										' color:' + (month.process.totals.accumulated.actual.expenses <= month.process.totals.accumulated.planned.expenses?'#46BFBD':'red') + ';">' +
 										(month.process.totals.accumulated.actual.expenses).formatMoney(0) +
 										'</td>', {queue: 'progress-show'});
 							}
@@ -1962,7 +2040,7 @@ ns1blankspace.financial.budget.progress =
 						{
 							cPlannedMargin = (month.process.totals.accumulated.planned.revenue - month.process.totals.accumulated.planned.expenses);
 
-							$vq.add('<td class="ns1blankspaceHeaderCaptionx ns1blankspaceRowShadedHighlight" style="text-align:right; color:#46BFBD; padding-right:8px;">' +
+							$vq.add('<td class="ns1blankspaceHeaderCaptionx ns1blankspaceRowShadedHighlight" style="text-align:right; color:#949FB1; padding-right:8px;">' +
 										(cPlannedMargin).formatMoney(0) +
 										'</td>', {queue: 'progress-show'});
 						});
@@ -1981,7 +2059,7 @@ ns1blankspace.financial.budget.progress =
 							if (!moment(month.start, "DD MMM YYYY").isAfter())
 							{
 								$vq.add('<td class="ns1blankspaceHeaderCaption ns1blankspaceRowShadedHighlight" style="text-align:right; padding-right:8px;' +
-										' color: ' + (cActualMargin >= cPlannedMargin?'#888888':'red') + '">' +
+										' color: ' + (cActualMargin >= cPlannedMargin?'#46BFBD':'red') + '">' +
 										(cActualMargin).formatMoney(0) +
 										'</td>', {queue: 'progress-show'});
 							}
@@ -1993,7 +2071,9 @@ ns1blankspace.financial.budget.progress =
 
 						$vq.add('</tr>', {queue: 'progress-show'});
 
-						$vq.add('</table>', {queue: 'progress-show'});
+						$vq.add('</table></div>', {queue: 'progress-show'});
+
+						$vq.add('<div id="ns1blankspaceProgressColumn1_legend"><ul class="chartjs-legend"><li><span style="background-color:#949FB1"></span>Planned</li><li><span style="background-color:#46BFBD"></span>Actual</li><li><span style="background-color:red"></span>Actual and revenue less than planned or expenses more than planned.</li></ul></div>', {queue: 'progress-show'});
 
 						$vq.render('#ns1blankspaceProgressColumn1', {queue: 'progress-show'});
 					}	

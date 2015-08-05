@@ -31,7 +31,6 @@ ns1blankspace.visualise =
 						        highlight: "#FF5A5E",
 						       	series: "1"
 						    },
-						  
 						    {
 						        color: "#FDB45C",
 						        highlight: "#FFC870",
@@ -688,6 +687,7 @@ ns1blankspace.visualise =
 									  		shortName: dStartDate.format("MMM"),
 									  		start: dStartDate.startOf("month").format("DD MMM YYYY"),
 									  		end: dStartDate.endOf("month").format("DD MMM YYYY"),
+									  		endName: dStartDate.endOf("month").format("DD MMM"),
 									  		data: {}
 									  	});
 									  		
