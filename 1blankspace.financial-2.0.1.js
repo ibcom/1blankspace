@@ -1292,7 +1292,7 @@ ns1blankspace.financial.profitLoss =
 						if (oParam.startDate != undefined) {sStartDate = oParam.startDate}
 						if (oParam.endDate != undefined) {sEndDate = oParam.endDate}
 						if (oParam.percentage != undefined) {bPercentage = oParam.percentage}
-					}		
+					}
 
 					if (oResponse == undefined)
 					{
@@ -1493,7 +1493,9 @@ ns1blankspace.financial.profitLoss =
 							{
 								amounts: oParam.dataBranch,
 								accounts: oParam.dataTree,
-								root: oParam.dataRoot
+								root: oParam.dataRoot,
+								startdate: oParam.startDate,
+								enddate: oParam.endDate
 							}
 								
 							ns1blankspace.format.tree.init(oParam);
@@ -1522,7 +1524,8 @@ ns1blankspace.financial.profitLoss =
 		 				{
 		 					xhtmlElementID: 'ns1blankspaceFinancialTransactions',
 		 					financialAccount: iFinancialAccount,
-		 					setWidth: true
+		 					setWidth: true,
+		 					namespace: 'profitLoss'
 		 				});
 		 			}	
 	 			}			
@@ -1541,7 +1544,7 @@ ns1blankspace.financial.balanceSheet =
 					{
 						if (oParam.startDate != undefined) {sStartDate = oParam.startDate}
 						if (oParam.endDate != undefined) {sEndDate = oParam.endDate}
-					}		
+					}
 
 					if (oResponse == undefined)
 					{
@@ -1620,7 +1623,7 @@ ns1blankspace.financial.balanceSheet =
 
 						var sData = 'rows=500'
 
-						if (sStartDate != undefined)
+						if (sStartDate != undefined && sStartDate != '1 Jul 1900')
 						{
 							sData += '&startdate=' + ns1blankspace.util.fs(sStartDate);
 							$('#ns1blankspaceBSStartDate').val(sStartDate);
@@ -1654,6 +1657,7 @@ ns1blankspace.financial.balanceSheet =
 							oParam.dataBranch = oResponse.data.rows;
 							oParam.xhtmlElementID = 'ns1blankspaceBSColumn2';
 							oParam.xhtmlElementContext = 'BS';
+							oParam.startDate = oResponse.startdate;
 							oParam.endDate = oResponse.enddate;
 							oParam.onLeaveClick = ns1blankspace.financial.balanceSheet.transactions;
 
@@ -1684,7 +1688,9 @@ ns1blankspace.financial.balanceSheet =
 							{
 								amounts: oParam.dataBranch,
 								accounts: oParam.dataTree,
-								root: oParam.dataRoot
+								root: oParam.dataRoot,
+								startdate: oParam.startDate,
+								enddate: oParam.endDate
 							}
 
 							ns1blankspace.format.tree.init(oParam);
@@ -1713,7 +1719,8 @@ ns1blankspace.financial.balanceSheet =
 		 				{
 		 					xhtmlElementID: 'ns1blankspaceFinancialTransactions',
 		 					financialAccount: iFinancialAccount,
-		 					setWidth: true
+		 					setWidth: true,
+		 					namespace: 'balanceSheet'
 		 				});
 		 			}	
 	 			}	
@@ -3285,6 +3292,7 @@ ns1blankspace.financial.transactions =
 					var iObjectContext = ns1blankspace.objectContext;
 					var iFinancialAccount;
 					var sXHTMLElementID = 'ns1blankspaceMainTransaction';
+					var sNamespace = ns1blankspace.util.getParam(oParam, 'namespace').value;
 
 					if (oParam != undefined)
 					{
@@ -3303,7 +3311,7 @@ ns1blankspace.financial.transactions =
 						{	
 							oSearch.addField('amount,date,description');
 							oSearch.addFilter('financialaccount', 'EQUAL_TO', iFinancialAccount);
-							oSearch.rows = 10;
+							oSearch.rows = 20;
 							oSearch.sort('date', 'desc');
 						}
 						else
@@ -3313,7 +3321,10 @@ ns1blankspace.financial.transactions =
 							oSearch.addFilter('objectcontext', 'EQUAL_TO', ns1blankspace.objectContext);
 							oSearch.sort('financialaccounttext', 'asc');
 						}
-		
+
+						if (ns1blankspace.financial[sNamespace].data.startdate!='') {oSearch.addFilter('date', 'GREATER_THAN_OR_EQUAL_TO', ns1blankspace.financial[sNamespace].data.startdate)};
+						if (ns1blankspace.financial[sNamespace].data.enddate!='') {oSearch.addFilter('date', 'LESS_THAN_OR_EQUAL_TO', ns1blankspace.financial[sNamespace].data.enddate)};
+
 						oSearch.getResults(function(data) {ns1blankspace.financial.transactions.show(oParam, data)});
 					}
 					else
