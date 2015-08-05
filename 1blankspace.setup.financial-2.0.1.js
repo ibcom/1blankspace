@@ -220,7 +220,6 @@ ns1blankspace.setup.financial =
 				{
 					var aHTML = [];
 					
-					
 					if (ns1blankspace.objectContextData == undefined)
 					{
 						aHTML.push('<table><tr><td class="ns1blankspaceNothing">Sorry can\'t find the settings.</td></tr></table>');
@@ -248,6 +247,25 @@ ns1blankspace.setup.financial =
 										'Taxation Method</td></tr>' +
 										'<tr><td class="ns1blankspaceSummary">' +
 										sTaxMethod +
+										'</td></tr>');
+						
+						aHTML.push('</table>');
+				
+						aHTML.push('<table class="ns1blankspace">');
+						
+						aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Debtors Locked Before</td></tr>' +
+										'<tr><td class="ns1blankspaceSummary">' +
+										(ns1blankspace.financial.data.settings.lockeddatedebtors != ''?ns1blankspace.financial.data.settings.lockeddatedebtors:'Not locked') +
+										'</td></tr>');
+
+						aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Creditors Locked Before</td></tr>' +
+										'<tr><td class="ns1blankspaceSummary">' +
+										(ns1blankspace.financial.data.settings.lockeddatecreditors != ''?ns1blankspace.financial.data.settings.lockeddatecreditors:'Not locked')+
+										'</td></tr>');
+						
+						aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Journals (General) Locked Before</td></tr>' +
+										'<tr><td class="ns1blankspaceSummary">' +
+										(ns1blankspace.financial.data.settings.lockeddatejournals != ''?ns1blankspace.financial.data.settings.lockeddatejournals:'Not locked') +
 										'</td></tr>');
 						
 						aHTML.push('</table>');					

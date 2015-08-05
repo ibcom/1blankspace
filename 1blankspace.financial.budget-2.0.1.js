@@ -14,6 +14,7 @@ ns1blankspace.financial.budget =
 					
 					ns1blankspace.financial.budget.data.refresh.summary = true;
 					ns1blankspace.financial.budget.data.refresh.progress = true;
+					ns1blankspace.financial.budget.data = {process: {}, planned: [], actual: [], totals: {}, refresh: {summary: true, progress: true}};
 
 					ns1blankspace.visualise.data.styles.budget =
 					[
@@ -245,13 +246,17 @@ ns1blankspace.financial.budget =
 
 											$vq.add('<td class="ns1blankspaceSearch" id="' +
 														'search-' + this.id + '">' +
+														this.startdate + '</td>', {queue: 'search-process'});
+
+											$vq.add('<td class="ns1blankspaceSearch" id="' +
+														'search-' + this.id + '">' +
 														this.enddate + '</td>', {queue: 'search-process'});
 		
 											if (iColumn == iMaximumColumns)
 											{
 												$vq.add('</tr>', {queue: 'search-process'});
 												iColumn = 0;
-											}	
+											}
 										});
 								    	
 										$vq.add('</table>', {queue: 'search-process'});
@@ -259,17 +264,17 @@ ns1blankspace.financial.budget =
 										$(ns1blankspace.xhtml.searchContainer).html(
 											ns1blankspace.render.init(
 											{
-												html: aHTML.join(''),
+												html: $vq.get({queue: 'search-process'}),
 												more: (oResponse.morerows == "true"),
 												header: false
 											}) 
-										);		
+										);	
 										
 										$('td.ns1blankspaceSearch').click(function(event)
 										{
 											$(ns1blankspace.xhtml.dropDownContainer).html('&nbsp;');
 											$(ns1blankspace.xhtml.dropDownContainer).hide(ns1blankspace.option.hideSpeedOptions)
-											ns1blankspace.financial.budget.search.send(event.target.id, {source: 1});
+											ns1blankspace.financial.budget.init({id: (event.target.id).split('-')[1]});
 										});
 
 										ns1blankspace.render.bind(
@@ -280,8 +285,7 @@ ns1blankspace.financial.budget =
 											startRow: parseInt(oResponse.startrow) + parseInt(oResponse.rows),
 											functionSearch: ns1blankspace.financial.budget.search.send
 										}); 
-									}				
-											
+									}		
 								}
 				},				
 
