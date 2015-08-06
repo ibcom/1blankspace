@@ -231,7 +231,7 @@ ns1blankspace.setup.financial =
 						aHTML.push('<table class="ns1blankspaceMain">' +
 									'<tr class="ns1blankspaceRow">' +
 									'<td id="ns1blankspaceSummaryColumn1" class="ns1blankspaceColumn1Large"></td>' +
-									'<td id="ns1blankspaceSummaryColumn2" class="ns1blankspaceColumn2Action" style="width:345px;"></td>' +
+									'<td id="ns1blankspaceSummaryColumn2" class="ns1blankspaceColumn2Action" style="width:445px;"></td>' +
 									'</tr>' +
 									'</table>');		
 						
@@ -242,20 +242,6 @@ ns1blankspace.setup.financial =
 						aHTML.push('<table class="ns1blankspace">');
 						
 						var sTaxMethod = (ns1blankspace.objectContextData.taxreportcalculationmethod == "1") ? "Cash" : "Accrual";
-						
-						aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">' +
-										'Taxation Method</td></tr>' +
-										'<tr><td class="ns1blankspaceSummary">' +
-										sTaxMethod +
-										'</td></tr>');
-						
-						aHTML.push('</table>');
-
-						$('#ns1blankspaceSummaryColumn1').html(aHTML.join(''));
-
-						var aHTML = [];
-				
-						aHTML.push('<table class="ns1blankspaceColumn2" style="width:250px;">');
 						
 						aHTML.push('<tr><td class="ns1blankspaceHeaderCaption">ACCOUNTS LOCKING</td></tr>');
 
@@ -273,10 +259,11 @@ ns1blankspace.setup.financial =
 										'<tr><td class="ns1blankspaceSummary">' +
 										(ns1blankspace.financial.data.settings.lockeddatejournals != ''?ns1blankspace.financial.data.settings.lockeddatejournals:'Not locked') +
 										'</td></tr>');
+
 						
-						aHTML.push('</table>');					
-						
-						$('#ns1blankspaceSummaryColumn2').html(aHTML.join(''));
+						aHTML.push('</table>');
+
+						$('#ns1blankspaceSummaryColumn1').html(aHTML.join(''));
 					}	
 				},
 
@@ -2212,8 +2199,46 @@ ns1blankspace.setup.financial =
 												if ($('#ns1blankspaceMainTemplate_statement').html() != '') {ns1blankspace.setup.financial.template.save({template: 'statement'})}
 												if ($('#ns1blankspaceMainTemplate_payslip').html() != '') {ns1blankspace.setup.financial.template.save({template: 'payslip'})}
 												if ($('#ns1blankspaceMainTemplate_payroll').html() != '') {ns1blankspace.setup.financial.template.save({template: 'payroll'})}	
+
+												if ($('#ns1blankspaceGeneralLockedDateDebtors').val() != ns1blankspace.objectContextData.lockeddatedebtors)
+												{
+													ns1blankspace.setup.financial.save.profile({attribute: 233, value: $('#ns1blankspaceGeneralLockedDateDebtors').val()})
+												}
+
+												if ($('#ns1blankspaceGeneralLockedDateCreditors').val() != ns1blankspace.objectContextData.lockeddatedebtors)
+												{
+													ns1blankspace.setup.financial.save.profile({attribute: 264, value: $('#ns1blankspaceGeneralLockedDateCreditors').val()})
+												}
+
+												if ($('#ns1blankspaceGeneralLockedDateJournals').val() != ns1blankspace.objectContextData.lockeddatedebtors)
+												{
+													ns1blankspace.setup.financial.save.profile({attribute: 265, value: $('#ns1blankspaceGeneralLockedDateJournals').val()})
+												}
 											}
 									});		
-								}
+								},
+
+					profile: 	function (oParam)
+								{
+									//debtors: 233, creditors: 264, journals: 265
+
+									var iAttribute = ns1blankspace.util.getParam(oParam, 'attribute').value;
+									var sValue = ns1blankspace.util.getParam(oParam, 'value').value;
+
+									var oData =
+									{
+										attribute: iAttribute,
+										value: sValue,
+										context: ns1blankspace.space
+									}
+
+									$.ajax(
+									{
+										type: 'POST',
+										url: '/rpc/core/?method=CORE_PROFILE_MANAGE',
+										data: oData,
+										dataType: 'json'
+									});
+								}			
 				}
 }
