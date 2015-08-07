@@ -21,7 +21,7 @@ ns1blankspace.financial.bankAccount =
 						if (oParam.id != undefined) {iID = oParam.id}
 					}
 
-					ns1blankspace.object = -3;
+					ns1blankspace.object = 233;
 					ns1blankspace.objectContextData = undefined;
 					ns1blankspace.objectParentName = 'financial';
 					ns1blankspace.objectName = 'bankAccount';
@@ -141,6 +141,16 @@ ns1blankspace.financial.bankAccount =
 									'<td id="ns1blankspaceControlReconciliations" class="ns1blankspaceControl">Completed</td>' +
 									'</tr>');
 
+					aHTML.push('</table>');	
+
+					aHTML.push('<table class="ns1blankspaceControl">');
+				
+					aHTML.push('<tr><td id="ns1blankspaceControlActions" class="ns1blankspaceControl">' +
+									'Actions</td></tr>');
+								
+					aHTML.push('<tr><td id="ns1blankspaceControlAttachments" class="ns1blankspaceControl">' +
+									'Attachments</td></tr>');
+
 					aHTML.push('</table>');					
 							
 					$('#ns1blankspaceControl').html(aHTML.join(''));
@@ -151,6 +161,8 @@ ns1blankspace.financial.bankAccount =
 					aHTML.push('<div id="ns1blankspaceMainImport" class="ns1blankspaceControlMain"></div>');
 					aHTML.push('<div id="ns1blankspaceMainMapping" class="ns1blankspaceControlMain"></div>');
 					aHTML.push('<div id="ns1blankspaceMainReconcile" class="ns1blankspaceControlMain"></div>');
+					aHTML.push('<div id="ns1blankspaceMainActions" class="ns1blankspaceControlMain"></div>');
+					aHTML.push('<div id="ns1blankspaceMainAttachments" class="ns1blankspaceControlMain"></div>');
 					
 					$('#ns1blankspaceMain').html(aHTML.join(''));
 					
@@ -183,6 +195,18 @@ ns1blankspace.financial.bankAccount =
 						ns1blankspace.show({selector: '#ns1blankspaceMainReconcile', refresh: true});
 						ns1blankspace.financial.bankAccount.reconcile.show({mode: 2});
 					});
+
+					$('#ns1blankspaceControlActions').click(function(event)
+					{
+						ns1blankspace.show({selector: '#ns1blankspaceMainActions', refresh: true});
+						ns1blankspace.actions.show({xhtmlElementID: 'ns1blankspaceMainActions'});
+					});
+
+					$('#ns1blankspaceControlAttachments').click(function(event)
+					{
+						ns1blankspace.show({selector: '#ns1blankspaceMainAttachments', refresh: true});
+						ns1blankspace.attachments.show({xhtmlElementID: 'ns1blankspaceMainAttachments'});
+					});		
 				},
 
 	show: 		function (oParam, oResponse)
@@ -3147,6 +3171,20 @@ ns1blankspace.financial.bankAccount =
 														$('#ns1blankspaceItemsEditSearchAmount').val(cSearchAmount);
 														$('#ns1blankspaceItemsEditSearchReference').val(sSearchReference);
 																
+														$('#ns1blankspaceItemsEditSearchReference')
+
+														$('#ns1blankspaceItemsEditSearchReference').keyup(function(e)
+														{
+															if (e.which === 13)
+													    	{
+																oParam.editAction = 1;
+																oParam.searchDate = $('#ns1blankspaceItemsEditSearchDate').val();
+																oParam.searchAmount = $('#ns1blankspaceItemsEditSearchAmount').val();
+																oParam.searchReference = $('#ns1blankspaceItemsEditSearchReference').val();
+																ns1blankspace.financial.bankAccount.reconcile.items.edit(oParam);
+															}		
+														});	
+
 														$('#ns1blankspaceItemsEditSearch').button(
 														{
 															label: 'Search',
