@@ -4278,7 +4278,7 @@ ns1blankspace.financial.util =
 									{
 										if ($('#' + sAmountXHTMLElementID).val() !== '')
 										{	
-											cAmount = parseFloat($('#' + sAmountXHTMLElementID).val());
+											cAmount = accounting.unformat($('#' + sAmountXHTMLElementID).val());
 										}	
 									}	
 									
@@ -4291,6 +4291,8 @@ ns1blankspace.financial.util =
 									}
 									else
 									{	
+										cAmount = parseFloat(cAmount);
+
 										if (cRate == 0)
 										{
 											cTax = 0;
