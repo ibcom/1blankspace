@@ -2010,17 +2010,23 @@ ns1blankspace.logon.changePassword =
 						
 						var sCurrentPassword = $('#ns1blankspaceLogonCurrentPassword').val();
 
-						var sData = 'expiredays=36500' +
-										'&site=1533' +
-										'&currentpassword=' + sCurrentPassword + 
-										'&newpassword=' + sNewPassword +
-										'&newpasswordconfirm=' + sNewPasswordConfirm;
+						var iDays = (ns1blankspace.option.passwordExpiry!=undefined?(ns1blankspace.option.passwordExpiry.days||36500):36500);
+						var iSite = (ns1blankspace.option.passwordExpiry!=undefined?(ns1blankspace.option.passwordExpiry.site||ns1blankspace.user.site):ns1blankspace.user.site)
+
+						var oData =
+						{
+							expiredays: iDays,
+							site: iSite,
+							currentpassword: sCurrentPassword,
+							newpassword: sNewPassword,
+							newpasswordconfirm: sNewPasswordConfirm
+						}	
 						
 						$.ajax(
 						{
 							type: 'POST',
 							url: ns1blankspace.util.endpointURI('SITE_USER_PASSWORD_MANAGE'),
-							data: sData,
+							data: oData,
 							dataType: 'json',
 							success: this.process
 						});
@@ -2043,6 +2049,7 @@ ns1blankspace.logon.changePassword =
 					else
 					{
 						$('#ns1blankspaceLogonChangePasswordStatus').html('Password changed!');
+						ns1blankspace.unloadWarning = false;
 					
 						if (oResponse.url === '#' || ns1blankspace.option.logonStayOnDocument)
 						{
@@ -2991,7 +2998,7 @@ ns1blankspace.search =
 						if (oParam.minimumLength != undefined) {iMinimumLength = oParam.minimumLength}
 						if (oParam.method != undefined) {sMethod = oParam.method}
 						if (oParam.searchText != undefined) {sSearchText = oParam.searchText}
-						if (oParam.sColumns != undefined) {sColumns = oParam.columns}
+						if (oParam.columns != undefined) {sColumns = oParam.columns}
 						if (oParam.methodFilter != undefined) {sMethodFilter = oParam.methodFilter}
 						if (oParam.multiSelect != undefined) {bMultiSelect = oParam.multiSelect}
 					}
@@ -3105,6 +3112,8 @@ ns1blankspace.search =
 
 									if (!bCache && iSource === ns1blankspace.data.searchSource.text && sMethodFilter == '')
 									{	
+										oSearch.addbracket("(");
+
 										$.each(aColumns, function(i) 
 										{
 											if (this != 'space' && this != 'comma' && this != 'pipe' && this != 'column')
@@ -3116,7 +3125,9 @@ ns1blankspace.search =
 
 												oSearch.addFilter(this, 'TEXT_IS_LIKE', sSearchText);
 											}	
-										});	
+										});
+
+										oSearch.addbracket(")"); 
 									}	
 									
 									if (sMethodFilter != '')

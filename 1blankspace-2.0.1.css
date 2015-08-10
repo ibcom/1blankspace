@@ -1251,3 +1251,18 @@ iframe.ns1blankspaceMessageContainer {width: 900px; zoom: 1.00; -moz-transform: 
   height: 100%;
   border-radius: 5px;
 }
+
+.c3 svg
+{
+  font: 10px Europa;
+}
+
+.c3-legend-item
+{
+    font-size: 1.25em;
+}
+
+.c3-bar
+{
+	pointer: cursor;
+}

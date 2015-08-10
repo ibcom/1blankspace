@@ -20,6 +20,7 @@ ns1blankspace.option.classic = true;
 ns1blankspace.option.loadControl = false;
 ns1blankspace.option.httpsOnly = true;
 ns1blankspace.option.viewShowSearch = true;
+ns1blankspace.option.passwordExpiry = {site: 1533, days: 36500};
 
 ns1blankspace.data.object = {person: 32, business: 12, opportunity: 35};
 ns1blankspace.data.attachmentTypes = [];

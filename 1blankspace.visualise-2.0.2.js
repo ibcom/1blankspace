@@ -685,7 +685,7 @@ ns1blankspace.visualise =
 											legend: true
 										},
 										{
-											name: 'bar-pie',
+											name: 'bar_pie',
 											datasets: false,
 											type: 'bar',
 											percentage: true,
@@ -699,7 +699,7 @@ ns1blankspace.visualise =
 											legend: true
 										},
 										{
-											name: 'horizontalbar-pie',
+											name: 'horizontalbar_pie',
 											datasets: false,
 											type: 'bar',
 											rotated: true,
