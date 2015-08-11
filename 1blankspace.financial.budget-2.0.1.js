@@ -1700,8 +1700,9 @@ ns1blankspace.financial.budget.today =
 				oParam.type = 'HorizontalBar';
 				oParam.options = {}
 				oParam.style = 'budget';
+				oParam.renderType = ns1blankspace.visualise.data.renderType.pixel;
 
-				ns1blankspace.visualise.provider.chartjs.render(oParam);
+				ns1blankspace.visualise.render(oParam);
 			}
 }				
 

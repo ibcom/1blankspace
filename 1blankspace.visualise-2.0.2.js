@@ -43,7 +43,14 @@ ns1blankspace.visualise =
 						        series: "1"
 						    }
 						]
-					}	
+					},
+
+					renderType:
+					{
+						vector: 1,
+						pixel: 2
+					}
+
 				},
 
 	options: 	{
@@ -78,6 +85,29 @@ ns1blankspace.visualise =
 						ns1blankspace.app.set(oParam);
 					}
 				},
+
+	render: 	function (oParam)
+				{
+					var sProvider = ns1blankspace.util.getParam(oParam, 'provider').value;
+					var iRenderType = ns1blankspace.util.getParam(oParam, 'renderType', {"default": 1}).value;
+					if (sProvider==undefined) {sProvider=(iRenderType==1?'c3':'chartjs')}
+
+					if (ns1blankspace.visualise.provider[sProvider] == undefined)
+					{
+						ns1blankspace.status.error('Unknown provider: ' + sProvider);
+					}
+					else
+					{	
+						if (iRenderType = ns1blankspace.visualise.data.renderType.vector && !window.d3)
+						{
+							ns1blankspace.status.error('You need d3.');
+						}
+						else
+						{
+							ns1blankspace.visualise.provider[sProvider].render(oParam);
+						}	
+					}
+				},		
 
 	home:		function (oParam, oResponse)
 				{
