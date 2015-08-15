@@ -1380,14 +1380,11 @@ ns1blankspace.contactPerson =
 									{
 										if (oResponse == undefined)
 										{
-											$.ajax(
-											{
-												type: 'GET',
-												url: ns1blankspace.util.endpointURI('SETUP_CONTACT_PERSON_GROUP_SEARCH'),
-												data: 'rows=200',
-												dataType: 'json',
-												success: function(data){ns1blankspace.contactPerson.groups.add(oParam, data)}
-											});
+											var oSearch = new AdvancedSearch();
+											oSearch.method = 'SETUP_CONTACT_PERSON_GROUP_SEARCH';
+											oSearch.addField('title');
+											oSearch.rows = 100;
+											oSearch.getResults(function(data) {ns1blankspace.contactPerson.groups.add(oParam, data)});
 										}
 										else
 										{

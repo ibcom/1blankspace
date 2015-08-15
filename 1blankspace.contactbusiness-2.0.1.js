@@ -557,7 +557,6 @@ ns1blankspace.contactBusiness =
 							var oSearch = new AdvancedSearch();
 							oSearch.method = 'CORE_FAVOURITE_SEARCH';		
 							oSearch.addField('id');
-						
 							oSearch.getResults(function(data) {ns1blankspace.contactBusiness.summary(oParam, data)});	
 						}
 						else
@@ -1225,13 +1224,10 @@ ns1blankspace.contactBusiness =
 									{
 										if (oResponse == undefined)
 										{
-											$.ajax(
-											{
-												type: 'GET',
-												url: ns1blankspace.util.endpointURI('SETUP_CONTACT_BUSINESS_GROUP_SEARCH'),
-												dataType: 'json',
-												success: function(data){ns1blankspace.contactBusiness.groups.add(oParam, data)}
-											});
+											var oSearch = new AdvancedSearch();
+											oSearch.method = 'SETUP_CONTACT_BUSINESS_GROUP_SEARCH';		
+											oSearch.addField('title');
+											oSearch.getResults(function(data) {ns1blankspace.contactBusiness.groups.add(oParam, data)});	
 										}
 										else
 										{
