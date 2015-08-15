@@ -121,62 +121,89 @@ ns1blankspace.util.local =
 															ns1blankspace.util.local.db.exists() && bPersist);
 
 										var oData = ns1blankspace.util.getParam(oParam, 'data');
+										var oDataRaw = ns1blankspace.util.getParam(oParam, 'dataRaw');
 
-										if (!oData.exists)
+										if (!oDataRaw.exists)
 										{	
-											var sData = oStorage.getItem(sKey);
-											if (sData == null) {sData = undefined}
-
-											if (bProtect && ns1blankspace.util.protect !== undefined && sData !== undefined)
+											if (bAdvanced)
 											{
-												oParam = ns1blankspace.util.setParam(oParam, 'cryptoKeyReference', ns1blankspace.util.local.cache.data.cryptoKeyReference);
-												oParam = ns1blankspace.util.setParam(oParam, 'cryptoKey', ns1blankspace.util.protect.key.data[ns1blankspace.util.local.cache.data.cryptoKeyReference]);
-												oParam = ns1blankspace.util.setParam(oParam, 'protectedData', sData);
-
 												ns1blankspace.util.whenCan.execute(
 												{
 													now:
 													{
-														method: ns1blankspace.util.protect.decrypt,
+														method: ns1blankspace.util.local.db.search,
 														param:
 														{
-															cryptoKeyReference: ns1blankspace.util.local.cache.data.cryptoKeyReference,
-															cryptoKey: ns1blankspace.util.protect.key.data[ns1blankspace.util.local.cache.data.cryptoKeyReference],
-															protectedData: sData
+															key: sKey
 														}
 													},
 													then:
 													{
 														comment: 'util.protect.decrypt<>util.local.cache.search',
-														method: (bAdvanced?ns1blankspace.util.local.db.search:ns1blankspace.util.local.cache.search),
-														set: 'data',
+														method: ns1blankspace.util.local.cache.search,
+														set: 'dataRaw',
 														param: oParam
 													}	
 												});
 											}
 											else
-											{
-												oParam.data = sData;
-												if (bAdvanced)
+											{	
+												var sData = oStorage.getItem(sKey);
+												oParam.dataRaw = sData;
+												ns1blankspace.util.local.cache.search(oParam)
+											}
+										}
+										else
+										{	
+											if (!oData.exists)
+											{	
+												var sDataRaw = oDataRaw.value;
+												if (sDataRaw == null) {sDataRaw = undefined}
+
+												if (bProtect && ns1blankspace.util.protect !== undefined && sDataRaw !== undefined)
 												{
-													ns1blankspace.util.local.db.search(oParam)
+													oParam = ns1blankspace.util.setParam(oParam, 'cryptoKeyReference', ns1blankspace.util.local.cache.data.cryptoKeyReference);
+													oParam = ns1blankspace.util.setParam(oParam, 'cryptoKey', ns1blankspace.util.protect.key.data[ns1blankspace.util.local.cache.data.cryptoKeyReference]);
+													oParam = ns1blankspace.util.setParam(oParam, 'protectedData', sDataRaw);
+
+													ns1blankspace.util.whenCan.execute(
+													{
+														now:
+														{
+															method: ns1blankspace.util.protect.decrypt,
+															param:
+															{
+																cryptoKeyReference: ns1blankspace.util.local.cache.data.cryptoKeyReference,
+																cryptoKey: ns1blankspace.util.protect.key.data[ns1blankspace.util.local.cache.data.cryptoKeyReference],
+																protectedData: sDataRaw
+															}
+														},
+														then:
+														{
+															comment: 'util.protect.decrypt<>util.local.cache.search',
+															method: ns1blankspace.util.local.cache.search,
+															set: 'data',
+															param: oParam
+														}	
+													});
 												}
 												else
-												{	
+												{
+													oParam.data = sDataRaw;
 													ns1blankspace.util.local.cache.search(oParam)
-												}	
+												}
 											}
-										}	
-										else		
-										{
-											var oDataReturn = oData.value;
-
-											if (bJSON && oDataReturn !== undefined)
+											else
 											{
-												oDataReturn = JSON.parse(oDataReturn);
-											}
+												var oDataReturn = oData.value;
 
-											ns1blankspace.util.whenCan.complete(oDataReturn, oParam);
+												if (bJSON && oDataReturn !== undefined)
+												{
+													oDataReturn = JSON.parse(oDataReturn);
+												}
+
+												ns1blankspace.util.whenCan.complete(oDataReturn, oParam);
+											}
 										}	
 									}	
 								},
