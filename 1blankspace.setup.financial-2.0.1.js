@@ -2169,6 +2169,21 @@ ns1blankspace.setup.financial =
 										sData += '&lockeddatedebtors=' + ns1blankspace.util.fs($('#ns1blankspaceGeneralLockedDateDebtors').val());
 										sData += '&lockeddatecreditors=' + ns1blankspace.util.fs($('#ns1blankspaceGeneralLockedDateCreditors').val());
 										sData += '&lockeddatejournals=' + ns1blankspace.util.fs($('#ns1blankspaceGeneralLockedDateJournals').val());
+
+										if ($('#ns1blankspaceGeneralLockedDateDebtors').val() != ns1blankspace.objectContextData.lockeddatedebtors)
+										{
+											ns1blankspace.setup.financial.save.profile({attribute: 233, value: $('#ns1blankspaceGeneralLockedDateDebtors').val()})
+										}
+
+										if ($('#ns1blankspaceGeneralLockedDateCreditors').val() != ns1blankspace.objectContextData.lockeddatedebtors)
+										{
+											ns1blankspace.setup.financial.save.profile({attribute: 264, value: $('#ns1blankspaceGeneralLockedDateCreditors').val()})
+										}
+
+										if ($('#ns1blankspaceGeneralLockedDateJournals').val() != ns1blankspace.objectContextData.lockeddatedebtors)
+										{
+											ns1blankspace.setup.financial.save.profile({attribute: 265, value: $('#ns1blankspaceGeneralLockedDateJournals').val()})
+										}
 									};
 									
 									if ($('#ns1blankspaceMainTax').html() != '')
@@ -2199,21 +2214,6 @@ ns1blankspace.setup.financial =
 												if ($('#ns1blankspaceMainTemplate_statement').html() != '') {ns1blankspace.setup.financial.template.save({template: 'statement'})}
 												if ($('#ns1blankspaceMainTemplate_payslip').html() != '') {ns1blankspace.setup.financial.template.save({template: 'payslip'})}
 												if ($('#ns1blankspaceMainTemplate_payroll').html() != '') {ns1blankspace.setup.financial.template.save({template: 'payroll'})}	
-
-												if ($('#ns1blankspaceGeneralLockedDateDebtors').val() != ns1blankspace.objectContextData.lockeddatedebtors)
-												{
-													ns1blankspace.setup.financial.save.profile({attribute: 233, value: $('#ns1blankspaceGeneralLockedDateDebtors').val()})
-												}
-
-												if ($('#ns1blankspaceGeneralLockedDateCreditors').val() != ns1blankspace.objectContextData.lockeddatedebtors)
-												{
-													ns1blankspace.setup.financial.save.profile({attribute: 264, value: $('#ns1blankspaceGeneralLockedDateCreditors').val()})
-												}
-
-												if ($('#ns1blankspaceGeneralLockedDateJournals').val() != ns1blankspace.objectContextData.lockeddatedebtors)
-												{
-													ns1blankspace.setup.financial.save.profile({attribute: 265, value: $('#ns1blankspaceGeneralLockedDateJournals').val()})
-												}
 											}
 									});		
 								},

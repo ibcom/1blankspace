@@ -1227,6 +1227,7 @@ ns1blankspace.contactBusiness =
 											var oSearch = new AdvancedSearch();
 											oSearch.method = 'SETUP_CONTACT_BUSINESS_GROUP_SEARCH';		
 											oSearch.addField('title');
+											oSearch.rows = 100;
 											oSearch.getResults(function(data) {ns1blankspace.contactBusiness.groups.add(oParam, data)});	
 										}
 										else

@@ -378,14 +378,20 @@ ns1blankspace.financial.home = function (oParam)
 
 						$('#ns1blankspaceControlSummary').addClass('ns1blankspaceHighlight');
 
-						//ns1blankspace.history.control({functionDefault: sFunctionDefault});
+						var oXHTMLElementID = ns1blankspace.util.getParam(oParam, 'xhtmlElementID');
 
-						if (!ns1blankspace.util.getParam(oParam, 'functionDefault').exists)
+						if (oXHTMLElementID.exists)
 						{
-							oParam = ns1blankspace.util.setParam(oParam, 'functionDefault', 'ns1blankspace.financial.summary()')
+							$('.ns1blankspaceControl').removeClass('ns1blankspaceHighlight');
+							$('#' + oXHTMLElementID.value).addClass('ns1blankspaceHighlight');
+							$('#' + oXHTMLElementID.value).click()
+							//ns1blankspace.util.execute(ns1blankspace.util.getParam(oParam, 'functionDefault').value);
 						}
-
-						ns1blankspace.history.control(oParam);
+						else
+						{
+							ns1blankspace.history.control({functionDefault: sFunctionDefault});
+							ns1blankspace.history.control(oParam);
+						}
 					}
 
 ns1blankspace.financial.summary = function (oParam, oResponse)

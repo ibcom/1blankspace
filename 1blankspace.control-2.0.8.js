@@ -41,6 +41,7 @@ ns1blankspace.option.taxVATCaption = 'GST';
 ns1blankspace.option.taxPayrollCaption = 'Employee';
 ns1blankspace.option.taxBusinessCaption = 'Business';
 ns1blankspace.option.currencySymbol = '$';
+ns1blankspace.option.bulkInvoicing = true;
 ns1blankspace.option.postInit = undefined;
 ns1blankspace.option.initialiseSpaceTemplate = '/jscripts/1blankspace.setup.space-2.0.0.json';
 ns1blankspace.option.searchWatermark = 'search';
@@ -111,7 +112,7 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.messaging.conversation',
-		source: '/jscripts/1blankspace.messaging.conversation-2.0.0.js'
+		source: '/jscripts/1blankspace.messaging.conversation-2.0.1.js'
 	},
 	{
 		nameSpace: '1blankspace.messaging.imap',
@@ -119,7 +120,7 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.document',
-		source: '/jscripts/1blankspace.document-2.0.0.js'
+		source: '/jscripts/1blankspace.document-2.0.1.js'
 	},
 	{
 		nameSpace: '1blankspace.news',
@@ -155,7 +156,7 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.financial.invoice',
-		source: '/jscripts/1blankspace.financial.invoice-2.0.1.js'
+		source: '/jscripts/1blankspace.financial.invoice-2.0.2.js'
 	},
 	{
 		nameSpace: '1blankspace.financial.expense',
@@ -1087,6 +1088,7 @@ ns1blankspace.control =
 														aHTML.push('<tr class="ns1blankspaceViewControl">' +
 																	'<td class="ns1blankspaceViewControl">' +
 																	'<span id="ns1blankspaceViewControl_' + (k.parentNamespace!==undefined?k.parentNamespace + '_':'') + k.namespace +
+																		(k.namesuffix!==undefined?'_' + k.namesuffix:'') + 
 																	'" class="ns1blankspaceViewControl">' + k.title + '</span>');
 
 														if (k.subNote !== undefined)
@@ -1148,11 +1150,28 @@ ns1blankspace.control =
 												$('#ns1blankspaceViewControl' + sNS).attr('data-parentnamespace', sParent);
 											}
 
+											if (this.namesuffix)
+											{
+												sNS = sNS + '_' + this.namesuffix;
+												$('#ns1blankspaceViewControl' + sNS).attr('data-namesuffix', this.namesuffix);
+											}
+
 											$('#ns1blankspaceViewControl' + sNS).attr('data-namespace', this.namespace);
+											$('#ns1blankspaceViewControl' + sNS).attr('data-fullnamespace', sNS);
+											$('#ns1blankspaceViewControl' + sNS).attr('data-title', this.title);
 
 											$('#ns1blankspaceViewControl' + sNS).click(function(event)
 											{
 												$(ns1blankspace.xhtml.container).attr('data-initiator', '');
+
+												var oParam = {};
+												var sTitle = $(this).attr('data-title')
+												var oViewport = $.grep(ns1blankspace.views, function (a) {return a.title == sTitle;})[0];
+
+												if (oViewport.param)
+												{
+													oParam = oViewport.param;
+												}
 
 												if ($(this).attr('data-parentnamespace'))
 												{
@@ -1163,7 +1182,7 @@ ns1blankspace.control =
 													var oNS = oRoot[$(this).attr('data-namespace')];
 												}
 
-												oNS.init();
+												oNS.init(oParam);
 											});
 										});
 									}
@@ -1260,7 +1279,6 @@ ns1blankspace.control =
 															{
 																var oParam = {};
 																var sTitle = $(this).attr('data-title')
-
 																var oViewport = $.grep(ns1blankspace.views, function (a) {return a.title == sTitle;})[0];
 
 																if (oViewport.param)

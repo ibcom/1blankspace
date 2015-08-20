@@ -897,8 +897,7 @@ ns1blankspace.visualise =
 									        pattern: $.map(aStyles, function (style) {return style.color})
 									    },
 									    grid: {y: {show:false}},
-									    padding: {right:30},
-									    oninit: function () {}
+									    padding: {right:30}
 									}
 
 									/*
@@ -921,7 +920,7 @@ ns1blankspace.visualise =
    
 									var oChart = c3.generate(oOptions);
 
-									$('#' + sXHTMLElementContainer + '_chart svg').attr('id', sXHTMLElementContainer + '_chart_svg');
+									$('#' + sXHTMLElementContainer + '_chart svg').attr('id', sXHTMLElementContainer + '_chart_svg')
 
 									ns1blankspace.util.onComplete(oParam);
 								}
@@ -957,6 +956,177 @@ ns1blankspace.visualise =
 									};
 
 									return aMonths;
-								}
+								},
+
+					svgToImage: function (oParam)
+								{
+									if (!window.btoa) window.btoa = base64.encode
+ 									if (!window.atob) window.atob = base64.decode
+
+									var sXHTMLElementSVGContainerID = ns1blankspace.util.getParam(oParam, 'xhtmlElementSVGContainerID').value;
+									var sXHTMLElementImageContainerID = ns1blankspace.util.getParam(oParam, 'xhtmlElementImageContainerID', {"default": sXHTMLElementSVGContainerID + '_image'}).value;
+									var sStyles = ns1blankspace.util.getParam(oParam, 'styles', {"default": ''}).value;
+									var sFormat = ns1blankspace.util.getParam(oParam, 'format', {"default": (navigator.userAgent.indexOf('Chrome')!=-1?'svg':'png')}).value;
+
+									var sHeight = $('#' + sXHTMLElementSVGContainerID).height();
+									var sWidth = $('#' + sXHTMLElementSVGContainerID).width();
+
+									var sBoxHeight = (parseInt(sHeight) * 1)
+									var sBoxWidth = (parseInt(sWidth) * 1)
+
+									if (sFormat == 'svg')
+									{
+										var html = '<svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="275" height="' + sHeight + '" style="width:275px; height:' + sHeight + 'px;">' +
+												sStyles + 
+												$('#' + sXHTMLElementSVGContainerID)
+									      	  	.attr("version", 1.1)
+									        	.attr("xmlns", "http://www.w3.org/2000/svg")
+									        	.html() + '</svg>';
+
+										var imgsrc = 'data:image/svg+xml;base64,'+ btoa(html);
+									       	
+										var img = '<img src="' + imgsrc + '" style="width:275px; height:' + sHeight + 'px;">';
+										$('#' + sXHTMLElementImageContainerID).html(img); 
+									}
+									else	
+									{ 
+										//viewBox="0 0 ' + sBoxWidth + ' ' + sBoxHeight + '" 
+										var html = '<svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="275" height="' + sHeight + '" style="width:275px; height:' + sHeight + 'px;">' +
+												sStyles + 
+												$('#' + sXHTMLElementSVGContainerID)
+									      	  	.attr("version", 1.1)
+									        	.attr("xmlns", "http://www.w3.org/2000/svg")
+									        	.html() + '</svg>';
+
+										var imgsrc = 'data:image/svg+xml;base64,'+ btoa(html);
+									       	
+										$('#' + sXHTMLElementImageContainerID).html('<canvas id="' + sXHTMLElementImageContainerID + '_canvas" style="display:none; width:275px; height:' + sHeight + 'px;">')
+
+										//var canvas = document.querySelector('#' + sXHTMLElementImageContainerID + '_canvas');
+
+										var canvas = document.createElement('canvas');
+										//canvas.style.width = '275px';
+										//canvas.style.height = (parseInt(sHeight) + 0) +'px';
+
+										canvas.width = 275;
+										canvas.height = sHeight;
+
+										var context = canvas.getContext("2d");
+
+										//context.mozImageSmoothingEnabled = false;
+										//context.msImageSmoothingEnabled = false;
+										//context.imageSmoothingEnabled = false;
+
+										var image = new Image;
+										image.style.height = (parseInt(sHeight)-20) + 'px';
+										image.style.width = '275px';
+									  	image.src = imgsrc;
+									  
+									 	image.onload = function()
+									 	{
+											  context.drawImage(image, 0, 0, sWidth, sHeight);
+
+											  var canvasdata = canvas.toDataURL("image/png");
+
+											  var pngimg = '<img src="' + canvasdata + '" style="width:275px; height:' + sHeight + 'px;">'; 
+
+										  	  $('#' + sXHTMLElementImageContainerID + '_canvas').after(pngimg);
+										};
+									}	
+								},				
+
+					save: 	function (oParam)
+							{
+								var sXHTMLElementSVGContainerID = ns1blankspace.util.getParam(oParam, 'xhtmlElementSVGContainerID').value;
+								var sXHTMLElementImageID = ns1blankspace.util.getParam(oParam, 'xhtmlElementImageID', {"default": sXHTMLElementSVGContainerID + '_image'}).value;
+								
+								/*
+								var html = d3.select(sXHTMLElementID)
+								      	  	.attr("version", 1.1)
+								        	.attr("xmlns", "http://www.w3.org/2000/svg")
+								        	.node().parentNode.innerHTML;
+								*/
+
+								var sStyles = '<style type="text/css"><![CDATA[' +
+        											'svg{font:14px sans-serif; -webkit-tap-highlight-color:transparent; shape-rendering: crispEdges;} line, path{fill:none;stroke:#000} text{-webkit-user-select:none;-moz-user-select:none;user-select:none}-bars path,-event-rect,-legend-item-tile,-xgrid-focus,-ygrid{shape-rendering:crispEdges}-chart-arc path{stroke:#fff}-chart-arc text{fill:#fff;font-size:13px}-grid line{stroke:#aaa}-grid text{fill:#aaa}-xgrid,-ygrid{stroke-dasharray:3 3}-text-empty{fill:gray;font-size:2em}-line{stroke-width:1px}-circle._expanded_{stroke-width:1px;stroke:#fff}-selected-circle{fill:#fff;stroke-width:2px}-bar{stroke-width:0}-bar._expanded_{fill-opacity:.75}-target-focused{opacity:1}-target-focused path-line,-target-focused path-step{stroke-width:2px}-target-defocused{opacity:.3!important}-region{fill:#4682b4;fill-opacity:.1}-brush .extent{fill-opacity:.1}-legend-item{font-size:12px}-legend-item-hidden{opacity:.15}-legend-background{opacity:.75;fill:#fff;stroke:#d3d3d3;stroke-width:1}-title{font:14px sans-serif}-tooltip-container{z-index:10}-tooltip{border-collapse:collapse;border-spacing:0;background-color:#fff;empty-cells:show;-webkit-box-shadow:7px 7px 12px -9px #777;-moz-box-shadow:7px 7px 12px -9px #777;box-shadow:7px 7px 12px -9px #777;opacity:.9}-tooltip tr{border:1px solid #CCC}-tooltip th{background-color:#aaa;font-size:14px;padding:2px 5px;text-align:left;color:#FFF}-tooltip td{font-size:13px;padding:3px 6px;background-color:#fff;border-left:1px dotted #999}-tooltip td>span{display:inline-block;width:10px;height:10px;margin-right:6px}-tooltip td.value{text-align:right}-area{stroke-width:0;opacity:.2}-chart-arcs-title{dominant-baseline:middle;font-size:1.3em}-chart-arcs -chart-arcs-background{fill:#e0e0e0;stroke:none}-chart-arcs -chart-arcs-gauge-unit{fill:#000;font-size:16px}-chart-arcs -chart-arcs-gauge-max,-chart-arcs -chart-arcs-gauge-min{fill:#777}-chart-arc -gauge-value{fill:#000}' +
+													' path.c3-bar-1 { fill: rgb(100,101,103) !important; stroke: rgb(100,101,103) !important;}' +
+     												']]></style>';
+								
+								var html = '<svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="550" height="360">' +
+											sStyles + 
+											$('#' + sXHTMLElementSVGContainerID)
+								      	  	.attr("version", 1.1)
+								        	.attr("xmlns", "http://www.w3.org/2000/svg")
+								        	.html() + '</svg>';
+
+								//console.log(html);
+
+								var imgsrc = 'data:image/svg+xml;base64,'+ btoa(html);
+								
+								var img = '<img src="' + imgsrc + '" style="width:550px; height:360px;">';
+
+								$('#' + sXHTMLElementContainerID).after('<div id="' + sXHTMLElementContainerID + '_image_svg"></div>');
+								$('#' + sXHTMLElementContainerID).after('<div id="' + sXHTMLElementContainerID + '_image"></div>');
+
+								$('#' + sXHTMLElementContainerID).after('<canvas id="' + sXHTMLElementContainerID + '_canvas" style="width:275px; height:180px;">');   
+
+								$('#' + sXHTMLElementContainerID + '_image_svg').html(img);
+
+								var canvas = document.querySelector('#' + sXHTMLElementContainerID + '_canvas');
+								var context = canvas.getContext("2d");
+
+								// SVG is resolution independent. Canvas is not. We need to make our canvas 
+								// High Resolution.
+
+								// lets get the resolution of our device.
+								var pixelRatio = window.devicePixelRatio || 1;
+
+								// lets scale the canvas and change its CSS width/height to make it high res.
+								
+								/*
+								canvas.width = parseInt($('#' + sXHTMLElementContainerID).width()) * 2
+								canvas.height = parseInt($('#' + sXHTMLElementContainerID).height()) * 2
+
+								canvas.style.width = canvas.width +'px';
+								canvas.style.height = canvas.height +'px';
+								canvas.width *= pixelRatio;
+								canvas.height *= pixelRatio;
+
+								// Now that its high res we need to compensate so our images can be drawn as 
+								//normal, by scaling everything up by the pixelRatio.
+								context.setTransform(pixelRatio,0,0,pixelRatio,0,0);
+
+								// lets convert that into a dataURL
+								//var ur = cv.toDataURL();
+
+								// result should look exactly like the canvas when using PNG (default)
+								//var result = document.getElementById('result');
+								//result.src=ur;
+
+								// we need our image to match the resolution of the canvas
+								*/
+
+							  	var image = new Image;
+							  	image.src = imgsrc;
+							  	//image.style.width = canvas.style.width;
+							  	//image.style.height = canvas.style.height;
+							 	image.onload = function()
+							 	{
+									  context.drawImage(image, 0, 0);
+
+									  var canvasdata = canvas.toDataURL("image/png");
+
+									  var pngimg = '<img src="' + canvasdata + '">'; 
+
+								  	  $('#' + sXHTMLElementContainerID + '_image').html(pngimg);
+
+								  	  /*
+									  var a = document.createElement("a");
+									  a.download = "sample.png";
+									  a.href = canvasdata;
+									  a.click();
+									  */
+								};
+							}			
 				}			
 }
