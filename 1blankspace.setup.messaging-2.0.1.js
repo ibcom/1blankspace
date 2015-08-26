@@ -424,7 +424,7 @@ ns1blankspace.setup.messaging =
 						
 						if (ns1blankspace.objectContextData.verification == '1' || ns1blankspace.objectContextData.verification == undefined)
 						{
-							aHTML.push('NOT VERIFIED')
+							aHTML.push('NOT VERIFIED FOR SENDING')
 							aHTML.push('</td></tr>');
 							aHTML.push('<tr><td class="ns1blankspaceSubNote" style="padding-top:8px;">Send a request for verification to <a href="mailto:verify@ibcom.biz">verify@ibcom.biz</a>.</td></tr>');
 						}		

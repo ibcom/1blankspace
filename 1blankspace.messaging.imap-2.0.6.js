@@ -857,6 +857,7 @@ ns1blankspace.messaging.imap =
 				
 				if (oResponse.data.rows.length == 0)
 				{
+					ns1blankspace.status.clear();
 					aHTML.push('<tr><td class="ns1blankspaceNothing">No emails.</td></tr>')
 				}	
 

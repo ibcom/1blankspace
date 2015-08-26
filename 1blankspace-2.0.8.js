@@ -4823,7 +4823,14 @@ ns1blankspace.util =
 	copy: 		function (oObject)
 				{
 					return $.extend(true, [], oObject)
-				}											
+				},
+
+	hasRole: 	function (oParam)
+				{
+					var sTitle = ns1blankspace.util.getParam(oParam, 'title').value;
+					var aRole = $.grep(ns1blankspace.user.roles, function (role) {role.title==sTitle})
+					return (aRole.length!=0)
+				}													
 }
 
 ns1blankspace.debug = 
