@@ -3112,7 +3112,7 @@ ns1blankspace.search =
 
 									if (!bCache && iSource === ns1blankspace.data.searchSource.text && sMethodFilter == '')
 									{	
-										oSearch.addbracket("(");
+										oSearch.addBracket("(");
 
 										$.each(aColumns, function(i) 
 										{
@@ -3127,7 +3127,7 @@ ns1blankspace.search =
 											}	
 										});
 
-										oSearch.addbracket(")"); 
+										oSearch.addBracket(")"); 
 									}	
 									
 									if (sMethodFilter != '')
