@@ -749,6 +749,8 @@ ns1blankspace.financial.payroll =
 
 									$('#ns1blankspaceNewColumn2').html(ns1blankspace.xhtml.loading);
 
+									ns1blankspace.status.working();
+
 									//PAYS
 									if (ns1blankspace.financial.payroll.data.context == 'pays')
 									{
@@ -819,6 +821,8 @@ ns1blankspace.financial.payroll =
 														{
 															if (data.status == 'OK')
 															{
+																ns1blankspace.status.error('Employee added.')
+
 																ns1blankspace.financial.payroll["new"].process(
 																{
 																	contactPerson: data.id,

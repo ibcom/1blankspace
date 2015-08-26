@@ -45,7 +45,8 @@ ns1blankspace.option.bulkInvoicing = true;
 ns1blankspace.option.postInit = undefined;
 ns1blankspace.option.initialiseSpaceTemplate = '/jscripts/1blankspace.setup.space-2.0.0.json';
 ns1blankspace.option.searchWatermark = 'search';
-ns1blankspace.option.showLogonOptions = true;
+ns1blankspace.option.showLogonOptions = false;
+ns1blankspace.option.showLogonOptionsOnHover = true;
 
 if (ns1blankspace.financial === undefined) {ns1blankspace.financial = {}}
 if (ns1blankspace.control === undefined) {ns1blankspace.control = {}}
@@ -82,12 +83,9 @@ ns1blankspace.xhtml.header =
 	'<div id="ns1blankspaceLogo" style="width:250px; float:left; "><img src="/jscripts/images/1blankspace.aoe-2.0.0.png"></div>' +
 	'<div style="float:right; margin-right:3px;">' +
 	'<div id="ns1blankspaceSpaceText" style="width:450px; margin-top:-3px; margin-bottom:0px;"></div>' +
-	'<div id="ns1blankspaceLogonName" style="width:450px; margin-top:-2px;"></div></div>';
-
-if (ns1blankspace.option.showLogonOptions)
-{
-	
-}	
+	'<div id="ns1blankspaceLogonName" style="width:450px; margin-top:-2px; overflow:auto; height:20px;"></div>' +
+	(ns1blankspace.option.showLogonOptions?'<div id="ns1blankspaceLogonOptions" style="width:20px; margin-top:0px; float:right;"></div>':'') +
+	'</div>';
 
 ns1blankspace.scripts =
 ns1blankspace.scripts.concat(
