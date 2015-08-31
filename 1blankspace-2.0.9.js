@@ -860,12 +860,22 @@ ns1blankspace.app =
 										'<span id="ns1blankspaceViewControlHome">&nbsp;</span>' +
 										'<span id="ns1blankspaceViewControlHomeOptions">&nbsp;</span>' +
 										'</div>');
-										
-						aHTML.push('<div id="ns1blankspaceViewControlHistoryContainer">' +
+
+						if (ns1blankspace.option.showFavourites)
+						{
+							aHTML.push('<div id="ns1blankspaceViewControlHistoryContainer">' +
+										'<span id="ns1blankspaceViewControlRefresh">&nbsp;</span>' +
+										'<span id="ns1blankspaceViewControlFavourites">&nbsp;</span>' +
+										'</div>');
+						}	
+						else
+						{				
+							aHTML.push('<div id="ns1blankspaceViewControlHistoryContainer">' +
 										'<span id="ns1blankspaceViewControlBack" >&nbsp;</span>' +
 										'<span id="ns1blankspaceViewControlRefresh">&nbsp;</span>' +
 										'<span id="ns1blankspaceViewControlForward">&nbsp;</span>' +
-										'</div>');				
+										'</div>');
+						}							
 								
 						aHTML.push('<div id="ns1blankspaceViewControlViewContainer">' +
 										'<span id="ns1blankspaceViewControlView">&nbsp;</span>' +
@@ -960,53 +970,101 @@ ns1blankspace.app =
 							.css('margin-left', '2px')
 							.parent()
 								.buttonset();
-					
-					$('#ns1blankspaceViewControlBack')
-						.button({
-								text: false,
-								icons: {}
-								})
-						.click(function(event)
-						{
-							ns1blankspace.history.view({instruction: 2});
-						})
-						.css('width', '19px')
-						.next()
-							.button( {
-								text: false,
-								icons:
-								{
-									primary: "ui-icon-arrowthickstop-1-n"
-								}
-							})
-							.click(function()
-							{
-								var sNS = ns1blankspace.namespace;
-								if (sNS == undefined) {sNS = 'ns1blankspace'}
 
-								if (ns1blankspace.objectParentName !== undefined)
-								{
-									window[sNS][ns1blankspace.objectParentName][ns1blankspace.objectName].init();
-								}	
-								else
-								{
-									window[sNS][ns1blankspace.objectName].init();
-								}	
-							})
-							.css('width', '25px')
-							.css('margin-left', '2px')
-						.next()
-							.button( {
-								text: false,
-								icons: {}
-							})
-							.click(function() {
-								ns1blankspace.history.view({instruction: 3});
+					if (!ns1blankspace.option.showFavourites)
+					{
+						$('#ns1blankspaceViewControlBack')
+							.button({
+									text: false,
+									icons: {}
+									})
+							.click(function(event)
+							{
+								ns1blankspace.history.view({instruction: 2});
 							})
 							.css('width', '19px')
-							.css('margin-left', '2px')
-							.parent()
-								.buttonset();
+							.next()
+								.button( {
+									text: false,
+									icons:
+									{
+										primary: "ui-icon-arrowthickstop-1-n"
+									}
+								})
+								.click(function()
+								{
+									var sNS = ns1blankspace.namespace;
+									if (sNS == undefined) {sNS = 'ns1blankspace'}
+
+									if (ns1blankspace.objectParentName !== undefined)
+									{
+										window[sNS][ns1blankspace.objectParentName][ns1blankspace.objectName].init();
+									}	
+									else
+									{
+										window[sNS][ns1blankspace.objectName].init();
+									}	
+								})
+								.css('width', '25px')
+								.css('margin-left', '2px')
+							.next()
+								.button( {
+									text: false,
+									icons: {}
+								})
+								.click(function() {
+									ns1blankspace.history.view({instruction: 3});
+								})
+								.css('width', '19px')
+								.css('margin-left', '2px')
+								.parent()
+									.buttonset();
+					}
+					else
+					{
+						$('#ns1blankspaceViewControlRefresh')
+								.button( {
+									text: false,
+									icons:
+									{
+										primary: "ui-icon-arrowthickstop-1-n"
+									}
+								})
+								.click(function()
+								{
+									var sNS = ns1blankspace.namespace;
+									if (sNS == undefined) {sNS = 'ns1blankspace'}
+
+									if (ns1blankspace.objectParentName !== undefined)
+									{
+										window[sNS][ns1blankspace.objectParentName][ns1blankspace.objectName].init();
+									}	
+									else
+									{
+										window[sNS][ns1blankspace.objectName].init();
+									}	
+								})
+								.css('width', '25px')
+								.css('margin-left', '20px')
+							.next()
+								.button(
+								{
+									text: false,
+									disabled: false,
+									icons:
+									{
+										primary: "ui-icon-star"
+									}
+								})
+								.click(function()
+								{
+									ns1blankspace.control.favourites.show({instruction: 3});
+								})
+								.css('width', '25px')
+								.css('margin-left', '4px')
+								.parent()
+									.buttonset();
+					}				
 					
 					$('#ns1blankspaceViewControlViewContainer')
 						.button(
@@ -4366,7 +4424,7 @@ ns1blankspace.util =
 
 					return function(a,b)
 					{
-						if(a[prop] > b[prop])
+						if (a[prop] > b[prop])
 						{
 							return (direction.toLowerCase()=='desc'?-1:1);
 						}
@@ -4377,6 +4435,27 @@ ns1blankspace.util =
 						return 0;
 					}
 				},
+
+	sortByNumber: 
+				function (prop, direction)
+				{
+					//yourArray.sort(ns1blankspace.util.sortByNumber('count'))
+
+					if (direction==undefined) {direction = 'asc'}
+
+					return function(a,b)
+					{
+						if (parseFloat(a[prop]) > parseFloat(b[prop]))
+						{
+							return (direction.toLowerCase()=='desc'?-1:1);
+						}
+						else if(parseFloat(a[prop]) < parseFloat(b[prop]))
+						{
+							return (direction.toLowerCase()=='desc'?1:-1);
+						}
+						return 0;
+					}
+				},			
 
 	sortByDate: function (prop)
 				{
@@ -4810,8 +4889,9 @@ ns1blankspace.util =
 						{
 							var sType = ns1blankspace.util.getParam(oParam, 'type', {"default": 'data'}).value;
 							var sQueueID = ns1blankspace.util.getParam(oParam, 'queue', {"default": 'base'}).value;
+							var bPreserve = ns1blankspace.util.getParam(oParam, 'preserve', {"default": false}).value;
 							
-							ns1blankspace.util.view[sType][sQueueID] = [];
+							if (!bPreserve) {ns1blankspace.util.view[sType][sQueueID] = []};
 						},
 
 						add: function (sData, oParam)
@@ -4865,6 +4945,13 @@ ns1blankspace.util =
 							this.clear(oParam);
 							this.add(sData, oParam);
 							this.render(sElementSelector, oParam);
+						},
+
+						exists: function (oParam)
+						{
+							var sType = ns1blankspace.util.getParam(oParam, 'type', {"default": 'data'}).value;
+							var sQueueID = ns1blankspace.util.getParam(oParam, 'queue', {"default": 'base'}).value;
+							return (ns1blankspace.util.view[sType][sQueueID].length!=0);
 						}
 					}	
 				},
@@ -4877,7 +4964,7 @@ ns1blankspace.util =
 	hasRole: 	function (oParam)
 				{
 					var sTitle = ns1blankspace.util.getParam(oParam, 'title').value;
-					var aRole = $.grep(ns1blankspace.user.roles, function (role) {role.title==sTitle})
+					var aRole = $.grep(ns1blankspace.user.roles, function (role) {return role.title==sTitle})
 					return (aRole.length!=0)
 				}													
 }

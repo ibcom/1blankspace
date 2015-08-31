@@ -779,7 +779,8 @@ ns1blankspace.setup.user =
 											var oSearch = new AdvancedSearch();
 											oSearch.method = 'SETUP_ROLE_SEARCH';
 											oSearch.addField('title,notes')
-
+											oSearch.rows = 50;
+											oSearch.sort('title', 'asc');
 											oSearch.getResults(function(data)
 											{
 												ns1blankspace.setup.user.access.add(oParam, data)

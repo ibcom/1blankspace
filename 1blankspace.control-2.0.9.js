@@ -47,6 +47,7 @@ ns1blankspace.option.initialiseSpaceTemplate = '/jscripts/1blankspace.setup.spac
 ns1blankspace.option.searchWatermark = 'search';
 ns1blankspace.option.showLogonOptions = false;
 ns1blankspace.option.showLogonOptionsOnHover = true;
+ns1blankspace.option.showFavourites = true;
 
 if (ns1blankspace.financial === undefined) {ns1blankspace.financial = {}}
 if (ns1blankspace.control === undefined) {ns1blankspace.control = {}}
@@ -152,7 +153,7 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.financial',
-		source: '/jscripts/1blankspace.financial-2.0.1.js'
+		source: '/jscripts/1blankspace.financial-2.0.2.js'
 	},
 	{
 		nameSpace: '1blankspace.financial.bankAccount',
@@ -328,6 +329,61 @@ ns1blankspace.themes =
 		title: 				'Wall',
 		cssURI: 			'/jscripts/1blankspace.theme.wall-2.0.0.css',
 		xhtmlHeaderLogo: 	'<img src="/jscripts/images/1blankspace.white-2.0.0.png">'
+	}
+]
+
+ns1blankspace.viewGroups =
+[
+	{
+		id: 1,
+		name: 'Contact',
+		type: 1
+	},
+	{
+		id: 2,
+		name: 'Project',
+		type: 1
+	},
+	{
+		id: 3,
+		name: 'Document',
+		type: 1
+	},
+	{
+		id: 4,
+		name: 'Product',
+		type: 1
+	},
+	{
+		id: 5,
+		name: 'Financial',
+		type: 1
+	},
+	{
+		id: 6,
+		name: '',
+		type: 1
+	},
+	{
+		id: 7,
+		name: 'SetupUser',
+		type: 2
+	},
+	{
+		id: 8,
+		name: 'SetupWebsite',
+		type: 2
+	},
+	{
+		id: 9,
+		name: 'Financial',
+		type: 2,
+		width: '150px'
+	},
+	{
+		id: 10,
+		name: 'SetupSpace',
+		type: 2
 	}
 ]	
 
@@ -839,61 +895,6 @@ ns1blankspace.views =
 	}
 ]
 
-ns1blankspace.viewGroups =
-[
-	{
-		id: 1,
-		name: 'Contact',
-		type: 1
-	},
-	{
-		id: 2,
-		name: 'Project',
-		type: 1
-	},
-	{
-		id: 3,
-		name: 'Document',
-		type: 1
-	},
-	{
-		id: 4,
-		name: 'Product',
-		type: 1
-	},
-	{
-		id: 5,
-		name: 'Financial',
-		type: 1
-	},
-	{
-		id: 6,
-		name: '',
-		type: 1
-	},
-	{
-		id: 7,
-		name: 'SetupUser',
-		type: 2
-	},
-	{
-		id: 8,
-		name: 'SetupWebsite',
-		type: 2
-	},
-	{
-		id: 9,
-		name: 'Financial',
-		type: 2,
-		width: '150px'
-	},
-	{
-		id: 10,
-		name: 'SetupSpace',
-		type: 2
-	}
-]
-
 ns1blankspace.control = 
 {
 	init: 		function (oParam, oResponse)
@@ -1021,6 +1022,43 @@ ns1blankspace.control =
 
 					else if (iStep == 5)
 					{
+						$(ns1blankspace.views).each(function(i, k)
+						{
+							if (k.visits==undefined) {k.visits=0}
+						});
+
+						var oData =
+						{
+							attribute: 1000,
+							custom: 'Y'
+						}
+					
+						$.ajax(
+						{
+							type: 'POST',
+							url: '/rpc/core/?method=CORE_PROFILE_SEARCH',
+							data: oData,
+							dataType: 'json',
+							success: function (oResponse)
+							{
+								ns1blankspace.control.favourites.data.views = [];
+
+								$.each(JSON.parse(oResponse.data), function (vt, viewTitle)
+								{
+									var oView = $.grep(ns1blankspace.views, function (view) {return view.title==viewTitle})[0];
+
+									if (oView) {ns1blankspace.control.favourites.data.views.push(oView)}
+								})
+
+								$.extend(true, oParam, {step: 6});
+								ns1blankspace.control.init(oParam)
+							}
+
+						});
+					}	
+
+					else if (iStep == 6)
+					{
 						if (ns1blankspace.user.systemAdmin) {ns1blankspace.setupShow = true};
 
 						$.ajax(
@@ -1069,11 +1107,14 @@ ns1blankspace.control =
 										if (ns1blankspace.xhtml.viewControl == undefined)
 										{
 											var aHTML = [];
-											
+
 											aHTML.push('<table class="ns1blankspaceViewControlContainer">');
 											aHTML.push('<tr class="ns1blankspaceViewControl">');
 
-											$.each($.grep(ns1blankspace.viewGroups, function (a) {return a.type == 1;}), function(i, v)
+											var oGroups = $.grep(ns1blankspace.viewGroups, function (a) {return a.type == 1;});
+											oGroups = $.grep(oGroups, function (a) {return a.role == undefined || ns1blankspace.util.hasRole({title: a.role})});
+
+											$.each(oGroups, function(i, v)
 											{
 												var oViewGroup = $.grep(ns1blankspace.views, function (a) {return a.group == v.id && a.show == true && a.type == 1;});
 
@@ -1081,7 +1122,8 @@ ns1blankspace.control =
 												{
 													oViewGroup.sort(ns1blankspace.util.sortBy('order'))
 
-													aHTML.push('<td class="ns1blankspaceViewControlColumn">');
+													aHTML.push('<td class="ns1blankspaceViewControlColumn" ' + (oViewGroup.style!=undefined?'style="' + oViewGroup.style + '"':'') + '>');
+
 													aHTML.push('<table class="ns1blankspaceViewControlColumn">');
 
 													aHTML.push('<tr><td><div id="ns1blankspaceView' + (v.imageName || v.name) + '" class="ns1blankspaceViewImage"></div>' +
@@ -1171,7 +1213,10 @@ ns1blankspace.control =
 												var oParam = {};
 												var sTitle = $(this).attr('data-title')
 												var oViewport = $.grep(ns1blankspace.views, function (a) {return a.title == sTitle;})[0];
+												oViewport.visits += 1;
 
+												ns1blankspace.control.favourites.visit({view: oViewport});
+												
 												if (oViewport.param)
 												{
 													oParam = oViewport.param;
@@ -1307,6 +1352,100 @@ ns1blankspace.control =
 													}
 									}
 					},
+
+	favourites: 	{
+						data: 		{
+										titles: [],
+										views: []
+									},
+
+						visit: 		function (oParam)
+									{
+										var oView = ns1blankspace.util.getParam(oParam, 'view').value;
+										
+										$('#ns1blankspaceViewControlFavourites').button({disabled: false});
+
+										var oFavourites = ns1blankspace.util.copy(ns1blankspace.views);
+										oFavourites = $.grep(oFavourites, function (favourite) {return favourite.visits!=0});
+										ns1blankspace.control.favourites.data.views = [];
+
+										oFavourites.sort(ns1blankspace.util.sortByNumber('visits', 'desc'));
+
+										$.each(oFavourites, function (f, favourite)
+										{
+											if (f <= 5) {ns1blankspace.control.favourites.data.views.push(favourite)}
+										});
+
+										ns1blankspace.control.favourites.data.views.reverse();
+
+										var oData =
+										{
+											attribute: 1000,
+											custom: 'Y',
+											value: JSON.stringify($.map(ns1blankspace.control.favourites.data.views, function (view) {return view.title}))
+										}
+									
+										$.ajax(
+										{
+											type: 'POST',
+											url: '/rpc/core/?method=CORE_PROFILE_MANAGE',
+											data: oData,
+											dataType: 'json'
+										});
+									},			
+
+						show: 		function (oParam)
+									{
+										var oFavourites = ns1blankspace.control.favourites.data.views;
+										
+										if (oFavourites.length == 0)
+										{
+											ns1blankspace.status.error('No favourites');
+										}
+										else
+										{
+											$vq.clear({queue: 'view-favourites'});
+
+											$vq.add('<table class="ns1blankspaceViewControlContainer">',
+													{queue: 'view-favourites'})
+
+											//oFavourites.sort(ns1blankspace.util.sortBy('title', 'asc'));
+		
+											$.each(oFavourites, function (f, favourite)
+											{
+												if (f <= 5)
+												{	
+													$vq.add('<tr class="ns1blankspaceViewControl">' +
+																'<td class="ns1blankspaceViewControl">' +
+																'<span id="ns1blankspaceViewControl_' + (favourite.parentNamespace!==undefined?favourite.parentNamespace + '_':'') + favourite.namespace +
+																	(favourite.namesuffix!==undefined?'_' + favourite.namesuffix:'') + 
+																'" class="ns1blankspaceViewControl">' + favourite.title + '</span>',
+																{queue: 'view-favourites'});
+
+													if (favourite.subNote !== undefined)
+													{	
+														$vq.add('<br /><div class="ns1blankspaceSubNote" style="margin-top:2px;">' + 
+																 	favourite.subNote + '</div>',
+																	{queue: 'view-favourites'});
+													}	
+
+													$vq.add('</td></tr>', {queue: 'view-favourites'});
+												}	
+											});
+
+											$vq.add('</table>', {queue: 'view-favourites'});
+										}	
+									
+										ns1blankspace.container.show(
+										{
+											xhtmlElementID: 'ns1blankspaceViewControlFavourites',
+											leftOffset: 30,
+											xhtml: $vq.get({queue: 'view-favourites'})
+										});	
+
+										ns1blankspace.control.views.bind();
+									}		
+					},				
 
 	user:			{
 						show: 		function (oElement)

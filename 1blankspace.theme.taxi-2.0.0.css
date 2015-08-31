@@ -1,12 +1,8 @@
 html
 {
-	background-color: black;
-}
-
-#ns1blankspaceContainer
-{
-	background-image: url(/jscripts/images/1blankspace.theme.taxi.jpg);
-	background-repeat: no-repeat;
+	background: background-image: url(/jscripts/images/1blankspace.theme.taxi.jpg) no-repeat center center fixed;
+	background-size: cover;
+	height: 100%;
 }
 
 a:link, a:visited, a:active
