@@ -46,8 +46,8 @@ ns1blankspace.option.postInit = undefined;
 ns1blankspace.option.initialiseSpaceTemplate = '/jscripts/1blankspace.setup.space-2.0.0.json';
 ns1blankspace.option.searchWatermark = 'search';
 ns1blankspace.option.showLogonOptions = false;
-ns1blankspace.option.showLogonOptionsOnHover = true;
-ns1blankspace.option.showFavourites = true;
+ns1blankspace.option.showLogonOptionsOnHover = false;
+ns1blankspace.option.showFavourites = false;
 
 if (ns1blankspace.financial === undefined) {ns1blankspace.financial = {}}
 if (ns1blankspace.control === undefined) {ns1blankspace.control = {}}
@@ -293,7 +293,7 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.visualise',
-		source: '/jscripts/1blankspace.visualise-2.0.2.js'
+		source: '/jscripts/1blankspace.visualise-2.0.7.js'
 	}
 ])
 
@@ -1029,8 +1029,10 @@ ns1blankspace.control =
 
 						var oData =
 						{
-							attribute: 1000,
-							custom: 'Y'
+							advanced: 10,
+							attribute: 10,
+							custom: 'Y',
+							type: 1
 						}
 					
 						$.ajax(
@@ -1043,12 +1045,19 @@ ns1blankspace.control =
 							{
 								ns1blankspace.control.favourites.data.views = [];
 
-								$.each(JSON.parse(oResponse.data), function (vt, viewTitle)
-								{
-									var oView = $.grep(ns1blankspace.views, function (view) {return view.title==viewTitle})[0];
+								if (oResponse.data != '')
+								{	
+									$.each(JSON.parse(oResponse.data), function (fv, favouriteView)
+									{
+										var oView = $.grep(ns1blankspace.views, function (view) {return view.title==favouriteView.title})[0];
 
-									if (oView) {ns1blankspace.control.favourites.data.views.push(oView)}
-								})
+										if (oView != undefined)
+										{
+											oView.visits = favouriteView.visits;
+											ns1blankspace.control.favourites.data.views.push(oView)
+										}
+									})
+								}	
 
 								$.extend(true, oParam, {step: 6});
 								ns1blankspace.control.init(oParam)
@@ -1380,15 +1389,17 @@ ns1blankspace.control =
 
 										var oData =
 										{
-											attribute: 1000,
+											advanced: 10,
+											attribute: 10,
 											custom: 'Y',
-											value: JSON.stringify($.map(ns1blankspace.control.favourites.data.views, function (view) {return view.title}))
+											type: 1,
+											value: JSON.stringify($.map(ns1blankspace.control.favourites.data.views, function (view) {return {title: view.title, visits: view.visits}}))
 										}
 									
 										$.ajax(
 										{
 											type: 'POST',
-											url: '/rpc/core/?method=CORE_PROFILE_MANAGE',
+											url: '/ondemand/core/?method=CORE_PROFILE_MANAGE',
 											data: oData,
 											dataType: 'json'
 										});

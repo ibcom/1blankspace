@@ -864,7 +864,7 @@ ns1blankspace.app =
 						if (ns1blankspace.option.showFavourites)
 						{
 							aHTML.push('<div id="ns1blankspaceViewControlHistoryContainer">' +
-										'<span id="ns1blankspaceViewControlRefresh">&nbsp;</span>' +
+										'<span id="ns1blankspaceViewControlBack" >&nbsp;</span>' +
 										'<span id="ns1blankspaceViewControlFavourites">&nbsp;</span>' +
 										'</div>');
 						}	
@@ -971,7 +971,53 @@ ns1blankspace.app =
 							.parent()
 								.buttonset();
 
-					if (!ns1blankspace.option.showFavourites)
+					if (ns1blankspace.option.showFavourites)
+					{
+						$('#ns1blankspaceViewControlRefresh')
+								.button( {
+									text: false,
+									icons:
+									{
+										primary: "ui-icon-arrowthickstop-1-n"
+									}
+								})
+								.click(function()
+								{
+									var sNS = ns1blankspace.namespace;
+									if (sNS == undefined) {sNS = 'ns1blankspace'}
+
+									if (ns1blankspace.objectParentName !== undefined)
+									{
+										window[sNS][ns1blankspace.objectParentName][ns1blankspace.objectName].init();
+									}	
+									else
+									{
+										window[sNS][ns1blankspace.objectName].init();
+									}	
+								})
+								.css('width', '25px')
+								.css('margin-left', '20px')
+							.next()
+								.button(
+								{
+									text: false,
+									disabled: false,
+									label: 'Most used',
+									icons:
+									{
+										primary: "ui-icon-star"
+									}
+								})
+								.click(function()
+								{
+									ns1blankspace.control.favourites.show({instruction: 3});
+								})
+								.css('width', '25px')
+								.css('margin-left', '4px')
+								.parent()
+									.buttonset();
+					}
+					else
 					{
 						$('#ns1blankspaceViewControlBack')
 							.button({
@@ -1017,51 +1063,6 @@ ns1blankspace.app =
 								})
 								.css('width', '19px')
 								.css('margin-left', '2px')
-								.parent()
-									.buttonset();
-					}
-					else
-					{
-						$('#ns1blankspaceViewControlRefresh')
-								.button( {
-									text: false,
-									icons:
-									{
-										primary: "ui-icon-arrowthickstop-1-n"
-									}
-								})
-								.click(function()
-								{
-									var sNS = ns1blankspace.namespace;
-									if (sNS == undefined) {sNS = 'ns1blankspace'}
-
-									if (ns1blankspace.objectParentName !== undefined)
-									{
-										window[sNS][ns1blankspace.objectParentName][ns1blankspace.objectName].init();
-									}	
-									else
-									{
-										window[sNS][ns1blankspace.objectName].init();
-									}	
-								})
-								.css('width', '25px')
-								.css('margin-left', '20px')
-							.next()
-								.button(
-								{
-									text: false,
-									disabled: false,
-									icons:
-									{
-										primary: "ui-icon-star"
-									}
-								})
-								.click(function()
-								{
-									ns1blankspace.control.favourites.show({instruction: 3});
-								})
-								.css('width', '25px')
-								.css('margin-left', '4px')
 								.parent()
 									.buttonset();
 					}				
