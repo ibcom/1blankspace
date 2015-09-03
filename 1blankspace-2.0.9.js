@@ -864,7 +864,7 @@ ns1blankspace.app =
 						if (ns1blankspace.option.showFavourites)
 						{
 							aHTML.push('<div id="ns1blankspaceViewControlHistoryContainer">' +
-										'<span id="ns1blankspaceViewControlBack" >&nbsp;</span>' +
+										'<span id="ns1blankspaceViewControlRefresh" >&nbsp;</span>' +
 										'<span id="ns1blankspaceViewControlFavourites">&nbsp;</span>' +
 										'</div>');
 						}	
@@ -1182,11 +1182,14 @@ ns1blankspace.app =
 						},
 						function(event)
 						{
-							if (event.toElement.id != 'ns1blankspaceMultiUseContainer' && event.toElement.id != this.id)
-							{
-								$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions);
-								$(ns1blankspace.xhtml.container).attr('data-initiator', '');
-							}
+							if (event.toElement != undefined)
+							{	
+								if (event.toElement.id != 'ns1blankspaceMultiUseContainer' && event.toElement.id != this.id)
+								{
+									$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions);
+									$(ns1blankspace.xhtml.container).attr('data-initiator', '');
+								}
+							}	
 						});
 					}	
 
@@ -2541,7 +2544,9 @@ ns1blankspace.history.view =
 								bForward = false;					
 							};			
 					
-							$('#ns1blankspaceViewControlBack')
+							if (!ns1blankspace.option.showFavourites)
+							{	
+								$('#ns1blankspaceViewControlBack')
 								.button({
 										text: false,
 										icons: {primary: "ui-icon-triangle-1-w"},
@@ -2562,6 +2567,7 @@ ns1blankspace.history.view =
 									})
 									.parent()
 										.buttonset();
+							}			
 					
 							$('#ns1blankspaceViewControlBack')
 								.button({disabled: bBack})

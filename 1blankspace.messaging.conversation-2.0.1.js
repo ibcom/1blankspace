@@ -636,7 +636,8 @@ ns1blankspace.messaging.conversation =
 										oSearch.method = 'MESSAGING_CONVERSATION_PARTICIPANT_SEARCH';
 										oSearch.addField('user,username');
 										oSearch.addCustomOption('conversation', ns1blankspace.objectContext);
-										oSearch.rows = 1;
+										oSearch.addFilter('status', 'EQUAL_TO', 1)
+										oSearch.rows = 100;
 										oSearch.getResults(function(oResponse)
 										{
 											ns1blankspace.messaging.conversation.participants.show(oParam, oResponse)
@@ -691,8 +692,9 @@ ns1blankspace.messaging.conversation =
 													 primary: "ui-icon-close"
 												}
 											})
-											.click(function() {
-												ns1blankspace.messaging.conversation.participants.remove(this.id)
+											.click(function()
+											{
+												ns1blankspace.messaging.conversation.participants.remove({xhtmlElementID: this.id});
 											})
 											.css('width', '15px')
 											.css('height', '18px');				
@@ -931,7 +933,7 @@ ns1blankspace.messaging.conversation =
 									{	
 										var sID = ns1blankspace.util.getParam(oParam, 'xhtmlElementID', {index: 1}).value;
 									
-										var sData = 'remove=1&user=' + sID + '&conversation=' + ns1blankspace.objectContext;
+										var sData = 'remove=1&id=' + sID + '&conversation=' + ns1blankspace.objectContext;
 																					
 										$.ajax(
 										{
@@ -939,7 +941,7 @@ ns1blankspace.messaging.conversation =
 											url: ns1blankspace.util.endpointURI('MESSAGING_CONVERSATION_PARTICIPANT_MANAGE'),
 											data: sData,
 											dataType: 'json',
-											success: function(data){$('#' + sXHTMLElementID).parent().fadeOut(500)}
+											success: function(data){$('#' + sXHTMLElementID).parent().parent().fadeOut(500)}
 										});	
 									}	
 								},

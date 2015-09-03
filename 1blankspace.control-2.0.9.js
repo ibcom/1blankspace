@@ -229,7 +229,7 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.setup.space',
-		source: '/jscripts/1blankspace.setup.space-2.0.0.js'
+		source: '/jscripts/1blankspace.setup.space-2.0.1.js'
 	},
 	{
 		nameSpace: '1blankspace.setup.structure',
@@ -1418,7 +1418,13 @@ ns1blankspace.control =
 											$vq.clear({queue: 'view-favourites'});
 
 											$vq.add('<table class="ns1blankspaceViewControlContainer">',
-													{queue: 'view-favourites'})
+														{queue: 'view-favourites'})
+
+											$vq.add('<tr class="ns1blankspaceViewControl">' +
+														'<td class="ns1blankspaceViewControlColumn">' +
+														'<table class="ns1blankspaceViewControlColumn">',
+														{queue: 'view-favourites'})
+											
 
 											//oFavourites.sort(ns1blankspace.util.sortBy('title', 'asc'));
 		
@@ -1444,7 +1450,7 @@ ns1blankspace.control =
 												}	
 											});
 
-											$vq.add('</table>', {queue: 'view-favourites'});
+											$vq.add('</table></td></tr></table>', {queue: 'view-favourites'});
 										}	
 									
 										ns1blankspace.container.show(
@@ -2162,7 +2168,7 @@ ns1blankspace.attachments =
 					{	
 						var oSearch = new AdvancedSearch();
 						oSearch.method = 'CORE_ATTACHMENT_SEARCH';
-						oSearch.addField('type,filename,description,download,modifieddate,attachment,createddate,createdusertext');
+						oSearch.addField('type,filename,description,download,modifieddate,attachment,bucket,createddate,createdusertext');
 						oSearch.addFilter('object', 'EQUAL_TO', iObject);
 						oSearch.addFilter('objectcontext', 'EQUAL_TO', iObjectContext);
 						oSearch.rows = ns1blankspace.option.defaultRows;
@@ -2288,17 +2294,47 @@ ns1blankspace.attachments =
 					.css('height', '20px')	
 				},
 
-	add: 		function (oParam)
+	add: 		function (oParam, oResponse)
 				{
-					$('#ns1blankspaceAttachmentsColumn1').html(ns1blankspace.attachments.upload.show(oParam));
-					
-					$('#ns1blankspaceUpload').button(
+					if (ns1blankspace.option.attachmentsBucket == undefined && oResponse == undefined)
+					{	
+						var oSearch = new AdvancedSearch();
+						oSearch.method = 'SETUP_AWS_S3_BUCKET_SEARCH';
+						oSearch.addField('account,title');
+						oSearch.addFilter('title', 'TEXT_IS_LIKE', '1blankspace-attachments')
+						oSearch.rows = 1;
+						oSearch.getResults(function(oResponse)
+						{
+							ns1blankspace.attachments.add(oParam, oResponse)
+						});
+					}
+					else
+					{	
+						if (oResponse != undefined)
+						{	
+							ns1blankspace.option.attachmentsBucket = -1;
+
+							if (oResponse.data.rows.length==1)
+							{
+								ns1blankspace.option.attachmentsBucket = oResponse.data.rows[0].id;
+							}
+						}	
+
+						if (ns1blankspace.option.attachmentsBucket != -1)
+						{
+							oParam = ns1blankspace.util.setParam(oParam, 'bucket', ns1blankspace.option.attachmentsBucket)
+						}
+
+						$('#ns1blankspaceAttachmentsColumn1').html(ns1blankspace.attachments.upload.show(oParam));
+						$('#ns1blankspaceUpload').button(
 						{
 							label: "Upload"
 						})
-						.click(function() {
+						.click(function()
+						{
 							 ns1blankspace.attachments.upload.process();
-						})
+						});
+					}	
 				},
 
 	upload: 	{ 
@@ -2317,9 +2353,10 @@ ns1blankspace.attachments =
 									var sXHTML = '';
 									var sHelpNotes;
 									var aInputs = [];
-									var sURL = '/ondemand/attach/';
+									var sURL = '/rpc/attach/?method=ATTACH_FILE&rf=TEXT';
 									var aInputParams = [];
 									var iPublicType;
+									var iBucket = ns1blankspace.util.getParam(oParam, 'bucket').value;
 									
 									if (oParam != undefined)
 									{
@@ -2345,6 +2382,11 @@ ns1blankspace.attachments =
 													'<input type="hidden" name="maxfiles" id="maxfiles" value="' + iMaxFiles + '">' +
 													'<input type="hidden" name="object" id="object" value="' + iObject + '">' +
 													'<input type="hidden" name="objectcontext" id="objectcontext" value="' + lObjectContext + '">');
+											
+									if (iBucket != undefined)
+									{		
+										aHTML.push('<input type="hidden" name="bucket" id="bucket" value="' + iBucket + '">');
+									}	
 											
 									for (var i = 0; i < iMaxFiles; i++) 	
 									{
@@ -2435,7 +2477,7 @@ ns1blankspace.attachments =
 										else 
 										{
 											//FF
-											if (oFrame.contentDocument.body.innerHTML === 'OK') 
+											if (oFrame.contentDocument.body.innerHTML.substring(0, 2) === 'OK') 
 											{
 												sCurrentState = 'complete';
 											}
