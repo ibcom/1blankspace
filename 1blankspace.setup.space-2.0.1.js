@@ -1407,7 +1407,7 @@ ns1blankspace.setup.space =
 														'</td></tr>');
 
 										aHTML.push('<tr><td class="ns1blankspaceCaption">' +
-														'Access Secret Key' +
+														'Access Key (Secret/Password)' +
 														'</td></tr>' +
 														'<tr class="ns1blankspaceText">' +
 														'<td class="ns1blankspaceText">' +
@@ -1473,34 +1473,43 @@ ns1blankspace.setup.space =
 												{
 													if (data.status == 'OK')
 													{	
-														sID = data.id;
+														if ($('#ns1blankspaceSetupSpaceStorageBucketTitle').val() != '')
+														{	
+															sID = data.id;
 
-														var oData =
-														{
-															account: sID,
-															title: $('#ns1blankspaceSetupSpaceStorageBucketTitle').val()
-														}
-
-														$.ajax(
-														{
-															type: 'POST',
-															url: ns1blankspace.util.endpointURI('SETUP_AWS_S3_BUCKET_MANAGE'),
-															data: oData,
-															dataType: 'json',
-															success: function(data)
+															var oData =
 															{
-																if (data.status == 'OK')
-																{	
-																	ns1blankspace.status.message('Storage added.')
-																	ns1blankspace.show({selector: '#ns1blankspaceMainStorage', refresh: true});
-																	ns1blankspace.setup.space.storage.show();
-																}
-																else
-																{
-																	ns1blankspace.status.error(data.error.errornotes);
-																}	
+																account: sID,
+																title: $('#ns1blankspaceSetupSpaceStorageBucketTitle').val()
 															}
-														});	
+
+															$.ajax(
+															{
+																type: 'POST',
+																url: ns1blankspace.util.endpointURI('SETUP_AWS_S3_BUCKET_MANAGE'),
+																data: oData,
+																dataType: 'json',
+																success: function(data)
+																{
+																	if (data.status == 'OK')
+																	{	
+																		ns1blankspace.status.message('Saved.')
+																		ns1blankspace.show({selector: '#ns1blankspaceMainStorage', refresh: true});
+																		ns1blankspace.setup.space.storage.show();
+																	}
+																	else
+																	{
+																		ns1blankspace.status.error(data.error.errornotes);
+																	}	
+																}
+															});
+														}
+														else
+														{
+															ns1blankspace.status.message('Saved.')
+															ns1blankspace.show({selector: '#ns1blankspaceMainStorage', refresh: true});
+															ns1blankspace.setup.space.storage.show();
+														}	
 													}
 													else
 													{
