@@ -1440,6 +1440,10 @@ ns1blankspace.financial.profitLoss =
 						aHTML.push('<tr><td style="padding-top:5px;">' +
 										'<span class="ns1blankspaceAction" style="width:95px;" id="ns1blankspacePLShowAll">Show All</span>' +
 										'</td></tr>');
+
+						aHTML.push('<tr><td style="padding-top:10px;">' +
+										'<span class="ns1blankspaceSubNote" style="width:95px;">Accounts with zero values are not shown.</span>' +
+										'</td></tr>');
 						
 						aHTML.push('</table>');					
 						

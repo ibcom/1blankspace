@@ -50,54 +50,64 @@ ns1blankspace.financial.bankAccount =
 					{	
 						if (ns1blankspace.financial.data.bankaccounts)
 						{
-							window.clearInterval(ns1blankspace.timer.initData);
-							
-							var aHTML = [];
-							
-							aHTML.push('<table>');
+							if (ns1blankspace.financial.data.bankaccounts.length==1)
+							{	
+								if (ns1blankspace.financial.data.bankaccounts[0].id != ns1blankspace.objectContext)
+								{	
+									ns1blankspace.financial.bankAccount.init({id: ns1blankspace.financial.data.bankaccounts[0].id});
+								}	
+							}
+							else
+							{	
+								window.clearInterval(ns1blankspace.timer.initData);
+								
+								var aHTML = [];
+								
+								aHTML.push('<table>');
 
-							aHTML.push('<tr><td><div id="ns1blankspaceViewFinancialLarge" class="ns1blankspaceViewImageLarge"></div></td></tr>');
-	
-							aHTML.push('<tr class="ns1blankspaceControl">' +
-										'<td id="ns1blankspaceControlTransfer" class="ns1blankspaceControl" style="padding-top:15px;">Transfer</td>' +
-										'</tr>');
+								aHTML.push('<tr><td><div id="ns1blankspaceViewFinancialLarge" class="ns1blankspaceViewImageLarge"></div></td></tr>');
+		
+								aHTML.push('<tr class="ns1blankspaceControl">' +
+											'<td id="ns1blankspaceControlTransfer" class="ns1blankspaceControl" style="padding-top:15px;">Transfer</td>' +
+											'</tr>');
 
-							aHTML.push('</table>');		
-							
-							$('#ns1blankspaceControl').html(aHTML.join(''));
+								aHTML.push('</table>');		
+								
+								$('#ns1blankspaceControl').html(aHTML.join(''));
 
-							$('#ns1blankspaceControlTransfer').click(function(event)
-							{
-								ns1blankspace.show({selector: '#ns1blankspaceMain'});
-								ns1blankspace.financial.bankAccount.transfer.show({xhtmlElementID: 'ns1blankspaceMain'});
-							});	
+								$('#ns1blankspaceControlTransfer').click(function(event)
+								{
+									ns1blankspace.show({selector: '#ns1blankspaceMain'});
+									ns1blankspace.financial.bankAccount.transfer.show({xhtmlElementID: 'ns1blankspaceMain'});
+								});	
 
-							$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions);
-							
-							var aHTML = [];
-										
-							aHTML.push('<table id="ns1blankspaceMostLikely" class="ns1blankspace">');
+								$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions);
+								
+								var aHTML = [];
+											
+								aHTML.push('<table id="ns1blankspaceMostLikely" class="ns1blankspace">');
 
-							$.each(ns1blankspace.financial.data.bankaccounts, function()
-							{
-								aHTML.push('<tr class="ns1blankspaceRow">' +
-												'<td id="ns1blankspaceBankAccount_title-' + this.id + '" class="ns1blankspaceMostLikely" style="width:200px;">' +
-												this["title"] + '</td>' + 
-												'<td id="ns1blankspaceBankAccount_lastreconcileddate-' + this.id + '" class="ns1blankspaceMostLikelySub" style="width:90px;text-align:right;">' +
-												this.lastreconcileddate + '</td>' +
-												'<td id="ns1blankspaceBankAccount_lastreconciledamount-' + this.id + '" class="ns1blankspaceMostLikelySub" style="width:90px;text-align:right;">' +
-												'$' + this.lastreconciledamount + '</td>' + 	
-												'<td>&nbsp;</td></tr>');
-							});
-							
-							aHTML.push('</table>');
-				
-							$('#ns1blankspaceMain').html(aHTML.join(''));
+								$.each(ns1blankspace.financial.data.bankaccounts, function()
+								{
+									aHTML.push('<tr class="ns1blankspaceRow">' +
+													'<td id="ns1blankspaceBankAccount_title-' + this.id + '" class="ns1blankspaceMostLikely" style="width:200px;">' +
+													this["title"] + '</td>' + 
+													'<td id="ns1blankspaceBankAccount_lastreconcileddate-' + this.id + '" class="ns1blankspaceMostLikelySub" style="width:90px;text-align:right;">' +
+													this.lastreconcileddate + '</td>' +
+													'<td id="ns1blankspaceBankAccount_lastreconciledamount-' + this.id + '" class="ns1blankspaceMostLikelySub" style="width:90px;text-align:right;">' +
+													'$' + this.lastreconciledamount + '</td>' + 	
+													'<td>&nbsp;</td></tr>');
+								});
+								
+								aHTML.push('</table>');
+					
+								$('#ns1blankspaceMain').html(aHTML.join(''));
 
-							$('#ns1blankspaceMostLikely .ns1blankspaceMostLikely').click(function(event) {
-								var aID = (this.id).split('-');
-								ns1blankspace.financial.bankAccount.show({id: aID[1]});
-							});
+								$('#ns1blankspaceMostLikely .ns1blankspaceMostLikely').click(function(event) {
+									var aID = (this.id).split('-');
+									ns1blankspace.financial.bankAccount.show({id: aID[1]});
+								});
+							}	
 						}	
 					}	
 				},		
