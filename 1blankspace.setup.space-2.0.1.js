@@ -1475,11 +1475,12 @@ ns1blankspace.setup.space =
 													{	
 														if ($('#ns1blankspaceSetupSpaceStorageBucketTitle').val() != '')
 														{	
-															sID = data.id;
+															var sAccount = data.id;
 
 															var oData =
 															{
-																account: sID,
+																id: $('#ns1blankspaceSetupSpaceStorageBucketTitle').attr('data-id'),
+																account: sAccount,
 																title: $('#ns1blankspaceSetupSpaceStorageBucketTitle').val()
 															}
 
@@ -1558,6 +1559,7 @@ ns1blankspace.setup.space =
 												if (oResponse.data.rows.length != 0)
 												{	
 													$('#ns1blankspaceSetupSpaceStorageBucketTitle').val(oResponse.data.rows[0].title)
+													$('#ns1blankspaceSetupSpaceStorageBucketTitle').attr('data-id', oResponse.data.rows[0].id)
 												}	
 											});
 

@@ -2237,6 +2237,7 @@ ns1blankspace.financial.unallocated =
 									oSearch.method = 'FINANCIAL_INVOICE_SEARCH';
 									oSearch.addField('reference,sentdate,invoice.lineitem.amount,invoice.lineitem.description,invoice.lineitem.id');
 									oSearch.addFilter('invoice.lineitem.financialaccount', 'EQUAL_TO', ns1blankspace.financial.unallocatedAccount);
+									oSearch.addFilter('invoice.lineitem.amount', 'NOT_EQUAL_TO', 0);
 									oSearch.addFilter('invoice.sent', 'EQUAL_TO', 'N');
 
 									ns1blankspace.financial.unallocated.row = function (oRow)
@@ -2269,6 +2270,7 @@ ns1blankspace.financial.unallocated =
 									oSearch.method = 'FINANCIAL_RECEIPT_SEARCH';
 									oSearch.addField('reference,receiveddate,receipt.lineitem.amount,receipt.lineitem.description,receipt.lineitem.id');
 									oSearch.addFilter('receipt.lineitem.financialaccount', 'EQUAL_TO', ns1blankspace.financial.unallocatedAccount);
+									oSearch.addFilter('receipt.lineitem.amount', 'NOT_EQUAL_TO', 0);
 
 									ns1blankspace.financial.unallocated.row = function (oRow)
 									{
@@ -2300,6 +2302,7 @@ ns1blankspace.financial.unallocated =
 									oSearch.method = 'FINANCIAL_EXPENSE_SEARCH';
 									oSearch.addField('reference,accrueddate,expense.lineitem.amount,expense.lineitem.description,expense.lineitem.id');
 									oSearch.addFilter('expense.lineitem.financialaccount', 'EQUAL_TO', ns1blankspace.financial.unallocatedAccount);
+									oSearch.addFilter('expense.lineitem.amount', 'NOT_EQUAL_TO', 0);
 
 									ns1blankspace.financial.unallocated.row = function (oRow)
 									{
@@ -2331,6 +2334,7 @@ ns1blankspace.financial.unallocated =
 									oSearch.method = 'FINANCIAL_PAYMENT_SEARCH';
 									oSearch.addField('reference,paiddate,payment.lineitem.amount,payment.lineitem.description,payment.lineitem.id');
 									oSearch.addFilter('payment.lineitem.financialaccount', 'EQUAL_TO', ns1blankspace.financial.unallocatedAccount);
+									oSearch.addFilter('payment.lineitem.amount', 'NOT_EQUAL_TO', 0);
 
 									ns1blankspace.financial.unallocated.row = function (oRow)
 									{
