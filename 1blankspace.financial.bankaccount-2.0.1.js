@@ -48,6 +48,8 @@ ns1blankspace.financial.bankAccount =
 					}
 					else
 					{	
+						window.clearInterval(ns1blankspace.timer.initData);
+
 						if (ns1blankspace.financial.data.bankaccounts)
 						{
 							if (ns1blankspace.financial.data.bankaccounts.length==1)
@@ -59,8 +61,6 @@ ns1blankspace.financial.bankAccount =
 							}
 							else
 							{	
-								window.clearInterval(ns1blankspace.timer.initData);
-								
 								var aHTML = [];
 								
 								aHTML.push('<table>');
