@@ -64,7 +64,7 @@ ns1blankspace.setup.space =
 
 						aHTML.push('<tr class="ns1blankspaceControl">' +
 										'<td id="ns1blankspaceControlDetails" class="ns1blankspaceControl">Details' +
-										'<br /><span class="ns1blankspaceSub" style="font-size:0.75em;">password<br />settings</span></td>' +
+										'<br /><span class="ns1blankspaceSub" style="font-size:0.75em;">password settings</span></td>' +
 										'</tr>');
 
 						aHTML.push('</table>');	

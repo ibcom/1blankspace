@@ -181,13 +181,14 @@ ns1blankspace.views =
 		type: 1
 	},
 	{
-		title: "Email",
-		parentNamespace: "messaging",
-		namespace: "imap",
-		endpoint: "MESSAGING_IMAP",
+		title: "Messaging",
+		parentnamespace: "setup",
+		namespace: "messaging",
+		endpoint: "SETUP_MESSAGING", 
 		show: true,
 		group: 1,
-		type: 1
+		type: 1,
+		subNote: 'Email'
 	},
 	{
 		title: "Structures",

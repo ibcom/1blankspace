@@ -8,19 +8,39 @@ ns1blankspace.xhtml.loading = '<img class="ns1blankspaceLoading" id="ns1blankspa
 ns1blankspace.xhtml.loadingSmall = '<img class="ns1blankspaceLoadingSmall" id="ns1blankspaceLoadingSmall" src="/jscripts/images/1blankspace.loading.square.10.gif">';
 ns1blankspace.xhtml.editorCSS = '';
 
-ns1blankspace.option.defaultRows = 20;
-ns1blankspace.option.defaultView = "Select...";
-ns1blankspace.option.defaultSetupView = "Website";
-ns1blankspace.option.returnToLast = true;
-ns1blankspace.option.restLevel = 0;
-ns1blankspace.option.autoSetupSwitch = true;
-ns1blankspace.option.passwordhash = true;
-ns1blankspace.option.formFactor.size.value = ns1blankspace.option.formFactor.size.options.medium;
-ns1blankspace.option.classic = true;
-ns1blankspace.option.loadControl = false;
-ns1blankspace.option.httpsOnly = true;
-ns1blankspace.option.viewShowSearch = true;
-ns1blankspace.option.passwordExpiry = {site: 1533, days: 36500};
+ns1blankspace.option = $.extend(true, ns1blankspace.option, 
+{
+	defaultRows: 20,
+	defaultView: "Select...",
+	defaultSetupView: "Website",
+	returnToLast: true,
+	restLevel: 0,
+	autoSetupSwitch: true,
+	passwordhash: true,
+	classicURI: '/index.asp?Site=475&p=asms%2Fmystartpage.asp',
+	loadControl: false,
+	httpsOnly: true,
+	viewShowSearch: true,
+	passwordExpiry: {site: 1533, days: 36500},
+	showBrowsing: false,
+	messagingEmailShowCount: false,
+	messagingCheckForNew: 60000,
+	helpURI: 'http://community.mydigitalstructure.com',
+	taxVATCaption: 'GST',
+	taxPayrollCaption: 'Employee',
+	taxBusinessCaption: 'Business',
+	currencySymbol: '$',
+	bulkInvoicing: true,
+	postInit: undefined,
+	initialiseSpaceTemplate: '/jscripts/1blankspace.setup.space-2.0.0.json',
+	searchWatermark: 'search',
+	showLogonOptions: false,
+	showLogonOptionsOnHover: false,
+	showFavourites: false,
+	showLogoff: false
+});
+
+ns1blankspace.formFactor.size.value = ns1blankspace.formFactor.size.options.medium;
 
 ns1blankspace.data.object = {person: 32, business: 12, opportunity: 35};
 ns1blankspace.data.attachmentTypes = [];
@@ -32,23 +52,6 @@ ns1blankspace.data.actionTypes =
 	emailSent: {id: 5, title: 'Email Sent'},
 	emailReceived: {id: 9, title: 'Email Received'}
 };
-
-ns1blankspace.option.showBrowsing = false;
-ns1blankspace.option.messagingEmailShowCount = false;
-ns1blankspace.option.messagingCheckForNew = 60000;
-ns1blankspace.option.helpURI = 'http://community.mydigitalstructure.com';
-ns1blankspace.option.taxVATCaption = 'GST';
-ns1blankspace.option.taxPayrollCaption = 'Employee';
-ns1blankspace.option.taxBusinessCaption = 'Business';
-ns1blankspace.option.currencySymbol = '$';
-ns1blankspace.option.bulkInvoicing = true;
-ns1blankspace.option.postInit = undefined;
-ns1blankspace.option.initialiseSpaceTemplate = '/jscripts/1blankspace.setup.space-2.0.0.json';
-ns1blankspace.option.searchWatermark = 'search';
-ns1blankspace.option.showLogonOptions = false;
-ns1blankspace.option.showLogonOptionsOnHover = false;
-ns1blankspace.option.showFavourites = false;
-ns1blankspace.option.showLogoff = true;
 
 if (ns1blankspace.financial === undefined) {ns1blankspace.financial = {}}
 if (ns1blankspace.control === undefined) {ns1blankspace.control = {}}
@@ -85,8 +88,9 @@ ns1blankspace.xhtml.header =
 	'<div id="ns1blankspaceLogo" style="width:250px; float:left; "><img src="/jscripts/images/1blankspace.aoe-2.0.0.png"></div>' +
 	'<div style="float:right; margin-right:3px;">' +
 	'<div id="ns1blankspaceSpaceText" style="width:450px; margin-top:-3px; margin-bottom:0px;"></div>' +
-	'<div id="ns1blankspaceLogonName" style="width:450px; margin-top:-2px; overflow:auto; height:20px;"></div>' +
+	'<div id="ns1blankspaceLogonName" style="width:' + (ns1blankspace.option.showLogoff?'410':'450') + 'px; margin-top:-2px; overflow:auto; height:20px; float:left;"></div>' +
 	(ns1blankspace.option.showLogonOptions?'<div id="ns1blankspaceLogonOptions" style="width:20px; margin-top:0px; float:right;"></div>':'') +
+	(ns1blankspace.option.showLogoff?'<div id="ns1blankspaceLogoff" style="width:40px; margin-top:1px; float:right; font-size:0.75em; cursor:pointer;" class="ns1blankspaceSub"></div>':'') +
 	'</div>';
 
 ns1blankspace.scripts =
@@ -154,11 +158,11 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.financial',
-		source: '/jscripts/1blankspace.financial-2.0.2.js'
+		source: '/jscripts/1blankspace.financial-2.0.3.js'
 	},
 	{
 		nameSpace: '1blankspace.financial.bankAccount',
-		source: '/jscripts/1blankspace.financial.bankaccount-2.0.0.js'
+		source: '/jscripts/1blankspace.financial.bankaccount-2.0.1.js'
 	},
 	{
 		nameSpace: '1blankspace.financial.invoice',
