@@ -34,7 +34,7 @@
 			"data":
 			{
 				"title": "Bootstrap",
-				"headerscript": "&lt;script src=\"//code.jquery.com/jquery-1.11.0.min.js\"&gt;&lt;/script&gt;\r\n&lt;link rel=\"stylesheet\" href=\"https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css\"&gt;\r\n&lt;link rel=\"stylesheet\" href=\"https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap-theme.min.css\"&gt;\r\n&lt;script src=\"https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js\"&gt;&lt;/script&gt;"
+				"headerscript": "&lt;link rel=\"stylesheet\" type=\"text/css\" href=\"//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css\"&gt;\r\n&lt;script src=\"//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js\" type=\"text/javascript\"&gt;&lt;/script&gt;\r\n&lt;script src=\"//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js\" type=\"text/javascript\"&gt;&lt;/script&gt;\r\n&lt;script src=\"/jscripts/md5-min.js\"&gt;&lt;/script&gt;\r\n&lt;script src=\"/jscripts/mydigitalstructure-2.0.0.js\"&gt;&lt;/script&gt;"
 			}
 		},
 		{

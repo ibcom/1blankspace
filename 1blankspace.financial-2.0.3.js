@@ -2507,6 +2507,7 @@ ns1blankspace.financial.unallocated =
 
 							var sData = 'id=' + ns1blankspace.util.fs(aID[1]);
 							sData += '&financialaccount=' + ns1blankspace.util.fs(aID[2]);
+							sData += '&override=Y'
 
 							$.ajax(
 							{
