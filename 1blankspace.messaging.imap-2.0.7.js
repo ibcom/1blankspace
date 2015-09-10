@@ -2118,7 +2118,8 @@ ns1blankspace.messaging.imap =
 			aHTML.push(ns1blankspace.xhtml.loading);
 			
 			aHTML.push('<div class="ns1blankspaceMessageContainer" id="ns1blankspaceMessageFrameContainer"><iframe class="ns1blankspaceMessageContainer" name="ifMessage" ' +
-								'id="ifMessage" frameborder="0" border="0" scrolling="auto" sandbox="allow-same-origin"></iframe></div>');
+								'id="ifMessage" frameborder="0" border="0" scrolling="auto" sandbox="allow-same-origin"' +
+								' style="min-height:' + $('#ns1blankspaceControl').height() + 'px;"></iframe></div>');
 														
 			$('#ns1blankspaceMainSummary').html(aHTML.join(''));
 
