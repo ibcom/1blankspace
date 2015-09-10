@@ -4898,6 +4898,12 @@ ns1blankspace.util =
 
 					queue:
 					{
+						init: function (sData, oParam)
+						{
+							this.clear(oParam);
+							this.add(sData, oParam);
+						},
+
 						clear: function (oParam)
 						{
 							var sType = ns1blankspace.util.getParam(oParam, 'type', {"default": 'data'}).value;

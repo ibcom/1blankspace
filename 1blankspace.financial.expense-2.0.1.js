@@ -72,7 +72,6 @@ ns1blankspace.financial.expense =
 						oSearch.addField('accrueddate,amount,tax');
 						oSearch.rf = 'json';
 						oSearch.addFilter('id', 'EQUAL_TO', ns1blankspace.objectContext);
-						
 						oSearch.getResults(function(data) {ns1blankspace.financial.expense.refresh(data)});
 					}
 					else
