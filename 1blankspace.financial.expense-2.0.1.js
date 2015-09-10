@@ -936,7 +936,7 @@ ns1blankspace.financial.expense =
 
 										var oSearch = new AdvancedSearch();
 										oSearch.method = 'FINANCIAL_PAYMENT_EXPENSE_SEARCH';
-										oSearch.addField('appliesdate,amount,paymentexpense.payment.reference,paymentexpense.payment.amount');
+										oSearch.addField('appliesdate,amount,paymentexpense.payment.reference,paymentexpense.payment.amount,paymentexpense.payment.id');
 										oSearch.addFilter('expense', 'EQUAL_TO', iObjectContext);
 										oSearch.sort('appliesdate', 'asc');
 										oSearch.rows = 1000;
@@ -956,16 +956,17 @@ ns1blankspace.financial.expense =
 										}
 										else
 										{
-											var oPayments = ns1blankspace.util.unique({key: 'paymentexpense.payment.reference', data: oResponse.data.rows});
+											//var oPayments = ns1blankspace.util.unique({key: 'paymentexpense.payment.reference', data: oResponse.data.rows});
+											var oPayments = oResponse.data.rows;
 
-											aHTML.push('<table class="ns1blankspace">');
+											aHTML.push('<table class="ns1blankspace" id="ns1blankspaceFinancialExpensePayments">');
 											aHTML.push('<tr class="ns1blankspaceCaption">');
 											aHTML.push('<td class="ns1blankspaceHeaderCaption">Date</td>');
 											aHTML.push('<td class="ns1blankspaceHeaderCaption" style="text-align:right;">Amount</td>');
 											aHTML.push('<td class="ns1blankspaceHeaderCaption">&nbsp;</td>');
 											aHTML.push('</tr>');
 
-											$.each(oPayments, function()
+											$.each(oPayments, function(p, payment)
 											{
 												aHTML.push('<tr class="ns1blankspaceRow">');
 																			
@@ -976,12 +977,10 @@ ns1blankspace.financial.expense =
 												aHTML.push('<td id="ns1blankspaceReceipt_amount-' + this.id + '" class="ns1blankspaceRow" style="text-align:right;">' +
 																this['paymentexpense.payment.amount'] + '</td>');
 						
-												aHTML.push('<td style="width:30px;text-align:right;" class="ns1blankspaceRow">');
+												aHTML.push('<td style="width:60px;text-align:right;" class="ns1blankspaceRow">');
 													
-												if (oOptions.remove)
-												{	
-													aHTML.push('<span id="ns1blankspacePayment_options_remove-' + this.id + '" class="ns1blankspacePaymentRemove"></span>');
-												};	
+												aHTML.push('<span id="ns1blankspacePayment_options_remove-' + this.id + '" class="ns1blankspaceRemove"></span>');
+												aHTML.push('<span id="ns1blankspacePayment_options_play-' + payment['paymentexpense.payment.id'] + '" class="ns1blankspaceView"></span>');
 													
 												aHTML.push('</td></tr>');
 											});
@@ -990,20 +989,42 @@ ns1blankspace.financial.expense =
 
 											$('#ns1blankspacePaymentColumn1').html(aHTML.join(''));
 											
-											if (oOptions.remove) 
+											$('#ns1blankspaceFinancialExpensePayments .ns1blankspaceRemove').button(
 											{
-												$('.ns1blankspacePaymentRemove').button( {
-													text: false,
-													icons: {
-														primary: "ui-icon-close"
-													}
-												})
-												.click(function() {
-													ns1blankspace.financial.expense.payment.remove({xhtmlElementID: this.id});
-												})
-												.css('width', '15px')
-												.css('height', '17px')
-											}
+												text: false,
+												icons: {
+													primary: "ui-icon-close"
+												}
+											})
+											.click(function()
+											{
+												ns1blankspace.remove(
+												{
+													xhtmlElementID: this.id,
+													method: 'FINANCIAL_PAYMENT_EXPENSE_MANAGE',
+													ifNoneMessage: 'No payments.',
+													onComplete: ns1blankspace.financial.expense.refresh
+												});
+
+												//ns1blankspace.financial.expense.payment.remove({xhtmlElementID: this.id});
+											})
+											.css('width', '15px')
+											.css('height', '17px');
+
+											$('#ns1blankspaceFinancialExpensePayments .ns1blankspaceView').button(
+											{
+												text: false,
+												icons:
+												{
+													primary: "ui-icon-play"
+												}
+											})
+											.click(function()
+											{
+												ns1blankspace.financial.payment.init({id: (this.id).split('-')[1]})
+											})
+											.css('width', '15px')
+											.css('height', '17px');
 										}
 									}	
 								},

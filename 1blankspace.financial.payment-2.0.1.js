@@ -995,61 +995,6 @@ ns1blankspace.financial.payment =
 										dataType: 'json',
 										success: function(data){$('#' + sXHTMLElementID).parent().parent().fadeOut(500)}
 									});
-								},
-
-					allocate: 	{
-									data: 	{},
-
-									to:		function (oParam)
-											{
-												var iPaymentItemID = ns1blankspace.util.getParam(oParam, 'paymentItemID').value;
-												var iExpenseItemID = ns1blankspace.util.getParam(oParam, 'expenseItemID').value;
-												var iExpenseID = ns1blankspace.util.getParam(oParam, 'expenseID').value;
-												var cAmount = accounting.unformat(ns1blankspace.util.getParam(oParam, 'amount', {"default": 0}).value);
-
-												var oSearch = new AdvancedSearch();
-												oSearch.method = 'FINANCIAL_ITEM_SEARCH';
-
-												oSearch.addField('expense.lineitem.amount,expense.lineitem.description,expense.lineitem.id,' + 
-																	'expense.lineitem.amount,' + 
-																	'expense.lineitem.expensecreditamount,' + 
-																	'expense.lineitem.expenseoutstandingamount,' + 
-																	'expense.lineitem.financialaccounttext,' + 
-																	'expense.lineitem.paymentamount');
-
-												oSearch.addFilter('expense.lineitem.object', 'EQUAL_TO', 2);
-												oSearch.addFilter('expense.lineitem.objectcontext', 'EQUAL_TO', iExpenseID);
-												oSearch.addFilter('expense.lineitem.expenseoutstandingamount', 'NOT_EQUAL_TO', 0);
-
-												if (iExpenseItemID != undefined)
-												{
-													oSearch.addFilter('expense.lineitem.id', 'EQUAL_TO', iExpenseItemID);
-												}	
-
-												oSearch.sort('id', 'desc');
-												oSearch.getResults(function(oResponse)
-												{
-													oParam = ns1blankspace.util.setParam(oParam, 'items', oResponse.data.rows)
-													ns1blankspace.financial.payment.expense.allocate.to(oParam);
-												})
-											},
-											
-									process: function (oParam)
-											{
-												items = 
-												itemIndex = 0
-
-												if (itemIndex < items.length-1 && cAmount > 0)
-												{	
-													$.ajax(
-													{
-														type: 'POST',
-														url: '/rpc/financial/?method=FINANCIAL_PAYMENT_EXPENSE_MANAGE',
-														dataType: 'json',
-														data: 'amount=10&paymentlineitem=143187&expenselineitem=143192'
-													})
-												}
-											}
-								}			
+								}
 				}														
 }

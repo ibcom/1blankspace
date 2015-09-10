@@ -967,7 +967,8 @@ ns1blankspace.financial.expense =
 										}
 										else
 										{
-											var oPayments = ns1blankspace.util.unique({key: 'paymentexpense.payment.reference', data: oResponse.data.rows});
+											//var oPayments = ns1blankspace.util.unique({key: 'paymentexpense.payment.reference', data: oResponse.data.rows});
+											var oPayments = oResponse.data.rows;
 
 											aHTML.push('<table class="ns1blankspace">');
 											aHTML.push('<tr class="ns1blankspaceCaption">');

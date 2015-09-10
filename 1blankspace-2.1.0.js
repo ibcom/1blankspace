@@ -6241,6 +6241,8 @@ ns1blankspace.remove =
 											}
 										}
 									});
+
+									ns1blankspace.util.onComplete(oParam)
 								}
 								else
 								{
