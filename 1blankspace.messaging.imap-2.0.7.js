@@ -2030,7 +2030,7 @@ ns1blankspace.messaging.imap =
 			aHTML.push('<table id="ns1blankspaceMessagingEmailContainer" class="ns1blankspace">');
 		
 			aHTML.push('<tr class="ns1blankspaceHeader">' +
-							'<td id="ns1blankspaceMessagingEmailSubject" colspan=2 class="ns1blankspaceHeaderCaption" style="text-align:left; font-weight:bold; color:#000000;">' +
+							'<td id="ns1blankspaceMessagingEmailSubject" class="ns1blankspaceHeaderCaption" style="text-align:left; font-weight:bold; color:#000000;">' +
 							ns1blankspace.objectContextData.subject + '</td>');
 			
 			aHTML.push('<td class="ns1blankspaceHeaderCaption" style="text-align:right;">' +
