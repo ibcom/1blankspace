@@ -2530,6 +2530,8 @@ ns1blankspace.financial.unallocated =
 						var aXHTMLElementID = sXHTMLElementID.split('-');
 						if (iType==undefined && aXHTMLElementID[2]) {iType = aXHTMLElementID[2]}
 
+						var sSearchText = ns1blankspace.util.getParam(oParam, 'searchText', {"default": ''}).value;
+
 						var oSearch = new AdvancedSearch();
 						
 						if (iType == 1)
@@ -2541,14 +2543,52 @@ ns1blankspace.financial.unallocated =
 						if (iType == 2)
 						{	
 							oSearch.method = 'FINANCIAL_INVOICE_SEARCH';
-							oSearch.addField('reference,ContactBusinessSentToText,description,sentdate,amount,outstandingamount');
+							oSearch.addField('reference,contactbusinesssenttotext,description,sentdate,amount,outstandingamount');
 						}	
 
 						oSearch.addFilter('outstandingamount', 'NOT_EQUAL_TO', 0);
+
+						if (sSearchText != '')
+						{
+							oSearch.addBracket('(');
+							oSearch.addFilter('reference', 'TEXT_IS_LIKE', sSearchText);
+							oSearch.addOperator('or');
+
+							if (iType == 1)
+							{
+								oSearch.addFilter('expense.contactbusinesspaidto.tradename', 'TEXT_IS_LIKE', sSearchText);
+								oSearch.addOperator('or');
+								oSearch.addFilter('expense.contactpersonpaidto.surname', 'TEXT_IS_LIKE', sSearchText);
+								oSearch.addOperator('or');
+								oSearch.addFilter('expense.contactpersonpaidto.firstname', 'TEXT_IS_LIKE', sSearchText);
+							}
+
+							if (iType == 2)
+							{
+								oSearch.addFilter('invoice.contactbusinesssentto.tradename', 'TEXT_IS_LIKE', sSearchText);
+								oSearch.addOperator('or');
+								oSearch.addFilter('invoice.contactpersonsentto.surname', 'TEXT_IS_LIKE', sSearchText);
+								oSearch.addOperator('or');
+								oSearch.addFilter('invoice.contactpersonsentto.firstname', 'TEXT_IS_LIKE', sSearchText);
+							}
+
+							oSearch.addBracket(')');
+						}
+
 						oSearch.sort('id', 'desc');
 						oSearch.getResults(function(oResponse)
 						{
 							$vq.init('<table class="ns1blankspaceSearchMedium" id="ns1blankspaceUnallocatedExpenses">', {queue: 'allocate'});
+
+							if (sSearchText != '')
+							{
+								$vq.add('<tr><td><input id="ns1blankspaceFinancialAllocateItem" class="ns1blankspaceText" value="' + sSearchText + '" style="width:97%;"></input></td></tr>', {queue: 'allocate'});
+							}
+							else if (oResponse.morerows=='true')
+							{
+								$vq.add('<tr><td><input id="ns1blankspaceFinancialAllocateItem" class="ns1blankspaceWatermark ns1blankspaceText" value="search" style="width:97%;"></input></td></tr>', {queue: 'allocate'});
+								$vq.add('<tr><td class="ns1blankspaceSubNote">If not listed below, then you can search for it.</td></tr>', {queue: 'allocate'});
+							}	
 
 							if (oResponse.data.rows.length == 0)
 							{
@@ -2563,7 +2603,7 @@ ns1blankspace.financial.unallocated =
 												'search-' + row.id + '">' +
 												'<div style="color: #ee8f00; font-weight:bold;">' + row.reference + '</div>' +
 												'<div>' + row[(iType==1?'contactbusinesspaidtotext':'contactbusinesssenttotext')] + '</div>' +
-												'<div>' + row[(iType==1?'accrueddate':'senddate')] + '</div>' +
+												'<div>' + row[(iType==1?'accrueddate':'sentdate')] + '</div>' +
 												'<div>$' + row.outstandingamount + '</div>' +
 												'<div>' + row.description + '</div>' +
 												'</td></tr>', {queue: 'allocate'});
@@ -2591,7 +2631,30 @@ ns1blankspace.financial.unallocated =
 								$(ns1blankspace.xhtml.container).hide();
 								ns1blankspace.status.message('Allocated');
 								$('#' + sXHTMLElementID).parent().parent().fadeOut(500);
-							})
+							});
+
+							$('#ns1blankspaceFinancialAllocateItem').keyup(function(e)
+							{
+								if ($(this).val().length == 0) {$(this).attr('data-id', '')}
+
+								if (e.which === 13)
+						    	{
+									ns1blankspace.search.show({xhtmlElementID: ns1blankspace.xhtml.divID, source: 4});
+								}
+								else
+								{
+									if (ns1blankspace.timer.delayCurrent != 0) {clearTimeout(ns1blankspace.timer.delayCurrent)};
+								
+									oParam = ns1blankspace.util.setParam(oParam, 'searchText', $(this).val());
+
+									var sFunction = 'ns1blankspace.financial.unallocated.edit(' +
+														JSON.stringify(oParam) + ');'
+								
+									ns1blankspace.timer.delayCurrent = setTimeout(sFunction, ns1blankspace.option.typingWait);
+								}		
+							});
+
+							$('#ns1blankspaceFinancialAllocateItem').focus().val(sSearchText);
 						});
 					}	
 					else
@@ -2638,10 +2701,10 @@ ns1blankspace.financial.unallocated =
 								if (iType == 1 || iType == 2)
 								{	
 									aHTML.push('<tr class="ns1blankspaceSearch"><td class="ns1blankspaceRowSelect" id="ns1blankspaceUnallocatedAllocate" style="cursor:pointer;">' +
-										'Allocate to an ' + $.grep(ns1blankspace.financial.data.types, function(t) {return t.id == iType})[0].name.toLowerCase() + '</td></tr>');
+										'Allocate to an ' + (iType==1?'expense':'invoice') + ' &raquo;</td></tr>');
 								}
 
-								aHTML.push('<tr class="ns1blankspaceSearch"><td class="ns1blankspaceRowSelect" id="ns1blankspaceUnallocatedShowAll" style="cursor:pointer;">Select a different account type</td></tr>');
+								aHTML.push('<tr class="ns1blankspaceSearch"><td class="ns1blankspaceRowSelect" id="ns1blankspaceUnallocatedShowAll" style="cursor:pointer;">Select a different account type &raquo;</td></tr>');
 
 								$.each(oResponse, function()
 								{		
