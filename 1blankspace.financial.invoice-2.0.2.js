@@ -1360,7 +1360,7 @@ ns1blankspace.financial.invoice =
 
 										var oSearch = new AdvancedSearch();
 										oSearch.method = 'FINANCIAL_RECEIPT_INVOICE_SEARCH';
-										oSearch.addField('appliesdate,amount,receiptinvoice.receipt.reference,receiptinvoice.receipt.amount');
+										oSearch.addField('appliesdate,amount,receiptinvoice.receipt.reference,receiptinvoice.receipt.amount,receiptinvoice.receipt.id');
 										oSearch.addFilter('invoice', 'EQUAL_TO', iObjectContext);
 										oSearch.sort('appliesdate', 'asc');
 										oSearch.rows = 1000;
@@ -1383,29 +1383,30 @@ ns1blankspace.financial.invoice =
 										{
 											var oReceipts = ns1blankspace.util.unique({key: 'receiptinvoice.receipt.reference', data: oResponse.data.rows});
 									
-											aHTML.push('<table class="ns1blankspace">');
+											aHTML.push('<table class="ns1blankspace" id="ns1blankspaceFinancialInvoiceReceipts">');
 											aHTML.push('<tr>');
 											aHTML.push('<td class="ns1blankspaceHeaderCaption">Date</td>');
 											aHTML.push('<td class="ns1blankspaceHeaderCaption" style="text-align:right;">Amount</td>');
 											aHTML.push('<td class="ns1blankspaceHeaderCaption">&nbsp;</td>');
 											aHTML.push('</tr>');
 
-											$.each(oReceipts, function()
+											$.each(oReceipts, function(r, receipt)
 											{
 												aHTML.push('<tr class="ns1blankspaceRow">');
 																			
-												aHTML.push('<td id="ns1blankspaceReceipt_date-' + this.id + '" class="ns1blankspaceRow">' +
-																this['appliesdate'] + '</td>');
+												aHTML.push('<td id="ns1blankspaceReceipt_date-' + receipt.id + '" class="ns1blankspaceRow">' +
+																receipt['appliesdate'] + '</td>');
 
 												
-												aHTML.push('<td id="ns1blankspaceReceipt_amount-' + this.id + '" class="ns1blankspaceRow" style="text-align:right;">' +
-																this['receiptinvoice.receipt.amount'] + '</td>');
+												aHTML.push('<td id="ns1blankspaceReceipt_amount-' + receipt.id + '" class="ns1blankspaceRow" style="text-align:right;">' +
+																receipt['amount'] + '</td>');
 						
-												aHTML.push('<td style="width:30px; text-align:right;" class="ns1blankspaceRow">');
+												aHTML.push('<td style="width:60px; text-align:right;" class="ns1blankspaceRow">');
 													
 												if (oOptions.remove)
 												{	
 													aHTML.push('<span id="ns1blankspaceReceipt_options_remove-' + this.id + '" class="ns1blankspaceReceiptRemove"></span>');
+													aHTML.push('<span id="view-' + receipt['receiptinvoice.receipt.id'] + '" class="ns1blankspaceView"></span>');
 												};	
 													
 												aHTML.push('</td></tr>');
@@ -1415,21 +1416,40 @@ ns1blankspace.financial.invoice =
 
 											$('#ns1blankspaceReceiptColumn1').html(aHTML.join(''));
 											
-											if (oOptions.remove) 
+											$('#ns1blankspaceFinancialInvoiceReceipts .ns1blankspaceReceiptRemove').button( {
+												text: false,
+												icons: {
+													primary: "ui-icon-close"
+												}
+											})
+											.click(function()
 											{
-												$('.ns1blankspaceReceiptRemove').button( {
-													text: false,
-													icons: {
-														primary: "ui-icon-close"
-													}
-												})
-												.click(function() {
-													ns1blankspace.financial.invoice.receipt.remove({xhtmlElementID: this.id});
-												})
-												.css('width', '15px')
-												.css('height', '17px')
-											}
-										}
+												ns1blankspace.remove(
+												{
+													xhtmlElementID: this.id,
+													method: 'FINANCIAL_RECEIPT_INVOICE_MANAGE',
+													ifNoneMessage: 'No receipts.',
+													onComplete: ns1blankspace.financial.receipt.refresh
+												});
+											})
+											.css('width', '15px')
+											.css('height', '17px');
+
+											$('#ns1blankspaceFinancialInvoiceReceipts .ns1blankspaceView').button(
+											{
+												text: false,
+												icons:
+												{
+													primary: "ui-icon-play"
+												}
+											})
+											.click(function()
+											{
+												ns1blankspace.financial.receipt.init({id: (this.id).split('-')[1]})
+											})
+											.css('width', '15px')
+											.css('height', '17px');
+									}
 									}	
 								},
 

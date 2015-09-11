@@ -61,7 +61,7 @@ ns1blankspace.financial.expense =
 					});
 				},			
 
-	refresh: 	function (oResponse)
+	refresh: 	function (oParam, oResponse)
 				{
 					if (oResponse == undefined)
 					{
@@ -72,7 +72,7 @@ ns1blankspace.financial.expense =
 						oSearch.addField('accrueddate,amount,tax');
 						oSearch.rf = 'json';
 						oSearch.addFilter('id', 'EQUAL_TO', ns1blankspace.objectContext);
-						oSearch.getResults(function(data) {ns1blankspace.financial.expense.refresh(data)});
+						oSearch.getResults(function(data) {ns1blankspace.financial.expense.refresh(oParam, data)});
 					}
 					else
 					{
@@ -975,12 +975,12 @@ ns1blankspace.financial.expense =
 
 												
 												aHTML.push('<td id="ns1blankspaceReceipt_amount-' + this.id + '" class="ns1blankspaceRow" style="text-align:right;">' +
-																this['paymentexpense.payment.amount'] + '</td>');
+																this['amount'] + '</td>');
 						
 												aHTML.push('<td style="width:60px;text-align:right;" class="ns1blankspaceRow">');
 													
 												aHTML.push('<span id="ns1blankspacePayment_options_remove-' + this.id + '" class="ns1blankspaceRemove"></span>');
-												aHTML.push('<span id="ns1blankspacePayment_options_play-' + payment['paymentexpense.payment.id'] + '" class="ns1blankspaceView"></span>');
+												aHTML.push('<span id="ns1blankspacePayment_options_view-' + payment['paymentexpense.payment.id'] + '" class="ns1blankspaceView"></span>');
 													
 												aHTML.push('</td></tr>');
 											});
@@ -1005,8 +1005,6 @@ ns1blankspace.financial.expense =
 													ifNoneMessage: 'No payments.',
 													onComplete: ns1blankspace.financial.expense.refresh
 												});
-
-												//ns1blankspace.financial.expense.payment.remove({xhtmlElementID: this.id});
 											})
 											.css('width', '15px')
 											.css('height', '17px');

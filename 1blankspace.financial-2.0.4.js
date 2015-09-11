@@ -2249,34 +2249,35 @@ ns1blankspace.financial.unallocated =
 					{	
 						if (oResponse == undefined)
 						{
-							if (ns1blankspace.financial.unallocatedAccount == undefined)
+							if (ns1blankspace.financial.unallocatedAccounts == undefined)
 							{	
 								var oSearch = new AdvancedSearch();
 								oSearch.method = 'SETUP_FINANCIAL_ACCOUNT_SEARCH';
-								oSearch.addField('title');
+								oSearch.addField('title,type');
 								oSearch.addFilter('title', 'TEXT_IS_LIKE', 'Unallocated');
 								oSearch.async = false;
-								oSearch.rows = 1;
 								
 								oSearch.getResults(function(oResponse)
 								{
 									if (oResponse.data.rows.length != 0)
 									{
-										ns1blankspace.financial.unallocatedAccount = oResponse.data.rows[0].id;
+										ns1blankspace.financial.unallocatedAccounts = oResponse.data.rows;
 									}
-									else
-									{
-										ns1blankspace.financial.unallocatedAccount = -1;
-									}	
 								});	
 							}
+
+							var iAccountType = 1;
+							if (iType==1 || iType==2) {iAccountType = 2}
+							var oUnallocatedAccount = $.grep(ns1blankspace.financial.unallocatedAccounts, function (account) {return account.type==iAccountType})[0];
 								
-							if (ns1blankspace.financial.unallocatedAccount == -1)
+							if (oUnallocatedAccount == undefined)
 							{
-								$('#ns1blankspaceUnallocatedColumn1').html('<span class="ns1blankspaceNothing">No unallocated account set up.</span>');
+								$('#ns1blankspaceUnallocatedColumn2').html('<span class="ns1blankspaceNothing">No unallocated account set up.</span>');
 							}
 							else
 							{	
+								ns1blankspace.financial.unallocatedAccount = oUnallocatedAccount.id;
+
 								$('#ns1blankspaceUnallocatedColumn2').html(ns1blankspace.xhtml.loading);
 
 								var oSearch = new AdvancedSearch();
@@ -2285,7 +2286,7 @@ ns1blankspace.financial.unallocated =
 								{
 									oSearch.method = 'FINANCIAL_INVOICE_SEARCH';
 									oSearch.addField('reference,sentdate,invoice.lineitem.amount,invoice.lineitem.description,invoice.lineitem.id');
-									oSearch.addFilter('invoice.lineitem.financialaccount', 'EQUAL_TO', ns1blankspace.financial.unallocatedAccount);
+									oSearch.addFilter('invoice.lineitem.financialaccount', 'EQUAL_TO', oUnallocatedAccount.id);
 									oSearch.addFilter('invoice.lineitem.amount', 'NOT_EQUAL_TO', 0);
 									oSearch.addFilter('invoice.sent', 'EQUAL_TO', 'N');
 
@@ -2318,7 +2319,7 @@ ns1blankspace.financial.unallocated =
 								{
 									oSearch.method = 'FINANCIAL_RECEIPT_SEARCH';
 									oSearch.addField('reference,receiveddate,receipt.lineitem.amount,receipt.lineitem.description,receipt.lineitem.id');
-									oSearch.addFilter('receipt.lineitem.financialaccount', 'EQUAL_TO', ns1blankspace.financial.unallocatedAccount);
+									oSearch.addFilter('receipt.lineitem.financialaccount', 'EQUAL_TO', oUnallocatedAccount.id);
 									oSearch.addFilter('receipt.lineitem.amount', 'NOT_EQUAL_TO', 0);
 
 									ns1blankspace.financial.unallocated.row = function (oRow)
@@ -2340,6 +2341,9 @@ ns1blankspace.financial.unallocated =
 
 										aHTML.push('<td style="width:30px;text-align:right;" class="ns1blankspaceRow">');
 										aHTML.push('<span id="ns1blankspaceReconcileItems_options_search-' + oRow["receipt.lineitem.id"] + '-2"' +
+														' data-amount="' + accounting.unformat(oRow["receipt.lineitem.amount"]) + '"' +
+														' data-object="6"' +
+														' data-objectcontext="' + oRow["id"] + '"' +
 														' class="ns1blankspaceUnallocatedEdit"></span></td>');
 										aHTML.push('</tr>');
 
@@ -2350,7 +2354,7 @@ ns1blankspace.financial.unallocated =
 								{
 									oSearch.method = 'FINANCIAL_EXPENSE_SEARCH';
 									oSearch.addField('reference,accrueddate,expense.lineitem.amount,expense.lineitem.description,expense.lineitem.id');
-									oSearch.addFilter('expense.lineitem.financialaccount', 'EQUAL_TO', ns1blankspace.financial.unallocatedAccount);
+									oSearch.addFilter('expense.lineitem.financialaccount', 'EQUAL_TO', oUnallocatedAccount.id);
 									oSearch.addFilter('expense.lineitem.amount', 'NOT_EQUAL_TO', 0);
 
 									ns1blankspace.financial.unallocated.row = function (oRow)
@@ -2382,7 +2386,7 @@ ns1blankspace.financial.unallocated =
 								{
 									oSearch.method = 'FINANCIAL_PAYMENT_SEARCH';
 									oSearch.addField('reference,paiddate,payment.lineitem.amount,payment.lineitem.description,payment.lineitem.id');
-									oSearch.addFilter('payment.lineitem.financialaccount', 'EQUAL_TO', ns1blankspace.financial.unallocatedAccount);
+									oSearch.addFilter('payment.lineitem.financialaccount', 'EQUAL_TO', oUnallocatedAccount.id);
 									oSearch.addFilter('payment.lineitem.amount', 'NOT_EQUAL_TO', 0);
 
 									ns1blankspace.financial.unallocated.row = function (oRow)
@@ -2405,6 +2409,8 @@ ns1blankspace.financial.unallocated =
 										aHTML.push('<td style="width:30px;text-align:right;" class="ns1blankspaceRow">');
 										aHTML.push('<span id="ns1blankspaceReconcileItems_options_search-' + oRow["payment.lineitem.id"] + '-1"' +
 														' data-amount="' + accounting.unformat(oRow["payment.lineitem.amount"]) + '"' +
+														' data-object="3"' +
+														' data-objectcontext="' + oRow["id"] + '"' +
 														' class="ns1blankspaceUnallocatedEdit"></span></td>');
 										aHTML.push('</tr>');
 
@@ -2521,10 +2527,24 @@ ns1blankspace.financial.unallocated =
 					}
 					else if (bAllocate)
 					{
+						var aXHTMLElementID = sXHTMLElementID.split('-');
+						if (iType==undefined && aXHTMLElementID[2]) {iType = aXHTMLElementID[2]}
+
 						var oSearch = new AdvancedSearch();
-						oSearch.method = 'FINANCIAL_EXPENSE_SEARCH';
-						oSearch.addField('reference,contactbusinesspaidtotext,accrueddate,amount,outstandingamount');
-						oSearch.addFilter('expense.outstandingamount', 'NOT_EQUAL_TO', 0);
+						
+						if (iType == 1)
+						{	
+							oSearch.method = 'FINANCIAL_EXPENSE_SEARCH';
+							oSearch.addField('reference,contactbusinesspaidtotext,description,accrueddate,amount,outstandingamount');
+						}	
+
+						if (iType == 2)
+						{	
+							oSearch.method = 'FINANCIAL_INVOICE_SEARCH';
+							oSearch.addField('reference,ContactBusinessSentToText,description,sentdate,amount,outstandingamount');
+						}	
+
+						oSearch.addFilter('outstandingamount', 'NOT_EQUAL_TO', 0);
 						oSearch.sort('id', 'desc');
 						oSearch.getResults(function(oResponse)
 						{
@@ -2532,7 +2552,7 @@ ns1blankspace.financial.unallocated =
 
 							if (oResponse.data.rows.length == 0)
 							{
-								$vq.add('<td class="ns1blankspaceNothing">No outstanding expenses</td>', {queue: 'allocate'});
+								$vq.add('<td class="ns1blankspaceNothing">Nothing outstanding.</td>', {queue: 'allocate'});
 							}
 							else
 							{	
@@ -2541,7 +2561,11 @@ ns1blankspace.financial.unallocated =
 									$vq.add('<tr class="ns1blankspaceSearch">' + 
 												'<td class="ns1blankspaceSearch ns1blankspaceRowSelect" id="' +
 												'search-' + row.id + '">' +
-												row.reference +
+												'<div style="color: #ee8f00; font-weight:bold;">' + row.reference + '</div>' +
+												'<div>' + row[(iType==1?'contactbusinesspaidtotext':'contactbusinesssenttotext')] + '</div>' +
+												'<div>' + row[(iType==1?'accrueddate':'senddate')] + '</div>' +
+												'<div>$' + row.outstandingamount + '</div>' +
+												'<div>' + row.description + '</div>' +
 												'</td></tr>', {queue: 'allocate'});
 								});
 							}				
@@ -2554,10 +2578,19 @@ ns1blankspace.financial.unallocated =
 							{
 								ns1blankspace.financial.allocate.to(
 								{
+									allocateToObject: (iType==1?2:5),
 									allocateToID: (this.id).split('-')[1],
 									allocateFromItemID: sXHTMLElementID.split('-')[1],
-									amount: $('#' + sXHTMLElementID).attr('data-amount')
-								})
+									amount: $('#' + sXHTMLElementID).attr('data-amount'),
+									allocateFromItemFinancialAccount: ns1blankspace.financial.data.settings.financialaccountcreditor,
+									allocateFromObject: $('#' + sXHTMLElementID).attr('data-object'),
+									allocateFromObjectContext: $('#' + sXHTMLElementID).attr('data-objectcontext')
+								});
+
+								$(ns1blankspace.xhtml.container).attr('data-source', '');
+								$(ns1blankspace.xhtml.container).hide();
+								ns1blankspace.status.message('Allocated');
+								$('#' + sXHTMLElementID).parent().parent().fadeOut(500);
 							})
 						});
 					}	
@@ -3606,7 +3639,7 @@ ns1blankspace.financial.transactions =
 							if (ns1blankspace.financial[sNamespace].data.startdate!='') {oSearch.addFilter('date', 'GREATER_THAN_OR_EQUAL_TO', ns1blankspace.financial[sNamespace].data.startdate)};
 							if (ns1blankspace.financial[sNamespace].data.enddate!='') {oSearch.addFilter('date', 'LESS_THAN_OR_EQUAL_TO', ns1blankspace.financial[sNamespace].data.enddate)};
 						}
-						
+
 						oSearch.getResults(function(data) {ns1blankspace.financial.transactions.show(oParam, data)});
 					}
 					else
@@ -4486,31 +4519,44 @@ ns1blankspace.financial.allocate =
 
 	to:		function (oParam)
 			{
-				var iExpenseItemID = ns1blankspace.util.getParam(oParam, 'allocateToItemID').value;
-				var iExpenseID = ns1blankspace.util.getParam(oParam, 'allocateToID').value;
-			
-				ns1blankspace.status.working();
+				var iAllocateToItemID = ns1blankspace.util.getParam(oParam, 'allocateToItemID').value;
+				var iAllocateToID = ns1blankspace.util.getParam(oParam, 'allocateToID').value;
+				var iAllocateToObject = ns1blankspace.util.getParam(oParam, 'allocateToObject').value;
 
-				var oSearch = new AdvancedSearch();
-				oSearch.method = 'FINANCIAL_ITEM_SEARCH';
+				if (iAllocateToObject != undefined)
+				{	
+					ns1blankspace.status.working();
 
-				oSearch.addField('amount,expensecreditamount,expenseoutstandingamount,financialaccounttext,paymentamount');
+					var oSearch = new AdvancedSearch();
+					oSearch.method = 'FINANCIAL_ITEM_SEARCH';
 
-				oSearch.addFilter('object', 'EQUAL_TO', 2);
-				oSearch.addFilter('objectcontext', 'EQUAL_TO', iExpenseID);
-				oSearch.addFilter('expenseoutstandingamount', 'NOT_EQUAL_TO', 0);
+					if (iAllocateToObject == 2)
+					{
+						oSearch.addField('amount,expenseoutstandingamount,paymentamount');
+						oSearch.addFilter('expenseoutstandingamount', 'NOT_EQUAL_TO', 0);
+					}
 
-				if (iExpenseItemID != undefined)
-				{
-					oSearch.addFilter('id', 'EQUAL_TO', iExpenseItemID);
+					if (iAllocateToObject == 5)
+					{
+						oSearch.addField('amount,invoiceoutstandingamount,receiptamount');
+						oSearch.addFilter('invoiceoutstandingamount', 'NOT_EQUAL_TO', 0);
+					}
+
+					oSearch.addFilter('object', 'EQUAL_TO', iAllocateToObject);
+					oSearch.addFilter('objectcontext', 'EQUAL_TO', iAllocateToID);
+
+					if (iAllocateToItemID != undefined)
+					{
+						oSearch.addFilter('id', 'EQUAL_TO', iAllocateToItemID);
+					}	
+
+					oSearch.sort('id', 'desc');
+					oSearch.getResults(function(oResponse)
+					{
+						oParam = ns1blankspace.util.setParam(oParam, 'items', oResponse.data.rows)
+						ns1blankspace.financial.allocate.process(oParam);
+					});
 				}	
-
-				oSearch.sort('id', 'desc');
-				oSearch.getResults(function(oResponse)
-				{
-					oParam = ns1blankspace.util.setParam(oParam, 'items', oResponse.data.rows)
-					ns1blankspace.financial.allocate.process(oParam);
-				})
 			},
 			
 	process: function (oParam)
@@ -4518,34 +4564,101 @@ ns1blankspace.financial.allocate =
 				var aItems = ns1blankspace.util.getParam(oParam, 'items').value;
 				var iItemIndex = ns1blankspace.util.getParam(oParam, 'itemIndex', {"default": 0}).value;
 				var cAmount = accounting.unformat(ns1blankspace.util.getParam(oParam, 'amount', {"default": 0}).value);
-				var iPaymentItemID = ns1blankspace.util.getParam(oParam, 'allocateFromItemID').value;
+				var iAllocateFromItemID = ns1blankspace.util.getParam(oParam, 'allocateFromItemID').value;
+				var iAllocateFromItemFinancialAccount = ns1blankspace.util.getParam(oParam, 'allocateFromItemFinancialAccount').value;
+				var iAllocateToObject = ns1blankspace.util.getParam(oParam, 'allocateToObject').value;
+				var iAllocateFromObject = ns1blankspace.util.getParam(oParam, 'allocateFromObject').value;
+				var iAllocateFromObjectContext = ns1blankspace.util.getParam(oParam, 'allocateFromObjectContext').value;
+
+				var sMethod;
 
 				if (iItemIndex < aItems.length && cAmount > 0)
 				{	
 					var oItem = aItems[iItemIndex];
-					var cItemOutstandingAmount = accounting.unformat(oItem.amount) - accounting.unformat(oItem.paymentamount)
-					if (cAmount > cItemOutstandingAmount) {cItemOutstandingAmount = cAmount}
+					var cItemOutstandingAmount = accounting.unformat(oItem.amount) - accounting.unformat((iAllocateToObject==2?oItem.paymentamount:oItem.receiptamount))
+					if (cAmount > cItemOutstandingAmount) {cAmount = cItemOutstandingAmount}
 
 					oParam = ns1blankspace.util.setParam(oParam, 'amount', cAmount - cItemOutstandingAmount)
 
 					var oData =
 					{
-						amount: cItemOutstandingAmount,
-						paymentlineitem: iPaymentItemID,
-						expenselineitem: oItem.id
+						amount: cAmount,
 					}
+
+					if (iAllocateToObject == 2)
+					{
+						oData.paymentlineitem = iAllocateFromItemID;
+						oData.expenselineitem = oItem.id;
+						sMethod = 'FINANCIAL_PAYMENT_EXPENSE_MANAGE';
+					}	
+
+					if (iAllocateToObject == 5)
+					{
+						oData.receiptlineitem = iAllocateFromItemID;
+						oData.invoicelineitem = oItem.id;
+						sMethod = 'FINANCIAL_RECEIPT_INVOICE_MANAGE';
+					}	
 
 					$.ajax(
 					{
 						type: 'POST',
-						url: '/rpc/financial/?method=FINANCIAL_PAYMENT_EXPENSE_MANAGE',
+						url: '/rpc/financial/?method=' + sMethod,
 						dataType: 'json',
 						data: oData,
 						success: function (data)
 						{
 							if (data.status == 'OK')
 							{	
-								ns1blankspace.financial.allocate.process(oParam);
+								iItemIndex +=
+								oParam = ns1blankspace.util.setParam(oParam, 'indexIndex', iItemIndex)
+
+								if (iAllocateFromItemFinancialAccount != undefined)
+								{
+									var oData =
+									{
+										id: iAllocateFromItemID,
+										override: 'Y',
+										financialaccount: iAllocateFromItemFinancialAccount
+									};
+									
+									$.ajax(
+									{
+										type: 'POST',
+										url: ns1blankspace.util.endpointURI('FINANCIAL_ITEM_MANAGE'),
+										data: oData,
+										dataType: 'json',
+										success: function(data)
+										{
+											if (data.status == 'OK')
+											{
+												var oData =
+												{
+													object: iAllocateFromObject,
+													objectcontext: iAllocateFromObjectContext
+												};
+
+												$.ajax(
+												{
+													type: 'POST',
+													url: ns1blankspace.util.endpointURI('FINANCIAL_ITEM_COMPLETE'),
+													data: oData,
+													dataType: 'json',
+													success: function(data)
+													{
+														if (data.status == 'OK')
+														{
+															ns1blankspace.financial.allocate.process(oParam);
+														}
+													}
+												});
+											}
+										}
+									});
+								}
+								else
+								{
+									ns1blankspace.financial.allocate.process(oParam);
+								}
 							}	
 						}
 					})
