@@ -2537,13 +2537,13 @@ ns1blankspace.financial.unallocated =
 						if (iType == 1)
 						{	
 							oSearch.method = 'FINANCIAL_EXPENSE_SEARCH';
-							oSearch.addField('reference,contactbusinesspaidtotext,description,accrueddate,amount,outstandingamount');
+							oSearch.addField('reference,contactbusinesspaidtotext,contactbusinesspaidto,description,accrueddate,amount,outstandingamount');
 						}	
 
 						if (iType == 2)
 						{	
 							oSearch.method = 'FINANCIAL_INVOICE_SEARCH';
-							oSearch.addField('reference,contactbusinesssenttotext,description,sentdate,amount,outstandingamount');
+							oSearch.addField('reference,contactbusinesssenttotext,contactbusinesssentto,description,sentdate,amount,outstandingamount');
 						}	
 
 						oSearch.addFilter('outstandingamount', 'NOT_EQUAL_TO', 0);
@@ -2600,7 +2600,7 @@ ns1blankspace.financial.unallocated =
 								{		
 									$vq.add('<tr class="ns1blankspaceSearch">' + 
 												'<td class="ns1blankspaceSearch ns1blankspaceRowSelect" id="' +
-												'search-' + row.id + '">' +
+												'search-' + row.id + '-' + row['contactbusiness' + (iType==1?'paidto':'sentto')] + '">' +
 												'<div style="color: #ee8f00; font-weight:bold;">' + row.reference + '</div>' +
 												'<div>' + row[(iType==1?'contactbusinesspaidtotext':'contactbusinesssenttotext')] + '</div>' +
 												'<div>' + row[(iType==1?'accrueddate':'sentdate')] + '</div>' +
@@ -2624,7 +2624,8 @@ ns1blankspace.financial.unallocated =
 									amount: $('#' + sXHTMLElementID).attr('data-amount'),
 									allocateFromItemFinancialAccount: ns1blankspace.financial.data.settings[(iType==1?'financialaccountcreditor':'financialaccountdebtor')],
 									allocateFromObject: $('#' + sXHTMLElementID).attr('data-object'),
-									allocateFromObjectContext: $('#' + sXHTMLElementID).attr('data-objectcontext')
+									allocateFromObjectContext: $('#' + sXHTMLElementID).attr('data-objectcontext'),
+									allocateToContactBusiness: (this.id).split('-')[2]
 								});
 
 								$(ns1blankspace.xhtml.container).attr('data-source', '');
@@ -4647,6 +4648,7 @@ ns1blankspace.financial.allocate =
 				var iAllocateToObject = ns1blankspace.util.getParam(oParam, 'allocateToObject').value;
 				var iAllocateFromObject = ns1blankspace.util.getParam(oParam, 'allocateFromObject').value;
 				var iAllocateFromObjectContext = ns1blankspace.util.getParam(oParam, 'allocateFromObjectContext').value;
+				var iAllocateToContactBusiness = ns1blankspace.util.getParam(oParam, 'allocateToContactBusiness').value;
 
 				var sMethod;
 
@@ -4660,21 +4662,19 @@ ns1blankspace.financial.allocate =
 
 					var oData =
 					{
-						amount: cAmount,
+						id: iAllocateFromObjectContext
 					}
 
 					if (iAllocateToObject == 2)
 					{
-						oData.paymentlineitem = iAllocateFromItemID;
-						oData.expenselineitem = oItem.id;
-						sMethod = 'FINANCIAL_PAYMENT_EXPENSE_MANAGE';
+						oData.contactbusinesspaidto = iAllocateToContactBusiness;						
+						sMethod = 'FINANCIAL_PAYMENT_MANAGE';
 					}	
 
 					if (iAllocateToObject == 5)
 					{
-						oData.receiptlineitem = iAllocateFromItemID;
-						oData.invoicelineitem = oItem.id;
-						sMethod = 'FINANCIAL_RECEIPT_INVOICE_MANAGE';
+						oData.contactbusinessreceivedfrom = iAllocateToContactBusiness;	
+						sMethod = 'FINANCIAL_RECEIPT_MANAGE';
 					}	
 
 					$.ajax(
@@ -4687,59 +4687,91 @@ ns1blankspace.financial.allocate =
 						{
 							if (data.status == 'OK')
 							{	
-								iItemIndex +=
-								oParam = ns1blankspace.util.setParam(oParam, 'indexIndex', iItemIndex)
-
-								if (iAllocateFromItemFinancialAccount != undefined)
+								var oData =
 								{
-									var oData =
+									amount: cAmount
+								}
+
+								if (iAllocateToObject == 2)
+								{
+									oData.paymentlineitem = iAllocateFromItemID;
+									oData.expenselineitem = oItem.id;
+									sMethod = 'FINANCIAL_PAYMENT_EXPENSE_MANAGE';
+								}	
+
+								if (iAllocateToObject == 5)
+								{
+									oData.receiptlineitem = iAllocateFromItemID;
+									oData.invoicelineitem = oItem.id;
+									sMethod = 'FINANCIAL_RECEIPT_INVOICE_MANAGE';
+								}
+
+								$.ajax(
+								{
+									type: 'POST',
+									url: '/rpc/financial/?method=' + sMethod,
+									dataType: 'json',
+									data: oData,
+									success: function (data)
 									{
-										id: iAllocateFromItemID,
-										override: 'Y',
-										financialaccount: iAllocateFromItemFinancialAccount
-									};
-									
-									$.ajax(
-									{
-										type: 'POST',
-										url: ns1blankspace.util.endpointURI('FINANCIAL_ITEM_MANAGE'),
-										data: oData,
-										dataType: 'json',
-										success: function(data)
-										{
-											if (data.status == 'OK')
+										if (data.status == 'OK')
+										{	
+											iItemIndex +=
+											oParam = ns1blankspace.util.setParam(oParam, 'indexIndex', iItemIndex)
+
+											if (iAllocateFromItemFinancialAccount != undefined)
 											{
 												var oData =
 												{
-													object: iAllocateFromObject,
-													objectcontext: iAllocateFromObjectContext
+													id: iAllocateFromItemID,
+													override: 'Y',
+													financialaccount: iAllocateFromItemFinancialAccount
 												};
-
+												
 												$.ajax(
 												{
 													type: 'POST',
-													url: ns1blankspace.util.endpointURI('FINANCIAL_ITEM_COMPLETE'),
+													url: ns1blankspace.util.endpointURI('FINANCIAL_ITEM_MANAGE'),
 													data: oData,
 													dataType: 'json',
 													success: function(data)
 													{
 														if (data.status == 'OK')
 														{
-															ns1blankspace.financial.allocate.process(oParam);
+															var oData =
+															{
+																object: iAllocateFromObject,
+																objectcontext: iAllocateFromObjectContext
+															};
+
+															$.ajax(
+															{
+																type: 'POST',
+																url: ns1blankspace.util.endpointURI('FINANCIAL_ITEM_COMPLETE'),
+																data: oData,
+																dataType: 'json',
+																success: function(data)
+																{
+																	if (data.status == 'OK')
+																	{
+																		ns1blankspace.financial.allocate.process(oParam);
+																	}
+																}
+															});
 														}
 													}
 												});
 											}
-										}
-									});
-								}
-								else
-								{
-									ns1blankspace.financial.allocate.process(oParam);
-								}
-							}	
+											else
+											{
+												ns1blankspace.financial.allocate.process(oParam);
+											}
+										}	
+									}
+								});
+							}
 						}
-					})
+					});
 				}
 				else
 				{
