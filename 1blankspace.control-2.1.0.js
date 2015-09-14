@@ -2140,6 +2140,10 @@ ns1blankspace.attachments =
 						aHTML.push('<tr><td class="ns1blankspaceAction">' +
 										'<span id="ns1blankspaceAttachmentsAdd">Add</span>' +
 										'</td></tr>');
+
+						aHTML.push('<tr><td class="ns1blankspaceAction">' +
+										'<span id="ns1blankspaceAttachmentsImage">Image</span>' +
+										'</td></tr>');
 							
 						if (sHelpNotes != undefined)
 						{
@@ -2163,8 +2167,8 @@ ns1blankspace.attachments =
 						.click(function()
 						{
 							 ns1blankspace.attachments.add(oParam);
-						})
-					
+						});
+
 						sXHTMLElementID = 'ns1blankspaceAttachmentsColumn1';
 					}
 					
@@ -2330,6 +2334,7 @@ ns1blankspace.attachments =
 						}
 
 						$('#ns1blankspaceAttachmentsColumn1').html(ns1blankspace.attachments.upload.show(oParam));
+
 						$('#ns1blankspaceUpload').button(
 						{
 							label: "Upload"
@@ -2361,6 +2366,7 @@ ns1blankspace.attachments =
 									var aInputParams = [];
 									var iPublicType;
 									var iBucket = ns1blankspace.util.getParam(oParam, 'bucket').value;
+									var bImage = ns1blankspace.util.getParam(oParam, 'image').value;
 									
 									if (oParam != undefined)
 									{
@@ -2428,8 +2434,8 @@ ns1blankspace.attachments =
 									for (var i = 0; i < iMaxFiles; i++) 	
 									{
 										aHTML.push('<div id="ns1blankspaceUploadFile' + i + '" class="ns1blankspaceUpload">' +
-														'<input class="ns1blankspaceUpload" type="file" name="oFile' + i + '" id="oFile' + i + '">' +
-														'</div>');
+														'<input class="ns1blankspaceUpload" type="file" name="oFile' + i + '" id="oFile' + i + '"' +
+														(bImage?' accept="image/*" capture="camera"':'') + '></div>');
 									}
 
 									if (bShowUpload)
