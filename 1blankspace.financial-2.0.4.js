@@ -2622,7 +2622,7 @@ ns1blankspace.financial.unallocated =
 									allocateToID: (this.id).split('-')[1],
 									allocateFromItemID: sXHTMLElementID.split('-')[1],
 									amount: $('#' + sXHTMLElementID).attr('data-amount'),
-									allocateFromItemFinancialAccount: ns1blankspace.financial.data.settings.financialaccountcreditor,
+									allocateFromItemFinancialAccount: ns1blankspace.financial.data.settings[(iType==1?'financialaccountcreditor':'financialaccountdebtor')],
 									allocateFromObject: $('#' + sXHTMLElementID).attr('data-object'),
 									allocateFromObjectContext: $('#' + sXHTMLElementID).attr('data-objectcontext')
 								});
@@ -2698,10 +2698,10 @@ ns1blankspace.financial.unallocated =
 							}
 							else
 							{	
-								if (iType == 1 || iType == 2)
+								if (aXHTMLElementID[2] == 1 || aXHTMLElementID[2] == 2)
 								{	
 									aHTML.push('<tr class="ns1blankspaceSearch"><td class="ns1blankspaceRowSelect" id="ns1blankspaceUnallocatedAllocate" style="cursor:pointer;">' +
-										'Allocate to an ' + (iType==1?'expense':'invoice') + ' &raquo;</td></tr>');
+										'Allocate to an ' + (aXHTMLElementID[2]==1?'expense':'invoice') + ' &raquo;</td></tr>');
 								}
 
 								aHTML.push('<tr class="ns1blankspaceSearch"><td class="ns1blankspaceRowSelect" id="ns1blankspaceUnallocatedShowAll" style="cursor:pointer;">Select a different account type &raquo;</td></tr>');
@@ -2758,8 +2758,24 @@ ns1blankspace.financial.unallocated =
 									{
 										if (data.status == 'OK')
 										{
-											ns1blankspace.status.message('Allocated');
-											$('#' + sXHTMLElementID).parent().parent().fadeOut(500);
+											var oData =
+											{
+												object: $('#' + sXHTMLElementID).attr('data-object'),
+												objectcontext: $('#' + sXHTMLElementID).attr('data-objectcontext')
+											};
+
+											$.ajax(
+											{
+												type: 'POST',
+												url: ns1blankspace.util.endpointURI('FINANCIAL_ITEM_COMPLETE'),
+												data: oData,
+												dataType: 'json',
+												success: function(data)
+												{
+													ns1blankspace.status.message('Allocated');
+													$('#' + sXHTMLElementID).parent().parent().fadeOut(500);
+												}
+											});
 										}
 										else
 										{
@@ -2767,7 +2783,6 @@ ns1blankspace.financial.unallocated =
 										}
 									}
 								});
-
 							});
 						}
 					}			
