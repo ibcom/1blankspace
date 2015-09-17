@@ -31,6 +31,7 @@ String.prototype.repeat = function(num)
 String.prototype.formatXHTML = function(bDirection)
 {
 	var sValue = this;
+	
 	var aFind = [
 		String.fromCharCode(8220), //“
 		String.fromCharCode(8221), //”

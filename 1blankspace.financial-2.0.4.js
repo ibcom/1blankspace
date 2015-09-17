@@ -3883,9 +3883,13 @@ ns1blankspace.financial.item =
 					
 					if (oResponse.data.rows.length == 0)
 					{
-						aHTML.push('<table><tr><td class="ns1blankspaceNothing">No items.</td></tr></table>');
+						aHTML.push('<table><tr><td class="ns1blankspaceNothing">No items.<br /><br /><span style="font-weight:100">Once you have entered details for the first item,<br />click Save.</span></td></tr></table>');
 
 						$('#ns1blankspaceItemColumn1').html(aHTML.join(''));
+
+						oParam = ns1blankspace.util.setParam(oParam, 'xhtmlElementID', undefined);
+						oParam = ns1blankspace.util.setParam(oParam, 'step', 1);
+						ns1blankspace.financial.item.edit(oParam);
 					}
 					else
 					{

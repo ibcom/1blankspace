@@ -295,7 +295,6 @@ ns1blankspace.visualise =
 									var oOptions = ns1blankspace.util.getParam(oParam, 'options').value;
 									var bLegend = ns1blankspace.util.getParam(oParam, 'legend', {"default": false}).value;
 									var bLabels = ns1blankspace.util.getParam(oParam, 'labels', {"default": false}).value;
-									var bLabels = ns1blankspace.util.getParam(oParam, 'labels', {"default": false}).value;
 
 									if (oOptions === undefined && ns1blankspace.visualise.options.example)
 									{

@@ -37,7 +37,8 @@ ns1blankspace.option = $.extend(true, ns1blankspace.option,
 	showLogonOptions: false,
 	showLogonOptionsOnHover: false,
 	showFavourites: false,
-	showLogoff: false
+	showLogoff: false,
+	quickInvoice: false
 });
 
 ns1blankspace.formFactor.size.value = ns1blankspace.formFactor.size.options.medium;
@@ -166,7 +167,7 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.financial.invoice',
-		source: '/jscripts/1blankspace.financial.invoice-2.0.2.js'
+		source: '/jscripts/1blankspace.financial.invoice-2.0.3.js'
 	},
 	{
 		nameSpace: '1blankspace.financial.expense',
@@ -2140,11 +2141,7 @@ ns1blankspace.attachments =
 						aHTML.push('<tr><td class="ns1blankspaceAction">' +
 										'<span id="ns1blankspaceAttachmentsAdd">Add</span>' +
 										'</td></tr>');
-
-						aHTML.push('<tr><td class="ns1blankspaceAction">' +
-										'<span id="ns1blankspaceAttachmentsImage">Image</span>' +
-										'</td></tr>');
-							
+		
 						if (sHelpNotes != undefined)
 						{
 							aHTML.push('<tr><td class="ns1blankspaceAction">' +
