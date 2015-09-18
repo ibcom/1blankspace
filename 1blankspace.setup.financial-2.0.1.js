@@ -169,7 +169,7 @@ ns1blankspace.setup.financial =
 					$('#ns1blankspaceControlInvoiceTemplate').click(function(event)
 					{
 						ns1blankspace.show({selector: '#ns1blankspaceMainTemplate_invoice'});
-						ns1blankspace.setup.financial.template.init({template: 'invoice', object: 5});
+						ns1blankspace.setup.financial.template.init({template: 'invoice', object: 5, refresh: true});
 					});
 
 					$('#ns1blankspaceControlStatementTemplate').click(function(event)
@@ -1908,8 +1908,28 @@ ns1blankspace.setup.financial =
 										$('#ns1blankspaceMainTemplate_' + sTemplate).html(aHTML.join(''));
 										
 										var aHTML = [];
+
+										if (ns1blankspace.xhtml.templates.all[sTemplate].length > 1)
+										{
+											aHTML.push('<table>');			
+											aHTML.push('<tr><td class="ns1blankspaceCaption" style="font-size:0.75em;">' +
+														'<span id="ns1blankspaceTemplate_variants_add">Add variant</span></td</tr>');
+
+											$.each(ns1blankspace.xhtml.templates.all[sTemplate], function(t, template)
+											{
+												aHTML.push('<tr><td class="ns1blankspaceRow ns1blankspaceRowSelect" style="font-size:0.75em;">');
+
+												aHTML.push('<span id="ns1blankspaceTemplate_variants_' + template.id + '"' +
+														  		' class="ns1blankspaceRowSelect" ' +
+														   		' data-caption="' + (template.title) + '" style="cursor: pointer;">' + template.title + '</span>');
+
+												aHTML.push('</td></tr>');		   		
+											});
+										}
+
+										aHTML.push('</table>');
 										
-										aHTML.push('<table>');
+										aHTML.push('<table style="margin-top:10px;">');
 															
 										aHTML.push('<tr><td class="ns1blankspaceCaption" style="font-size:0.75em;">Tags</td</tr>');
 
@@ -1944,6 +1964,16 @@ ns1blankspace.setup.financial =
 										aHTML.push('</table>');			
 
 										$('#ns1blankspaceTemplateColumn2_' + sTemplate).html(aHTML.join(''));
+
+										$('#ns1blankspaceTemplate_variants_add').button(
+										{
+											text: "Add variant"
+										})
+										.click(function()
+										{
+											ns1blankspace.setup.financial.template.init({template: 'invoice', object: 5, new: true});
+										})
+										.css('font-size', '0.75em');
 
 										var aHTML = [];
 										

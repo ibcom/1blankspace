@@ -434,7 +434,6 @@ ns1blankspace.financial.home = function (oParam)
 							$('.ns1blankspaceControl').removeClass('ns1blankspaceHighlight');
 							$('#' + oXHTMLElementID.value).addClass('ns1blankspaceHighlight');
 							$('#' + oXHTMLElementID.value).click()
-							//ns1blankspace.util.execute(ns1blankspace.util.getParam(oParam, 'functionDefault').value);
 						}
 						else
 						{
@@ -3896,8 +3895,8 @@ ns1blankspace.financial.item =
 						aHTML.push('<table class="ns1blankspace">');
 
 						aHTML.push('<tr>');
-						aHTML.push('<td class="ns1blankspaceHeaderCaption">Description</td>');
 						aHTML.push('<td class="ns1blankspaceHeaderCaption style="width:125px;">Account</td>');
+						aHTML.push('<td class="ns1blankspaceHeaderCaption">Description</td>');
 						aHTML.push('<td class="ns1blankspaceHeaderCaption" style="text-align:right;">Amount</td>');
 						aHTML.push('<td class="ns1blankspaceHeaderCaption" style="text-align:right;">' +
 										ns1blankspace.option.taxVATCaption + '</td>');
@@ -3909,11 +3908,11 @@ ns1blankspace.financial.item =
 						{
 							aHTML.push('<tr class="ns1blankspaceRow">');
 													
-							aHTML.push('<td id="ns1blankspaceItem_description-' + this.id + '" class="ns1blankspaceRow">' +
-											this.description + '</td>');
-																		
 							aHTML.push('<td id="ns1blankspaceItem_financialaccounttext-' + this.id + '" class="ns1blankspaceRow">' +
 											this.financialaccounttext + '</td>');
+
+							aHTML.push('<td id="ns1blankspaceItem_description-' + this.id + '" class="ns1blankspaceRow">' +
+											this.description + '</td>');
 							
 							aHTML.push('<td id="ns1blankspaceItem_amount-' + this.id + '" class="ns1blankspaceRow" style="text-align:right;">' +
 											this.amount + '</td>');
@@ -3947,8 +3946,16 @@ ns1blankspace.financial.item =
 						})
 						.click(function()
 						{
-							oParam.xhtmlElementID = this.id;
-							ns1blankspace.financial.item.remove(oParam);
+							//oParam.xhtmlElementID = this.id;
+							
+							ns1blankspace.remove(
+							{
+								xhtmlElementID: this.id,
+								method: 'FINANCIAL_ITEM_MANAGE',
+								ifNoneMessage: 'No items.'
+							});
+
+							//ns1blankspace.financial.item.remove(oParam);
 						})
 						.css('width', '15px')
 						.css('height', '17px');

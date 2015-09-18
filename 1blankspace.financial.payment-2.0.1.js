@@ -787,6 +787,8 @@ ns1blankspace.financial.payment =
 									if ((cAmount == 0 && cTax == 0) || iAccount == undefined)
 									{
 										if (iAccount == undefined) {alert('No creditor account set up.')}
+										ns1blankspace.inputDetected = false;
+										ns1blankspace.financial.payment.init({id: ns1blankspace.objectContext});
 									}
 									else
 									{

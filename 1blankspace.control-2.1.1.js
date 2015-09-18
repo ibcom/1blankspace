@@ -59,7 +59,7 @@ if (ns1blankspace.control === undefined) {ns1blankspace.control = {}}
 
 ns1blankspace.financial.summaryUseTemplate = false; 
 
-ns1blankspace.xhtml.templates = {source: {}, document: {}};
+ns1blankspace.xhtml.templates = {source: {}, document: {}, all: {}};
 
 ns1blankspace.xhtml.templates.source =
 {
@@ -103,7 +103,7 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.format',
-		source: '/jscripts/1blankspace.format-2.0.3.js'
+		source: '/jscripts/1blankspace.format-2.0.4.js'
 	},
 	{
 		nameSpace: '1blankspace.contactPerson',

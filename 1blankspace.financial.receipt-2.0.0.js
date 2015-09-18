@@ -573,15 +573,6 @@ ns1blankspace.financial.receipt =
 					
 						aHTML.push('<tr class="ns1blankspaceCaption">' +
 										'<td class="ns1blankspaceCaption">' +
-										'Received Date' +
-										'</td></tr>' +
-										'<tr class="ns1blankspace">' +
-										'<td class="ns1blankspaceDate">' +
-										'<input id="ns1blankspaceDetailsReceivedDate" class="ns1blankspaceDate">' +
-										'</td></tr>');		
-
-						aHTML.push('<tr class="ns1blankspaceCaption">' +
-										'<td class="ns1blankspaceCaption">' +
 										'Business' +
 										'</td></tr>' +
 										'<tr class="ns1blankspace">' +
@@ -603,7 +594,16 @@ ns1blankspace.financial.receipt =
 											' data-parent="ns1blankspaceDetailsContactBusinessReceivedFrom"' +
 											' data-parent-search-id="contactbusiness"' +
 											' data-parent-search-text="tradename">' +
-										'</td></tr>');							
+										'</td></tr>');
+
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
+										'Received Date' +
+										'</td></tr>' +
+										'<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceDate">' +
+										'<input id="ns1blankspaceDetailsReceivedDate" class="ns1blankspaceDate">' +
+										'</td></tr>');											
 						
 						if (ns1blankspace.objectContext == -1)
 						{		
@@ -696,18 +696,12 @@ ns1blankspace.financial.receipt =
 							$('#ns1blankspaceDetailsTax').val(ns1blankspace.objectContextData.tax);	
 							$('#ns1blankspaceDetailsDescription').val(ns1blankspace.objectContextData.description);
 						}
+						else
+						{
+							$('#ns1blankspaceDetailsReceivedDate').val(Date.today().toString("dd MMM yyyy"));
+						}
 					}	
 				},
-
-	new2:		function (oParam)
-				{
-					ns1blankspace.objectContextData = undefined
-					ns1blankspace.objectContext = -1;
-					ns1blankspace.financial.receipt.init();
-					$('#ns1blankspaceViewControlAction').button({disabled: false});
-					ns1blankspace.show({selector: '#ns1blankspaceMainDetails'});
-					ns1blankspace.financial.receipt.details();
-				},		
 
 	save: 		{
 					send:		function (oParam, oResponse)
@@ -773,6 +767,8 @@ ns1blankspace.financial.receipt =
 									if ((cAmount == 0 && cTax == 0) || iAccount == undefined)
 									{
 										if (iAccount == undefined) {alert('No debitor account set up.')}
+										ns1blankspace.inputDetected = false;
+										ns1blankspace.financial.receipt.init({id: ns1blankspace.objectContext});
 									}
 									else
 									{
