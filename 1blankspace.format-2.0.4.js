@@ -1049,9 +1049,47 @@ ns1blankspace.format.templates =
 {
 	data: 		{},
 
+	convert:  	function (oParam)
+				{
+					var iObject = ns1blankspace.util.getParam(oParam, 'object').value;
+					
+					var oSearch = new AdvancedSearch();
+					oSearch.method = 'DOCUMENT_SEARCH';
+					oSearch.addField('title,content');
+					oSearch.addFilter('type', 'EQUAL_TO', 10);
+					oSearch.addFilter('object', 'IS_NULL');
+					oSearch.addFilter('title', 'TEXT_IS_LIKE', 'TEMPLATE');
+					
+					oSearch.getResults(function(oResponse)
+					{
+						$.each(oResponse.data.rows.length, function (r, row)
+						{
+							var oData = {id: row.id}
+
+							if (row.title.indexOf('INVOICE') > 0) {oData.object = 5}
+							if (row.title.indexOf('STATEMENT') > 0) {oData.object = 175}
+							if (row.title.indexOf('PAYSLIP') > 0) {oData.object = 371}
+							if (row.title.indexOf('PAYROLL') > 0) {oData.object = 37}
+							
+							$.ajax(
+							{
+								type: 'POST',
+								url: ns1blankspace.util.endpointURI('DOCUMENT_MANAGE'),
+								data: oData,
+								success: function ()
+								{
+									if (r==oResponse.data.rows.length-1)
+									{	
+										ns1blankspace.util.onComplete(oParam);
+									}	
+								}
+							});
+						});
+					});	
+				},
+
 	init:  		function (oParam)
 				{
-					var sTemplate = ns1blankspace.util.getParam(oParam, 'template', {"default": 'invoice'}).value;
 					var iObject = ns1blankspace.util.getParam(oParam, 'object').value;
 					var bRefresh = ns1blankspace.util.getParam(oParam, 'refresh', {"default": false}).value;
 					var bNew = ns1blankspace.util.getParam(oParam, 'new', {"default": false}).value;
