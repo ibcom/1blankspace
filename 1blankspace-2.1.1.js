@@ -816,7 +816,8 @@ ns1blankspace.app =
 							ns1blankspace.user.contactBusinessText = oResponse.contactbusinesstext;
 							ns1blankspace.user.commonName = oResponse.firstname + ' ' + oResponse.surname;
 							ns1blankspace.user.email = oResponse.email;
-							ns1blankspace.user.systemAdmin = (oResponse.systemadmin == "true");
+							//ns1blankspace.user.systemAdmin = (oResponse.systemadmin == "true");
+							ns1blankspace.user.systemAdmin = (oResponse.unrestrictedaccess == 'Y');
 							ns1blankspace.user.roles = oResponse.roles.rows;
 							ns1blankspace.user.site = parseInt(oResponse.site);
 
