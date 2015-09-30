@@ -3183,7 +3183,7 @@ ns1blankspace.search =
 
 						if (fOnComplete != undefined)
 						{
-							fOnComplete();
+							fOnComplete(oParam);
 						}
 					}
 					else
@@ -3199,7 +3199,8 @@ ns1blankspace.search =
 
 						if (bCache && oResponse === undefined)
 						{
-							oResponse = ns1blankspace.search.cache.search({method: sMethod, searchText: sSearchText, columns: sColumns, fixedFilter: sMethodFilter});
+							//oResponse = ns1blankspace.search.cache.search({method: sMethod, searchText: sSearchText, columns: sColumns, fixedFilter: sMethodFilter});
+							oResponse = ns1blankspace.search.cache.search({method: sMethod, searchText: sSearchText, columns: sColumns});
 
 							if (oResponse !== undefined)
 							{
