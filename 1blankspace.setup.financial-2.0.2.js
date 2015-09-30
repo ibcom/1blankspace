@@ -199,7 +199,7 @@ ns1blankspace.setup.financial =
 					$('#ns1blankspaceControlPayroll').click(function(event)
 					{
 						ns1blankspace.show({selector: '#ns1blankspaceMainPayroll'});
-						ns1blankspace.setup.financial.payroll();
+						ns1blankspace.setup.financial.payroll.init();
 					});
 
 					$.ajax(
@@ -2248,48 +2248,84 @@ ns1blankspace.setup.financial =
 					}	
 				},
 
-	payroll:	function ()
-				{
-					var aHTML = [];
-					
-					if ($('#ns1blankspaceMainPayroll').attr('data-loading') == '1')
-					{
-						$('#ns1blankspaceMainPayroll').attr('data-loading', '');
-												
-						aHTML.push('<table class="ns1blankspaceContainer">' +
-										'<tr class="ns1blankspaceContainer">' +
-										'<td id="ns1blankspacePayrollColumn1" class="ns1blankspaceColumn1"></td>' +
-										'<td id="ns1blankspacePayrollColumn2" class="ns1blankspaceColumn2"></td>' +
-										'</tr>' + 
-										'</table>');	
+	payroll:	{
+					data: 		{},
 
-						$('#ns1blankspaceMainPayroll').html(aHTML.join(''));
-						
-						var aHTML = [];
-						
-						aHTML.push('<table class="ns1blankspace">');
-					
-						aHTML.push('<tr class="ns1blankspace">' +
-										'<td class="ns1blankspaceCaption">' +
-										'Default Pay Period' +
-										'</td></tr>' +
-										'<tr class="ns1blankspace">' +
-										'<td class="ns1blankspaceRadio">' +
-										'<input type="radio" id="radioPeriodDefault1" name="radioPeriodDefault" value="1"/>Weekly' +
-										'<br /><input type="radio" id="radioPeriodDefault2" name="radioPeriodDefault" value="2"/>Fortnightly' +
-										'<br /><input type="radio" id="radioPeriodDefault3" name="radioPeriodDefault" value="3"/>Monthly' +
-										'<br /><input type="radio" id="radioPeriodDefault4" name="radioPeriodDefault" value="4"/>Bi-Monthly' +
-										'</td></tr>');			
-												
-						aHTML.push('</table>');					
-						
-						$('#ns1blankspacePayrollColumn1').html(aHTML.join(''));
+					init: 		function (oParam)
+								{
+									oParam = ns1blankspace.util.setParam(oParam, 'onComplete', ns1blankspace.setup.financial.payroll.show);
+									ns1blankspace.setup.financial.payroll.linetypes.init(oParam);
+								},
 
-						if (ns1blankspace.objectContextData != undefined)
-						{
-							$('[name="radioPeriodDefault"][value="' + ns1blankspace.objectContextData.payrollpayperiod + '"]').attr('checked', true);
-						}
-					}	
+					show: 		function ()
+								{
+									var aHTML = [];
+									
+									if ($('#ns1blankspaceMainPayroll').attr('data-loading') == '1')
+									{
+										$('#ns1blankspaceMainPayroll').attr('data-loading', '');
+																
+										aHTML.push('<table class="ns1blankspaceContainer">' +
+														'<tr class="ns1blankspaceContainer">' +
+														'<td id="ns1blankspacePayrollColumn1" class="ns1blankspaceColumn1" style="width:200px;"></td>' +
+														'<td id="ns1blankspacePayrollColumn2" class="ns1blankspaceColumn2"></td>' +
+														'</tr>' + 
+														'</table>');	
+
+										$('#ns1blankspaceMainPayroll').html(aHTML.join(''));
+										
+										var aHTML = [];
+										
+										aHTML.push('<table class="ns1blankspace">');
+									
+										aHTML.push('<tr class="ns1blankspace">' +
+														'<td class="ns1blankspaceCaption">' +
+														'Default Pay Period' +
+														'</td></tr>' +
+														'<tr class="ns1blankspace">' +
+														'<td class="ns1blankspaceRadio">' +
+														'<input type="radio" id="radioPeriodDefault1" name="radioPeriodDefault" value="1"/>Weekly' +
+														'<br /><input type="radio" id="radioPeriodDefault2" name="radioPeriodDefault" value="2"/>Fortnightly' +
+														'<br /><input type="radio" id="radioPeriodDefault3" name="radioPeriodDefault" value="3"/>Monthly' +
+														'<br /><input type="radio" id="radioPeriodDefault4" name="radioPeriodDefault" value="4"/>Bi-Monthly' +
+														'</td></tr>');			
+																
+										aHTML.push('</table>');					
+										
+										$('#ns1blankspacePayrollColumn1').html(aHTML.join(''));
+
+										if (ns1blankspace.objectContextData != undefined)
+										{
+											$('[name="radioPeriodDefault"][value="' + ns1blankspace.objectContextData.payrollpayperiod + '"]').attr('checked', true);
+										}
+									}
+								},
+							
+					linetypes: 	{
+									init:		function (oParam)
+												{
+													if (ns1blankspace.setup.financial.payroll.data.linetypes != undefined)
+													{
+														ns1blankspace.util.onComplete(oParam);
+													}
+													else
+													{	
+														var oSearch = new AdvancedSearch();
+														oSearch.method = 'SETUP_FINANCIAL_PAYROLL_LINE_TYPE_SEARCH';		
+														oSearch.addField('includeinallowancesnontaxable,includeinallowancestaxable,includeindeductions,includeingrosssalary,' +
+																			'includeinleave,includeinleaveloading,includeinleavetype,includeinleavetypetext,includeinposttaxsuper,' +
+																			'includeinsalarysacrificesuper,includeinstandardhours,includeinsuper,includeintaxadjustments,notes,title');
+														oSearch.rows = 100;
+														oSearch.sort('title', 'asc');
+														oSearch.getResults(function(oResponse)
+														{
+															ns1blankspace.setup.financial.payroll.data.linetypes = oResponse.data.rows;
+															ns1blankspace.util.onComplete(oParam);
+														});
+													}	
+												}
+
+								}
 				},
 
 	save: 		{			
