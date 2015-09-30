@@ -1308,8 +1308,6 @@ ns1blankspace.financial.payroll =
 										{
 											$('[name="radioMedicare"][value="' + ns1blankspace.financial.employee["medicare"] + '"]').attr('checked', true);
 											$('[name="radioFrequency"][value="' + ns1blankspace.financial.employee["payfrequency"] + '"]').attr('checked', true);
-											$('#ns1blankspaceDetailsStandardHours').val(ns1blankspace.financial.employee["standardhours"]);
-											$('#ns1blankspaceDetailsAllowance').val(ns1blankspace.financial.employee["allowance"]);
 											$('#ns1blankspaceDetailsAllowanceDescription').val(ns1blankspace.financial.employee["allowancedescription"]);
 											$('#ns1blankspaceDetailsDeduction').val(ns1blankspace.financial.employee["deduction"]);
 											$('#ns1blankspaceDetailsDeductionDescription').val(ns1blankspace.financial.employee["deductiondescription"]);
@@ -1342,8 +1340,6 @@ ns1blankspace.financial.payroll =
 											var sData = 'id=' + ns1blankspace.util.fs(iEmployee);
 											sData += '&payfrequency=' + ns1blankspace.util.fs($('input[name="radioFrequency"]:checked').val());
 											sData += '&medicare=' + ns1blankspace.util.fs($('input[name="radioMedicare"]:checked').val());
-											sData += '&allowance=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsAllowance').val());
-											sData += '&standardhours=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsStandardHours').val());
 											sData += '&allowancedescription=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsAllowanceDescription').val());
 											sData += '&deduction=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsDeduction').val());
 											sData += '&deductiondescription=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsDeductionDescription').val());
@@ -1779,7 +1775,7 @@ ns1blankspace.financial.payroll =
 																'<tr class="ns1blankspaceContainer">' +
 																'<td id="ns1blankspacePayrollEmployeeDetailsPayRateColumn1" style="font-size:0.875em;">' +
 																ns1blankspace.xhtml.loading + '</td>' +
-																'<td id="ns1blankspacePayrollEmployeeDetailsPayRateColumn2" style="width:75px;">' +
+																'<td id="ns1blankspacePayrollEmployeeDetailsPayRateColumn2" style="width:0px;">' +
 																'</td>' +
 																'</tr>' + 
 																'</table>');				
@@ -1797,24 +1793,16 @@ ns1blankspace.financial.payroll =
 																	'<tr><td><span id="ns1blankspacePayrollEmployee_options_add" class="ns1blankspaceAction">' +
 																	'Add</span></td></tr></table>');					
 													
-													$('#ns1blankspacePayrollEmployeeDetailsPayRateColumn2').html(aHTML.join(''));
+													$('#ns1blankspacePayrollEmployeeDetailsPayRateColumn2x').html(aHTML.join(''));
 
-													$('#ns1blankspacePayrollEmployee_options_add').button(
-													{
-														text: "Add"
-													})
-													.click(function() {
-														$.extend(true, oParam, {stepAction: 3, xhtmlElementID: "", id: ""});
-														ns1blankspace.financial.payroll.employees.show(oParam);
-													})
-													.css('font-size', '0.75em');
-												
+											
 													var aHTML = [];
 
 													if (oResponse.data.rows.length == 0)
 													{
 														aHTML.push('<table class="ns1blankspaceColumn2">' +
-																		'<tr><td class="ns1blankspaceNothing">No pay types & rates.</td></tr>' +
+																		'<tr><td><span id="ns1blankspacePayrollEmployee_options_add" class="ns1blankspaceAction">' +
+																			'</span></td></tr>' + 
 																		'</table>');
 
 														$('#ns1blankspacePayrollEmployeeDetailsPayRateColumn1').html(aHTML.join(''));
@@ -1826,11 +1814,11 @@ ns1blankspace.financial.payroll =
 														aHTML.push('<td class="ns1blankspaceHeaderCaption">Start Date</td>');
 														aHTML.push('<td class="ns1blankspaceHeaderCaption">End Date</td>');
 														aHTML.push('<td class="ns1blankspaceHeaderCaption" style="text-align:right;">Type</td>');
-														aHTML.push('<td class="ns1blankspaceHeaderCaption" style="text-align:left;">' +
+														aHTML.push('<td class="ns1blankspaceHeaderCaption" style="text-align:left; width:100px;">' +
 															ns1blankspace.financial.payroll.data.payPeriods[ns1blankspace.financial.data.settings.payrollpayperiod] +
 															' Amount</td>');
 																
-														aHTML.push('<td class="ns1blankspaceHeaderCaption">&nbsp;</td>');
+														aHTML.push('<td class="ns1blankspaceHeaderCaption" style="width:30px;text-align:right;"><span id="ns1blankspacePayrollEmployee_options_add" class="ns1blankspaceAction"></span></td>');
 														aHTML.push('</tr>');
 
 														$(oResponse.data.rows).each(function() 
@@ -1870,6 +1858,22 @@ ns1blankspace.financial.payroll =
 													}
 													
 													$('#ns1blankspacePayrollEmployeeDetailsPayRateColumn1').html(aHTML.join(''));
+
+													$('#ns1blankspacePayrollEmployee_options_add').button(
+													{
+														text: false,
+														icons:
+														{
+															primary: "ui-icon-plus"
+														}
+													})
+													.click(function()
+													{
+														$.extend(true, oParam, {stepAction: 3, xhtmlElementID: "", id: ""});
+														ns1blankspace.financial.payroll.employees.show(oParam);
+													})
+													.css('width', '15px')
+													.css('height', '17px');
 
 													$('.ns1blankspacePayrollEmployeeDetailsPayRateRemove').button(
 													{
@@ -2590,10 +2594,10 @@ ns1blankspace.financial.payroll =
 												oRow["netsalary"] +
 												'</td></tr>');
 
-								aHTML.push('<tr><td colspan=2 class="ns1blankspaceCaption">' +
+								aHTML.push('<tr><td colspan=2 class="ns1blankspaceCaption" style="font-size:0.875em;">' +
 												 'Note</td></tr>');
 
-								aHTML.push('<tr><td colspan=2 id="ns1blankspaceFinancialPayrollPayNoteContainer" style="display:table-cell; text-align:right;" class="ns1blankspaceRow">' +
+								aHTML.push('<tr><td colspan=2 id="ns1blankspaceFinancialPayrollPayNoteContainer" style="display:table-cell; text-align:right; border-width:0px;" class="ns1blankspaceRow">' +
 												'<textarea rows="10" cols="35" id="ns1blankspaceFinancialPayrollPayNote" class="ns1blankspaceTextMulti"'+
 												' style="width:100%; height:150px;">' + oRow["notes"] + '</textarea>' +
 												'</td></tr>');	
@@ -2631,11 +2635,7 @@ ns1blankspace.financial.payroll =
 									dataType: 'json',
 									success: function(data)
 									{
-										if (data.status == 'OK')
-										{
-											ns1blankspace.status.message('Note saved.');
-										}
-										else
+										if (data.status != 'OK')
 										{
 											ns1blankspace.status.message('Note could not be saved.');
 										}	
@@ -2644,8 +2644,6 @@ ns1blankspace.financial.payroll =
 
 							})
 							.css('font-size', '0.725em;');
-
-							$('#ns1blankspaceFinancialPayrollPayNote').focus();
 
 							$('#ns1blankspaceFinancialPayrollShowCalcs').click(function ()
 							{
