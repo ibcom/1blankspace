@@ -4946,6 +4946,7 @@ ns1blankspace.util =
 						{
 							var sType = ns1blankspace.util.getParam(oParam, 'type', {"default": 'data'}).value;
 							var sQueueID = ns1blankspace.util.getParam(oParam, 'queue', {"default": 'base'}).value;
+							var bShow = ns1blankspace.util.getParam(oParam, 'show', {"default": false}).value;
 
 							if (sElementSelector == undefined)
 							{
@@ -4957,6 +4958,11 @@ ns1blankspace.util =
 								{	
 									$(sElementSelector).html(ns1blankspace.util.view[sType][sQueueID].join(''));
 								}
+
+								if (bShow)
+								{
+									$(sElementSelector).show(ns1blankspace.option.showSpeedOptions);
+								}	
 
 								if ($.fn.datepicker != undefined)
 								{

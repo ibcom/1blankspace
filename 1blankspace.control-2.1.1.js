@@ -135,7 +135,7 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.news',
-		source: '/jscripts/1blankspace.news-2.0.1.js'
+		source: '/jscripts/1blankspace.news-2.0.2.js'
 	},
 	{
 		nameSpace: '1blankspace.event',
@@ -195,7 +195,7 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.financial.payroll',
-		source: '/jscripts/1blankspace.financial.payroll-2.0.1.js'
+		source: '/jscripts/1blankspace.financial.payroll-2.0.2.js'
 	},
 	{
 		nameSpace: '1blankspace.financial.budget',
@@ -215,7 +215,7 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.setup.financial',
-		source: '/jscripts/1blankspace.setup.financial-2.0.1.js'
+		source: '/jscripts/1blankspace.setup.financial-2.0.2.js'
 	},
 	{
 		nameSpace: '1blankspace.setup.messaging',

@@ -27,11 +27,6 @@ ns1blankspace.messaging.conversation =
 					ns1blankspace.viewName = 'Conversations';
 					
 					ns1blankspace.app.set(oParam);
-
-					if (ns1blankspace.option.richTextEditing)
-					{
-						//ns1blankspace.format.editor.init();
-					}
 				},
 
 	home: 		function (oParam, oResponse)
@@ -237,14 +232,6 @@ ns1blankspace.messaging.conversation =
 
 	layout: 	function ()
 				{
-					/*
-					if (tinyMCE.getInstanceById('ns1blankspaceMainEditText'))
-					{
-						tinyMCE.get('ns1blankspaceMainEditText').remove();
-						$('#ns1blankspaceMainEditText').remove();
-					}
-					*/
-
 					var aHTML = [];
 
 					aHTML.push('<div id="ns1blankspaceControlContext" class="ns1blankspaceControlContext"></div>');
@@ -1387,10 +1374,7 @@ ns1blankspace.messaging.conversation =
 								{
 									var sXHTMLElementContextID;
 									var iPost;
-									
-									//for (edId in tinyMCE.editors) 
-									//tinyMCE.editors[edId].destroy(true);
-												
+													
 									ns1blankspace.counter.editor = ns1blankspace.counter.editor + 1;		
 									
 									if (oParam != undefined)
@@ -1406,8 +1390,6 @@ ns1blankspace.messaging.conversation =
 										var sElementId = aSearch[0];
 										var lProjectTask = aSearch[1];
 									}	
-										
-									//ns1blankspace.show({selector: '#ns1blankspaceMainPostDetails'});	
 										
 									var aHTML = [];
 									

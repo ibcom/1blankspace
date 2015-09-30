@@ -573,11 +573,15 @@ ns1blankspace.financial.invoice =
 									}
 									else
 									{
-										if (ns1blankspace.financial.summaryUseTemplate || bUseTemplate)
+										if (false && (ns1blankspace.financial.summaryUseTemplate || bUseTemplate))
 										{	
 											$('#ns1blankspaceSummaryColumn1').html(ns1blankspace.xhtml.loading);
-											oParam.onComplete = ns1blankspace.financial.invoice.summary["default"];
-											ns1blankspace.util.initTemplate(oParam);
+											
+											oParam = ns1blankspace.util.setParam(oParam, 'object', 5);
+											oParam = ns1blankspace.util.setParam(oParam, 'onComplete', ns1blankspace.financial.invoice.summary["default"]);
+
+											ns1blankspace.format.templates.init(oParam);
+											//ns1blankspace.util.initTemplate(oParam);
 										}	
 										else
 										{
@@ -590,6 +594,7 @@ ns1blankspace.financial.invoice =
 								{
 									var aHTML = [];
 									var bUseTemplate = false;
+									//var sXHTMLTemplate = ns1blankspace.util.getParam(oParam, 'xhtmlTemplate').value;
 									
 									if (oParam)
 									{
@@ -614,10 +619,13 @@ ns1blankspace.financial.invoice =
 										$('#ns1blankspaceMainSummary').html(aHTML.join(''));	
 				
 										var aHTML = [];
+
+										var oTemplate = ns1blankspace.format.templates.get(oParam);
 									
-										if (ns1blankspace.xhtml.templates['invoice'] != '' && (ns1blankspace.financial.summaryUseTemplate || bUseTemplate))
+										if (oTemplate != undefined && (ns1blankspace.financial.summaryUseTemplate || bUseTemplate))
 										{
-											aHTML.push(ns1blankspace.format.render({object: 5, xhtmlTemplate: ns1blankspace.xhtml.templates['invoice']}));
+											aHTML.push(ns1blankspace.format.render({object: 5, xhtmlTemplate: oTemplate.xhtml}));
+
 											$('#ns1blankspaceSummaryColumn1').html(aHTML.join(''));
 										}
 										else
@@ -726,14 +734,12 @@ ns1blankspace.financial.invoice =
 												{
 													var sHTML = $('#ns1blankspaceSummaryColumn1').html();
 
-													//sHTML = sHTML.replace(/app.alt-enter.com/g,'[[host]]');
-													//sHTML = sHTML.replace(/https/g,'http');
-
-													ns1blankspace.pdf.create({
-															xhtmlContent: sHTML,
-															filename: ns1blankspace.objectContextData.reference + '.pdf',
-															open: false
-														});
+													ns1blankspace.pdf.create(
+													{
+														xhtmlContent: sHTML,
+														filename: ns1blankspace.objectContextData.reference + '.pdf',
+														open: false
+													});
 												});
 											}		
 											else		
@@ -744,7 +750,7 @@ ns1blankspace.financial.invoice =
 												})
 												.click(function(event)
 												{
-													ns1blankspace.financial.invoice.summary.show({useTemplate: true});
+													ns1blankspace.financial.invoice.summary.templates();
 												});
 											}
 
@@ -758,7 +764,50 @@ ns1blankspace.financial.invoice =
 											});
 										}	
 									}	
-								}
+								},
+
+					templates: 	function (oParam)
+								{
+
+									if (ns1blankspace.format.templates.data[ns1blankspace.object] == undefined)
+									{
+										oParam = ns1blankspace.util.setParam(oParam, 'object', ns1blankspace.object);
+										oParam = ns1blankspace.util.setParam(oParam, 'onComplete', ns1blankspace.financial.invoice.summary.templates);
+										ns1blankspace.format.templates.init(oParam);
+									}
+									else
+									{
+										oParam = ns1blankspace.util.setParam(oParam, 'useTemplate', true);
+
+										if (ns1blankspace.format.templates.data[ns1blankspace.object].length == 1)
+										{
+											oParam = ns1blankspace.util.setParam(oParam, 'object', ns1blankspace.object);
+											ns1blankspace.financial.invoice.summary["default"](oParam)
+										}
+										else
+										{
+											ns1blankspace.container.position(
+											{
+												xhtmlElementID: 'ns1blankspaceSummaryView',
+												topOffset: -34,
+												leftOffset: -195
+											});
+
+											$vq.clear({queue: 'templates'});
+
+											$vq.add('<div class="ns1blankspaceViewControlContainer" style="font-size:0.875em;">', {queue: 'templates'});
+
+											$.each(ns1blankspace.format.templates.data[ns1blankspace.object], function (t, template)
+											{
+												$vq.add('<div>' + template.title + '</div>', {queue: 'templates'});
+											});	
+
+											$vq.add('</div>', {queue: 'templates'});
+
+											$vq.render(ns1blankspace.xhtml.container, {queue: 'templates', show: true});
+										}
+									}
+								}			
 				},
 
 	email: 		{
@@ -768,6 +817,9 @@ ns1blankspace.financial.invoice =
 									oParam = ns1blankspace.util.setParam(oParam, 'onComplete', ns1blankspace.financial.invoice.email.render);
 									ns1blankspace.util.initTemplate(oParam);
 								},
+
+					templates: 	function (oParam)
+								{},			
 
 					render: 	function (oParam, oResponse)
 								{

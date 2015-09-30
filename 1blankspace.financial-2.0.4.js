@@ -857,7 +857,7 @@ ns1blankspace.financial.debtors =
 				{
 					var bShowInvoices = ns1blankspace.util.getParam(oParam, 'showInvoices', {"default": true}).value;
 
-					$('#ns1blankspaceMainDebtors .ns1blankspaceRowSelect')
+					$('#ns1blankspaceFinancialDebtors .ns1blankspaceRowSelect')
 					.click(function()
 					{
 						var sKey =(this.id).split('-')[1];
@@ -874,7 +874,7 @@ ns1blankspace.financial.debtors =
 					.css('width', '15px')
 					.css('height', '20px');
 
-					$('#ns1blankspaceMainDebtors .ns1blankspaceDebtorsSelectAll').button(
+					$('#ns1blankspaceFinancialDebtors .ns1blankspaceDebtorsSelectAll').button(
 					{
 						text: false,
 						icons:
@@ -914,7 +914,10 @@ ns1blankspace.financial.debtors =
 									$('#ns1blankspaceFinancialDebtorsPreviewStatus').html(ns1blankspace.xhtml.loadingSmall);
 									oParam = ns1blankspace.util.setParam(oParam, 'onComplete', ns1blankspace.financial.debtors.preview.show);
 									oParam = ns1blankspace.util.setParam(oParam, 'template', 'statement');
-									ns1blankspace.util.initTemplate(oParam)
+									//ns1blankspace.util.initTemplate(oParam)
+
+									oParam = ns1blankspace.util.setParam(oParam, 'object', 175);
+									ns1blankspace.format.templates.init(oParam);
 								},
 
 					show:		function (oParam)
@@ -1010,8 +1013,9 @@ ns1blankspace.financial.debtors =
 														primary: "ui-icon-document"
 													}
 												})
-												.click(function() {
-													ns1blankspace.financial.debtors.preview.showHide({xhtmlElementID: this.id});
+												.click(function()
+												{
+													ns1blankspace.financial.debtors.preview.showHide({xhtmlElementID: this.id, object: 175});
 												})
 												.css('width', '15px')
 												.css('height', '20px');
@@ -1050,11 +1054,13 @@ ns1blankspace.financial.debtors =
 
 										if (oStatement)
 										{
+											var oTemplate = ns1blankspace.format.templates.get(oParam);
+
 											sHTML = ns1blankspace.format.render(
 											{
 												object: 175,
 												objectContext: -1,
-												xhtmlTemplate: ns1blankspace.xhtml.templates['statement'],
+												xhtmlTemplate: oTemplate.xhtml,
 												objectData: oStatement,
 												objectOtherData: oStatement.invoices
 											});

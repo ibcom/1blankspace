@@ -616,6 +616,7 @@ ns1blankspace.format.editor =
 					var sTheme = ns1blankspace.util.getParam(oParam, 'theme', {"default": 'advanced'}).value;
 					var sXHTMLElement = ns1blankspace.util.getParam(oParam, 'xhtmlElement', {"default": 'textarea'}).value;
 					var sSelector = ns1blankspace.util.getParam(oParam, 'selector', {"default": sXHTMLElement}).value;
+					var iObject = ns1blankspace.util.getParam(oParam, 'object', {"default": '32'}).value;
 					var sAdditional = '';
 
 					if (sVersion == undefined && tinyMCE != undefined )
@@ -658,9 +659,9 @@ ns1blankspace.format.editor =
 						                {title: 'Bold text', inline: 'b'}
 						        ],
 
-						        templates: "/rpc/core/?method=CORE_DYNAMIC_TAG_SEARCH",
-						        link_list: "/rpc/core/?method=CORE_EDITOR_LINK_SEARCH",
-						        image_list: "/rpc/core/?method=CORE_EDITOR_IMAGE_SEARCH"
+						        templates: '/ondemand/core/?method=CORE_DYNAMIC_TAG_SEARCH',
+						        link_list: '/rpc/core/?method=CORE_EDITOR_LINK_SEARCH',
+						        image_list: '/rpc/core/?method=CORE_EDITOR_IMAGE_SEARCH'
 							}
 						}
 						else if (sVersion == '3')
@@ -706,7 +707,7 @@ ns1blankspace.format.editor =
 								convert_urls : false, 
 								visual : true, 
 								gecko_spellcheck : true,
-								TemplateLinkType : "32",
+								TemplateLinkType : iObject,
 								content_css : ns1blankspace.xhtml.editorCSS,
 								
 								external_link_list_url : "/ondemand/core/?method=CORE_EDITOR_LINK_SEARCH", 
@@ -1062,29 +1063,36 @@ ns1blankspace.format.templates =
 					
 					oSearch.getResults(function(oResponse)
 					{
-						$.each(oResponse.data.rows.length, function (r, row)
+						if (oResponse.data.rows.length == 0)
 						{
-							var oData = {id: row.id}
-
-							if (row.title.indexOf('INVOICE') > 0) {oData.object = 5}
-							if (row.title.indexOf('STATEMENT') > 0) {oData.object = 175}
-							if (row.title.indexOf('PAYSLIP') > 0) {oData.object = 371}
-							if (row.title.indexOf('PAYROLL') > 0) {oData.object = 37}
-							
-							$.ajax(
+							ns1blankspace.util.onComplete(oParam);
+						}	
+						else
+						{
+							$.each(oResponse.data.rows, function (r, row)
 							{
-								type: 'POST',
-								url: ns1blankspace.util.endpointURI('DOCUMENT_MANAGE'),
-								data: oData,
-								success: function ()
+								var oData = {id: row.id}
+
+								if (row.title.indexOf('INVOICE') >= 0) {oData.object = 5}
+								if (row.title.indexOf('STATEMENT') >= 0) {oData.object = 175}
+								if (row.title.indexOf('PAYSLIP') >= 0) {oData.object = 371}
+								if (row.title.indexOf('PAYROLL') >= 0) {oData.object = 37}
+								
+								$.ajax(
 								{
-									if (r==oResponse.data.rows.length-1)
-									{	
-										ns1blankspace.util.onComplete(oParam);
-									}	
-								}
+									type: 'POST',
+									url: ns1blankspace.util.endpointURI('DOCUMENT_MANAGE'),
+									data: oData,
+									success: function ()
+									{
+										if (r == oResponse.data.rows.length-1)
+										{	
+											ns1blankspace.util.onComplete(oParam);
+										}	
+									}
+								});
 							});
-						});
+						}	
 					});	
 				},
 
@@ -1129,31 +1137,49 @@ ns1blankspace.format.templates =
 					}
 				},
 
-	new: 		function (oParam)
+	get: 		function (oParam)
+				{
+					var iObject = ns1blankspace.util.getParam(oParam, 'object').value;
+					var iDocument = ns1blankspace.util.getParam(oParam, 'document').value;
+					var oTemplate, aTemplate;
+
+					if (iObject != undefined)
+					{	
+						aTemplate = ns1blankspace.format.templates.data[iObject];
+
+						if (iDocument != undefined)
+						{
+							aTemplate = $.grep(aTemplate, function (template) {return template.id == iDocument});
+						}	
+
+						if (aTemplate.length != 0) {oTemplate = aTemplate[0]}
+					}
+
+					return oTemplate
+				},		
+
+	"new": 		function (oParam)
 				{
 					var sTemplate = ns1blankspace.util.getParam(oParam, 'template', {"default": 'invoice'}).value;
 					var iObject = ns1blankspace.util.getParam(oParam, 'object').value;
 
-					if (ns1blankspace.format.templates.data[iObject] !== undefined)
-					{	
-						$.ajax(
+					$.ajax(
+					{
+						type: 'GET',
+						url: ns1blankspace.xhtml.templates.source[sTemplate],
+						dataType: 'text',
+						global: false,
+						success: function(data)
 						{
-							type: 'GET',
-							url: ns1blankspace.xhtml.templates.source[sTemplate],
-							dataType: 'text',
-							global: false,
-							success: function(data)
-							{
-								ns1blankspace.format.templates.data[iObject].push = data;
-								ns1blankspace.util.onComplete(oParam);
-							},
-							error: function(data)
-							{
-								ns1blankspace.xhtml.templates[sTemplate] = '';
-								ns1blankspace.util.onComplete(oParam);
-							}
-						});	
-					}
+							oParam = ns1blankspace.util.setParam(oParam, 'content', data);
+							ns1blankspace.format.templates.save(oParam);
+						},
+						error: function(data)
+						{
+							oParam = ns1blankspace.util.setParam(oParam, 'content', '');
+							ns1blankspace.format.templates.save(oParam);
+						}
+					});	
 				},
 
 	save:		function (oParam)
@@ -1170,8 +1196,20 @@ ns1blankspace.format.templates =
 						id: iDocumentID,
 						content: sContent,
 						type: 10,
-						object: iObject,
-						title: sTemplate.toUpperCase() + ' TEMPLATE'
+						object: iObject
+					}
+
+					if (iDocumentID == undefined)
+					{
+						sTitle = sTemplate.toUpperCase() + ' TEMPLATE';
+
+						if (ns1blankspace.format.templates.data[iObject].length >= 1)
+						{
+							sTitle = sTitle + ' ' + (ns1blankspace.format.templates.data[iObject].length + 1)
+						}
+
+						oData.title = sTitle;
+						oParam.refresh = true;
 					}	
 
 					$.ajax(
@@ -1182,6 +1220,7 @@ ns1blankspace.format.templates =
 						dataType: 'json',
 						success: function(data)
 						{
+							oParam = ns1blankspace.util.setParam(oParam, 'document', data.id);
 							ns1blankspace.status.message('Saved');
 							ns1blankspace.format.templates.init(oParam);
 						}

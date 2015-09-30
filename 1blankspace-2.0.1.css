@@ -196,6 +196,11 @@ a:hover
 	background-position: -96px -224px;
 }
 
+.ui-icon-plus
+{
+    background-position: -16px -129px;
+}
+
 .ns1blankspaceViewImage
 {
 	background-repeat: no-repeat;
