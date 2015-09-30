@@ -499,7 +499,7 @@ td.ns1blankspaceColumn1Flexixble
 	padding-right: 20px;
 }
 
-td.ns1blankspaceRowSelect
+td.ns1blankspaceRowSelect, div.ns1blankspaceRowSelect
 {
 	cursor: pointer;
 	color: #ee8f00;
@@ -507,7 +507,7 @@ td.ns1blankspaceRowSelect
 	font-size: 0.875em;
 }
 
-td.ns1blankspaceRow
+td.ns1blankspaceRow, div.ns1blankspaceRow
 {
 	font-size: 0.875em;
 	border-spacing: 0px;

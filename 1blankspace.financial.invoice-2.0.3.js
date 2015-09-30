@@ -6,6 +6,8 @@
  
 ns1blankspace.financial.invoice = 
 {
+	data: 		{},
+
 	init: 		function (oParam)
 				{
 					var bInitialised = false;
@@ -134,9 +136,7 @@ ns1blankspace.financial.invoice =
 
 						$('#ns1blankspaceControlDebtors').click(function(event)
 						{
-							//ns1blankspace.show({selector: '#ns1blankspaceMainDebtors'});
 							ns1blankspace.financial.debtors.show({xhtmlElementID: 'ns1blankspaceMain'});
-							//ns1blankspace.financial.init({functionDefault: 'ns1blankspace.financial.debtors.show()'});
 						});
 													
 						$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions);
@@ -577,14 +577,13 @@ ns1blankspace.financial.invoice =
 										{	
 											$('#ns1blankspaceSummaryColumn1').html(ns1blankspace.xhtml.loading);
 											
-											oParam = ns1blankspace.util.setParam(oParam, 'object', 5);
+											oParam = ns1blankspace.util.setParam(oParam, 'object', ns1blankspace.object);
 											oParam = ns1blankspace.util.setParam(oParam, 'onComplete', ns1blankspace.financial.invoice.summary["default"]);
-
 											ns1blankspace.format.templates.init(oParam);
-											//ns1blankspace.util.initTemplate(oParam);
 										}	
 										else
 										{
+											delete ns1blankspace.financial.invoice.data.templateDocument;
 											ns1blankspace.financial.invoice.summary["default"](oParam);
 										}
 									}	
@@ -768,7 +767,6 @@ ns1blankspace.financial.invoice =
 
 					templates: 	function (oParam)
 								{
-
 									if (ns1blankspace.format.templates.data[ns1blankspace.object] == undefined)
 									{
 										oParam = ns1blankspace.util.setParam(oParam, 'object', ns1blankspace.object);
@@ -786,26 +784,48 @@ ns1blankspace.financial.invoice =
 										}
 										else
 										{
-											ns1blankspace.container.position(
+											if ($(ns1blankspace.xhtml.container).attr('data-initiator') == 'ns1blankspaceSummaryView')
 											{
-												xhtmlElementID: 'ns1blankspaceSummaryView',
-												topOffset: -34,
-												leftOffset: -195
-											});
-
-											$vq.clear({queue: 'templates'});
-
-											$vq.add('<div class="ns1blankspaceViewControlContainer" style="font-size:0.875em;">', {queue: 'templates'});
-
-											$.each(ns1blankspace.format.templates.data[ns1blankspace.object], function (t, template)
+												$(ns1blankspace.xhtml.container).slideUp(500);
+												$(ns1blankspace.xhtml.container).attr('data-initiator', '');
+											}
+											else
 											{
-												$vq.add('<div>' + template.title + '</div>', {queue: 'templates'});
-											});	
+												ns1blankspace.container.position(
+												{
+													xhtmlElementID: 'ns1blankspaceSummaryView',
+													topOffset: -34,
+													leftOffset: -195
+												});
 
-											$vq.add('</div>', {queue: 'templates'});
+												$vq.clear({queue: 'templates'});
 
-											$vq.render(ns1blankspace.xhtml.container, {queue: 'templates', show: true});
-										}
+												$vq.add('<div class="ns1blankspaceViewControlContainer" id="ns1blankspaceViewTemplateContainer" style="font-size:0.875em;">', {queue: 'templates'});
+
+												$.each(ns1blankspace.format.templates.data[ns1blankspace.object], function (t, template)
+												{
+													$vq.add('<div class="ns1blankspaceRow ns1blankspaceRowSelect" style="border-width: 0px;"' +
+																' id="ns1blankspaceViewTemplate-' + template.id + '">' + template.title + '</div>', {queue: 'templates'});
+												});	
+
+												$vq.add('</div>', {queue: 'templates'});
+
+												$vq.render(ns1blankspace.xhtml.container, {queue: 'templates', show: true});
+
+												$('#ns1blankspaceViewTemplateContainer .ns1blankspaceRowSelect').click(function ()
+												{
+													oParam = ns1blankspace.util.setParam(oParam, 'document', this.id.split('-')[1]);
+													ns1blankspace.financial.invoice.data.templateDocument = this.id.split('-')[1];
+													oParam = ns1blankspace.util.setParam(oParam, 'object', ns1blankspace.object);
+													ns1blankspace.financial.invoice.summary["default"](oParam);
+													ns1blankspace.container.hide(
+													{
+														xhtmlElementID: 'ns1blankspaceSummaryView',
+														fadeOutTime: 0
+													});
+												})
+											}
+										}	
 									}
 								}			
 				},
@@ -813,16 +833,89 @@ ns1blankspace.financial.invoice =
 	email: 		{
 					init: 		function (oParam)
 								{
-									ns1blankspace.status.working('Creating...');
-									oParam = ns1blankspace.util.setParam(oParam, 'onComplete', ns1blankspace.financial.invoice.email.render);
-									ns1blankspace.util.initTemplate(oParam);
+									var iDocument = ns1blankspace.util.getParam(oParam, 'document', {"default": ns1blankspace.financial.invoice.data.templateDocument}).value;
+									
+									oParam = ns1blankspace.util.setParam(oParam, 'object', ns1blankspace.object);
+
+									if (iDocument != undefined)
+									{
+										oParam = ns1blankspace.util.setParam(oParam, 'document', iDocument);
+										oParam = ns1blankspace.util.setParam(oParam, 'onComplete', ns1blankspace.financial.invoice.email.render);
+									}
+									else
+									{
+										oParam = ns1blankspace.util.setParam(oParam, 'onComplete', ns1blankspace.financial.invoice.email.templates);
+									}	
+
+									ns1blankspace.format.templates.init(oParam);
 								},
 
 					templates: 	function (oParam)
-								{},			
+								{
+									if (ns1blankspace.format.templates.data[ns1blankspace.object] == undefined)
+									{
+										oParam = ns1blankspace.util.setParam(oParam, 'object', ns1blankspace.object);
+										oParam = ns1blankspace.util.setParam(oParam, 'onComplete', ns1blankspace.financial.invoice.email.templates);
+										ns1blankspace.format.templates.init(oParam);
+									}
+									else
+									{
+										if (ns1blankspace.format.templates.data[ns1blankspace.object].length == 1)
+										{
+											ns1blankspace.financial.invoice.email.render(oParam)
+										}
+										else
+										{
+											if ($(ns1blankspace.xhtml.container).attr('data-initiator') == 'ns1blankspaceSummaryEmail')
+											{
+												ns1blankspace.container.hide(
+												{
+													xhtmlElementID: 'ns1blankspaceSummaryEmail'
+												});
+											}
+											else
+											{
+												ns1blankspace.container.position(
+												{
+													xhtmlElementID: 'ns1blankspaceSummaryEmail',
+													topOffset: -34,
+													leftOffset: -195
+												});
+
+												$vq.clear({queue: 'templates'});
+
+												$vq.add('<div class="ns1blankspaceViewControlContainer" id="ns1blankspaceEmailTemplateContainer" style="font-size:0.875em;">', {queue: 'templates'});
+
+												$.each(ns1blankspace.format.templates.data[ns1blankspace.object], function (t, template)
+												{
+													$vq.add('<div class="ns1blankspaceRow ns1blankspaceRowSelect" style="border-width: 0px;"' +
+																' id="ns1blankspaceEmailTemplate-' + template.id + '">' + template.title + '</div>', {queue: 'templates'});
+												});	
+
+												$vq.add('</div>', {queue: 'templates'});
+
+												$vq.render(ns1blankspace.xhtml.container, {queue: 'templates', show: true});
+
+												$('#ns1blankspaceEmailTemplateContainer .ns1blankspaceRowSelect').click(function ()
+												{
+													oParam = ns1blankspace.util.setParam(oParam, 'document', this.id.split('-')[1]);
+													oParam = ns1blankspace.util.setParam(oParam, 'object', ns1blankspace.object);
+													ns1blankspace.financial.invoice.email.render(oParam);
+													ns1blankspace.container.hide(
+													{
+														xhtmlElementID: 'ns1blankspaceSummaryEmail',
+														fadeOutTime: 0
+													});
+												})
+											}
+										}	
+									}
+								},			
 
 					render: 	function (oParam, oResponse)
 								{
+									ns1blankspace.status.working('Creating...');
+
 									var iMode = ns1blankspace.util.getParam(oParam, 'mode', {"default": 1}).value;
 
 									//1=Show, 2=Just Send
@@ -846,10 +939,12 @@ ns1blankspace.financial.invoice =
 									}	
 									else
 									{
+										var oTemplate = ns1blankspace.format.templates.get(oParam);
+
 										ns1blankspace.objectContextData.xhtml = ns1blankspace.format.render(
 										{
 											object: 5,
-											xhtmlTemplate: ns1blankspace.xhtml.templates['invoice'],
+											xhtmlTemplate: oTemplate.xhtml,
 											objectData: ns1blankspace.objectContextData,
 											objectOtherData: oResponse.data.rows
 										});
@@ -913,6 +1008,7 @@ ns1blankspace.financial.invoice =
 									$('#ns1blankspaceSummaryColumn1').html(aHTML.join(''));
 
 									var sMessage = ns1blankspace.objectContextData.xhtml;
+									
 
 									$('#ns1blankspaceMessageText' + ns1blankspace.counter.editor).val(sMessage);
 

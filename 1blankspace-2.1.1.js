@@ -2924,7 +2924,8 @@ ns1blankspace.container =
 					{	
 						$(sXHTMLElementContainerID).html('')
 							.show()
-							.offset({ top: $(oElement).offset().top + $(oElement).height() + iTopOffset, left: $(oElement).offset().left + iLeftOffset});
+							.offset({ top: $(oElement).offset().top + $(oElement).height() + iTopOffset, left: $(oElement).offset().left + iLeftOffset})
+							.attr('data-initiator', sXHTMLElementID);
 
 						if (bSetWidth)
 						{
