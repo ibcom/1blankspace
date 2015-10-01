@@ -1815,7 +1815,7 @@ ns1blankspace.financial.payroll =
 														aHTML.push('<tr class="ns1blankspaceCaption">');
 														aHTML.push('<td class="ns1blankspaceHeaderCaption">Start Date</td>');
 														aHTML.push('<td class="ns1blankspaceHeaderCaption">End Date</td>');
-														aHTML.push('<td class="ns1blankspaceHeaderCaption" style="text-align:right;">Type</td>');
+														aHTML.push('<td class="ns1blankspaceHeaderCaption" style="text-align:left;">Type</td>');
 														aHTML.push('<td class="ns1blankspaceHeaderCaption" style="text-align:left; width:100px;">' +
 															ns1blankspace.financial.payroll.data.payPeriods[ns1blankspace.financial.data.settings.payrollpayperiod] +
 															' Amount</td>');
@@ -1833,7 +1833,7 @@ ns1blankspace.financial.payroll =
 															aHTML.push('<td id="ns1blankspacePayrollEmployeeDetailsPayRate_enddate-' + this.id + '" class="ns1blankspaceRow ns1blankspacePayrollEmployeeDetailsPayRate">' +
 																			this.enddate + '</td>');
 
-															aHTML.push('<td id="ns1blankspacePayrollEmployeeDetailsPayRate_type-' + this.id + '" class="ns1blankspaceRow ns1blankspacePayrollEmployeeDetailsPayRate" style="text-align:right;">' +
+															aHTML.push('<td id="ns1blankspacePayrollEmployeeDetailsPayRate_type-' + this.id + '" class="ns1blankspaceRow ns1blankspacePayrollEmployeeDetailsPayRate" style="text-align:left;">' +
 																			this.linetypetext + '</td>');
 
 															var oLineType = ns1blankspace.financial.payroll.util.linetypes.get({title: this.linetypetext});
@@ -2643,9 +2643,7 @@ ns1blankspace.financial.payroll =
 										}	
 									}
 								});	
-
-							})
-							.css('font-size', '0.725em;');
+							});
 
 							$('#ns1blankspaceFinancialPayrollShowCalcs').click(function ()
 							{
@@ -4621,7 +4619,7 @@ ns1blankspace.financial.payroll.util =
 									},
 									{
 										key: 'allowancestaxable',
-										title: 'Allowances (Non-taxable)'
+										title: 'Allowances (Taxable)'
 									},
 									{
 										key: 'deductions',
