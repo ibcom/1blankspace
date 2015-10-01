@@ -1243,7 +1243,7 @@ ns1blankspace.financial.payroll =
 														'<tr><td class="ns1blankspaceText">' +
 														'<input id="ns1blankspaceDetailsAllowance" class="ns1blankspaceText">' +
 														'</td></tr>');
-										*/				
+														
 									
 										aHTML.push('<tr class="ns1blankspaceCaption">' +
 														'<td class="ns1blankspaceCaption">' +
@@ -1271,6 +1271,8 @@ ns1blankspace.financial.payroll =
 														'<tr><td class="ns1blankspaceText">' +
 														'<input id="ns1blankspaceDetailsDeductionDescription" class="ns1blankspaceText">' +
 														'</td></tr>');	
+
+										*/				
 										
 										aHTML.push('<tr class="ns1blankspaceCaption">' +
 														'<td class="ns1blankspaceCaption">' +
@@ -4612,6 +4614,76 @@ ns1blankspace.financial.payroll.pays.totals =
 ns1blankspace.financial.payroll.util = 
 {
 	linetypes: 	{
+					data: 		[
+									{
+										key: 'allowancesnontaxable',
+										title: 'Allowances (Non-taxable)'
+									},
+									{
+										key: 'allowancestaxable',
+										title: 'Allowances (Non-taxable)'
+									},
+									{
+										key: 'deductions',
+										title: 'Deductions'
+									},
+									{
+										key: 'grosssalary',
+										title: 'Gross Salary'
+									},
+									{
+										key: 'leave',
+										title: 'Leave'
+									},
+									{
+										key: 'leaveloading',
+										title: 'Leave Loading'
+									},
+									{
+										key: 'leavetype',
+										title: 'Leave Type',
+										options:
+										[
+											{
+												id: 1,
+												title: 'Annual'
+											},
+											{
+												id: 2,
+												title: 'Sick'
+											},
+											{
+												id: 3,
+												title: 'Long Service'
+											},
+											{
+												id: 4,
+												title: 'Leave Without Pay'
+											},
+										]
+									},
+									{
+										key: 'posttaxsuper',
+										title: 'Post Tax Superannuation'
+									},
+									{
+										key: 'salarysacrificesuper',
+										title: 'Salary Sacrificed Superannuation'
+									},
+									{
+										key: 'standardhours',
+										title: 'Standard Hours'
+									},
+									{
+										key: 'super',
+										title: 'Superannuation'
+									},
+									{
+										key: 'taxadjustments',
+										title: 'Tax Adjustments'
+									}
+								],
+
 					init:		function (oParam)
 								{
 									if (ns1blankspace.financial.payroll.data.linetypes != undefined)
@@ -4652,7 +4724,8 @@ ns1blankspace.financial.payroll.util =
 								{
 									var sTitle = ns1blankspace.util.getParam(oParam, 'title').value;
 									var sID = ns1blankspace.util.getParam(oParam, 'id').value;
-									var aLineTypes = ns1blankspace.financial.payroll.data.linetypes;
+									var aLineTypes = ns1blankspace.util.getParam(oParam, 'lineTypes', {"default": ns1blankspace.financial.payroll.data.linetypes}).value;
+									if (aLineTypes == undefined) {aLineTypes = ns1blankspace.setup.financial.payroll.data.linetypes}
 
 									if (sTitle != undefined)
 									{	
@@ -4674,6 +4747,31 @@ ns1blankspace.financial.payroll.util =
 
 									$('.includein').hide();
 									$('.includeinstandardhours' + oLineType.includeinstandardhours).show();
-								}			
+								},
+
+					includeIn:	function (oParam)
+								{
+									var iLineType = ns1blankspace.util.getParam(oParam, 'id').value;
+									var oLineType = ns1blankspace.financial.payroll.util.linetypes.get({id: iLineType});
+									var aIncludeIn = [];
+									var oKey;
+
+									if (oLineType != undefined)
+									{
+										for (var key in oLineType)
+								  		{
+								     		if (oLineType.hasOwnProperty(key))
+								     		{
+								     			if (oLineType[key] == 'Y')
+								     			{
+								     				oKey = $.grep(ns1blankspace.financial.payroll.util.linetypes.data, function (type) {return type.key == key.replace('includein', '')})[0];
+								     				aIncludeIn.push(oKey);
+								     			}	
+								     		}
+								     	}
+									}
+
+									return aIncludeIn
+								}
 				}			
 }							

@@ -695,8 +695,11 @@ ns1blankspace.financial.invoice =
 										var aHTML = [];
 
 										aHTML.push('<table class="ns1blankspaceColumn2">');
-																		
-										if (ns1blankspace.xhtml.templates['invoice'] != '')
+																	
+										oParam = ns1blankspace.util.setParam(oParam, 'object', ns1blankspace.object);	
+										var oTemplate = ns1blankspace.format.templates.get(oParam);
+
+										if (oTemplate != undefined)
 										{
 											if (ns1blankspace.financial.summaryUseTemplate || bUseTemplate)
 											{
