@@ -2336,7 +2336,6 @@ ns1blankspace.setup.financial =
 														oSearch.getResults(function(oResponse)
 														{
 															ns1blankspace.setup.financial.payroll.data.linetypes = oResponse.data.rows;
-
 															$.each(ns1blankspace.setup.financial.payroll.data.linetypes, function () {this.system = (this.id <= 22)});
 															ns1blankspace.util.onComplete(oParam);
 														});
@@ -2372,27 +2371,67 @@ ns1blankspace.setup.financial =
 									edit: 		function (oParam)
 												{
 													var iLineType = ns1blankspace.util.getParam(oParam, 'xhtmlElementID', {index: 1}).value;
-													var oLineType = ns1blankspace.financial.payroll.util.linetypes.get({id: iLineType});
+													var oLineType = ns1blankspace.financial.payroll.util.linetypes.get(
+																		{
+																			id: iLineType,
+																			lineTypes: ns1blankspace.setup.financial.payroll.data.linetypes
+																		});
 													var aIncludeIn = ns1blankspace.financial.payroll.util.linetypes.includeIn({id: iLineType});
 													
 													$vq.init('<table class="ns1blankspaceColumn2">', {queue: 'type-edit'});
 
 													if (oLineType.system)
 													{	
-														$vq.add('<tr><td class="ns1blankspaceSub">This is standard type, that can not be edited.</td></tr>', {queue: 'type-edit'});
+														$vq.add('<tr><td class="ns1blankspaceSub">This is standard type;<br />it can not be edited.</td></tr>', {queue: 'type-edit'});
+
+														$vq.add('<tr><td class="ns1blankspaceCaption">' +
+																		'Include In' +
+																		'</td></tr>', {queue: 'type-edit'});
 
 														$vq.add('<tr><td>', {queue: 'type-edit'});
 
 														$.each(aIncludeIn, function (i, include)
 														{
 															$vq.add('<div class="ns1blankspaceRow" style="border-width: 1px;"' +
-																			' id="ns1blankspaceSetupPayrollTypeInclude-' + include.key + '">' + include.caption + '</div>', {queue: 'type-edit'});
+																			' id="ns1blankspaceSetupPayrollTypeInclude-' + include.key + '">' + include.title + '</div>', {queue: 'type-edit'});
+														});
+
+														$vq.add('</td></tr>', {queue: 'type-edit'});
+													}
+													else
+													{
+														$vq.add('<tr><td class="ns1blankspaceCaption">' +
+																		'Title' +
+																		'</td></tr>' +
+																		'<tr class="ns1blankspace">' +
+																		'<td class="ns1blankspaceText">' +
+																		'<input id="ns1blankspaceSetupPayrollTypeTitle" class="ns1blankspaceText">' +
+																		'</td></tr>' +
+																		'</tr>', {queue: 'type-edit'});
+
+														$vq.add('<tr><td class="ns1blankspaceCaption">' +
+																		'Include In' +
+																		'</td></tr>', {queue: 'type-edit'});
+
+														$vq.add('<tr><td>', {queue: 'type-edit'});
+
+														$.each(ns1blankspace.financial.payroll.util.linetypes.data, function (i, include)
+														{
+															if (include.options == undefined)
+															{	
+																$vq.add('<div class="ns1blankspaceRow" style="border-width: 0px;"' +
+																			' id="ns1blankspaceSetupPayrollTypeIncludeContainer-' + include.key + '">' +
+																			'<input type="checkbox" style="margin-right:8px;"' +
+																			($.grep(aIncludeIn, function (i) {return i.key == include.key}).length==0?'':' checked="checked"') +
+																			' id="ns1blankspaceSetupPayrollTypeInclude-' + include.key + '" />' +
+																			include.title + '</div>', {queue: 'type-edit'});
+															}	
 														});
 
 														$vq.add('</td></tr>', {queue: 'type-edit'});
 													}
 
-													$vq.init('</table>', {queue: 'type-edit'});
+													$vq.add('</table>', {queue: 'type-edit'});
 
 													$vq.render('#ns1blankspacePayrollColumn3', {queue: 'type-edit'});
 												}			
