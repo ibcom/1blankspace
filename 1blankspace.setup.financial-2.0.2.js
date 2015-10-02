@@ -2330,13 +2330,13 @@ ns1blankspace.setup.financial =
 														oSearch.method = 'SETUP_FINANCIAL_PAYROLL_LINE_TYPE_SEARCH';		
 														oSearch.addField('includeinallowancesnontaxable,includeinallowancestaxable,includeindeductions,includeingrosssalary,' +
 																			'includeinleave,includeinleaveloading,includeinleavetype,includeinleavetypetext,includeinposttaxsuper,' +
-																			'includeinsalarysacrificesuper,includeinstandardhours,includeinsuper,includeintaxadjustments,notes,title');
+																			'includeinsalarysacrificesuper,includeinstandardhours,includeinsuper,includeintaxadjustments,notes,title,fixed');
 														oSearch.rows = 100;
 														oSearch.sort('title', 'asc');
 														oSearch.getResults(function(oResponse)
 														{
 															ns1blankspace.setup.financial.payroll.data.linetypes = oResponse.data.rows;
-															$.each(ns1blankspace.setup.financial.payroll.data.linetypes, function () {this.fixed = (this.id <= 22)});
+															//$.each(ns1blankspace.setup.financial.payroll.data.linetypes, function () {this.fixed = (this.id <= 22)});
 															ns1blankspace.setup.financial.payroll.linetypes.show(oParam);
 														});
 													}	
@@ -2368,7 +2368,7 @@ ns1blankspace.setup.financial =
 
 														if (!bShowFixed)
 														{
-															aLineTypes = $.grep(aLineTypes, function (type) {return !type.fixed})
+															aLineTypes = $.grep(aLineTypes, function (type) {return type.fixed == 'N'})
 														}	
 
 														if (aLineTypes == 0)
@@ -2455,12 +2455,12 @@ ns1blankspace.setup.financial =
 													
 													$vq.init('<table class="ns1blankspaceColumn2">', {queue: 'type-edit'});
 
-													if (oLineType.fixed)
+													if (oLineType.fixed == 'Y')
 													{	
 														$vq.add('<tr><td class="ns1blankspaceSub">This is standard type; it can not be edited.</td></tr>', {queue: 'type-edit'});
 
-														$vq.add('<tr><td class="ns1blankspaceCaption">' +
-																		'Include In' +
+														$vq.add('<tr><td class="ns1blankspaceCaption" style="padding-top:8px;">' +
+																		'Included in' +
 																		'</td></tr>', {queue: 'type-edit'});
 
 														$vq.add('<tr><td>', {queue: 'type-edit'});
