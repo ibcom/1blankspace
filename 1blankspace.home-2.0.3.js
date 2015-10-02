@@ -169,6 +169,11 @@ ns1blankspace.home.options =
 											'Classic</a></td></tr>');
 					}
 
+					aHTML.push('<tr><td id="ns1blankspaceHomeOptionsConnections" class="ns1blankspaceRowSelect">' +
+									'Connections<br />' +
+									'<span class="ns1blankspaceSubNote">Other webapps, websites...</span>' +
+									'</td></tr>');
+
 					aHTML.push('</table>');
 						
 					if ($(ns1blankspace.xhtml.container).attr('data-initiator') == oElement.id)
@@ -205,6 +210,12 @@ ns1blankspace.home.options =
 					{
 						$(ns1blankspace.xhtml.container).attr('data-initiator', '');
 						$(ns1blankspace.xhtml.container).hide();
+					});
+
+					$('#ns1blankspaceHomeOptionsConnections').click(function(event)
+					{
+						$(ns1blankspace.xhtml.container).attr('data-initiator', '');
+						ns1blankspace.connect.init();
 					});
 				}
 }				

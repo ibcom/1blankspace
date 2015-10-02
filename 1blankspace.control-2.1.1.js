@@ -99,7 +99,7 @@ ns1blankspace.scripts.concat(
 [
 	{
 		nameSpace: '1blankspace.home',
-		source: '/jscripts/1blankspace.home-2.0.2.js'
+		source: '/jscripts/1blankspace.home-2.0.3.js'
 	},
 	{
 		nameSpace: '1blankspace.format',
@@ -279,7 +279,7 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.util.local',
-		source: '/jscripts/1blankspace.util.local-2.0.1.js'
+		source: '/jscripts/1blankspace.util.local-2.0.0.js'
 	},
 	{
 		nameSpace: '1blankspace.util.protect',
@@ -287,7 +287,7 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.connect',
-		source: '/jscripts/1blankspace.connect-2.0.0.js'
+		source: '/jscripts/1blankspace.connect-2.0.1.js'
 	},
 	{
 		nameSpace: '1blankspace.util.whenDone',
