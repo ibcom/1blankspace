@@ -32,7 +32,6 @@ ns1blankspace.setup.financial =
 					else
 					{
 						ns1blankspace.app.set(oParam);
-						//ns1blankspace.format.editor.init({height: "500px"});
 					}
 				},
 
@@ -2515,7 +2514,7 @@ ns1blankspace.setup.financial =
 
 														$vq.init('<table class="ns1blankspaceColumn2">' +
 																	'<tr><td><span id="ns1blankspaceSetupPayrollTypeEditDelete" class="ns1blankspaceAction">Delete</span></td></tr>' +
-																	'<tr><td class="ns1blankspaceSubNote" style="padding-top:8px;">Changes are automatically saved.</td></tr>' +
+																	'<tr><td class="ns1blankspaceSubNote" style="padding-top:8px;">Changes are saved automatically.</td></tr>' +
 																	'</table>', {queue: 'type-edit-delete'});
 
 														$vq.render('#ns1blankspacePayrollTypesColumn3', {queue: 'type-edit-delete'});
@@ -2560,6 +2559,12 @@ ns1blankspace.setup.financial =
 														var oData = {id: oLineType.id}
 														oData['includein' + this.id.split('-')[1]] = ($(this).prop('checked')?'Y':'N');
 														oLineType['includein' + this.id.split('-')[1]] = oData['includein' + this.id.split('-')[1]]
+
+														if ($(this).prop('checked') && this.id.split('-')[1] == 'leave' && oData['includeinleavetype'] == undefined)
+														{
+															oData['includeinleavetype'] = '1';
+															oLineType['includeinleavetype'] = '1'
+														}
 
 														$.ajax(
 														{

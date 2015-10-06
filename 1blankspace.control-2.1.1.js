@@ -38,7 +38,8 @@ ns1blankspace.option = $.extend(true, ns1blankspace.option,
 	showLogonOptionsOnHover: false,
 	showFavourites: false,
 	showLogoff: false,
-	quickInvoice: false
+	quickInvoice: false,
+	spaceTextMaximumLength: 200
 });
 
 ns1blankspace.formFactor.size.value = ns1blankspace.formFactor.size.options.medium;
