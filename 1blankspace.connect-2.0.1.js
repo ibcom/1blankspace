@@ -1224,3 +1224,11 @@ ns1blankspace.connect =
 								}								
 				}								
 }					
+
+ns1blankspace.connect.util =
+{
+	test: 		function (oParam)
+				{
+					var oData = ns1blankspace.
+				}
+}

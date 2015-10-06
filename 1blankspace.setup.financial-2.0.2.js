@@ -2345,6 +2345,7 @@ ns1blankspace.setup.financial =
 									show:		function (oParam)
 												{
 													var bShowFixed = ns1blankspace.util.getParam(oParam, 'showFixed', {"default": false}).value;
+													var iID = ns1blankspace.util.getParam(oParam, 'id').value;
 
 													if (ns1blankspace.setup.financial.payroll.data.linetypes == undefined)
 													{
@@ -2374,7 +2375,7 @@ ns1blankspace.setup.financial =
 														if (aLineTypes == 0)
 														{
 															$vq.add('<div class="ns1blankspaceSubNote" style=" margin-top:4px;"' +
-																		' id="ns1blankspaceSetupPayrollTypeShowFixed">No pay types set up.</div>', {queue: 'types'});
+																		'>No pay types set up.</div>', {queue: 'types'});
 														}
 														else
 														{	
@@ -2424,7 +2425,7 @@ ns1blankspace.setup.financial =
 														$('#ns1blankspaceSetupPayrollTypeAdd').button()
 														.click(function()
 														{
-															var oData = {title: 'New Type'}
+															var oData = {title: '[New Type]'}
 														
 															$.ajax(
 															{
@@ -2432,14 +2433,21 @@ ns1blankspace.setup.financial =
 																url: ns1blankspace.util.endpointURI('SETUP_FINANCIAL_PAYROLL_LINE_TYPE_MANAGE'),
 																data: oData,
 																dataType: 'json',
-																success: function()
+																success: function(oResponse)
 																{
 																	ns1blankspace.status.message('Added');
+																	oParam = ns1blankspace.util.setParam(oParam, 'showFixed', false);
+																	oParam = ns1blankspace.util.setParam(oParam, 'id', oResponse.id);
 																	ns1blankspace.setup.financial.payroll.data.linetypes = undefined
 																	ns1blankspace.setup.financial.payroll.linetypes.show(oParam);
 																}
 															});
 														});
+
+														if (iID != undefined)
+														{
+															ns1blankspace.setup.financial.payroll.linetypes.edit({xhtmlElementID: 'ns1blankspaceSetupPayrollType-' + iID})
+														}	
 													}	
 												},
 
@@ -2505,30 +2513,34 @@ ns1blankspace.setup.financial =
 
 														$vq.add('</td></tr>', {queue: 'type-edit'});
 
-														$vq.init('<table class="ns1blankspaceColumn2"><tr><td>' +
-																	'<span id="ns1blankspaceSetupPayrollTypeEditDelete" class="ns1blankspaceAction">Delete</span></td>' +
-																	'</td></tr></table>', {queue: 'type-edit-delete'});
+														$vq.init('<table class="ns1blankspaceColumn2">' +
+																	'<tr><td><span id="ns1blankspaceSetupPayrollTypeEditDelete" class="ns1blankspaceAction">Delete</span></td></tr>' +
+																	'<tr><td class="ns1blankspaceSubNote" style="padding-top:8px;">Changes are automatically saved.</td></tr>' +
+																	'</table>', {queue: 'type-edit-delete'});
 
 														$vq.render('#ns1blankspacePayrollTypesColumn3', {queue: 'type-edit-delete'});
 
 														$('#ns1blankspaceSetupPayrollTypeEditDelete').button()
 														.click(function()
 														{
-															var oData = {id: oLineType.id, remove: 1}
-														
-															$.ajax(
+															if (confirm('Are you sure you want to delete this type?'))
 															{
-																type: 'POST',
-																url: ns1blankspace.util.endpointURI('SETUP_FINANCIAL_PAYROLL_LINE_TYPE_MANAGE'),
-																data: oData,
-																dataType: 'json',
-																success: function()
+																var oData = {id: oLineType.id, remove: 1}
+															
+																$.ajax(
 																{
-																	ns1blankspace.status.message('Deleted');
-																	ns1blankspace.setup.financial.payroll.data.linetypes = undefined
-																	ns1blankspace.setup.financial.payroll.linetypes.show(oParam);
-																}
-															});
+																	type: 'POST',
+																	url: ns1blankspace.util.endpointURI('SETUP_FINANCIAL_PAYROLL_LINE_TYPE_MANAGE'),
+																	data: oData,
+																	dataType: 'json',
+																	success: function()
+																	{
+																		ns1blankspace.status.message('Deleted');
+																		ns1blankspace.setup.financial.payroll.data.linetypes = undefined
+																		ns1blankspace.setup.financial.payroll.linetypes.show(oParam);
+																	}
+																});
+															}	
 														});
 													}
 

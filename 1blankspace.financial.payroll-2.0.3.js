@@ -4767,7 +4767,10 @@ ns1blankspace.financial.payroll.util =
 								     			if (oLineType[key] == 'Y')
 								     			{
 								     				oKey = $.grep(ns1blankspace.financial.payroll.util.linetypes.data, function (type) {return type.key == key.replace('includein', '')})[0];
-								     				aIncludeIn.push(oKey);
+								     				if (oKey != undefined)
+								     				{	
+								     					aIncludeIn.push(oKey);
+								     				}	
 								     			}	
 								     		}
 								     	}
