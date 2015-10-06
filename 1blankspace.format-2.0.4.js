@@ -611,12 +611,18 @@ ns1blankspace.format.editor =
 	init:		function (oParam)
 				{
 					var sHeight = ns1blankspace.util.getParam(oParam, 'height', {"default": '370px'}).value;
+					var sWidth = ns1blankspace.util.getParam(oParam, 'width', {"default": '100%'}).value;
 					var bDynamicTags = ns1blankspace.util.getParam(oParam, 'dynamicTags', {"default": false}).value;
 					var sVersion = ns1blankspace.util.getParam(oParam, 'version').value;
 					var sTheme = ns1blankspace.util.getParam(oParam, 'theme', {"default": 'advanced'}).value;
 					var sXHTMLElement = ns1blankspace.util.getParam(oParam, 'xhtmlElement', {"default": 'textarea'}).value;
 					var sSelector = ns1blankspace.util.getParam(oParam, 'selector', {"default": sXHTMLElement}).value;
 					var iObject = ns1blankspace.util.getParam(oParam, 'object', {"default": '32'}).value;
+					var aToolbars = ns1blankspace.util.getParam(oParam, 'toolbars').value;
+					var bSimple = ns1blankspace.util.getParam(oParam, 'simple', {"default": false}).value;
+					var oInit = ns1blankspace.util.getParam(oParam, 'init').value;
+					var fOnInit = ns1blankspace.util.getParam(oParam, 'onInit').value;
+
 					var sAdditional = '';
 
 					if (sVersion == undefined && tinyMCE != undefined )
@@ -632,37 +638,63 @@ ns1blankspace.format.editor =
 
 						if (sVersion == '4')
 						{	
-							var oInit = 
-							{
-								selector: sSelector,
-								theme: "modern",
-								skin: 'light',
-								height : sHeight, 
-								width : "100%",
-								plugins:
-								[
-						                "advlist autolink autosave link image lists charmap print preview hr anchor pagebreak spellchecker",
-						                "searchreplace wordcount visualblocks visualchars code fullscreen insertdatetime media nonbreaking",
-						                "table contextmenu directionality emoticons template textcolor paste fullpage textcolor colorpicker textpattern"
-						        ],
+							if (oInit == undefined)
+							{	
+								oInit = 
+								{
+									selector: sSelector,
+									theme: "modern",
+									skin: 'light',
+									height : sHeight, 
+									width : sWidth,
+									plugins:
+									[
+							                "advlist autolink autosave link image lists charmap print preview hr anchor pagebreak spellchecker",
+							                "searchreplace wordcount visualblocks visualchars code fullscreen insertdatetime media nonbreaking",
+							                "table contextmenu directionality emoticons template textcolor paste fullpage textcolor colorpicker textpattern"
+							        ],
 
-						        toolbar1: "bold italic underline strikethrough | alignleft aligncenter alignright alignjustify | formatselect fontselect fontsizeselect",
-						        toolbar2: "forecolor backcolor | cut copy paste | bullist numlist | outdent indent blockquote | undo redo | link unlink anchor image media code",
-						        toolbar3: "table | hr removeformat | subscript superscript | charmap emoticons | fullscreen | ltr rtl | spellchecker | visualchars visualblocks nonbreaking pagebreak | template",
+							        menubar: false,
+							        statusbar : false,
+							        toolbar_items_size: 'small',
 
-						        menubar: false,
-						        statusbar : false,
-						        toolbar_items_size: 'small',
+							        style_formats:
+							        [
+							                {title: 'Bold text', inline: 'b'}
+							        ],
 
-						        style_formats:
-						        [
-						                {title: 'Bold text', inline: 'b'}
-						        ],
+							        templates: '/ondemand/core/?method=CORE_DYNAMIC_TAG_SEARCH',
+							        link_list: '/rpc/core/?method=CORE_EDITOR_LINK_SEARCH',
+							        image_list: '/rpc/core/?method=CORE_EDITOR_IMAGE_SEARCH'
+								}
 
-						        templates: '/ondemand/core/?method=CORE_DYNAMIC_TAG_SEARCH',
-						        link_list: '/rpc/core/?method=CORE_EDITOR_LINK_SEARCH',
-						        image_list: '/rpc/core/?method=CORE_EDITOR_IMAGE_SEARCH'
-							}
+								if (bSimple)
+								{
+									oInit.toolbar1 = 'bold italic underline | alignleft aligncenter alignright alignjustify | fontselect fontsizeselect';
+									oInit.toolbar2 = 'forecolor backcolor | cut copy paste | bullist numlist | outdent indent blockquote | undo redo | link unlink anchor image media code';
+								}	
+								else
+								{	
+									if (aToolbars == undefined)
+									{
+										oInit.toolbar1 = 'bold italic underline strikethrough | alignleft aligncenter alignright alignjustify | formatselect fontselect fontsizeselect';
+							        	oInit.toolbar2 = 'forecolor backcolor | cut copy paste | bullist numlist | outdent indent blockquote | undo redo | link unlink anchor image media code';
+							        	oInit.toolbar3 = 'table | hr removeformat | subscript superscript | charmap emoticons | fullscreen | ltr rtl | spellchecker | visualchars visualblocks nonbreaking pagebreak | template';
+									}
+									else
+									{
+										$.each(aToolbars, function (t, toolbar)
+										{
+											oInit['toolbar' + (t+1)] = toolbar;
+										});
+									}
+								}
+
+								if (fOnInit != undefined)
+								{
+									oInit.init_instance_callback = fOnInit;
+								}	
+							}	
 						}
 						else if (sVersion == '3')
 						{
