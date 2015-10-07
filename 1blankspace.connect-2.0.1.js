@@ -190,8 +190,16 @@ ns1blankspace.connect =
 							{
 								aHTML.push('<tr class="ns1blankspaceRow">');
 
-								aHTML.push('<td id="ns1blankspaceMostLikely_Title-' + this.id + '" class="ns1blankspaceRow ns1blankspaceRowSelect" style="width:200px;">' +
+								if (this.url == '')
+								{
+									aHTML.push('<td id="ns1blankspaceMostLikely_Title-' + this.id + '" class="ns1blankspaceRow ns1blankspaceSubNote" style="width:200px;">' +
+														'Not set</td>');
+								}
+								else
+								{	
+									aHTML.push('<td id="ns1blankspaceMostLikely_Title-' + this.id + '" class="ns1blankspaceRow ns1blankspaceRowSelect" style="width:200px;">' +
 														ns1blankspace.connect.url.asXHTML({title: this.title, url: this.url}) + '</td>');
+								}	
 
 								aHTML.push('<td style="width:60px; text-align:right;" class="ns1blankspaceRow">' +
 									(this.urllogon!=''?'<span id="ns1blankspaceConnect_option_logon-' + this.id + '" class="ns1blankspaceOptionLogon"' +
@@ -1073,7 +1081,7 @@ ns1blankspace.connect =
 
 											var aHTML = [];
 
-											aHTML.push('<div class="ns1blankspaceSubNote">Protection key installed.</div>');
+											aHTML.push('<div class="ns1blankspaceSubNote">Protection key installed on this device.</div>');
 
 											aHTML.push('<div id="ns1blankspaceConnectProtectGet" class="ns1blankspaceAction" style="margin-top:10px; font-size:0.75em;">Get key</div>');
 
