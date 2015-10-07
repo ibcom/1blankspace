@@ -104,10 +104,11 @@ ns1blankspace.util.protect =
 									pair: 		function(oParam) {}			
 								},			
 
-					search: 	function(oParam, oResponse)
+					search: 	function(oParam)
 								{
 									var bLocal = ns1blankspace.util.getParam(oParam, 'local', {"default": false}).value;
 									var sCryptoKeyReference = ns1blankspace.util.getParam(oParam, 'cryptoKeyReference').value;
+									var bCreateKey = ns1blankspace.util.getParam(oParam, 'createKey', {"default": false}).value;
 
 									if (ns1blankspace.util.protect.key.data[sCryptoKeyReference] !== undefined)
 									{	
@@ -115,28 +116,15 @@ ns1blankspace.util.protect =
 									}
 									else
 									{	
-										if (!bLocal && oResponse === undefined)
-										{
-											var oSearch = new AdvancedSearch();
-											oSearch.method = 'CORE_PROTECT_KEY_SEARCH';
-											oSearch.addField('key');
-											oSearch.addField(ns1blankspace.option.auditFields);
-											oSearch.addFilter('reference', 'EQUAL_TO', sCryptoKeyReference);
-											oSearch.sort('modifieddate', 'desc');
-											
-											oSearch.getResults(function(data)
-											{
-												ns1blankspace.util.protect.key.search(oParam, data)
-											});
-										}
-										else
+										var sProtectCryptoKey = ns1blankspace.util.getParam(oParam, 'protectCryptoKey').value;
+
+										if (sProtectCryptoKey === undefined)
 										{
 											if (bLocal)
 											{
 												oParam = ns1blankspace.util.setParam(oParam, 'key', sCryptoKeyReference);
 												//var sCryptoKey = ns1blankspace.util.local.cache.search(oParam);
-												var sProtectCryptoKey = ns1blankspace.util.getParam(oParam, 'protectCryptoKey').value;
-
+												
 												ns1blankspace.util.whenCan.execute(
 												{
 													now:
@@ -155,40 +143,57 @@ ns1blankspace.util.protect =
 											}	
 											else
 											{
-												if (oResponse.data.rows.length !== 0)
-												{	
-													var sCryptoKey = oResponse.data.rows[0].key;
-												}
-												else
+												var oSearch = new AdvancedSearch();
+												oSearch.method = 'CORE_PROTECT_KEY_SEARCH';
+												oSearch.addField('key');
+												oSearch.addField(ns1blankspace.option.auditFields);
+												oSearch.addFilter('reference', 'EQUAL_TO', sCryptoKeyReference);
+												oSearch.sort('modifieddate', 'desc');
+												
+												oSearch.getResults(function(oResponse)
 												{
-													ns1blankspace.util.whenCan.execute(
-													{
-														now:
-														{
-															method: ns1blankspace.util.protect.key.create.single,
-															param:
-															{
-																local: bLocal,
-																persist: true,
-																cryptoKeyReference: sCryptoKeyReference
-															}
-														},
-														then:
-														{
-															comment: 'util.protect.key.create.single<>util.protect.key.search',
-															method: ns1blankspace.util.protect.key.search,
-															param: oParam
-														}
-													});
-												}	
-											}
+													oParam = ns1blankspace.util.setParam(oParam, 'protectCryptoKey', '');
 
-											if (sCryptoKey)
+													if (oResponse.data.rows.length !== 0)
+													{	
+														oParam.protectCryptoKey = oResponse.data.rows[0].key;
+													}
+
+													ns1blankspace.util.protect.key.search(oParam)
+												});
+											}	
+										}
+										else
+										{
+											if (bCreateKey)
 											{	
-												ns1blankspace.util.protect.key.data[sCryptoKeyReference] = sCryptoKey;
+												ns1blankspace.util.whenCan.execute(
+												{
+													now:
+													{
+														method: ns1blankspace.util.protect.key.create.single,
+														param:
+														{
+															local: bLocal,
+															persist: true,
+															cryptoKeyReference: sCryptoKeyReference
+														}
+													},
+													then:
+													{
+														comment: 'util.protect.key.create.single<>util.protect.key.search',
+														method: ns1blankspace.util.protect.key.search,
+														param: oParam
+													}
+												});
 											}
 
-											return ns1blankspace.util.whenCan.complete(sCryptoKey, oParam);
+											if (sProtectCryptoKey != undefined)
+											{	
+												ns1blankspace.util.protect.key.data[sCryptoKeyReference] = sProtectCryptoKey;
+											}
+
+											return ns1blankspace.util.whenCan.complete(sProtectCryptoKey, oParam);
 										}
 									}	
 								}					

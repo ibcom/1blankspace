@@ -113,7 +113,7 @@ ns1blankspace.connect =
 										'<td id="ns1blankspaceMostLikely" class="ns1blankspaceMain">' +
 										ns1blankspace.xhtml.loading +
 										'</td>' +
-										'<td id="ns1blankspaceHomeAction" style="width:150px;"></td>' +
+										'<td id="ns1blankspaceHomeAction" style="width:250px;"></td>' +
 										'</tr>');
 						aHTML.push('</table>');					
 						
@@ -190,11 +190,16 @@ ns1blankspace.connect =
 							{
 								aHTML.push('<tr class="ns1blankspaceRow">');
 
-								aHTML.push('<td id="ns1blankspaceMostLikely_Title-' + this.id + '" class="ns1blankspaceMostLikely" style="width:200px;">' +
-														this.title + '</td>');
+								aHTML.push('<td id="ns1blankspaceMostLikely_Title-' + this.id + '" class="ns1blankspaceRow ns1blankspaceRowSelect" style="width:200px;">' +
+														ns1blankspace.connect.url.asXHTML({title: this.title, url: this.url}) + '</td>');
 
-								aHTML.push('<td id="ns1blankspaceMostLikely_URL-' + this.id + '" class="ns1blankspaceMostLikely">' +
-														ns1blankspace.connect.url.asXHTML({title: 'Open', url: this.url}));
+								aHTML.push('<td style="width:60px; text-align:right;" class="ns1blankspaceRow">' +
+									'<span id="ns1blankspaceConnect_option_edit" class="ns1blankspaceOptionEdit"' +
+										' data-id="' + this.id + '"></span>' +
+									(this.urllogon!=''?'<span id="ns1blankspaceConnect_option_logon" class="ns1blankspaceOptionLogon"' +
+											' data-urllogon=' + this.urllogon + '"></span>':'') +
+									'</td>' +			
+									'</tr>');
 
 								aHTML.push('</td></tr>');
 							});
@@ -204,10 +209,36 @@ ns1blankspace.connect =
 						
 						$('#ns1blankspaceMostLikely').html(aHTML.join(''));
 					
-						$('td.ns1blankspaceMostLikely').click(function(event)
+						$('.ns1blankspaceOptionEdit').button(
 						{
-							ns1blankspace.connect.search.send(event.target.id, {source: 1});
-						});
+							text: false,
+							icons:
+							{
+								primary: "ui-icon-pencil"
+							}
+						})
+						.click(function()
+						{
+							ns1blankspace.connect.init({id: $(this).attr('data-id')});
+						})
+						.css('height', '18px')
+						.css('width', '18px');
+
+						$('.ns1blankspaceOptionLogon').button(
+						{
+							text: false,
+							icons:
+							{
+								primary: "ui-icon-person"
+							}
+						})
+						.click(function()
+						{
+							
+
+						})
+						.css('height', '18px')
+						.css('width', '18px');
 
 						ns1blankspace.connect.protect.init({xhtmlElementID: 'ns1blankspaceHomeActionProtectKey'});
 					}
@@ -387,7 +418,7 @@ ns1blankspace.connect =
 
 						aHTML.push('<tr><td id="ns1blankspaceControlLogon" class="ns1blankspaceControl">' +
 										'Logon<br />Credentials<br />' +
-										'<span class="ns1blankspaceSubNote">Username, Key,<br />Password, Secret...</span>' +
+										'<span class="ns1blankspaceSubNote">Username, Key,<br />Password, Secret</span>' +
 										'</td></tr>');
 					}	
 					
@@ -589,6 +620,8 @@ ns1blankspace.connect =
 									}
 									else
 									{
+										if (oCryptoKey.exists) {oCryptoKey.exists = (oCryptoKey.value != '')}
+
 										if (oCryptoKey.exists && !bDecrypted)
 										{
 											oParam = ns1blankspace.util.setParam(oParam, 'decrypted', true);
@@ -783,7 +816,10 @@ ns1blankspace.connect =
 									
 									ns1blankspace.status.working();
 
-									if (sURLPassword && ns1blankspace.util.protect.key.data[ns1blankspace.connect.data.cryptoKeyReference] && !bURLPasswordExists)
+									var bValidCryptoKey = (ns1blankspace.util.protect.key.data[ns1blankspace.connect.data.cryptoKeyReference] != undefined)
+									if (bValidCryptoKey) {bValidCryptoKey = (ns1blankspace.util.protect.key.data[ns1blankspace.connect.data.cryptoKeyReference] != '')}
+
+									if (sURLPassword && bValidCryptoKey && !bURLPasswordExists)
 									{
 										ns1blankspace.util.whenCan.execute(
 										{
@@ -1229,6 +1265,6 @@ ns1blankspace.connect.util =
 {
 	test: 		function (oParam)
 				{
-					var oData = ns1blankspace.
+					
 				}
 }

@@ -114,32 +114,40 @@ ns1blankspace.util.local =
 											var sData = oStorage.getItem(sKey);
 											if (sData == null) {sData = undefined}
 
-											if (bProtect && ns1blankspace.util.protect !== undefined && sData !== undefined)
+											if (bProtect && ns1blankspace.util.protect !== undefined)
 											{
-												oParam = ns1blankspace.util.setParam(oParam, 'cryptoKeyReference', ns1blankspace.util.local.cache.data.cryptoKeyReference);
-												oParam = ns1blankspace.util.setParam(oParam, 'cryptoKey', ns1blankspace.util.protect.key.data[ns1blankspace.util.local.cache.data.cryptoKeyReference]);
-												oParam = ns1blankspace.util.setParam(oParam, 'protectedData', sData);
-
-												ns1blankspace.util.whenCan.execute(
+												if (sData !== undefined)
 												{
-													now:
+													oParam = ns1blankspace.util.setParam(oParam, 'cryptoKeyReference', ns1blankspace.util.local.cache.data.cryptoKeyReference);
+													oParam = ns1blankspace.util.setParam(oParam, 'cryptoKey', ns1blankspace.util.protect.key.data[ns1blankspace.util.local.cache.data.cryptoKeyReference]);
+													oParam = ns1blankspace.util.setParam(oParam, 'protectedData', sData);
+
+													ns1blankspace.util.whenCan.execute(
 													{
-														method: ns1blankspace.util.protect.decrypt,
-														param:
+														now:
 														{
-															cryptoKeyReference: ns1blankspace.util.local.cache.data.cryptoKeyReference,
-															cryptoKey: ns1blankspace.util.protect.key.data[ns1blankspace.util.local.cache.data.cryptoKeyReference],
-															protectedData: sData
-														}
-													},
-													then:
-													{
-														comment: 'util.protect.decrypt<>util.local.cache.search',
-														method: ns1blankspace.util.local.cache.search,
-														set: 'data',
-														param: oParam
-													}	
-												});
+															method: ns1blankspace.util.protect.decrypt,
+															param:
+															{
+																cryptoKeyReference: ns1blankspace.util.local.cache.data.cryptoKeyReference,
+																cryptoKey: ns1blankspace.util.protect.key.data[ns1blankspace.util.local.cache.data.cryptoKeyReference],
+																protectedData: sData
+															}
+														},
+														then:
+														{
+															comment: 'util.protect.decrypt<>util.local.cache.search',
+															method: ns1blankspace.util.local.cache.search,
+															set: 'data',
+															param: oParam
+														}	
+													});
+												}
+												else
+												{
+													oParam.data = '';
+													ns1blankspace.util.local.cache.search(oParam)
+												}	
 											}
 											else
 											{
@@ -156,7 +164,7 @@ ns1blankspace.util.local =
 												oDataReturn = JSON.parse(oDataReturn);
 											}
 
-											ns1blankspace.util.whenCan.complete(oDataReturn, oParam);
+											return ns1blankspace.util.whenCan.complete(oDataReturn, oParam);
 										}	
 									}	
 								},
