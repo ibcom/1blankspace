@@ -31,6 +31,7 @@ ns1blankspace.connect =
 					ns1blankspace.objectName = 'connect';
 					ns1blankspace.objectContextData = undefined;
 					ns1blankspace.objectContext = -1;
+					ns1blankspace.objectMethod = "CORE_URL"
 					ns1blankspace.viewName = 'Connections / URLs';
 
 					if (ns1blankspace.connect.data.mode.value === undefined)
@@ -166,8 +167,8 @@ ns1blankspace.connect =
 							oSearch.addFilter('private', 'EQUAL_TO', 'N');
 						}
 
-						oSearch.rows = 30;
-						oSearch.sort('description', 'desc');
+						oSearch.rows = 50;
+						oSearch.sort('title', 'asc');
 						
 						oSearch.getResults(function(data) {ns1blankspace.connect.home(oParam, data)});
 
@@ -193,7 +194,7 @@ ns1blankspace.connect =
 								if (this.url == '')
 								{
 									aHTML.push('<td id="ns1blankspaceMostLikely_Title-' + this.id + '" class="ns1blankspaceRow ns1blankspaceSubNote" style="width:200px;">' +
-														'Not set</td>');
+														this.title + '</td>');
 								}
 								else
 								{	
@@ -211,10 +212,16 @@ ns1blankspace.connect =
 
 								aHTML.push('</td></tr>');
 							});
-							
-							aHTML.push('</table>');			
+	
+							aHTML.push('</table>');
+
+							if (oResponse.morerows == "true")
+							{
+								aHTML.push('<div style="padding:4px; padding-top:10px;" class="ns1blankspaceSubNote">' +
+												'First 50 shown, use search to find more.</div>');
+							}		
 						}
-						
+
 						$('#ns1blankspaceMostLikely').html(aHTML.join(''));
 					
 						$('.ns1blankspaceOptionEdit').button(
@@ -370,14 +377,13 @@ ns1blankspace.connect =
 											}
 											
 											aHTML.push('<td class="ns1blankspaceSearch" id="ns1blankspaceSearch-' +
-															this.id + '">' +
+															this.id + '"><div>' +
 															this.title + 
-															'</td>');
+															'</div>');
 
-											aHTML.push('<td class="ns1blankspaceSearch" id="ns1blankspaceSearch-' +
-															this.id + '">' +
+											aHTML.push('<div style="padding:4px;" class="ns1blankspaceSub">' +
 															ns1blankspace.connect.url.asXHTML({title: this.url, url: this.url}) +
-															'</td>');
+															'<div></td>');
 
 											if (iColumn == iMaximumColumns)
 											{
@@ -988,6 +994,8 @@ ns1blankspace.connect =
 									{	
 										if (!oResponse)
 										{
+											ns1blankspace.status.working()
+
 											if (sXHTMLElementID)
 											{
 												$('td.ns1blankspaceControl').removeClass('ns1blankspaceHighlight');
@@ -1019,6 +1027,8 @@ ns1blankspace.connect =
 										}
 										else
 										{
+											ns1blankspace.status.clear()
+
 											if (sXHTMLElementID)
 											{
 												var aHeaders = [];
