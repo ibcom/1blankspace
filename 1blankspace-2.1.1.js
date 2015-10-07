@@ -2827,6 +2827,7 @@ ns1blankspace.container =
 					var bForceShow = false;
 					var bSetWidth = false;
 					var iTimeOut = ns1blankspace.util.getParam(oParam, 'timeOut').value;
+					var fOnShow;
 
 					if (oParam != undefined)
 					{
@@ -2840,6 +2841,7 @@ ns1blankspace.container =
 						if (oParam.leftOffset != undefined) {iOffsetLeft = oParam.leftOffset}
 						if (oParam.forceShow != undefined) {bForceShow = oParam.forceShow}
 						if (oParam.setWidth != undefined) {bSetWidth = oParam.setWidth}
+						if (oParam.onShow != undefined) {fOnShow = oParam.onShow}
 					}
 					
 					if (oXHTMLElement === undefined && sXHTMLElementID != undefined)
@@ -2872,6 +2874,9 @@ ns1blankspace.container =
 
 							if (sFunctionBind != undefined)
 								{eval(sFunctionBind)}
+
+							if (fOnShow != undefined)
+								{fOnShow(oParam)}
 
 							return true;
 						}

@@ -113,7 +113,7 @@ ns1blankspace.connect =
 										'<td id="ns1blankspaceMostLikely" class="ns1blankspaceMain">' +
 										ns1blankspace.xhtml.loading +
 										'</td>' +
-										'<td id="ns1blankspaceHomeAction" style="width:250px;"></td>' +
+										'<td id="ns1blankspaceHomeAction" style="width:275px;"></td>' +
 										'</tr>');
 						aHTML.push('</table>');					
 						
@@ -194,10 +194,10 @@ ns1blankspace.connect =
 														ns1blankspace.connect.url.asXHTML({title: this.title, url: this.url}) + '</td>');
 
 								aHTML.push('<td style="width:60px; text-align:right;" class="ns1blankspaceRow">' +
-									'<span id="ns1blankspaceConnect_option_edit" class="ns1blankspaceOptionEdit"' +
+									(this.urllogon!=''?'<span id="ns1blankspaceConnect_option_logon-' + this.id + '" class="ns1blankspaceOptionLogon"' +
+											' data-urllogon="' + this.urllogon + '"></span>':'') +
+									'<span id="ns1blankspaceConnect_option_edit-' + this.id + '" class="ns1blankspaceOptionEdit"' +
 										' data-id="' + this.id + '"></span>' +
-									(this.urllogon!=''?'<span id="ns1blankspaceConnect_option_logon" class="ns1blankspaceOptionLogon"' +
-											' data-urllogon=' + this.urllogon + '"></span>':'') +
 									'</td>' +			
 									'</tr>');
 
@@ -234,8 +234,24 @@ ns1blankspace.connect =
 						})
 						.click(function()
 						{
-							
+							$vq.init('<div class="ns1blankspaceViewControlContainer" id="ns1blankspaceViewTemplateContainer" style="font-size:0.875em;">', {queue: 'logon'});
 
+							$vq.add('<div class="ns1blankspaceSub" style="padding:4px;">' + $(this).attr('data-urllogon') + '</div>', {queue: 'logon'});
+							$vq.add('<div id="ns1blankspaceConnectPasswordShow" class="ns1blankspaceSub" style="padding:4px;">' +
+										 '</div>', {queue: 'logon'});
+						
+							$vq.add('</div>', {queue: 'logon'});
+
+							ns1blankspace.container.show(
+							{
+								xhtmlElementID: this.id,
+								topOffset: -26,
+								leftOffset: -195,
+								xhtml: $vq.get({queue: 'logon'}),
+								onShow: ns1blankspace.connect.password.get,
+								id: this.id.split('-')[1],
+								fadeOut: 30000
+							});
 						})
 						.css('height', '18px')
 						.css('width', '18px');
@@ -504,7 +520,7 @@ ns1blankspace.connect =
 						aHTML.push('<table class="ns1blankspaceMain">' +
 									'<tr class="ns1blankspaceRow">' +
 									'<td id="ns1blankspaceSummaryColumn1" class="ns1blankspaceColumn1Flexible"></td>' +
-									'<td id="ns1blankspaceSummaryColumn2" class="ns1blankspaceColumn2Action" style="width:200px;"></td>' +
+									'<td id="ns1blankspaceSummaryColumn2" class="ns1blankspaceColumn2Action" style="width:275px;"></td>' +
 									'</tr>' +
 									'</table>');				
 						
@@ -514,37 +530,48 @@ ns1blankspace.connect =
 
 						aHTML.push('<table class="ns1blankspace">');
 						
-						if (ns1blankspace.objectContextData.description != '')
-						{
-							aHTML.push('<tr><td id="ns1blankspaceSummaryDescription" class="ns1blankspaceSummary">' +
-											ns1blankspace.objectContextData.description +
-											'</td></tr>');
-						}	
-
 						if (ns1blankspace.objectContextData.url != '')
 						{
 							aHTML.push('<tr><td id="ns1blankspaceSummaryURL" class="ns1blankspaceSummary">' +
 											ns1blankspace.connect.url.asXHTML() +
+											'</td></tr>');									
+						}
+
+						aHTML.push('<tr><td class="ns1blankspaceSummary ns1blankspaceSub">' +
+											'Available to ' + (ns1blankspace.objectContextData.private=='Y'?'just me.':'everyone in this space.') +
 											'</td></tr>');
 
-							if (ns1blankspace.objectContextData.urllogon != '')
-							{
-								aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Username</td></tr>' +
-												'<tr><td id="ns1blankspaceSummaryURLLogon" class="ns1blankspaceSummary">' +
-												ns1blankspace.objectContextData.urllogon +
-												'</td></tr>');
-							
-								aHTML.push('<tr><td style="padding-top:8px;">' +
-												'<span id="ns1blankspaceConnectGetPassword" class="ns1blankspaceAction" style="font-size:0.75em;">Get Password</span>' +
-												'</td></tr>');
-
-								aHTML.push('<tr><td id="ns1blankspaceConnectPasswordShow" class="ns1blankspaceSubNote" style="padding-left: 4px; padding-top: 6px;"></td></tr>');
-							}											
-						}
+						if (ns1blankspace.objectContextData.description != '')
+						{
+							aHTML.push('<tr><td id="ns1blankspaceSummaryDescription" class="ns1blankspaceSummary ns1blankspaceSub">' +
+											ns1blankspace.objectContextData.description +
+											'</td></tr>');
+						}	
 
 						aHTML.push('</table>');								
 
 						$('#ns1blankspaceSummaryColumn1').html(aHTML.join(''));
+
+						var aHTML = [];
+
+						aHTML.push('<table class="ns1blankspaceColumn2">');
+
+						if (ns1blankspace.objectContextData.urllogon != '')
+						{
+							aHTML.push('<tr><td id="ns1blankspaceSummaryURLLogon" class="ns1blankspaceSummary ns1blankspaceSub">' +
+											ns1blankspace.objectContextData.urllogon +
+											'</td></tr>');
+
+							aHTML.push('<tr><td style="padding-top:8px;">' +
+											'<span id="ns1blankspaceConnectGetPassword" class="ns1blankspaceAction" style="font-size:0.75em;">Get Password</span>' +
+											'</td></tr>');
+
+							aHTML.push('<tr><td id="ns1blankspaceConnectPasswordShow" class="ns1blankspaceSubNote" style="padding-left: 4px; padding-top: 6px;"></td></tr>');
+						}			
+
+						aHTML.push('</table>');								
+
+						$('#ns1blankspaceSummaryColumn2').html(aHTML.join(''));
 
 						$('#ns1blankspaceConnectGetPassword').button().click(function()
 						{
@@ -556,6 +583,8 @@ ns1blankspace.connect =
 	password: 	{
 					get: 		function (oParam)
 								{
+									var sID = ns1blankspace.util.getParam(oParam, 'id', {"default": ns1blankspace.objectContext}).value;
+
 									if (!ns1blankspace.util.getParam(oParam, 'urlpassword').exists)
 									{
 										$('#ns1blankspaceConnectPasswordShow').html(ns1blankspace.xhtml.loadingSmall);
@@ -563,7 +592,7 @@ ns1blankspace.connect =
 										var oSearch = new AdvancedSearch();
 										oSearch.method = 'CORE_URL_SEARCH';
 										oSearch.addField('urlpassword');
-										oSearch.addFilter('id', 'EQUAL_TO', ns1blankspace.objectContext);
+										oSearch.addFilter('id', 'EQUAL_TO', sID);
 										oSearch.getResults(function(oResponse)
 										{
 											oParam = ns1blankspace.util.setParam(oParam, 'urlpassword', '');
@@ -613,6 +642,7 @@ ns1blankspace.connect =
 									var oCryptoKey = ns1blankspace.util.getParam(oParam, 'cryptoKey');
 									var oURLPassword = ns1blankspace.util.getParam(oParam, 'urlpassword');
 									var bDecrypted = ns1blankspace.util.getParam(oParam, 'decrypted').value;
+									var iFadeOut = ns1blankspace.util.getParam(oParam, 'fadeOut', {"default": 8000}).value;
 
 									if (oURLPassword.value == '')
 									{
@@ -650,7 +680,7 @@ ns1blankspace.connect =
 										else
 										{
 											$('#ns1blankspaceConnectPasswordShow').html('<div id="ns1blankspaceConnectPassword">' + oURLPassword.value + '</div>');
-											$('#ns1blankspaceConnectPassword').fadeOut(8000);
+											$('#ns1blankspaceConnectPassword').fadeOut(iFadeOut);
 										}
 									}
 								}
