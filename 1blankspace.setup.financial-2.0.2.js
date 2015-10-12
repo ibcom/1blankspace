@@ -2508,9 +2508,11 @@ ns1blankspace.setup.financial =
 															{	
 																$vq.add('<div class="ns1blankspaceRow" style="border-width: 0px;"' +
 																			' id="ns1blankspaceSetupPayrollTypeIncludeContainer-' + include.key + '">' +
-																			'<input type="checkbox" style="margin-right:8px;"' +
+																			'<input type="radio" style="margin-right:8px;"' +
 																			($.grep(aIncludeIn, function (i) {return i.key == include.key}).length==0?'':' checked="checked"') +
-																			' id="ns1blankspaceSetupPayrollTypeInclude-' + include.key + '" />' +
+																			' id="ns1blankspaceSetupPayrollTypeInclude-' + include.key + '"' +
+																			' name="ns1blankspaceSetupPayrollTypeInclude"' +
+																			' value="' + include.key + '" />' +
 																			include.title + '</div>', {queue: 'type-edit'});
 															}	
 														});
