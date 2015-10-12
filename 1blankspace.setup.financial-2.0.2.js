@@ -2512,6 +2512,29 @@ ns1blankspace.setup.financial =
 																			($.grep(aIncludeIn, function (i) {return i.key == include.key}).length==0?'':' checked="checked"') +
 																			' id="ns1blankspaceSetupPayrollTypeInclude-' + include.key + '"' +
 																			' name="ns1blankspaceSetupPayrollTypeInclude"' +
+																			' data-dependant="false"' + 
+																			' value="' + include.key + '" />' +
+																			include.title + '</div>', {queue: 'type-edit'});
+															}	
+														});
+
+														$vq.add('</td></tr>', {queue: 'type-edit'});
+
+														$vq.add('<tr><td class="ns1blankspaceCaption">' +
+																		'And' +
+																		'</td></tr>', {queue: 'type-edit'});
+
+														$vq.add('<tr><td id="ns1blankspaceSetupPayrollTypeIncludeDependantContainer">', {queue: 'type-edit'});
+
+														$.each($.grep(ns1blankspace.financial.payroll.util.linetypes.data, function (include) {return include.selectable && include.dependant}), function (i, include)
+														{
+															if (include.options == undefined)
+															{	
+																$vq.add('<div class="ns1blankspaceRow" style="border-width: 0px;"' +
+																			' id="ns1blankspaceSetupPayrollTypeIncludeContainer-' + include.key + '">' +
+																			'<input type="checkbox" style="margin-right:8px;"' +
+																			($.grep(aIncludeIn, function (i) {return i.key == include.key}).length==0?'':' checked="checked"') +
+																			' id="ns1blankspaceSetupPayrollTypeInclude-' + include.key + '"' +
 																			' value="' + include.key + '" />' +
 																			include.title + '</div>', {queue: 'type-edit'});
 															}	
@@ -2561,17 +2584,31 @@ ns1blankspace.setup.financial =
 
 													$('#ns1blankspaceSetupPayrollTypeTitle').val(oLineType.title);
 
-													$('#ns1blankspaceSetupPayrollTypeIncludeContainer input').click(function ()
+													$('#ns1blankspacePayrollTypesColumn2 input').click(function ()
 													{
-														var oData = {id: oLineType.id}
-														oData['includein' + this.id.split('-')[1]] = ($(this).prop('checked')?'Y':'N');
-														oLineType['includein' + this.id.split('-')[1]] = oData['includein' + this.id.split('-')[1]]
+														var sKey = this.id.split('-')[1];
 
-														if ($(this).prop('checked') && this.id.split('-')[1] == 'leave' && oData['includeinleavetype'] == undefined)
+														var oData = {id: oLineType.id}
+														oData['includein' + sKey] = ($(this).prop('checked')?'Y':'N');
+														oLineType['includein' + sKey] = oData['includein' + this.id.split('-')[1]]
+
+														if ($(this).prop('checked') && sKey == 'leave' && oData['includeinleavetype'] == undefined)
 														{
 															oData['includeinleavetype'] = '1';
 															oLineType['includeinleavetype'] = '1'
 														}
+
+														if ($(this).prop('data-dependant') == 'false')
+														{	
+															var aIncludeInOthers = $.grep(ns1blankspace.financial.payroll.util.linetypes.data, function (include)
+																							{return include.selectable && !include.dependant && include.key != sKey})
+
+															$.each(aIncludeInOthers, function (i, include)
+															{
+																oData['includein' + include.key] = 'N';
+																oLineType['includein' + include.key] = 'N';
+															});
+														}	
 
 														$.ajax(
 														{
