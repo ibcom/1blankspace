@@ -1687,7 +1687,7 @@ ns1blankspace.financial.payroll =
 										.css('font-size', '0.75em');
 									}	
 
-									//PAY
+									//STANDARD PAY
 									if (iStep == 13)
 									{
 										if (iStepAction == 4)
@@ -2043,6 +2043,8 @@ ns1blankspace.financial.payroll =
 															$('#ns1blankspacePayrollEmployeeDetailsPayRateLineType').attr('data-id', oObjectContext.linetype);
 															$('#ns1blankspacePayrollEmployeeDetailsPayRateLineType').val(oObjectContext.linetypetext);
 															$('#ns1blankspacePayrollEmployeeDetailsPayRateUnits').val(oObjectContext.units);
+
+															ns1blankspace.financial.payroll.util.linetypes.showHide({lineType: oObjectContext.linetype});
 														}
 														else
 														{
@@ -2052,6 +2054,8 @@ ns1blankspace.financial.payroll =
 															{	
 																$('#ns1blankspacePayrollEmployeeDetailsPayRateLineType').attr('data-id', oLineType.id);
 																$('#ns1blankspacePayrollEmployeeDetailsPayRateLineType').val(oLineType.title);
+
+																ns1blankspace.financial.payroll.util.linetypes.showHide({lineType: oLineType.id});
 															}	
 														}
 													}	
@@ -2806,11 +2810,6 @@ ns1blankspace.financial.payroll =
 
 						aHTML.push('<table class="ns1blankspaceColumn2" style="width:200px;">');
 									
-						aHTML.push('<tr><td class="ns1blankspaceCaption">Hours</td></tr>' +
-										'<tr><td class="ns1blankspaceText">' +
-										'<input id="ns1blankspacePayrollItemHours" class="ns1blankspaceText">' +
-										'</td></tr>');
-
 						aHTML.push('<tr><td class="ns1blankspaceCaption">' +
 										'Type' +
 										'</td></tr>' +
@@ -2818,16 +2817,114 @@ ns1blankspace.financial.payroll =
 										'<td class="ns1blankspaceSelect">' +
 										'<input id="ns1blankspacePayrollItemType" class="ns1blankspaceSelect"' +
 											' data-method="SETUP_FINANCIAL_PAYROLL_LINE_TYPE_SEARCH"' +
-											' data-methodFilter="includeinstandardhours-EQUAL_TO-Y"' +
-											' data-cache="true">' +
+											' data-cache="true"' +
+											' data-click="ns1blankspace.financial.payroll.util.linetypes.showHide">' +
+										'</td></tr>');
+
+						aHTML.push('<tr><td style="padding-bottom:5px;" id="ns1blankspacePayrollItemTypeSearchResults">' +
+										'<span class="ns1blankspaceSub" style="font-size:0.75em;">Press <i>enter</i> to see all<br />or just start typing.</span></td></tr>');
+													
+						/*
+
+						data-methodFilter="includeinstandardhours-EQUAL_TO-Y"
+
+						aHTML.push('<tr><td class="ns1blankspaceCaption">Hours</td></tr>' +
+										'<tr><td class="ns1blankspaceText">' +
+										'<input id="ns1blankspacePayrollItemHours" class="ns1blankspaceText">' +
+										'</td></tr>');
+						*/
+
+						aHTML.push('<tr><td class="ns1blankspaceCaption includein includeinstandardhoursY">' +
+										ns1blankspace.financial.payroll.data.payPeriods[ns1blankspace.financial.data.settings.payrollpayperiod] +
+										' Hours</td></tr>' +
+										'<tr><td class="includein includeinstandardhoursY ns1blankspaceText">' +
+										'<input id="ns1blankspacePayrollItemHours" class="ns1blankspaceText">' +
+										'</td></tr>');	
+
+						aHTML.push('<tr><td class="ns1blankspaceCaption includein includeinstandardhoursY">' +
+										ns1blankspace.option.currencySymbol +
+										'/Hour</td></tr>' +
+										'<tr><td class="ns1blankspaceCaption includein includeinstandardhoursN">' +
+										ns1blankspace.option.currencySymbol +
+										'</td></tr>' +
+										'<tr><td class="ns1blankspaceText">' +
+										'<input id="ns1blankspacePayrollItemAmount" class="ns1blankspaceText">' +
 										'</td></tr>');
 
 						aHTML.push('</table>');					
 						
 						$('#ns1blankspacePayrollPayRunColumn2').html(aHTML.join(''));
-						
-						$('#ns1blankspacePayrollItemHours').focus();
 
+						$('#ns1blankspacePayrollItemType').keyup(function()
+						{
+							var sSearch = $(this).val()
+
+							var oData = $.grep(ns1blankspace.financial.payroll.data.linetypes, function (type)
+							{ 
+								var aIncludeIn = ns1blankspace.financial.payroll.util.linetypes.includeIn({id: type.id});
+								var bInclude = ($.grep(aIncludeIn, function (include) {return !include.selectable}).length == 0)
+
+								if (bInclude && sSearch != '') {bInclude = ((a.title).toLowerCase().indexOf(sSearch) != -1)}
+
+								return bInclude
+							});
+							
+							$vq
+							if (oData.length == 0)
+							{
+								aHTML.push('<table class="ns1blankspace">' +
+												'<tr><td class="ns1blankspaceNothing">No accounts.</td></tr>' + 
+												'</table>');
+
+								$('#ns1blankspaceItemAddSearchResults').html(aHTML.join(''));		
+							}
+							else
+							{	
+								aHTML.push('<table class="ns1blankspace" style="font-size:0.875em;">');
+								
+								$.each(oResponse, function() 
+								{ 
+									aHTML.push('<tr class="ns1blankspaceRow">'+ 
+													'<td id="ns1blankspaceItem_title-' + this.id + '-' + this.taxtype + '" class="ns1blankspaceRow ns1blankspaceRowSelect">' +
+													this.title + '</td></tr>');	
+								});
+								
+								aHTML.push('</table>');
+
+								$('#ns1blankspaceItemAddSearchResults').html(aHTML.join(''))
+								
+								$('.ns1blankspaceRowSelect')
+								.click(function()
+								{
+									var sID = this.id;
+									var aID = sID.split('-');
+
+									$('#ns1blankspaceItemAccount').attr('data-id', aID[1]);
+									$('#ns1blankspaceItemAccount').val($(this).html());
+									$('#ns1blankspaceItemAddSearchResults').html('');
+
+									if (aID[2] != '')
+									{
+										$('[name="radioTaxCode"][value="' + aID[2] + '"]').attr('checked', true);
+
+										ns1blankspace.financial.util.tax.calculate(
+										{
+											amountXHTMLElementID: 'ns1blankspaceItemAmount',
+											taxXHTMLElementID: 'ns1blankspaceItemTax'
+										});
+
+										$('#ns1blankspaceItemAmount').focus();
+									}
+
+								});
+							}
+							/*
+							oParam = ns1blankspace.util.setParam(oParam, 'step', 2);
+							if (ns1blankspace.timer.delayCurrent != 0) {clearTimeout(ns1blankspace.timer.delayCurrent)};
+					        ns1blankspace.timer.delayCurrent = setTimeout('ns1blankspace.financial.item.edit(' + JSON.stringify(oParam) + ')', ns1blankspace.option.typingWait);
+					        */
+						});
+						
 						var aHTML = [];
 
 						aHTML.push('<table class="ns1blankspaceColumn2">');
@@ -2893,9 +2990,11 @@ ns1blankspace.financial.payroll =
 
 						if (sID != undefined)
 						{
+							$('#ns1blankspacePayrollItemHours').focus();
+
 							var oSearch = new AdvancedSearch();
 							oSearch.method = 'FINANCIAL_PAYROLL_PAY_RECORD_ITEM_SEARCH';
-							oSearch.addField('hours,type,typetext');
+							oSearch.addField('hours,type,typetext,rate');
 							oSearch.addFilter('id', 'EQUAL_TO', sID);
 							oSearch.getResults(function(data) {
 									$.extend(true, oParam, {step: 5});
@@ -2904,6 +3003,8 @@ ns1blankspace.financial.payroll =
 						}
 						else
 						{
+							$('#ns1blankspacePayrollItemType').focus();
+
 							$('[name="radioItemType"][value="1"]').attr('checked', true);
 						}
 					}
@@ -2914,10 +3015,13 @@ ns1blankspace.financial.payroll =
 						{
 							var oObjectContext = oResponse.data.rows[0];
 							$('#ns1blankspacePayrollItemHours').val(ns1blankspace.util.toFixed(oObjectContext.hours));
+							$('#ns1blankspacePayrollItemRate').val(ns1blankspace.util.toFixed(oObjectContext.rate));
 							$('#ns1blankspacePayrollItemType').val(oObjectContext.typetext);
 							$('#ns1blankspacePayrollItemType').attr('data-id', oObjectContext.type);
 							$('#ns1blankspacePayrollItemHours').focus();
 							$('#ns1blankspacePayrollItemHours').select();
+
+							ns1blankspace.financial.payroll.util.linetypes.showHide({lineType: oObjectContext.type});
 						}
 					}
 
@@ -4619,31 +4723,45 @@ ns1blankspace.financial.payroll.util =
 					data: 		[
 									{
 										key: 'allowancesnontaxable',
-										title: 'Allowances (Non-taxable)'
+										title: 'Allowances (Non-taxable)',
+										selectable: true,
+										dependant: false
 									},
 									{
 										key: 'allowancestaxable',
-										title: 'Allowances (Taxable)'
+										title: 'Allowances (Taxable)',
+										selectable: true,
+										dependant: false
 									},
 									{
 										key: 'deductions',
-										title: 'Deductions'
+										title: 'Deductions',
+										selectable: true,
+										dependant: false
 									},
 									{
 										key: 'grosssalary',
-										title: 'Gross Salary'
+										title: 'Gross Salary',
+										selectable: true,
+										dependant: true
 									},
 									{
 										key: 'leave',
-										title: 'Leave'
+										title: 'Leave',
+										selectable: true,
+										dependant: true
 									},
 									{
 										key: 'leaveloading',
-										title: 'Leave Loading'
+										title: 'Leave Loading',
+										selectable: false,
+										dependant: true
 									},
 									{
 										key: 'leavetype',
 										title: 'Leave Type',
+										selectable: true,
+										dependant: true,
 										options:
 										[
 											{
@@ -4666,23 +4784,33 @@ ns1blankspace.financial.payroll.util =
 									},
 									{
 										key: 'posttaxsuper',
-										title: 'Post Tax Superannuation'
+										title: 'Post Tax Superannuation',
+										selectable: false,
+										dependant: true
 									},
 									{
 										key: 'salarysacrificesuper',
-										title: 'Salary Sacrificed Superannuation'
+										title: 'Salary Sacrificed Superannuation',
+										selectable: false,
+										dependant: true
 									},
 									{
 										key: 'standardhours',
-										title: 'Standard Hours'
+										title: 'Standard Hours',
+										selectable: true,
+										dependant: false
 									},
 									{
 										key: 'super',
-										title: 'Superannuation'
+										title: 'Superannuation',
+										selectable: true,
+										dependant: true
 									},
 									{
 										key: 'taxadjustments',
-										title: 'Tax Adjustments'
+										title: 'Tax Adjustments',
+										selectable: true,
+										dependant: false
 									}
 								],
 
@@ -4744,7 +4872,8 @@ ns1blankspace.financial.payroll.util =
 
 					showHide:	function (oParam)
 								{
-									var iLineType = ns1blankspace.util.getParam(oParam, 'xhtmlElementID', {index: 1}).value;
+									var iLineType = ns1blankspace.util.getParam(oParam, 'lineType').value;
+									if (iLineType==undefined) {iLineType = ns1blankspace.util.getParam(oParam, 'xhtmlElementID', {index: 1}).value};
 									var oLineType = ns1blankspace.financial.payroll.util.linetypes.get({id: iLineType});
 
 									$('.includein').hide();
@@ -4754,6 +4883,8 @@ ns1blankspace.financial.payroll.util =
 					includeIn:	function (oParam)
 								{
 									var iLineType = ns1blankspace.util.getParam(oParam, 'id').value;
+									var bSelectableOnly = ns1blankspace.util.getParam(oParam, 'selectableOnly', {"default": true}).value;
+
 									var oLineType = ns1blankspace.financial.payroll.util.linetypes.get({id: iLineType});
 									var aIncludeIn = [];
 									var oKey;

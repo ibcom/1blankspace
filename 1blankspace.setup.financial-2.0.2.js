@@ -2458,7 +2458,12 @@ ns1blankspace.setup.financial =
 																			id: iLineType,
 																			lineTypes: ns1blankspace.setup.financial.payroll.data.linetypes
 																		});
-													var aIncludeIn = ns1blankspace.financial.payroll.util.linetypes.includeIn({id: iLineType});
+
+													var aIncludeIn = ns1blankspace.financial.payroll.util.linetypes.includeIn(
+																		{
+																			id: iLineType,
+																			selectableOnly: true
+																		});
 													
 													$vq.init('<table class="ns1blankspaceColumn2">', {queue: 'type-edit'});
 
@@ -2497,7 +2502,7 @@ ns1blankspace.setup.financial =
 
 														$vq.add('<tr><td id="ns1blankspaceSetupPayrollTypeIncludeContainer">', {queue: 'type-edit'});
 
-														$.each(ns1blankspace.financial.payroll.util.linetypes.data, function (i, include)
+														$.each($.grep(ns1blankspace.financial.payroll.util.linetypes.data, function (include) {return include.selectable && !include.dependant}), function (i, include)
 														{
 															if (include.options == undefined)
 															{	

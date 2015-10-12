@@ -573,7 +573,13 @@ ns1blankspace.financial.invoice =
 									}
 									else
 									{
-										if (false && (ns1blankspace.financial.summaryUseTemplate || bUseTemplate))
+										delete ns1blankspace.financial.invoice.data.templateDocument;
+										oParam = ns1blankspace.util.setParam(oParam, 'object', ns1blankspace.object);
+										oParam = ns1blankspace.util.setParam(oParam, 'onComplete', ns1blankspace.financial.invoice.summary["default"]);
+										ns1blankspace.format.templates.init(oParam);
+
+										/*
+										if (ns1blankspace.financial.summaryUseTemplate || bUseTemplate)
 										{	
 											$('#ns1blankspaceSummaryColumn1').html(ns1blankspace.xhtml.loading);
 											
@@ -586,6 +592,7 @@ ns1blankspace.financial.invoice =
 											delete ns1blankspace.financial.invoice.data.templateDocument;
 											ns1blankspace.financial.invoice.summary["default"](oParam);
 										}
+										*/
 									}	
 								},
 
@@ -736,11 +743,14 @@ ns1blankspace.financial.invoice =
 												{
 													var sHTML = $('#ns1blankspaceSummaryColumn1').html();
 
+													$('#ns1blankspaceSummaryCreatePDF').unbind('click');
+
 													ns1blankspace.pdf.create(
 													{
 														xhtmlContent: sHTML,
 														filename: ns1blankspace.objectContextData.reference + '.pdf',
-														open: false
+														open: false,
+														leftmargin: 45
 													});
 												});
 											}		
@@ -1044,6 +1054,7 @@ ns1blankspace.financial.invoice =
 											oParam = ns1blankspace.util.setParam(oParam, 'xhtmlContent', ns1blankspace.objectContextData.xhtml);
 											oParam = ns1blankspace.util.setParam(oParam, 'filename', ns1blankspace.objectContextData.reference + '.pdf');
 											oParam = ns1blankspace.util.setParam(oParam, 'open', false);
+											oParam = ns1blankspace.util.setParam(oParam, 'leftmargin', 45);
 
 											ns1blankspace.pdf.create(oParam);
 										}	
@@ -1121,17 +1132,17 @@ ns1blankspace.financial.invoice =
 
 											if (iAttachmentLink !== undefined)
 											{
-												oData.attachmentobject = 5;
-												oData.attachmentobjectContext = ns1blankspace.objectContext;
-												oData.attachmentLink = iAttachmentLink
+												oData.copyattachmentsfromobject = 5;
+												oData.copyattachmentsfromobjectcontext = ns1blankspace.objectContext;
+												oData.copyattachmentsfromobjectattachmentlink = iAttachmentLink
 											}	
 
-											//ns1blankspace.util.endpointURI('MESSAGING_EMAIL_SEND')
+											//'/ondemand/messaging/?method=MESSAGING_EMAIL_SEND'
 
 											$.ajax(
 											{
 												type: 'POST',
-												url: '/ondemand/messaging/?method=MESSAGING_EMAIL_SEND',
+												url: ns1blankspace.util.endpointURI('MESSAGING_EMAIL_SEND'),
 												data: oData,
 												dataType: 'json',
 												global: false,

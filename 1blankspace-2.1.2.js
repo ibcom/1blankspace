@@ -4145,7 +4145,7 @@ ns1blankspace.util =
 						$.ajax(
 						{
 							type: 'GET',
-							url: '/jscripts/1blankspace.mydigitalstructure-2.0.1.json',
+							url: '/jscripts/1blankspace.mydigitalstructure-2.0.2.json',
 							dataType: 'json',
 							async: false,
 							success: function(data) {ns1blankspace.ondemand = data.ondemand}
