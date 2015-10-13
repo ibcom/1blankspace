@@ -2424,7 +2424,7 @@ ns1blankspace.setup.financial =
 														$('#ns1blankspaceSetupPayrollTypeAdd').button()
 														.click(function()
 														{
-															var oData = {title: '[New Type]'}
+															var oData = {title: '[New Type]', includeinstandardhours: 'Y'}
 														
 															$.ajax(
 															{
@@ -2521,7 +2521,7 @@ ns1blankspace.setup.financial =
 														$vq.add('</td></tr>', {queue: 'type-edit'});
 
 														$vq.add('<tr><td class="ns1blankspaceCaption">' +
-																		'And' +
+																		'and' +
 																		'</td></tr>', {queue: 'type-edit'});
 
 														$vq.add('<tr><td id="ns1blankspaceSetupPayrollTypeIncludeDependantContainer">', {queue: 'type-edit'});
@@ -2598,7 +2598,7 @@ ns1blankspace.setup.financial =
 															oLineType['includeinleavetype'] = '1'
 														}
 
-														if ($(this).prop('data-dependant') == 'false')
+														if ($(this).attr('data-dependant') == 'false')
 														{	
 															var aIncludeInOthers = $.grep(ns1blankspace.financial.payroll.util.linetypes.data, function (include)
 																							{return include.selectable && !include.dependant && include.key != sKey})

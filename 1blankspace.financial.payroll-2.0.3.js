@@ -1687,6 +1687,61 @@ ns1blankspace.financial.payroll =
 										.css('font-size', '0.75em');
 									}	
 
+									if (iStep == 18)
+									{
+										var sSearch = ns1blankspace.util.getParam(oParam, 'searchText', {"default": ''}).value;
+										var bAll = ns1blankspace.util.getParam(oParam, 'all', {"default": false}).value;
+
+										var aData = $.grep(ns1blankspace.financial.payroll.data.linetypes, function (type)
+										{ 
+											var aIncludeIn = ns1blankspace.financial.payroll.util.linetypes.includeIn({id: type.id});
+											var bInclude = ($.grep(aIncludeIn, function (include) {return !include.selectable}).length == 0)
+
+											if (bInclude && sSearch != '' && !bAll) {bInclude = ((type.title).toLowerCase().indexOf(sSearch.toLowerCase()) != -1)}
+
+											return bInclude
+										});
+										
+										$vq.clear({queue: 'type'});
+
+										if (aData.length == 0)
+										{
+											$vq.add('<table class="ns1blankspace">' +
+															'<tr><td class="ns1blankspaceSubNote">No pay types.</td></tr>' + 
+															'</table>', {queue: 'type'});
+
+											$vq.render('#ns1blankspacePayrollEmployeeDetailsPayRateLineTypeSearchResults', {queue: 'type'});		
+										}
+										else
+										{	
+											$vq.add('<table class="ns1blankspace">', {queue: 'type'});
+											
+											$.each(aData, function(d, data) 
+											{ 
+												$vq.add('<tr class="ns1blankspaceRow">'+ 
+																'<td id="ns1blankspaceTypeem_title-' + data.id + '" class="ns1blankspaceRow ns1blankspaceRowSelect">' +
+																data.title + '</td></tr>', {queue: 'type'});	
+											});
+											
+											$vq.add('</table>');
+
+											$vq.render('#ns1blankspacePayrollEmployeeDetailsPayRateLineTypeSearchResults', {queue: 'type'});
+											
+											$('.ns1blankspaceRowSelect')
+											.click(function()
+											{
+												var sID = this.id;
+												var aID = sID.split('-');
+
+												$('#ns1blankspacePayrollEmployeeDetailsPayRateLineType').attr('data-id', aID[1]);
+												$('#ns1blankspacePayrollEmployeeDetailsPayRateLineType').val($(this).html());
+												$('#ns1blankspacePayrollEmployeeDetailsPayRateLineTypeSearchResults').html('');
+
+												ns1blankspace.financial.payroll.util.linetypes.showHide({lineType: aID[1]});
+											});
+										}
+									}
+
 									//STANDARD PAY
 									if (iStep == 13)
 									{
@@ -1762,15 +1817,6 @@ ns1blankspace.financial.payroll =
 												if (iStepAction == 1)
 												{
 													var aHTML = [];
-						
-													aHTML.push('<table class="ns1blankspaceColumn2">' +
-																	'<tr><td><span id="ns1blankspacePayrollEmployee_options_add" class="ns1blankspaceAction">' +
-																	'Add</span></td></tr></table>');					
-													
-													$('#ns1blankspacePayrollEmployeeDetailsPayRateColumn2x').html(aHTML.join(''));
-
-											
-													var aHTML = [];
 
 													if (oResponse.data.rows.length == 0)
 													{
@@ -1808,9 +1854,14 @@ ns1blankspace.financial.payroll =
 															aHTML.push('<td id="ns1blankspacePayrollEmployeeDetailsPayRate_type-' + this.id + '" class="ns1blankspaceRow ns1blankspacePayrollEmployeeDetailsPayRate" style="text-align:left;">' +
 																			this.linetypetext + '</td>');
 
-															var oLineType = ns1blankspace.financial.payroll.util.linetypes.get({title: this.linetypetext});
+															//var oLineType = ns1blankspace.financial.payroll.util.linetypes.get({title: this.linetypetext});
 
-															if (oLineType.includeinstandardhours == 'Y')
+															var aIncludeIn = ns1blankspace.financial.payroll.util.linetypes.includeIn({id: this.linetype});
+															var oIncludeIn = $.grep(aIncludeIn, function (i) {return !i.dependant})[0];
+
+															var bHours = (oIncludeIn!==undefined?$.grep(aIncludeIn, function (i) {return !i.dependant})[0].hours:true);
+											
+															if (bHours)
 															{	
 																sAmount = this.units + ' hours @ ' + ns1blankspace.option.currencySymbol + this.rate + '/hour';
 															}
@@ -1884,29 +1935,31 @@ ns1blankspace.financial.payroll =
 																	'<input id="ns1blankspacePayrollEmployeeDetailsPayRateEndDate" class="ns1blankspaceDate">' +
 																	'</td></tr>');
 
+													var aNotSelectable = $.map($.grep(ns1blankspace.financial.payroll.data.linetypes, function (type) {return !type.selectable}), function (type) {return type.id});
+
 													aHTML.push('<tr class="ns1blankspaceCaption">' +
 																	'<td class="ns1blankspaceCaption">' +
 																	'Type' +
 																	'</td></tr>' +
 																	'<tr>' +
 																	'<td class="ns1blankspaceSelect">' +
-																	'<input id="ns1blankspacePayrollEmployeeDetailsPayRateLineType" class="ns1blankspaceSelect"' +
-																		' data-method="SETUP_FINANCIAL_PAYROLL_LINE_TYPE_SEARCH"' +
-																		' data-cache="true"' +
-																		' data-click="ns1blankspace.financial.payroll.util.linetypes.showHide">' +
+																	'<input id="ns1blankspacePayrollEmployeeDetailsPayRateLineType" class="ns1blankspaceText">' +
 																	'</td></tr>');
 
-													aHTML.push('<tr><td class="ns1blankspaceCaption includein includeinstandardhoursY">' +
+													aHTML.push('<tr><td style="padding-bottom:5px;" id="ns1blankspacePayrollEmployeeDetailsPayRateLineTypeSearchResults">' +
+																		'<span class="ns1blankspaceSub" style="font-size:0.75em;">Press <i>enter</i> to see all pay types<br />or just start typing.</span></td></tr>');
+
+													aHTML.push('<tr><td class="ns1blankspaceCaption includein includeinhoursY">' +
 																	ns1blankspace.financial.payroll.data.payPeriods[ns1blankspace.financial.data.settings.payrollpayperiod] +
 																	' Hours</td></tr>' +
-																	'<tr><td class="includein includeinstandardhoursY ns1blankspaceText">' +
+																	'<tr><td class="includein includeinhoursY ns1blankspaceText">' +
 																	'<input id="ns1blankspacePayrollEmployeeDetailsPayRateUnits" class="ns1blankspaceText">' +
 																	'</td></tr>');	
 
-													aHTML.push('<tr><td class="ns1blankspaceCaption includein includeinstandardhoursY">' +
+													aHTML.push('<tr><td class="ns1blankspaceCaption includein includeinhoursY">' +
 																	ns1blankspace.option.currencySymbol +
 																	'/Hour</td></tr>' +
-																	'<tr><td class="ns1blankspaceCaption includein includeinstandardhoursN">' +
+																	'<tr><td class="ns1blankspaceCaption includein includeinhoursN">' +
 																	ns1blankspace.option.currencySymbol +
 																	'</td></tr>' +
 																	'<tr><td class="ns1blankspaceText">' +
@@ -1916,6 +1969,12 @@ ns1blankspace.financial.payroll =
 													aHTML.push('</table>');
 
 													$('#ns1blankspacePayrollEmployeeDetailsPayRateColumn1').html(aHTML.join(''));
+
+													$('#ns1blankspacePayrollEmployeeDetailsPayRateLineType').keyup(function(e)
+													{
+														$.extend(true, oParam, {step: 18, searchText: $(this).val(), all: (e.which === 13)});
+														ns1blankspace.financial.payroll.employees.show(oParam)
+													});
 
 													var aHTML = [];
 												
@@ -1928,7 +1987,7 @@ ns1blankspace.financial.payroll =
 																	'</td></tr>' +
 																	'</table>');
 
-													aHTML.push('<table class="ns1blankspaceColumn2 includein includeinstandardhoursY" style="font-size:0.75em; background-color:#F3F3F3; margin-top:25px; border:0px; padding-left:5px;">' +
+													aHTML.push('<table class="ns1blankspaceColumn2 includein includeinhoursY" style="font-size:0.75em; background-color:#F3F3F3; margin-top:25px; border:0px; padding-left:5px;">' +
 																	'<tr><td class="ns1blankspaceCaption" style="padding-top:8px;">' +
 																	'Calculate<br />hourly rate..' +
 																	'</td></tr>' +
@@ -1960,7 +2019,7 @@ ns1blankspace.financial.payroll =
 													{	
 														$('#ns1blankspacePayrollEmployeeDetailsPayRateLineType').attr('data-id', oLineType.id);
 														$('#ns1blankspacePayrollEmployeeDetailsPayRateLineType').val(oLineType.title);
-														$('.includeinstandardhoursY').show();
+														$('.includeinhoursY').show();
 													}	
 
 													$('#ns1blankspacePayrollEmployeeDetailsPayRateAnnualAmount, #ns1blankspacePayrollEmployeeDetailsPayRateHoursPerWeek').keyup(function ()
@@ -2010,6 +2069,7 @@ ns1blankspace.financial.payroll =
 																if (data.status == "OK")
 																{
 																	ns1blankspace.status.message('Saved');
+																	$.extend(true, oParam, {step: 13});
 																	$.extend(true, oParam, {stepAction: 1, id: ''});
 																	ns1blankspace.financial.payroll.employees.show(oParam);
 																}
@@ -2713,7 +2773,7 @@ ns1blankspace.financial.payroll =
 							
 							var oSearch = new AdvancedSearch();
 							oSearch.method = 'FINANCIAL_PAYROLL_PAY_RECORD_ITEM_SEARCH';
-							oSearch.addField('type,typetext,hours');
+							oSearch.addField('type,typetext,hours,rate');
 							oSearch.addFilter('record', 'EQUAL_TO', iPay);
 							oSearch.rows = 100;
 							oSearch.sort('typetext', 'asc')
@@ -2729,29 +2789,29 @@ ns1blankspace.financial.payroll =
 						
 							if (oResponse.data.rows.length == 0)
 							{
-								aHTML.push('<tr><td class="ns1blankspaceNothing">No times.</td></tr></table>');
+								aHTML.push('<tr><td class="ns1blankspaceNothing">No items.</td></tr></table>');
 							}
 							else
 							{		
-								aHTML.push('<tr class="ns1blankspaceCaption">');
-								aHTML.push('<td class="ns1blankspaceHeaderCaption">Type</td>');
-								aHTML.push('<td class="ns1blankspaceHeaderCaption" style="text-align:right;">Hours</td>');
-								aHTML.push('<td class="ns1blankspaceHeaderCaption">&nbsp;</td>');
-								aHTML.push('</tr>');
-								
-								$(oResponse.data.rows).each(function()
+								$(oResponse.data.rows).each(function(i, item)
 								{
 									aHTML.push('<tr class="ns1blankspaceRow">');
 										
-									aHTML.push('<td id="ns1blankspaceFinancialPayPeriodItem_type-' + this.id + '" class="ns1blankspaceRow' + sClass + '">' +
-															this["typetext"] + '</td>');
+									aHTML.push('<td id="ns1blankspaceFinancialPayPeriodItem_type-' + item.id + '" class="ns1blankspaceRow' + sClass + '">' +
+															item.typetext + '</td>');
 
-									var cHours = parseFloat(this["hours"]);
-									aHTML.push('<td id="ns1blankspaceFinancialPayPeriodItem_hours-' + this.id + '" class="ns1blankspaceRow" style="text-align:right;">' +
-															 cHours.toFixed(2) + '</td>');						
+									var aIncludeIn = ns1blankspace.financial.payroll.util.linetypes.includeIn({id: item.type});
+									var oIncludeIn = $.grep(aIncludeIn, function (i) {return !i.dependant})[0];
+
+									var bHours = (oIncludeIn!==undefined?$.grep(aIncludeIn, function (i) {return !i.dependant})[0].hours:true);
+									var cAmount = parseFloat((bHours?item.hours:item.rate));
+									
+									aHTML.push('<td id="ns1blankspaceFinancialPayPeriodItem_amount-' + item.id + '" class="ns1blankspaceRow" style="text-align:right;">' +
+															cAmount.toFixed(2) + 
+															'<br /><span class="ns1blankspaceSubNote">' + (bHours?'hours':ns1blankspace.option.currencySymbol) + '</span></td>');					 			
 													
 									aHTML.push('<td style="width:30px;text-align:right;" class="ns1blankspaceRow">' +
-													'<span id="ns1blankspaceFinancialPay_remove-' + this.id + '" class="ns1blankspaceRowRemove"></span></td>');				
+													'<span id="ns1blankspaceFinancialPay_remove-' + item.id + '" class="ns1blankspaceRowRemove"></span></td>');				
 																												
 									aHTML.push('</tr>');
 								});	
@@ -2787,6 +2847,61 @@ ns1blankspace.financial.payroll =
 						}
 					}
 
+					else if (iStep == 13)
+					{
+						var sSearch = ns1blankspace.util.getParam(oParam, 'searchText', {"default": ''}).value;
+						var bAll = ns1blankspace.util.getParam(oParam, 'all', {"default": false}).value;
+
+						var aData = $.grep(ns1blankspace.financial.payroll.data.linetypes, function (type)
+						{ 
+							var aIncludeIn = ns1blankspace.financial.payroll.util.linetypes.includeIn({id: type.id});
+							var bInclude = ($.grep(aIncludeIn, function (include) {return !include.selectable}).length == 0)
+
+							if (bInclude && sSearch != '' && !bAll) {bInclude = ((type.title).toLowerCase().indexOf(sSearch.toLowerCase()) != -1)}
+
+							return bInclude
+						});
+						
+						$vq.clear({queue: 'type'});
+
+						if (aData.length == 0)
+						{
+							$vq.add('<table class="ns1blankspace">' +
+											'<tr><td class="ns1blankspaceSubNote">No pay types.</td></tr>' + 
+											'</table>', {queue: 'type'});
+
+							$vq.render('#ns1blankspacePayrollItemTypeSearchResults', {queue: 'type'});		
+						}
+						else
+						{	
+							$vq.add('<table class="ns1blankspace">', {queue: 'type'});
+							
+							$.each(aData, function(d, data) 
+							{ 
+								$vq.add('<tr class="ns1blankspaceRow">'+ 
+												'<td id="ns1blankspaceTypeem_title-' + data.id + '" class="ns1blankspaceRow ns1blankspaceRowSelect">' +
+												data.title + '</td></tr>', {queue: 'type'});	
+							});
+							
+							$vq.add('</table>');
+
+							$vq.render('#ns1blankspacePayrollItemTypeSearchResults', {queue: 'type'});
+							
+							$('.ns1blankspaceRowSelect')
+							.click(function()
+							{
+								var sID = this.id;
+								var aID = sID.split('-');
+
+								$('#ns1blankspacePayrollItemType').attr('data-id', aID[1]);
+								$('#ns1blankspacePayrollItemType').val($(this).html());
+								$('#ns1blankspacePayrollItemTypeSearchResults').html('');
+
+								ns1blankspace.financial.payroll.util.linetypes.showHide({lineType: aID[1]});
+							});
+						}
+					}
+						
 					// TIME DETAILS
 					else if (iStep == 4)
 					{
@@ -2815,39 +2930,26 @@ ns1blankspace.financial.payroll =
 										'</td></tr>' +
 										'<tr>' +
 										'<td class="ns1blankspaceSelect">' +
-										'<input id="ns1blankspacePayrollItemType" class="ns1blankspaceSelect"' +
-											' data-method="SETUP_FINANCIAL_PAYROLL_LINE_TYPE_SEARCH"' +
-											' data-cache="true"' +
-											' data-click="ns1blankspace.financial.payroll.util.linetypes.showHide">' +
+										'<input id="ns1blankspacePayrollItemType" class="ns1blankspaceText">' +
 										'</td></tr>');
 
 						aHTML.push('<tr><td style="padding-bottom:5px;" id="ns1blankspacePayrollItemTypeSearchResults">' +
-										'<span class="ns1blankspaceSub" style="font-size:0.75em;">Press <i>enter</i> to see all<br />or just start typing.</span></td></tr>');
+										'<span class="ns1blankspaceSub" style="font-size:0.75em;">Press <i>enter</i> to see all pay types<br />or just start typing.</span></td></tr>');
 													
-						/*
-
-						data-methodFilter="includeinstandardhours-EQUAL_TO-Y"
-
-						aHTML.push('<tr><td class="ns1blankspaceCaption">Hours</td></tr>' +
-										'<tr><td class="ns1blankspaceText">' +
-										'<input id="ns1blankspacePayrollItemHours" class="ns1blankspaceText">' +
-										'</td></tr>');
-						*/
-
-						aHTML.push('<tr><td class="ns1blankspaceCaption includein includeinstandardhoursY">' +
+						aHTML.push('<tr><td class="ns1blankspaceCaption includein includeinhoursY">' +
 										ns1blankspace.financial.payroll.data.payPeriods[ns1blankspace.financial.data.settings.payrollpayperiod] +
 										' Hours</td></tr>' +
-										'<tr><td class="includein includeinstandardhoursY ns1blankspaceText">' +
+										'<tr><td class="includein includeinhoursY ns1blankspaceText">' +
 										'<input id="ns1blankspacePayrollItemHours" class="ns1blankspaceText">' +
 										'</td></tr>');	
 
-						aHTML.push('<tr><td class="ns1blankspaceCaption includein includeinstandardhoursY">' +
+						aHTML.push('<tr><td class="ns1blankspaceCaption includein includeinhoursX">' +
 										ns1blankspace.option.currencySymbol +
 										'/Hour</td></tr>' +
-										'<tr><td class="ns1blankspaceCaption includein includeinstandardhoursN">' +
+										'<tr><td class="ns1blankspaceCaption includein includeinhoursN">' +
 										ns1blankspace.option.currencySymbol +
 										'</td></tr>' +
-										'<tr><td class="ns1blankspaceText">' +
+										'<tr><td class="ns1blankspaceText includein includeinhoursN">' +
 										'<input id="ns1blankspacePayrollItemAmount" class="ns1blankspaceText">' +
 										'</td></tr>');
 
@@ -2855,74 +2957,10 @@ ns1blankspace.financial.payroll =
 						
 						$('#ns1blankspacePayrollPayRunColumn2').html(aHTML.join(''));
 
-						$('#ns1blankspacePayrollItemType').keyup(function()
+						$('#ns1blankspacePayrollItemType').keyup(function(e)
 						{
-							var sSearch = $(this).val()
-
-							var oData = $.grep(ns1blankspace.financial.payroll.data.linetypes, function (type)
-							{ 
-								var aIncludeIn = ns1blankspace.financial.payroll.util.linetypes.includeIn({id: type.id});
-								var bInclude = ($.grep(aIncludeIn, function (include) {return !include.selectable}).length == 0)
-
-								if (bInclude && sSearch != '') {bInclude = ((a.title).toLowerCase().indexOf(sSearch) != -1)}
-
-								return bInclude
-							});
-							
-							$vq
-							if (oData.length == 0)
-							{
-								aHTML.push('<table class="ns1blankspace">' +
-												'<tr><td class="ns1blankspaceNothing">No accounts.</td></tr>' + 
-												'</table>');
-
-								$('#ns1blankspaceItemAddSearchResults').html(aHTML.join(''));		
-							}
-							else
-							{	
-								aHTML.push('<table class="ns1blankspace" style="font-size:0.875em;">');
-								
-								$.each(oResponse, function() 
-								{ 
-									aHTML.push('<tr class="ns1blankspaceRow">'+ 
-													'<td id="ns1blankspaceItem_title-' + this.id + '-' + this.taxtype + '" class="ns1blankspaceRow ns1blankspaceRowSelect">' +
-													this.title + '</td></tr>');	
-								});
-								
-								aHTML.push('</table>');
-
-								$('#ns1blankspaceItemAddSearchResults').html(aHTML.join(''))
-								
-								$('.ns1blankspaceRowSelect')
-								.click(function()
-								{
-									var sID = this.id;
-									var aID = sID.split('-');
-
-									$('#ns1blankspaceItemAccount').attr('data-id', aID[1]);
-									$('#ns1blankspaceItemAccount').val($(this).html());
-									$('#ns1blankspaceItemAddSearchResults').html('');
-
-									if (aID[2] != '')
-									{
-										$('[name="radioTaxCode"][value="' + aID[2] + '"]').attr('checked', true);
-
-										ns1blankspace.financial.util.tax.calculate(
-										{
-											amountXHTMLElementID: 'ns1blankspaceItemAmount',
-											taxXHTMLElementID: 'ns1blankspaceItemTax'
-										});
-
-										$('#ns1blankspaceItemAmount').focus();
-									}
-
-								});
-							}
-							/*
-							oParam = ns1blankspace.util.setParam(oParam, 'step', 2);
-							if (ns1blankspace.timer.delayCurrent != 0) {clearTimeout(ns1blankspace.timer.delayCurrent)};
-					        ns1blankspace.timer.delayCurrent = setTimeout('ns1blankspace.financial.item.edit(' + JSON.stringify(oParam) + ')', ns1blankspace.option.typingWait);
-					        */
+							$.extend(true, oParam, {step: 13, searchText: $(this).val(), all: (e.which === 13)});
+							ns1blankspace.financial.payroll.pays(oParam)
 						});
 						
 						var aHTML = [];
@@ -2930,40 +2968,50 @@ ns1blankspace.financial.payroll =
 						aHTML.push('<table class="ns1blankspaceColumn2">');
 								
 						aHTML.push('<tr><td>' +
-										'<span style="width:70px;" id="ns1blankspaceAccountEditSave" class="ns1blankspaceAction">Save</span>' +
+										'<span style="width:70px;" id="ns1blankspaceItemEditSave" class="ns1blankspaceAction">Save</span>' +
 										'</td></tr>');
 										
 						aHTML.push('<tr><td>' +
-											'<span style="width:70px;" id="ns1blankspaceAccountEditCancel" class="ns1blankspaceAction">Cancel</span>' +
+											'<span style="width:70px;" id="ns1blankspaceItemEditCancel" class="ns1blankspaceAction">Cancel</span>' +
 											'</td></tr>');
+
+						aHTML.push('<tr><td id="ns1blankspaceItemEditAbout"></td></tr>');
 															
 						aHTML.push('</table>');					
 							
 						$('#ns1blankspacePayrollPayRunColumn3').html(aHTML.join(''));
 						
-						$('#ns1blankspaceAccountEditSave').button(
+						$('#ns1blankspaceItemEditSave').button(
 						{
 							text: "Save"
 						})
-						.click(function() 
+						.click(function()
 						{
 							ns1blankspace.status.working();
+
+							var iHours = ($('#ns1blankspacePayrollItemHours').is(':visible')?$('#ns1blankspacePayrollItemHours').val():1)
 
 							var oData =
 							{
 								record: iPay,
 								type: $('#ns1blankspacePayrollItemType').attr('data-id'),
-								hours: $('#ns1blankspacePayrollItemHours').val(),
+								hours: iHours,
 								id: sID
 							};
-							
+
+							if ($('#ns1blankspacePayrollItemAmount').is(':visible'))
+							{	
+								oData.rate = $('#ns1blankspacePayrollItemAmount').val();
+							}
+
 							$.ajax(
 							{
 								type: 'POST',
 								url: ns1blankspace.util.endpointURI('FINANCIAL_PAYROLL_PAY_RECORD_ITEM_MANAGE'),
 								data: oData,
 								dataType: 'json',
-								success: function(data) {
+								success: function(data)
+								{
 									if (data.status == "OK")
 									{
 										ns1blankspace.inputDetected = false;
@@ -2978,7 +3026,7 @@ ns1blankspace.financial.payroll =
 							});
 						});
 
-						$('#ns1blankspaceAccountEditCancel').button(
+						$('#ns1blankspaceItemEditCancel').button(
 						{
 							text: "Cancel"
 						})
@@ -3004,8 +3052,12 @@ ns1blankspace.financial.payroll =
 						else
 						{
 							$('#ns1blankspacePayrollItemType').focus();
-
 							$('[name="radioItemType"][value="1"]').attr('checked', true);
+
+							ns1blankspace.financial.payroll.util.linetypes.showHide();
+
+							$.extend(true, oParam, {step: 13, searchText: ''});
+							ns1blankspace.financial.payroll.pays(oParam);
 						}
 					}
 
@@ -3015,11 +3067,11 @@ ns1blankspace.financial.payroll =
 						{
 							var oObjectContext = oResponse.data.rows[0];
 							$('#ns1blankspacePayrollItemHours').val(ns1blankspace.util.toFixed(oObjectContext.hours));
-							$('#ns1blankspacePayrollItemRate').val(ns1blankspace.util.toFixed(oObjectContext.rate));
+							$('#ns1blankspacePayrollItemAmount').val(ns1blankspace.util.toFixed(oObjectContext.rate));
 							$('#ns1blankspacePayrollItemType').val(oObjectContext.typetext);
 							$('#ns1blankspacePayrollItemType').attr('data-id', oObjectContext.type);
-							$('#ns1blankspacePayrollItemHours').focus();
-							$('#ns1blankspacePayrollItemHours').select();
+							$('.includein :visible').focus().select();
+							//$('#ns1blankspacePayrollItemHours').select();
 
 							ns1blankspace.financial.payroll.util.linetypes.showHide({lineType: oObjectContext.type});
 						}
@@ -4725,37 +4777,43 @@ ns1blankspace.financial.payroll.util =
 										key: 'allowancesnontaxable',
 										title: 'Allowances (Non-taxable)',
 										selectable: true,
-										dependant: false
+										dependant: false,
+										hours: false
 									},
 									{
 										key: 'allowancestaxable',
 										title: 'Allowances (Taxable)',
 										selectable: true,
-										dependant: false
+										dependant: false,
+										hours: false
 									},
 									{
 										key: 'deductions',
 										title: 'Deductions',
 										selectable: true,
-										dependant: false
+										dependant: false,
+										hours: false
 									},
 									{
 										key: 'grosssalary',
 										title: 'Gross Salary',
 										selectable: true,
-										dependant: true
+										dependant: true,
+										hours: false
 									},
 									{
 										key: 'leave',
 										title: 'Leave',
 										selectable: true,
-										dependant: true
+										dependant: true,
+										hours: false
 									},
 									{
 										key: 'leaveloading',
 										title: 'Leave Loading',
 										selectable: false,
-										dependant: true
+										dependant: true,
+										hours: false
 									},
 									{
 										key: 'leavetype',
@@ -4798,7 +4856,8 @@ ns1blankspace.financial.payroll.util =
 										key: 'standardhours',
 										title: 'Standard Hours',
 										selectable: true,
-										dependant: false
+										dependant: false,
+										hours: true
 									},
 									{
 										key: 'super',
@@ -4810,7 +4869,8 @@ ns1blankspace.financial.payroll.util =
 										key: 'taxadjustments',
 										title: 'Tax Adjustments',
 										selectable: true,
-										dependant: false
+										dependant: false,
+										hours: false
 									}
 								],
 
@@ -4864,7 +4924,7 @@ ns1blankspace.financial.payroll.util =
 
 									if (sID != undefined)
 									{	
-										aLineTypes = $.grep(aLineTypes, function (linetype) {return linetype.id == sID});
+										aLineTypes = $.grep(aLineTypes, function (linetype) {return linetype.id == sID});										
 									}	
 
 									return aLineTypes[0]
@@ -4874,10 +4934,34 @@ ns1blankspace.financial.payroll.util =
 								{
 									var iLineType = ns1blankspace.util.getParam(oParam, 'lineType').value;
 									if (iLineType==undefined) {iLineType = ns1blankspace.util.getParam(oParam, 'xhtmlElementID', {index: 1}).value};
-									var oLineType = ns1blankspace.financial.payroll.util.linetypes.get({id: iLineType});
 
 									$('.includein').hide();
-									$('.includeinstandardhours' + oLineType.includeinstandardhours).show();
+									$vq.show('#ns1blankspaceItemEditAbout', '');
+
+									if (iLineType != undefined)
+									{	
+										var oLineType = ns1blankspace.financial.payroll.util.linetypes.get({id: iLineType});
+										var aIncludeIn = ns1blankspace.financial.payroll.util.linetypes.includeIn({id: iLineType});
+										var sHours = ($.grep(aIncludeIn, function (i) {return !i.dependant})[0].hours?'Y':'N');					
+
+										$('.includeinhours' + sHours).show();
+										$('.includein :visible').focus();
+
+										if ($('#ns1blankspaceItemEditAbout').length != 0)
+										{
+											$vq.clear({queue: 'edit-about'});
+
+											$vq.add('<div class="ns1blankspaceCaption" style="padding-top:22px; padding-left:0px;">Included in</div>', {queue: 'edit-about'});
+
+											$.each(aIncludeIn, function (i, include)
+											{
+												$vq.add('<div class="ns1blankspaceSubNote" style="font-size:0.75em; padding-left:0px; padding-top:4px;"' +
+																' id="ns1blankspaceItemEditAbout-' + include.key + '">' + include.title + '</div>', {queue: 'edit-about'});
+											});
+
+											$vq.render('#ns1blankspaceItemEditAbout', {queue: 'edit-about'});
+										}	
+									}	
 								},
 
 					includeIn:	function (oParam)
