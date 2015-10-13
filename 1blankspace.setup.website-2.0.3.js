@@ -1324,13 +1324,11 @@ ns1blankspace.setup.website =
 											}
 											
 											if (sID != undefined) {sData += '&id=' + ns1blankspace.util.fs(sID)};
-											
-											//ns1blankspace.util.endpointURI('SETUP_SITE_DOCUMENT_MANAGE')
 
 											$.ajax(
 											{
 												type: 'POST',
-												url: '/rpc/setup/?method=SETUP_SITE_DOCUMENT_MANAGE',
+												url: ns1blankspace.util.endpointURI('SETUP_SITE_DOCUMENT_MANAGE'),
 												data: sData,
 												dataType: 'json',
 												success: function()
@@ -1357,12 +1355,10 @@ ns1blankspace.setup.website =
 											if (parseInt($('input[name="radioDocumentType"]:checked').val()) == 5)
 											{
 												ns1blankspace.format.editor.init({selector: '#ns1blankspaceEditText' + ns1blankspace.counter.editor});
-												//tinyMCE.execCommand('mceAddControl', false, 'ns1blankspaceEditText' + ns1blankspace.counter.editor);
 											}
 											else
 											{
 												tinymce.remove('#ns1blankspaceEditText' + ns1blankspace.counter.editor);
-												//tinyMCE.execCommand('mceRemoveControl', false, 'ns1blankspaceEditText' + ns1blankspace.counter.editor);
 											}
 										});
 										
@@ -1391,7 +1387,6 @@ ns1blankspace.setup.website =
 										{
 											$('[name="radioDocumentType"][value="5"]').attr('checked', true);
 											$('[name="radioLocation"][value="9"]').attr('checked', true);
-											//tinyMCE.execCommand('mceAddControl', false, 'ns1blankspaceEditText' + ns1blankspace.counter.editor);
 											ns1blankspace.format.editor.init({selector: '#ns1blankspaceEditText' + ns1blankspace.counter.editor});
 											$('[name="radioPublic"][value="Y"]').attr('checked', true);	
 										}
@@ -1409,7 +1404,6 @@ ns1blankspace.setup.website =
 											if (parseInt(oObjectContext.documenttype) == 5)
 											{
 												ns1blankspace.format.editor.init({selector: '#ns1blankspaceEditText' + ns1blankspace.counter.editor});
-												//tinyMCE.execCommand('mceAddControl', false, 'ns1blankspaceEditText' + ns1blankspace.counter.editor);
 											}
 											
 											$('[name="radioLocation"][value="' + oObjectContext.location + '"]').attr('checked', true);
@@ -1426,7 +1420,6 @@ ns1blankspace.setup.website =
 											$('[name="radioLocation"][value="9"]').attr('checked', true);
 											$('[name="radioDocumentType"][value="5"]').attr('checked', true);
 											ns1blankspace.format.editor.init({selector: '#ns1blankspaceEditText' + ns1blankspace.counter.editor});
-											//tinyMCE.execCommand('mceAddControl', false, 'inputInterfaceMainEditText' + ns1blankspace.counter.editor);
 											$('[name="radioPublic"][value="Y"]').attr('checked', true);					
 										}
 									}		
