@@ -93,6 +93,15 @@ ns1blankspace.setup.website =
 									var sName = (this.id).split('-')[1]
 									var oTemplate = $.grep(ns1blankspace.setup.website.data.templates, function(a) {return a.name == sName});
 									var oParam = {data: $.extend(true, oTemplateDefault[0].data, oTemplate[0].data)};
+
+									for (var key in oParam.data)
+							  		{
+							     		if (oParam.data.hasOwnProperty(key))
+							     		{
+							     			oParam.data[key] = oParam.data[key].formatXHTML()
+							     		}
+							     	}
+
 									ns1blankspace.setup.website.save.send(oParam);
 								});
 							}
@@ -813,7 +822,7 @@ ns1blankspace.setup.website =
 									{
 										var aHTML = [];
 
-										aHTML.push('<input type="radio" id="radioCSSAttachment" name="radioCSSAttachment" value=""/>' +
+										aHTML.push('<input type="radio" id="radioCSSAttachment0" name="radioCSSAttachment" value="0"/>' +
 																	'None<br />');
 
 										$.each(oResponse.data.rows, function()
@@ -2413,7 +2422,7 @@ ns1blankspace.setup.website =
 											}
 											else
 											{
-												sCSSAttachment = -1;
+												sCSSAttachment = 0;
 											}
 											
 											if ($('#ns1blankspaceMainDetails').html() != '')
@@ -2454,6 +2463,8 @@ ns1blankspace.setup.website =
 												oData.cssattachment = sCSSAttachment;
 											}	
 										}
+
+										if (oData.cssattachment == -1) {oData.cssattachment = 0}
 
 										ns1blankspace.status.working();
 
