@@ -2562,11 +2562,14 @@ ns1blankspace.setup.financial =
 																	url: ns1blankspace.util.endpointURI('SETUP_FINANCIAL_PAYROLL_LINE_TYPE_MANAGE'),
 																	data: oData,
 																	dataType: 'json',
-																	success: function()
+																	success: function(data)
 																	{
-																		ns1blankspace.status.message('Deleted');
-																		ns1blankspace.setup.financial.payroll.data.linetypes = undefined
-																		ns1blankspace.setup.financial.payroll.linetypes.show(oParam);
+																		if (data.status == 'OK')
+																		{	
+																			ns1blankspace.status.message('Deleted');
+																			ns1blankspace.setup.financial.payroll.data.linetypes = undefined
+																			ns1blankspace.setup.financial.payroll.linetypes.show(oParam);
+																		}	
 																	}
 																});
 															}	
