@@ -1094,7 +1094,7 @@ ns1blankspace.messaging.conversation =
 									aHTML.push('<td id="ns1blankspaceMessagingConversationPosts_subject-' + oRow.id + '" class="ns1blankspaceRow" style="padding-top:6px;">' +
 															sSubject);
 															
-									aHTML.push('<br /><div style="margin-top:3px;" class="ns1blankspaceRow ns1blankspaceSubNote">' +
+									aHTML.push('<br /><div style="margin-top:3px;" class="ns1blankspaceSubNote">' +
 															oRow.createdusertext + ', ');
 															
 									var oDate = new Date(oRow.modifieddate);
