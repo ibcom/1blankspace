@@ -3104,7 +3104,7 @@ ns1blankspace.financial.bankAccount =
 																			'Receipts & Journals</label>');
 
 															aHTML.push('<input type="radio" id="ns1blankspaceReconcileItemEdit-2" name="radioEdit" /><label for="ns1blankspaceReconcileItemEdit-2" style="width:135px;">' +
-																			'Unpaid<br />Invoices</label>');
+																			'Unpaid&nbsp;Invoices</label>');
 														}
 
 														aHTML.push('</div>');
