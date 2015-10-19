@@ -2335,7 +2335,6 @@ ns1blankspace.setup.financial =
 														oSearch.getResults(function(oResponse)
 														{
 															ns1blankspace.setup.financial.payroll.data.linetypes = oResponse.data.rows;
-															//$.each(ns1blankspace.setup.financial.payroll.data.linetypes, function () {this.fixed = (this.id <= 22)});
 															ns1blankspace.setup.financial.payroll.linetypes.show(oParam);
 														});
 													}	
@@ -2416,7 +2415,7 @@ ns1blankspace.setup.financial =
 														});
 
 														$vq.init('<table class="ns1blankspaceColumn2"><tr><td>' +
-																	'<span id="ns1blankspaceSetupPayrollTypeAdd" class="ns1blankspaceAction">Add</span></td>' +
+																	'<span id="ns1blankspaceSetupPayrollTypeAdd" class="ns1blankspaceAction">New</span></td>' +
 																	'</td></tr></table>', {queue: 'type-add'});
 
 														$vq.render('#ns1blankspacePayrollTypesColumn2', {queue: 'type-add'});
@@ -2424,23 +2423,7 @@ ns1blankspace.setup.financial =
 														$('#ns1blankspaceSetupPayrollTypeAdd').button()
 														.click(function()
 														{
-															var oData = {title: '[New Type]', includeinstandardhours: 'Y'}
-														
-															$.ajax(
-															{
-																type: 'POST',
-																url: ns1blankspace.util.endpointURI('SETUP_FINANCIAL_PAYROLL_LINE_TYPE_MANAGE'),
-																data: oData,
-																dataType: 'json',
-																success: function(oResponse)
-																{
-																	ns1blankspace.status.message('Added');
-																	oParam = ns1blankspace.util.setParam(oParam, 'showFixed', false);
-																	oParam = ns1blankspace.util.setParam(oParam, 'id', oResponse.id);
-																	ns1blankspace.setup.financial.payroll.data.linetypes = undefined
-																	ns1blankspace.setup.financial.payroll.linetypes.show(oParam);
-																}
-															});
+															ns1blankspace.setup.financial.payroll.linetypes.add();
 														});
 
 														if (iID != undefined)
@@ -2449,6 +2432,27 @@ ns1blankspace.setup.financial =
 														}	
 													}	
 												},
+
+									add: 		function (oParam)
+												{
+													var oData = {title: '[New Type]', includeinstandardhours: 'Y'}
+														
+													$.ajax(
+													{
+														type: 'POST',
+														url: ns1blankspace.util.endpointURI('SETUP_FINANCIAL_PAYROLL_LINE_TYPE_MANAGE'),
+														data: oData,
+														dataType: 'json',
+														success: function(oResponse)
+														{
+															ns1blankspace.status.message('Added');
+															oParam = ns1blankspace.util.setParam(oParam, 'showFixed', false);
+															oParam = ns1blankspace.util.setParam(oParam, 'id', oResponse.id);
+															ns1blankspace.setup.financial.payroll.data.linetypes = undefined
+															ns1blankspace.setup.financial.payroll.linetypes.show(oParam);
+														}
+													});
+												},			
 
 									edit: 		function (oParam)
 												{
@@ -2542,12 +2546,15 @@ ns1blankspace.setup.financial =
 
 														$vq.add('</td></tr>', {queue: 'type-edit'});
 
-														$vq.init('<table class="ns1blankspaceColumn2">' +
-																	'<tr><td><span id="ns1blankspaceSetupPayrollTypeEditDelete" class="ns1blankspaceAction">Delete</span></td></tr>' +
-																	'<tr><td class="ns1blankspaceSubNote" style="padding-top:8px;">Changes are saved automatically.</td></tr>' +
-																	'</table>', {queue: 'type-edit-delete'});
+														$vq.init('<table class="ns1blankspaceColumn2"><tr><td>' +
+																	'<span id="ns1blankspaceSetupPayrollTypeAdd" class="ns1blankspaceAction" style="width:65px;">New</span></td>' +
+																	'</td></tr>', {queue: 'type-edit-actions'});
 
-														$vq.render('#ns1blankspacePayrollTypesColumn3', {queue: 'type-edit-delete'});
+														$vq.add('<tr><td><span id="ns1blankspaceSetupPayrollTypeEditDelete" class="ns1blankspaceAction" style="width:65px;">Delete</span></td></tr>' +
+																	'<tr><td class="ns1blankspaceSubNote" style="padding-top:8px;">Changes are saved automatically.</td></tr>' +
+																	'</table>', {queue: 'type-edit-actions'});
+
+														$vq.render('#ns1blankspacePayrollTypesColumn3', {queue: 'type-edit-actions'});
 
 														$('#ns1blankspaceSetupPayrollTypeEditDelete').button()
 														.click(function()
@@ -2584,6 +2591,12 @@ ns1blankspace.setup.financial =
 													{
 														ns1blankspace.setup.financial.payroll.data.editType = {id: iLineType, title: $('#ns1blankspaceSetupPayrollTypeTitle').val()}
 													});
+
+													$('#ns1blankspaceSetupPayrollTypeAdd').button()
+														.click(function()
+														{
+															ns1blankspace.setup.financial.payroll.linetypes.add();
+														});
 
 													$('#ns1blankspaceSetupPayrollTypeTitle').val(oLineType.title);
 

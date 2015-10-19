@@ -4468,7 +4468,7 @@ ns1blankspace.financial.save =
 
 					if (iObject == 5)
 					{
-						sDateField = 'senddate';
+						sDateField = 'sentdate';
 						sSuffix = 'sentto';
 						sMethod = 'FINANCIAL_INVOICE_MANAGE';
 					}
@@ -4979,14 +4979,28 @@ ns1blankspace.financial.util =
 										});						
 									}
 
-									var oSearch = new AdvancedSearch();
-									oSearch.method = 'FINANCIAL_CREDIT_NOTE_SEARCH';
-									oSearch.addField('creditdate,notes,amount,tax,type,typetext');
-									oSearch.addFilter('object', 'EQUAL_TO', iObject);
-									oSearch.addFilter('objectcontext', 'EQUAL_TO', iObjectContext);
-									oSearch.sort('creditdate', 'desc');
+									if (sNamespace != undefined)
+									{	
+										var oSearch = new AdvancedSearch();
+											
+										oSearch.method = 'FINANCIAL_' + sNamespace.toUpperCase() + '_CREDIT_NOTE_SEARCH';
+										oSearch.addField('appliesdate,amount,tax,credittext,credit');
 									
-									oSearch.getResults(function(data) {ns1blankspace.financial.util.credit.show(oParam, data)});
+										oSearch.addFilter(sNamespace, 'EQUAL_TO', iObjectContext);
+										oSearch.sort('appliesdate', 'asc');
+										oSearch.getResults(function(data) {ns1blankspace.financial.util.credit.show(oParam, data)});
+									}
+									else
+									{
+										var oSearch = new AdvancedSearch();
+										oSearch.method = 'FINANCIAL_CREDIT_NOTE_SEARCH';
+										oSearch.addField('creditdate,notes,amount,tax,type,typetext');
+										oSearch.addFilter('object', 'EQUAL_TO', iObject);
+										oSearch.addFilter('objectcontext', 'EQUAL_TO', iObjectContext);
+										oSearch.sort('creditdate', 'desc');
+										
+										oSearch.getResults(function(data) {ns1blankspace.financial.util.credit.show(oParam, data)});
+									}	
 								}
 								else
 								{
@@ -5005,7 +5019,7 @@ ns1blankspace.financial.util =
 
 										aHTML.push('<tr>');
 										aHTML.push('<td class="ns1blankspaceHeaderCaption style="width:125px;">Date</td>');
-										aHTML.push('<td class="ns1blankspaceHeaderCaption">Notes</td>');
+										aHTML.push('<td class="ns1blankspaceHeaderCaption">Reference</td>');
 										aHTML.push('<td class="ns1blankspaceHeaderCaption" style="text-align:right;">Amount</td>');
 										aHTML.push('<td class="ns1blankspaceHeaderCaption" style="text-align:right;">' +
 														ns1blankspace.option.taxVATCaption + '</td>');
@@ -5018,10 +5032,10 @@ ns1blankspace.financial.util =
 											aHTML.push('<tr class="ns1blankspaceRow">');
 																		
 											aHTML.push('<td id="ns1blankspaceCredit_date-' + this.id + '" class="ns1blankspaceRow">' +
-															this['creditdate'] + '</td>');
+															this['appliesdate'] + '</td>');
 											
 											aHTML.push('<td id="ns1blankspaceCredit_description-' + this.id + '" class="ns1blankspaceRow">' +
-															this["notes"] + '</td>');
+															this["credittext"] + '</td>');
 
 											aHTML.push('<td id="ns1blankspaceCredit_amount-' + this.id + '" class="ns1blankspaceRow" style="text-align:right;">' +
 															this["amount"] + '</td>');
@@ -5030,7 +5044,8 @@ ns1blankspace.financial.util =
 															this["tax"] + '</td>');
 
 											aHTML.push('<td style="width:30px;text-align:right;" class="ns1blankspaceRow">');
-											aHTML.push('<span id="ns1blankspaceRowItem_options_remove-' + this.id + '" class="ns1blankspaceCreditRemove"></span>');
+											aHTML.push('<span id="ns1blankspaceRowItem_options_view-' + this.credit + '" class="ns1blankspaceCreditView"></span>');
+											//aHTML.push('<span id="ns1blankspaceRowItem_options_remove-' + this.id + '" class="ns1blankspaceCreditRemove"></span>');
 											aHTML.push('</td></tr>');
 										});
 										
@@ -5058,7 +5073,7 @@ ns1blankspace.financial.util =
 											}
 										})
 										.click(function() {
-											//ns1blankspace.financial.util.credit.edit({xhtmlElementID: this.id})
+											ns1blankspace.financial.credit.init({id: (this.id).split('-')[1]})
 										})
 										.css('width', '15px')
 										.css('height', '17px')	

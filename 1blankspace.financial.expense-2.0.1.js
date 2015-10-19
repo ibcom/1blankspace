@@ -524,7 +524,7 @@ ns1blankspace.financial.expense =
 					$('#ns1blankspaceControlCredit').click(function(event)
 					{
 						ns1blankspace.show({selector: '#ns1blankspaceMainCredit', refresh: true});
-						ns1blankspace.financial.util.credit.show();
+						ns1blankspace.financial.util.credit.show({namespace: 'expense'});
 					});
 					
 					$('#ns1blankspaceControlPayments').click(function(event)

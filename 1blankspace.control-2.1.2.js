@@ -176,7 +176,7 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.financial.receipt',
-		source: '/jscripts/1blankspace.financial.receipt-2.0.0.js'
+		source: '/jscripts/1blankspace.financial.receipt-2.0.1.js'
 	},
 	{
 		nameSpace: '1blankspace.financial.payment',
@@ -184,7 +184,7 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.financial.credit',
-		source: '/jscripts/1blankspace.financial.credit-2.0.0.js'
+		source: '/jscripts/1blankspace.financial.credit-2.0.1.js'
 	},
 	{
 		nameSpace: '1blankspace.financial.journal',

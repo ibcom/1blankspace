@@ -2880,7 +2880,8 @@ ns1blankspace.financial.bankAccount =
 														else
 														{	
 															$('#' + sSourceXHTMLElementID).attr('data-unallocatedAmount', (cAmount - cAllocated));
-															$('#ns1blankspaceRecocileItems_allocated-' + iTransactionID).html('$' + (cAllocated).formatMoney() + ' allocated');
+															$('#ns1blankspaceRecocileItems_allocated-' + iTransactionID).html('$' + (cAllocated).formatMoney() + ' allocated' +
+																			'<br />$' + (cAmount - cAllocated).formatMoney() + ' unallocated');
 															ns1blankspace.status.message('');
 														}
 

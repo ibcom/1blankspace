@@ -1132,7 +1132,7 @@ ns1blankspace.format.templates =
 				{
 					var iObject = ns1blankspace.util.getParam(oParam, 'object').value;
 					var bRefresh = ns1blankspace.util.getParam(oParam, 'refresh', {"default": false}).value;
-					var bNew = ns1blankspace.util.getParam(oParam, 'new', {"default": false}).value;
+					var bNew = ns1blankspace.util.getParam(oParam, 'new', {"default": true}).value;
 
 					if (ns1blankspace.format.templates.data[iObject] == undefined || bRefresh)
 					{
@@ -1148,7 +1148,14 @@ ns1blankspace.format.templates =
 						{
 							if (oResponse.data.rows.length == 0)
 							{
-								ns1blankspace.format.templates.new(oParam);
+								if (bNew)
+								{ 
+									ns1blankspace.format.templates.new(oParam);
+								}
+								else
+								{
+									ns1blankspace.util.onComplete(oParam);
+								}	
 							}
 							else
 							{
@@ -1235,10 +1242,13 @@ ns1blankspace.format.templates =
 					{
 						sTitle = sTemplate.toUpperCase() + ' TEMPLATE';
 
-						if (ns1blankspace.format.templates.data[iObject].length >= 1)
-						{
-							sTitle = sTitle + ' ' + (ns1blankspace.format.templates.data[iObject].length + 1)
-						}
+						if (ns1blankspace.format.templates.data[iObject] != undefined)
+						{	
+							if (ns1blankspace.format.templates.data[iObject].length >= 1)
+							{
+								sTitle = sTitle + ' ' + (ns1blankspace.format.templates.data[iObject].length + 1)
+							}
+						}	
 
 						oData.title = sTitle;
 						oParam.refresh = true;

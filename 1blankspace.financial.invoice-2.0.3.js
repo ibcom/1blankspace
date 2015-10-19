@@ -471,7 +471,7 @@ ns1blankspace.financial.invoice =
 					$('#ns1blankspaceControlCredit').click(function(event)
 					{
 						ns1blankspace.show({selector: '#ns1blankspaceMainCredit', refresh: true});
-						ns1blankspace.financial.util.credit.show();
+						ns1blankspace.financial.util.credit.show({namespace: 'invoice'});
 					});
 					
 					$('#ns1blankspaceControlReceipts').click(function(event)
@@ -1637,7 +1637,8 @@ ns1blankspace.financial.invoice =
 										}
 										else
 										{
-											var oReceipts = ns1blankspace.util.unique({key: 'receiptinvoice.receipt.reference', data: oResponse.data.rows});
+											//var oReceipts = ns1blankspace.util.unique({key: 'receiptinvoice.receipt.reference', data: oResponse.data.rows});
+											var oReceipts = oResponse.data.rows;
 									
 											aHTML.push('<table class="ns1blankspace" id="ns1blankspaceFinancialInvoiceReceipts">');
 											aHTML.push('<tr>');
