@@ -3,6 +3,7 @@
 	[
 		{
 			"name": "default",
+			"environment": "web-browser", 
 			"data":
 			{
 				"title": "Blank",
@@ -18,6 +19,7 @@
 		},
 		{
 			"name": "1blankspace_app",
+			"environment": "web-browser",
 			"description": "Example all-of-enterprise app.",
 			"helpURI": "http://1blankspace.com",
 			"data":
@@ -29,6 +31,7 @@
 		},
 		{
 			"name": "bootstrap",
+			"environment": "web-browser",
 			"description": "Bootstrap is the most popular HTML, CSS, and JS framework for developing responsive, mobile first projects on the web.",
 			"helpURI": "http://getbootstrap.com/",
 			"data":
@@ -39,6 +42,7 @@
 		},
 		{
 			"name": "jquery",
+			"environment": "web-browser",
 			"description": "The Write Less, Do More, JavaScript Library",
 			"helpURI": "http://jquery.com",
 			"data":
@@ -49,6 +53,7 @@
 		},
 		{
 			"name": "jquery",
+			"environment": "web-browser",
 			"description": "jQuery UI is a curated set of user interface interactions, effects, widgets, and themes built on top of the jQuery JavaScript Library",
 			"helpURI": "http://jqueryui.com",
 			"data":
@@ -59,6 +64,7 @@
 		},
 		{
 			"name": "skeleton",
+			"environment": "web-browser",
 			"description": "A dead simple, responsive boilerplate.",
 			"helpURI": "http://getskeleton.com/",
 			"data":
@@ -69,6 +75,7 @@
 		},
 		{
 			"name": "skel_baseline",
+			"environment": "web-browser",
 			"description": "",
 			"helpURI": "http://getskel.com/downloads/skel-baseline/",
 			"data":

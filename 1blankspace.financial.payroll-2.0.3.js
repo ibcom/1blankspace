@@ -899,6 +899,7 @@ ns1blankspace.financial.payroll =
 									var iFilterEmployee;
 									var iID = '';
 									var sXHTMLElementID;
+									var bShowAll = ns1blankspace.util.getParam(oParam, 'showAll', {"default": false}).value;
 
 									if (oParam != undefined)
 									{
@@ -928,13 +929,16 @@ ns1blankspace.financial.payroll =
 
 										aHTML.push('<table class="ns1blankspaceContainer">' +
 													'<tr class="ns1blankspaceContainer">' +
-													'<td id="ns1blankspacePayrollEmployeeColumn1" class="ns1blankspaceColumn1" style="width:125px;font-size:0.875em;padding-right:10px;"></td>' +
+													'<td id="ns1blankspacePayrollEmployeeColumn1Container" class="ns1blankspaceColumn1" style="width:125px;padding-right:10px;">' +
+													'<div id="ns1blankspacePayrollEmployeeColumn1" style="font-size:0.875em;"></div>' +
+													'<div id="ns1blankspacePayrollEmployeeColumn1ShowAllContainer"></div>' +
+													'</td>' +
 													'<td id="ns1blankspacePayrollEmployeeColumn2" class="ns1blankspaceColumn2"></td>' +
 													'</tr>' + 
 													'</table>');		
 															
 										$('#ns1blankspaceMainEmployee').html(aHTML.join(''));
-										
+
 										$('#ns1blankspacePayrollEmployeeColumn1').html(ns1blankspace.xhtml.loading);
 										
 										if (oResponse == undefined)
@@ -942,19 +946,29 @@ ns1blankspace.financial.payroll =
 											var oSearch = new AdvancedSearch();
 											oSearch.method = 'FINANCIAL_PAYROLL_EMPLOYEE_SEARCH';
 											oSearch.addField('contactpersontext,employmentstartdate,employmentenddate,statustext,employee.contactperson.firstname,employee.contactperson.surname');
-											oSearch.addFilter('status', 'EQUAL_TO', '2')
+											
+											if (!bShowAll)
+											{	
+												oSearch.addFilter('status', 'EQUAL_TO', '2')
+											}	
 
 											if (iFilterEmployee !== undefined)
 											{
 												oSearch.addFilter('id', 'EQUAL_TO', iFilterEmployee);
 											}	
 
-											oSearch.rows = 50;
+											oSearch.rows = 100;
 											oSearch.sort('employee.contactperson.firstname', 'asc');
 											oSearch.getResults(function(data) {ns1blankspace.financial.payroll.employees.show(oParam, data)});
 										}
 										else
 										{
+											$('#ns1blankspacePayrollEmployeeColumn1ShowAllContainer').html(
+												'<div class="ns1blankspaceSubNote" style="margin-top:12px; cursor:pointer;"' +
+												' id="ns1blankspacePayrollEmployeeColumn1ShowAll">Show ' +
+												(bShowAll?'only active':'all employees') +
+												'</div>');
+											
 											var aHTML = [];
 
 											if (oResponse.data.rows.length == 0)
@@ -986,7 +1000,7 @@ ns1blankspace.financial.payroll =
 												xhtml: aHTML.join(''),
 												showMore: (oResponse.morerows == "true"),
 												more: oResponse.moreid,
-												rows: 50,
+												rows: 100,
 												functionShowRow: ns1blankspace.financial.payroll.employees.row,
 												functionOpen: undefined,
 												functionNewPage: ''
@@ -1008,7 +1022,13 @@ ns1blankspace.financial.payroll =
 												$('#ns1blankspaceEmployee_contact-' + iFilterEmployee).addClass('ns1blankspaceRowShadedHighlight');
 												$.extend(true, oParam, {step: 2});
 												ns1blankspace.financial.payroll.employees.show(oParam);
-											}	
+											}
+
+											$('#ns1blankspacePayrollEmployeeColumn1ShowAll').click(function()
+											{
+												oParam.showAll = !bShowAll;
+												ns1blankspace.financial.payroll.employees.show(oParam);
+											});
 										}
 									}
 									

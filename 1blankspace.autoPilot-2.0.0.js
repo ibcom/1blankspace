@@ -6,6 +6,7 @@
 
 //Could put to canvas and then capture as image
 
+/*
 var oAutoPilot = Get(.json)
 var sXHTMLElementID;
 
@@ -50,6 +51,7 @@ var sXHTMLElementID;
 		window.timeout(3000, ".show({index: ' + iIndex + '})");
 	}
 }
+*/
 
 
 
