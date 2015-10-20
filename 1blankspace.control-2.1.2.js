@@ -2563,7 +2563,7 @@ ns1blankspace.actions =
 									'<td id="ns1blankspaceActionsColumn1" class="ns1blankspaceColumn1Flexible">' +
 									ns1blankspace.xhtml.loading +
 									'</td>' +
-									ns1blankspace.option.formFactor.is(
+									ns1blankspace.formFactor.is(
 									{
 										size: 'small',
 										not: true,
