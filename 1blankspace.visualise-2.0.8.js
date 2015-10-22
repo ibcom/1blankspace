@@ -1197,6 +1197,8 @@ ns1blankspace.visualise =
 					getTextFromImage:
 							function (oParam)
 							{
+								//<script src="//tenso.rs/tesseract.js"></script>
+
 								var sImageSource = ns1blankspace.util.getParam(oParam, 'imageSource').value;
 								var sXHTMLElementCanvasContainerID = ns1blankspace.util.getParam(oParam, 'xhtmlElementCanvasContainerID').value;
 
@@ -1204,9 +1206,15 @@ ns1blankspace.visualise =
 
 								Tesseract.recognize( canvas, function (err, result)
 								{
-									console.log(err);
-									console.log(result);
-									$('#' + sXHTMLElementCanvasContainerID).html(result.html)
+									if (sXHTMLElementCanvasContainerID != undefined)
+									{	
+										$('#' + sXHTMLElementCanvasContainerID).html(result.html)
+									}
+									else
+									{
+										oParam = ns1blankspace.util.setParam(oParam, 'text', result);
+										ns1blankspace.util.onComplete(oParam);
+									}	
 								});
 							}						
 				}			
