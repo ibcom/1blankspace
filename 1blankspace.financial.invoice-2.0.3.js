@@ -1492,6 +1492,8 @@ ns1blankspace.financial.invoice =
 											sData += '&sent=' + $('input[name="radioSent"]:checked').val();
 											sData += '&frequency=' + $('input[name="radioFrequency"]:checked').val();
 										}
+
+										sData += '&override_LockedDate=Y'
 										
 										$.ajax(
 										{
@@ -1513,7 +1515,6 @@ ns1blankspace.financial.invoice =
 											{
 												ns1blankspace.objectContext = oResponse.id;
 												ns1blankspace.inputDetected = false;
-												//ns1blankspace.financial.invoice.search.send('-' + ns1blankspace.objectContext, {source: 1});
 												ns1blankspace.financial.invoice.init({id: ns1blankspace.objectContext, showItems: true});
 											}	
 										}
