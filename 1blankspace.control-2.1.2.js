@@ -300,7 +300,7 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.visualise',
-		source: '/jscripts/1blankspace.visualise-2.0.7.js'
+		source: '/jscripts/1blankspace.visualise-2.0.8.js'
 	}
 ])
 

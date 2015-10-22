@@ -974,7 +974,7 @@ ns1blankspace.financial.payroll =
 											if (oResponse.data.rows.length == 0)
 											{
 												aHTML.push('<table><tr>' + 
-														'<td class="ns1blankspaceNothing">No employees set up</td>' + 
+														'<td class="ns1blankspaceNothing">There are no active employees.</td>' + 
 														'</tr>' +
 														'</table>');
 											}
