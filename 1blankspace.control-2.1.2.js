@@ -39,7 +39,9 @@ ns1blankspace.option = $.extend(true, ns1blankspace.option,
 	showFavourites: false,
 	showLogoff: false,
 	quickInvoice: false,
-	spaceTextMaximumLength: 200
+	spaceTextMaximumLength: 200,
+	expenseShowImages: false,
+	paymentShowImages: true
 });
 
 ns1blankspace.formFactor.size.value = ns1blankspace.formFactor.size.options.medium;
@@ -172,7 +174,7 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.financial.expense',
-		source: '/jscripts/1blankspace.financial.expense-2.0.1.js'
+		source: '/jscripts/1blankspace.financial.expense-2.0.2.js'
 	},
 	{
 		nameSpace: '1blankspace.financial.receipt',
@@ -180,7 +182,7 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.financial.payment',
-		source: '/jscripts/1blankspace.financial.payment-2.0.1.js'
+		source: '/jscripts/1blankspace.financial.payment-2.0.2.js'
 	},
 	{
 		nameSpace: '1blankspace.financial.credit',
@@ -2174,7 +2176,7 @@ ns1blankspace.attachments =
 					{	
 						var oSearch = new AdvancedSearch();
 						oSearch.method = 'CORE_ATTACHMENT_SEARCH';
-						oSearch.addField('type,filename,description,download,modifieddate,attachment,bucket,createddate,createdusertext');
+						oSearch.addField('type,filename,title,description,download,modifieddate,attachment,bucket,createddate,createdusertext');
 						oSearch.addFilter('object', 'EQUAL_TO', iObject);
 						oSearch.addFilter('objectcontext', 'EQUAL_TO', iObjectContext);
 						oSearch.rows = ns1blankspace.option.defaultRows;

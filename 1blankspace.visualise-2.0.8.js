@@ -1145,53 +1145,79 @@ ns1blankspace.visualise =
 							function (oParam)
 							{
 								var sXHTMLElementCanvasContainerID = ns1blankspace.util.getParam(oParam, 'xhtmlElementCanvasContainerID').value;
+								var sXHTMLElementCanvasID = ns1blankspace.util.getParam(oParam, 'xhtmlElementCanvasID').value;
 								var sImageSource = ns1blankspace.util.getParam(oParam, 'imageSource').value;
 								var iScale = ns1blankspace.util.getParam(oParam, 'scale', {"default": 1}).value;
 								var iRotation = ns1blankspace.util.getParam(oParam, 'rotation', {"default": 0}).value;
 								var bAutoScale = ns1blankspace.util.getParam(oParam, 'autoScale', {"default": true}).value;
+								var iAutoRotation = ns1blankspace.util.getParam(oParam, 'autoRotation').value;
 
-								$('#' + sXHTMLElementCanvasContainerID).html('<canvas id="' + sXHTMLElementCanvasContainerID + '_canvas">');
-  
-								var canvas = document.querySelector('#' + sXHTMLElementCanvasContainerID + '_canvas');
-								var context = canvas.getContext("2d");
-							
-								var image = new Image;
-							  	image.src = sImageSource;
+								ns1blankspace.status.working();
 
-							  	var cw = image.width, ch = image.height, cx = 0, cy = 0;
-
-							  	switch(iRotation)
+								if (sXHTMLElementCanvasContainerID == undefined)
 								{
-								     case 90:
-								          cw = image.height;
-								          ch = image.width;
-								          cy = image.height * (-1);
-								          break;
-								     case 180:
-								          cx = image.width * (-1);
-								          cy = image.height * (-1);
-								          break;
-								     case 270:
-								          cw = image.height;
-								          ch = image.width;
-								          cx = image.width * (-1);
-								          break;
-								}
-					
-								canvas.setAttribute('width', cw);
-								canvas.setAttribute('height', ch);
-
-								if (bAutoScale)
-								{
-									iScale = $('#' + sXHTMLElementCanvasContainerID).width() / image.width;	
+									sXHTMLElementCanvasContainerID = $('#' + sXHTMLElementCanvasID).parent().attr('id');
 								}
 
-							 	image.onload = function()
-							 	{
-							 		context.setTransform(iScale,0,0,iScale,0,0);
-									context.rotate(iRotation * Math.PI / 180);
-									context.drawImage(image, cx, cy);
-								};
+								if ($('#' + sXHTMLElementCanvasID).length == 0)
+								{
+									$('#' + sXHTMLElementCanvasContainerID).html('<canvas id="' + sXHTMLElementCanvasContainerID + '_canvas">');
+									oParam = ns1blankspace.util.setParam(oParam, 'xhtmlElementCanvasID', sXHTMLElementCanvasContainerID + '_canvas');
+									ns1blankspace.visualise.util.imageToCanvas(oParam);
+								}
+								else
+								{	
+									var canvas = document.querySelector('#' + sXHTMLElementCanvasID);
+									var context = canvas.getContext("2d");
+								
+									var image = new Image;
+								  	image.src = sImageSource;
+
+								 	image.onload = function()
+								 	{
+										if (iAutoRotation != undefined)
+										{
+											if (image.width > image.height) {iRotation = iAutoRotation}
+										}	
+
+									  	var cw = image.width, ch = image.height, cx = 0, cy = 0;
+
+									  	switch(iRotation)
+										{
+										     case 90:
+										          cw = image.height;
+										          ch = image.width;
+										          cy = image.height * (-1);
+										          break;
+										     case 180:
+										          cx = image.width * (-1);
+										          cy = image.height * (-1);
+										          break;
+										     case 270:
+										          cw = image.height;
+										          ch = image.width;
+										          cx = image.width * (-1);
+										          break;
+										}
+
+										if (bAutoScale)
+										{
+											iScale = $('#' + sXHTMLElementCanvasContainerID).width() / cw;	
+										}
+
+										cw = cw * iScale;
+										ch = ch * iScale;
+
+										canvas.setAttribute('width', cw);
+										canvas.setAttribute('height', ch);
+
+								 		context.setTransform(iScale, 0, 0, iScale, 0, 0);
+										context.rotate(iRotation * Math.PI / 180);
+										context.drawImage(image, cx, cy);
+
+										ns1blankspace.status.clear();
+									};
+								}	
 							},
 
 					getTextFromImage:
