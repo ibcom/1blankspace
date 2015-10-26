@@ -819,7 +819,11 @@ ns1blankspace.app =
 							//ns1blankspace.user.systemAdmin = (oResponse.systemadmin == "true");
 							ns1blankspace.user.systemAdmin = (oResponse.unrestrictedaccess == 'Y');
 							ns1blankspace.user.roles = oResponse.roles.rows;
-							ns1blankspace.user.site = parseInt(oResponse.site);
+
+							if (oResponse.site != "0")
+							{	
+								ns1blankspace.user.site = parseInt(oResponse.site);
+							}	
 
 							ns1blankspace.spaceText = oResponse.spacename;
 							ns1blankspace.space = oResponse.space;

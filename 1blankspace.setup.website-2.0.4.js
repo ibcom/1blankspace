@@ -1599,6 +1599,7 @@ ns1blankspace.setup.website =
 										oSearch.addFilter('site', 'EQUAL_TO', ns1blankspace.objectContext)
 										oSearch.rf = 'json';
 										oSearch.sort('url', 'asc');
+										oSearch.rows = 100;
 										
 										oSearch.getResults(function(oResponse)
 										{
