@@ -240,17 +240,6 @@ ns1blankspace.setup.website =
 										{
 											ns1blankspace.setup.website.show(oParam, oResponse)
 										});
-
-										/*
-										$.ajax(
-										{
-											type: 'GET',
-											url: ns1blankspace.util.endpointURI('SETUP_SITE_SEARCH'),
-											data: 'id=' + ns1blankspace.objectContext,
-											dataType: 'json',
-											success: function(data) {ns1blankspace.setup.website.show(oParam, data)}
-										});
-*/
 									}
 									else
 									{
@@ -965,6 +954,13 @@ ns1blankspace.setup.website =
 										'<textarea style="height: 50px;" rows="3" cols="35" id="ns1blankspaceAdvancedBodyTag" class="ns1blankspaceTextMultiLarge"></textarea>' +
 										'</td></tr>');		
 										
+						if (ns1blankspace.option.canCreateSpaces)
+						{				
+							aHTML.push('<tr><td class="ns1blankspaceRadio">' +
+											'<input type="checkbox" id="ns1blankspaceWebsiteAdvancedCanCreateSpace" />' +
+											'Allow new spaces to be created using this site</td>');
+						}	
+																		
 						aHTML.push('</table>');					
 						
 						$('#ns1blankspaceMainAdvanced').html(aHTML.join(''));
@@ -976,6 +972,7 @@ ns1blankspace.setup.website =
 							$('[name="radioTitle"][value="' +ns1blankspace.objectContextData.layout + '"]').attr('checked', true);
 							$('#ns1blankspaceAdvancedDocumentType').val((ns1blankspace.objectContextData.documenttype).formatXHTML());
 							$('#ns1blankspaceAdvancedBodyTag').val((ns1blankspace.objectContextData.bodytag).formatXHTML());
+							$('#ns1blankspaceWebsiteAdvancedCanCreateSpace').attr('checked', (ns1blankspace.objectContextData.cancreatespace == 'Y'));
 						}
 					}	
 				},
@@ -1110,44 +1107,7 @@ ns1blankspace.setup.website =
 											
 											$.each(oResponse.data.rows, function()
 											{	
-												aHTML.push('<tr class="ns1blankspaceRow">');
-																
-												aHTML.push('<td id="ns1blankspaceWebsitePages_title-' + this.id + '" class="ns1blankspaceRow ns1blankspaceRowSelect">' +
-																		this.documenttitle + '</td>');
-																		
-												aHTML.push('<td id="ns1blankspaceWebsitePages_url-' + this.id + '" class="ns1blankspaceRow">' +
-																		this.documenturl + '</td>');
-																		
-												if (this.locationtext == 'Header' || this.locationtext == 'Home')
-												{				
-													aHTML.push('<td id="ns1blankspaceWebsitePages_location-' + this.id + '" class="ns1blankspaceRow">' +
-																		this.locationtext + '</td>');
-												}	
-												else
-												{
-													aHTML.push('<td id="ns1blankspaceWebsitePages_location-' + this.id + '" class="ns1blankspaceRow" style="color:#A0A0A0;">' +
-																		'Page</td>');
-												}						
-												
-												if (this.documentpublic == 'Y')
-												{				
-													aHTML.push('<td id="ns1blankspaceWebsitePages_public-' + this.id + '" class="ns1blankspaceRow">' +
-																		'Public</td>');
-												}
-												else
-												{
-													aHTML.push('<td id="ns1blankspaceWebsitePages_public-' + this.id + '" class="ns1blankspaceRow">' +
-																		'Private</td>');
-												}		
-																
-												aHTML.push('<td id="ns1blankspaceWebsitePages_id-' + this.document + '" class="ns1blankspaceRow" style="color:#A0A0A0;">' +
-																		this.document + '</td>');
-																								
-												aHTML.push('<td style="width:30px; text-align:right;" class="ns1blankspaceRow">');
-												
-												aHTML.push('<span id="ns1blankspaceWebsitePage_options_remove-' + this.id + '" class="ns1blankspaceRowRemove"></span>');
-																	
-												aHTML.push('</td></tr>');
+												aHTML.push(ns1blankspace.setup.website.pages.row(this, oParam));
 											});
 											
 											aHTML.push('</table>');
@@ -1181,6 +1141,52 @@ ns1blankspace.setup.website =
 										}
 									}	
 								},
+
+					row: 		function (oRow, oParam)
+								{
+									var aHTML = []
+
+									aHTML.push('<tr class="ns1blankspaceRow">');
+																
+									aHTML.push('<td id="ns1blankspaceWebsitePages_title-' + oRow.id + '" class="ns1blankspaceRow ns1blankspaceRowSelect">' +
+															oRow.documenttitle + '</td>');
+															
+									aHTML.push('<td id="ns1blankspaceWebsitePages_url-' + oRow.id + '" class="ns1blankspaceRow">' +
+															oRow.documenturl + '</td>');
+															
+									if (oRow.locationtext == 'Header' || oRow.locationtext == 'Home')
+									{				
+										aHTML.push('<td id="ns1blankspaceWebsitePages_location-' + oRow.id + '" class="ns1blankspaceRow">' +
+															oRow.locationtext + '</td>');
+									}	
+									else
+									{
+										aHTML.push('<td id="ns1blankspaceWebsitePages_location-' + oRow.id + '" class="ns1blankspaceRow" style="color:#A0A0A0;">' +
+															'Page</td>');
+									}						
+									
+									if (this.documentpublic == 'Y')
+									{				
+										aHTML.push('<td id="ns1blankspaceWebsitePages_public-' + oRow.id + '" class="ns1blankspaceRow">' +
+															'Public</td>');
+									}
+									else
+									{
+										aHTML.push('<td id="ns1blankspaceWebsitePages_public-' + oRow.id + '" class="ns1blankspaceRow">' +
+															'Private</td>');
+									}		
+													
+									aHTML.push('<td id="ns1blankspaceWebsitePages_id-' + oRow.document + '" class="ns1blankspaceRow" style="color:#A0A0A0;">' +
+															oRow.document + '</td>');
+																					
+									aHTML.push('<td style="width:30px; text-align:right;" class="ns1blankspaceRow">');
+									
+									aHTML.push('<span id="ns1blankspaceWebsitePage_options_remove-' + oRow.id + '" class="ns1blankspaceRowRemove"></span>');
+														
+									aHTML.push('</td></tr>');
+
+									return aHTML.join('');
+								},			
 
 					edit:		function (oParam, oResponse)
 								{
@@ -2450,6 +2456,7 @@ ns1blankspace.setup.website =
 												oData.usekeywordsastitle = $('input[name="radioTitle"]:checked').val();
 												oData.documenttype = $('#ns1blankspaceAdvancedDocumentType').val();
 												oData.bodytag = $('#ns1blankspaceAdvancedBodyTag').val();
+												oData.cancreatespace = ($('#ns1blankspaceWebsiteAdvancedCanCreateSpace:checked').length==0?'N':'Y');
 											}
 											
 											if ($('#ns1blankspaceMainScripts').html() != '')

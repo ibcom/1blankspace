@@ -41,7 +41,8 @@ ns1blankspace.option = $.extend(true, ns1blankspace.option,
 	quickInvoice: false,
 	spaceTextMaximumLength: 200,
 	expenseShowImages: false,
-	paymentShowImages: true
+	paymentShowImages: true,
+	canCreateSpaces: true
 });
 
 ns1blankspace.formFactor.size.value = ns1blankspace.formFactor.size.options.medium;
@@ -254,7 +255,7 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.setup.website',
-		source: '/jscripts/1blankspace.setup.website-2.0.3.js'
+		source: '/jscripts/1blankspace.setup.website-2.0.4.js'
 	},
 	{
 		nameSpace: '1blankspace.setup.websiteForm',
