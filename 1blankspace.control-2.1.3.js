@@ -1883,14 +1883,14 @@ ns1blankspace.control =
 
 										if (oResponse == undefined)	
 										{
-											if ($(ns1blankspace.xhtml.container).attr('data-source') == oElement.id)
+											if ($(ns1blankspace.xhtml.container).attr('data-initiator') == oElement.id)
 											{
 												$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions);
-												$(ns1blankspace.xhtml.container).attr('data-source', '');
+												$(ns1blankspace.xhtml.container).attr('data-initiator', '');
 											}
 											else
 											{	
-												$(ns1blankspace.xhtml.container).attr('data-source', oElement.id);
+												$(ns1blankspace.xhtml.container).attr('data-initiator', oElement.id);
 												$(ns1blankspace.xhtml.container).html('<table style="width: 250px;" class="ns1blankspaceViewControlContainer"><tr><td>' + ns1blankspace.xhtml.loadingSmall + '</tr><td></table>');
 												$(ns1blankspace.xhtml.container).show(ns1blankspace.option.showSpeedOptions);
 												$(ns1blankspace.xhtml.container).offset({ top: $(oElement).offset().top + $(oElement).height() - 5, left: $(oElement).offset().left + 150});
@@ -1919,7 +1919,7 @@ ns1blankspace.control =
 
 													$('#ns1blankspaceControlSpaceSwitchBack').click(function(event)
 													{
-														$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions);
+														ns1blankspace.container.hide({force: true});
 
 														$.ajax(
 														{
@@ -1994,7 +1994,7 @@ ns1blankspace.control =
 
 											$('#ns1blankspaceControlSpaceSwitchContainer td.ns1blankspaceRowSelect').click(function(event)
 											{
-												$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions);
+												ns1blankspace.container.hide({force: true});
 
 												var aID = (event.target.id).split('-')
 												$.ajax(
@@ -2062,7 +2062,8 @@ ns1blankspace.control =
 
 											$('#ns1blankspaceControlSpaceSwitchContainer td.ns1blankspaceRowSelect').click(function(event)
 											{
-												$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions);
+												//$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions);
+												ns1blankspace.container.hide({force: true});
 
 												var aID = (event.target.id).split('-')
 												$.ajax(
