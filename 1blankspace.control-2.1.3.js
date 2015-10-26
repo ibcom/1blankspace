@@ -279,7 +279,7 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.developer.space',
-		source: '/jscripts/1blankspace.developer.space-2.0.0.js'
+		source: '/jscripts/1blankspace.developer.space-2.0.1.js'
 	},
 	{
 		nameSpace: '1blankspace.util.local',
