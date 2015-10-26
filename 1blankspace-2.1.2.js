@@ -2012,7 +2012,7 @@ ns1blankspace.logon =
 							$.cookie('mydigitalstucturelogonname', $('#ns1blankspaceLogonLogonName').val(), {expires:30});
 						}
 						
-						var sStatus = (oResponse.passwordStatus!==undefined?oResponse.passwordStatus:oResponse.PasswordStatus);
+						var sStatus = (oResponse.passwordStatus!==undefined?oResponse.passwordStatus:oResponse.passwordstatus);
 
 						if (sStatus === "EXPIRED")
 						{
@@ -2022,7 +2022,6 @@ ns1blankspace.logon =
 						{	
 							if (oResponse.url === '#' || ns1blankspace.option.logonStayOnDocument)
 							{
-								//document.location.reload(false);
 								ns1blankspace.container.hide({force: true});
 								ns1blankspace.app.start();
 							}	
@@ -2130,7 +2129,7 @@ ns1blankspace.logon.changePassword =
 						var sCurrentPassword = $('#ns1blankspaceLogonCurrentPassword').val();
 
 						var iDays = (ns1blankspace.option.passwordExpiry!=undefined?(ns1blankspace.option.passwordExpiry.days||36500):36500);
-						var iSite = (ns1blankspace.option.passwordExpiry!=undefined?(ns1blankspace.option.passwordExpiry.site||ns1blankspace.user.site):ns1blankspace.user.site)
+						var iSite = (ns1blankspace.option.passwordExpiry!=undefined?ns1blankspace.option.passwordExpiry.site:ns1blankspace.user.site)
 
 						var oData =
 						{
