@@ -431,7 +431,7 @@ ns1blankspace.developer.space =
 											'</td></tr>' +
 											'<tr class="ns1blankspace">' +
 											'<td class="ns1blankspaceText">' +
-											'<input id="ns1blankspaceDetailsEnterpriseName" class="ns1blankspaceText">' +
+											'<input id="ns1blankspaceDetailsBusiness" class="ns1blankspaceText">' +
 											'</td></tr>');		
 
 							aHTML.push('<tr class="ns1blankspaceCaption">' +
@@ -488,7 +488,7 @@ ns1blankspace.developer.space =
 										'</td></tr>' +
 										'<tr class="ns1blankspace">' +
 										'<td class="ns1blankspaceText">' +
-										'<input id="ns1blankspaceDetailsEnterpriseName" class="ns1blankspaceText">' +
+										'<input id="ns1blankspaceDetailsBusiness" class="ns1blankspaceText">' +
 										'</td></tr>');		
 						
 						aHTML.push('</table>');					
@@ -497,7 +497,7 @@ ns1blankspace.developer.space =
 						
 						if (ns1blankspace.objectContext != undefined)
 						{
-							$('#ns1blankspaceDetailsEnterpriseName').val(ns1blankspace.objectContext.spacename);
+							$('#ns1blankspaceDetailsBusiness').val(ns1blankspace.objectContext.spacename);
 						}
 					}	
 					
@@ -785,49 +785,51 @@ ns1blankspace.developer.space =
 									{}	
 									else
 									{
-										var iContactBusinessId = ''; 
+										var iContactBusinessId = '';
+
+										var oData =
+										{
+											site: ns1blankspace.user.site
+										}	
 
 										if ($('#ns1blankspaceMainFromContact').html() != '')
 										{
-											iContactBusinessId = $('#ns1blankspaceDetailsContactBusiness').attr('data-id');
-											iContactPersonId = $('#ns1blankspaceDetailsContactPerson').attr('data-id');
+											oData.registration_spacename = $('#ns1blankspaceDetailsBusiness').val();
+											oData.registration_contactbusiness = $('#ns1blankspaceDetailsContactBusiness').attr('data-id');
+											oData.registration_contactperson = $('#ns1blankspaceDetailsContactPerson').attr('data-id');
 										}
 
 										if ($('#ns1blankspaceMainDetails').html() != '')
 										{
-											ns1blankspace.status.working();
+											oData.contactperson_firstname = $('#ns1blankspaceDetailsFirstName').val();
+											oData.contactperson_surname = $('#ns1blankspaceDetailsLastName').val();
+											oData.contactperson_email = $('#ns1blankspaceDetailsEmail').val();
+											oData.registration_spacename = $('#ns1blankspaceDetailsBusiness').val();
+										}		
+												
+										ns1blankspace.status.working();
 
-											var oData =
+										$.ajax(
+										{
+											type: 'POST',
+											url: '/rpc/register/?method=REGISTER_SPACE_MANAGE',
+											data: oData,
+											dataType: 'json',
+											success: function(response)
 											{
-												contactperson_firstname: $('#ns1blankspaceDetailsFirstName').val(),
-												contactperson_surname: $('#ns1blankspaceDetailsLastName').val(),
-												contactperson_email: $('#ns1blankspaceDetailsEmail').val(),
-												registration_spacename: $('#ns1blankspaceDetailsEnterpriseName').val(),
-												site: ns1blankspace.user.site
-											}	
-
-											$.ajax(
-											{
-												type: 'POST',
-												url: '/rpc/register/?method=REGISTER_SPACE_MANAGE',
-												data: oData,
-												dataType: 'json',
-												success: function(response)
+												if (response.status == "OK")
 												{
-													if (response.status == "OK")
-													{
-														ns1blankspace.status.message('Space created');
-														ns1blankspace.objectContext = response.registration;
-														ns1blankspace.inputDetected = false;
-														ns1blankspace.developer.space.init({id: ns1blankspace.objectContext});
-													}
-													else
-													{
-														ns1blankspace.status.error(response.error.errornotes);
-													}
+													ns1blankspace.status.message('Space created');
+													ns1blankspace.objectContext = response.registration;
+													ns1blankspace.inputDetected = false;
+													ns1blankspace.developer.space.init({id: ns1blankspace.objectContext});
 												}
-											});
-										}
+												else
+												{
+													ns1blankspace.status.error(response.error.errornotes);
+												}
+											}
+										});
 									}
 								}
 				}				
