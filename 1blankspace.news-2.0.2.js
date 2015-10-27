@@ -858,13 +858,6 @@ search: 		{
 										})
 										.click(function()
 										{
-											ns1blankspace.container.position(
-											{
-												xhtmlElementID: 'ns1blankspaceNewsGroupsAdd',
-												topOffset: -28,
-												leftOffset: 32
-											});
-
 											ns1blankspace.news.groups.add(oParam);
 										})
 										.css('width', '25px')
@@ -938,20 +931,23 @@ search: 		{
 									{
 										if (oResponse == undefined)
 										{
-											$.ajax(
-											{
-												type: 'GET',
-												url: ns1blankspace.util.endpointURI('SETUP_CONTACT_PERSON_GROUP_SEARCH'),
-												data: 'rows=100',
-												dataType: 'json',
-												success: function(data){ns1blankspace.news.groups.add(oParam, data)}
-											});
+											var oSearch = new AdvancedSearch();
+											oSearch.method = 'SETUP_CONTACT_PERSON_GROUP_SEARCH';
+											oSearch.addField('title');
+											oSearch.rows = 100;
+											oSearch.getResults(function(data) {ns1blankspace.news.groups.add(oParam, data)});
 										}
 										else
 										{
 											$(ns1blankspace.xhtml.container).attr('data-initiator', 'ns1blankspaceNewsGroupsAdd')
 											
-											
+											ns1blankspace.container.position(
+											{
+												xhtmlElementID: 'ns1blankspaceNewsGroupsAdd',
+												topOffset: -28,
+												leftOffset: 32
+											});
+
 											var aHTML = [];
 											
 											if (oResponse.data.rows.length == 0)
