@@ -402,7 +402,7 @@ ns1blankspace.contactPerson =
 					
 					$('#ns1blankspaceControlBusiness').click(function(event)
 					{
-						ns1blankspace.show({selector: '#ns1blankspaceMainBusiness' , refresh: true});
+						ns1blankspace.show({selector: '#ns1blankspaceMainBusiness'});
 						ns1blankspace.contactPerson.business();
 					});
 					
