@@ -150,7 +150,7 @@ ns1blankspace.setup.user =
 										var oSearch = new AdvancedSearch();
 										oSearch.method = 'SETUP_USER_SEARCH';
 										oSearch.addField('username,contactpersontext,contactperson,lastlogon,disabled,disabledreason,unrestrictedaccess,authenticationlevel,' +
-															'authenticationdelivery,timezoneoffset');
+															'authenticationdelivery,timezoneoffset,passwordexpiry,contactbusinesstext,contactbusiness');
 										oSearch.addFilter('id', 'EQUAL_TO', ns1blankspace.objectContext);
 										oSearch.getResults(function(data) {ns1blankspace.setup.user.show(data)});
 									}
@@ -414,14 +414,31 @@ ns1blankspace.setup.user =
 
 						aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Name</td></tr>' +
 										'<tr><td id="ns1blankspaceSummaryName" class="ns1blankspaceSummary">' +
-										ns1blankspace.objectContextData.contactpersontext +
-										'</td></tr>');
+										'<div>' + ns1blankspace.objectContextData.contactpersontext + '</div>');
 						
+						if (ns1blankspace.objectContextData.contactbusiness != ns1blankspace.user.contactBusiness)
+						{
+							aHTML.push('<div class="ns1blankspaceSubNote">' +
+										ns1blankspace.objectContextData.contactbusinesstext +
+										'<div>');
+						}
+
+						aHTML.push('</td></tr>');
+
 						if (ns1blankspace.objectContextData.lastlogon != '')
 						{
 							aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Last Logon</td></tr>' +
 										'<tr><td id="ns1blankspaceSummaryLastLogon" class="ns1blankspaceSummary">' +
 										ns1blankspace.objectContextData.lastlogon +
+										'</td></tr>');
+						}
+
+
+						if (ns1blankspace.objectContextData.passwordexpiry != '')
+						{
+							aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Password Expiry</td></tr>' +
+										'<tr><td id="ns1blankspaceSummaryPasswordExpiry" class="ns1blankspaceSummary">' +
+										ns1blankspace.objectContextData.passwordexpiry +
 										'</td></tr>');
 						}
 						
@@ -532,7 +549,14 @@ ns1blankspace.setup.user =
 							aHTML.push('<tr"><td class="ns1blankspaceSubNote">' +
 										'Leave the password blank to have it auto-generated.' +
 										'</td></tr>')
+						}
 
+						aHTML.push('<tr><td class="ns1blankspaceSubNote ns1blankspaceRadio" style="font-size:0.75em;">' +
+											'<input type="checkbox" id="ns1blankspaceDetailsPasswordExpired" />' +
+											'Prompt user to change password on next logon.</td>');
+							
+						if (ns1blankspace.objectContext == -1)
+						{
 							aHTML.push('<tr class="ns1blankspaceCaption">' +
 											'<td class="ns1blankspaceCaption">' +
 											'First Name' +
@@ -1096,7 +1120,7 @@ ns1blankspace.setup.user =
 																ns1blankspace.setup.user.save.process(
 																{
 																	contactPerson: data.id,
-																	contactBusiness: ns1blankspace.user.contactBusiness
+																	contactBusiness: iContactBusiness
 																});	
 															}
 															else
@@ -1152,8 +1176,12 @@ ns1blankspace.setup.user =
 										if (sPassword != '')
 										{	
 											sData += '&userpassword=' + ns1blankspace.util.fs(ns1blankspace.setup.user.util.setPassword({password: sPassword}));
+										}
+
+										if ($('#ns1blankspaceDetailsPasswordExpired:checked').length!=0)
+										{
 											sData += '&passwordexpiry=' + ns1blankspace.util.fs(Date.today().add(-1).days().toString("dd-MMM-yyyy"));
-										}	
+										}
 									};
 
 									if ($('#ns1blankspaceMainAccess').html() != '')
