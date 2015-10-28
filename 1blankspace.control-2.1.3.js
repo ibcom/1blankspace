@@ -42,9 +42,7 @@ ns1blankspace.option = $.extend(true, ns1blankspace.option,
 	spaceTextMaximumLength: 200,
 	expenseShowImages: false,
 	paymentShowImages: true,
-	canCreateSpaces: true,
-	xlogonSuffix: '@test',
-	xpasswordSuffix: '-test',
+	canCreateSpaces: true
 });
 
 ns1blankspace.formFactor.size.value = ns1blankspace.formFactor.size.options.medium;
@@ -201,7 +199,7 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.financial.payroll',
-		source: '/jscripts/1blankspace.financial.payroll-2.0.5.js'
+		source: '/jscripts/1blankspace.financial.payroll-2.0.4.js'
 	},
 	{
 		nameSpace: '1blankspace.financial.budget',
