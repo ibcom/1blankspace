@@ -43,8 +43,8 @@ ns1blankspace.option = $.extend(true, ns1blankspace.option,
 	expenseShowImages: false,
 	paymentShowImages: true,
 	canCreateSpaces: true,
-	xlogonSuffix: '@test',
-	xpasswordSuffix: '-test',
+	logonSuffix: undefined,
+	passwordSuffix: undefined
 });
 
 ns1blankspace.formFactor.size.value = ns1blankspace.formFactor.size.options.medium;
@@ -249,7 +249,7 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.setup.user',
-		source: '/jscripts/1blankspace.setup.user-2.0.1.js'
+		source: '/jscripts/1blankspace.setup.user-2.0.2.js'
 	},
 	{
 		nameSpace: '1blankspace.setup.userRole',
