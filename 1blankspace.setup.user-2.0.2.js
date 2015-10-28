@@ -754,8 +754,8 @@ ns1blankspace.setup.user =
 											{
 												label: "Add Role"
 											})
-											.click(function() {
-												ns1blankspace.container.position({xhtmlElementID: 'ns1blankspaceUserAccessRolesAdd', leftOffset: -252, topOffset: -42});
+											.click(function()
+											{
 												ns1blankspace.setup.user.access.add(oParam);
 											})
 											.css('width', '75px')
@@ -845,7 +845,8 @@ ns1blankspace.setup.user =
 										}
 										else
 										{
-											$(ns1blankspace.xhtml.container).attr('data-initiator', 'ns1blankspaceUserAccessRolesAdd')
+											ns1blankspace.container.position({xhtmlElementID: 'ns1blankspaceUserAccessRolesAdd', leftOffset: -252, topOffset: -42});
+											//$(ns1blankspace.xhtml.container).attr('data-initiator', 'ns1blankspaceUserAccessRolesAdd')
 								
 											var aHTML = [];
 											

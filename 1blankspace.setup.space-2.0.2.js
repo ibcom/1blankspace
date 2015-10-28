@@ -372,14 +372,22 @@ ns1blankspace.setup.space =
 									{
 										minimumpasswordlength: $('#ns1blankspaceDetailsMinimumPasswordLength').val(),
 										minimumpasswordstrength: $('input[name="radioMinimumStrength"]:checked').val(),
-										lostpassword: $('input[name="radioLostPassword"]:checked').val(),
-										passwordexpiredays: $('#ns1blankspaceDetailsPasswordExpireDays').val(),
-										passwordlockifwrongcount: $('#ns1blankspaceDetailsPasswordLockIfWrongCount').val(),
-										passwordlockduration: $('#ns1blankspaceDetailsPasswordLockDuration').val(),
-										passwordunlockduration: $('#ns1blankspaceDetailsPasswordUnlockDuration').val()										
+										lostpassword: $('input[name="radioLostPassword"]:checked').val(),								
 									}
 
-									if (ns1blankspace.objectContext !== undefined) {oData.id = ns1blankspace.objectContext}
+									if ($('#ns1blankspaceDetailsPasswordExpireDays').val() != '')
+										{oData.passwordexpiredays = $('#ns1blankspaceDetailsPasswordExpireDays').val()}
+
+									if ($('#ns1blankspaceDetailsPasswordLockIfWrongCount').val() != '')
+										{oData.passwordlockifwrongcount = $('#ns1blankspaceDetailsPasswordLockIfWrongCount').val()}
+
+									if ($('#ns1blankspaceDetailsPasswordLockDuration').val() != '')
+										{oData.passwordlockduration = $('#ns1blankspaceDetailsPasswordLockDuration').val()}
+
+									if ($('#ns1blankspaceDetailsPasswordUnlockDuration').val() != '')
+										{oData.passwordunlockduration = $('#ns1blankspaceDetailsPasswordUnlockDuration').val()}
+
+									if (ns1blankspace.objectContext !== undefined && ns1blankspace.objectContext !== -1) {oData.id = ns1blankspace.objectContext}
 
 									$.ajax(
 									{
