@@ -1124,7 +1124,6 @@ ns1blankspace.financial.invoice =
 											{
 												subject: sSubject,
 												message: sMessage,
-												id: ns1blankspace.objectContextData.contactpersonsentto,
 												to: sTo,
 												object: 5,
 												objectContext: ns1blankspace.objectContext

@@ -1270,7 +1270,7 @@ ns1blankspace.financial.debtors =
 												{
 													subject: 'Statement',
 													message: oStatement.xhtml,
-													id: oStatement.contactperson,
+													to: oStatement.contactperson,
 													object: (oStatement.debtortype=='P'?32:12),
 													objectContext: oStatement.id
 												}
@@ -3260,7 +3260,6 @@ ns1blankspace.financial.invoicing =
 													subject: oInvoice.reference,
 	 												message: oInvoice.xhtml,
 	 												to: sTo,
-	 												id: oInvoice.contactpersonsentto,
 	 												object: 5,
 	 												objectContext: oInvoice.id
 												}

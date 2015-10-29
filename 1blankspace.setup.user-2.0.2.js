@@ -407,7 +407,7 @@ ns1blankspace.setup.user =
 							sTmpClass = ' ns1blankspaceDisabled';
 						}
 
-						aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">User Name</td></tr>' +
+						aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Logon Name</td></tr>' +
 										'<tr><td id="ns1blankspaceSummaryUserName" class="ns1blankspaceSummary' + sTmpClass + '">' +
 										ns1blankspace.setup.user.util.getUsername({username: ns1blankspace.objectContextData.username}) +
 										'</td></tr>');
@@ -1182,6 +1182,10 @@ ns1blankspace.setup.user =
 										if ($('#ns1blankspaceDetailsPasswordExpired:checked').length!=0)
 										{
 											sData += '&passwordexpiry=' + ns1blankspace.util.fs(Date.today().add(-1).days().toString("dd-MMM-yyyy"));
+										}
+										else
+										{
+											sData += '&passwordexpiry=' + ns1blankspace.util.fs(Date.today().add(365).days().toString("dd-MMM-yyyy"));
 										}
 									};
 

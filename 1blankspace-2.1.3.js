@@ -285,7 +285,7 @@ ns1blankspace.app =
 
 						ns1blankspace.param;
 
-						ns1blankspace.history.viewList = ['ns1blankspace.home.show()']
+						ns1blankspace.history.viewList = ['ns1blankspace.home.init()']
 						ns1blankspace.history.currentIndex = 0
 						ns1blankspace.history.lastDestinationInstruction = '';
 						ns1blankspace.history.list = [];
