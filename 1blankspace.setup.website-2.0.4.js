@@ -1165,7 +1165,7 @@ ns1blankspace.setup.website =
 															'Page</td>');
 									}						
 									
-									if (this.documentpublic == 'Y')
+									if (oRow.documentpublic == 'Y')
 									{				
 										aHTML.push('<td id="ns1blankspaceWebsitePages_public-' + oRow.id + '" class="ns1blankspaceRow">' +
 															'Public</td>');
