@@ -105,7 +105,7 @@ ns1blankspace.scripts.concat(
 [
 	{
 		nameSpace: '1blankspace.home',
-		source: '/jscripts/1blankspace.home-2.0.3.js'
+		source: '/jscripts/1blankspace.home-2.0.4.js'
 	},
 	{
 		nameSpace: '1blankspace.format',
