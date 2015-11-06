@@ -2507,7 +2507,7 @@ ns1blankspace.financial.payroll =
 
 							var oSearch = new AdvancedSearch();
 							oSearch.method = 'FINANCIAL_PAYROLL_PAY_RECORD_SEARCH';
-							oSearch.addField('payrecord.employee.employeenumber,payrecord.employee.contactperson.firstname,payrecord.employee.contactperson.surname');
+							oSearch.addField('payrecord.employee.contactperson,payrecord.employee.employeenumber,payrecord.employee.contactperson.firstname,payrecord.employee.contactperson.surname');
 							oSearch.addFilter('period', 'EQUAL_TO', ns1blankspace.objectContext)
 							oSearch.rows = 200;
 							oSearch.sort('payrecord.employee.contactpersontext', 'asc');
@@ -3623,8 +3623,8 @@ ns1blankspace.financial.payroll.totals =
 
 						var oSearch = new AdvancedSearch();
 						oSearch.method = 'FINANCIAL_PAYROLL_PAY_RECORD_SEARCH';
-						//oSearch.addField('payrecord.employee.contactperson,grosssalary,netsalary,deductions,superannuation,taxbeforerebate,');
-						oSearch.addField('payrecord.employee.contactperson,sum(grosssalary) grosssalary,sum(netsalary) netsalary,sum(deductions) deductions,sum(superannuation) superannuation,sum(taxbeforerebate) taxbeforerebate');
+						oSearch.addField('payrecord.employee.contactperson,payrecord.employee.contactpersontext,payrecord.employee.employeenumber,' +
+											'sum(grosssalary) grosssalary,sum(netsalary) netsalary,sum(deductions) deductions,sum(superannuation) superannuation,sum(taxbeforerebate) taxbeforerebate');
 						oSearch.addSummaryField('sum(grosssalary) grosssalary');
 						oSearch.addSummaryField('sum(netsalary) netsalary');
 						oSearch.addSummaryField('sum(superannuation) superannuation');
@@ -3649,7 +3649,8 @@ ns1blankspace.financial.payroll.totals =
 					}
 					else
 					{
-						ns1blankspace.financial.payroll.data.payrecords = oResponse.data.rows;
+						//ns1blankspace.financial.payroll.data.payrecords = oResponse.data.rows;
+						ns1blankspace.financial.payroll.data.payrecords = oResponse;
 
 						var aHTML = [];
 
@@ -3666,7 +3667,7 @@ ns1blankspace.financial.payroll.totals =
 							'<tr><td style="text-align:left;">$' +
 							(oResponse.summary.taxbeforerebate).parseCurrency().formatMoney(0, '.', ',') + 
 							'</td></tr>' +
-							'<tr><td style="text-align:left; padding-top:10px;" class="ns1blankspaceCaption">Super.</td></tr>' +
+							'<tr><td style="text-align:left; padding-top:10px;" class="ns1blankspaceCaption">Superannuation</td></tr>' +
 							'<tr><td style="text-align:left;">$' +
 							(oResponse.summary.superannuation).parseCurrency().formatMoney(0, '.', ',') + 
 							'</td></tr>' +
@@ -3685,6 +3686,8 @@ ns1blankspace.financial.payroll.totals =
 	employees: 	{
 					show: 		function (oParam, oResponse)
 								{
+									var bShowAsList = ns1blankspace.util.getParam(oParam, 'showAsList', {"default": true}).value;
+
 									if (oResponse == undefined)
 									{
 										ns1blankspace.financial.data.employee = [];
@@ -3706,7 +3709,7 @@ ns1blankspace.financial.payroll.totals =
 															'employee.contactperson.streetaddress1,employee.contactperson.streetaddress2,employee.contactperson.streetsuburb,' +
 															'employee.contactperson.streetstate,employee.contactperson.streetpostcode');
 										//oSearch.addFilter('status', 'EQUAL_TO', '2') - use termination date
-										oSearch.rows = 50;
+										oSearch.rows = 200;
 										oSearch.sort('employee.contactperson.firstname', 'asc');
 										oSearch.getResults(function(data) {ns1blankspace.financial.payroll.totals.employees.show(oParam, data)});
 									}
@@ -3729,9 +3732,32 @@ ns1blankspace.financial.payroll.totals =
 											aHTML.push('<table id="ns1blankspacePayrollEmployeeTotals" class="ns1blankspace">' +
 															'<tr class="ns1blankspaceCaption">' +
 															'<td class="ns1blankspaceHeaderCaption" style="width:10px;"><span class="ns1blankspacePayrollEmployeeTotalsSelectAll"></span></td>' +
-															'<td class="ns1blankspaceHeaderCaption">Employee</td>' +
-															'<td class="ns1blankspaceHeaderCaption">Pay</td>' +
-															'<td class="ns1blankspaceHeaderCaption">&nbsp;</td>' +
+															'<td class="ns1blankspaceHeaderCaption">Employee</td>');
+
+											if (bShowAsList)
+											{
+												aHTML.push('<td class="ns1blankspaceHeaderCaption" style="text-align:right; font-size:0.875em;">Gross<br />'+ 
+																'<span style="font-size:0.75em;">' + (ns1blankspace.financial.payroll.data.payrecords.summary.grosssalary).parseCurrency().formatMoney(2, '.', ',') +
+																'</span></td>');
+												aHTML.push('<td class="ns1blankspaceHeaderCaption" style="text-align:right; font-size:0.875em;">Tax<br />'+ 
+																'<span style="font-size:0.75em;">' + (ns1blankspace.financial.payroll.data.payrecords.summary.netsalary).parseCurrency().formatMoney(2, '.', ',') +
+																'</span></td>');
+												aHTML.push('<td class="ns1blankspaceHeaderCaption" style="text-align:right; font-size:0.875em;">Net<br />'+ 
+																'<span style="font-size:0.75em;">' + (ns1blankspace.financial.payroll.data.payrecords.summary.taxbeforerebate).parseCurrency().formatMoney(2, '.', ',') +
+																'</span></td>');
+												aHTML.push('<td class="ns1blankspaceHeaderCaption" style="text-align:right; font-size:0.875em;">Super.<br />'+ 
+																'<span style="font-size:0.75em;">' + (ns1blankspace.financial.payroll.data.payrecords.summary.superannuation).parseCurrency().formatMoney(2, '.', ',') +
+																'</span></td>');
+												aHTML.push('<td class="ns1blankspaceHeaderCaption" style="text-align:right; font-size:0.875em;">Ded.<br />'+ 
+																'<span style="font-size:0.75em;">' + (ns1blankspace.financial.payroll.data.payrecords.summary.deductions).parseCurrency().formatMoney(2, '.', ',') +
+																'</span></td>');
+											}
+											else
+											{
+												aHTML.push('<td class="ns1blankspaceHeaderCaption">Pay</td>');
+											}	
+
+											aHTML.push('<td class="ns1blankspaceHeaderCaption">&nbsp;</td>' +
 															'</tr>');
 											
 											$(oResponse.data.rows).each(function() 
@@ -3749,7 +3775,7 @@ ns1blankspace.financial.payroll.totals =
 												xhtml: aHTML.join(''),
 												showMore: (oResponse.morerows == "true"),
 												more: oResponse.moreid,
-												rows: 100,
+												rows: 200,
 												functionShowRow: ns1blankspace.financial.payroll.totals.employees.row,
 												functionOpen: undefined,
 												functionOnNewPage: ns1blankspace.financial.payroll.totals.employees.bind,
@@ -3758,17 +3784,24 @@ ns1blankspace.financial.payroll.totals =
 											var aHTML = [];
 																	
 											aHTML.push('<table class="ns1blankspaceColumn2" style="margin-right:0px;">');
-													
-											aHTML.push('<tr><td><span id="ns1blankspacePayrollTotalsPreview" class="ns1blankspaceAction" style="text-align:left;">' +
-															'Summary</span></td></tr>');
 
-											aHTML.push('<tr><td id="ns1blankspacePayrollTotalsPreviewStatus" style="padding-top:5px; padding-bottom:12px; font-size:0.75em;" class="ns1blankspaceSub">' +
+											aHTML.push('<tr><td style="padding-top:4px;"><span id="ns1blankspacePayrollTotalsDownload" class="ns1blankspaceAction" style="text-align:left;">' +
+															'Download</span></td></tr>');
+													
+											aHTML.push('<tr><td id="ns1blankspacePayrollTotalsPreviewStatus" style="padding-top:14px; padding-bottom:2px; font-size:0.75em;" class="ns1blankspaceSub">' +
 															'Create summaries for selected employees</td></tr>');
+																	
+											aHTML.push('<tr><td><span id="ns1blankspacePayrollTotalsPreview" class="ns1blankspaceAction" style="text-align:left;">' +
+															'Show</span></td></tr>');
 
 											aHTML.push('<tr><td><span id="ns1blankspacePayrollTotalsEmail" class="ns1blankspaceAction" style="text-align:left;">' +
 															'Email</span></td></tr>');
 
 											aHTML.push('<tr><td id="ns1blankspacePayrollTotalsEmailStatus" style="padding-top:10px; font-size:0.75em;" class="ns1blankspaceSub"></td></tr>');
+
+											aHTML.push('<tr>' +
+														'<td class="ns1blankspaceSubNote" style="padding-top:14px;">' +
+														ns1blankspace.option.taxOffice + ' reporting</td></tr>');
 
 											aHTML.push('<tr><td><span id="ns1blankspacePayrollTotalsFile" class="ns1blankspaceAction" style="text-align:left;">' +
 															'File</span></td></tr>');
@@ -3784,7 +3817,7 @@ ns1blankspace.financial.payroll.totals =
 											
 											$('#ns1blankspacePayrollTotalsPreview').button(
 											{
-												label: 'Summary',
+												label: 'Show',
 												icons:
 												{
 													primary: "ui-icon-document"
@@ -3842,12 +3875,45 @@ ns1blankspace.financial.payroll.totals =
 												ns1blankspace.financial.payroll.totals.employees.preview.init(oParam);
 											})
 											.css('width', '90px');
+
+											$('#ns1blankspacePayrollTotalsDownload').button(
+											{
+												label: 'Download',
+												icons:
+												{
+													primary: "ui-icon-arrowreturnthick-1-s"
+												}
+											})
+											.click(function()
+											{	
+												var oData =
+												{
+													more: ns1blankspace.financial.payroll.data.payrecords.moreid,
+													filename: 'payroll-totals.csv'
+												}
+
+												$.ajax(
+												{
+													type: 'POST',
+													url: ns1blankspace.util.endpointURI('CORE_MORE_FILE_MANAGE'),
+													data: oData,
+													dataType: 'json',
+													success: function(data)
+													{
+														ns1blankspace.status.message('File created');
+														window.open(data.link);
+													}
+												});
+											})
+											.css('width', '90px');
 										}	    	
 									}
 								},
 
-					row: 		function (oRow)
+					row: 		function (oRow, oParam)
 								{
+									var bShowAsList = ns1blankspace.util.getParam(oParam, 'showAsList', {"default": true}).value;
+
 									var sKey = oRow.id;									
 									var aHTML = [];
 
@@ -3861,29 +3927,45 @@ ns1blankspace.financial.payroll.totals =
 													'<div class="ns1blankspaceSub">' + oRow["employee.employeenumber"] + '</div>' + 
 													'</td>');
 
-									var oPayRecord = $.grep(ns1blankspace.financial.payroll.data.payrecords,
+									var oPayRecord = $.grep(ns1blankspace.financial.payroll.data.payrecords.data.rows,
 															function (payrecord) {return payrecord['payrecord.employee.contactperson'] == oRow['employee.contactperson']})[0];
 
-									aHTML.push('<td id="ns1blankspacePayrollTotals_pay" class="ns1blankspaceRow ns1blankspaceSubNote" style="padding-bottom:6px;">')
-
-									if (oPayRecord == undefined)
+									if (bShowAsList)
 									{
-										aHTML.push('<div class="ns1blankspaceSubNote">-<div>');
+										 aHTML.push('<td class="ns1blankspaceRow ns1blankspaceSubNote" style="text-align:right; font-size:0.75em;">' +
+										 					(oPayRecord==undefined?'-':oPayRecord["grosssalary"]) + '</td>' +
+										 			'<td class="ns1blankspaceRow ns1blankspaceSubNote" style="text-align:right; font-size:0.75em;">' +
+										 					(oPayRecord==undefined?'-':oPayRecord["taxbeforerebate"]) + '</td>' +
+										 			'<td class="ns1blankspaceRow ns1blankspaceSubNote" style="text-align:right; font-size:0.75em;">' +
+										 					(oPayRecord==undefined?'-':oPayRecord["netsalary"]) + '</td>' +
+										 			'<td class="ns1blankspaceRow ns1blankspaceSubNote" style="text-align:right; font-size:0.75em;">' +
+										 					(oPayRecord==undefined?'-':oPayRecord["superannuation"]) + '</td>' +
+										 			'<td class="ns1blankspaceRow ns1blankspaceSubNote" style="text-align:right; font-size:0.75em;">' +
+										 					(oPayRecord==undefined?'-': oPayRecord["deductions"]) + '</td>');				
 									}
 									else
 									{
-										aHTML.push('<table>' +
-													 '<tr><td class="ns1blankspaceRow">Gross</td><td class="ns1blankspaceRow"style="text-align:right;">$' + oPayRecord["grosssalary"] + '</td></tr>' +
-													 '<tr><td class="ns1blankspaceRow">Tax</td><td class="ns1blankspaceRow" style="text-align:right;">$' + oPayRecord["taxbeforerebate"] + '</td></tr>' +
-													 '<tr><td class="ns1blankspaceRow">Net</td><td class="ns1blankspaceRow" style="text-align:right;">$' + oPayRecord["netsalary"] + '</td></tr>' +
-													 '<tr><td class="ns1blankspaceRow">Superannuation</td><td class="ns1blankspaceRow" style="text-align:right;">$' + oPayRecord["superannuation"] + '</td></tr>' +
-													 '<tr><td class="ns1blankspaceRow" style="border-width:0px;">Deductions</td><td class="ns1blankspaceRow" style="border-width:0px; text-align:right;">$' + oPayRecord["deductions"] + '</td></tr>' +
-													 '</table>');
-									}
+										aHTML.push('<td id="ns1blankspacePayrollTotals_pay" class="ns1blankspaceRow ns1blankspaceSubNote" style="padding-bottom:6px;">')
 
-									aHTML.push('</td>');
+										if (oPayRecord == undefined)
+										{
+											aHTML.push('<div class="ns1blankspaceSubNote">-<div>');
+										}
+										else
+										{
+											aHTML.push('<table>' +
+														 '<tr><td class="ns1blankspaceRow">Gross</td><td class="ns1blankspaceRow"style="text-align:right;">$' + oPayRecord["grosssalary"] + '</td></tr>' +
+														 '<tr><td class="ns1blankspaceRow">Tax</td><td class="ns1blankspaceRow" style="text-align:right;">$' + oPayRecord["taxbeforerebate"] + '</td></tr>' +
+														 '<tr><td class="ns1blankspaceRow">Net</td><td class="ns1blankspaceRow" style="text-align:right;">$' + oPayRecord["netsalary"] + '</td></tr>' +
+														 '<tr><td class="ns1blankspaceRow">Superannuation</td><td class="ns1blankspaceRow" style="text-align:right;">$' + oPayRecord["superannuation"] + '</td></tr>' +
+														 '<tr><td class="ns1blankspaceRow" style="border-width:0px;">Deductions</td><td class="ns1blankspaceRow" style="border-width:0px; text-align:right;">$' + oPayRecord["deductions"] + '</td></tr>' +
+														 '</table>');
+										}
+
+										aHTML.push('</td>');
+									}	
 								
-									aHTML.push('<td style="width:30px;text-align:right;" class="ns1blankspaceRow">' +
+									aHTML.push('<td style="width:20px;text-align:right;" class="ns1blankspaceRow">' +
 													'<span style="margin-right:5px;" id="ns1blankspacePayrollTotals_option_preview-' + sKey + '"' +
 																	' class="ns1blankspaceRowPreview"></span>' +
 													'</td></tr>');
@@ -4122,7 +4204,7 @@ ns1blankspace.financial.payroll.totals =
 																oSummary.xhtml = sHTML;
 															
 																$('#ns1blankspacePayrollTotals_container-' + sKey).after('<tr id="ns1blankspacePayrollTotals_container_preview-' + sKey + '">' +
-																'<td colspan=5><div style="background-color: #F3F3F3; padding:8px;" class="ns1blankspaceScale85">' + sHTML + '</div></td></tr>');
+																'<td colspan=8><div style="background-color: #F3F3F3; padding:8px;" class="ns1blankspaceScale85">' + sHTML + '</div></td></tr>');
 															}	
 														}
 													}
@@ -4173,11 +4255,13 @@ ns1blankspace.financial.payroll.totals =
 
 																if (oSummary.xhtml === undefined)
 																{
+																	var oTemplate = ns1blankspace.format.templates.get(oParam);
+
 																	oSummary.xhtml = ns1blankspace.format.render(
 																	{
 																		object: 37,
 																		objectContext: -1,
-																		xhtmlTemplate: ns1blankspace.xhtml.templates['payroll'],
+																		xhtmlTemplate: oTemplate.xhtml,
 																		objectData: oSummary,
 																		objectOtherData: oSummary.pay
 																	});
@@ -4187,18 +4271,17 @@ ns1blankspace.financial.payroll.totals =
 																{
 																	subject: ns1blankspace.user.contactBusinessText + ' Pay Summary',
 																	message: oSummary.xhtml,
-																	id: oSummary['employee.contactperson'],
 																	to: oSummary['employee.contactperson.email'],
 																	object: 37,
 																	objectContext: oSummary.id
 																}
 
-																//ns1blankspace.util.endpointURI('MESSAGING_EMAIL_SEND')
+																//
 
 																$.ajax(
 																{
 																	type: 'POST',
-																	url: '/ondemand/messaging/?method=MESSAGING_EMAIL_SEND',
+																	url: ns1blankspace.util.endpointURI('MESSAGING_EMAIL_SEND'),
 																	data: oData,
 																	dataType: 'json',
 																	global: false,
@@ -4362,7 +4445,7 @@ ns1blankspace.financial.payroll.pays.totals =
 							'<tr><td style="text-align:left;">$' +
 							(oResponse.summary.taxbeforerebate).parseCurrency().formatMoney(0, '.', ',') + 
 							'</td></tr>' +
-							'<tr><td style="text-align:left; padding-top:10px;" class="ns1blankspaceCaption">Super.</td></tr>' +
+							'<tr><td style="text-align:left; padding-top:10px;" class="ns1blankspaceCaption">Superannuation</td></tr>' +
 							'<tr><td style="text-align:left;">$' +
 							(oResponse.summary.superannuation).parseCurrency().formatMoney(0, '.', ',') + 
 							'</td></tr>' +
@@ -4395,7 +4478,7 @@ ns1blankspace.financial.payroll.pays.totals =
 										oSearch.method = 'FINANCIAL_PAYROLL_PAY_RECORD_SEARCH';
 										oSearch.addField('payrecord.grosssalary,payrecord.netsalary,payrecord.superannuation,payrecord.taxafterrebate,payrecord.taxbeforerebate,' +
 															'payrecord.employee.taxfilenumber,payrecord.employee.employeenumber,' +
-															'payrecord.employee.contactperson.firstname,payrecord.employee.contactperson.surname,payrecord.employee.contactperson.email,' +
+															'payrecord.employee.contactperson,payrecord.employee.contactperson.firstname,payrecord.employee.contactperson.surname,payrecord.employee.contactperson.email,' +
 															'payrecord.payperiod.startdate,payrecord.payperiod.paydate');
 										oSearch.addFilter('period', 'EQUAL_TO', ns1blankspace.objectContext)
 										oSearch.rows = 200;
@@ -4461,6 +4544,10 @@ ns1blankspace.financial.payroll.pays.totals =
 											aHTML.push('<tr><td><span id="ns1blankspacePayrollPayTotalsEmail" class="ns1blankspaceAction">' +
 															'Email</span></td></tr>');
 
+											aHTML.push('<tr><td id="ns1blankspacePayrollPayTotalsPreviewStatus" style="padding-left:2px; padding-top:12px; padding-bottom:4px; font-size:0.75em;" class="ns1blankspaceSub">' +
+																'<div style="border-left-style:solid; border-left-width:1px; border-left-color:red;">' +
+																'&nbsp;= no email</div></td></tr>');
+
 											aHTML.push('<tr><td id="ns1blankspacePayrollPayTotalsEmailStatus" style="padding-top:10px; font-size:0.75em;" class="ns1blankspaceSub"></td></tr>');
 
 											aHTML.push('</table>');					
@@ -4506,8 +4593,14 @@ ns1blankspace.financial.payroll.pays.totals =
 									var aHTML = [];
 
 									aHTML.push('<tr class="ns1blankspaceRow" id="ns1blankspacePayrollPayTotals_container-' + sKey + '">' +
-																	'<td class="ns1blankspaceRow ns1blankspaceSub" id="ns1blankspacePayrollPayTotals_selectContainer-' + sKey + '">' +
-																	'<input type="checkbox" checked="checked" id="ns1blankspacePayrollPayTotals_select-' + sKey + '" /></td>');
+																	'<td class="ns1blankspaceRow ns1blankspaceSub" id="ns1blankspacePayrollPayTotals_selectContainer-' + sKey + '"');
+
+									if (oRow["payrecord.employee.contactperson.email"] == '')
+									{
+										aHTML.push('style="border-left-style:solid; border-left-width:1px; border-left-color:red;"')
+									}	
+
+									aHTML.push('><input type="checkbox" checked="checked" id="ns1blankspacePayrollPayTotals_select-' + sKey + '" /></td>');
 
 									aHTML.push('<td id="ns1blankspacePayrollPayTotals_firstname" class="ns1blankspaceRow">' +
 													oRow["payrecord.employee.contactperson.firstname"] + '</td>');
@@ -4660,6 +4753,7 @@ ns1blankspace.financial.payroll.pays.totals =
 														else
 														{
 															$('#ns1blankspacePayrollPayTotalsPreviewStatus').fadeOut(3000);
+															delete oParam.dataIndex;
 															ns1blankspace.util.onComplete(oParam);
 														}	
 													}						
@@ -4711,7 +4805,13 @@ ns1blankspace.financial.payroll.pays.totals =
 					email: 		{
 									init: 		function (oParam, oResponse)
 												{
-													ns1blankspace.financial.payroll.pays.totals.slips.email.send({dataIndex: 0})
+													oParam = ns1blankspace.util.setParam(oParam, 'dataIndex', 0)
+													ns1blankspace.financial.payroll.pays.totals.slips.preview.init(
+													{
+														onCompleteWhenCan: ns1blankspace.financial.payroll.pays.totals.slips.email.send
+													})
+													
+													//ns1blankspace.financial.payroll.pays.totals.slips.email.send({dataIndex: 0})
 												},
 
 									send:		function (oParam)
@@ -4724,7 +4824,7 @@ ns1blankspace.financial.payroll.pays.totals =
 													}
 													else
 													{
-														oParam = {}
+														oParam = {dataIndex: 0}
 													}			
 																	
 													if (iDataIndex < ns1blankspace.financial.payroll.data.slips.length)
@@ -4739,7 +4839,7 @@ ns1blankspace.financial.payroll.pays.totals =
 
 														if (oSlip !== undefined)
 														{
-															if (oSlip['payperiod.employee.contactperson.email'] == '')
+															if (oSlip['payrecord.employee.contactperson.email'] == '')
 															{
 																$('#ns1blankspacePayrollPayTotals_selectContainer-' + oSlip.id).html('No Email');
 																oParam.dataIndex = iDataIndex + 1;
@@ -4752,11 +4852,13 @@ ns1blankspace.financial.payroll.pays.totals =
 
 																if (oSlip.xhtml === undefined)
 																{
+																	var oTemplate = ns1blankspace.format.templates.get(oParam);
+
 																	oSlip.xhtml = ns1blankspace.format.render(
 																	{
 																		object: 371,
 																		objectContext: -1,
-																		xhtmlTemplate: ns1blankspace.xhtml.templates['payslip'],
+																		xhtmlTemplate: oTemplate.xhtml,
 																		objectData: oSlip,
 																		objectOtherData: oSlip.items
 																	});
@@ -4766,18 +4868,15 @@ ns1blankspace.financial.payroll.pays.totals =
 																{
 																	subject: ns1blankspace.user.contactBusinessText + ' Pay Slip - ' + ns1blankspace.objectContextData.paydate,
 																	message: oSlip.xhtml,
-																	id: oSlip['payrecord.employee.contactperson'],
-																	to: oSlip['payrecord.employee.contactperson.email'],
+																	to: oSlip['payrecord.employee.contactperson'],
 																	object: 37,
 																	objectContext: ns1blankspace.objectContext
 																}
 
-																//ns1blankspace.util.endpointURI('MESSAGING_EMAIL_SEND')
-
 																$.ajax(
 																{
 																	type: 'POST',
-																	url: '/ondemand/messaging/?method=MESSAGING_EMAIL_SEND',
+																	url: ns1blankspace.util.endpointURI('MESSAGING_EMAIL_SEND'),
 																	data: oData,
 																	dataType: 'json',
 																	global: false,

@@ -98,7 +98,10 @@ ns1blankspace.setup.website =
 							  		{
 							     		if (oParam.data.hasOwnProperty(key))
 							     		{
-							     			oParam.data[key] = oParam.data[key].formatXHTML()
+							     			if (typeof oParam.data[key] == 'string')
+							     			{	
+							     				oParam.data[key] = oParam.data[key].formatXHTML();
+							     			}	
 							     		}
 							     	}
 
@@ -1131,7 +1134,6 @@ ns1blankspace.setup.website =
 											})
 											.css('width', '15px')
 											.css('height', '17px');
-											
 											
 											$('#ns1blankspaceSetupWebsitePages td.ns1blankspaceRowSelect')
 											.click(function()
