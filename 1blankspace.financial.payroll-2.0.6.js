@@ -3649,7 +3649,6 @@ ns1blankspace.financial.payroll.totals =
 					}
 					else
 					{
-						//ns1blankspace.financial.payroll.data.payrecords = oResponse.data.rows;
 						ns1blankspace.financial.payroll.data.payrecords = oResponse;
 
 						var aHTML = [];
@@ -3687,6 +3686,7 @@ ns1blankspace.financial.payroll.totals =
 					show: 		function (oParam, oResponse)
 								{
 									var bShowAsList = ns1blankspace.util.getParam(oParam, 'showAsList', {"default": true}).value;
+									var sStartDate = ns1blankspace.util.getParam(oParam, 'startDate').value;
 
 									if (oResponse == undefined)
 									{
@@ -3708,7 +3708,16 @@ ns1blankspace.financial.payroll.totals =
 															'employee.contactperson,employee.contactperson.firstname,employee.contactperson.surname,employee.contactperson.email,' +
 															'employee.contactperson.streetaddress1,employee.contactperson.streetaddress2,employee.contactperson.streetsuburb,' +
 															'employee.contactperson.streetstate,employee.contactperson.streetpostcode');
-										//oSearch.addFilter('status', 'EQUAL_TO', '2') - use termination date
+
+										if (sStartDate != undefined)
+										{
+											oSearch.addBracket('(');
+											oSearch.addFilter('employee.employmentenddate', 'IS_NULL');
+											oSearch.addOperator('or');
+											oSearch.addFilter('employee.employmentenddate', 'GREATER_THAN_OR_EQUAL_TO', sStartDate)
+											oSearch.addBracket(')');
+										}
+
 										oSearch.rows = 200;
 										oSearch.sort('employee.contactperson.firstname', 'asc');
 										oSearch.getResults(function(data) {ns1blankspace.financial.payroll.totals.employees.show(oParam, data)});
@@ -3736,19 +3745,19 @@ ns1blankspace.financial.payroll.totals =
 
 											if (bShowAsList)
 											{
-												aHTML.push('<td class="ns1blankspaceHeaderCaption" style="text-align:right; font-size:0.875em;">Gross<br />'+ 
+												aHTML.push('<td class="ns1blankspaceHeaderCaption" style="text-align:right; font-size:1em;">Gross<br />'+ 
 																'<span style="font-size:0.75em;">' + (ns1blankspace.financial.payroll.data.payrecords.summary.grosssalary).parseCurrency().formatMoney(2, '.', ',') +
 																'</span></td>');
-												aHTML.push('<td class="ns1blankspaceHeaderCaption" style="text-align:right; font-size:0.875em;">Tax<br />'+ 
-																'<span style="font-size:0.75em;">' + (ns1blankspace.financial.payroll.data.payrecords.summary.netsalary).parseCurrency().formatMoney(2, '.', ',') +
-																'</span></td>');
-												aHTML.push('<td class="ns1blankspaceHeaderCaption" style="text-align:right; font-size:0.875em;">Net<br />'+ 
+												aHTML.push('<td class="ns1blankspaceHeaderCaption" style="text-align:right; font-size:1em;">Tax<br />'+ 
 																'<span style="font-size:0.75em;">' + (ns1blankspace.financial.payroll.data.payrecords.summary.taxbeforerebate).parseCurrency().formatMoney(2, '.', ',') +
 																'</span></td>');
-												aHTML.push('<td class="ns1blankspaceHeaderCaption" style="text-align:right; font-size:0.875em;">Super.<br />'+ 
+												aHTML.push('<td class="ns1blankspaceHeaderCaption" style="text-align:right; font-size:1em;">Net<br />'+ 
+																'<span style="font-size:0.75em;">' + (ns1blankspace.financial.payroll.data.payrecords.summary.netsalary).parseCurrency().formatMoney(2, '.', ',') +
+																'</span></td>');
+												aHTML.push('<td class="ns1blankspaceHeaderCaption" style="text-align:right; font-size:1em;">Super.<br />'+ 
 																'<span style="font-size:0.75em;">' + (ns1blankspace.financial.payroll.data.payrecords.summary.superannuation).parseCurrency().formatMoney(2, '.', ',') +
 																'</span></td>');
-												aHTML.push('<td class="ns1blankspaceHeaderCaption" style="text-align:right; font-size:0.875em;">Ded.<br />'+ 
+												aHTML.push('<td class="ns1blankspaceHeaderCaption" style="text-align:right; font-size:1em;">Ded.<br />'+ 
 																'<span style="font-size:0.75em;">' + (ns1blankspace.financial.payroll.data.payrecords.summary.deductions).parseCurrency().formatMoney(2, '.', ',') +
 																'</span></td>');
 											}
