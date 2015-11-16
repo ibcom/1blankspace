@@ -1020,20 +1020,24 @@ ns1blankspace.setup.website =
 					}	
 				},
 
-	pages: 		{			
+	pages: 		{	
+					data: 		{searchText: undefined},
+
 					show: 		function (oParam, oResponse)
 								{
-									var iObjectContext = ns1blankspace.objectContext;
-									var oOptions = {view: true, remove: true};
-									var oActions = {add: true};
-									
-									if (oParam != undefined)
+									var iObjectContext = ns1blankspace.util.getParam(oParam, 'objectContext', {"default": ns1blankspace.objectContext}).value;
+									var oSearchText = ns1blankspace.util.getParam(oParam, 'searchText');
+
+									if (oSearchText.exists)
 									{
-										if (oParam.objectContext != undefined) {iObjectContext = oParam.objectContext}
-										if (oParam.options != undefined) {oOptions = oParam.options}
-										if (oParam.actions != undefined) {oActions = oParam.actions}
-									}		
-										
+										sSearchText = oSearchText.value;
+										ns1blankspace.setup.website.pages.data.searchText = sSearchText;
+									}
+									else
+									{	
+										sSearchText = ns1blankspace.setup.website.pages.data.searchText;
+									}	
+
 									if (oResponse == undefined)
 									{
 										var oSearch = new AdvancedSearch();
@@ -1041,7 +1045,24 @@ ns1blankspace.setup.website =
 										
 										oSearch.addField('documenttitle,documentpublic,locationtext,documenturl,document');
 
-										oSearch.addFilter('site', 'EQUAL_TO', iObjectContext)
+										oSearch.addFilter('site', 'EQUAL_TO', iObjectContext);
+
+										if (sSearchText != undefined)
+										{
+											oSearch.addBracket('(');
+											oSearch.addFilter('documenttitle', 'TEXT_IS_LIKE', sSearchText);
+											oSearch.addOperator('or');
+											oSearch.addFilter('documenturl', 'TEXT_IS_LIKE', sSearchText);
+
+											if (!isNaN(sSearchText))
+											{
+												oSearch.addOperator('or');
+												oSearch.addFilter('document', 'EQUAL_TO', sSearchText);
+											}
+
+											oSearch.addBracket(')');
+										}
+
 										oSearch.sort('documenttitle', 'asc');
 										
 										oSearch.getResults(function(data)
@@ -1051,57 +1072,98 @@ ns1blankspace.setup.website =
 									}
 									else
 									{
-										if (oActions != undefined)
-										{
-											var aHTML = [];
-												
-											aHTML.push('<table class="ns1blankspaceContainer">' +
-															'<tr class="ns1blankspaceContainer">' +
-															'<td id="ns1blankspacePagesColumn1" class="ns1blankspaceColumn1Flexible" style="width:750px;"></td>' +
-															'<td id="ns1blankspacePagesColumn2" class="ns1blankspaceColumn2Action"></td>' +
-															'</tr>' + 
-															'</table>');
-												
-											$('#ns1blankspaceMainPages').html(aHTML.join(''));
+										var aHTML = [];
+											
+										aHTML.push('<table class="ns1blankspaceContainer">' +
+														'<tr class="ns1blankspaceContainer">' +
+														'<td id="ns1blankspacePagesColumn1" class="ns1blankspaceColumn1Flexible" style="width:620px;"></td>' +
+														'<td id="ns1blankspacePagesColumn2" class="ns1blankspaceColumn2Action"></td>' +
+														'</tr>' + 
+														'</table>');
+											
+										$('#ns1blankspaceMainPages').html(aHTML.join(''));
 
-											var aHTML = [];
+										var aHTML = [];
 
-											aHTML.push('<table class="ns1blankspaceColumn2">');
-											
-											if (oActions.add)
-											{
-												aHTML.push('<tr><td class="ns1blankspaceAction">' +
-																'<span id="ns1blankspaceSetupWebsitePagesAdd">Add</span>' +
-																'</td></tr>');
-											}
-											
-											aHTML.push('</table>');					
-											
-											$('#ns1blankspacePagesColumn2').html(aHTML.join(''));
+										aHTML.push('<table class="ns1blankspaceColumn2">');
 										
-											$('#ns1blankspaceSetupWebsitePagesAdd').button(
-											{
-												label: "Add"
-											})
-											.click(function() {
-												 ns1blankspace.setup.website.pages.edit(oParam);
-											})
+										aHTML.push('<tr><td>' +
+														'<span id="ns1blankspaceSetupWebsitePagesAdd" class="ns1blankspaceAction">Add</span>' +
+														'</td></tr>');
+										
+										aHTML.push('<tr><td class="ns1blankspaceText" style="padding-top:30px;">' +
+														'<input id="ns1blankspacePagesSearchText" class="ns1blankspaceText" style="width:62px;">' +
+														'</td></tr>');
+																					
+										aHTML.push('<tr><td style="padding-top:0px;">' +
+														'<span style="width:60px;" id="ns1blankspacePagesSearch" class="ns1blankspaceAction">Search</span>' +
+														'</td></tr>');
+
+										if (sSearchText != undefined)
+										{	
+											aHTML.push('<tr><td>' +
+														'<span id="ns1blankspacePagesSearchClear" class="ns1blankspaceAction">Clear</span>' +
+														'</td></tr>');
 										}	
+										
+										aHTML.push('</table>');					
+										
+										$('#ns1blankspacePagesColumn2').html(aHTML.join(''));
 									
+										$('#ns1blankspaceSetupWebsitePagesAdd').button(
+										{
+											label: "Add"
+										})
+										.click(function()
+										{
+											 ns1blankspace.setup.website.pages.edit(oParam);
+										})
+										.css('width', '65px');
+
+										$('#ns1blankspacePagesSearch').button(
+										{
+											label: 'Search'
+										})
+										.click(function() 
+										{
+											ns1blankspace.setup.website.pages.show({searchText: $('#ns1blankspacePagesSearchText').val()});
+										})
+										.css('width', '65px');
+
+										$('#ns1blankspacePagesSearchClear').button(
+										{
+											label: 'Clear'
+										})
+										.click(function() 
+										{
+											ns1blankspace.setup.website.pages.show({searchText: undefined});
+										})
+										.css('width', '65px');
+
+										$('#ns1blankspacePagesSearchText').keyup(function(e)
+										{
+											if (e.which === 13)
+									    	{
+									    		ns1blankspace.setup.website.pages.show({searchText: $('#ns1blankspacePagesSearchText').val()});
+									    	}
+									    });	
+											
+										$('#ns1blankspacePagesSearchText').val(sSearchText);
+											
 										var aHTML = [];
 
 										if (oResponse.data.rows.length == 0)
 										{
-											aHTML.push('<table><tr><td class="ns1blankspaceNothing">No pages.</td></tr></table>');
+											aHTML.push('<table id="ns1blankspaceSetupWebsitePages" style="width:622px;">' +
+															'<tr><td class="ns1blankspaceNothing">No pages.</td></tr></table>');
 	
 											$('#ns1blankspacePagesColumn1').html(aHTML.join(''));
 										}
 										else
 										{
-											aHTML.push('<table id="ns1blankspaceSetupWebsitePages">');
+											aHTML.push('<table id="ns1blankspaceSetupWebsitePages" style="width:622px;">');
 											aHTML.push('<tr class="ns1blankspaceCaption">');
 											aHTML.push('<td class="ns1blankspaceHeaderCaption">Title</td>');
-											aHTML.push('<td class="ns1blankspaceHeaderCaption">URL</td>');
 											aHTML.push('<td class="ns1blankspaceHeaderCaption">Type</td>');
 											aHTML.push('<td class="ns1blankspaceHeaderCaption">Sharing</td>');
 											aHTML.push('<td class="ns1blankspaceHeaderCaption">ID</td>');
@@ -1115,34 +1177,49 @@ ns1blankspace.setup.website =
 											
 											aHTML.push('</table>');
 
-											$('#ns1blankspacePagesColumn1').html(aHTML.join(''));
-											
-											$('#ns1blankspaceSetupWebsitePages .ns1blankspaceRowRemove').button({
-												text: false,
-												icons: {
-													primary: "ui-icon-close"
-												}
-											})
-											.click(function()
+											ns1blankspace.render.page.show(
 											{
-												ns1blankspace.remove(
-												{
-													xhtmlElementID: this.id,
-													method: 'SETUP_SITE_DOCUMENT_MANAGE',
-													ifNoneMessage: 'No pages.'
-												});
-											})
-											.css('width', '15px')
-											.css('height', '17px');
-											
-											$('#ns1blankspaceSetupWebsitePages td.ns1blankspaceRowSelect')
-											.click(function()
-											{
-												ns1blankspace.setup.website.pages.edit({xhtmlElementID: this.id})
-											});
+												xhtmlElementID: 'ns1blankspacePagesColumn1',
+												xhtmlContext: 'SetupWebsitePages',
+												xhtml: aHTML.join(''),
+												showMore: (oResponse.morerows == "true"),
+												more: oResponse.moreid,
+												rows: ns1blankspace.option.defaultRows,
+												functionShowRow: ns1blankspace.setup.website.pages.row,
+												functionOnNewPage: ns1blankspace.setup.website.pages.bind,
+												headerRow: false,
+												bodyClass: 'ns1blankspaceSetupWebsitePages'
+											}); 
 										}
 									}	
 								},
+
+					bind: 		function (oRow, oParam)
+								{
+									$('#ns1blankspaceSetupWebsitePages .ns1blankspaceRowRemove').button({
+										text: false,
+										icons: {
+											primary: "ui-icon-close"
+										}
+									})
+									.click(function()
+									{
+										ns1blankspace.remove(
+										{
+											xhtmlElementID: this.id,
+											method: 'SETUP_SITE_DOCUMENT_MANAGE',
+											ifNoneMessage: 'No pages.'
+										});
+									})
+									.css('width', '15px')
+									.css('height', '17px');
+									
+									$('#ns1blankspaceSetupWebsitePages td.ns1blankspaceRowSelect')
+									.click(function()
+									{
+										ns1blankspace.setup.website.pages.edit({xhtmlElementID: this.id})
+									});
+								},	
 
 					row: 		function (oRow, oParam)
 								{
@@ -1151,11 +1228,10 @@ ns1blankspace.setup.website =
 									aHTML.push('<tr class="ns1blankspaceRow">');
 																
 									aHTML.push('<td id="ns1blankspaceWebsitePages_title-' + oRow.id + '" class="ns1blankspaceRow ns1blankspaceRowSelect">' +
-															oRow.documenttitle + '</td>');
-															
-									aHTML.push('<td id="ns1blankspaceWebsitePages_url-' + oRow.id + '" class="ns1blankspaceRow">' +
-															oRow.documenturl + '</td>');
-															
+															'<div>' + oRow.documenttitle + '</div>' +
+															'<div class="ns1blankspaceSubNote" style="padding-bottom:6px;">' + oRow.documenturl + '</div>' +
+															'</td>');
+																													
 									if (oRow.locationtext == 'Header' || oRow.locationtext == 'Home')
 									{				
 										aHTML.push('<td id="ns1blankspaceWebsitePages_location-' + oRow.id + '" class="ns1blankspaceRow">' +
@@ -1302,17 +1378,24 @@ ns1blankspace.setup.website =
 										
 										aHTML.push('<table class="ns1blankspaceColumn2">');
 												
+										aHTML.push('<tr><td class="ns1blankspaceAction ns1blankspaceSubNote">' +
+														'<input type="checkbox" id="ns1blankspaceWebsitePageSaveClose" class="ns1blankspaceAction">' +
+														'<label for="ns1blankspaceWebsitePageSaveClose">Close on save</label>' +
+														'</td></tr>');
+																
 										aHTML.push('<tr><td>' +
 														'<span class="ns1blankspaceAction" id="ns1blankspaceWebsitePageSave">Save</span>' +
 														'</td></tr>');
-									
-										aHTML.push('<tr><td>' +
+
+										aHTML.push('<tr><td style="padding-top:4px;">' +
 														'<span class="ns1blankspaceAction" id="ns1blankspaceWebsitePageCancel">Cancel</span>' +
 														'</td></tr>');
 														
 										aHTML.push('</table>');					
 										
 										$('#ns1blankspacePagesColumn2').html(aHTML.join(''));
+
+										$('#ns1blankspaceWebsitePageSaveClose').attr('checked', ns1blankspace.setup.website.data.saveClosed);
 										
 										$('#ns1blankspaceWebsitePageSave').button(
 										{
@@ -1350,8 +1433,13 @@ ns1blankspace.setup.website =
 												dataType: 'json',
 												success: function()
 												{
-													ns1blankspace.setup.website.pages.show();
-													ns1blankspace.status.clear();
+													ns1blankspace.status.message('Saved');
+													ns1blankspace.setup.website.data.saveClosed = $('#ns1blankspaceWebsitePageSaveClose').attr('checked');
+
+													if ($('#ns1blankspaceWebsitePageSaveClose:checked').length == 1)
+													{
+														ns1blankspace.setup.website.pages.show();	
+													}	
 												}
 											});
 										})
