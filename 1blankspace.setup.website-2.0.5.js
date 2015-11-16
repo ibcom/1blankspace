@@ -1289,7 +1289,7 @@ ns1blankspace.setup.website =
 									
 										var aHTML = [];
 										
-										aHTML.push('<table class="ns1blankspace">');
+										aHTML.push('<table class="ns1blankspace" style="width:620px;">');
 												
 										aHTML.push('<tr>' +
 														'<td class="ns1blankspaceCaption">' +
@@ -1307,7 +1307,7 @@ ns1blankspace.setup.website =
 										
 										aHTML.push('</table>');
 					
-										aHTML.push('<table class="ns1blankspace">');
+										aHTML.push('<table class="ns1blankspace" style="width:620px;">');
 										
 										aHTML.push('<tr class="ns1blankspace">' +	
 														'<td class="ns1blankspaceCaption">' +
@@ -1355,7 +1355,7 @@ ns1blankspace.setup.website =
 														'<td class="ns1blankspaceTextMulti">' +
 														'<textarea rows="10" cols="70" name="ns1blankspaceEditText" id="ns1blankspaceEditText' +
 														ns1blankspace.counter.editor + '" data-editorcount="' + ns1blankspace.counter.editor + '"' +
-														' class="ns1blankspaceTextMultiLarge tinymceAdvanced" style="width:610px; font-size:0.75em; height:500px;"></textarea>' +
+														' class="ns1blankspaceTextMultiLarge tinymceAdvanced" style="width:600px; font-size:0.75em; height:500px;"></textarea>' +
 														'</td></tr>');
 										
 										aHTML.push('</table>');	
