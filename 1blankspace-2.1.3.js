@@ -4889,8 +4889,9 @@ ns1blankspace.util =
 
 	uuid: 		function (oParam)
 				{
+					var sPattern = ns1blankspace.util.getParam(oParam, 'pattern', {"default": 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'}).value;
 				    var d = new Date().getTime();
-				    var sUUID = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c)
+				    var sUUID = sPattern.replace(/[xy]/g, function(c)
 				    {
 				        var r = (d + Math.random()*16)%16 | 0;
 				        d = Math.floor(d/16);

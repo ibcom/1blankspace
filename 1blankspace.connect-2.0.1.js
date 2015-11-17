@@ -447,7 +447,7 @@ ns1blankspace.connect =
 						aHTML.push('<table class="ns1blankspaceControl">');
 
 						aHTML.push('<tr><td id="ns1blankspaceControlLogon" class="ns1blankspaceControl">' +
-										'Logon<br />Credentials<br />' +
+										'Log on<br />' +
 										'<span class="ns1blankspaceSubNote">Username, Key,<br />Password, Secret</span>' +
 										'</td></tr>');
 					}	
@@ -805,8 +805,9 @@ ns1blankspace.connect =
 						
 						aHTML.push('<table class="ns1blankspaceContainer">' +
 										'<tr class="ns1blankspaceContainer">' +
-										'<td id="ns1blankspaceLogonColumn1" class="ns1blankspaceColumn1"></td>' +
-										'<td id="ns1blankspaceLogonColumn2" class="ns1blankspaceColumn2"></td>' +
+										'<td id="ns1blankspaceLogonColumn1" class="ns1blankspaceColumn1Flexible" style="width:275px;"></td>' +
+										'<td></td>' +
+										'<td id="ns1blankspaceLogonColumn2" class="ns1blankspaceColumn2Action" style="width:275px;"></td>' +
 										'</tr>' + 
 										'</table>');					
 						
@@ -843,6 +844,28 @@ ns1blankspace.connect =
 						{
 							$('#ns1blankspaceLogonUsername').val(ns1blankspace.objectContextData.urllogon);
 						}
+
+						var aHTML = [];
+
+						aHTML.push('<table class="ns1blankspaceColumn2">');
+
+						aHTML.push('<tr><td style="padding-top:8px;">' +
+										'<span id="ns1blankspaceConnectGeneratePassword" class="ns1blankspaceAction" style="font-size:0.75em;">Generate a password</span>' +
+										'</td></tr>');
+
+						aHTML.push('<tr><td id="ns1blankspaceConnectGeneratePasswordShow" class="ns1blankspaceSubNote" style="padding-left: 4px; padding-top: 6px;"></td></tr>');
+								
+						aHTML.push('</table>');								
+
+						$('#ns1blankspaceLogonColumn2').html(aHTML.join(''));
+
+						$('#ns1blankspaceConnectGeneratePassword').button().click(function()
+						{
+							var sPassword = ns1blankspace.connect.util.generatePassword();
+							$('#ns1blankspaceConnectGeneratePasswordShow').html('<div>' + sPassword + '</div>' +
+																				 '<div style="padding-top:6px;">* To set it, click Save</div>');
+							$('#ns1blankspaceLogonPassword').val(sPassword);
+						});	
 					}	
 				},			
 
@@ -1311,8 +1334,16 @@ ns1blankspace.connect =
 
 ns1blankspace.connect.util =
 {
-	test: 		function (oParam)
+	generatePassword: 	
+				function (oParam)
 				{
-					
+					if (ns1blankspace.setup.user != undefined)
+					{
+						return ns1blankspace.setup.user.util.generatePassword();
+					}
+					else
+					{
+						ns1blankspace.status.error('Missing password generator!')
+					}	
 				}
 }

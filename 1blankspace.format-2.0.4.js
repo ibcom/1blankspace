@@ -649,7 +649,7 @@ ns1blankspace.format.editor =
 									width : sWidth,
 									plugins:
 									[
-							                "advlist autolink autosave link image lists charmap print preview hr anchor pagebreak spellchecker",
+							                "advlist autolink autosave link image lists charmap print preview hr anchor pagebreak",
 							                "searchreplace wordcount visualblocks visualchars code fullscreen insertdatetime media nonbreaking",
 							                "table contextmenu directionality emoticons template textcolor paste fullpage textcolor colorpicker textpattern"
 							        ],
@@ -665,7 +665,9 @@ ns1blankspace.format.editor =
 
 							        templates: '/ondemand/core/?method=CORE_DYNAMIC_TAG_SEARCH',
 							        link_list: '/rpc/core/?method=CORE_EDITOR_LINK_SEARCH',
-							        image_list: '/rpc/core/?method=CORE_EDITOR_IMAGE_SEARCH'
+							        image_list: '/rpc/core/?method=CORE_EDITOR_IMAGE_SEARCH',
+
+							        browser_spellcheck: true 
 								}
 
 								if (bSimple)
@@ -677,9 +679,9 @@ ns1blankspace.format.editor =
 								{	
 									if (aToolbars == undefined)
 									{
-										oInit.toolbar1 = 'bold italic underline strikethrough | alignleft aligncenter alignright alignjustify | formatselect fontselect fontsizeselect';
+										oInit.toolbar1 = 'bold italic underline strikethrough | alignleft aligncenter alignright alignjustify | formatselect fontselect fontsizeselect | fullscreen';
 							        	oInit.toolbar2 = 'forecolor backcolor | cut copy paste | bullist numlist | outdent indent blockquote | undo redo | link unlink anchor image media code';
-							        	oInit.toolbar3 = 'table | hr removeformat | subscript superscript | charmap emoticons | fullscreen | ltr rtl | spellchecker | visualchars visualblocks nonbreaking pagebreak | template';
+							        	oInit.toolbar3 = 'table | hr removeformat | subscript superscript | charmap emoticons | ltr rtl | visualchars visualblocks nonbreaking pagebreak | template';
 									}
 									else
 									{
