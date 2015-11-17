@@ -10,6 +10,8 @@ if (ns1blankspace.admin == undefined) {ns1blankspace.admin = {}}
 
 ns1blankspace.admin.space = 
 {
+	data: 		{superUser: false},
+
 	init: 		function (oParam)
 				{
 					ns1blankspace.app.reset();
@@ -37,9 +39,10 @@ ns1blankspace.admin.space =
 										'<td id="ns1blankspaceMostLikely" class="ns1blankspaceMain">' +
 										ns1blankspace.xhtml.loading +
 										'</td>' +
+										'<td id="ns1blankspaceHomeColumn2" class="ns1blankspaceColumn2Action" style="width:180px;"></td>' +
 										'</tr>');
-						aHTML.push('</table>');					
-						
+						aHTML.push('</table>');	
+											
 						$('#ns1blankspaceMain').html(aHTML.join(''));
 
 						var aHTML = [];
@@ -48,7 +51,30 @@ ns1blankspace.admin.space =
 							'<tr><td><div id="ns1blankspaceViewDeveloperSpaceLarge" class="ns1blankspaceViewImageLarge"></div></td></tr>' +
 							'</table>');
 												
-						$('#ns1blankspaceControl').html(aHTML.join(''));	
+						$('#ns1blankspaceControl').html(aHTML.join(''));
+
+						if (ns1blankspace.option.superUser)
+						{	
+							var aHTML = [];
+							
+							aHTML.push('<table class="ns1blankspaceColumn2">' +
+										'<tr><td id="ns1blankspaceSuperUser" class="ns1blankspaceAction">' +
+										'</td></tr></table>');
+
+							$('#ns1blankspaceHomeColumn2').html(aHTML.join(''));
+
+							$('#ns1blankspaceSuperUser').button(
+							{
+								text: true,
+								label: 'Show ' + (ns1blankspace.admin.space.data.superUser?'just mine':'all'),
+							})
+							.click(function()
+							{
+								ns1blankspace.admin.space.data.superUser = !ns1blankspace.admin.space.data.superUser;
+								$('#ns1blankspaceSuperUser').button({label: 'Show ' + (ns1blankspace.admin.space.data.superUser?'just mine':'all')});
+								ns1blankspace.admin.space.home()
+							});
+						}	
 						
 						var oSearch = new AdvancedSearch();
 						oSearch.method = 'ADMIN_REGISTRATION_SEARCH';
@@ -56,7 +82,7 @@ ns1blankspace.admin.space =
 						oSearch.addFilter('space', 'NOT_EQUAL_TO', '');
 						oSearch.rows = 50;
 						oSearch.sort('modifieddate', 'desc');
-						oSearch.addCustomOption('allregistrationspaces', (ns1blankspace.option.superUser?'Y':'N'));
+						oSearch.addCustomOption('allregistrationspaces', (ns1blankspace.admin.space.data.superUser?'Y':'N'));
 						oSearch.getResults(function(data) {ns1blankspace.admin.space.home(oParam, data)})	
 					}
 					else
@@ -130,8 +156,8 @@ ns1blankspace.admin.space =
 										var oSearch = new AdvancedSearch();
 										oSearch.method = 'ADMIN_REGISTRATION_SEARCH';
 										oSearch.addField('initiallogon,initialpassword,registrationdate,registrationspace,registrationspacetext,space,spacetext,status,statustext');
-										oSearch.addFilter('id', 'NOT_EQUAL_TO', ns1blankspace.objectContext);
-										oSearch.addCustomOption('allregistrationspaces', (ns1blankspace.option.superUser?'Y':'N'));
+										oSearch.addFilter('id', 'EQUAL_TO', ns1blankspace.objectContext);
+										oSearch.addCustomOption('allregistrationspaces', (ns1blankspace.admin.space.data.superUser?'Y':'N'));
 										oSearch.getResults(function(data) {ns1blankspace.admin.space.show(oParam, data)})	
 									}
 									else
@@ -158,7 +184,7 @@ ns1blankspace.admin.space =
 											oSearch.method = 'ADMIN_REGISTRATION_SEARCH';
 											oSearch.addField('space,spacetext,status,statustext');
 											oSearch.addFilter('spacetext', 'TEXT_IS_LIKE', sSearchText);
-											oSearch.addCustomOption('allregistrationspaces', (ns1blankspace.option.superUser?'Y':'N'));
+											oSearch.addCustomOption('allregistrationspaces', (ns1blankspace.admin.space.data.superUser?'Y':'N'));
 											oSearch.getResults(function(data) {ns1blankspace.admin.space.search.process(oParam, data)})	
 										}
 									};	
@@ -296,7 +322,7 @@ ns1blankspace.admin.space =
 					{
 						ns1blankspace.objectContextData = oResponse.data.rows[0];
 						
-						$('#ns1blankspaceControlContext').html(ns1blankspace.objectContextData.contactbusinesstext);
+						$('#ns1blankspaceControlContext').html(ns1blankspace.objectContextData.spacetext);
 						$('#ns1blankspaceViewControlAction').button({disabled: false});
 						$('#ns1blankspaceViewControlActionOptions').button({disabled: false});
 						
@@ -340,7 +366,7 @@ ns1blankspace.admin.space =
 
 						aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Initial Logon Name</td></tr>' +
 										'<tr><td id="ns1blankspaceSummaryInitialLogonName" class="ns1blankspaceSummary">' +
-										ns1blankspace.objectContextData.initiallogonname +
+										ns1blankspace.objectContextData.initiallogon +
 										'</td></tr>');
 
 						if (ns1blankspace.objectContextData.initialpassword != '')
