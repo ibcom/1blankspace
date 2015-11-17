@@ -262,6 +262,9 @@ ns1blankspace.admin.space =
 						aHTML.push('<tr><td id="ns1blankspaceControlSubscriptions" class="ns1blankspaceControl">' +
 										'Subscriptions</td></tr>');
 
+						aHTML.push('<tr><td id="ns1blankspaceControlBilling" class="ns1blankspaceControl">' +
+										'Billing</td></tr>');
+
 						aHTML.push('</table>');
 					}				
 								
@@ -275,6 +278,7 @@ ns1blankspace.admin.space =
 					aHTML.push('<div id="ns1blankspaceMainSummary" class="ns1blankspaceControlMain"></div>');
 					aHTML.push('<div id="ns1blankspaceMainSubscriptions" class="ns1blankspaceControlMain"></div>');
 					aHTML.push('<div id="ns1blankspaceMainUsers" class="ns1blankspaceControlMain"></div>');
+					aHTML.push('<div id="ns1blankspaceMainBilling" class="ns1blankspaceControlMain"></div>');
 
 					$('#ns1blankspaceMain').html(aHTML.join(''));
 
@@ -300,6 +304,12 @@ ns1blankspace.admin.space =
 					{
 						ns1blankspace.show({selector: '#ns1blankspaceMainSubscriptions', refresh: true});
 						ns1blankspace.admin.space.subscriptions();
+					});
+
+					$('#ns1blankspaceControlBilling').click(function(event)
+					{
+						ns1blankspace.show({selector: '#ns1blankspaceMainBilling', refresh: true});
+						ns1blankspace.admin.space.billing();
 					});
 				},							
 				
@@ -732,7 +742,7 @@ ns1blankspace.admin.space =
 							success: function(data){$('#' + sXHTMLElementID).parent().parent().fadeOut(500)}
 						});	
 					}
-				},
+				},			
 
 	users:		function (aParam, oResponse)
 				{
@@ -800,6 +810,66 @@ ns1blankspace.admin.space =
 						}
 					}	
 				},
+
+	billing: 	function (oParam, oResponse)
+				{
+					var aHTML = [];
+
+					if (oResponse == undefined)
+					{
+						aHTML.push('<table class="ns1blankspaceMain">' +
+									'<tr class="ns1blankspaceRow">' +
+									'<td id="ns1blankspaceBillingColumn1" class="ns1blankspaceColumn1Large"></td>' +
+									'<td id="ns1blankspaceBillingColumn2" class="ns1blankspaceColumn2Action" style="width:120px;"></td>' +
+									'</tr>' +
+									'</table>');				
+						
+						$('#ns1blankspaceMainBilling').html(aHTML.join(''));
+
+						var oSearch = new AdvancedSearch();
+						oSearch.method = 'ADMIN_SPACE_SEARCH';
+						oSearch.addField('datausagedate,datausagemegabytes,disabled,site,sitetext,status,statustext');
+						oSearch.addFilter('id', 'EQUAL_TO', ns1blankspace.objectContextData.space);
+						oSearch.addCustomOption('allregistrationspaces', (ns1blankspace.admin.space.data.superUser?'Y':'N'));
+						oSearch.getResults(function(data) {ns1blankspace.admin.space.billing(oParam, data)})	
+					}	
+					else
+					{
+						if (oResponse.data.rows.length > 0)
+						{	
+							ns1blankspace.objectContextData.billing = oResponse.data.rows[0];
+
+							aHTML.push('<table class="ns1blankspace">');
+							
+							aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Signup Site</td></tr>' +
+											'<tr><td id="ns1blankspaceBillingSignupSite" class="ns1blankspaceSummary">' +
+											ns1blankspace.objectContextData.billing.sitetext +
+											'</td></tr>');
+
+							aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Status</td></tr>' +
+											'<tr><td id="ns1blankspaceBillingStatus" class="ns1blankspaceSummary">' +
+											ns1blankspace.objectContextData.billing.statustext +
+											'</td></tr>');
+
+							if (ns1blankspace.objectContextData.billing.datausagemegabytes != '')
+							{	
+								aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Data usage as at</td></tr>' +
+											'<tr><td id="ns1blankspaceBillingDataUsageAsAt" class="ns1blankspaceSummary">' +
+											ns1blankspace.objectContextData.billing.datausagedate +
+											'</td></tr>');
+
+								aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Data usage (MB)</td></tr>' +
+											'<tr><td id="ns1blankspaceBillingDataUsage" class="ns1blankspaceSummary">' +
+											ns1blankspace.objectContextData.billing.datausagemegabytes +
+											'</td></tr>');
+							}
+							
+							aHTML.push('</table>');					
+							
+							$('#ns1blankspaceBillingColumn1').html(aHTML.join(''));
+						}	
+					}
+				},			
 
 	save:		{
 					send:		function ()
