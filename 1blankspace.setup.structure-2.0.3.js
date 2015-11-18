@@ -1501,6 +1501,7 @@ ns1blankspace.setup.structure =
 										if (ns1blankspace.option.richTextEditing)
 										{
 											$('#ns1blankspaceSetupStructureElementDescription' + ns1blankspace.counter.editor).attr('data-id', sID);
+											$('#ns1blankspaceSetupStructureElementDescription' + ns1blankspace.counter.editor).attr('data-category', iCategory);
 
 											ns1blankspace.format.editor.init(
 											{
@@ -1549,33 +1550,17 @@ ns1blankspace.setup.structure =
 												url: ns1blankspace.util.endpointURI('SETUP_STRUCTURE_ELEMENT_MANAGE'),
 												data: sData,
 												dataType: 'json',
-												success: function()
+												success: function(oResponse)
 												{
-													$('#ns1blankspaceSetupStructureElement_title-' + sID).html($('#ns1blankspaceSetupStructureElementTitle').val());
-													ns1blankspace.status.message('Element has been saved.');
-													ns1blankspace.setup.structure.element.show(oParam);
+													if (oResponse.status == 'OK')
+													{	
+														$('#ns1blankspaceSetupStructureElement_title-' + sID).html($('#ns1blankspaceSetupStructureElementTitle').val());
+														ns1blankspace.status.message('Element has been saved.');
+														ns1blankspace.setup.structure.element.show(oParam);
+													}	
 												}
 											});
 										});
-
-										/*
-										ns1blankspace.setup.structure.element.search()
-										
-										if (sID != undefined)
-										{
-											var oSearch = new AdvancedSearch();
-											oSearch.method = 'SETUP_STRUCTURE_ELEMENT_SEARCH';
-											oSearch.addField( 'backgroundcolour,caption,category,categorytext,datatype,datatypetext,description,displayorder,' +
-																	'hint,notes,notestype,notestypetext,reference,structure,structuretext,textcolour,title');
-											oSearch.addFilter('id', 'EQUAL_TO', sID);
-											oSearch.getResults(function(data) {ns1blankspace.setup.structure.element.edit(oParam, data)});
-										}
-										else
-										{
-											$('[name="radioDataType"][value="4"]').attr('checked', true);
-											$('[name="radioCategory"][value="' + iCategory + '"]').attr('checked', true);	
-										}
-										*/
 									}
 									else
 									{
@@ -1603,6 +1588,7 @@ ns1blankspace.setup.structure =
 					search: 	function (oEditor, oResponse)
 								{
 									var sID = $('#' + oEditor.id).attr('data-id');
+									var iCategory = $('#' + oEditor.id).attr('data-category');
 
 									if (oResponse == undefined)
 									{	
@@ -1617,6 +1603,7 @@ ns1blankspace.setup.structure =
 										}
 										else
 										{
+											$('#ns1blankspaceSetupStructureElementDescription' + ns1blankspace.counter.editor).attr('data-category');
 											$('[name="radioDataType"][value="4"]').attr('checked', true);
 											$('[name="radioCategory"][value="' + iCategory + '"]').attr('checked', true);	
 										}
@@ -1632,7 +1619,7 @@ ns1blankspace.setup.structure =
 											$('#ns1blankspaceSetupStructureElementHint').val(oObjectContext.hint);
 
 											var sHTML = (oObjectContext.description).formatXHTML();
-											tinyMCE.get('ns1blankspaceSetupStructureElementDescription' + ns1blankspace.counter.editor).setContent(sHTML)
+											tinyMCE.get('ns1blankspaceSetupStructureElementDescription' + ns1blankspace.counter.editor).setContent(sHTML);
 											
 											$('[name="radioDataType"][value="' + oObjectContext.datatype + '"]').attr('checked', true);
 											$('[name="radioCategory"][value="' + oObjectContext.category + '"]').attr('checked', true);

@@ -246,7 +246,7 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.setup.structure',
-		source: '/jscripts/1blankspace.setup.structure-2.0.2.js'
+		source: '/jscripts/1blankspace.setup.structure-2.0.3.js'
 	},
 	{
 		nameSpace: '1blankspace.setup.user',

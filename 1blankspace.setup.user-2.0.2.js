@@ -1210,7 +1210,6 @@ ns1blankspace.setup.user =
 											{
 												if (data.password != undefined) {sPassword = data.password};
 												ns1blankspace.status.message('Initial password is ' + sPassword, {timeout: false});
-												ns1blankspace.setup.user.search.send('-' + ns1blankspace.objectContext);
 											}
 											else
 											{
@@ -1223,6 +1222,7 @@ ns1blankspace.setup.user =
 											}
 
 											ns1blankspace.inputDetected = false;
+											ns1blankspace.setup.user.search.send('-' + ns1blankspace.objectContext);
 										}	
 									});
 

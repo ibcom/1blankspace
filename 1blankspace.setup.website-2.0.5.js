@@ -1721,9 +1721,13 @@ ns1blankspace.setup.website =
 															'<span id="ns1blankspaceWebsiteURLAdd">Add</span>' +
 															'</td></tr>');
 															
-												aHTML.push('<tr><td style="padding-top:20px;" id="ns1blankspaceURLAdd" class="ns1blankspaceAction">' +
+												aHTML.push('<tr><td style="padding-top:20px;" class="ns1blankspaceAction">' +
 															'CNAME your own url to site.mydigitalstructure.com' +
-															'</td></tr>');			
+															'</td></tr>');
+
+												aHTML.push('<tr><td style="padding-top:12px;" class="ns1blankspaceSubNote">' +
+															'<a href="http://mydigitalstructure.com/gettingstarted_dns" target="_blank">More on using your own URL with mydigitalstructure.</a>' +
+															'</td></tr>');
 											}
 											
 											aHTML.push('</table>');					
@@ -1761,14 +1765,12 @@ ns1blankspace.setup.website =
 												aHTML.push('<tr class="ns1blankspaceRow">');
 																
 												aHTML.push('<td id="ns1blankspaceWebsiteURL_url-' + this.id + '" class="ns1blankspaceRow ns1blankspaceRowSelect">' +
-																		this.url + '</td>');
+																this.url + '</td>');
 																		
-												aHTML.push('<td style="width:30px; text-align:right;" class="ns1blankspaceRow">');
+												aHTML.push('<td style="width:60px; text-align:right;" class="ns1blankspaceRow">');
 													
-												if (oOptions.remove)
-												{	
-													aHTML.push('<span id="ns1blankspaceWebsiteURL_options_remove-' + this.id + '" class="ns1blankspaceRowRemove"></span>');
-												};	
+												aHTML.push('<span id="ns1blankspaceWebsiteURL_options_remove-' + this.id + '" class="ns1blankspaceRowRemove"></span>' +
+																'<a href="' + this.url + '" target="_blank" class="ns1blankspaceRowGoTo">' + this.url + '</a>');
 													
 												aHTML.push('</td>');
 																
@@ -1779,37 +1781,44 @@ ns1blankspace.setup.website =
 
 											$('#ns1blankspaceURLColumn1').html(aHTML.join(''));
 											
-											if (oOptions.remove) 
+											$('#ns1blankspaceSetupWebsiteURLs span.ns1blankspaceRowRemove').button( {
+												text: false,
+												icons: {
+													primary: "ui-icon-close"
+												}
+											})
+											.click(function()
 											{
-												$('#ns1blankspaceSetupWebsiteURLs span.ns1blankspaceRowRemove').button( {
-													text: false,
-													icons: {
-														primary: "ui-icon-close"
-													}
-												})
-												.click(function()
+												ns1blankspace.remove(
 												{
-													ns1blankspace.remove(
-													{
-														xhtmlElementID: this.id,
-														method: 'SETUP_SITE_URL_MANAGE',
-														parentLevel: 2,
-														ifNoneMessage: 'No URLs.'
-													});
-												})
-												.css('width', '15px')
-												.css('height', '17px')
-											}
+													xhtmlElementID: this.id,
+													method: 'SETUP_SITE_URL_MANAGE',
+													parentLevel: 2,
+													ifNoneMessage: 'No URLs.'
+												});
+											})
+											.css('width', '15px')
+											.css('height', '17px')
 											
-											if (oOptions.view) 
+											$('#ns1blankspaceSetupWebsiteURLs .ns1blankspaceRowSelect')
+											.click(function()
 											{
-												$('#ns1blankspaceSetupWebsiteURLs .ns1blankspaceRowSelect').click(function()
+												ns1blankspace.setup.website.urls.add({xhtmlElementID: this.id})
+											})
+											.css('width', '15px')
+											.css('height', '17px');
+
+											$('#ns1blankspaceSetupWebsiteURLs .ns1blankspaceRowGoTo')
+											.button(
+											{
+												text: false,
+												icons:
 												{
-													ns1blankspace.setup.website.urls.add({xhtmlElementID: this.id})
-												})
-												.css('width', '15px')
-												.css('height', '17px')
-											}	
+													primary: "ui-icon-extlink"
+												}
+											})
+											.css('width', '15px')
+											.css('height', '17px');
 										}
 									}
 								},
