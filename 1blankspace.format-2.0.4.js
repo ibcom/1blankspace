@@ -622,6 +622,7 @@ ns1blankspace.format.editor =
 					var bSimple = ns1blankspace.util.getParam(oParam, 'simple', {"default": false}).value;
 					var oInit = ns1blankspace.util.getParam(oParam, 'init').value;
 					var fOnInit = ns1blankspace.util.getParam(oParam, 'onInit').value;
+					var sContentCSS = ns1blankspace.util.getParam(oParam, 'contactCSS').value;
 
 					var sAdditional = '';
 
@@ -667,7 +668,8 @@ ns1blankspace.format.editor =
 							        link_list: '/rpc/core/?method=CORE_EDITOR_LINK_SEARCH',
 							        image_list: '/rpc/core/?method=CORE_EDITOR_IMAGE_SEARCH',
 
-							        browser_spellcheck: true 
+							        browser_spellcheck: true,
+							        content_css: sContentCSS
 								}
 
 								if (bSimple)

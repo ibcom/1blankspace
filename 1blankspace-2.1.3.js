@@ -985,7 +985,8 @@ ns1blankspace.app =
 					if (ns1blankspace.option.showFavourites)
 					{
 						$('#ns1blankspaceViewControlRefresh')
-								.button( {
+								.button({
+									label: 'Back to top',
 									text: false,
 									icons:
 									{
@@ -1032,6 +1033,7 @@ ns1blankspace.app =
 					{
 						$('#ns1blankspaceViewControlBack')
 							.button({
+									label: 'Previous',
 									text: false,
 									icons: {}
 									})
@@ -1041,7 +1043,9 @@ ns1blankspace.app =
 							})
 							.css('width', '19px')
 							.next()
-								.button( {
+								.button(
+								{
+									label: 'Back to top',
 									text: false,
 									icons:
 									{

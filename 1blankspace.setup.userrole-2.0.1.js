@@ -468,43 +468,45 @@ ns1blankspace.setup.userRole =
 	access: 	{
 					show: 		function(oParam, oResponse)
 								{
+									var sAccessType = ns1blankspace.util.getParam(oParam, 'accessType', {"default": 'method'}).value;
+
 									if (oResponse == undefined)
 									{
-										$vq.clear({queue: 'plan'});
+										$vq.clear({queue: 'access'});
 
 										$vq.add('<table class="ns1blankspaceContainer">', {queue: 'access'});
 
 										$vq.add('<tr class="ns1blankspaceContainer">' +
-													'<td id="ns1blankspacePlanColumn1Container" class="ns1blankspaceColumn1Flexible">', {queue: 'access'});
+													'<td id="ns1blankspaceAccessColumn1Container" class="ns1blankspaceColumn1Flexible">', {queue: 'access'});
 
 											$vq.add('<table>', {queue: 'access'});
 
 											$vq.add('<tr><td id="ns1blankspaceAccessColumnType">', {queue: 'access'});
 
-											$vq.add('<div style="width:370px;"><div id="ns1blankspaceAccessType" style="margin-left:0px; margin-right:3px; margin-bottom:5px; width:350px; float:left;">' +
+											$vq.add('<div style="width:380px;"><div id="ns1blankspaceAccessType" style="margin-left:0px; margin-right:3px; margin-bottom:5px; width:360px; float:left;">' +
 													'<input style="width: 100%;" type="radio" id="ns1blankspaceAccessType-method" name="radioAccessType" />' +
 														'<label for="ns1blankspaceAccessType-method" style="width:80px; font-size:0.75em;">' +
 														'Methods</label>' +
 													'<input style="width: 100%;" type="radio" id="ns1blankspaceAccessType-parameter" name="radioAccessType" />' +
-														'<label for="ns1blankspaceBAccessType-parameter" style="width:80px; font-size:0.75em;">' +
+														'<label for="ns1blankspaceAccessType-parameter" style="width:90px; font-size:0.75em;">' +
 														'Parameters</label>' +	
 													'</div>', {queue: 'access'});
 
 											$vq.add('</td></tr>', {queue: 'access'})
 
 											$vq.add('<tr><td id="ns1blankspaceAccessColumn1" class="ns1blankspaceColumn1Flexible">' +
-														ns1blankspace.xhtml.loading + '</td></tr>', {queue: 'access'});
+														 + '</td></tr>', {queue: 'access'});
 
 											$vq.add('</table>', {queue: 'access'});
 
 										$vq.add('</td>', {queue: 'access'});	
 														
-										$vq.add('<td id="ns1blankspaceAccessColumn2" class="ns1blankspaceColumn2" style="width:275px;"></td>' +
+										$vq.add('<td id="ns1blankspaceAccessColumn2" class="ns1blankspaceColumn2" style="width:125px;"></td>' +
 														'</tr>', {queue: 'access'});
 
-										$vq.add('</table>', {queue: 'plan'});					
+										$vq.add('</table>', {queue: 'access'});					
 										
-										$vq.render('#ns1blankspaceMainAccess', {queue: 'plan'});
+										$vq.render('#ns1blankspaceMainAccess', {queue: 'access'});
 
 										$('#ns1blankspaceAccessType-' + sAccessType).attr('checked', true);
 
@@ -512,8 +514,8 @@ ns1blankspace.setup.userRole =
 															
 										$('#ns1blankspaceAccessType :radio').click(function()
 										{
-											oParam = ns1blankspace.util.setParam(oParam, 'accountType', (this.id).split('-')[1]);
-											ns1blankspace.financial.budget.plan.show(oParam);
+											//oParam = ns1blankspace.util.setParam(oParam, 'accountType', (this.id).split('-')[1]);
+											//ns1blankspace.financial.budget.plan.show(oParam);
 										});
 
 										/*
