@@ -20,7 +20,13 @@ ns1blankspace.home =
 					}	
 
 					$('#ns1blankspaceViewControlAction').button({disabled: true});
-					$('#ns1blankspaceViewControlNew').button({disabled: true});
+
+					$('#ns1blankspaceViewControlNew').button({disabled: false})
+					.click(function(event)
+					{
+						ns1blankspace.setup.website.new();
+					});
+
 					$('#ns1blankspaceViewControlActionOptions').button({disabled: true});
 
 					$('#ns1blankspaceViewControlViewContainer').button(
@@ -64,13 +70,11 @@ ns1blankspace.home =
 				},
 
 	bind: 		function ()
-				{
-					
+				{	
 					$('#ns1blankspaceControlWebsite').click(function(event)
 					{
 						$('#ns1blankspaceHomeColumn1').html(ns1blankspace.xhtml.loading);
 						ns1blankspace.xhtml.defaultElementID = this.id;
-						
 						ns1blankspace.home.websites.show();
 					});
 				}

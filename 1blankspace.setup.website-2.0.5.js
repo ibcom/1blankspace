@@ -833,37 +833,46 @@ ns1blankspace.setup.website =
 									var iCSSAttachment = (ns1blankspace.objectContextData.cssattachment ? ns1blankspace.objectContextData.cssattachment : -1);
 									var fCallback = ns1blankspace.setup.website.pages.show;
 
-									if (oParam != undefined)
+									if (ns1blankspace.objectContextData.cssattachmenttext != undefined && ns1blankspace.objectContextData.cssattachmenttext != '')
 									{
-										if (oParam.cssAttachment != undefined) {iCSSAttachment = oParam.cssAttachment}
-									}
-
-									if 	(iCSSAttachment != -1 && ns1blankspace.objectContextData.cssuri == undefined)
-									{
-										var oSearch = new AdvancedSearch();
-										oSearch.method = 'CORE_ATTACHMENT_SEARCH';
-										oSearch.addField('filename');
-										oSearch.addFilter('attachment', 'EQUAL_TO', iCSSAttachment);
-										oSearch.rf = 'json';
-										
-										oSearch.getResults(function(oResponse)
-										{
-											if (oResponse.status = "OK")
-											{
-												if (oResponse.data.rows.length > 0)
-												{
-													ns1blankspace.objectContextData.cssuri = '/site/' + ns1blankspace.objectContext + '/' +
-														oResponse.data.rows[0].filename;
-												}		
-											}	
-											 
-											fCallback();
-										});
+										ns1blankspace.objectContextData.cssuri = '/site/' + ns1blankspace.objectContext + '/' +
+																					ns1blankspace.objectContextData.cssattachmenttext;
+										fCallback();											
 									}
 									else
-									{
-										fCallback();
-									}
+									{	
+										if (oParam != undefined)
+										{
+											if (oParam.cssAttachment != undefined) {iCSSAttachment = oParam.cssAttachment}
+										}
+
+										if 	(iCSSAttachment != -1 && ns1blankspace.objectContextData.cssuri == undefined)
+										{
+											var oSearch = new AdvancedSearch();
+											oSearch.method = 'CORE_ATTACHMENT_SEARCH';
+											oSearch.addField('filename');
+											oSearch.addFilter('attachment', 'EQUAL_TO', iCSSAttachment);
+											oSearch.rf = 'json';
+											
+											oSearch.getResults(function(oResponse)
+											{
+												if (oResponse.status = "OK")
+												{
+													if (oResponse.data.rows.length > 0)
+													{
+														ns1blankspace.objectContextData.cssuri = '/site/' + ns1blankspace.objectContext + '/' +
+															oResponse.data.rows[0].filename;
+													}		
+												}	
+												 
+												fCallback();
+											});
+										}
+										else
+										{
+											fCallback();
+										}
+									}	
 								},
 	
 				},	
@@ -1459,7 +1468,11 @@ ns1blankspace.setup.website =
 										{
 											if (parseInt($('input[name="radioDocumentType"]:checked').val()) == 5)
 											{
-												ns1blankspace.format.editor.init({selector: '#ns1blankspaceEditText' + ns1blankspace.counter.editor});
+												ns1blankspace.format.editor.init(
+												{
+													selector: '#ns1blankspaceEditText' + ns1blankspace.counter.editor,
+													contentCSS: ns1blankspace.objectContextData.cssuri
+												});
 											}
 											else
 											{
@@ -1492,7 +1505,11 @@ ns1blankspace.setup.website =
 										{
 											$('[name="radioDocumentType"][value="5"]').attr('checked', true);
 											$('[name="radioLocation"][value="9"]').attr('checked', true);
-											ns1blankspace.format.editor.init({selector: '#ns1blankspaceEditText' + ns1blankspace.counter.editor});
+											ns1blankspace.format.editor.init(
+											{
+												selector: '#ns1blankspaceEditText' + ns1blankspace.counter.editor,
+												contentCSS: sCSS
+											});
 											$('[name="radioPublic"][value="Y"]').attr('checked', true);	
 										}
 									}
@@ -1508,7 +1525,11 @@ ns1blankspace.setup.website =
 											
 											if (parseInt(oObjectContext.documenttype) == 5)
 											{
-												ns1blankspace.format.editor.init({selector: '#ns1blankspaceEditText' + ns1blankspace.counter.editor});
+												ns1blankspace.format.editor.init(
+												{
+													selector: '#ns1blankspaceEditText' + ns1blankspace.counter.editor,
+													contentCSS: ns1blankspace.objectContextData.cssuri
+												});
 											}
 											
 											$('[name="radioLocation"][value="' + oObjectContext.location + '"]').attr('checked', true);
@@ -1524,7 +1545,11 @@ ns1blankspace.setup.website =
 										{
 											$('[name="radioLocation"][value="9"]').attr('checked', true);
 											$('[name="radioDocumentType"][value="5"]').attr('checked', true);
-											ns1blankspace.format.editor.init({selector: '#ns1blankspaceEditText' + ns1blankspace.counter.editor});
+											ns1blankspace.format.editor.init(
+											{
+												selector: '#ns1blankspaceEditText' + ns1blankspace.counter.editor,
+												contentCSS: ns1blankspace.objectContextData.cssuri
+											});
 											$('[name="radioPublic"][value="Y"]').attr('checked', true);					
 										}
 									}		

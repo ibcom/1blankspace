@@ -622,7 +622,7 @@ ns1blankspace.format.editor =
 					var bSimple = ns1blankspace.util.getParam(oParam, 'simple', {"default": false}).value;
 					var oInit = ns1blankspace.util.getParam(oParam, 'init').value;
 					var fOnInit = ns1blankspace.util.getParam(oParam, 'onInit').value;
-					var sContentCSS = ns1blankspace.util.getParam(oParam, 'contactCSS').value;
+					var sContentCSS = ns1blankspace.util.getParam(oParam, 'contentCSS').value;
 
 					var sAdditional = '';
 
