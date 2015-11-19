@@ -166,7 +166,7 @@ ns1blankspace.setup.website =
 						if (oResponse.data.rows.length == 0)
 						{
 							aHTML.push('<table>' +
-											'<tr><td class="ns1blankspaceNothing">Click New to create a website.</td></tr>' +
+											'<tr><td class="ns1blankspaceNothing">Click New to create a website/app.</td></tr>' +
 											'</table>');
 						}
 						else

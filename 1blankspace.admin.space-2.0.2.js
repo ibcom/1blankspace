@@ -183,7 +183,11 @@ ns1blankspace.admin.space =
 											var oSearch = new AdvancedSearch();
 											oSearch.method = 'ADMIN_REGISTRATION_SEARCH';
 											oSearch.addField('space,spacetext,status,statustext');
+											oSearch.addBracket('(');
 											oSearch.addFilter('spacetext', 'TEXT_IS_LIKE', sSearchText);
+											oSearch.addOperator('or');
+											oSearch.addFilter('initiallogon', 'TEXT_IS_LIKE', sSearchText);
+											oSearch.addBracket(')');
 											oSearch.addCustomOption('allregistrationspaces', (ns1blankspace.admin.space.data.superUser?'Y':'N'));
 											oSearch.getResults(function(data) {ns1blankspace.admin.space.search.process(oParam, data)})	
 										}

@@ -173,8 +173,8 @@ ns1blankspace.home.websites =
 					
 						$('td.ns1blankspaceMostLikely').click(function(event)
 						{
-							ns1blankspace.setup.website.init();
-							ns1blankspace.setup.website.search.send(event.target.id, {source: 1});
+							ns1blankspace.setup.website.init({id: (event.target.id).split('-')[1]});
+							//ns1blankspace.setup.website.search.send(event.target.id, {source: 1});
 						});
 					}
 				}
