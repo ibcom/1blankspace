@@ -1762,6 +1762,12 @@ ns1blankspace.setup.user =
 							            }
 
 							          	return password;
-        							}										
+        							},
+
+        			setRelationshipManagerRestriction:
+        							function (oParam)
+        							{
+        								
+        							}												
 				}			
 }									
