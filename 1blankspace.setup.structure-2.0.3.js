@@ -1218,7 +1218,7 @@ ns1blankspace.setup.structure =
 										oSearch.method = 'SETUP_STRUCTURE_ELEMENT_SEARCH';
 										oSearch.addField( 'backgroundcolour,caption,category,categorytext,datatype,datatypetext,' +
 															'description,displayorder,hint,id,notes,notestype,notestypetext,' +
-															'reference,structure,structuretext,textcolour,title');
+															'reference,structure,structuretext,textcolour,title,alias');
 										oSearch.rows = 250;
 										oSearch.addFilter('category', 'EQUAL_TO', iCategory);
 										oSearch.getResults(function(data) {ns1blankspace.setup.structure.element.show(oParam, data)});
@@ -1399,6 +1399,15 @@ ns1blankspace.setup.structure =
 														'<td class="ns1blankspaceTextMulti">' +
 														'<input id="ns1blankspaceSetupStructureElementReference" class="ns1blankspaceText">' +
 														'</td></tr>');
+
+										aHTML.push('<tr class="ns1blankspaceCaption">' +
+														'<td class="ns1blankspaceCaption">' +
+														'Alias&nbsp;<div class="ns1blankspaceSubNote">(must start with "se" and be unique)</div>' +
+														'</td></tr>' +
+														'<tr class="ns1blankspaceTextMulti">' +
+														'<td class="ns1blankspaceTextMulti">' +
+														'<input id="ns1blankspaceSetupStructureElementAlias" class="ns1blankspaceText">' +
+														'</td></tr>');
 										
 										aHTML.push('<tr class="ns1blankspaceCaption">' +
 														'<td class="ns1blankspaceCaption">' +
@@ -1460,7 +1469,8 @@ ns1blankspace.setup.structure =
 														'<input type="radio" id="radioDataType4" name="radioDataType" value="4"/>Text (Single Line)' +
 														'<br /><input type="radio" id="radioDataType1" name="radioDataType" value="1"/>Text (Multi Line)' +
 														'<br /><input type="radio" id="radioDataType3" name="radioDataType" value="3"/>Date' +
-														'<br /><input type="radio" id="radioDataType2" name="radioDataType" value="2"/>Select / Choice' +
+														'<br /><input type="radio" id="radioDataType2" name="radioDataType" value="2"/>Select / Choice (Single)' +
+														'<br /><input type="radio" id="radioDataType6" name="radioDataType" value="6"/>Select / Choice (Multi)' +
 														'</td></tr>');
 													
 										aHTML.push('<tr class="ns1blankspaceCaption">' +
@@ -1536,6 +1546,7 @@ ns1blankspace.setup.structure =
 											sData += '&id=' + ns1blankspace.util.fs(sID);
 											sData += '&title=' + ns1blankspace.util.fs($('#ns1blankspaceSetupStructureElementTitle').val());
 											sData += '&reference=' + ns1blankspace.util.fs($('#ns1blankspaceSetupStructureElementReference').val());
+											sData += '&alias=' + ns1blankspace.util.fs($('#ns1blankspaceSetupStructureElementAlias').val());
 											sData += '&datatype=' + ns1blankspace.util.fs($('input[name="radioDataType"]:checked').val());
 											sData += '&category=' + ns1blankspace.util.fs($('input[name="radioCategory"]:checked').val());
 											sData += '&textcolour=' + ns1blankspace.util.fs($('#ns1blankspaceSetupStructureElementTextColour').val());
@@ -1564,6 +1575,7 @@ ns1blankspace.setup.structure =
 									}
 									else
 									{
+										/*
 										if (oResponse.data.rows.length != 0)
 										{
 											var oObjectContext = oResponse.data.rows[0];
@@ -1582,6 +1594,7 @@ ns1blankspace.setup.structure =
 											$('#ns1blankspaceSetupStructureElementTitle').focus();
 											ns1blankspace.setup.structure.element.options.show({structureElementID: oObjectContext.id});
 										}
+										*/
 									}
 								},
 
@@ -1597,7 +1610,7 @@ ns1blankspace.setup.structure =
 											var oSearch = new AdvancedSearch();
 											oSearch.method = 'SETUP_STRUCTURE_ELEMENT_SEARCH';
 											oSearch.addField( 'backgroundcolour,caption,category,categorytext,datatype,datatypetext,description,displayorder,' +
-																	'hint,notes,notestype,notestypetext,reference,structure,structuretext,textcolour,title');
+																	'hint,notes,notestype,notestypetext,reference,structure,structuretext,textcolour,title,alias');
 											oSearch.addFilter('id', 'EQUAL_TO', sID);
 											oSearch.getResults(function(data) {ns1blankspace.setup.structure.element.search(oEditor, data)});
 										}
@@ -1616,6 +1629,7 @@ ns1blankspace.setup.structure =
 
 											$('#ns1blankspaceSetupStructureElementTitle').val((oObjectContext.title).formatXHTML());
 											$('#ns1blankspaceSetupStructureElementReference').val(oObjectContext.reference);
+											$('#ns1blankspaceSetupStructureElementAlias').val(oObjectContext.alias);
 											$('#ns1blankspaceSetupStructureElementHint').val(oObjectContext.hint);
 
 											var sHTML = (oObjectContext.description).formatXHTML();
