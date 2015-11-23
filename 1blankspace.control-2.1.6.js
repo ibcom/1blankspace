@@ -845,6 +845,26 @@ ns1blankspace.views =
 		param: {viewName: 'Product Categories', method: 'SETUP_PRODUCT_CATEGORY'}														
 	},
 	{
+		title: 'Project Types',
+		namespace: 'setup',
+		namesuffix: 'projectType',
+		endpoint: "SETUP", 
+		show: true,
+		group: 9,
+		type: 2,
+		param: {viewName: 'Project Types', method: 'SETUP_PROJECT_TYPE'}														
+	},
+	{
+		title: 'Project Task Types',
+		namespace: 'setup',
+		namesuffix: 'projectTaskType',
+		endpoint: "SETUP", 
+		show: true,
+		group: 9,
+		type: 2,
+		param: {viewName: 'Project Task Types', method: 'SETUP_PROJECT_TASK_TYPE'}														
+	},
+	{
 		title: "Project&nbsp;Templates",
 		parentNamespace: "setup",
 		namespace: "project",
