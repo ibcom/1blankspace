@@ -885,10 +885,10 @@ ns1blankspace.setup.userRole =
 															
 															aHTML.push('<tr class="ns1blankspaceCaption">');
 															aHTML.push('<td class="ns1blankspaceHeaderCaption">Title</td>');
-															aHTML.push('<td class="ns1blankspaceHeaderCaption">Search</td>');
-															aHTML.push('<td class="ns1blankspaceHeaderCaption">Add</td>');
-															aHTML.push('<td class="ns1blankspaceHeaderCaption">Update</td>');
-															aHTML.push('<td class="ns1blankspaceHeaderCaption">Remove</td>');
+															aHTML.push('<td class="ns1blankspaceHeaderCaption" style="text-align:center;">Search</td>');
+															aHTML.push('<td class="ns1blankspaceHeaderCaption" style="text-align:center;">Add</td>');
+															aHTML.push('<td class="ns1blankspaceHeaderCaption" style="text-align:center;">Update</td>');
+															aHTML.push('<td class="ns1blankspaceHeaderCaption" style="text-align:center;">Remove</td>');
 															aHTML.push('</tr>');
 
 															$.each(oResponse.data.rows, function()
@@ -920,14 +920,14 @@ ns1blankspace.setup.userRole =
 													aHTML.push('<tr class="ns1blankspaceRow">');
 													aHTML.push('<td id="ns1blankspaceUserRoleAccess_method-' + oRow.id + '" class="ns1blankspaceRow">' +
 																			oRow.accessmethodtext + '</td>');
-													aHTML.push('<td id="ns1blankspaceUserRoleAccess_search-' + oRow.id + '" class="ns1blankspaceRow">' +
-																			oRow.canuse + '</td>');
-													aHTML.push('<td id="ns1blankspaceUserRoleAccess_add-' + oRow.id + '" class="ns1blankspaceRow">' +
-																			(oRow.canuse=='N'?oRow.canadd:'-') + '</td>');
-													aHTML.push('<td id="ns1blankspaceUserRoleAccess_update-' + oRow.id + '" class="ns1blankspaceRow">' +
-																			(oRow.canuse=='N'?oRow.canupdate:'-') + '</td>');
-													aHTML.push('<td id="ns1blankspaceUserRoleAccess_remove-' + oRow.id + '" class="ns1blankspaceRow">' +
-																			(oRow.canuse=='N'?oRow.canremove:'-') + '</td>');
+													aHTML.push('<td id="ns1blankspaceUserRoleAccess_search-' + oRow.id + '" class="ns1blankspaceRow" style="text-align:center;">' +
+																			(oRow.canuse=='N'?'-':'Yes') + '</td>');
+													aHTML.push('<td id="ns1blankspaceUserRoleAccess_add-' + oRow.id + '" class="ns1blankspaceRow" style="text-align:center;">' +
+																			(oRow.canadd=='N'?'-':'Yes') + '</td>');
+													aHTML.push('<td id="ns1blankspaceUserRoleAccess_update-' + oRow.id + '" class="ns1blankspaceRow" style="text-align:center;">' +
+																			(oRow.canupdate=='N'?'-':'Yes') + '</td>');
+													aHTML.push('<td id="ns1blankspaceUserRoleAccess_remove-' + oRow.id + '" class="ns1blankspaceRow" style="text-align:center;">' +
+																			(oRow.canremove=='N'?'-':'Yes') + '</td>');
 
 													aHTML.push('</tr>');
 
@@ -1021,7 +1021,7 @@ ns1blankspace.setup.userRole =
 															oSearch.method = 'SETUP_METHOD_SEARCH';
 															oSearch.addField('title,useavailable,addavailable,updateavailable,removeavailable');
 															oSearch.addFilter('endpoint', 'EQUAL_TO', iEndpoint)
-															oSearch.rows = 200;
+															oSearch.rows = 500;
 															oSearch.sort('title', 'asc');
 															oSearch.getResults(function(data) {ns1blankspace.setup.userRole.access.methods.edit(oParam, data)})	
 														}
