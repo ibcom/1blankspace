@@ -90,7 +90,7 @@ ns1blankspace.xhtml.logonNotes =
 	'<br /><br /><a href="http://mydigitalstructure.com/gettingstarted" target="_blank">Getting started</a>' +
 	'<br /><br /><a href="http://twitter.com/ibComMYDS" target="_blank">twitter.com/ibComMYDS</a>' +
 	'<br /><br /><hr />' +
-	'<br /><a href="https://developer.1blankspace.com" target="_blank"><strong>Modify this app or create your own app using the simple jQuery IDE.</strong></a>';
+	'<br /><a href="https://console.mydigitalstructure.com" target="_blank"><strong>Modify this app or create your own app using the simple jQuery IDE.</strong></a>';
 
 ns1blankspace.xhtml.header =
 	'<div id="ns1blankspaceLogo" style="width:250px; float:left; "><img src="/jscripts/images/1blankspace.aoe-2.0.0.png"></div>' +
