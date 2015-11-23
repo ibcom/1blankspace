@@ -763,7 +763,7 @@ ns1blankspace.setup.user =
 											var aHTML = [];
 											var h = -1;	
 													
-											aHTML.push('<table class="ns1blankspace">');
+											aHTML.push('<table class="ns1blankspace" id="ns1blankspaceUserUserRoles">');
 									
 											if (oResponse.data.rows.length == 0)
 											{
@@ -783,7 +783,7 @@ ns1blankspace.setup.user =
 											{
 												aHTML.push('<tr id="ns1blankspaceUserRole" class="ns1blankspaceRow">');
 												
-												aHTML.push('<td id="ns1blankspaceUserRole_title-' + this.id + '" class="ns1blankspaceRow">' +
+												aHTML.push('<td id="ns1blankspaceUserRole_title-' + this.role + '" class="ns1blankspaceRow ns1blankspaceRowSelect">' +
 																		this.roletext + '</td>');
 
 												aHTML.push('<td style="width:30px;text-align:right;" class="ns1blankspaceRow">' +
@@ -802,11 +802,18 @@ ns1blankspace.setup.user =
 												text: false,
 											 	icons: {primary: "ui-icon-close"}
 											})
-											.click(function() {
+											.click(function()
+											{
 												ns1blankspace.setup.user.access.remove(this.id)
 											})
 											.css('width', '15px')
-											.css('height', '20px')
+											.css('height', '20px');
+
+											$('#ns1blankspaceUserUserRoles td.ns1blankspaceRowSelect')
+											.click(function()
+											{
+												ns1blankspace.setup.userRole.init({id: (this.id).split('-')[1]})
+											});
 										}
 									}
 								},
@@ -836,7 +843,7 @@ ns1blankspace.setup.user =
 											var oSearch = new AdvancedSearch();
 											oSearch.method = 'SETUP_ROLE_SEARCH';
 											oSearch.addField('title,notes')
-											oSearch.rows = 50;
+											oSearch.rows = 100;
 											oSearch.sort('title', 'asc');
 											oSearch.getResults(function(data)
 											{
@@ -846,7 +853,6 @@ ns1blankspace.setup.user =
 										else
 										{
 											ns1blankspace.container.position({xhtmlElementID: 'ns1blankspaceUserAccessRolesAdd', leftOffset: -252, topOffset: -42});
-											//$(ns1blankspace.xhtml.container).attr('data-initiator', 'ns1blankspaceUserAccessRolesAdd')
 								
 											var aHTML = [];
 											

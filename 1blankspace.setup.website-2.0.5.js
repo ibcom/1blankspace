@@ -1740,21 +1740,18 @@ ns1blankspace.setup.website =
 												
 											aHTML.push('<table class="ns1blankspaceColumn2">');
 											
-											if (oActions.add)
-											{
-												aHTML.push('<tr><td class="ns1blankspaceAction">' +
-															'<span id="ns1blankspaceWebsiteURLAdd">Add</span>' +
-															'</td></tr>');
-															
-												aHTML.push('<tr><td style="padding-top:20px;" class="ns1blankspaceAction">' +
-															'CNAME your own url to site.mydigitalstructure.com' +
-															'</td></tr>');
+											aHTML.push('<tr><td class="ns1blankspaceAction">' +
+														'<span id="ns1blankspaceWebsiteURLAdd">Add</span>' +
+														'</td></tr>');
+														
+											aHTML.push('<tr><td style="padding-top:20px;" class="ns1blankspaceAction">' +
+														'CNAME your own url to site.mydigitalstructure.com' +
+														'</td></tr>');
 
-												aHTML.push('<tr><td style="padding-top:12px;" class="ns1blankspaceSubNote">' +
-															'<a href="http://mydigitalstructure.com/gettingstarted_dns" target="_blank">More on using your own URL with mydigitalstructure.</a>' +
-															'</td></tr>');
-											}
-											
+											aHTML.push('<tr><td style="padding-top:12px;" class="ns1blankspaceSubNote">' +
+														'<a href="http://mydigitalstructure.com/gettingstarted_dns" target="_blank">More on using your own URL with mydigitalstructure.</a>' +
+														'</td></tr>');
+										
 											aHTML.push('</table>');					
 											
 											$('#ns1blankspaceURLColumn2').html(aHTML.join(''));
