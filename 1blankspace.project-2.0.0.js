@@ -329,7 +329,7 @@ ns1blankspace.project =
 					});
 				},
 
-	show: 		function ns1blankspaceProjectShow(oParam, oResponse)
+	show: 		function (oParam, oResponse)
 				{
 					ns1blankspace.app.clean();
 					ns1blankspace.project.layout();
@@ -851,17 +851,6 @@ ns1blankspace.project =
 								}	
 				},
 
-	new2: 		function ()
-				{
-					ns1blankspace.objectContextData = undefined;
-					ns1blankspace.objectContext = -1;
-					ns1blankspace.project.layout();
-					ns1blankspace.show({selector: '#ns1blankspaceMainDetails'});
-					$('#ns1blankspaceViewportControlAction').button({disabled: false});
-					$('#ns1blankspaceViewportControlActionOptions').button({disabled: true});
-					ns1blankspace.project.details();
-				},
-
 	save: 		{
 					send:		function ()
 								{
@@ -909,5 +898,26 @@ ns1blankspace.project =
 										ns1blankspace.status.error(oResponse.error.errornotes);
 									}
 								}
-				}				
+				},
+
+	util: 		{
+					taskTypes: 	function (oParam, oResponse)
+								{
+									if (oResponse == undefined)
+									{
+										var oSearch = new AdvancedSearch();
+										oSearch.method = 'SETUP_PROJECT_TASK_TYPE_SEARCH';
+										oSearch.addField('displayorder,projecttype,projecttypetext,title');
+										oSearch.rf = 'json';
+										oSearch.rows = 100;
+										oSearch.sort('title', 'asc');
+										oSearch.getResults(function (data) {ns1blankspace.project.util.taskTypes(oParam, data)});
+									}		
+									else
+									{
+										ns1blankspace.util.onComplete(oParam);
+									}	
+								}
+				}			
+
 }

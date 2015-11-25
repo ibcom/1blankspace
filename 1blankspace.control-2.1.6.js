@@ -845,6 +845,16 @@ ns1blankspace.views =
 		param: {viewName: 'Product Categories', method: 'SETUP_PRODUCT_CATEGORY'}														
 	},
 	{
+		title: 'Action Types',
+		namespace: 'setup',
+		namesuffix: 'actionType',
+		endpoint: "SETUP", 
+		show: true,
+		group: 9,
+		type: 2,
+		param: {viewName: 'Action Types', method: 'SETUP_ACTION_TYPE', search: {fields: 'title', sort: [{name: 'title'}], filters: [{name: 'fixed', comparison: 'EQUAL_TO', value1: 'N'}]}}														
+	},
+	{
 		title: 'Project Types',
 		namespace: 'setup',
 		namesuffix: 'projectType',

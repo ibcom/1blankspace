@@ -74,7 +74,7 @@ $.extend(true, ns1blankspace.setup,
 						{
 							if (ns1blankspace.setup.searchParam == undefined)
 							{
-								ns1blankspace.setup.searchParam = {fields: 'title'}
+								ns1blankspace.setup.searchParam = {fields: 'title', sort: 'title'}
 							}	
 
 							var oSearch = new AdvancedSearch();
