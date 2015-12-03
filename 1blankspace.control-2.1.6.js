@@ -126,7 +126,7 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.action',
-		source: '/jscripts/1blankspace.action-2.0.1.js'
+		source: '/jscripts/1blankspace.action-2.0.2.js'
 	},
 	{
 		nameSpace: '1blankspace.messaging.conversation',
@@ -270,7 +270,7 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.structureData',
-		source: '/jscripts/1blankspace.structuredata-2.0.0.js'
+		source: '/jscripts/1blankspace.structuredata-2.0.1.js'
 	},
 	{
 		nameSpace: '1blankspace.supportIssue',
@@ -281,8 +281,8 @@ ns1blankspace.scripts.concat(
 		source: '/jscripts/1blankspace.setup.file-2.0.1.js'
 	},
 	{
-		nameSpace: '1blankspace.admin.space',
-		source: '/jscripts/1blankspace.admin.space-2.0.2.js'
+		nameSpace: '1blankspace.developer.space',
+		source: '/jscripts/1blankspace.developer.space-2.0.1.js'
 	},
 	{
 		nameSpace: '1blankspace.util.local',
@@ -406,6 +406,8 @@ ns1blankspace.views =
 		title: "People",
 		namespace: "contactPerson",
 		endpoint: "CONTACT_PERSON",
+		object: 32,
+		keyObjectProperties: 'firstname,surname',
 		show: true,
 		group: 1,
 		type: 1,
@@ -435,6 +437,8 @@ ns1blankspace.views =
 		title: "Businesses",
 		namespace: "contactBusiness",
 		endpoint: "CONTACT_BUSINESS",
+		object: 12,
+		keyObjectProperties: 'tradename',
 		show: true,
 		group: 1,
 		type: 1,
@@ -447,6 +451,7 @@ ns1blankspace.views =
 		title: "Opportunities",
 		namespace: "opportunity",
 		endpoint: "OPPORTUNITY",
+		object: 35,
 		show: true,
 		group: 1,
 		type: 1,
@@ -477,6 +482,7 @@ ns1blankspace.views =
 		title: "Projects",
 		namespace: "project",
 		endpoint: "PROJECT",
+		object: 1,
 		show: true,
 		group: 2,
 		type: 1
@@ -493,6 +499,8 @@ ns1blankspace.views =
 		title: "Actions",
 		namespace: "action",
 		endpoint: "ACTION",
+		object: 17,
+		keyObjectProperties: 'actionreference',
 		show: true,
 		group: 2,
 		type: 1,
@@ -510,6 +518,7 @@ ns1blankspace.views =
 		title: "News",
 		namespace: "news",
 		endpoint: "NEWS",
+		object: 19,
 		show: true,
 		group: 3,
 		type: 1
@@ -518,6 +527,7 @@ ns1blankspace.views =
 		title: "Events",
 		namespace: "event",
 		endpoint: "EVENT",
+		object: 39,
 		show: false,
 		group: 3,
 		type: 1
@@ -526,6 +536,7 @@ ns1blankspace.views =
 		title: "Products",
 		namespace: "product",
 		endpoint: "PRODUCT",
+		object: 16,
 		show: true,
 		group: 4,
 		type: 1,
@@ -538,6 +549,7 @@ ns1blankspace.views =
 		title: "Orders",
 		namespace: "order",
 		endpoint: "PRODUCT_ORDER",
+		object: 43,
 		show: true,
 		group: 4,
 		type: 1
@@ -566,6 +578,7 @@ ns1blankspace.views =
 		parentNamespace: "financial",
 		namespace: "invoice",
 		endpoint: "FINANCIAL_INVOICE",
+		object: 5,
 		show: true,
 		group: 5,
 		type: 1,
@@ -596,6 +609,7 @@ ns1blankspace.views =
 		parentNamespace: "financial",
 		namespace: "expense",
 		endpoint: "FINANCIAL_EXPENSE",
+		object: 2,
 		show: true,
 		group: 5,
 		type: 1,
@@ -626,6 +640,7 @@ ns1blankspace.views =
 		parentNamespace: "financial",
 		namespace: "receipt",
 		endpoint: "FINANCIAL_RECEIPT",
+		object: 6,
 		show: true,
 		group: 5,
 		type: 1,
@@ -656,6 +671,7 @@ ns1blankspace.views =
 		parentNamespace: "financial",
 		namespace: "payment",
 		endpoint: "FINANCIAL_PAYMENT",
+		object: 3,
 		show: true,
 		group: 5,
 		type: 1,
@@ -912,7 +928,7 @@ ns1blankspace.views =
 	},
 	{
 		title: "Other&nbsp;Spaces",
-		parentNamespace: "admin",
+		parentNamespace: "developer",
 		namespace: "space",
 		endpoint: "SETUP_SPACE", 
 		show: true,

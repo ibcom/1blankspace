@@ -56,6 +56,7 @@ ns1blankspace.setup.structure =
 						oSearch.method = 'SETUP_STRUCTURE_SEARCH';
 						oSearch.addField('reference,title');
 						oSearch.sort('modifieddate', 'desc');
+						oSearch.rows = 200;
 						oSearch.getResults(function (data) {ns1blankspace.setup.structure.home(oParam, data)});
 					}
 					else
@@ -255,17 +256,20 @@ ns1blankspace.setup.structure =
 						aHTML.push('<tr><td id="ns1blankspaceControlElement" class="ns1blankspaceControl">' +
 										'Elements</td></tr>');
 
-						aHTML.push('<tr><td>&nbsp;</td></tr>');
-
-						aHTML.push('<tr><td id="ns1blankspaceControlGrouping" class="ns1blankspaceControl">' +
-										'Grouping</td></tr>');
-
 						aHTML.push('</table>');	
 
 						aHTML.push('<table class="ns1blankspaceControl">');
 
+						aHTML.push('<tr><td id="ns1blankspaceControlGrouping" class="ns1blankspaceControl">' +
+										'Grouping</td></tr>');
+
 						aHTML.push('<tr><td id="ns1blankspaceControlObject" class="ns1blankspaceControl">' +
 										'Objects</td></tr>');
+
+						aHTML.push('<tr><td>&nbsp;</td></tr>');
+
+						aHTML.push('<tr><td id="ns1blankspaceControlData" class="ns1blankspaceControl">' +
+										'Data</td></tr>');
 					}	
 					
 					aHTML.push('</table>');					
@@ -317,6 +321,11 @@ ns1blankspace.setup.structure =
 					{
 						ns1blankspace.show({selector: '#ns1blankspaceMainObject', refresh: true});
 						ns1blankspace.setup.structure.object.show();
+					});
+
+					$('#ns1blankspaceControlData').click(function(event)
+					{
+						ns1blankspace.structureData.init({structure: ns1blankspace.objectContext});
 					});
 				},
 

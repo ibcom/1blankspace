@@ -29,7 +29,7 @@ ns1blankspace.scripts =
 	},
 	{
 		nameSpace: '1blankspace.admin.space',
-		source: '/jscripts/1blankspace.admin.space-2.0.2.js'
+		source: '/jscripts/1blankspace.developer.space-2.0.1.js'
 	},
 	{
 		nameSpace: '1blankspace.news',
@@ -317,7 +317,7 @@ ns1blankspace.control.setView =
 
 	setup:			function ()
 					{
-						ns1blankspace.admin.space.init();
+						ns1blankspace.developer.space.init();
 					},
 }
 

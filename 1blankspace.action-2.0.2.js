@@ -397,11 +397,14 @@ ns1blankspace.action =
 							var oDate = Date.parse(ns1blankspace.objectContextData.duedatetime);
 								
 							var sHTML = '';
-														
-							if (oDate.getHours() != 0 || oDate.getMinutes() != 0)
-							{
-								sHTML = '<br /><span id="ns1blankspaceControlContext_time" class="ns1blankspaceSub">' + 
-											oDate.toString("h:mm tt")  + '</span>';
+								
+							if (oDate != null)
+							{								
+								if (oDate.getHours() != 0 || oDate.getMinutes() != 0)
+								{
+									sHTML = '<br /><span id="ns1blankspaceControlContext_time" class="ns1blankspaceSub">' + 
+												oDate.toString("h:mm tt")  + '</span>';
+								}
 							}		
 								
 							$('#ns1blankspaceControlContext').html(ns1blankspace.objectContextData.subject +
@@ -664,9 +667,12 @@ ns1blankspace.action =
 						{
 							$('#ns1blankspaceDetailsSubject').val(ns1blankspace.objectContextData.subject.formatXHTML());
 							
-							var sDate = new Date(ns1blankspace.objectContextData.duedatetime);
-							sDate = $.fullCalendar.formatDate(sDate, 'dd MMM yyyy h:mm TT')
-							$('#ns1blankspaceDetailsDate').val(sDate);
+							if (ns1blankspace.objectContextData.duedatetime != '')
+							{	
+								var sDate = new Date(ns1blankspace.objectContextData.duedatetime);
+								sDate = $.fullCalendar.formatDate(sDate, 'dd MMM yyyy h:mm TT')
+								$('#ns1blankspaceDetailsDate').val(sDate);
+							}	
 							
 							$('#ns1blankspaceDetailsType').attr("data-id", ns1blankspace.objectContextData.actiontype);
 							$('#ns1blankspaceDetailsType').val(ns1blankspace.objectContextData.actiontypetext);

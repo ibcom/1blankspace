@@ -1440,9 +1440,10 @@ ns1blankspace.setup.website =
 												url: ns1blankspace.util.endpointURI('SETUP_SITE_DOCUMENT_MANAGE'),
 												data: sData,
 												dataType: 'json',
-												success: function()
+												success: function(oResponse)
 												{
 													ns1blankspace.status.message('Saved');
+													ns1blankspace.objectContext = oResponse.documentid;
 													ns1blankspace.setup.website.data.saveClosed = $('#ns1blankspaceWebsitePageSaveClose').attr('checked');
 
 													if ($('#ns1blankspaceWebsitePageSaveClose:checked').length == 1)

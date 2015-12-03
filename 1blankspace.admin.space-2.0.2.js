@@ -263,11 +263,11 @@ ns1blankspace.admin.space =
 						aHTML.push('<tr><td id="ns1blankspaceControlSummary" class="ns1blankspaceControl ns1blankspaceHighlight">' +
 										'Summary</td></tr>');
 
+						aHTML.push('<tr><td id="ns1blankspaceControlBilling" class="ns1blankspaceControl">' +
+										'Account</td></tr>');
+
 						aHTML.push('<tr><td id="ns1blankspaceControlSubscriptions" class="ns1blankspaceControl">' +
 										'Subscriptions</td></tr>');
-
-						aHTML.push('<tr><td id="ns1blankspaceControlBilling" class="ns1blankspaceControl">' +
-										'Billing</td></tr>');
 
 						aHTML.push('</table>');
 					}				
@@ -312,7 +312,7 @@ ns1blankspace.admin.space =
 
 					$('#ns1blankspaceControlBilling').click(function(event)
 					{
-						ns1blankspace.show({selector: '#ns1blankspaceMainBilling', refresh: true});
+						ns1blankspace.show({selector: '#ns1blankspaceMainBilling'});
 						ns1blankspace.admin.space.billing();
 					});
 				},							
@@ -824,7 +824,7 @@ ns1blankspace.admin.space =
 						aHTML.push('<table class="ns1blankspaceMain">' +
 									'<tr class="ns1blankspaceRow">' +
 									'<td id="ns1blankspaceBillingColumn1" class="ns1blankspaceColumn1Large"></td>' +
-									'<td id="ns1blankspaceBillingColumn2" class="ns1blankspaceColumn2Action" style="width:120px;"></td>' +
+									'<td id="ns1blankspaceBillingColumn2" class="ns1blankspaceColumn2Action" style="width:270px;"></td>' +
 									'</tr>' +
 									'</table>');				
 						
@@ -850,27 +850,67 @@ ns1blankspace.admin.space =
 											ns1blankspace.objectContextData.billing.sitetext +
 											'</td></tr>');
 
-							aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Status</td></tr>' +
-											'<tr><td id="ns1blankspaceBillingStatus" class="ns1blankspaceSummary">' +
-											ns1blankspace.objectContextData.billing.statustext +
-											'</td></tr>');
+							aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
+										'Access' +
+										'</td></tr>' +
+										'<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceRadio">' +
+										'<input type="radio" id="radioStatus1" name="radioStatus" value="1"/>Full<br />' +
+										'<input type="radio" id="radioStatus2" name="radioStatus" value="3"/>Trial<br />' +
+										'<input type="radio" id="radioStatus3" name="radioStatus" value="7"/>None<br />' +
+										'<input type="radio" id="radioStatus2" name="radioStatus" value="2"/>' +
+													'<span class="ns1blankspaceSub">Internal</span>' +
+										'</td></tr>');
 
-							if (ns1blankspace.objectContextData.billing.datausagemegabytes != '')
-							{	
-								aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Data usage as at</td></tr>' +
+							aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
+										'Space Status' +
+										'</td></tr>' +
+										'<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceRadio">' +
+										'<input type="radio" id="radioDisabledN" name="radioDisabled" value="N"/>Enabled<br />' +
+										'<input type="radio" id="radioDisabledY" name="radioDisabled" value="Y"/>Disabled' +
+										'</td></tr>');
+
+							aHTML.push('</table>');					
+							
+							$('#ns1blankspaceBillingColumn1').html(aHTML.join(''));
+
+							var aHTML = [];
+						
+							if (ns1blankspace.objectContextData.billing.datausagemegabytes != '' || ns1blankspace.objectContextData.billing.status==3)
+							{
+								aHTML.push('<table class="ns1blankspaceColumn2">');
+							
+								if (ns1blankspace.objectContextData.billing.datausagemegabytes != '')
+								{	
+									aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Data usage as at</td></tr>' +
 											'<tr><td id="ns1blankspaceBillingDataUsageAsAt" class="ns1blankspaceSummary">' +
 											ns1blankspace.objectContextData.billing.datausagedate +
 											'</td></tr>');
 
-								aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Data usage (MB)</td></tr>' +
+									aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Data usage (MB)</td></tr>' +
 											'<tr><td id="ns1blankspaceBillingDataUsage" class="ns1blankspaceSummary">' +
 											ns1blankspace.objectContextData.billing.datausagemegabytes +
 											'</td></tr>');
-							}
-							
-							aHTML.push('</table>');					
-							
-							$('#ns1blankspaceBillingColumn1').html(aHTML.join(''));
+								}	
+													
+								if (ns1blankspace.objectContextData.billing.status==3)
+								{					
+									aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Trail Access</td></tr>' +
+												'<tr><td class="ns1blankspaceSubNote" style="padding-top:4px;">' +
+												'All objects are limited to 50 records.' +
+												'</td></tr>');
+								}	
+
+								aHTML.push('</table>');
+							}				
+
+							$('#ns1blankspaceBillingColumn2').html(aHTML.join(''));
+
+							$('[name="radioStatus"][value="' + ns1blankspace.objectContextData.billing.status  + '"]').attr('checked', true);
+							$('[name="radioDisabled"][value="' + ns1blankspace.objectContextData.billing.disabled  + '"]').attr('checked', true);
 						}	
 					}
 				},			
@@ -878,8 +918,36 @@ ns1blankspace.admin.space =
 	save:		{
 					send:		function ()
 								{
-									if (ns1blankspace.objectContext != -1)
-									{}	
+									if (ns1blankspace.objectContextData.billing != undefined)
+									{
+										var oData =
+										{
+											id: ns1blankspace.objectContextData.billing.id,
+											status: $('input[name="radioStatus"]:checked').val(),
+											disabled: $('input[name="radioDisabled"]:checked').val()
+										}
+
+										$.ajax(
+										{
+											type: 'POST',
+											url: '/rpc/admin/?method=ADMIN_SPACE_MANAGE',
+											data: oData,
+											dataType: 'json',
+											success: function(response)
+											{
+												if (response.status == "OK")
+												{
+													ns1blankspace.status.message('Updated');
+													ns1blankspace.inputDetected = false;
+													ns1blankspace.admin.space.init({id: ns1blankspace.objectContext});
+												}
+												else
+												{
+													ns1blankspace.status.error(response.error.errornotes);
+												}
+											}
+										});
+									}	
 									else
 									{
 										var iContactBusinessId = '';
@@ -902,8 +970,8 @@ ns1blankspace.admin.space =
 											oData.contactperson_surname = $('#ns1blankspaceDetailsLastName').val();
 											oData.contactperson_email = $('#ns1blankspaceDetailsEmail').val();
 											oData.registration_spacename = $('#ns1blankspaceDetailsBusiness').val();
-										}		
-												
+										}
+			
 										ns1blankspace.status.working();
 
 										$.ajax(
