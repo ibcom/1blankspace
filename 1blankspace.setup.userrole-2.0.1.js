@@ -539,7 +539,7 @@ ns1blankspace.setup.userRole =
 													if (oResponse == undefined)
 													{
 														$vq.init('<table class="ns1blankspaceColumn2">');
-														
+														/*
 														$vq.add('<tr><td>' +
 																		'<span id="ns1blankspaceUserRoleAccessEdit" class="ns1blankspaceAction">Edit</span>' +
 																		'</td></tr>');
@@ -547,6 +547,7 @@ ns1blankspace.setup.userRole =
 														$vq.add('<tr><td style="padding-top:12px;" class="ns1blankspaceSubNote">' +
 																		'Set up restricted access to data.' +
 																		'</td></tr>');
+														*/				
 
 														$vq.add('<tr><td style="padding-top:12px;" class="ns1blankspaceSubNote">' +
 																		'<a href="http://mydigitalstructure.com/gettingstarted_responsive_controls" target="_blank">More on data access control.</a>' +
@@ -590,7 +591,7 @@ ns1blankspace.setup.userRole =
 															aHTML.push('<table id="ns1blankspaceUserRoleAccess" class="ns1blankspaceContainer" style="font-size:0.875em;">');
 															
 															aHTML.push('<tr class="ns1blankspaceCaption">');
-															aHTML.push('<td class="ns1blankspaceHeaderCaption">Object</td>');
+															aHTML.push('<td class="ns1blankspaceHeaderCaption">Context</td>');
 															aHTML.push('<td class="ns1blankspaceHeaderCaption">Notes</td>');
 															aHTML.push('<td class="ns1blankspaceHeaderCaption" style="text-align:center;">Search</td>');
 															aHTML.push('<td class="ns1blankspaceHeaderCaption" style="text-align:center;">Update</td>');
@@ -625,11 +626,11 @@ ns1blankspace.setup.userRole =
 													var aHTML = [];
 
 													aHTML.push('<tr class="ns1blankspaceRow">');
-													aHTML.push('<td id="ns1blankspaceUserRoleAccess_method-' + oRow.id + '" class="ns1blankspaceRow"' +
+													aHTML.push('<td id="ns1blankspaceUserRoleAccess_object-' + oRow.id + '" class="ns1blankspaceRow ns1blankspaceRowSelect"' +
 																			' data-object="' + oRow.object + '"' +
 																			' data-objectcontext="' + oRow.objectcontext + '">' +
-																			oRow.objectcontext + '</td>');
-													aHTML.push('<td id="ns1blankspaceUserRoleAccess_method-' + oRow.id + '" class="ns1blankspaceRow">' +
+																			'...</td>');
+													aHTML.push('<td id="ns1blankspaceUserRoleAccess_object-' + oRow.id + '" class="ns1blankspaceRow">' +
 																			oRow.notes + '</td>');
 													aHTML.push('<td id="ns1blankspaceUserRoleAccess_search-' + oRow.id + '" class="ns1blankspaceRow" style="text-align:center;">' +
 																			(oRow.cansearch=='N'?'No':'Yes') + '</td>');
@@ -645,7 +646,32 @@ ns1blankspace.setup.userRole =
 
 									bind:  		function (oParam)
 												{
-													//$('#ns1blankspaceRenderPage_UserRoleAccess-0 td[data-objectcontext]').attr('data-objectcontext')
+													var aObjectContextIDs = $.map($('#ns1blankspaceUserRoleAccess td[data-objectcontext]'),
+																				function (s) {return $(s).attr('data-objectcontext')});
+
+													var oSearch = new AdvancedSearch();
+													oSearch.method = 'STRUCTURE_DATA_SEARCH';
+													oSearch.addField('reference,title,structuretext,completedbyusertext,contactbusinesstext,contactpersontext,referencedate,modifieddate');
+													oSearch.addFilter('id', 'IN_LIST', aObjectContextIDs.join(','));
+													oSearch.rows = 100;
+													oSearch.getResults(function (oResponse)
+													{
+														$.each(oResponse.data.rows, function (r, row)
+														{
+															if (row.contactbusinesstext != '' || row.contactpersontext != '')
+															{	
+																var sObject = row.contactbusinesstext;
+																if (sObject != '') {sObject += ' '}
+																sObject += row.contactpersontext;
+																$('#ns1blankspaceRenderPage_UserRoleAccess-0 td[data-objectcontext="' + row.id + '"]').html(sObject);
+															}
+														})
+													});
+
+													$('#ns1blankspaceUserRoleAccess .ns1blankspaceRowSelect').click(function ()
+													{
+														ns1blankspace.structureData.init({id: $(this).attr('data-objectcontext')})
+													});
 												}			
 								},							
 						
