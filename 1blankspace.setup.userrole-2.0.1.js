@@ -499,7 +499,10 @@ ns1blankspace.setup.userRole =
 													'Methods</label>' +
 												'<input style="width: 100%;" type="radio" id="ns1blankspaceAccessType-parameters" name="radioAccessType" />' +
 													'<label for="ns1blankspaceAccessType-parameters" style="width:90px; font-size:0.75em;">' +
-													'Properties</label>' +	
+													'Properties</label>' +
+												'<input style="width: 100%;" type="radio" id="ns1blankspaceAccessType-data" name="radioAccessType" />' +
+													'<label for="ns1blankspaceAccessType-data" style="width:75px; font-size:0.75em;">' +
+													'Data</label>' +	
 												'</div>', {queue: 'access'});
 
 										$vq.add('</td></tr>', {queue: 'access'})
@@ -530,57 +533,45 @@ ns1blankspace.setup.userRole =
 									ns1blankspace.setup.userRole.access.methods.show();
 								},
 
-					parameters: {
+					data: 		{
 									show: 		function (oParam, oResponse)
 												{
-													var iAccessMethod = ns1blankspace.util.getParam(oParam, 'accessmethod').value;
-
 													if (oResponse == undefined)
 													{
 														$vq.init('<table class="ns1blankspaceColumn2">');
 														
 														$vq.add('<tr><td>' +
-																		'<span id="ns1blankspaceUserRoleAccessParametersAdd" class="ns1blankspaceAction">Add</span>' +
+																		'<span id="ns1blankspaceUserRoleAccessEdit" class="ns1blankspaceAction">Edit</span>' +
 																		'</td></tr>');
 
 														$vq.add('<tr><td style="padding-top:12px;" class="ns1blankspaceSubNote">' +
-																		'Set up restricted access to function/method based on property value.' +
+																		'Set up restricted access to data.' +
 																		'</td></tr>');
 
 														$vq.add('<tr><td style="padding-top:12px;" class="ns1blankspaceSubNote">' +
-																		'<a href="http://mydigitalstructure.com/gettingstarted_access_control" target="_blank">More on access control.</a>' +
-																		'</td></tr>');
-
-														$vq.add('<tr><td style="padding-top:12px;" class="ns1blankspaceSubNote">' +
-																		'i.e. restrict access to PRODUCT_ORDER_MANAGE where status=6 (Requires Approval)' +
+																		'<a href="http://mydigitalstructure.com/gettingstarted_responsive_controls" target="_blank">More on data access control.</a>' +
 																		'</td></tr>');
 																		
 														$vq.add('</table>');					
 														
 														$vq.render('#ns1blankspaceAccessColumn2');
-													
-														$('#ns1blankspaceUserRoleAccessParametersAdd').button(
+
+														$('#ns1blankspaceUserRoleAccessEdit').button(
 														{
-															label: "Add"
+															label: "Edit"
 														})
 														.click(function()
 														{
-															 ns1blankspace.setup.userRole.access.parameters.edit();
+															 ns1blankspace.setup.userRole.access.data.edit();
 														})
 
 														var oSearch = new AdvancedSearch();
-														oSearch.method = 'SETUP_ROLE_PARAMETER_ACCESS_SEARCH';
-														oSearch.addField('accessmethod,accessmethodtext,allowedvalues,disallowedvalues,id,notes,parameter,type');
-														
-														if (iAccessMethod != undefined)
-														{	
-															oSearch.addFilter('accessmethod', 'EQUAL_TO', iAccessMethod);
-														}
-
+														oSearch.method = 'SETUP_ROLE_OBJECT_ACCESS_SEARCH';
+														oSearch.addField('canremove,cansearch,canupdate,notes,object,objecttext,objectcontext,createduser,createdusertext,createddate');
 														oSearch.addFilter('role', 'EQUAL_TO', ns1blankspace.objectContext);
-														oSearch.rows = 100;
-														oSearch.sort('accessmethodtext', 'asc');
-														oSearch.getResults(function(data) {ns1blankspace.setup.userRole.access.parameters.show(oParam, data)});
+														oSearch.rows = ns1blankspace.option.defaultRows;
+														oSearch.sort('createddate', 'desc');
+														oSearch.getResults(function(data) {ns1blankspace.setup.userRole.access.data.show(oParam, data)});
 													}
 													else
 													{
@@ -588,7 +579,7 @@ ns1blankspace.setup.userRole =
 										
 														if (oResponse.data.rows.length == 0)
 														{
-															aHTML.push('<table><tr><td class="ns1blankspaceNothing">No property value based access set up.</td></tr></table>');
+															aHTML.push('<table><tr><td class="ns1blankspaceNothing">No data access set up.</td></tr></table>');
 
 															aHTML.push('</table>');
 
@@ -599,16 +590,16 @@ ns1blankspace.setup.userRole =
 															aHTML.push('<table id="ns1blankspaceUserRoleAccess" class="ns1blankspaceContainer" style="font-size:0.875em;">');
 															
 															aHTML.push('<tr class="ns1blankspaceCaption">');
-															aHTML.push('<td class="ns1blankspaceHeaderCaption" style="vertical-align:bottom;">Method</td>');
-															aHTML.push('<td class="ns1blankspaceHeaderCaption" style="vertical-align:bottom;">Property</td>');
-															aHTML.push('<td class="ns1blankspaceHeaderCaption">Values<br />Allowed</td>');
-															aHTML.push('<td class="ns1blankspaceHeaderCaption" style="vertical-align:bottom;">Disallowed</td>');
-															aHTML.push('<td class="ns1blankspaceHeaderCaption">&nbsp;</td>');
+															aHTML.push('<td class="ns1blankspaceHeaderCaption">Object</td>');
+															aHTML.push('<td class="ns1blankspaceHeaderCaption">Notes</td>');
+															aHTML.push('<td class="ns1blankspaceHeaderCaption" style="text-align:center;">Search</td>');
+															aHTML.push('<td class="ns1blankspaceHeaderCaption" style="text-align:center;">Update</td>');
+															aHTML.push('<td class="ns1blankspaceHeaderCaption" style="text-align:center;">Remove</td>');
 															aHTML.push('</tr>');
 
 															$.each(oResponse.data.rows, function()
 															{
-																aHTML.push(ns1blankspace.setup.userRole.access.parameters.row(this));
+																aHTML.push(ns1blankspace.setup.userRole.access.data.row(this));
 															});
 																
 															aHTML.push('</table>');
@@ -621,212 +612,43 @@ ns1blankspace.setup.userRole =
 																showMore: (oResponse.morerows == "true"),
 																more: oResponse.moreid,
 																rows: ns1blankspace.option.defaultRows,
-																functionShowRow: ns1blankspace.setup.userRole.access.parameters.row,
-																functionOnNewPage: ns1blankspace.setup.userRole.access.parameters.bind,
+																functionShowRow: ns1blankspace.setup.userRole.access.data.row,
+																functionOnNewPage: ns1blankspace.setup.userRole.access.data.bind,
 																headerRow: true,
 															});
 														}
 													}
+												},		
+
+									row:		function (oRow)
+												{
+													var aHTML = [];
+
+													aHTML.push('<tr class="ns1blankspaceRow">');
+													aHTML.push('<td id="ns1blankspaceUserRoleAccess_method-' + oRow.id + '" class="ns1blankspaceRow"' +
+																			' data-object="' + oRow.object + '"' +
+																			' data-objectcontext="' + oRow.objectcontext + '">' +
+																			oRow.objectcontext + '</td>');
+													aHTML.push('<td id="ns1blankspaceUserRoleAccess_method-' + oRow.id + '" class="ns1blankspaceRow">' +
+																			oRow.notes + '</td>');
+													aHTML.push('<td id="ns1blankspaceUserRoleAccess_search-' + oRow.id + '" class="ns1blankspaceRow" style="text-align:center;">' +
+																			(oRow.cansearch=='N'?'No':'Yes') + '</td>');
+													aHTML.push('<td id="ns1blankspaceUserRoleAccess_update-' + oRow.id + '" class="ns1blankspaceRow" style="text-align:center;">' +
+																			(oRow.canupdate=='N'?'No':'Yes') + '</td>');
+													aHTML.push('<td id="ns1blankspaceUserRoleAccess_remove-' + oRow.id + '" class="ns1blankspaceRow" style="text-align:center;">' +
+																			(oRow.canremove=='N'?'No':'Yes') + '</td>');
+
+													aHTML.push('</tr>');
+
+													return aHTML.join('');						
 												},
 
-									row: 		function (oRow)
+									bind:  		function (oParam)
 												{
-													$vq.init('<tr class="ns1blankspaceRow">');
-																				
-													$vq.add('<td id="ns1blankspaceAccessParameters_method-' + oRow.id + '" class="ns1blankspaceRow ns1blankspaceRowSelect">' +
-																			(oRow.accessmethodtext==''?'[All]':oRow.accessmethodtext) + '</td>');
-													$vq.add('<td id="ns1blankspaceAccessParameters_parameter-' + oRow.id + '" class="ns1blankspaceRow">' +
-																			oRow.parameter + '</td>');
-													$vq.add('<td id="ns1blankspaceAccessParameters_allowedvalues-' + oRow.id + '" class="ns1blankspaceRow">' +
-																			oRow.allowedvalues + '</td>');
-													$vq.add('<td id="ns1blankspaceAccessParameters_disallowedvalues-' + oRow.id + '" class="ns1blankspaceRow">' +
-																			oRow.disallowedvalues + '</td>');
-																											
-													$vq.add('<td style="width:30px; text-align:right;" class="ns1blankspaceRow">');
-													
-													$vq.add('<span id="ns1blankspaceAccessParameters_remove-' + oRow.id + '" class="ns1blankspaceRowRemove"></span>');
-																		
-													$vq.add('</td></tr>');
-
-													return $vq.get('');
-												},
-
-									bind: 		function (oParam)
-												{
-													$('#ns1blankspaceUserRoleAccess .ns1blankspaceRowRemove').button(
-													{
-														text: false,
-														icons: 
-														{
-															primary: "ui-icon-close"
-														}
-													})
-													.click(function()
-													{
-														ns1blankspace.remove(
-														{
-															xhtmlElementID: this.id,
-															method: 'SETUP_ROLE_PARAMETER_ACCESS_MANAGE',
-															ifNoneMessage: 'No property value based access set up.'
-														});
-													})
-													.css('width', '15px')
-													.css('height', '17px');
-
-													$('#ns1blankspaceUserRoleAccess td.ns1blankspaceRowSelect')
-													.click(function()
-													{
-														ns1blankspace.setup.userRole.access.parameters.edit({xhtmlElementID: this.id})
-													});
-												},
-												
-									edit: 		function (oParam, oResponse)
-												{
-													var sID; 
-									
-													if (oResponse == undefined)
-													{
-														var sXHTMLElementID = ns1blankspace.util.getParam(oParam, 'xhtmlElementID').value;
-
-														if (sXHTMLElementID != undefined)
-														{
-															sID = sXHTMLElementID.split('-')[1];
-														}	
-													
-														$vq.init('<table class="ns1blankspace" style="width:450px;">');
-																
-														$vq.add('<tr class="ns1blankspaceCaption">' +
-																'<td class="ns1blankspaceCaption">' +
-																'Method' +
-																'</td></tr>' +
-																'<tr class="ns1blankspaceSelect">' +
-																'<td class="ns1blankspaceSelect">' +
-																'<input id="ns1blankspaceSetupAccessMethod" class="ns1blankspaceSelect"' +
-																	' data-method="SETUP_METHOD_SEARCH">' +
-																'</td></tr>');	
-												
-														$vq.add('<tr><td class="ns1blankspaceCaption">' +
-																'Property' +
-																'</td></tr>' +
-																'<tr class="ns1blankspaceText">' +
-																'<td class="ns1blankspaceText">' +
-																'<input id="ns1blankspaceSetupAccessParameter" class="ns1blankspaceText">' +
-																'</td></tr>');
-
-														$vq.add('<tr><td class="ns1blankspaceCaption">' +
-																'Allowed Values' +
-																'</td></tr>' +
-																'<tr class="ns1blankspaceText">' +
-																'<td class="ns1blankspaceText">' +
-																'<input id="ns1blankspaceSetupAccessAllowedValues" class="ns1blankspaceText">' +
-																'</td></tr>');
-
-														$vq.add('<tr><td class="ns1blankspaceCaption">' +
-																'Disallowed Values' +
-																'</td></tr>' +
-																'<tr class="ns1blankspaceText">' +
-																'<td class="ns1blankspaceText">' +
-																'<input id="ns1blankspaceSetupAccessDisallowedValues" class="ns1blankspaceText">' +
-																'</td></tr>');
-																		
-														$vq.add('</table>');					
-														
-														$vq.render('#ns1blankspaceAccessColumn1');
-
-														$vq.init('<table class="ns1blankspaceColumn2">');
-																
-														$vq.add('<tr><td>' +
-																		'<span class="ns1blankspaceAction" style="width:70px;" id="ns1blankspaceAccessParameterSave">Save</span>' +
-																		'</td></tr>');
-													
-														$vq.add('<tr><td>' +
-																		'<span class="ns1blankspaceAction" style="width:70px;" id="ns1blankspaceAccessParameterCancel">Cancel</span>' +
-																		'</td></tr>');
-
-														$vq.add('<tr><td class="ns1blankspaceSubNote" style="padding-top:12px;">Leave method blank to set for all methods.</td></tr>');
-
-														$vq.add('<tr><td id="ns1blankspaceAccessParameterAbout" class="ns1blankspaceSubNote" style="padding-top:12px;"></td></tr>');
-																		
-														$vq.add('</table>');	
-					
-														$vq.render('#ns1blankspaceAccessColumn2');
-														
-														$('#ns1blankspaceAccessParameterSave').button(
-														{
-															text: "Save"
-														})
-														.click(function() 
-														{
-															var oData =
-															{
-																id: sID,
-																role: ns1blankspace.objectContext,
-																type: 1,
-																accessmethod: $('#ns1blankspaceSetupAccessMethod').attr('data-id'),
-																parameter: $('#ns1blankspaceSetupAccessParameter').val(),
-																allowedvalues: $('#ns1blankspaceSetupAccessAllowedValues').val(),
-																disallowedvalues: $('#ns1blankspaceSetupAccessDisallowedValues').val()
-															}
-
-															ns1blankspace.status.working();
-
-															$.ajax(
-															{
-																type: 'POST',
-																url: ns1blankspace.util.endpointURI('SETUP_ROLE_PARAMETER_ACCESS_MANAGE'),
-																data: oData,
-																dataType: 'json',
-																success: function(data)
-																{
-																	if (data.status == 'OK')
-																	{	
-																		ns1blankspace.status.message('Access added.')
-																		ns1blankspace.setup.userRole.access.parameters.show();
-																	}
-																}
-															});
-														});
-														
-														$('#ns1blankspaceAccessParameterCancel').button(
-														{
-															text: "Cancel"
-														})
-														.click(function() 
-														{
-															ns1blankspace.setup.userRole.access.parameters.show();
-														});
-														
-														if (sID != undefined)
-														{
-															var oSearch = new AdvancedSearch();
-															oSearch.method = 'SETUP_ROLE_PARAMETER_ACCESS_SEARCH';
-															oSearch.addField('accessmethod,accessmethodtext,allowedvalues,disallowedvalues,notes,parameter,role,roletext,type');
-															oSearch.addFilter('id', 'EQUAL_TO', sID)
-															
-															oSearch.getResults(function(oResponse)
-															{
-																ns1blankspace.setup.userRole.access.parameters.edit(oParam, oResponse)
-															});
-														}
-													}
-													else
-													{
-														if (oResponse.data.rows.length != 0)
-														{
-															var oObjectContext = oResponse.data.rows[0];
-															$('#ns1blankspaceSetupAccessMethod').attr('data-id', oObjectContext.accessmethod);
-															$('#ns1blankspaceSetupAccessMethod').val(oObjectContext.accessmethodtext);
-															$('#ns1blankspaceSetupAccessParameter').val(oObjectContext.parameter);
-															$('#ns1blankspaceSetupAccessAllowedValues').val(oObjectContext.allowedvalues);
-															$('#ns1blankspaceSetupAccessDisallowedValues').val(oObjectContext.disallowedvalues);
-
-															$('#ns1blankspaceAccessParameterAbout').html('<a href="http://mydigitalstructure.com/' + oObjectContext.accessmethodtext + '"' +
-																											' target="_blank">About this method</a>'); 
-														}
-													}
-												}								
-								},			
-
+													//$('#ns1blankspaceRenderPage_UserRoleAccess-0 td[data-objectcontext]').attr('data-objectcontext')
+												}			
+								},							
+						
 					methods: 	{
 									show: 		function (oParam, oResponse)
 												{
@@ -863,7 +685,7 @@ ns1blankspace.setup.userRole =
 														oSearch.method = 'SETUP_ROLE_METHOD_ACCESS_SEARCH';
 														oSearch.addField('access,accesstext,accessmethod,accessmethodtext,canadd,canremove,canupdate,canuse');
 														oSearch.addFilter('role', 'EQUAL_TO', ns1blankspace.objectContext);
-														oSearch.rows = 500;
+														oSearch.rows = ns1blankspace.option.defaultRows;
 														oSearch.sort('accessmethodtext', 'asc');
 														oSearch.getResults(function(data) {ns1blankspace.setup.userRole.access.methods.show(oParam, data)});
 													}
@@ -1311,7 +1133,304 @@ ns1blankspace.setup.userRole =
 														}
 													}
 												}
-								}			
+								},
+
+					parameters: {
+									show: 		function (oParam, oResponse)
+												{
+													var iAccessMethod = ns1blankspace.util.getParam(oParam, 'accessmethod').value;
+
+													if (oResponse == undefined)
+													{
+														$vq.init('<table class="ns1blankspaceColumn2">');
+														
+														$vq.add('<tr><td>' +
+																		'<span id="ns1blankspaceUserRoleAccessParametersAdd" class="ns1blankspaceAction">Add</span>' +
+																		'</td></tr>');
+
+														$vq.add('<tr><td style="padding-top:12px;" class="ns1blankspaceSubNote">' +
+																		'Set up restricted access to function/method based on property value.' +
+																		'</td></tr>');
+
+														$vq.add('<tr><td style="padding-top:12px;" class="ns1blankspaceSubNote">' +
+																		'<a href="http://mydigitalstructure.com/gettingstarted_access_control" target="_blank">More on access control.</a>' +
+																		'</td></tr>');
+
+														$vq.add('<tr><td style="padding-top:12px;" class="ns1blankspaceSubNote">' +
+																		'i.e. restrict access to PRODUCT_ORDER_MANAGE where status=6 (Requires Approval)' +
+																		'</td></tr>');
+																		
+														$vq.add('</table>');					
+														
+														$vq.render('#ns1blankspaceAccessColumn2');
+													
+														$('#ns1blankspaceUserRoleAccessParametersAdd').button(
+														{
+															label: "Add"
+														})
+														.click(function()
+														{
+															 ns1blankspace.setup.userRole.access.parameters.edit();
+														})
+
+														var oSearch = new AdvancedSearch();
+														oSearch.method = 'SETUP_ROLE_PARAMETER_ACCESS_SEARCH';
+														oSearch.addField('accessmethod,accessmethodtext,allowedvalues,disallowedvalues,id,notes,parameter,type');
+														
+														if (iAccessMethod != undefined)
+														{	
+															oSearch.addFilter('accessmethod', 'EQUAL_TO', iAccessMethod);
+														}
+
+														oSearch.addFilter('role', 'EQUAL_TO', ns1blankspace.objectContext);
+														oSearch.rows = 100;
+														oSearch.sort('accessmethodtext', 'asc');
+														oSearch.getResults(function(data) {ns1blankspace.setup.userRole.access.parameters.show(oParam, data)});
+													}
+													else
+													{
+														var aHTML = [];
+										
+														if (oResponse.data.rows.length == 0)
+														{
+															aHTML.push('<table><tr><td class="ns1blankspaceNothing">No property value based access set up.</td></tr></table>');
+
+															aHTML.push('</table>');
+
+															$('#ns1blankspaceAccessColumn1').html(aHTML.join(''));
+														}
+														else
+														{		
+															aHTML.push('<table id="ns1blankspaceUserRoleAccess" class="ns1blankspaceContainer" style="font-size:0.875em;">');
+															
+															aHTML.push('<tr class="ns1blankspaceCaption">');
+															aHTML.push('<td class="ns1blankspaceHeaderCaption" style="vertical-align:bottom;">Method</td>');
+															aHTML.push('<td class="ns1blankspaceHeaderCaption" style="vertical-align:bottom;">Property</td>');
+															aHTML.push('<td class="ns1blankspaceHeaderCaption">Values<br />Allowed</td>');
+															aHTML.push('<td class="ns1blankspaceHeaderCaption" style="vertical-align:bottom;">Disallowed</td>');
+															aHTML.push('<td class="ns1blankspaceHeaderCaption">&nbsp;</td>');
+															aHTML.push('</tr>');
+
+															$.each(oResponse.data.rows, function()
+															{
+																aHTML.push(ns1blankspace.setup.userRole.access.parameters.row(this));
+															});
+																
+															aHTML.push('</table>');
+															
+															ns1blankspace.render.page.show(
+															{
+																xhtmlElementID: 'ns1blankspaceAccessColumn1',
+																xhtmlContext: 'UserRoleAccess',
+																xhtml: aHTML.join(''),
+																showMore: (oResponse.morerows == "true"),
+																more: oResponse.moreid,
+																rows: ns1blankspace.option.defaultRows,
+																functionShowRow: ns1blankspace.setup.userRole.access.parameters.row,
+																functionOnNewPage: ns1blankspace.setup.userRole.access.parameters.bind,
+																headerRow: true,
+															});
+														}
+													}
+												},
+
+									row: 		function (oRow)
+												{
+													$vq.init('<tr class="ns1blankspaceRow">');
+																				
+													$vq.add('<td id="ns1blankspaceAccessParameters_method-' + oRow.id + '" class="ns1blankspaceRow ns1blankspaceRowSelect">' +
+																			(oRow.accessmethodtext==''?'[All]':oRow.accessmethodtext) + '</td>');
+													$vq.add('<td id="ns1blankspaceAccessParameters_parameter-' + oRow.id + '" class="ns1blankspaceRow">' +
+																			oRow.parameter + '</td>');
+													$vq.add('<td id="ns1blankspaceAccessParameters_allowedvalues-' + oRow.id + '" class="ns1blankspaceRow">' +
+																			oRow.allowedvalues + '</td>');
+													$vq.add('<td id="ns1blankspaceAccessParameters_disallowedvalues-' + oRow.id + '" class="ns1blankspaceRow">' +
+																			oRow.disallowedvalues + '</td>');
+																											
+													$vq.add('<td style="width:30px; text-align:right;" class="ns1blankspaceRow">');
+													
+													$vq.add('<span id="ns1blankspaceAccessParameters_remove-' + oRow.id + '" class="ns1blankspaceRowRemove"></span>');
+																		
+													$vq.add('</td></tr>');
+
+													return $vq.get('');
+												},
+
+									bind: 		function (oParam)
+												{
+													$('#ns1blankspaceUserRoleAccess .ns1blankspaceRowRemove').button(
+													{
+														text: false,
+														icons: 
+														{
+															primary: "ui-icon-close"
+														}
+													})
+													.click(function()
+													{
+														ns1blankspace.remove(
+														{
+															xhtmlElementID: this.id,
+															method: 'SETUP_ROLE_PARAMETER_ACCESS_MANAGE',
+															ifNoneMessage: 'No property value based access set up.'
+														});
+													})
+													.css('width', '15px')
+													.css('height', '17px');
+
+													$('#ns1blankspaceUserRoleAccess td.ns1blankspaceRowSelect')
+													.click(function()
+													{
+														ns1blankspace.setup.userRole.access.parameters.edit({xhtmlElementID: this.id})
+													});
+												},
+												
+									edit: 		function (oParam, oResponse)
+												{
+													var sID; 
+									
+													if (oResponse == undefined)
+													{
+														var sXHTMLElementID = ns1blankspace.util.getParam(oParam, 'xhtmlElementID').value;
+
+														if (sXHTMLElementID != undefined)
+														{
+															sID = sXHTMLElementID.split('-')[1];
+														}	
+													
+														$vq.init('<table class="ns1blankspace" style="width:450px;">');
+																
+														$vq.add('<tr class="ns1blankspaceCaption">' +
+																'<td class="ns1blankspaceCaption">' +
+																'Method' +
+																'</td></tr>' +
+																'<tr class="ns1blankspaceSelect">' +
+																'<td class="ns1blankspaceSelect">' +
+																'<input id="ns1blankspaceSetupAccessMethod" class="ns1blankspaceSelect"' +
+																	' data-method="SETUP_METHOD_SEARCH">' +
+																'</td></tr>');	
+												
+														$vq.add('<tr><td class="ns1blankspaceCaption">' +
+																'Property' +
+																'</td></tr>' +
+																'<tr class="ns1blankspaceText">' +
+																'<td class="ns1blankspaceText">' +
+																'<input id="ns1blankspaceSetupAccessParameter" class="ns1blankspaceText">' +
+																'</td></tr>');
+
+														$vq.add('<tr><td class="ns1blankspaceCaption">' +
+																'Allowed Values' +
+																'</td></tr>' +
+																'<tr class="ns1blankspaceText">' +
+																'<td class="ns1blankspaceText">' +
+																'<input id="ns1blankspaceSetupAccessAllowedValues" class="ns1blankspaceText">' +
+																'</td></tr>');
+
+														$vq.add('<tr><td class="ns1blankspaceCaption">' +
+																'Disallowed Values' +
+																'</td></tr>' +
+																'<tr class="ns1blankspaceText">' +
+																'<td class="ns1blankspaceText">' +
+																'<input id="ns1blankspaceSetupAccessDisallowedValues" class="ns1blankspaceText">' +
+																'</td></tr>');
+																		
+														$vq.add('</table>');					
+														
+														$vq.render('#ns1blankspaceAccessColumn1');
+
+														$vq.init('<table class="ns1blankspaceColumn2">');
+																
+														$vq.add('<tr><td>' +
+																		'<span class="ns1blankspaceAction" style="width:70px;" id="ns1blankspaceAccessParameterSave">Save</span>' +
+																		'</td></tr>');
+													
+														$vq.add('<tr><td>' +
+																		'<span class="ns1blankspaceAction" style="width:70px;" id="ns1blankspaceAccessParameterCancel">Cancel</span>' +
+																		'</td></tr>');
+
+														$vq.add('<tr><td class="ns1blankspaceSubNote" style="padding-top:12px;">Leave method blank to set for all methods.</td></tr>');
+
+														$vq.add('<tr><td id="ns1blankspaceAccessParameterAbout" class="ns1blankspaceSubNote" style="padding-top:12px;"></td></tr>');
+																		
+														$vq.add('</table>');	
+					
+														$vq.render('#ns1blankspaceAccessColumn2');
+														
+														$('#ns1blankspaceAccessParameterSave').button(
+														{
+															text: "Save"
+														})
+														.click(function() 
+														{
+															var oData =
+															{
+																id: sID,
+																role: ns1blankspace.objectContext,
+																type: 1,
+																accessmethod: $('#ns1blankspaceSetupAccessMethod').attr('data-id'),
+																parameter: $('#ns1blankspaceSetupAccessParameter').val(),
+																allowedvalues: $('#ns1blankspaceSetupAccessAllowedValues').val(),
+																disallowedvalues: $('#ns1blankspaceSetupAccessDisallowedValues').val()
+															}
+
+															ns1blankspace.status.working();
+
+															$.ajax(
+															{
+																type: 'POST',
+																url: ns1blankspace.util.endpointURI('SETUP_ROLE_PARAMETER_ACCESS_MANAGE'),
+																data: oData,
+																dataType: 'json',
+																success: function(data)
+																{
+																	if (data.status == 'OK')
+																	{	
+																		ns1blankspace.status.message('Access added.')
+																		ns1blankspace.setup.userRole.access.parameters.show();
+																	}
+																}
+															});
+														});
+														
+														$('#ns1blankspaceAccessParameterCancel').button(
+														{
+															text: "Cancel"
+														})
+														.click(function() 
+														{
+															ns1blankspace.setup.userRole.access.parameters.show();
+														});
+														
+														if (sID != undefined)
+														{
+															var oSearch = new AdvancedSearch();
+															oSearch.method = 'SETUP_ROLE_PARAMETER_ACCESS_SEARCH';
+															oSearch.addField('accessmethod,accessmethodtext,allowedvalues,disallowedvalues,notes,parameter,role,roletext,type');
+															oSearch.addFilter('id', 'EQUAL_TO', sID)
+															
+															oSearch.getResults(function(oResponse)
+															{
+																ns1blankspace.setup.userRole.access.parameters.edit(oParam, oResponse)
+															});
+														}
+													}
+													else
+													{
+														if (oResponse.data.rows.length != 0)
+														{
+															var oObjectContext = oResponse.data.rows[0];
+															$('#ns1blankspaceSetupAccessMethod').attr('data-id', oObjectContext.accessmethod);
+															$('#ns1blankspaceSetupAccessMethod').val(oObjectContext.accessmethodtext);
+															$('#ns1blankspaceSetupAccessParameter').val(oObjectContext.parameter);
+															$('#ns1blankspaceSetupAccessAllowedValues').val(oObjectContext.allowedvalues);
+															$('#ns1blankspaceSetupAccessDisallowedValues').val(oObjectContext.disallowedvalues);
+
+															$('#ns1blankspaceAccessParameterAbout').html('<a href="http://mydigitalstructure.com/' + oObjectContext.accessmethodtext + '"' +
+																											' target="_blank">About this method</a>'); 
+														}
+													}
+												}								
+								},						
 				},
 
 	users: 		{

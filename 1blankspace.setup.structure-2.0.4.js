@@ -248,17 +248,17 @@ ns1blankspace.setup.structure =
 						aHTML.push('<tr><td id="ns1blankspaceControlDetails" class="ns1blankspaceControl">' +
 										'Details</td></tr>');
 
-						aHTML.push('<tr><td>&nbsp;</td></tr>');
-
-						aHTML.push('<tr><td id="ns1blankspaceControlCategory" class="ns1blankspaceControl">' +
-										'Categories</td></tr>');
-
 						aHTML.push('<tr><td id="ns1blankspaceControlElement" class="ns1blankspaceControl">' +
-										'Elements</td></tr>');
+										'Elements' +
+										'<div class="ns1blankspaceSubNote">Properties</div>' +
+										'</td></tr>');
 
 						aHTML.push('</table>');	
 
 						aHTML.push('<table class="ns1blankspaceControl">');
+
+						aHTML.push('<tr><td id="ns1blankspaceControlCategory" class="ns1blankspaceControl">' +
+										'Categories</td></tr>');
 
 						aHTML.push('<tr><td id="ns1blankspaceControlGrouping" class="ns1blankspaceControl">' +
 										'Grouping</td></tr>');
@@ -501,7 +501,24 @@ ns1blankspace.setup.structure =
 											{
 												ns1blankspace.objectContext = oResponse.id;
 												ns1blankspace.inputDetected = false;
-												ns1blankspace.setup.structure.search.send('-' + ns1blankspace.objectContext, {source: 1});
+
+												var oData =
+												{
+													structure: ns1blankspace.objectContext,
+													title: 'Default'
+												};
+													
+												$.ajax(
+												{
+													type: 'POST',
+													url: ns1blankspace.util.endpointURI('SETUP_STRUCTURE_CATEGORY_MANAGE'),
+													data: oData,
+													dataType: 'json',
+													success: function()
+													{
+														ns1blankspace.setup.structure.init({id: ns1blankspace.objectContext});
+													}
+												});
 											}	
 										}
 										else
@@ -1139,6 +1156,8 @@ ns1blankspace.setup.structure =
 				},
 				
 	element: 	{
+					data: 		{},
+
 					init:		function (oParam, oResponse)
 								{
 									var iObjectContext = ns1blankspace.objectContext;
@@ -1164,29 +1183,42 @@ ns1blankspace.setup.structure =
 									else
 									{
 										var aHTML = [];
-									
-										aHTML.push('<table class="ns1blankspaceContainer">' +
-													'<tr class="ns1blankspaceContainer">' +
-													'<td id="ns1blankspaceSetupStructureElementColumnCategory" style="width:100px;padding-right:5px;font-size:0.875em;" class="ns1blankspaceColumn1">' +
-														ns1blankspace.xhtml.loading + '</td>' +
-													'<td id="ns1blankspaceSetupStructureElementColumnElement1" style="width:175px;padding-right:5px;font-size:0.875em;" class="ns1blankspaceColumn2"></td>' +
-													'<td id="ns1blankspaceSetupStructureElementColumnElement2" style="width:305px;padding-right:15px;font-size:0.875em;" class="ns1blankspaceColumn2"></td>' +
-													'<td id="ns1blankspaceSetupStructureElementColumnElement3" class="ns1blankspaceColumn2"></td>' +
-													'</tr>' +
-													'</table>');					
-											
-										$('#ns1blankspaceMainElement').html(aHTML.join(''));
-											
-										var aHTML = [];
+
+										ns1blankspace.setup.structure.element.data.categoryCount = oResponse.data.rows.length;
 										
 										if (oResponse.data.rows.length == 0)
 										{
 											aHTML.push('<table><tr><td valign="top">No categories.</td></tr></table>');
 
-											$('#ns1blankspaceSetupStructureElementColumnCategory').html(aHTML.join(''));
+											$('#ns1blankspaceMainElement').html(aHTML.join(''));
 										}
 										else
 										{
+											var aHTML = [];
+									
+											aHTML.push('<table class="ns1blankspaceContainer">' +
+															'<tr class="ns1blankspaceContainer">')
+
+											if (oResponse.data.rows.length == 1)
+											{
+												ns1blankspace.setup.structure.element.data.category = oResponse.data.rows[0].id;
+												ns1blankspace.setup.structure.element.show({category: ns1blankspace.setup.structure.element.data.category});
+											}
+											else
+											{	
+												aHTML.push('<td id="ns1blankspaceSetupStructureElementColumnCategory" style="width:100px;padding-right:5px;font-size:0.875em;" class="ns1blankspaceColumn1"></td>')
+											}
+
+											aHTML.push('<td id="ns1blankspaceSetupStructureElementColumnElement1" style="width:175px;padding-right:5px;font-size:0.875em;" class="ns1blankspaceColumn2"></td>' +
+															'<td id="ns1blankspaceSetupStructureElementColumnElement2" style="width:305px;padding-right:15px;font-size:0.875em;" class="ns1blankspaceColumn2"></td>' +
+															'<td id="ns1blankspaceSetupStructureElementColumnElement3" class="ns1blankspaceColumn2"></td>' +
+															'</tr>' +
+															'</table>');					
+											
+											$('#ns1blankspaceMainElement').html(aHTML.join(''));
+
+											var aHTML = [];
+
 											aHTML.push('<table id="ns1blankspaceSetupStructureCategory" class="ns1blankspaceContainer">');
 										
 											$.each(oResponse.data.rows, function()
@@ -1228,7 +1260,9 @@ ns1blankspace.setup.structure =
 										if (oParam.options != undefined) {oOptions = oParam.options}
 										if (oParam.actions != undefined) {oActions = oParam.actions}
 										if (oParam.category != undefined) {iCategory = oParam.category}
-									}		
+									}
+
+									ns1blankspace.setup.structure.element.data.category = iCategory
 										
 									if (oResponse == undefined)
 									{	
@@ -1249,7 +1283,6 @@ ns1blankspace.setup.structure =
 											
 										aHTML.push('<tr><td class="ns1blankspaceSub">' +
 														'No element selected.' +
-														'<br /><br/ >Click the gear icon to set up automation (issue creation) for an element.' +
 													'</td></tr>');
 
 										aHTML.push('</table>');		
@@ -1292,7 +1325,8 @@ ns1blankspace.setup.structure =
 										}
 										else
 										{
-											aHTML.push('<table id="ns1blankspaceSetupStructureElementColumnElement" class="ns1blankspaceColumn2">');
+											aHTML.push('<table id="ns1blankspaceSetupStructureElementColumnElement" ' +
+															(ns1blankspace.setup.structure.element.data.categoryCount>1?'class="ns1blankspaceColumn2"':'') + '>');
 										
 											$.each(oResponse.data.rows, function()
 											{
@@ -1341,8 +1375,9 @@ ns1blankspace.setup.structure =
 													ns1blankspace.remove(
 													{
 														xhtmlElementID: this.id,
-														method: 'ETUP_STRUCTURE_ELEMENT_MANAGE',
-														ifNoneMessage: 'No elements.'
+														method: 'SETUP_STRUCTURE_ELEMENT_MANAGE',
+														ifNoneMessage: 'No elements.',
+														minimumSiblings: 0
 													});
 
 													//ns1blankspace.setup.structure.element.remove({xhtmlElementID: this.id});

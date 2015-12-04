@@ -93,7 +93,15 @@ ns1blankspace.setup.space =
 						aHTML.push('<tr class="ns1blankspaceControl">' +
 										'<td id="ns1blankspaceControlStorage" class="ns1blankspaceControl">Storage<br />Accounts' +
 										'<br /><span class="ns1blankspaceSub" style="font-size:0.75em;">AWS S3</span></td>' +
-										'</tr>');		
+										'</tr>');
+
+						aHTML.push('</table>');	
+
+						aHTML.push('<table class="ns1blankspaceControl">');
+
+						aHTML.push('<tr class="ns1blankspaceControl">' +
+										'<td id="ns1blankspaceControlAdvanced" class="ns1blankspaceControl">Advanced</td>' +
+										'</tr>');							
 											
 						if (ns1blankspace.option.advancedAccess)
 						{	
@@ -102,7 +110,7 @@ ns1blankspace.setup.space =
 										'</tr>');
 						}
 			
-						aHTML.push('</table>');		
+						aHTML.push('</table>');	
 						
 						$('#ns1blankspaceControl').html(aHTML.join(''));
 
@@ -114,6 +122,7 @@ ns1blankspace.setup.space =
 						aHTML.push('<div id="ns1blankspaceMainInitialise" class="ns1blankspaceControlMain"></div>');
 						aHTML.push('<div id="ns1blankspaceMainStorage" class="ns1blankspaceControlMain"></div>');
 						aHTML.push('<div id="ns1blankspaceMainAccess" class="ns1blankspaceControlMain"></div>');
+						aHTML.push('<div id="ns1blankspaceMainAdvanced" class="ns1blankspaceControlMain"></div>');
 						
 						$('#ns1blankspaceMain').html(aHTML.join(''));
 						
@@ -151,6 +160,12 @@ ns1blankspace.setup.space =
 						{
 							ns1blankspace.show({selector: '#ns1blankspaceMainAccess', refresh: true});
 							ns1blankspace.setup.space.access();
+						});
+
+						$('#ns1blankspaceControlAdvanced').click(function(event)
+						{
+							ns1blankspace.show({selector: '#ns1blankspaceMainAdvanced'});
+							ns1blankspace.setup.space.advanced.show();
 						});
 						
 						$('#ns1blankspaceControlSummary').addClass('ns1blankspaceHighlight');
@@ -398,7 +413,31 @@ ns1blankspace.setup.space =
 										success: function (data)
 										{
 											ns1blankspace.status.message('Settings saved');
-											ns1blankspace.setup.space.init();
+
+											if ($('#ns1blankspaceMainAdvanced').html() != '')
+											{
+												var oData = 
+												{
+													attribute: 473,
+													value: $('input[name="radioDataBasedSecurity"]:checked').val()
+												}
+
+												$.ajax(
+												{
+													type: 'POST',
+													url: '/rpc/core/?method=CORE_PROFILE_MANAGE',
+													data: oData,
+													dataType: 'json',
+													success: function (data)
+													{
+														ns1blankspace.setup.space.init();
+													}
+												});	
+											}
+											else
+											{
+												ns1blankspace.setup.space.init();
+											}	
 										}
 									});
 								}	
@@ -1654,9 +1693,56 @@ ns1blankspace.setup.space =
 													$('#ns1blankspaceSetupSpaceStorageBucketTitle').attr('data-id', oResponse.data.rows[0].id)
 												}	
 											});
-
 										}
 									}		
 								}
-				}
+				},
+
+	advanced: 	{
+					show:		function (oResponse)
+								{		
+									var aHTML = [];
+									
+									aHTML.push('<table class="ns1blankspace">');
+									
+									aHTML.push('<tr><td class="ns1blankspaceCaption">' +
+													'Enable user role based data access' +
+													'</td></tr>' +
+													'<tr class="ns1blankspace">' +
+													'<td class="ns1blankspaceRadio">' +
+													'<input type="radio" id="radioDataBasedSecurityN" name="radioDataBasedSecurity" value="N"/>No<br />' +
+													'<input type="radio" id="radioDataBasedSecurityY" name="radioDataBasedSecurity" value="Y"/>Yes' +
+													'</td></tr>');
+
+									aHTML.push('</table>');					
+									
+									$('#ns1blankspaceMainAdvanced').html(aHTML.join(''));
+
+									ns1blankspace.setup.space.advanced.security();
+								},	
+
+					security:	function (oResponse)
+								{	
+									if (oResponse == undefined)
+									{	
+										$.ajax(
+										{
+											type: 'POST',
+											url: ns1blankspace.util.endpointURI('CORE_PROFILE_SEARCH'),
+											data: 'attribute=473',
+											dataType: 'json',
+											success: function(data)
+											{
+												ns1blankspace.setup.space.advanced.security(data);
+											}
+										});
+									}	
+									else
+									{	
+										if (oResponse.data == '') {oResponse.data = 'N'}
+										$('[name="radioDataBasedSecurity"][value="' +
+													oResponse.data + '"]').attr('checked', true);
+									}
+								}
+				}		
 }								
