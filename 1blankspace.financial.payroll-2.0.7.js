@@ -666,7 +666,7 @@ ns1blankspace.financial.payroll =
 										aHTML.push('<table class="ns1blankspaceContainer">' +
 														'<tr class="ns1blankspaceContainer">' +
 														'<td id="ns1blankspaceNewColumn1" class="ns1blankspaceColumn1" style="width:50%"></td>' +
-														'<td id="ns1blankspaceNewColumn2" class="ns1blankspaceColumn2" style="font-size:0.75em"></td>' +
+														'<td id="ns1blankspaceNewColumn2" class="ns1blankspaceColumn2"></td>' +
 														'</tr>' + 
 														'</table>');		
 
@@ -674,14 +674,22 @@ ns1blankspace.financial.payroll =
 
 										var aHTML = [];
 
-										aHTML.push('<table class="ns1blankspaceColumn2" style="font-size:0.875em">' +
+										aHTML.push('<table class="ns1blankspaceColumn2">' +
 															'<tr><td>' +
-															'<span style="width:70px;" id="ns1blankspacePayrollNew_options_save">Next</span>' +
+															'<span style="width:70px;" id="ns1blankspacePayrollNew_options_save" class="ns1blankspaceAction">Next</span>' +
 															'</td></tr>' +
 															'<tr><td>' +
-															'<span style="width:70px;" id="ns1blankspacePayrollNew_options_cancel">Cancel</span>' +
-															'</td></tr>' +
-															'</table>');	
+															'<span style="width:70px;" id="ns1blankspacePayrollNew_options_cancel" class="ns1blankspaceAction">Cancel</span>' +
+															'</td></tr>');
+
+										if (ns1blankspace.financial.payroll.data.context == 'employees')
+										{
+											aHTML.push('<tr><td class="ns1blankspaceSubNote" style="padding-top:16px;">' +
+															'When you click next the employee will be created as a new contact or linked to the existing one, if it exists.' +
+															'</td></tr>');
+										}
+
+										aHTML.push('</table>');	
 
 										$('#ns1blankspaceNewColumn2').html(aHTML.join(''));
 
@@ -785,7 +793,7 @@ ns1blankspace.financial.payroll =
 									//EMPLOYEES
 									if (ns1blankspace.financial.payroll.data.context == 'employees')
 									{
-										var iContactBusiness = ns1blankspace.user.spaceContactBusiness;
+										var iContactBusiness = ns1blankspace.spaceContactBusiness;
 										if (iContactBusiness == undefined) {iContactBusiness = ns1blankspace.user.contactBusiness};
 
 										if (iID == undefined)
@@ -939,7 +947,11 @@ ns1blankspace.financial.payroll =
 													'<div id="ns1blankspacePayrollEmployeeColumn1" style="font-size:0.875em;"></div>' +
 													'<div id="ns1blankspacePayrollEmployeeColumn1ShowAllContainer"></div>' +
 													'</td>' +
-													'<td id="ns1blankspacePayrollEmployeeColumn2" class="ns1blankspaceColumn2"></td>' +
+													'<td id="ns1blankspacePayrollEmployeeColumn2" class="ns1blankspaceColumn2">' + 
+													'<table class="ns1blankspaceColumn2"><tr><td class="ns1blankspaceSubNote">' +
+													'Click New to add an employee' +
+													'</td></tr></table>' +	
+													'</td>' +
 													'</tr>' + 
 													'</table>');		
 															
