@@ -2858,6 +2858,7 @@ ns1blankspace.container =
 					var bSetWidth = false;
 					var iTimeOut = ns1blankspace.util.getParam(oParam, 'timeOut').value;
 					var fOnShow;
+					var sContainerID = ns1blankspace.xhtml.container;
 
 					if (oParam != undefined)
 					{
@@ -2872,7 +2873,11 @@ ns1blankspace.container =
 						if (oParam.forceShow != undefined) {bForceShow = oParam.forceShow}
 						if (oParam.setWidth != undefined) {bSetWidth = oParam.setWidth}
 						if (oParam.onShow != undefined) {fOnShow = oParam.onShow}
+						if (oParam.containerID != undefined) {sContainerID = oParam.containerID}
 					}
+
+					var bDropdown = ns1blankspace.util.getParam(oParam, 'dropdown', {"default": false}).value;
+					if (bDropdown) {sContainerID = ns1blankspace.xhtml.dropDownContainer}
 					
 					if (oXHTMLElement === undefined && sXHTMLElementID != undefined)
 					{
@@ -2886,21 +2891,21 @@ ns1blankspace.container =
 
 					if (oXHTMLElement !== undefined)
 					{
-						if ($(ns1blankspace.xhtml.container).attr('data-initiator') === oXHTMLElement.attr('id') && !bForceShow)
+						if ($(sContainerID).attr('data-initiator') === oXHTMLElement.attr('id') && !bForceShow)
 						{
-							$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions);
-							$(ns1blankspace.xhtml.container).attr('data-initiator', '');
+							$(sContainerID).hide(ns1blankspace.option.hideSpeedOptions);
+							$(sContainerID).attr('data-initiator', '');
 							return false;
 						}
 						else
 						{
-							$(ns1blankspace.xhtml.container).attr('data-initiator', oXHTMLElement.attr('id'));
-							$(ns1blankspace.xhtml.container).html("&nbsp;")
+							$(sContainerID).attr('data-initiator', oXHTMLElement.attr('id'));
+							$(sContainerID).html("&nbsp;")
 								.show(ns1blankspace.option.showSpeedOptions)
 								.offset({ top: $(oXHTMLElement).offset().top + $(oXHTMLElement).height() + iOffsetTop, left: $(oXHTMLElement).offset().left + iOffsetLeft})
 								.html(sXHTML);
 							
-							if (bSetWidth) {$(ns1blankspace.xhtml.container + ' table').css('width', oXHTMLElement.width())}
+							if (bSetWidth) {$(sContainerID + ' table').css('width', oXHTMLElement.width())}
 
 							if (sFunctionBind != undefined)
 								{eval(sFunctionBind)}
@@ -2918,18 +2923,21 @@ ns1blankspace.container =
 					var iFadeOutTime = ns1blankspace.util.getParam(oParam, 'fadeOutTime', {"default": ns1blankspace.option.hideSpeedOptions}).value;
 					var sXHTMLElementID = ns1blankspace.util.getParam(oParam, 'xhtmlElementID').value;
 					var bForce = ns1blankspace.util.getParam(oParam, 'force', {"default": false}).value;
+					var sContainerID = ns1blankspace.util.getParam(oParam, 'containerID', {"default": ns1blankspace.xhtml.container}).value;
+					var bDropdown = ns1blankspace.util.getParam(oParam, 'dropdown', {"default": false}).value;
+					if (bDropdown) {sContainerID = ns1blankspace.xhtml.dropDownContainer}
 
 					if (bForce || $(ns1blankspace.xhtml.container).attr('data-initiator') == sXHTMLElementID)
 					{
 						if (iFadeOutTime == 0)
 						{
-							$(ns1blankspace.xhtml.container).attr('data-initiator', '')
+							$(sContainerID).attr('data-initiator', '')
 							.html("&nbsp;")
 							.hide();
 						}
 						else
 						{
-							$(ns1blankspace.xhtml.container).attr('data-initiator', '')
+							$(sContainerID).attr('data-initiator', '')
 							.fadeOut(iFadeOutTime);
 						}
 					}	

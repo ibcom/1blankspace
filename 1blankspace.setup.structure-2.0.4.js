@@ -1763,6 +1763,7 @@ ns1blankspace.setup.structure =
 														oSearch.method = 'SETUP_STRUCTURE_ELEMENT_OPTION_SEARCH';
 														oSearch.addField('title,points');
 														oSearch.addFilter('element', 'EQUAL_TO', iStructureElementID);
+														oSearch.rows = 100;
 														oSearch.getResults(function(data) {ns1blankspace.setup.structure.element.options.show(oParam, data)});
 													}	
 													else
@@ -1816,16 +1817,18 @@ ns1blankspace.setup.structure =
 														
 														$('#ns1blankspaceElementOptionAdd').button(
 														{
-																text: false,
-																 icons: {
-																	 primary: "ui-icon-plus"
-																}
-															})
-															.click(function() {
-																ns1blankspace.setup.structure.element.options.add()
-															})
-															.css('width', '15px')
-															.css('height', '20px');
+															text: false,
+															icons:
+															{
+																primary: "ui-icon-plus"
+															}
+														})
+														.click(function()
+														{
+															ns1blankspace.setup.structure.element.options.add()
+														})
+														.css('width', '15px')
+														.css('height', '20px');
 														
 														$('#ns1blankspaceElementOptions td.ns1blankspaceElementOption').click(function(event)
 														{
@@ -1849,8 +1852,6 @@ ns1blankspace.setup.structure =
 																method: 'SETUP_STRUCTURE_ELEMENT_OPTION_MANAGE',
 																ifNoneMessage: 'No options.'
 															});
-
-															//ns1blankspace.setup.structure.element.options.remove(this.id)
 														})
 														.css('width', '15px')
 														.css('height', '20px');

@@ -597,7 +597,7 @@ ns1blankspace.setup.website =
 						}		
 									
 						aHTML.push('<tr><td class="ns1blankspaceSub" style="font-size:0.75em;">' +
-										'Use the Attachments link to add your resources (scripts, documents, images etc) and update the Scripts section to reference any added js scripts or any other scripts your app may require.' +
+										'Use the Attachments link to add your assets/resources (scripts, documents, images etc) and update the Scripts section to reference any added js scripts or any other scripts your app may require.' +
 										'</td>' +
 										'</tr>');			
 									

@@ -307,6 +307,10 @@ ns1blankspace.scripts.concat(
 	{
 		nameSpace: '1blankspace.visualise',
 		source: '/jscripts/1blankspace.visualise-2.0.8.js'
+	},
+	{
+		nameSpace: '1blankspace.util.object',
+		source: '/jscripts/1blankspace.util.object-2.0.0.js'
 	}
 ])
 

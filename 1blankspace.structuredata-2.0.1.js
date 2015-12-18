@@ -120,8 +120,8 @@ ns1blankspace.structureData =
 											oSearch.addFilter('structure', 'EQUAL_TO', iStructure);
 										}
 
-										oSearch.rows = 10;
-										oSearch.sort('modifieddate', 'desc');
+										oSearch.rows = 250;
+										oSearch.sort('title', 'asc');
 										oSearch.getResults(function (data) {ns1blankspace.structureData.home.data(oParam, data)})
 									}
 									else
@@ -176,6 +176,11 @@ ns1blankspace.structureData =
 												aHTML.push('<td id="ns1blankspaceMostLikely_modifieddate-' + this.id + 
 																		'" class="ns1blankspaceRow ns1blankspaceSubNote">' +
 																		sModifiedDate +
+																		'</td>');
+
+												aHTML.push('<td id="ns1blankspaceMostLikely_id-' + this.id + 
+																		'" class="ns1blankspaceRow ns1blankspaceSubNote">' +
+																		this.id +
 																		'</td>');
 
 												aHTML.push('</tr>');
@@ -483,6 +488,11 @@ ns1blankspace.structureData =
 
 						aHTML.push('<table class="ns1blankspace">');
 						
+						aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">ID</td></tr>' +
+										'<tr><td id="ns1blankspaceSummaryID" class="ns1blankspaceSummary">' +
+										ns1blankspace.objectContextData.id +
+										'</td></tr>');
+
 						aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Last Updated</td></tr>' +
 										'<tr><td id="ns1blankspaceSummaryModifiedDate" class="ns1blankspaceSummary">' +
 										ns1blankspace.objectContextData.modifieddate +
