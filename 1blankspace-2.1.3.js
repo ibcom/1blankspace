@@ -3,6 +3,8 @@
  * Licensed as Attribution-ShareAlike 4.0 International
  * http://creativecommons.org/licenses/by-sa/4.0/
  *
+ * Version 2.1.3
+ *
  * jscripts/modernizr-load.js
  */
 
