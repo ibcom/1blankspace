@@ -644,7 +644,25 @@ ns1blankspace.structureData =
 										'<td class="ns1blankspaceRadio">' +
 										'<input type="radio" id="radioStatus2" name="radioStatus" value="2"/>In Progress' +
 										'<br /><input type="radio" id="radioStatus1" name="radioStatus" value="1"/>Approved' +
-										'</td></tr>');		
+										'</td></tr>');
+
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
+										'Object' +
+										'</td></tr>' +
+										'<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceSelect">' +
+										'<input id="ns1blankspaceDetailsObject" class="ns1blankspaceText">' +
+										'</td></tr>');
+										
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
+										'Object Context' +
+										'</td></tr>' +
+										'<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceSelect">' +
+										'<input id="ns1blankspaceDetailsObjectContext" class="ns1blankspaceText">' +
+										'</td></tr>');										
 						
 						aHTML.push('</table>');					
 						
@@ -661,6 +679,9 @@ ns1blankspace.structureData =
 
 							$('#ns1blankspaceDetailsPerson').val(ns1blankspace.objectContextData.contactpersontext);
 							$('#ns1blankspaceDetailsPerson').attr('data-id', ns1blankspace.objectContextData.contactperson);
+
+							$('#ns1blankspaceDetailsObject').val(ns1blankspace.objectContextData.object);
+							$('#ns1blankspaceDetailsObjectContext').val(ns1blankspace.objectContextData.objectcontext);
 						}
 						else
 						{
@@ -704,6 +725,8 @@ ns1blankspace.structureData =
 											oData.status = $('input[name="radioStatus"]:checked').val();	
 											oData.contactbusiness = $('#ns1blankspaceDetailsBusiness').attr('data-id');
 											oData.contactperson = $('#ns1blankspaceDetailsPerson').attr('data-id');
+											oData.object = $('#ns1blankspaceDetailsObject').val();
+											oData.objectcontext = $('#ns1blankspaceDetailsObjectContext').val();
 										};
 										
 										$.ajax(

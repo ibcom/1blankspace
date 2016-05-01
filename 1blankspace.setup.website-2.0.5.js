@@ -1443,7 +1443,10 @@ ns1blankspace.setup.website =
 												success: function(oResponse)
 												{
 													ns1blankspace.status.message('Saved');
-													ns1blankspace.objectContext = oResponse.documentid;
+													if (sID == undefined)
+													{
+														sID = oResponse.documentid;
+													}	
 													ns1blankspace.setup.website.data.saveClosed = $('#ns1blankspaceWebsitePageSaveClose').attr('checked');
 
 													if ($('#ns1blankspaceWebsitePageSaveClose:checked').length == 1)
