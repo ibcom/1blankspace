@@ -1276,6 +1276,7 @@ ns1blankspace.setup.file =
 									if (oFormat.length > 0)
 									{
 										oFormat = oFormat[0];
+										oParam.totalRecords = oItems.length + oFormat.header.length + oFormat.footer.length;
 
 										$.each(oFormat.header, function(i, k)
 										{
@@ -1356,19 +1357,20 @@ ns1blankspace.setup.file =
 											{
 												if (v.value !== undefined)
 												{
-													aFile.push(v.value);
+													v.text = v.value;
+													aFile.push(ns1blankspace.util.format(v));
 												}	
 												else if (v.field !== undefined)
 												{
 													if (oSummary[v.field] !== undefined)
 													{
-														v.value = oSummary[v.field];
+														v.text = oSummary[v.field];
 														aFile.push(ns1blankspace.util.format(v));
 													}	
 												}
 												else if (v.param !== undefined)
 												{
-													v.value = ns1blankspace.util.getParam(oParam, v.param).value;
+													v.text = (ns1blankspace.util.getParam(oParam, v.param).value).toString();
 													aFile.push(ns1blankspace.util.format(v));
 												}
 												else
@@ -1378,10 +1380,10 @@ ns1blankspace.setup.file =
 
 											});
 
-											if (i != oFormat.footer.length - 1)
-											{	
+											//if (i != oFormat.footer.length - 1)
+											//{	
 												aFile.push('\r\n');
-											}	
+											//}	
 										});
 
 									}
@@ -1671,6 +1673,9 @@ ns1blankspace.setup.file["export"].formats =
 						value: 'E',
 					},
 					{
+						value: 'A',
+					},
+					{
 						value: 'P',
 					},
 					{
@@ -1701,7 +1706,8 @@ ns1blankspace.setup.file["export"].formats =
 					{
 						param: 'contactPersonText',
 						length: (255 - 218 + 1),
-						fill: ' '
+						fill: ' ',
+						upper: true
 					},
 					{
 						param: 'phone',
@@ -1754,13 +1760,13 @@ ns1blankspace.setup.file["export"].formats =
 					},
 					{
 						param: 'streetState',
-						length: (127 - 124 + 1),
+						length: (123 - 121 + 1),
 						fill: ' ',
 						upper: true
 					},
 					{
 						param: 'streetPostCode',
-						length: (55 - 18 + 1),
+						length: (127 - 124 + 1),
 						fill: ' ',
 						upper: true
 					},
@@ -1834,6 +1840,7 @@ ns1blankspace.setup.file["export"].formats =
 					{
 						param: 'year',
 						length: 4,
+						"default": Date.today(),
 						dateFormat: 'yyyy'
 					},
 					{
@@ -1912,7 +1919,7 @@ ns1blankspace.setup.file["export"].formats =
 						value: 'SOFTWARE',
 					},
 					{
-						value: 'IBCOM MYDIGITALSTUCTURE',
+						value: 'COMMERCIAL IBCOM MYDIGITALSTUCTURE 1.0',
 						length: (91 - 12 + 1),
 						fill: ' '
 					},
@@ -2004,7 +2011,7 @@ ns1blankspace.setup.file["export"].formats =
 					{
 						calculate: function (v, p)
 						{
-							if (v['employee.employmentstartdate'] > p['startDate']) {return v['employee.employmentstartdate']} else {return p['startDate']}
+							if (Date(v['employee.employmentstartdate']) > Date(p['startDate'])) {return v['employee.employmentstartdate']} else {return p['startDate']}
 						},
 						length: 8,
 						dateFormat: 'ddMMyyyy'
@@ -2012,7 +2019,7 @@ ns1blankspace.setup.file["export"].formats =
 					{
 						calculate: function (v, p)
 						{
-							if (v['employee.employmentenddate'] < p['endDate']) {return v['employee.employmentenddate']} else {return p['endDate']}
+							if (Date(v['employee.employmentenddate']) < Date(p['endDate'])) {return v['employee.employmentenddate']} else {return p['endDate']}
 						},
 						length: 8,
 						dateFormat: 'ddMMyyyy'
@@ -2125,7 +2132,7 @@ ns1blankspace.setup.file["export"].formats =
 						value: 'FILE-TOTAL',
 					},
 					{
-						param: 'totalRows',
+						param: 'totalRecords',
 						length: (21 - 14 + 1),
 						fillLeft: '0'
 					},
