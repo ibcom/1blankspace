@@ -110,7 +110,7 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.format',
-		source: '/jscripts/1blankspace.format-2.0.4.js'
+		source: '/site/1433/1blankspace.format-2.0.5.js'
 	},
 	{
 		nameSpace: '1blankspace.contactPerson',
@@ -130,11 +130,11 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.messaging.conversation',
-		source: '/jscripts/1blankspace.messaging.conversation-2.0.2.js'
+		source: '/site/1433/1blankspace.messaging.conversation-2.0.2.js'
 	},
 	{
 		nameSpace: '1blankspace.messaging.imap',
-		source: '/site/1433/1blankspace.messaging.imap-2.0.8.js'
+		source: '/site/1433/1blankspace.messaging.imap-2.0.9.js'
 	},
 	{
 		nameSpace: '1blankspace.document',
@@ -162,11 +162,11 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.order',
-		source: '/jscripts/1blankspace.order-2.0.0.js'
+		source: '/site/1433/1blankspace.order-2.0.1.js'
 	},
 	{
 		nameSpace: '1blankspace.financial',
-		source: '/jscripts/1blankspace.financial-2.0.4.js'
+		source: '/site/1433/1blankspace.financial-2.0.5.js'
 	},
 	{
 		nameSpace: '1blankspace.financial.bankAccount',
@@ -210,7 +210,7 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.report',
-		source: '/jscripts/1blankspace.report-2.0.1.js'
+		source: '/site/1433/1blankspace.report-2.0.4.js'
 	},
 	{
 		nameSpace: '1blankspace.setup',
@@ -274,7 +274,7 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.supportIssue',
-		source: '/jscripts/1blankspace.supportissue-2.0.0.js'
+		source: '/site/1433/1blankspace.supportissue-2.0.1.js'
 	},
 	{
 		nameSpace: '1blankspace.setup.file',
@@ -294,7 +294,7 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.connect',
-		source: '/jscripts/1blankspace.connect-2.0.1.js'
+		source: '/site/1433/1blankspace.connect-2.0.2.js'
 	},
 	{
 		nameSpace: '1blankspace.util.whenDone',

@@ -2079,11 +2079,12 @@ ns1blankspace.setup.file["export"].formats =
 					},
 					{
 						value: 'O',
-					},
+					},		
 					{
-						value: '0',
+						field: 'superannuation',
 						length: (320 - 313 + 1),
-						fillLeft: '0'
+						fillLeft: '0',
+						amountDecimalPlaces: 0
 					},
 					{
 						calculate: function (v)

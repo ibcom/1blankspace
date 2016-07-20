@@ -60,6 +60,7 @@ ns1blankspace.messaging.conversation =
 						oSearch.addField('title');
 						oSearch.rows = 20;
 						oSearch.addFilter('status', 'NOT_EQUAL_TO', 2);
+						oSearch.addFilter('sharing', 'NOT_EQUAL_TO', 2);
 						oSearch.sort('modifieddate', 'desc');
 						oSearch.getResults(function (data) {ns1blankspace.messaging.conversation.home(oParam, data)});
 					}
@@ -1475,7 +1476,7 @@ ns1blankspace.messaging.conversation =
 										$('#ns1blankspacePostDetailsColumn1').html(
 											ns1blankspace.attachments.upload.show(
 												{
-													url: '/ondemand/attach/progress/',
+													url: '/ondemand/attach/',
 													xhtml: aHTML.join(''),
 													label: '',
 													inputs: ['message']

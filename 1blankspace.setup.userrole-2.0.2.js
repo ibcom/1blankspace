@@ -910,7 +910,7 @@ ns1blankspace.setup.userRole =
 															oSearch.method = 'SETUP_METHOD_SEARCH';
 															oSearch.addField('title,useavailable,addavailable,updateavailable,removeavailable');
 															oSearch.addFilter('endpoint', 'EQUAL_TO', iEndpoint)
-															oSearch.rows = 200;
+															oSearch.rows = 1000;
 															oSearch.sort('title', 'asc');
 															oSearch.getResults(function(data) {ns1blankspace.setup.userRole.access.methods.edit(oParam, data)})	
 														}
