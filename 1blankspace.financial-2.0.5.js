@@ -3916,7 +3916,6 @@ ns1blankspace.financial.item =
 						
 						aHTML.push('</table>');
 
-						// v2.0.4b Now paginates items
 						$.extend(true, oParam,
 						{
 							xhtmlElementID: 'ns1blankspaceItemColumn1',
@@ -3929,15 +3928,12 @@ ns1blankspace.financial.item =
 							functionOnNewPage: ns1blankspace.financial.item.bind
 					   	});
 						ns1blankspace.render.page.show(oParam); 	
-
-						//$('#ns1blankspaceItemColumn1').html(aHTML.join(''));
-						
 					}
 				}	
 			},
 
 	row: function(oRow)
-	{	// v2.0.4b Added as wasn't paginating items
+	{
 		var aHTML = [];
 
 		aHTML.push('<tr class="ns1blankspaceRow">');
@@ -4200,6 +4196,21 @@ ns1blankspace.financial.item =
 										'<input id="ns1blankspaceItemTax" class="ns1blankspaceText">' +
 										'</td></tr>');
 
+						if (ns1blankspace.option.financialShowProjects)
+						{
+							aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
+										'Project' +
+										'</td></tr>' +
+										'<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceText">' +
+										'<input id="ns1blankspaceItemProject" class="ns1blankspaceSelect"' +
+											' data-method="PROJECT_SEARCH"' +
+											' data-columns="reference-space-description"' +
+											' data-methodFilter="reference-TEXT_IS_LIKE|description-TEXT_IS_LIKE">' +
+										'</td></tr>');
+						}
+
 						aHTML.push('<tr class="ns1blankspaceCaption">' +
 										'<td class="ns1blankspaceCaption">' +
 										'Description' +
@@ -4223,6 +4234,8 @@ ns1blankspace.financial.item =
 							$('#ns1blankspaceItemDescription').val(ns1blankspace.util.getData(oParam, 'data-description').value);
 							$('#ns1blankspaceItemAccount').val(ns1blankspace.util.getData(oParam, 'data-financialaccounttext').value);
 							$('#ns1blankspaceItemAccount').attr('data-id', ns1blankspace.util.getData(oParam, 'data-financialaccount').value);
+							$('#ns1blankspaceItemProject').val(ns1blankspace.util.getData(oParam, 'data-projecttext').value);
+							$('#ns1blankspaceItemProject').attr('data-id', ns1blankspace.util.getData(oParam, 'data-project').value);
 						}	
 	
 						ns1blankspace.financial.util.tax.codes(
@@ -4264,7 +4277,6 @@ ns1blankspace.financial.item =
 							var iFinancialAccountType = (iType==1?2:1);
 							var oData = $.grep(ns1blankspace.financial.data.accounts, function (a)
 							{ 
-								// v2.0.4a Removes filter on account type if requested
 								if ($('#ns1blankspaceItemShowAll').prop('checked') == true)
 								{
 									return (a.postable == 'Y')
@@ -4409,6 +4421,11 @@ ns1blankspace.financial.item =
 				oData.taxtype = $('input[name="radioTaxCode"]:checked').val();
 				oData.description = $('#ns1blankspaceItemDescription').val();
 					
+				if (ns1blankspace.option.financialShowProjects)
+				{
+					oData.project = $('#ns1blankspaceItemProject').attr('data-id');
+				}	
+							
 				$.ajax(
 				{
 					type: 'POST',

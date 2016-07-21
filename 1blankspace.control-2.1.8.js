@@ -45,7 +45,8 @@ ns1blankspace.option = $.extend(true, ns1blankspace.option,
 	paymentShowImages: true,
 	canCreateSpaces: true,
 	logonSuffix: undefined,
-	passwordSuffix: undefined
+	passwordSuffix: undefined,
+	financialShowProjects: true
 });
 
 ns1blankspace.formFactor.size.value = ns1blankspace.formFactor.size.options.medium;

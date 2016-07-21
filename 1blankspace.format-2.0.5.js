@@ -645,6 +645,7 @@ ns1blankspace.format.editor =
 
 						if (sVersion == '4')
 						{	
+							if (sSelector && sSelector.indexOf('#') == -1) {sSelector = '#' + sSelector}
 							if (oInit == undefined)
 							{	
 								oInit = 
@@ -656,9 +657,9 @@ ns1blankspace.format.editor =
 									width : sWidth,
 									plugins:
 									[
-														"advlist autolink autosave link image lists charmap print preview hr anchor pagebreak",
-														"searchreplace wordcount visualblocks visualchars code fullscreen insertdatetime media nonbreaking",
-														"table contextmenu directionality emoticons template textcolor paste fullpage textcolor colorpicker textpattern"
+									  "advlist link image lists charmap hr anchor pagebreak",
+									  "searchreplace visualblocks code fullscreen insertdatetime media nonbreaking",
+									  "table contextmenu directionality emoticons template textcolor paste textcolor colorpicker textpattern"
 									],
 
 									menubar: false,
@@ -667,7 +668,7 @@ ns1blankspace.format.editor =
 
 									style_formats:
 									[
-													{title: 'Bold text', inline: 'b'}
+									  {title: 'Bold text', inline: 'b'}
 									],
 
 									templates: '/ondemand/core/?method=CORE_DYNAMIC_TAG_SEARCH',
@@ -676,7 +677,6 @@ ns1blankspace.format.editor =
 
 									browser_spellcheck: true,
 									content_css: sContentCSS,
-									
 									convert_urls: false
 								}
 
@@ -690,8 +690,8 @@ ns1blankspace.format.editor =
 									if (aToolbars == undefined)
 									{
 										oInit.toolbar1 = 'bold italic underline strikethrough | alignleft aligncenter alignright alignjustify | formatselect fontselect fontsizeselect | fullscreen';
-							        	oInit.toolbar2 = 'forecolor backcolor | cut copy paste | bullist numlist | outdent indent blockquote | undo redo | link unlink anchor image media code';
-							        	oInit.toolbar3 = 'table | hr removeformat | subscript superscript | charmap emoticons | ltr rtl | visualchars visualblocks nonbreaking pagebreak | template';
+							      		oInit.toolbar2 = 'forecolor backcolor | cut copy paste | bullist numlist | outdent indent blockquote | undo redo | link unlink anchor image media code';
+							     		oInit.toolbar3 = 'table | hr removeformat | subscript superscript | charmap emoticons | ltr rtl | visualchars visualblocks nonbreaking pagebreak | template';
 									}
 									else
 									{
@@ -760,7 +760,11 @@ ns1blankspace.format.editor =
 							}
 						}	
 
-						tinyMCE.init(oInit);								
+						tinyMCE.init(oInit);
+						if (sVersion == '3' && sSelector)
+						{
+							tinyMCE.execCommand('mceAddControl', false, sSelector);
+						}		
 					}
 				},
 

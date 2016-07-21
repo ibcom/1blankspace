@@ -3548,8 +3548,8 @@ ns1blankspace.report =
 												
 											return x.processFunction != undefined && sScriptNewPage && sScriptNewPage === x.processFunction.toString(); 
 										});
-		var iPage = Number($('.ns1blankspaceRenderHeaderPageSelected').first().html());
-		if (iPage == undefined) {iPage = 1}		// v2.0.3b Is undefined when only 1 pg of results
+		// v2.0.3b Is undefined when only 1 pg of results
+		var iPage = ($('.ns1blankspaceRenderHeaderPageSelected').first().html() ? Number($('.ns1blankspaceRenderHeaderPageSelected').first().html()) : 1);
 		var sIDColumn = (ns1blankspace.report.config.idColumn) ? ns1blankspace.report.config.idColumn : 'id';
 
 		// Loop through all of the results for the current page and populate the columns in oNewPageColumns
