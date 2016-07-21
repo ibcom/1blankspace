@@ -468,6 +468,18 @@ ns1blankspace.document =
 										'<td class="ns1blankspaceTextMulti">' +
 										'<textarea rows="10" cols="35" id="ns1blankspaceDetailsSummary" class="ns1blankspaceMainTextMulti" style="width:100%;"></textarea>' +
 										'</td></tr>');
+						
+							aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
+										'Status' +
+										'</td></tr>' +
+										'<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceRadio">' +
+										'<input type="radio" id="radioStatus1" name="radioStatus" value="1"/>Draft<br />' +
+										'<input type="radio" id="radioStatus2" name="radioStatus" value="2"/>Approved<br />' +
+										'<input type="radio" id="radioStatus3" name="radioStatus" value="3"/>Under Review<br />' +
+										'<input type="radio" id="radioStatus4" name="radioStatus" value="3"/>To Be linked to Folders' +
+										'</td></tr>');	
 
 						aHTML.push('</table>');					
 						
@@ -519,11 +531,13 @@ ns1blankspace.document =
 							$('#ns1blankspaceDetailsTitle').val(ns1blankspace.objectContextData.title);
 							$('#ns1blankspaceDetailsURL').val(ns1blankspace.objectContextData.url);
 							$('#ns1blankspaceDetailsSummary').val(ns1blankspace.objectContextData.summary);
+							$('[name="radioStatus"][value="' + ns1blankspace.objectContextData.status + '"]').attr('checked', true);
 							$('[name="radioPublic"][value="' + ns1blankspace.objectContextData.public + '"]').attr('checked', true);
 							$('[name="radioInternal"][value="' + ns1blankspace.objectContextData.internal + '"]').attr('checked', true);
 						}
 						else
 						{
+							$('[name="radioStatus"][value="1"]').attr('checked', true);
 							$('[name="radioPublic"][value="N"]').attr('checked', true);
 							$('[name="radioInternal"][value="Y"]').attr('checked', true);
 						}
@@ -647,6 +661,7 @@ ns1blankspace.document =
 										sData += '&public=' + ns1blankspace.util.fs($('input[name="radioPublic"]:checked').val());
 										sData += '&summary=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsSummary').val());
 										sData += '&internal=' + ns1blankspace.util.fs($('input[name="radioInternal"]:checked').val());
+										sData += '&status=' + ns1blankspace.util.fs($('input[name="radioStatus"]:checked').val());
 									}
 									
 									if ($('#ns1blankspaceMainEdit').html() != '')
