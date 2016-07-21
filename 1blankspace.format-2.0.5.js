@@ -656,26 +656,28 @@ ns1blankspace.format.editor =
 									width : sWidth,
 									plugins:
 									[
-							                "advlist autolink autosave link image lists charmap print preview hr anchor pagebreak",
-							                "searchreplace wordcount visualblocks visualchars code fullscreen insertdatetime media nonbreaking",
-							                "table contextmenu directionality emoticons template textcolor paste fullpage textcolor colorpicker textpattern"
-							        ],
+														"advlist autolink autosave link image lists charmap print preview hr anchor pagebreak",
+														"searchreplace wordcount visualblocks visualchars code fullscreen insertdatetime media nonbreaking",
+														"table contextmenu directionality emoticons template textcolor paste fullpage textcolor colorpicker textpattern"
+									],
 
-							        menubar: false,
-							        statusbar : false,
-							        toolbar_items_size: 'small',
+									menubar: false,
+									statusbar : false,
+									toolbar_items_size: 'small',
 
-							        style_formats:
-							        [
-							                {title: 'Bold text', inline: 'b'}
-							        ],
+									style_formats:
+									[
+													{title: 'Bold text', inline: 'b'}
+									],
 
-							        templates: '/ondemand/core/?method=CORE_DYNAMIC_TAG_SEARCH',
-							        link_list: '/rpc/core/?method=CORE_EDITOR_LINK_SEARCH',
-							        image_list: '/rpc/core/?method=CORE_EDITOR_IMAGE_SEARCH',
+									templates: '/ondemand/core/?method=CORE_DYNAMIC_TAG_SEARCH',
+									link_list: '/rpc/core/?method=CORE_EDITOR_LINK_SEARCH',
+									image_list: '/rpc/core/?method=CORE_EDITOR_IMAGE_SEARCH',
 
-							        browser_spellcheck: true,
-							        content_css: sContentCSS
+									browser_spellcheck: true,
+									content_css: sContentCSS,
+									
+									convert_urls: false
 								}
 
 								if (bSimple)

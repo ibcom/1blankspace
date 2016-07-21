@@ -3,8 +3,6 @@
  * Licensed as Attribution-ShareAlike 4.0 International
  * http://creativecommons.org/licenses/by-sa/4.0/
  *
- * Version 2.1.3
- *
  * jscripts/modernizr-load.js
  */
 
@@ -161,8 +159,24 @@ $(function()
 		window.location.href = window.location.href.replace('http', 'https')
 	}
 	else
-	{
-		ns1blankspace.app.init();
+	{		
+		var match = navigator.userAgent.match(/(?:MSIE |Trident\/.*; rv:)(\d+)/);
+		var sIEVersion = match ? parseInt(match[1]) : undefined;
+
+		if (sIEVersion == undefined || (sIEVersion != undefined && sIEVersion > 8))
+		{
+			ns1blankspace.app.init();
+		}
+		else
+		{
+			var para = document.createElement('p');
+			para.setAttribute('id', 'browserError');
+			para.className = '1blankspaceCaption';
+			var message = document.createTextNode("Your browser is outdated and is not supported by this app. Please upgrade to IE 9 or later or use an alternate modern browser.");
+			para.appendChild(message);
+			var body = document.body;
+			body.insertBefore(para);
+		}
 	}	
 });
 
@@ -282,6 +296,34 @@ ns1blankspace.app =
 						ns1blankspace.user.theme = 'Standard';
 
 						ns1blankspace.data.searchSource = {text: 1, browse: 2, select: 3, all: 4}
+						
+						ns1blankspace.data.search = [];
+						ns1blankspace.data.search.push(
+						{
+							method: 'REPORT_OBJECT_SEARCH',
+							rows: 
+							[
+								{id: '17',  title: 'Action'},
+								{id: '158', title: 'Bank Reconciliation'},
+								{id: '129', title: 'Bank Transfer'},
+								{id: '46',  title: 'BAS'},
+								{id: '12',  title: 'Business'},
+								{id: '14',  title: 'Document'},
+								{id: '39',  title: 'Event'},
+								{id: '2',   title: 'Expense'},
+								{id: '5',   title: 'Invoice'},
+								{id: '35',  title: 'Opportunity'},
+								{id: '30',  title: 'Order'},
+								{id: '3',   title: 'Payment'},
+								{id: '32',  title: 'Person'},
+								{id: '16',  title: 'Product'},
+								{id: '1',   title: 'Project'},
+								{id: '11',  title: 'Project Task'},
+								{id: '6',   title: 'Receipt'},
+								{id: '8',   title: 'Support Issue'},
+							]
+						});
+						ns1blankspace.data.search[0].data = ns1blankspace.data.search[0].rows;
 
 						ns1blankspace.debug.appContext = 'start';
 
@@ -302,9 +344,9 @@ ns1blankspace.app =
 							global: true,
 							headers: {"cache-control": "no-cache"},
 							beforeSend: function (oRequest)
-										{
-					            			oRequest.setRequestHeader("X-HTTP-myds-rest-level", ns1blankspace.option.restLevel);
-					        			}
+							{
+								oRequest.setRequestHeader("X-HTTP-myds-rest-level", ns1blankspace.option.restLevel);
+							}
 						});
 
 						$.ajaxPrefilter(function(options, originalOptions, jqXHR)
@@ -822,8 +864,13 @@ ns1blankspace.app =
 							ns1blankspace.user.contactBusinessText = oResponse.contactbusinesstext;
 							ns1blankspace.user.commonName = oResponse.firstname + ' ' + oResponse.surname;
 							ns1blankspace.user.email = oResponse.email;
-							//ns1blankspace.user.systemAdmin = (oResponse.systemadmin == "true");
-							ns1blankspace.user.systemAdmin = (oResponse.unrestrictedaccess == 'Y');
+							ns1blankspace.user.systemAdmin = (oResponse.systemadmin == "true");
+							
+							if (!ns1blankspace.user.systemAdmin)
+							{
+								ns1blankspace.user.systemAdmin = (oResponse.unrestrictedaccess == 'Y');
+							}
+							
 							ns1blankspace.user.roles = oResponse.roles.rows;
 
 							if (oResponse.site != "0")
@@ -845,7 +892,6 @@ ns1blankspace.app =
 
 	postInit: 	function (oParam)
 				{			
-					// v2.0.8 Cater for longer space names
 					var aHTML = [];
 					var sSpaceText = ns1blankspace.user.spaceText;
 					var sSpaceTextExtra;
@@ -1225,7 +1271,6 @@ ns1blankspace.app =
 						ns1blankspace.control.spaces.show(this);
 					});
 
-					// v2.0.8 Show whole space name when hover
 					$('#ns1blankspaceSpaceTextExtra').hover(
 					function(event)
 					{
@@ -1396,6 +1441,11 @@ ns1blankspace.app =
 								var sNS = sRoot + '.' + sNamespace;
 							}
 
+							$('#ns1blankspaceViewControlRefresh').unbind('click').click(function(oParam)
+							{
+								oNS.init({showHome: true});	
+							})
+							
 							$('#ns1blankspaceViewControlViewContainer').button(
 							{
 								label: ns1blankspace.viewName
@@ -1797,11 +1847,8 @@ ns1blankspace.logon =
 								'&nbsp;' +
 								'</td></tr>');
 
-					//if (sMessage != '')
-					//{
-						aHTML.push('<tr><td id="ns1blankspaceLogonMessage" class="ns1blankspaceSub" colspan=2 style="padding-top: 15px;">' +
-									sMessage + '</td></tr>');
-					//}	
+					aHTML.push('<tr><td id="ns1blankspaceLogonMessage" class="ns1blankspaceSub" colspan=2 style="padding-top: 15px;">' +
+									sMessage + '</td></tr>');	
 
 					aHTML.push('</table>');					
 					
@@ -2260,9 +2307,7 @@ ns1blankspace.logon.getPassword =
 					.click(function()
 					{
 						ns1blankspace.logon.getPassword.send();
-					});	
-					
-					$('#div1blankspaceLogon').show(ns1blankspace.option.showSpeed); //?
+					});
 				},
 
 	send: 		function ()
@@ -2356,9 +2401,6 @@ ns1blankspace.history.control =
 					var sXHTMLElementID;
 					var sFunctionDefault;
 					
-					//var fFunctionDefault = ns1blankspace.util.getParam(oParam, 'default');
-					//var oFunctionDefaultParam = ns1blankspace.util.getParam(oParam, 'defaultParam');
-
 					if (oParam != undefined)
 					{
 						if (oParam.object != undefined) {iObject = oParam.object}
@@ -2461,33 +2503,7 @@ ns1blankspace.history.view =
 							
 							if (iInstruction === 1 && sDestinationInstructions != undefined)
 							{
-								if (sDestinationInstructions === ns1blankspace.history.lastDestinationInstruction)
-								{
-									/*
-									var aTmp = sDestinationInstructions.split(';');
-									
-									$.each(aTmp, function(index) 
-									{ 
-										if (this === '')
-										{
-											aTmp.splice(index,1)
-										}
-									});
-									
-									if (aTmp.length === 1) 
-									{
-										$.each(ns1blankspace.history.viewList, function(index) 
-										{ 
-											if (this === sDestinationInstructions)
-											{
-												ns1blankspace.history.viewList.splice(index,1)
-												bAdd = true;
-											}
-										});
-									}
-									*/
-								}
-								else
+								if (sDestinationInstructions !== ns1blankspace.history.lastDestinationInstruction)
 								{
 									bAdd = true;
 								}	
@@ -2566,10 +2582,6 @@ ns1blankspace.history.view =
 									}
 								})
 							}		
-								
-							//$('#ns1blankspaceViewControlBack').button("destroy");	
-							//$('#ns1blankspaceViewControlRefresh').button("destroy");	
-							//$('#ns1blankspaceViewControlForward').button("destroy");	
 							
 							var bBack = true;
 							var bForward = true;
@@ -2986,17 +2998,16 @@ ns1blankspace.container =
 
 	confirm:	function (oParam)
 				{
-					//v2.0.8 updated to use passed buttons
 					var sHTML = ns1blankspace.util.getParam(oParam, 'html', {'default': ''}).value;
 					var sTitle = ns1blankspace.util.getParam(oParam, 'title', {'default': ''}).value;
 					var aButtons = ns1blankspace.util.getParam(oParam, 'buttons', 
 											{'default': [{text: "OK", icons: {primary: 'ui-icon-check'}, click: function() {$(this).dialog('close')}}]}).value;
 					
 
-					$('#divInterfaceDialog').html(sHTML);
-					$('#divInterfaceDialog').css('font-size', '0.75em');	
+					$('#ns1blankspaceMultiUseDialog').html(sHTML);
+					$('#ns1blankspaceMultiUseDialog').css('font-size', '0.75em');	
 
-					$('#divInterfaceDialog').dialog(
+					$('#ns1blankspaceMultiUseDialog').dialog(
 						{
 							resizable: false,
 							modal: true,
@@ -3244,8 +3255,8 @@ ns1blankspace.search =
 
 						if (bCache && oResponse === undefined)
 						{
-							//oResponse = ns1blankspace.search.cache.search({method: sMethod, searchText: sSearchText, columns: sColumns, fixedFilter: sMethodFilter});
-							oResponse = ns1blankspace.search.cache.search({method: sMethod, searchText: sSearchText, columns: sColumns});
+							oResponse = ns1blankspace.search.cache.search({method: sMethod, searchText: sSearchText, columns: sColumns, fixedFilter: sMethodFilter});
+							//oResponse = ns1blankspace.search.cache.search({method: sMethod, searchText: sSearchText, columns: sColumns});
 
 							if (oResponse !== undefined)
 							{
@@ -3273,7 +3284,7 @@ ns1blankspace.search =
 
 									$.each(aColumns, function() 
 									{
-										if (this != 'space' && this != 'comma' && this != 'pipe')
+										if (this != 'space' && this != 'comma' && this != 'pipe' && this != 'column' && this != 'hyphen')
 										{	
 											oSearch.addField(this);
 										}	
@@ -3285,7 +3296,7 @@ ns1blankspace.search =
 
 										$.each(aColumns, function(i) 
 										{
-											if (this != 'space' && this != 'comma' && this != 'pipe' && this != 'column')
+											if (this != 'space' && this != 'comma' && this != 'pipe' && this != 'column' && this != 'hyphen')
 											{	
 												if (i != 0)
 												{
@@ -3349,9 +3360,7 @@ ns1blankspace.search =
 										{
 											oSearch.addFilter(sParentColumnText, 'TEXT_STARTS_WITH', sParentContextText);
 										}
-									}
-
-									
+									}								
 
 									var sCustomOption = $('#' + sXHTMLInputElementID).attr("data-customoption");
 
@@ -3482,6 +3491,10 @@ ns1blankspace.search =
 												case 'pipe':
 													aHTML.push('|');
 													break;
+													
+												case 'hyphen':
+													aHTML.push('-');
+													break;	
 
 												default:
 
@@ -3535,7 +3548,6 @@ ns1blankspace.search =
 					var sElementID = 'ns1blankspaceViewControlSearch';
 					$('#' + sElementStatusID).show();
 					$('#' + sElementStatusID).html(ns1blankspace.xhtml.loadingSmall);
-					//ns1blankspace.container.position({xhtmlElementID: sElementID, topOffset: 10});
 				},
 
 	stop:		function ()
@@ -3619,7 +3631,6 @@ ns1blankspace.search =
 
 										$('#ns1blankspaceViewControlSearchHeaderContainer')
 											.html(aHTMLHeader.join(''));	
-
 
 										$('#ns1blankspaceViewControlSearchHeaderClose').button(
 										{
@@ -3737,7 +3748,6 @@ ns1blankspace.search =
 										}	
 
 										return aHTMLFilter.join('');
-
 								},
 
 					setFilters:	function ()
@@ -3815,18 +3825,15 @@ ns1blankspace.search =
 					}
 
 					sInputElementId = sXHTMLElementID.split('-').shift();
-					//sCellElementId = $('#' + sInputElementId).parent().attr('id');
-					sTableElementId = sInputElementId + '_SelectRows';
-					//sTableElementId = sTableElementId.replace('_input_', '_selectrows_');
 
-					// Check it the table is already there - if not, add it
+					sTableElementId = sInputElementId + '_SelectRows';
+
 					if (!$('#' + sTableElementId).is('*')) 
 					{
 						aHTML.push('<table id="' + sTableElementId + '" style="width:100%;">');
 
 					}
 
-					// Make sure the value hasn't already been selected and then Insert the row that's just been clicked 
 					if ($('#' + sTableElementId + '-' + sXHTMLElementID.split('-').pop()).is('*')) 
 					{
 						ns1blankspace.status.message("Value has already been selected.");
@@ -3846,18 +3853,15 @@ ns1blankspace.search =
 
 					if (!$('#' + sTableElementId).is('*')) 
 					{
-						// Let's insert the table into the td following the input element
 						aHTML.push('</table>');
 
 						$('#' + sInputElementId).parent().html($('#' + sInputElementId).parent().html() + aHTML.join(''));
 					}
 					else 
 					{
-						// Insert the row into the table 
 						$('#' + sTableElementId).append(aHTML.join(''));
 					}
 
-					// Now bind the remove button (we need to unbind all clicks first)
 					$('.ns1blankspaceMultiRemove').unbind('click');
 					$('.ns1blankspaceMultiRemove')
 					.button({
@@ -5175,14 +5179,13 @@ ns1blankspace.search.address =
 						if (sSearchText.length >= iMinimumLength || iSource === ns1blankspace.data.searchSource.all)
 						{
 							ns1blankspace.status.working();
-							$.ajax(
-							{
-								type: 'POST',
-								url: ns1blankspace.util.endpointURI('CORE_ADDRESS_SEARCH'),
-								data: 'rows=100&suburblike=' + ns1blankspace.util.fs(sSearchText),
-								dataType: 'json',
-								success: function(data) {ns1blankspace.search.address.process(oParam, data);}
-							});
+							var oSearch = new AdvancedSearch();
+							oSearch.method = 'CORE_ADDRESS_SEARCH';
+							oSearch.addField('suburb,state,postcode');
+							oSearch.addFilter('suburb', 'TEXT_IS_LIKE', sSearchText);
+							oSearch.rows = 100;
+							oSearch.dataType = 'json';
+							oSearch.getResults(function(data) {ns1blankspace.search.address.process(oParam, data);});
 						}
 					}
 				},
@@ -5274,11 +5277,11 @@ ns1blankspace.search.email =
 {
 	show: 		function (sXHTMLElementID, oParam)
 				{
-					var iSource = ns1blankspace.data.searchSource.text;
+							var iSource = ns1blankspace.data.searchSource.text;
 					var iMinimumLength = 1;
 					var sMethod;
 					var sSearchText;
-					var iMaximumColumns = 1;
+					var iMaximumColumns = 3;
 					var bEmailOnly = false;
 					var sParentSearchID;
 					var sParentElementID;
@@ -5311,32 +5314,22 @@ ns1blankspace.search.email =
 						if (sSetXHTMLElementID === undefined) {sSetXHTMLElementID = sElementID}
 					
 						var lDataID = $('#' + sSetXHTMLElementID).attr("data-id")
-						
-						if (lDataID === undefined) 
-						{
-							lDataID = aSearch[1];
-						}
-						else
-						{	
-							lDataID += '-' + aSearch[1]
-						}	
-						
+						lDataID = (lDataID === undefined) ? aSearch[1] : lDataID + '-' + aSearch[1];
 						$('#' + sSetXHTMLElementID).attr("data-id", lDataID)
 						
 						var sValue = $('#' + sSetXHTMLElementID).val();
 						
 						if (bEmailOnly) 
 						{
-							if (sValue === '') 
-							{
-								sValue = $('#' + sXHTMLElementID).parent().attr('data-email');
-							}
-							else
-							{
-								sValue += ';' + $('#' + sXHTMLElementID).parent().attr('data-email');
-							}		
+							sValue = (sValue === '') 
+									? $('#' + sXHTMLElementID).parent().attr('data-email') 
+									: sValue + ';' + $('#' + sXHTMLElementID).parent().attr('data-email');
 								
-							$('#' + sSetXHTMLElementID).val(sValue)	
+							$('#' + sSetXHTMLElementID).val(sValue);
+							$('#' + sSetXHTMLElementID).attr('data-values', ($('#' + sSetXHTMLElementID).attr('data-values') === undefined 
+																			? $('#' + sXHTMLElementID).parent().attr('data-email') 
+																			: sValue + ';' + $('#' + sXHTMLElementID).parent().attr('data-email')
+																			));	
 						}
 						else
 						{
@@ -5361,14 +5354,22 @@ ns1blankspace.search.email =
 						
 						if (sSearchText.length >= iMinimumLength || iSource === ns1blankspace.data.searchSource.all)
 						{						
+							var sFirstName = sSearchText;
+							var sSurname = sSearchText;
+							if (sSearchText.split(' ').length == 2)
+							{
+								sFirstName = sSearchText.split(' ').shift();
+								sSurname = sSearchText.split(' ').pop();
+							}
+
 							var oSearch = new AdvancedSearch();
-							oSearch.rows = 10;
+							oSearch.rows = 15;
 							oSearch.method = 'CONTACT_PERSON_SEARCH';
 							oSearch.addField( 'firstname,surname,contactbusinesstext,contactbusiness,email');
 							oSearch.addBracket('(');
-							oSearch.addFilter('firstname', 'TEXT_IS_LIKE', sSearchText);
+							oSearch.addFilter('firstname', 'TEXT_IS_LIKE', (sSearchText != sFirstName) ? sFirstName : sSearchText);
 							oSearch.addOperator('or');
-							oSearch.addFilter('surname', 'TEXT_IS_LIKE', sSearchText);
+							oSearch.addFilter('surname', 'TEXT_IS_LIKE', (sSearchText != sSurname) ? sSurname : sSearchText);
 							if (bEmailOnly)
 							{
 								oSearch.addOperator('or');
@@ -5398,12 +5399,11 @@ ns1blankspace.search.email =
 													
 							oSearch.getResults(function (data) {ns1blankspace.search.email.process(data, sElementID, oParam)}) 								
 						}
-					};	
+					};
 				},
 
 	process: 	function (oResponse, sElementID, oParam)
 				{
-
 					var iColumn = 0;
 					var aHTML = [];
 					var h = -1;
@@ -5452,8 +5452,7 @@ ns1blankspace.search.email =
 							type: 'JSON',
 							functionRow: ns1blankspace.search.email.row
 						}));
-					}	
-							
+					}				
 				},
 
 	row: 		function (oParam, oRow)
@@ -5685,8 +5684,6 @@ ns1blankspace.render =
 								
 								$('td.ns1blankspaceSearch').click(function(event)
 								{
-									//$(ns1blankspace.xhtml.container).html('&nbsp;');
-									//$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions)
 									oParam.source = 1;
 									fFunctionSearch(event.target.id, oParam);
 								});
@@ -5754,6 +5751,9 @@ ns1blankspace.render =
 						case 'pipe':
 							aHTML.push('|');
 							break;
+						case 'hyphen':
+							aHTML.push('-');
+							break;		
 						default:
 							aHTML.push(oRow[aColumns[i]]);
 						}
@@ -5764,7 +5764,6 @@ ns1blankspace.render =
 					aHTML.push('</tr>');
 
 					return aHTML.join('');
-
 				},	
 
 	showPage:	function (sXHTMLElementID)
@@ -6082,6 +6081,10 @@ ns1blankspace.pdf =
 						if (iTopMargin !== undefined) {oData.xhtml_TopMargin = iTopMargin}
 						if (iBottomMargin !== undefined) {oData.xhtml_BottomMargin = iBottomMargin}
 						
+						if (oParam.baseURLBody != undefined) {oData.xhtmlbody_baseurl = oParam.baseURLBody}
+						if (oParam.baseURLHeader != undefined) {oData.xhtmlheader_baseurl = oParam.baseURLHeader}
+						if (oParam.baseURLFooter != undefined) {oData.xhtmlfooter_baseurl = oParam.baseURLFooter}
+						
 						$.ajax(
 						{
 							type: 'POST',
@@ -6337,7 +6340,7 @@ ns1blankspace.extend =
 					var aCategories = [];
 					var bSetApp = true;
 					var iStep = 1;
-					var bAsync = true;   //LOOK AT REMOVE THIS SO ALWAYS ASYNC
+					var bAsync = true;
 					var fOnComplete;
 
 					if (oParam != undefined)
@@ -6367,7 +6370,7 @@ ns1blankspace.extend =
 							{	
 								var oSearch = new AdvancedSearch();
 								oSearch.method = 'SETUP_STRUCTURE_OBJECT_LINK_SEARCH';
-								oSearch.addField('objecttext,categorytext,category,object,structuretext');
+								oSearch.addField('objecttext,categorytext,category,object,structuretext,structureobjectlink.object.prefix');
 								oSearch.rows = 100;
 								oSearch.async = bAsync; 
 								oSearch.sort('object', 'asc');
@@ -6480,7 +6483,7 @@ ns1blankspace.extend =
 								sAlias = k.alias;
 								if (sAlias == undefined) {sAlias = 'se' + k.reference}
 
-								if (k.datatype == 2)
+								if (k.datatype == 2 || k.datatype == 7)
 								{	
 									aElements.push(sAlias + 'text');
 								}	
