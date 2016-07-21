@@ -114,7 +114,7 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.contactPerson',
-		source: '/jscripts/1blankspace.contactperson-2.0.2.js'
+		source: '/site/1433/1blankspace.contactperson-2.0.3.js'
 	},
 	{
 		nameSpace: '1blankspace.contactBusiness',
