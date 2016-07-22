@@ -89,8 +89,8 @@ ns1blankspace.setup.financial =
 					aHTML.push('<tr><td id="ns1blankspaceControlInvoiceTemplate" class="ns1blankspaceControl">' +
 									'Invoice</td></tr>');
 
-					//aHTML.push('<tr><td id="ns1blankspaceControlInvoiceScheduleTemplate" class="ns1blankspaceControl">' +
-					//				'Invoice Schedule</td></tr>');
+					aHTML.push('<tr><td id="ns1blankspaceControlInvoiceScheduleTemplate" class="ns1blankspaceControl">' +
+									'Invoice Schedule</td></tr>');
 
 					aHTML.push('<tr><td id="ns1blankspaceControlStatementTemplate" class="ns1blankspaceControl">' +
 									'Statement</td></tr>');

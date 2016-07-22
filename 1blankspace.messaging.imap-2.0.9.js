@@ -4,8 +4,6 @@
  * http://creativecommons.org/licenses/by-sa/4.0/
  */
 
-//toDo - add processing for account and systemwide document templates
-
 if (ns1blankspace.messaging === undefined) {ns1blankspace.messaging = {}}
 
 ns1blankspace.messaging.imap = 
