@@ -2860,6 +2860,11 @@ ns1blankspace.financial.invoicing =
 				},
 
 	unsent: 	{
+					data: 	{
+								fields: 'reference,amount,description,contactbusinesssentto,contactbusinesssenttotext,contactpersonsentto,contactpersonsenttotext,' +
+										'invoice.contactpersonsentto.email,invoice.contactbusinesssentto.email'
+							},
+
 					init: 		function ()
 								{
 									$('#ns1blankspaceInvoicingColumn2').html(ns1blankspace.xhtml.loading);
@@ -2887,8 +2892,7 @@ ns1blankspace.financial.invoicing =
 
 											var oSearch = new AdvancedSearch();
 											oSearch.method = 'FINANCIAL_INVOICE_SEARCH';
-											oSearch.addField('reference,amount,description,contactbusinesssentto,contactbusinesssenttotext,contactpersonsentto,contactpersonsenttotext,' +
-																'invoice.contactpersonsentto.email,invoice.contactbusinesssentto.email');
+											oSearch.addField(ns1blankspace.financial.invoicing.unsent.data.fields);
 											oSearch.addFilter('sent', 'EQUAL_TO', 'N');
 											oSearch.rows = 100;
 											oSearch.sort('reference', 'asc');
@@ -3073,6 +3077,10 @@ ns1blankspace.financial.invoicing =
 								},
 
 					preview: 	{
+									data: 	{
+												fields: 'financialaccounttext,tax,issuedamount,amount,description,object'
+											},
+
 									init:		function (oParam)
 												{
 													var iStep = 1
@@ -3118,7 +3126,15 @@ ns1blankspace.financial.invoicing =
 														});
 
 														oParam.step = 2;
-														ns1blankspace.financial.invoicing.unsent.preview.init(oParam);
+
+														if ($.type(ns1blankspace.financial.invoicing.preview.preProcessing) == 'function')
+														{
+															ns1blankspace.financial.invoicing.preview.preProcessing(oParam)
+														}
+														else
+														{
+															ns1blankspace.financial.invoicing.unsent.preview.init(oParam);
+														}	
 													}			
 
 													if (iStep == 2)
@@ -3133,7 +3149,7 @@ ns1blankspace.financial.invoicing =
 
 															var oSearch = new AdvancedSearch();
 															oSearch.method = 'FINANCIAL_ITEM_SEARCH';
-															oSearch.addField('financialaccounttext,tax,issuedamount,amount,description,object');
+															oSearch.addField(ns1blankspace.financial.invoicing.unsent.preview.data.fields);
 															oSearch.addFilter('object', 'EQUAL_TO', 5);
 															oSearch.addFilter('objectcontext', 'EQUAL_TO', oData.id);
 															oSearch.sort('id', 'asc');
@@ -3216,6 +3232,8 @@ ns1blankspace.financial.invoicing =
 					email: 	function (oParam)
 								{		
 									var iDataIndex = 0;
+									var bCreatePDF = ns1blankspace.util.getParam(oParam, 'createPDF', {"default": false}).value;
+									var iStep = ns1blankspace.util.getParam(oParam, 'emailSendStep', {"default": 1}).value;
 
 									if (oParam != undefined)
 									{	
@@ -3237,77 +3255,131 @@ ns1blankspace.financial.invoicing =
 
 										var oInvoice = ns1blankspace.financial.invoicing.data.unsentEmail[iDataIndex];
 
-										if (oInvoice)
+										if (oInvoice != undefined)
 										{
-											sHTML = ns1blankspace.format.render(
-											{
-												object: 5,
-												objectContext: oInvoice.id,
-												xhtmlTemplate: ns1blankspace.xhtml.templates['invoice'],
-												objectData: oInvoice,
-												objectOtherData: oInvoice.items
-											});
-
-											oInvoice.xhtml = sHTML;
-										
-											sTo = oInvoice['invoice.contactpersonsentto.email'];
-											if (sTo == '') {sTo = oInvoice['invoice.contactbusinesssentto.email']};
-
-											if (sTo != '')
+											if (iStep == 1)
 											{	
-												var oData = 
+												sHTML = ns1blankspace.format.render(
 												{
-													subject: oInvoice.reference,
-	 												message: oInvoice.xhtml,
-	 												to: sTo,
-	 												object: 5,
-	 												objectContext: oInvoice.id
+													object: 5,
+													objectContext: oInvoice.id,
+													xhtmlTemplate: ns1blankspace.xhtml.templates['invoice'],
+													objectData: oInvoice,
+													objectOtherData: oInvoice.items
+												});	
+
+												oInvoice.xhtml = sHTML;
+
+												if (bCreatePDF)
+												{
+													//TODO
+													var sHTML = oInvoice.xhtml;
+													var sURL = window.location.protocol + '//' + window.location.host;
+
+													oParam.emailSendStep = 2;
+													$.extend(oParam, 
+													{
+														xhtmlContent: sHTML,
+														filename: oInvoice.reference + '.pdf',
+														open: false,
+														object: 5,
+														objectContext: oInvoice.id,
+														onComplete: ns1blankspace.financial.invoicing.unsent.email,
+														leftmargin: 1,
+														rightmargin: 1,
+														topmargin: 1,
+														bottommargin: 1,
+														baseURLBody: sURL
+													});
+													
+													ns1blankspace.pdf.create(oParam);
+												}
+												else
+												{
+													iStep = 2
+												}
+											}	
+
+											if (iStep == 2)	
+											{
+												sTo = oInvoice['invoice.contactpersonsentto.email'];
+												if (sTo == '') {sTo = oInvoice['invoice.contactbusinesssentto.email']};
+
+												if (bCreatePDF)
+												{
+													$('#ns1blankspaceUnsent_option_preview-' + oInvoice.id)
+														.attr('data-attachmentlink', oParam.attachmentLink)
+														.unbind('click')
+														.on('click', function()
+														{
+															window.open('/download/' + $(this).attr('data-attachmentlink'));
+														});
 												}
 
-												$.ajax(
-												{
-													type: 'POST',
-													url: ns1blankspace.util.endpointURI('MESSAGING_EMAIL_SEND'),
-													data: oData,
-													dataType: 'json',
-													global: false,
-													success: function (data)
+												if (sTo != '')
+												{	
+													var oData = 
 													{
-														if (data.status == 'OK')
-														{
-															$.ajax(
-															{
-																type: 'POST',
-																url: ns1blankspace.util.endpointURI('FINANCIAL_INVOICE_MANAGE'),
-																data: 'sent=Y&id=' + oInvoice.id,
-																dataType: 'json',
-																global: false,
-																success: function (data)
-																{
-																	$('#ns1blankspaceUnsent_selectContainer-' + oInvoice.id).html('Emailed');
-																	//oInvoice.response = data;
-																	oParam.dataIndex = iDataIndex + 1;
-																	oParam.step = 2;  // NEXT INVOICE
-																	ns1blankspace.financial.invoicing.unsent.email(oParam);
-																}
-															});
-														}
-														else
-														{
-															$('#ns1blankspaceUnsent_selectContainer-' + oInvoice.id).html('Error');
-															$('#ns1blankspaceUnsent_selectContainer-' + oInvoice.id).attr('title', data.error.errornotes);
-														}
+														subject: oInvoice.reference,
+		 												message: oInvoice.xhtml,
+		 												to: sTo,
+		 												object: 5,
+		 												objectContext: oInvoice.id,
+		 												copyattachmentsfromobject: 5,
+														copyattachmentsfromobjectcontext: oInvoice.id,
+														copyattachmentsfromobjectattachmentlink: oParam.attachmentLink.split('/').pop()
 													}
-												});
+
+													$.ajax(
+													{
+														type: 'POST',
+														url: ns1blankspace.util.endpointURI('MESSAGING_EMAIL_SEND'),
+														data: oData,
+														dataType: 'json',
+														global: false,
+														success: function (data)
+														{
+															if (data.status == 'OK')
+															{
+																$.ajax(
+																{
+																	type: 'POST',
+																	url: ns1blankspace.util.endpointURI('FINANCIAL_INVOICE_MANAGE'),
+																	data: 'sent=Y&id=' + oInvoice.id,
+																	dataType: 'json',
+																	global: false,
+																	success: function (data)
+																	{
+																		$('#ns1blankspaceUnsent_selectContainer-' + oInvoice.id).html('Emailed');
+																		oParam.dataIndex = iDataIndex + 1;
+																		oParam.emailSendStep = 1;
+																		ns1blankspace.financial.invoicing.unsent.email(oParam);
+																	}
+																});
+															}
+															else
+															{
+																$('#ns1blankspaceUnsent_selectContainer-' + oInvoice.id).html('Error');
+																$('#ns1blankspaceUnsent_selectContainer-' + oInvoice.id).attr('title', data.error.errornotes);
+															}
+														}
+													});
+												}
+												else
+												{
+													$('#ns1blankspaceUnsent_selectContainer-' + oInvoice.id).html('No email');
+													oParam.dataIndex = iDataIndex + 1;
+													oParam.emailSendStep = 1
+													ns1blankspace.financial.invoicing.unsent.email(oParam);
+												}	
 											}
-											else
-											{
-												$('#ns1blankspaceUnsent_selectContainer-' + oInvoice.id).html('No email');
-												oParam.dataIndex = iDataIndex + 1;
-												oParam.step = 2;  // NEXT INVOICE
-												ns1blankspace.financial.invoicing.unsent.email(oParam);
-											}	
 										}
+										else
+										{
+											oParam.dataIndex = iDataIndex + 1;
+											oParam.emailSendStep = 1
+											ns1blankspace.financial.invoicing.unsent.email(oParam);
+										}	
 									}
 								}																			
 				},
@@ -4395,7 +4467,7 @@ ns1blankspace.financial.item =
 				}	
 			},
 
-	save:	function(oParam)
+	save: 	function(oParam)
 			{
 				var sNamespace = ns1blankspace.util.getParam(oParam, 'namespace').value;
 

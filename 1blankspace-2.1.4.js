@@ -4289,6 +4289,16 @@ ns1blankspace.util =
 					var sTemplate = ns1blankspace.util.getParam(oParam, 'template', {"default": 'invoice'}).value;
 					var iObject = ns1blankspace.util.getParam(oParam, 'object').value;
 					var bRefresh = ns1blankspace.util.getParam(oParam, 'refresh', {"default": false}).value;
+					var bCheckForSchedule = ns1blankspace.util.getParam(oParam, 'checkForSchedule', {"default": false}).value;
+
+					if (bCheckForSchedule)
+					{
+						oParam = ns1blankspace.util.setParam(oParam, 'onCompleteWhenCan', oParam.onComplete);
+						oParam = ns1blankspace.util.setParam(oParam, 'onComplete', ns1blankspace.util.initTemplate);
+						delete oParam.checkForSchedule;
+						oParam.object = oParam.checkForScheduleObject;
+						oParam.template = sTemplate + 'schedule';
+					}
 
 					if (ns1blankspace.xhtml.templates[sTemplate] == undefined || bRefresh)
 					{
@@ -4343,7 +4353,8 @@ ns1blankspace.util =
 									ns1blankspace.xhtml.templates.all[sTemplate] = oResponse.data.rows;
 								}
 								
-								oParam = ns1blankspace.util.setParam(oParam, 'count', oResponse.data.rows.length)	
+								oParam = ns1blankspace.util.setParam(oParam, 'count', oResponse.data.rows.length)
+
 								ns1blankspace.util.onComplete(oParam);
 							}
 						});		

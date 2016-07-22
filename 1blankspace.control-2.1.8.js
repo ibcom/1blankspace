@@ -127,7 +127,7 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.action',
-		source: '/jscripts/1blankspace.action-2.0.2.js'
+		source: '/site/1433/1blankspace.action-2.0.3.js'
 	},
 	{
 		nameSpace: '1blankspace.messaging.conversation',
@@ -175,7 +175,7 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.financial.invoice',
-		source: '/jscripts/1blankspace.financial.invoice-2.0.3.js'
+		source: '/site/1433/1blankspace.financial.invoice-2.0.4.js'
 	},
 	{
 		nameSpace: '1blankspace.financial.expense',
@@ -223,11 +223,11 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.setup.financial',
-		source: '/jscripts/1blankspace.setup.financial-2.0.2.js'
+		source: '/site/1433/1blankspace.setup.financial-2.0.3.js'
 	},
 	{
 		nameSpace: '1blankspace.setup.messaging',
-		source: '/jscripts/1blankspace.setup.messaging-2.0.1.js'
+		source: '/site/1433/1blankspace.setup.messaging-2.0.2.js'
 	},
 	{
 		nameSpace: '1blankspace.setup.networkGroup',
