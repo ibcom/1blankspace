@@ -78,7 +78,7 @@ ns1blankspace.xhtml.templates.source =
 }	
 
 ns1blankspace.xhtml.logonNotes =
-	'<span style="font-weight:bold;">THIS IS AN UI BEING WORKED ON BY THE COMMUNITY.</span><br /><br />' +
+	'<span style="font-weight:bold;">THIS IS A UI BEING WORKED ON BY THE COMMUNITY.</span><br /><br />' +
 	'As much as mydigitalstructure is well proven and stable, this HTML/js UI code is not yet stable and should not be used in production as is. ' +
 	'It exists to allow the community to debug and others to learn from. ' +
 	'Each day it gets more stable, so keep a watch on the repo.  If you find a bug, please raise an issue on github.<br /><br />' +
@@ -111,15 +111,15 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.format',
-		source: '/site/1433/1blankspace.format-2.0.5.js'
+		source: '/jscripts/1blankspace.format-2.0.5.js'
 	},
 	{
 		nameSpace: '1blankspace.contactPerson',
-		source: '/site/1433/1blankspace.contactperson-2.0.3.js'
+		source: '/jscripts/1blankspace.contactperson-2.0.3.js'
 	},
 	{
 		nameSpace: '1blankspace.contactBusiness',
-		source: '/site/1433/1blankspace.contactbusiness-2.0.3.js'
+		source: '/jscripts/1blankspace.contactbusiness-2.0.3.js'
 	},
 	{
 		nameSpace: '1blankspace.opportunity',
@@ -127,19 +127,19 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.action',
-		source: '/site/1433/1blankspace.action-2.0.3.js'
+		source: '/jscripts/1blankspace.action-2.0.3.js'
 	},
 	{
 		nameSpace: '1blankspace.messaging.conversation',
-		source: '/site/1433/1blankspace.messaging.conversation-2.0.2.js'
+		source: '/jscripts/1blankspace.messaging.conversation-2.0.2.js'
 	},
 	{
 		nameSpace: '1blankspace.messaging.imap',
-		source: '/site/1433/1blankspace.messaging.imap-2.0.9.js'
+		source: '/jscripts/1blankspace.messaging.imap-2.0.9.js'
 	},
 	{
 		nameSpace: '1blankspace.document',
-		source: '/site/1433/1blankspace.document-2.0.2.js'
+		source: '/jscripts/1blankspace.document-2.0.2.js'
 	},
 	{
 		nameSpace: '1blankspace.news',
@@ -163,11 +163,11 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.order',
-		source: '/site/1433/1blankspace.order-2.0.1.js'
+		source: '/jscripts/1blankspace.order-2.0.1.js'
 	},
 	{
 		nameSpace: '1blankspace.financial',
-		source: '/site/1433/1blankspace.financial-2.0.5.js'
+		source: '/jscripts/1blankspace.financial-2.0.5.js'
 	},
 	{
 		nameSpace: '1blankspace.financial.bankAccount',
@@ -175,7 +175,7 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.financial.invoice',
-		source: '/site/1433/1blankspace.financial.invoice-2.0.4.js'
+		source: '/jscripts/1blankspace.financial.invoice-2.0.4.js'
 	},
 	{
 		nameSpace: '1blankspace.financial.expense',
@@ -187,7 +187,7 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.financial.payment',
-		source: '/site/1433/1blankspace.financial.payment-2.0.3.js'
+		source: '/jscripts/1blankspace.financial.payment-2.0.3.js'
 	},
 	{
 		nameSpace: '1blankspace.financial.credit',
@@ -203,7 +203,7 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.financial.payroll',
-		source: '/site/1433/1blankspace.financial.payroll-2.0.8.js'
+		source: '/jscripts/1blankspace.financial.payroll-2.0.8.js'
 	},
 	{
 		nameSpace: '1blankspace.financial.budget',
@@ -211,7 +211,7 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.report',
-		source: '/site/1433/1blankspace.report-2.0.4.js'
+		source: '/jscripts/1blankspace.report-2.0.4.js'
 	},
 	{
 		nameSpace: '1blankspace.setup',
@@ -223,11 +223,11 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.setup.financial',
-		source: '/site/1433/1blankspace.setup.financial-2.0.3.js'
+		source: '/jscripts/1blankspace.setup.financial-2.0.3.js'
 	},
 	{
 		nameSpace: '1blankspace.setup.messaging',
-		source: '/site/1433/1blankspace.setup.messaging-2.0.2.js'
+		source: '/jscripts/1blankspace.setup.messaging-2.0.2.js'
 	},
 	{
 		nameSpace: '1blankspace.setup.networkGroup',
@@ -247,7 +247,7 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.setup.structure',
-		source: '/site/1433/1blankspace.setup.structure-2.0.4.js'
+		source: '/jscripts/1blankspace.setup.structure-2.0.4.js'
 	},
 	{
 		nameSpace: '1blankspace.setup.user',
@@ -255,7 +255,7 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.setup.userRole',
-		source: '/site/1433/1blankspace.setup.userRole-2.0.2.js'
+		source: '/jscripts/1blankspace.setup.userRole-2.0.2.js'
 	},
 	{
 		nameSpace: '1blankspace.setup.website',
@@ -271,15 +271,15 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.structureData',
-		source: '/site/1433/1blankspace.structuredata-2.0.1.js'
+		source: '/jscripts/1blankspace.structuredata-2.0.1.js'
 	},
 	{
 		nameSpace: '1blankspace.supportIssue',
-		source: '/site/1433/1blankspace.supportissue-2.0.1.js'
+		source: '/jscripts/1blankspace.supportissue-2.0.1.js'
 	},
 	{
 		nameSpace: '1blankspace.setup.file',
-		source: '/site/1433/1blankspace.setup.file-2.0.3.js'
+		source: '/jscripts/1blankspace.setup.file-2.0.3.js'
 	},
 	{
 		nameSpace: '1blankspace.developer.space',
@@ -295,7 +295,7 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.connect',
-		source: '/site/1433/1blankspace.connect-2.0.2.js'
+		source: '/jscripts/1blankspace.connect-2.0.2.js'
 	},
 	{
 		nameSpace: '1blankspace.util.whenDone',
@@ -311,11 +311,11 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.util.object',
-		source: '/site/1433/1blankspace.util.object-2.0.0.js'
+		source: '/jscripts/1blankspace.util.object-2.0.0.js'
 	},
 	{
 		nameSpace: '1blankspace.util.financial',
-		source: '/site/1433/1blankspace.util.financial-2.0.0.js'
+		source: '/jscripts/1blankspace.util.financial-2.0.0.js'
 	}
 ])
 
