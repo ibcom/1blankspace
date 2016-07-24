@@ -456,8 +456,14 @@ ns1blankspace.format.render = function (oParam)
 		if (oParam.objectOtherData != undefined) {oObjectOtherData = oParam.objectOtherData}		
 	}
 
+	//var bIncludeSchedule = ns1blankspace.util.getParam(oParam, 'includeSchedule', {'default': false}).value;
+	var bPageBreak = ns1blankspace.util.getParam(oParam, 'pageBreak', {'default': false}).value;
+	var iMaxRows = ns1blankspace.util.getParam(oParam, 'maxRows').value;
+
 	sXHTMLTemplate = (sXHTMLTemplate).replace(/\[\[/g,'<span class="template">');
 	sXHTMLTemplate = (sXHTMLTemplate).replace(/\]\]/g,'</span>');
+	sXHTMLTemplate = (sXHTMLTemplate).replace(/\{\{/g,'<span class="template">');
+	sXHTMLTemplate = (sXHTMLTemplate).replace(/\}\}/g,'</span>');
 
 	var oXHTML;
 
@@ -539,7 +545,7 @@ ns1blankspace.format.render = function (oParam)
 	{	
 		$(aSourceMethods).each(function() 
 		{
-			if (oObjectOtherData === undefined)
+			if (oObjectOtherData == undefined)
 			{
 				var oSearch = new AdvancedSearch();
 				oSearch.method = this.method;
@@ -547,10 +553,10 @@ ns1blankspace.format.render = function (oParam)
 				oSearch.addFilter('object', 'EQUAL_TO', iObject);
 				oSearch.addFilter('objectcontext', 'EQUAL_TO', iObjectContext);
 				oSearch.sort('id', 'desc');
+				oSearch.rows = 500;
 
 				var oTmp = {group: this.group};
 				oSearch.getResults(function(oResponse) {ns1blankspace.format.process(oTmp, oResponse.data.rows)});
-
 			}
 			else
 			{
@@ -566,6 +572,8 @@ ns1blankspace.format.render = function (oParam)
 
 ns1blankspace.format.process = function (oParam, oResponse)
 {
+	var iMaxRows = ns1blankspace.util.getParam(oParam, 'maxRows').value;
+
 	var oXHTML = document;
 
 	if (ns1blankspace.util.param(oParam, 'xhtml').exists)
@@ -598,7 +606,7 @@ ns1blankspace.format.process = function (oParam, oResponse)
 
 	sTRXHTML = aTR.join('');
 
-	$(oResponse).each(function()
+	$(oResponse).each(function(r)
 	{	
 		var oRow = this;
 
@@ -636,6 +644,37 @@ ns1blankspace.format.process = function (oParam, oResponse)
 	});
 
 	$('[data-format-source-group="' + oParam.group + '"]:first', oXHTML).closest('tr').remove();
+
+	//Split if greater than iMaxRows.
+
+	if (iMaxRows != undefined)
+	{	
+		var aAllRows =  $('tr', oXHTML);
+
+		if (aAllRows.length > iMaxRows + 1)
+		{
+			var table = $('[data-format-source-group="' + oParam.group + '"]:first', oXHTML).closest('table');
+			var tableContainer = table.children().remove();
+			var tableHeader = table.children().first('tr');
+
+			var aPagedRows = [];
+			var sHTML = ''
+
+			while(aAllRows.length)
+			{
+				aPagedRows.push(aAllRows.splice(0, iMaxRows));
+			}
+
+			$.each(aPagedRows, function (r, rows)
+			{	
+				rows.unshift('<div style="page-break-before:always;"></div>' + tableContainer.replace('</table>', ''))
+				rows.push('</table>');
+				sHTML = sHTML & rows.join('');
+			});
+
+			oXHTML.html(sHTML)
+		}
+	}
 
 	if (ns1blankspace.util.param(oParam, 'xhtml').exists)
 		{return oXHTML.html()};
