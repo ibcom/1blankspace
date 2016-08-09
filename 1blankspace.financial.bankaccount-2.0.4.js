@@ -4345,6 +4345,7 @@ ns1blankspace.financial.bankAccount =
 															else
 															{
 																var sourceBankTransactions = _.groupBy(items, 'sourcebanktransaction');
+																
 
 																ns1blankspace.financial.bankAccount.reconcile.items.data.reconciled['transactions'] = sourceBankTransactions;
 
@@ -4364,13 +4365,25 @@ ns1blankspace.financial.bankAccount =
 																	3: 'generaljournalitem' 
 																}
 
+																var bankTransactions = [];
+
 																_.each(sourceBankTransactions, function(value, id)
 																{
-																	var transaction = _.first(value);
+																	bankTransactions.push(_.first(value))
+																});
+
+																bankTransactions = _.sortBy(bankTransactions, function(transaction)
+																{ return new Date(transaction[namespace[iNamespace] + '.sourcebanktransaction.posteddate']) });
+
+																_.each(bankTransactions, function(value)
+																{
+																	var transaction = value;
 																	var cAmount = parseFloat(Math.abs((transaction[namespace[iNamespace] + '.sourcebanktransaction.amount']).parseCurrency())).formatMoney();
 																	var sNotes = transaction[namespace[iNamespace] + '.sourcebanktransaction.notes'];
 																	var sDate = transaction[namespace[iNamespace] + '.sourcebanktransaction.posteddate'];
-																	var sReference = _.join(_.map(value, 'reference'), ', ')
+																	var sourceBankTransaction = sourceBankTransactions[value.sourcebanktransaction];
+																	var sReference = _.join(_.map(sourceBankTransaction, 'reference'), ', ');
+																	var id = value.sourcebanktransaction;
 
 																	aHTML.push(
 																		'<tr class="ns1blankspaceRow">' +

@@ -187,8 +187,7 @@ ns1blankspace.financial.payment =
 										oSearch.addField('contactbusinesspaidtotext,contactbusinesspaidto,contactpersonpaidtotext,' +
 																			'contactpersonpaidto,projecttext,project,areatext,' +
 																			'area,reference,paiddate,description,amount,tax,' +
-																			'reconciliation,reconciliationtext,sourcebanktransaction,sourcebanktransactiontext,' +
-																			'taxreport,taxreportfield,taxreporttext');
+																			'reconciliation,reconciliationtext,sourcebanktransaction,sourcebanktransactiontext');
 
 										oSearch.addField(ns1blankspace.option.auditFields);
 										
