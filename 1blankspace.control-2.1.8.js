@@ -259,7 +259,7 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.setup.website',
-		source: '/jscripts/1blankspace.setup.website-2.0.5.js'
+		source: '/jscripts/1blankspace.setup.website-2.0.6.js'
 	},
 	{
 		nameSpace: '1blankspace.setup.websiteForm',
