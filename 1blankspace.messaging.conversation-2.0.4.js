@@ -1044,7 +1044,8 @@ ns1blankspace.messaging.conversation =
 											.click(function()
 											{
 												ns1blankspace.messaging.conversation.posts.add(false);
-											});
+											})
+											.css('width', '65px');
 
 											$('#ns1blankspacePostsSearch').button(
 											{
