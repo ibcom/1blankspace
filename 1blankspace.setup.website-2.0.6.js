@@ -1030,9 +1030,9 @@ ns1blankspace.setup.website =
 				},
 
 	pages: 		{	
-					data: 		{searchText: undefined},
+						data: {searchText: undefined},
 
-					show: 		function (oParam, oResponse)
+						show: function (oParam, oResponse)
 								{
 									var iObjectContext = ns1blankspace.util.getParam(oParam, 'objectContext', {"default": ns1blankspace.objectContext}).value;
 									var oSearchText = ns1blankspace.util.getParam(oParam, 'searchText');

@@ -1012,6 +1012,11 @@ ns1blankspace.financial.bankAccount =
 															status: 3
 														}
 
+														if (_.toNumber(oItem.amount) == 0)
+														{
+															oData.status = 2
+														}
+
 														if (oItem.mapping != undefined)
 														{	
 															if (oItem.mapping.maptofinancialaccount != '') {oData.financialaccount = oItem.mapping.maptofinancialaccount}
