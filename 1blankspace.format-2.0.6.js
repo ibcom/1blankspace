@@ -615,7 +615,7 @@ ns1blankspace.format.process = function (oParam, oResponse)
 		oTRClone.find('[data-format-source]').each(function()
 		{
 			var sSource = $(this).attr('data-format-source');
-			var sSourceMethod = $(e).attr('data-format-source-method');
+			var sSourceMethod = $(this).attr('data-format-source-method');
 
 			if (sSourceMethod != undefined)
 			{

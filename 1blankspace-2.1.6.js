@@ -4162,7 +4162,7 @@ ns1blankspace.util =
 
 	formatDate:	function (sDate, oOption)
 				{
-					var sFormat = ns1blankspace.util.param(oOption, 'format', {"default": "DD MMM YYYY"}).value;
+					var sFormat = ns1blankspace.util.getParam(oOption, 'format', {"default": "D MMM YYYY"}).value;
 					var sReturn = sDate;
 
 					if (sReturn != '')
