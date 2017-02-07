@@ -1205,7 +1205,8 @@ ns1blankspace.setup.website =
 
 					bind: 		function (oRow, oParam)
 								{
-									$('#ns1blankspaceSetupWebsitePages .ns1blankspaceRowRemove').button({
+									// v2.0.7 Was not binding second & subsequent pages correctly
+									$('#' + oParam.xhtmlContainerID + ' .ns1blankspaceRowRemove').button({
 										text: false,
 										icons: {
 											primary: "ui-icon-close"
@@ -1223,7 +1224,7 @@ ns1blankspace.setup.website =
 									.css('width', '15px')
 									.css('height', '17px');
 									
-									$('#ns1blankspaceSetupWebsitePages td.ns1blankspaceRowSelect')
+									$('#' + oParam.xhtmlContainerID + ' td.ns1blankspaceRowSelect')
 									.click(function()
 									{
 										ns1blankspace.setup.website.pages.edit({xhtmlElementID: this.id})
