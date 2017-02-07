@@ -736,13 +736,11 @@ ns1blankspace.financial.payment =
 										'Bank Account' +
 										'</td></tr>' +
 										'<tr class="ns1blankspaceRadio">' +
-										'<td id="ns1blankspacePaymentEditBankAccount" class="ns1blankspaceRadio">');
-									
-										var iDefaultBankAccount;
+										'<td id="ns1blankspaceDetailsBankAccount" class="ns1blankspaceRadio">');
 										
 										$.each(ns1blankspace.financial.data.bankaccounts, function()
 										{
-											if (iDefaultBankAccount == undefined) {iDefaultBankAccount = this.id}
+											if (ns1blankspace.objectContextData.bankaccount == undefined) {ns1blankspace.objectContextData.bankaccount = this.id}
 											aHTML.push('<input type="radio" id="radioBankAccount' + this.id + '" name="radioBankAccount" value="' + this.id + '"/>' +
 																this.title + '<br />');				
 										});
@@ -765,11 +763,14 @@ ns1blankspace.financial.payment =
 							$('[name="radioTaxCode"][value="' + ns1blankspace.objectContextData.taxtype + '"]').attr('checked', true);
 							$('#ns1blankspaceDetailsTax').val(ns1blankspace.objectContextData.tax);	
 							$('#ns1blankspaceDetailsDescription').val(ns1blankspace.objectContextData.description);
+							iDefaultBankAccount = ns1blankspace.objectContextData.
 						}
 						else
 						{
 							$('#ns1blankspaceDetailsPaidDate').val(Date.today().toString("dd MMM yyyy"));
 						}
+
+						$('[name="radioBankAccount"][value="' + ns1blankspace.objectContextData.bankaccount + '"]').attr('checked', true);
 					}	
 				},
 
