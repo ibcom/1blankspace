@@ -1203,7 +1203,7 @@ ns1blankspace.setup.website =
 									}	
 								},
 
-					bind: 		function (oRow, oParam)
+						bind: function (oParam)
 								{
 									// v2.0.7 Was not binding second & subsequent pages correctly
 									$('#' + oParam.xhtmlContainerID + ' .ns1blankspaceRowRemove').button({
