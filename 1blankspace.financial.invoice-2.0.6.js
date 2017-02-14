@@ -552,7 +552,7 @@ ns1blankspace.financial.invoice =
 					}	
 				},		
 		
-	summary: 	{
+	summary: {
 					show: 		function (oParam)
 								{
 									var aHTML = [];
@@ -579,22 +579,6 @@ ns1blankspace.financial.invoice =
 										oParam = ns1blankspace.util.setParam(oParam, 'object', ns1blankspace.object);
 										oParam = ns1blankspace.util.setParam(oParam, 'onComplete', ns1blankspace.financial.invoice.summary["default"]);
 										ns1blankspace.format.templates.init(oParam);
-
-										/*
-										if (ns1blankspace.financial.summaryUseTemplate || bUseTemplate)
-										{	
-											$('#ns1blankspaceSummaryColumn1').html(ns1blankspace.xhtml.loading);
-											
-											oParam = ns1blankspace.util.setParam(oParam, 'object', ns1blankspace.object);
-											oParam = ns1blankspace.util.setParam(oParam, 'onComplete', ns1blankspace.financial.invoice.summary["default"]);
-											ns1blankspace.format.templates.init(oParam);
-										}	
-										else
-										{
-											delete ns1blankspace.financial.invoice.data.templateDocument;
-											ns1blankspace.financial.invoice.summary["default"](oParam);
-										}
-										*/
 									}	
 								},
 
@@ -868,7 +852,7 @@ ns1blankspace.financial.invoice =
 								}			
 				},
 
-	email: 		{
+	email: 	{
 					init: 		function (oParam)
 								{
 									var iDocument = ns1blankspace.util.getParam(oParam, 'document', {"default": ns1blankspace.financial.invoice.data.templateDocument}).value;

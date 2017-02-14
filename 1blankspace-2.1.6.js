@@ -1811,7 +1811,7 @@ ns1blankspace.logon =
 									'</td>')
 
 					aHTML.push('<td class="ns1blankspaceLogonSub" style="padding-right:2px;">' +
-									'remember <input style="margin:0px; padding:0px; border: 0px;" type="checkbox" id="ns1blankspaceLogonRemember"/></td></tr>');
+									'remember <input style="margin:0px; padding:0px; border: 0px; margin-top:3px;" type="checkbox" id="ns1blankspaceLogonRemember"/></td></tr>');
 
 					aHTML.push('<tr><td colspan=2 style="padding-bottom: 10px;">' +
 									'<input id="ns1blankspaceLogonLogonName" class="ns1blankspaceLogon">' +

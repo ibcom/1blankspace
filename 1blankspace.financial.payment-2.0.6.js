@@ -485,9 +485,11 @@ ns1blankspace.financial.payment =
 					}	
 				},		
 		
-	summary: 	function ()
+	summary: function (oParam)
 				{
 					var aHTML = [];
+					var bUseTemplate = ns1blankspace.util.getParam(oParam, 'useTemplate').value;
+					var bTemplateInitialised = ns1blankspace.util.getParam(oParam, 'templateInitialised').value;
 
 					if (ns1blankspace.objectContextData == undefined)
 					{
@@ -500,7 +502,7 @@ ns1blankspace.financial.payment =
 						aHTML.push('<table class="ns1blankspaceMain">' +
 										'<tr class="ns1blankspaceRow">' +
 										'<td id="ns1blankspaceSummaryColumn1" class="ns1blankspaceColumn1Flexible"></td>' +
-										'<td id="ns1blankspaceSummaryColumn2" class="ns1blankspaceColumn2Action" style="width:250px;"></td>' +
+										'<td id="ns1blankspaceSummaryColumn2" class="ns1blankspaceColumn2Action" style="width:80px;"></td>' +
 										'</tr>' +
 										'</table>');				
 						
@@ -508,94 +510,164 @@ ns1blankspace.financial.payment =
 						
 						var aHTML = [];
 
-						aHTML.push('<table class="ns1blankspace">');
-
-						if (ns1blankspace.objectContextData.contactbusinesspaidtotext != '')
-						{
-
-							aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Business</td></tr>' +
-											'<tr><td id="ns1blankspaceSummaryBusiness" class="ns1blankspaceSummary">' +
-											ns1blankspace.objectContextData.contactbusinesspaidtotext +
-											'</td></tr>');
-						}
-						
-						if (ns1blankspace.objectContextData.contactpersonpaidtotext != '')
-						{
-							aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Person</td></tr>' +
-											'<tr><td id="ns1blankspaceSummaryPerson" class="ns1blankspaceSummary">' +
-											ns1blankspace.objectContextData.contactpersonpaidtotext +
-											'</td></tr>');
-						}
-
-						if (ns1blankspace.objectContextData.description != '')
-						{
-							aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Description</td></tr>' +
-											'<tr><td id="ns1blankspaceSummaryDescription" class="ns1blankspaceSummary">' +
-											ns1blankspace.objectContextData.description +
-											'</td></tr>');
-						}
-						
-						aHTML.push('</table>');		
-
-						$('#ns1blankspaceSummaryColumn1').html(aHTML.join(''));
-
-						var aHTML = [];
-
-						aHTML.push('<table class="ns1blankspaceColumn2">');
-
-						aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Date Paid</td></tr>' +
-											'<tr><td id="ns1blankspaceSummaryPaidDate" class="ns1blankspaceSummary">' +
-											ns1blankspace.objectContextData.paiddate + 
-											'</td></tr>');
-						
-						aHTML.push('<tr><td class="ns1blankspaceSub">');
-						
-						if (ns1blankspace.objectContextData.reconciliation == '')
-						{
-								aHTML.push('This payment is yet to be reconciled.');
-						}
-						else
-						{
-								aHTML.push('This payment has been reconciled!');
-						}
-						
-						aHTML.push('</td></tr>');
-
-						if (ns1blankspace.financial.data.bankaccounts.length == 0)
-						{
-							aHTML.push('<tr><td class="ns1blankspaceSub" style="color:red;">' +
-												'No bank accounts set up!' +
-												'</td></tr>');
-						}
-
-						oParam = ns1blankspace.util.setParam(oParam, 'object', ns1blankspace.object);	
-						var oTemplate = ns1blankspace.format.templates.get(oParam);
-						var bUseTemplate = false;
-
-						if (bUseTemplate)
-						{
-							aHTML.push('<tr><td><span id="ns1blankspaceSummaryCreatePDF" class="ns1blankspaceAction" style="width:75px;">' +
-											'PDF</span></td></tr>');
-						}
-						else
-						{				
-							aHTML.push('<tr><td>' +
-											'<span id="ns1blankspaceSummaryView" class="ns1blankspaceAction" style="width:75px;">' +
-											'View</span></td></tr>');
-						}
-
-						aHTML.push('<tr><td>' +
-									'<span id="ns1blankspaceSummaryEmail" class="ns1blankspaceAction" style="width:75px;">' +
-									'Email</span></td></tr>');
-
-						if (ns1blankspace.objectContextData.paid == 'N')
+						if (!bTemplateInitialised)
 						{	
-							aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Not paid</td></tr>');			
+							oParam = ns1blankspace.util.setParam(oParam, 'object', ns1blankspace.object);
+							oParam = ns1blankspace.util.setParam(oParam, 'onComplete', ns1blankspace.financial.payment.summary);
+							ns1blankspace.format.templates.init(oParam);
 						}
-						
-						aHTML.push('</table>');		
+						else
+						{
+							var oTemplate = ns1blankspace.format.templates.get({object: ns1blankspace.object});
 
-						$('#ns1blankspaceSummaryColumn2').html(aHTML.join(''));
+							if (oTemplate != undefined && (ns1blankspace.financial.summaryUseTemplate || bUseTemplate))
+							{
+								aHTML.push(ns1blankspace.format.render(
+								{
+									object: 3,
+									xhtmlTemplate: oTemplate.xhtml,
+									objectOtherData: oParam.objectOtherData
+								}));
+							}
+							else
+							{
+								aHTML.push('<table class="ns1blankspace">');
+
+								if (ns1blankspace.objectContextData.contactbusinesspaidtotext != '')
+								{
+									aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Business</td></tr>' +
+													'<tr><td id="ns1blankspaceSummaryBusiness" class="ns1blankspaceSummary">' +
+													ns1blankspace.objectContextData.contactbusinesspaidtotext +
+													'</td></tr>');
+								}
+								
+								if (ns1blankspace.objectContextData.contactpersonpaidtotext != '')
+								{
+									aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Person</td></tr>' +
+													'<tr><td id="ns1blankspaceSummaryPerson" class="ns1blankspaceSummary">' +
+													ns1blankspace.objectContextData.contactpersonpaidtotext +
+													'</td></tr>');
+								}
+
+								if (ns1blankspace.objectContextData.description != '')
+								{
+									aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Description</td></tr>' +
+													'<tr><td id="ns1blankspaceSummaryDescription" class="ns1blankspaceSummary">' +
+													ns1blankspace.objectContextData.description +
+													'</td></tr>');
+								}
+								
+								aHTML.push('</table>');
+							}	
+
+							$('#ns1blankspaceSummaryColumn1').html(aHTML.join(''));
+
+							var aHTML = [];
+
+							aHTML.push('<table class="ns1blankspaceColumn2">');
+
+							aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Date Paid</td></tr>' +
+												'<tr><td id="ns1blankspaceSummaryPaidDate" class="ns1blankspaceSummary">' +
+												ns1blankspace.objectContextData.paiddate + 
+												'</td></tr>');
+
+							aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Remittance</td></tr>');
+
+							if (bUseTemplate && oTemplate != undefined)
+							{
+								aHTML.push('<tr><td><span id="ns1blankspaceSummaryCreatePDF" class="ns1blankspaceAction" style="width:75px;">' +
+												'PDF</span></td></tr>');
+							}
+							else
+							{				
+								aHTML.push('<tr><td>' +
+												'<span id="ns1blankspaceSummaryView" class="ns1blankspaceAction" style="width:75px;">' +
+												'View</span></td></tr>');
+							}
+
+							aHTML.push('<tr><td>' +
+										'<span id="ns1blankspaceSummaryEmail" class="ns1blankspaceAction" style="width:75px;">' +
+										'Email</span></td></tr>');
+
+							if (ns1blankspace.objectContextData.paid == 'N')
+							{	
+								aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Not paid</td></tr>');			
+							}
+
+							aHTML.push('<tr><td class="ns1blankspaceSub" style="padding-top:12px;">');
+							
+							if (ns1blankspace.objectContextData.reconciliation == '')
+							{
+									aHTML.push('This payment is yet to be reconciled.');
+							}
+							else
+							{
+									aHTML.push('This payment has been reconciled!');
+							}
+							
+							aHTML.push('</td></tr>');
+
+							if (ns1blankspace.financial.data.bankaccounts.length == 0)
+							{
+								aHTML.push('<tr><td class="ns1blankspaceSub" style="color:red;">' +
+													'No bank accounts set up!' +
+													'</td></tr>');
+							}
+		
+							aHTML.push('</table>');		
+
+							$('#ns1blankspaceSummaryColumn2').html(aHTML.join(''));
+
+							if (ns1blankspace.financial.summaryUseTemplate || bUseTemplate)
+							{
+								$('#ns1blankspaceSummaryCreatePDF').button(
+								{
+									label: 'PDF'
+								})
+								.click(function(event)
+								{
+									var sHTML = $('#ns1blankspaceSummaryColumn1').html();
+									var sURL = document.location.protocol + '//' + document.location.host;
+
+									$('#ns1blankspaceSummaryCreatePDF').unbind('click');
+
+									ns1blankspace.pdf.create(
+									{
+										xhtmlElementID: 'ns1blankspaceSummaryCreatePDF',
+										xhtmlContent: sHTML,
+										filename: ns1blankspace.objectContextData.reference + '.pdf',
+										open: false,
+										leftmargin: 45,
+										baseURLBody:  sURL
+									});
+								});
+							}		
+							else		
+							{	
+								$('#ns1blankspaceSummaryView').button(
+								{
+									label: 'View'
+								})
+								.click(function(event)
+								{
+									ns1blankspace.financial.payment.summary({useTemplate: true});
+								});
+							}
+
+							$('#ns1blankspaceSummaryEmail').button(
+							{
+								label: 'Email'
+							})
+							.click(function(event)
+							{
+								if (ns1blankspace.financial.summaryUseTemplate || bUseTemplate)
+								{
+									$('#ns1blankspaceSummaryColumn1').html('');
+									delete(ns1blankspace.objectContextData.xhtml);
+								}
+								ns1blankspace.financial.payment.email.init();
+							});
+						}	
 					}	
 				},
 
@@ -924,7 +996,7 @@ ns1blankspace.financial.payment =
 								}
 				},
 
-	expense: 	{
+	expense: {
 					show:		function (oParam, oResponse)
 								{
 									var iObjectContext = ns1blankspace.objectContext;
@@ -1110,7 +1182,256 @@ ns1blankspace.financial.payment =
 										success: function(data){$('#' + sXHTMLElementID).parent().parent().fadeOut(500)}
 									});
 								}
-				}														
+				},
+
+	email: 	{
+					init: 	function (oParam)
+								{
+									var iDocument = ns1blankspace.util.getParam(oParam, 'document', {"default": ns1blankspace.financial.invoice.data.templateDocument}).value;
+									
+									oParam = ns1blankspace.util.setParam(oParam, 'object', ns1blankspace.object);
+									oParam = ns1blankspace.util.setParam(oParam, 'onComplete', ns1blankspace.financial.invoice.email.render);
+			
+									ns1blankspace.format.templates.init(oParam);
+								},
+
+					render: 	function (oParam, oResponse)
+								{
+									ns1blankspace.status.working('Creating...');
+
+									var iMode = ns1blankspace.util.getParam(oParam, 'mode', {"default": 1}).value;
+									var fPreProcess = ns1blankspace.util.getParam(oParam, 'preProcess').value;
+
+									//1=Show, 2=Just Send
+
+									var iFormat = ns1blankspace.util.getParam(oParam, 'format', {"default": 1}).value;
+
+									//1=HTML, 2=PDF
+		
+									var oTemplate = ns1blankspace.format.templates.get(oParam);
+
+									ns1blankspace.objectContextData.xhtml = ns1blankspace.format.render(
+									{
+										object: 5,
+										xhtmlTemplate: oTemplate.xhtml,
+										objectData: ns1blankspace.objectContextData,
+										objectOtherData: oResponse.data.rows
+									});
+
+									ns1blankspace.status.clear();
+
+									if (iMode == 1)
+									{
+										ns1blankspace.financial.invoice.email.show(oParam);
+									}
+									else
+									{
+										ns1blankspace.financial.invoice.email.send(oParam);
+									}	
+								},		
+
+					show: 	function (oParam)
+								{
+									ns1blankspace.format.editor.init();
+
+									var aHTML = [];
+
+									aHTML.push('<table class="ns1blankspace" cellspacing=0 cellpadding=0>');
+						
+									aHTML.push('<tr><td>')
+
+										aHTML.push('<table class="ns1blankspace" style="width:100%;" cellspacing=0 cellpadding=0>');
+
+										aHTML.push('<tr><td class="ns1blankspaceCaption">' +
+														'To</td>' +
+														'<td class="ns1blankspaceCaption">' +
+														'From</td></tr>' +
+														'<tr>' +
+														'<td class="ns1blankspaceText" style="padding-right:15px; padding-left:0px;">' +
+														'<input id="ns1blankspaceEmailTo" class="ns1blankspaceText">' +
+														'</td><td class="ns1blankspaceText">' +
+														'<input id="ns1blankspaceEmailFrom" class="ns1blankspaceSelect"' +
+																	' data-method="SETUP_MESSAGING_ACCOUNT_SEARCH"' +
+																	' data-methodFilter="type-EQUAL_TO-5"' +
+																	' data-customOption="hasaccess-Y"' +
+																	' data-columns="email">' +
+													'</td></tr>');
+
+										aHTML.push('</table>');											
+
+									aHTML.push('</td></tr>')
+
+									aHTML.push('<tr class="ns1blankspace">' +
+													'<td class="ns1blankspaceText">' +
+													'<input id="ns1blankspaceEmailSubject" class="ns1blankspaceText" style="width:80%;">' +
+													' <div style="font-size:0.875em; color:#999999; float:right; margin-top:6px;"><input type="checkbox" id="ns1blankspaceEmailAttachPDF">Attach a PDF</div>' +
+													'</td></tr>');	
+
+									ns1blankspace.counter.editor = ns1blankspace.counter.editor + 1;		
+
+									aHTML.push('<tr class="ns1blankspaceTextMulti">' +
+													'<td class="ns1blankspaceTextMulti">' +
+													'<textarea rows="30" cols="50" id="ns1blankspaceMessageText' +
+														ns1blankspace.counter.editor + '" editorcount="' + ns1blankspace.counter.editor + '" class="ns1blankspaceTextMulti"></textarea>' +
+													'</td></tr>');
+
+									aHTML.push('</table>');					
+						
+									$('#ns1blankspaceSummaryColumn1').html(aHTML.join(''));
+
+									var sMessage = ns1blankspace.objectContextData.xhtml;
+									
+									$('#ns1blankspaceMessageText' + ns1blankspace.counter.editor).val(sMessage);
+
+									ns1blankspace.format.editor.init({selector: '#ns1blankspaceMessageText' + ns1blankspace.counter.editor});
+
+									var aHTML = [];
+									
+									aHTML.push('<table class="ns1blankspaceColumn2">' +
+													'<tr><td><span id="ns1blankspaceEmailSend" class="ns1blankspaceAction">' +
+													'Send</span></td></tr>' +
+													'<tr><td><span id="ns1blankspaceEmailCancel" class="ns1blankspaceAction">' +
+													'Cancel</span></td></tr>' +
+													'</table>');					
+									
+									$('#ns1blankspaceSummaryColumn2').html(aHTML.join(''));
+									
+									$('#ns1blankspaceEmailSend').button(
+									{
+										text: "Send"
+									})
+									.click(function()
+									{
+										if ($('#ns1blankspaceEmailAttachPDF:checked').length == 0)
+										{
+											ns1blankspace.financial.invoice.email.send(oParam)
+										}
+										else
+										{
+											oParam = ns1blankspace.util.setParam(oParam, 'onComplete', ns1blankspace.financial.invoice.email.send);
+											oParam = ns1blankspace.util.setParam(oParam, 'xhtmlContent', ns1blankspace.objectContextData.xhtml);
+											oParam = ns1blankspace.util.setParam(oParam, 'filename', ns1blankspace.objectContextData.reference + '.pdf');
+											oParam = ns1blankspace.util.setParam(oParam, 'open', false);
+											oParam = ns1blankspace.util.setParam(oParam, 'leftmargin', 45);
+											oParam.baseURLBody = window.location.protocol + '/' + window.location.host;
+
+											ns1blankspace.pdf.create(oParam);
+										}	
+									})
+									.css('width', '65px');
+
+									$('#ns1blankspaceEmailCancel').button(
+									{
+										text: "Cancel"
+									})
+									.click(function()
+									{
+										ns1blankspace.financial.invoice.summary.show();
+									})
+									.css('width', '65px');
+
+									//$('#ns1blankspaceEmailFrom').val(ns1blankspace.user.email);
+									$('#ns1blankspaceEmailTo').val(ns1blankspace.objectContextData['invoice.contactpersonsentto.email']);
+									$('#ns1blankspaceEmailSubject').val(ns1blankspace.user.contactBusinessText + ' Invoice ' + ns1blankspace.objectContextData['reference']);
+
+									if (ns1blankspace.objectContextData['invoice.contactpersonsentto.email'] == '')
+									{
+										$('#ns1blankspaceEmailTo').focus();
+									}
+								},	
+
+					send:		function (oParam, oResponse)
+								{
+									var iMode = ns1blankspace.util.getParam(oParam, 'mode', {"default": 1}).value;
+
+									//1=Show, 2=Just Send
+
+									var iFormat = ns1blankspace.util.getParam(oParam, 'format', {"default": 1}).value;
+
+									//1=HTML, 2=PDF
+
+									var iAttachmentLink = ns1blankspace.util.getParam(oParam, 'attachmentLink').value;
+
+									if (iMode == 1)
+									{
+										var sTo = $('#ns1blankspaceEmailTo').val();
+										var sSubject = $('#ns1blankspaceEmailSubject').val();
+										var sMessage = tinyMCE.get('ns1blankspaceMessageText' + ns1blankspace.counter.editor).getContent();
+									}	
+									else
+									{	
+										var sTo = ns1blankspace.objectContextData['invoice.contactpersonsentto.email'];
+										var sSubject = ns1blankspace.objectContextData.reference;
+										var sMessage = ns1blankspace.objectContextData.xhtml;
+									}	
+
+									if (sTo == '')
+									{
+										ns1blankspace.status.error('No email address')
+									}
+									else
+									{	
+										ns1blankspace.status.working('Emailing...');
+
+										if (ns1blankspace.objectContextData.xhtml == '')
+										{
+											ns1blankspace.status.error('Nothing to email');
+										}	
+										else
+										{
+											var oData = 
+											{
+												subject: sSubject,
+												message: sMessage,
+												to: sTo,
+												saveagainstobject: 5,
+												saveagainstobjectcontext: ns1blankspace.objectContext,
+												send: 'Y',
+												applysystemtemplate: 'Y'
+											}
+
+											if (iAttachmentLink !== undefined)
+											{
+												oData.copyattachmentsfromobject = 5;
+												oData.copyattachmentsfromobjectcontext = ns1blankspace.objectContext;
+												oData.copyattachmentsfromobjectattachmentlink = iAttachmentLink
+											}	
+
+											$.ajax(
+											{
+												type: 'POST',
+												url: ns1blankspace.util.endpointURI('MESSAGING_EMAIL_SEND'),
+												data: oData,
+												dataType: 'json',
+												global: false,
+												success: function (data)
+												{
+													if (data.status == 'OK')
+													{
+														$.ajax(
+														{
+															type: 'POST',
+															url: ns1blankspace.util.endpointURI('FINANCIAL_INVOICE_MANAGE'),
+															data: 'sent=Y&id=' + ns1blankspace.objectContext,
+															dataType: 'json',
+															global: false,
+															success: function (data)
+															{
+																ns1blankspace.status.message('Emailed');
+																ns1blankspace.financial.invoice.summary.show();
+															}
+														});
+													}
+													else
+													{
+														ns1blankspace.status.error('Could not send email')
+													}
+												}
+											});
+										}
+									}	
+								}		
+				}																			
 }
 
 ns1blankspace.financial.payment.images =
@@ -1266,5 +1587,5 @@ ns1blankspace.financial.payment.images =
 
 						$('#ns1blankspacePaymentImageDetailsColumn2').html(aHTML.join(''))
 					}
-				}				
+				}
 }			
