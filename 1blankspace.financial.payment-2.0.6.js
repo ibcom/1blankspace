@@ -156,7 +156,7 @@ ns1blankspace.financial.payment =
 				},
 
 	search: 	{
-					send: 		function (sXHTMLElementId, oParam)
+					send: 	function (sXHTMLElementId, oParam)
 								{
 									var aSearch = sXHTMLElementId.split('-');
 									var sElementId = aSearch[0];
@@ -187,7 +187,9 @@ ns1blankspace.financial.payment =
 										oSearch.addField('contactbusinesspaidtotext,contactbusinesspaidto,contactpersonpaidtotext,' +
 																			'contactpersonpaidto,projecttext,project,areatext,' +
 																			'area,reference,paiddate,description,amount,tax,bankaccount,' +
-																			'reconciliation,reconciliationtext,sourcebanktransaction,sourcebanktransactiontext');
+																			'reconciliation,reconciliationtext,sourcebanktransaction,sourcebanktransactiontext,' +
+																			'payment.contactpersonpaidto.email',
+																			'payment.contactbusinesspaidto.email');
 
 										oSearch.addField(ns1blankspace.option.auditFields);
 										
@@ -1186,11 +1188,9 @@ ns1blankspace.financial.payment =
 
 	email: 	{
 					init: 	function (oParam)
-								{
-									var iDocument = ns1blankspace.util.getParam(oParam, 'document', {"default": ns1blankspace.financial.invoice.data.templateDocument}).value;
-									
+								{								
 									oParam = ns1blankspace.util.setParam(oParam, 'object', ns1blankspace.object);
-									oParam = ns1blankspace.util.setParam(oParam, 'onComplete', ns1blankspace.financial.invoice.email.render);
+									oParam = ns1blankspace.util.setParam(oParam, 'onComplete', ns1blankspace.financial.payment.email.render);
 			
 									ns1blankspace.format.templates.init(oParam);
 								},
@@ -1212,21 +1212,20 @@ ns1blankspace.financial.payment =
 
 									ns1blankspace.objectContextData.xhtml = ns1blankspace.format.render(
 									{
-										object: 5,
+										object: ns1blankspace.object,
 										xhtmlTemplate: oTemplate.xhtml,
-										objectData: ns1blankspace.objectContextData,
-										objectOtherData: oResponse.data.rows
+										objectData: ns1blankspace.objectContextData
 									});
 
 									ns1blankspace.status.clear();
 
 									if (iMode == 1)
 									{
-										ns1blankspace.financial.invoice.email.show(oParam);
+										ns1blankspace.financial.payment.email.show(oParam);
 									}
 									else
 									{
-										ns1blankspace.financial.invoice.email.send(oParam);
+										ns1blankspace.financial.payment.email.send(oParam);
 									}	
 								},		
 
@@ -1263,10 +1262,10 @@ ns1blankspace.financial.payment =
 
 									aHTML.push('<tr class="ns1blankspace">' +
 													'<td class="ns1blankspaceText">' +
-													'<input id="ns1blankspaceEmailSubject" class="ns1blankspaceText" style="width:80%;">' +
-													' <div style="font-size:0.875em; color:#999999; float:right; margin-top:6px;"><input type="checkbox" id="ns1blankspaceEmailAttachPDF">Attach a PDF</div>' +
+													'<input id="ns1blankspaceEmailSubject" class="ns1blankspaceText" style="width:100%;">' +
 													'</td></tr>');	
-
+									//' <div style="font-size:0.875em; color:#999999; float:right; margin-top:6px;"><input type="checkbox" id="ns1blankspaceEmailAttachPDF">Attach a PDF</div>' +
+			
 									ns1blankspace.counter.editor = ns1blankspace.counter.editor + 1;		
 
 									aHTML.push('<tr class="ns1blankspaceTextMulti">' +
@@ -1326,15 +1325,17 @@ ns1blankspace.financial.payment =
 									})
 									.click(function()
 									{
-										ns1blankspace.financial.invoice.summary.show();
+										ns1blankspace.financial.payment.summary();
 									})
 									.css('width', '65px');
 
-									//$('#ns1blankspaceEmailFrom').val(ns1blankspace.user.email);
-									$('#ns1blankspaceEmailTo').val(ns1blankspace.objectContextData['invoice.contactpersonsentto.email']);
-									$('#ns1blankspaceEmailSubject').val(ns1blankspace.user.contactBusinessText + ' Invoice ' + ns1blankspace.objectContextData['reference']);
+									$('#ns1blankspaceEmailFrom').val(ns1blankspace.user.email);
+									var emailTo = ns1blankspace.objectContextData['payment.contactpersonpaidto.email'];
+									if (emailTo == '') {emailTo = ns1blankspace.objectContextData['payment.contactbusinesspaidto.email']}
+									$('#ns1blankspaceEmailTo').val(emailTo);
+									$('#ns1blankspaceEmailSubject').val(ns1blankspace.user.contactBusinessText + ' Payment Remittance ' + ns1blankspace.objectContextData['reference']);
 
-									if (ns1blankspace.objectContextData['invoice.contactpersonsentto.email'] == '')
+									if (ns1blankspace.objectContextData['payment.contactpersonpaidto.email'] == '')
 									{
 										$('#ns1blankspaceEmailTo').focus();
 									}

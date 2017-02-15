@@ -62,24 +62,24 @@ ns1blankspace.format.tags =
 				object: 3,
 				type: 1,
 				caption: "Paid Date",
-				source: "payment.sentdate"
+				source: "payment.paiddate"
 			},
 			{
 				object: 3,
 				type: 1,
-				caption: "Paid To (Business)",
+				caption: "Business",
 				source: "payment.contactbusinesspaidtotext"
 			},
 			{
 				object: 3,
 				type: 1,
-				caption: "Paid To (Person)",
+				caption: "Person",
 				source: "payment.contactpersonpaidtotext"
 			},
 			{
 				object: 3,
 				type: 1,
-				caption: "Descriptionv",
+				caption: "Description",
 				source: "payment.description"
 			},
 			{
