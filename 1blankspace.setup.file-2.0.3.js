@@ -1253,13 +1253,13 @@ ns1blankspace.setup.file =
 				},
 
 	"export": 	{
-					show: 		function ()
+					show: 	function ()
 								{
 									//choose object
 									//holding method
 								},
 
-					process: 	function (oParam)
+					process: function (oParam)
 								{
 									var sFormatName = ns1blankspace.util.getParam(oParam, 'name').value;
 									var oSummary = ns1blankspace.util.getParam(oParam, 'summary', {"default": {}}).value;
