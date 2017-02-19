@@ -1283,6 +1283,7 @@ ns1blankspace.setup.file =
 
 										var oData =
 										{
+											id: iMore,
 											rows: iRows
 										}
 
@@ -1297,10 +1298,10 @@ ns1blankspace.setup.file =
 												rows: iRows,
 												success: function(oResponse) 
 												{
-													oParam = ns1blankspace.setParam(oParam, 'items', oResponse.data.rows);
-													ns1blankspace.setup.file["exports"].process(oParam)
+													oParam = ns1blankspace.util.setParam(oParam, 'items', oResponse.data.rows);
+													ns1blankspace.setup.file["export"].process(oParam)
 												}
-											}
+											});
 										}
 									}
 								},			
@@ -1311,10 +1312,24 @@ ns1blankspace.setup.file =
 									var oSummary = ns1blankspace.util.getParam(oParam, 'summary', {"default": {}}).value;
 									var oItems = ns1blankspace.util.getParam(oParam, 'items', {"default": {}}).value;
 									var bSaveToFile = ns1blankspace.util.getParam(oParam, 'saveToFile', {"default": false}).value;
+									var oFormat = ns1blankspace.util.getParam(oParam, 'format').value;
 
-									if (sFormatName !== undefined)
+									if (sFormatName != undefined && oFormat == undefined)
 									{
 										var oFormat = $.grep(ns1blankspace.setup.file["export"].formats, function (a) {return a.name == sFormatName});
+									}
+
+									if (oFormat == undefined) {oFormat = []}
+
+									var oOptions = 
+									{
+										delimiter: ',',
+										surroundWith: '"'
+									}
+
+									if (oFormat.options != undefined)
+									{
+										oOptions = oFormat.options;
 									}
 
 									var aFile = [];
@@ -1322,12 +1337,21 @@ ns1blankspace.setup.file =
 									if (oFormat.length > 0)
 									{
 										oFormat = oFormat[0];
+
+										if (oFormat.header == undefined) {oFormat.header = []}
+										if (oFormat.footer == undefined) {oFormat.footer = []}
+
 										oParam.totalRecords = oItems.length + oFormat.header.length + oFormat.footer.length;
 
 										$.each(oFormat.header, function(i, k)
 										{
 											$.each(k.fields, function (j, v)
 											{
+												if (oOptions.surroundWith != undefined)
+												{
+													aFile.push(oOptions.surroundWith);
+												}
+
 												if (v.value !== undefined)
 												{
 													v.text = v.value;
@@ -1349,7 +1373,17 @@ ns1blankspace.setup.file =
 												else
 												{
 													aFile.push(ns1blankspace.util.format(v));
-												}	
+												}
+
+												if (oOptions.surroundWith != undefined)
+												{
+													aFile.push(oOptions.surroundWith);
+												}
+
+												if (oOptions.delimiter != undefined && j < k.fields.length)
+												{
+													aFile.push(oOptions.delimiter);
+												}
 
 											});
 
@@ -1363,6 +1397,11 @@ ns1blankspace.setup.file =
 												$.each(oFormat.item[0].fields, function (j, v)
 												{
 													delete v.text;
+
+													if (oOptions.surroundWith != undefined)
+													{
+														aFile.push(oOptions.surroundWith);
+													}
 
 													if (v.value !== undefined)
 													{
@@ -1390,7 +1429,17 @@ ns1blankspace.setup.file =
 													else
 													{
 														aFile.push(ns1blankspace.util.format(v));
-													}	
+													}
+
+													if (oOptions.surroundWith != undefined)
+													{
+														aFile.push(oOptions.surroundWith);
+													}
+
+													if (oOptions.delimiter != undefined && j < oFormat.item[0].fields.length)
+													{
+														aFile.push(oOptions.delimiter);
+													}
 												});
 		
 												aFile.push('\r\n');
@@ -1401,6 +1450,11 @@ ns1blankspace.setup.file =
 										{
 											$.each(k.fields, function (j, v)
 											{
+												if (oOptions.surroundWith != undefined)
+												{
+													aFile.push(oOptions.surroundWith);
+												}
+
 												if (v.value !== undefined)
 												{
 													v.text = v.value;
@@ -1416,20 +1470,26 @@ ns1blankspace.setup.file =
 												}
 												else if (v.param !== undefined)
 												{
-													v.text = (ns1blankspace.util.getParam(oParam, v.param).value).toString();
+													v.text = (ns1blankspace.util.getParam(oParam, v.param, {"default": ''}).value).toString();
 													aFile.push(ns1blankspace.util.format(v));
 												}
 												else
 												{
 													aFile.push(ns1blankspace.util.format(v));
-												}	
+												}
 
+												if (oOptions.surroundWith != undefined)
+												{
+													aFile.push(oOptions.surroundWith);
+												}
+
+												if (oOptions.delimiter != undefined && j < k.fields.length)
+												{
+													aFile.push(oOptions.delimiter);
+												}
 											});
-
-											//if (i != oFormat.footer.length - 1)
-											//{	
-												aFile.push('\r\n');
-											//}	
+										
+											aFile.push('\r\n');
 										});
 
 									}
@@ -1457,27 +1517,35 @@ ns1blankspace.setup.file =
 										filename: sFileName
 									}
 
-									$.ajax(
+									if (window.saveAs)
 									{
-										type: 'POST',
-										url: ns1blankspace.util.endpointURI('CORE_FILE_MANAGE'),
-										data: oData,
-										dataType: 'json',
-										success: function(data)
+										var oFile = new File([sData], sFileName, {type: "text/plain;charset=utf-8"});
+										saveAs(oFile);
+									}
+									else
+									{
+										$.ajax(
 										{
-											ns1blankspace.status.message('File created');
-											
-											if (bOpen)
+											type: 'POST',
+											url: ns1blankspace.util.endpointURI('CORE_FILE_MANAGE'),
+											data: oData,
+											dataType: 'json',
+											success: function(data)
 											{
-												window.open(data.link);
-											}
+												ns1blankspace.status.message('File created');
+												
+												if (bOpen)
+												{
+													window.open(data.link, '_self');
+												}
 
-											if (sXHTMLElementID !== undefined)
-											{
-												$('#' + sXHTMLElementID).html('<a href="' + data.link + '" class="ns1blankspaceNoUnloadWarn">' + sText + '</a>')
-											}	
-										}
-									});	
+												if (sXHTMLElementID !== undefined)
+												{
+													$('#' + sXHTMLElementID).html('<a href="' + data.link + '" class="ns1blankspaceNoUnloadWarn">' + sText + '</a>')
+												}	
+											}
+										});
+									}	
 								} 			
 				},
 

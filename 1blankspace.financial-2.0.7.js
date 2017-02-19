@@ -783,7 +783,7 @@ ns1blankspace.financial.debtors =
 								aHTML.push('</table>');
 
 								ns1blankspace.render.page.show(
-							   	{
+							   {
 									type: 'JSON',
 									xhtmlElementID: 'ns1blankspaceDebtorsColumn1',
 									xhtmlContext: 'Debtors',
@@ -795,7 +795,7 @@ ns1blankspace.financial.debtors =
 									functionOpen: undefined,
 									functionOnNewPage: ns1blankspace.financial.debtors.bind,
 									showInvoices: bShowInvoices
-							   	});
+							   });
 							}
 						}	    	
 					}
@@ -1797,8 +1797,8 @@ ns1blankspace.financial.balanceSheet =
 						.click(function() {
 							ns1blankspace.financial.balanceSheet.show(
 							{
-								startDate: $('#ns1blankspacePLStartDate').val(),
-								endDate: $('#ns1blankspacePLEndDate').val(),
+								startDate: $('#ns1blankspaceBSStartDate').val(),
+								endDate: $('#ns1blankspaceBSEndDate').val(),
 								showAll: true
 							})
 						});
@@ -1998,7 +1998,7 @@ ns1blankspace.financial.bankAccounts =
 
 ns1blankspace.financial.accounts =
 {
-	show: 		function (oParam, oResponse)
+	show: 	function (oParam, oResponse)
 				{
 					var iStep = 1;
 					var iFinancialAccount = -1;
@@ -2014,6 +2014,9 @@ ns1blankspace.financial.accounts =
 					{
 						oParam = {};
 					}
+
+					var sStartDate = ns1blankspace.util.getParam(oParam, 'startDate').value;
+					var sEndDate = ns1blankspace.util.getParam(oParam, 'endDate').value;
 					
 					if (iStep == 1)	
 					{
@@ -2031,15 +2034,44 @@ ns1blankspace.financial.accounts =
 						var aHTML = [];
 
 						aHTML.push('<div id="ns1blankspaceAccountColumnCategory" style="width:100px; margin-top:3px; text-align:right;">');
-						aHTML.push('<input type="radio" id="ns1blankspaceBankAccountColumnCategory-0" name="radioCategory" /><label for="ns1blankspaceBankAccountColumnCategory-0" style="width: 100px; margin-bottom:1px;">All</label>');
-						aHTML.push('<input type="radio" id="ns1blankspaceBankAccountColumnCategory-2" name="radioCategory" /><label for="ns1blankspaceBankAccountColumnCategory-2" style="width: 100px; margin-bottom:1px;">Sales</label>');
-						aHTML.push('<input type="radio" id="ns1blankspaceBankAccountColumnCategory-1" name="radioCategory" /><label for="ns1blankspaceBankAccountColumnCategory-1" style="width: 100px; margin-bottom:1px;">Purchases</label>');
-						aHTML.push('<input type="radio" id="ns1blankspaceBankAccountColumnCategory-3" name="radioCategory" /><label for="ns1blankspaceBankAccountColumnCategory-3" style="width: 100px; margin-bottom:1px;">Assets</label>');
-						aHTML.push('<input type="radio" id="ns1blankspaceBankAccountColumnCategory-4" name="radioCategory" /><label for="ns1blankspaceBankAccountColumnCategory-4" style="width: 100px; margin-bottom:1px;">Liability</label>');
-						aHTML.push('<input type="radio" id="ns1blankspaceBankAccountColumnCategory-5" name="radioCategory" /><label for="ns1blankspaceBankAccountColumnCategory-5" style="width: 100px; margin-bottom:1px;">Equity</label>');
+						aHTML.push('<input type="radio" id="ns1blankspaceAccountColumnCategory-0" name="radioCategory" /><label for="ns1blankspaceAccountColumnCategory-0" style="width: 100px; margin-bottom:1px;">All</label>');
+						aHTML.push('<input type="radio" id="ns1blankspaceAccountColumnCategory-2" name="radioCategory" /><label for="ns1blankspaceAccountColumnCategory-2" style="width: 100px; margin-bottom:1px;">Sales</label>');
+						aHTML.push('<input type="radio" id="ns1blankspaceAccountColumnCategory-1" name="radioCategory" /><label for="ns1blankspaceAccountColumnCategory-1" style="width: 100px; margin-bottom:1px;">Purchases</label>');
+						aHTML.push('<input type="radio" id="ns1blankspaceAccountColumnCategory-3" name="radioCategory" /><label for="ns1blankspaceAccountColumnCategory-3" style="width: 100px; margin-bottom:1px;">Assets</label>');
+						aHTML.push('<input type="radio" id="ns1blankspaceAccountColumnCategory-4" name="radioCategory" /><label for="ns1blankspaceAccountColumnCategory-4" style="width: 100px; margin-bottom:1px;">Liability</label>');
+						aHTML.push('<input type="radio" id="ns1blankspaceAccountColumnCategory-5" name="radioCategory" /><label for="ns1blankspaceAccountColumnCategory-5" style="width: 100px; margin-bottom:1px;">Equity</label>');
 						aHTML.push('</div>');
+						
+						aHTML.push('<table style="margin-top:12px;">');
+
+						aHTML.push('<tr>' +
+										'<td class="ns1blankspaceCaption" style="padding-top:0px;">' +
+										'From' +
+										'</td></tr>' +
+										'<tr>' +
+										'<tr><td class="ns1blankspaceDate">' +
+										'<input id="ns1blankspaceAccountStartDate" class="ns1blankspaceDate">' +
+										'</td></tr>');
+							
+						aHTML.push('<tr>' +
+										'<td class="ns1blankspaceCaption" style="padding-top:0px;">' +
+										'To' +
+										'</td></tr>' +
+										'<tr><td class="ns1blankspaceDate">' +
+										'<input id="ns1blankspaceAccountEndDate" class="ns1blankspaceDate">' +
+										'</td></tr>');
+
+						aHTML.push('<tr><td style="padding-top:5px;">' +
+										'<span class="ns1blankspaceAction" style="width:95px;" id="ns1blankspaceAccountRefresh">Refresh</span>' +
+										'</td></tr>');
+
+						aHTML.push('</table>');
 
 						$('#ns1blankspaceAccountColumn1').html(aHTML.join(''));
+
+						$('input.ns1blankspaceDate').datepicker({dateFormat: ns1blankspace.option.dateFormat});
+						$('#ns1blankspaceAccountStartDate').val(sStartDate);
+						$('#ns1blankspaceAccountEndDate').val(sEndDate);
 					
 						$('#ns1blankspaceAccountColumnCategory').buttonset().css('font-size', '0.875em');
 						
@@ -2048,6 +2080,21 @@ ns1blankspace.financial.accounts =
 							var aID = (this.id).split('-');
 							$.extend(true, oParam, {step: 2, type: parseInt(aID[1])});
 							ns1blankspace.financial.accounts.show(oParam);
+						});
+
+						$('#ns1blankspaceAccountRefresh').button(
+						{
+							label: 'Refresh',
+							icons: {
+								primary: "ui-icon-arrowrefresh-1-e"
+							}
+						})
+						.click(function() {
+							ns1blankspace.financial.accounts.show(
+							{
+								startDate: $('#ns1blankspaceAccountStartDate').val(),
+								endDate: $('#ns1blankspaceAccountEndDate').val()
+							})
 						});
 					}
 					
@@ -2084,8 +2131,9 @@ ns1blankspace.financial.accounts =
 							{
 								aHTML.push('<table class="ns1blankspaceContainer">' +
 										'<tr class="ns1blankspaceContainer">' +
-										'<td id="ns1blankspaceAccountTransactionsColumn1" style="width: 70px;font-size:0.875em;"></td>' +
-										'<td id="ns1blankspaceAccountTransactionsColumn2"></td>' +
+										'<td id="ns1blankspaceAccountTransactionsColumn1" style="width: 65px;font-size:0.875em;"></td>' +
+										'<td><div class="ns1blankspaceColumn2" id="ns1blankspaceAccountTransactionsColumn2" style="border-left-style:solid; border-width:1px; border-color:#B8B8B8; padding-left: 10px; margin-left:15px; margin-right:15px;"></div></td>' +
+										'<td id="ns1blankspaceAccountTransactionsColumn3" style="width: 34px;font-size:0.875em; text-align:right;"></td>' +
 										'</tr>' +
 										'</table>');
 
@@ -2132,16 +2180,29 @@ ns1blankspace.financial.accounts =
 					{	
 						if (oResponse == undefined)
 						{	
-							$('#ns1blankspaceAccountTransactionsColumn2').html('<table class="ns1blankspaceColumn2">' +
+							$('#ns1blankspaceAccountTransactionsColumn2').html('<table id="ns1blankspaceAccountTransactions" class="ns1blankspaceColumn2">' +
 											'<tr><td>' + ns1blankspace.xhtml.loading + '</td></tr></table>');
 							
 							var oSearch = new AdvancedSearch();
 							oSearch.method = 'FINANCIAL_TRANSACTION_SEARCH';
 							oSearch.addField('date,description,amount');
-							oSearch.addSummaryField('sum(amount) sumamount');
+							oSearch.addSummaryField('sum(amount) sumamount, count(id) count');
 							oSearch.sort('date', 'desc');
 							if (iFinancialAccount != -1) {oSearch.addFilter('financialaccount', 'EQUAL_TO', iFinancialAccount)};
-							oSearch.rows = 200;
+
+							if (sStartDate != '' && sStartDate != undefined)
+							{
+								oSearch.addFilter('date', 'GREATER_THAN_OR_EQUAL_TO', sStartDate);
+								$('#ns1blankspaceAccountStartDate').val(sStartDate);
+							}
+								
+							if (sEndDate != '' && sEndDate != undefined)
+							{
+								oSearch.addFilter('date', 'LESS_THAN_OR_EQUAL_TO', sEndDate);
+								$('#ns1blankspaceAccountEndDate').val(sEndDate);
+							}
+
+							oSearch.rows = 100;
 							oSearch.getResults(function(data) {ns1blankspace.financial.accounts.show(oParam, data)});	
 						}
 						else
@@ -2153,7 +2214,7 @@ ns1blankspace.financial.accounts =
 						
 							if (oResponse.data.rows.length == 0)
 							{
-								aHTML.push('<table class="ns1blankspaceColumn2">' +
+								aHTML.push('<table>' +
 											'<tr class="ns1blankspace">' +
 											'<td class="ns1blankspaceNothing">No transactions.</td>' +
 											'</tr>' +
@@ -2165,7 +2226,7 @@ ns1blankspace.financial.accounts =
 							{
 								var aHTML = [];
 						
-								aHTML.push('<table class="ns1blankspaceColumn2" style="font-size:0.875em;">');
+								aHTML.push('<table style="font-size:0.875em;">');
 							
 								aHTML.push('<tr>');
 								aHTML.push('<td class="ns1blankspaceHeaderCaption">TOTAL</td>');
@@ -2173,33 +2234,116 @@ ns1blankspace.financial.accounts =
 								aHTML.push('<td class="ns1blankspaceHeaderCaption" style="text-align:right;">' + (oResponse.summary.sumamount).parseCurrency().formatMoney(2, '.', ',') + '</td>');
 								aHTML.push('</tr>');
 								
-								$(oResponse.data.rows).each(function(i) 
+								$(oResponse.data.rows).each(function() 
 								{
-									aHTML.push('<tr><td id="ns1blankspaceFinancialAccountTransactions_date-' + this.id + '" class="ns1blankspaceRow"' +
-													'>' + this.date + '</td>');
-									
-									aHTML.push('<td id="ns1blankspaceFinancialAccountTransactions_description-' + this.id + '" class="ns1blankspaceRow"' +
-													'>' + this.description + '</td>');
-													
-									aHTML.push('<td id="ns1blankspaceFinancialAccountTransactions_amount-' + this.id + '" class="ns1blankspaceRow"' +
-													' style="text-align:right;">' + this.amount + '</td>');				
-																	
-									aHTML.push('</tr>');
+									aHTML.push(ns1blankspace.financial.accounts.row(this));
 								});
 							
 								aHTML.push('</table>');
-							
-								$('#ns1blankspaceAccountTransactionsColumn2').html(aHTML.join(''));		
+
+								ns1blankspace.render.page.show(
+							   {
+									type: 'JSON',
+									xhtmlElementID: 'ns1blankspaceAccountTransactionsColumn2',
+									xhtmlContext: 'FinancialAccountTransactions',
+									xhtml: aHTML.join(''),
+									showMore: (oResponse.morerows == "true"),
+									more: oResponse.moreid,
+									rows: 100,
+									functionShowRow: ns1blankspace.financial.accounts.row,
+									functionOpen: undefined,
+									functionOnNewPage: undefined,
+									summary: oResponse.summary
+							   });
+								
+								$('#ns1blankspaceAccountTransactionsColumn3').html('<span class="ns1blankspaceAction" id="ns1blankspaceAccountExport">Refresh</span>');
+								$('#ns1blankspaceAccountExport').button(
+								{
+									label: false,
+									icons:
+									{
+										primary: "ui-icon-arrowthickstop-1-s"
+									}
+								})
+								.click(function()
+								{
+									ns1blankspace.financial.accounts.export()
+								})
+								.css('width', '24px')
+								.css('height', '20px');
 							}
-							
 						}
 					}
-				}
+				},
+
+	row: 		function(oRow)
+				{
+					var aHTML = [];
+					
+					aHTML.push('<tr><td id="ns1blankspaceFinancialAccountTransactions_date-' + oRow.id + '" class="ns1blankspaceRow"' +
+													'>' + oRow.date + '</td>');
+									
+					aHTML.push('<td id="ns1blankspaceFinancialAccountTransactions_description-' + oRow.id + '" class="ns1blankspaceRow"' +
+									'>' + oRow.description + '</td>');
+									
+					aHTML.push('<td id="ns1blankspaceFinancialAccountTransactions_amount-' + oRow.id + '" class="ns1blankspaceRow"' +
+									' style="text-align:right;">' + oRow.amount + '</td>');				
+													
+					aHTML.push('</tr>');
+
+					return aHTML.join('');
+				},
+
+	"export":
+				function (oParam)
+				{
+					var oFormat =
+					[{
+						options:
+						{
+							delimiter: ',',
+							surroundWith: '"'
+						},
+
+						header:
+						[
+							{
+								line: 1,
+								fields:
+								[
+									{value: 'Date'},
+									{value: 'Description'},
+									{value: 'Amount'}
+								]
+							}	
+						],
+
+						item:
+						[
+							{
+								fields:
+								[
+									{field: 'date'},
+									{field: 'description'},
+									{field: 'amount'}
+								]
+							}		
+						]
+					}]
+
+					ns1blankspace.setup.file.export.data.get(
+				   {
+						xhtmlContext: 'FinancialAccountTransactions',
+						format: oFormat,
+						saveToFile: true,
+						open: true
+					});
+				} 			
 }
 
 ns1blankspace.financial.unallocated =
 {
-	show: 		function (oParam, oResponse)
+	show: 	function (oParam, oResponse)
 				{
 					var iStep = 1;
 					var iType = 1;
@@ -2472,7 +2616,7 @@ ns1blankspace.financial.unallocated =
 					}	
 				},
 
-	bind: 		function()
+	bind: 	function()
 				{
 					$('#ns1blankspaceUnallocatedItems .ns1blankspaceUnallocatedEdit').button(
 					{
@@ -2489,7 +2633,7 @@ ns1blankspace.financial.unallocated =
 					.css('height', '20px');
 				},
 
-	edit: 		function(oParam, oResponse)
+	edit: 	function(oParam, oResponse)
 				{
 					var iType;
 					var sXHTMLElementID;
@@ -3877,7 +4021,7 @@ ns1blankspace.financial.transactions =
 					return aHTML.join('');
 				},
 
-	bind: 		function()
+	bind: 	function()
 				{
 
 				},			

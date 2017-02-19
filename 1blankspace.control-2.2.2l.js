@@ -191,7 +191,7 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.financial.credit',
-		source: '/jscripts/1blankspace.financial.credit-2.0.2.js'
+		source: '/site/312/1blankspace.financial.credit-2.0.3.js'
 	},
 	{
 		nameSpace: '1blankspace.financial.journal',
@@ -279,7 +279,7 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.setup.file',
-		source: '/jscripts/1blankspace.setup.file-2.0.3.js'
+		source: '/site/312/1blankspace.setup.file-2.0.4.js'
 	},
 	{
 		nameSpace: '1blankspace.developer.space',
