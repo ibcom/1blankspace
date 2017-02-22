@@ -55,7 +55,7 @@ ns1blankspace.financial.receipt =
 						ns1blankspace.objectContextData.amount = oObjectContext.amount;
 								
 						$('#ns1blankspaceControlContext_receiveddate').html(ns1blankspace.objectContextData.receiveddate);
-						$('#ns1blankspaceControlContext_amount').html('$' + oObjectContext.amount);
+						$('#ns1blankspaceControlContext_amount').html(ns1blankspace.option.currencySymbol + oObjectContext.amount);
 					}
 				},	
 

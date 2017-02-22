@@ -46,7 +46,8 @@ ns1blankspace.option = $.extend(true, ns1blankspace.option,
 	canCreateSpaces: true,
 	logonSuffix: undefined,
 	passwordSuffix: undefined,
-	financialShowProjects: true
+	financialShowProjects: true,
+	pdfStyles: '<link rel=stylesheet href="/site/312/1blankspace-2.0.2.css">'
 });
 
 ns1blankspace.formFactor.size.value = ns1blankspace.formFactor.size.options.medium;
@@ -75,6 +76,8 @@ ns1blankspace.xhtml.templates.source =
 	statement: '/jscripts/1blankspace.setup.financial.statement-1.0.0.html',
 	payroll: '/jscripts/1blankspace.setup.financial.payroll-1.0.0.html',
 	payslip: '/jscripts/1blankspace.setup.financial.payslip-1.0.0.html',
+	invoiceschedule: '/site/1433/1blankspace.setup.financial.invoiceschedule-1.0.0.html',
+	payment: '/site/1433/1blankspace.setup.financial.payment-1.0.0.html'
 }	
 
 ns1blankspace.xhtml.logonNotes =
@@ -167,7 +170,7 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.financial',
-		source: '/site/312/1blankspace.financial-2.0.8.js'
+		source: '/site/312/1blankspace.financial-2.0.9.js'
 	},
 	{
 		nameSpace: '1blankspace.financial.bankAccount',
@@ -203,11 +206,11 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.financial.payroll',
-		source: '/jscripts/1blankspace.financial.payroll-2.0.8.js'
+		source: '/site/312/1blankspace.financial.payroll-2.0.9.js'
 	},
 	{
 		nameSpace: '1blankspace.financial.budget',
-		source: '/jscripts/1blankspace.financial.budget-2.0.1.js'
+		source: '/site/312/1blankspace.financial.budget-2.0.2.js'
 	},
 	{
 		nameSpace: '1blankspace.report',
@@ -223,7 +226,7 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.setup.financial',
-		source: '/site/312/1blankspace.setup.financial-2.0.4.js'
+		source: '/site/312/1blankspace.setup.financial-2.0.5.js'
 	},
 	{
 		nameSpace: '1blankspace.setup.messaging',

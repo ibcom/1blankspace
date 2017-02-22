@@ -753,7 +753,7 @@ ns1blankspace.financial.invoice =
 															filename: ns1blankspace.objectContextData.reference + '.pdf',
 															open: false,
 															leftmargin: 45,
-															baseURLBody:  sURL
+															baseURLBody: sURL
 														});
 													});
 												}		

@@ -6086,8 +6086,23 @@ ns1blankspace.pdf =
 					var sXHTMLElementID = ns1blankspace.util.getParam(oParam, 'xhtmlElementID', {"default": 'ns1blankspaceSummaryCreatePDF'}).value;
 					var iObject = ns1blankspace.util.getParam(oParam, 'object', {"default": ns1blankspace.object}).value;
 					var iObjectContext = ns1blankspace.util.getParam(oParam, 'objectContext', {"default": ns1blankspace.objectContext}).value;
-					var sFileName = ns1blankspace.util.getParam(oParam, 'filename', {"default": ns1blankspace.objectContextData.id + '.pdf'}).value;
+					var sFileName = ns1blankspace.util.getParam(oParam, 'filename').value;
+					
+					if (sFileName == undefined)
+					{
+						if (ns1blankspace.objectContextData != undefined)
+						{
+							sFileName = ns1blankspace.objectContextData.id + '.pdf'
+						}
+						else
+						{
+							sFileName = 'download.pdf'
+						}
+					}
+
+					var sXHTMLContentHeader = ns1blankspace.util.getParam(oParam, 'xhtmlContentHeader', {"default": ''}).value;
 					var sXHTMLContent = ns1blankspace.util.getParam(oParam, 'xhtmlContent', {"default": ''}).value;
+					var sXHTMLContentFooter = ns1blankspace.util.getParam(oParam, 'xhtmlContentFooter', {"default": ''}).value;
 					var bOpen = ns1blankspace.util.getParam(oParam, 'open', {"default": false}).value;
 					var fOnComplete = ns1blankspace.util.getParam(oParam, 'onComplete').value;
 					var bReplace = ns1blankspace.util.getParam(oParam, 'replace', {"default": false}).value;
@@ -6098,13 +6113,22 @@ ns1blankspace.pdf =
 					var iOrientation = ns1blankspace.util.getParam(oParam, 'orientation', {"default": 1}).value;
 					var bLink = ns1blankspace.util.getParam(oParam, 'link', {"default": false}).value;
 					var sLinkText = ns1blankspace.util.getParam(oParam, 'linkText', {"default": "Download&nbsp;&raquo;"}).value;
+					var iHeaderHeight = ns1blankspace.util.getParam(oParam, 'headerheight', {"default": 25}).value;
+					var iFooterHeight = ns1blankspace.util.getParam(oParam, 'footerheight', {"default": 25}).value;
 
 					if (bReplace)
 					{	
 						sXHTMLContent = sXHTMLContent.replace(/https/g,'http');
 						sXHTMLContent = sXHTMLContent.replace(/app.alt-enter.com/g,'[[host]]');
 						sXHTMLContent = sXHTMLContent.replace(/app.1blankspace.com/g,'[[host]]');
-					}	
+					}
+
+					if (ns1blankspace.option.pdfStyles != undefined)
+					{
+						sXHTMLContent = ns1blankspace.option.pdfStyles + sXHTMLContent;
+						sXHTMLContentHeader = ns1blankspace.option.pdfStyles + sXHTMLContentHeader;
+						sXHTMLContentFooter = ns1blankspace.option.pdfStyles + sXHTMLContentFooter;
+					}
 													
 					if (oResponse === undefined)
 					{
@@ -6120,8 +6144,12 @@ ns1blankspace.pdf =
 							object: iObject,
 							objectcontext: iObjectContext,
 							filename: sFileName,
+							orientation: iOrientation,
+							xhtmlheader: sXHTMLContentHeader,
 							xhtmlbody: sXHTMLContent,
-							orientation: iOrientation
+							xhtmlfooter: sXHTMLContentFooter,
+							xhtmlheader_height: iHeaderHeight,
+							xhtmlfooter_height: iFooterHeight,
 						}
 
 						if (iLeftMargin !== undefined) {oData.xhtml_LeftMargin = iLeftMargin}
@@ -6170,7 +6198,7 @@ ns1blankspace.pdf =
 										})
 										.click(function(event)
 										{
-											window.open('/download/' + oResponse.attachmentlink)
+											window.open('/download/' + oResponse.attachmentlink, '_self')
 										});
 									}	
 								}	
