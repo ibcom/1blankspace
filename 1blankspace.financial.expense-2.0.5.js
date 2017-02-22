@@ -61,7 +61,7 @@ ns1blankspace.financial.expense =
 					});
 				},			
 
-	refresh: 	function (oParam, oResponse)
+	refresh: function (oParam, oResponse)
 				{
 					if (oResponse == undefined)
 					{
@@ -69,7 +69,7 @@ ns1blankspace.financial.expense =
 							
 						var oSearch = new AdvancedSearch();
 						oSearch.method = 'FINANCIAL_EXPENSE_SEARCH';
-						oSearch.addField('accrueddate,amount,tax');
+						oSearch.addField('accrueddate,amount,tax,outstandingamount');
 						oSearch.rf = 'json';
 						oSearch.addFilter('id', 'EQUAL_TO', ns1blankspace.objectContext);
 						oSearch.getResults(function(data) {ns1blankspace.financial.expense.refresh(oParam, data)});
@@ -80,15 +80,19 @@ ns1blankspace.financial.expense =
 								
 						ns1blankspace.objectContextData.accrueddate = ns1blankspace.util.fd(oObjectContext.accrueddate);
 						ns1blankspace.objectContextData.amount = oObjectContext.amount;
+						ns1blankspace.objectContextData.tax = oObjectContext.tax;
+						ns1blankspace.objectContextData.outstandingamount = oObjectContext.outstandingamount;
 								
 						$('#ns1blankspaceControlContext_accrueddate').html(ns1blankspace.objectContextData.accrueddate);
-						$('#ns1blankspaceControlContext_amount').html(oObjectContext.amount);
+						$('#ns1blankspaceControlContext_amount').html(ns1blankspace.option.currencySymbol + oObjectContext.amount);
+						$('#ns1blankspaceControlContext_outstanding').html('<span style="background-color:#CCCCCC; color: white;">' +
+												ns1blankspace.option.currencySymbol + ns1blankspace.objectContextData.outstandingamount + '</span>');
 
-						ns1blankspace.financial.expense.payment.refresh();
+						//ns1blankspace.financial.expense.payment.refresh();
 					}
 				},
 
-	copy: 		{			
+	copy: 	{			
 					init: 		function (oParam, oResponse)
 								{		
 									ns1blankspace.container.hide({force: true});
@@ -172,7 +176,7 @@ ns1blankspace.financial.expense =
 								}		
 				},			
 
-	home: 		function (oParam, oResponse)
+	home: 	function (oParam, oResponse)
 				{
 					if (oResponse == undefined)
 					{
@@ -308,7 +312,7 @@ ns1blankspace.financial.expense =
 										var oSearch = new AdvancedSearch();
 										oSearch.method = 'FINANCIAL_EXPENSE_SEARCH';
 										oSearch.addField('contactbusinesspaidtotext,contactbusinesspaidto,contactpersonpaidtotext,contactpersonpaidto,projecttext,project,projecttext,areatext,' +
-																'area,reference,accrueddate,description,amount,tax,object,objectcontext,paymentduedate,payeereference');
+																'area,reference,accrueddate,description,amount,outstandingamount,tax,object,objectcontext,paymentduedate,payeereference');
 
 										oSearch.addField(ns1blankspace.option.auditFields);
 										
@@ -583,10 +587,11 @@ ns1blankspace.financial.expense =
 					}
 					else
 					{
-						ns1blankspace.financial.expense.payment.refresh();
+						//ns1blankspace.financial.expense.payment.refresh();
 
 						ns1blankspace.objectContextData = oResponse.data.rows[0];
 						ns1blankspace.objectContextData.accrueddate = ns1blankspace.util.fd(ns1blankspace.objectContextData.accrueddate);
+						ns1blankspace.objectContextData.paymentduedate = ns1blankspace.util.fd(ns1blankspace.objectContextData.paymentduedate);
 						
 						$('#ns1blankspaceViewControlAction').button({disabled: false});
 						$('#ns1blankspaceViewControlActionOptions').button({disabled: false});
@@ -594,7 +599,9 @@ ns1blankspace.financial.expense =
 						$('#ns1blankspaceControlContext').html(ns1blankspace.objectContextData.reference +
 							'<br /><span id="ns1blankspaceControlContext_accrueddate" class="ns1blankspaceSub">' + ns1blankspace.objectContextData.accrueddate + '</span>' +
 							'<br /><span id="ns1blankspaceControlContext_amount" class="ns1blankspaceSub">$' + ns1blankspace.objectContextData.amount + '</span>' +
-							'<br /><span id="ns1blankspaceControlContext_outstanding" class="ns1blankspaceSub"></span>');
+							'<br /><span id="ns1blankspaceControlContext_outstanding" class="ns1blankspaceSub">' +
+												'<span style="background-color:#CCCCCC; color: white;">' +
+												ns1blankspace.option.currencySymbol + ns1blankspace.objectContextData.outstandingamount + '</span></span>');
 							
 						ns1blankspace.history.view(
 						{
@@ -797,16 +804,16 @@ ns1blankspace.financial.expense =
 
 						if (ns1blankspace.objectContextData != undefined)
 						{
-							$('#ns1blankspaceDetailsReference').val(ns1blankspace.objectContextData.reference);
+							$('#ns1blankspaceDetailsReference').val(ns1blankspace.objectContextData.reference.formatXHTML());
 							$('#ns1blankspaceDetailsContactBusinessPaidTo').attr('data-id', ns1blankspace.objectContextData.contactbusinesspaidto);
-							$('#ns1blankspaceDetailsContactBusinessPaidTo').val(ns1blankspace.objectContextData.contactbusinesspaidtotext);
+							$('#ns1blankspaceDetailsContactBusinessPaidTo').val(ns1blankspace.objectContextData.contactbusinesspaidtotext.formatXHTML());
 							$('#ns1blankspaceDetailsContactPersonPaidTo').attr('data-id', ns1blankspace.objectContextData.contactpersonpaidto);
-							$('#ns1blankspaceDetailsContactPersonPaidTo').val(ns1blankspace.objectContextData.contactpersonpaidtotext);	
+							$('#ns1blankspaceDetailsContactPersonPaidTo').val(ns1blankspace.objectContextData.contactpersonpaidtotext.formatXHTML());	
 							$('#ns1blankspaceDetailsAccruedDate').val(ns1blankspace.objectContextData.accrueddate);
 							$('#ns1blankspaceDetailsDueDate').val(ns1blankspace.objectContextData.paymentduedate);
 							$('[name="radioPaid"][value="' + ns1blankspace.objectContextData.paid + '"]').attr('checked', true);
-							$('#ns1blankspaceDetailsDescription').val(ns1blankspace.objectContextData.description);
-							$('#ns1blankspaceDetailsPayeeReference').val(ns1blankspace.objectContextData.payeereference);
+							$('#ns1blankspaceDetailsDescription').val(ns1blankspace.objectContextData.description.formatXHTML());
+							$('#ns1blankspaceDetailsPayeeReference').val(ns1blankspace.objectContextData.payeereference.formatXHTML());
 						}
 						else
 						{
@@ -1248,7 +1255,8 @@ ns1blankspace.financial.expense =
 									{
 										ns1blankspace.status.message('Payment added');
 										ns1blankspace.financial.expense.payment.show();
-										ns1blankspace.financial.expense.payment.refresh();
+										//ns1blankspace.financial.expense.payment.refresh();
+										ns1blankspace.financial.expense.refresh();
 									}
 								}
 				}

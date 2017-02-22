@@ -82,10 +82,10 @@ ns1blankspace.financial.invoice =
 					{
 						var oObjectContext = oResponse.data.rows[0];
 							
-						ns1blankspace.objectContextData.sentdate = oObjectContext.sentdate;
+						ns1blankspace.objectContextData.sentdate = ns1blankspace.util.fd(oObjectContext.sentdate);
 						ns1blankspace.objectContextData.amount = oObjectContext.amount;
 								
-						$('#ns1blankspaceControlContext_sentdate').html(oObjectContext.sentdate);
+						$('#ns1blankspaceControlContext_sentdate').html(ns1blankspace.objectContextData.sentdate);
 						$('#ns1blankspaceControlContext_amount').html('$' + oObjectContext.amount);
 
 						ns1blankspace.financial.invoice.receipt.refresh();
@@ -331,7 +331,7 @@ ns1blankspace.financial.invoice =
 
 											aHTML.push('<td class="ns1blankspaceSearch" id="' +
 															'searchContact-' + this.id + '">' +
-															this.sentdate +
+															ns1blankspace.util.fd(this.sentdate) +
 															'</td>');
 
 											aHTML.push('<td class="ns1blankspaceSearch" style="text-align:right;" id="' +
@@ -1433,16 +1433,16 @@ ns1blankspace.financial.invoice =
 
 						if (ns1blankspace.objectContextData != undefined)
 						{
-							$('#ns1blankspaceDetailsReference').val(ns1blankspace.objectContextData.reference);
+							$('#ns1blankspaceDetailsReference').val(ns1blankspace.objectContextData.reference.formatXHTML());
 							$('#ns1blankspaceDetailsPurchaseOrderReference').val(ns1blankspace.objectContextData.purchaseorder);
 							$('#ns1blankspaceDetailsContactBusinessSentTo').attr('data-id', ns1blankspace.objectContextData.contactbusinesssentto);
-							$('#ns1blankspaceDetailsContactBusinessSentTo').val(ns1blankspace.objectContextData.contactbusinesssenttotext);
+							$('#ns1blankspaceDetailsContactBusinessSentTo').val(ns1blankspace.objectContextData.contactbusinesssenttotext.formatXHTML());
 							$('#ns1blankspaceDetailsContactPersonSentTo').attr('data-id', ns1blankspace.objectContextData.contactpersonsentto);
-							$('#ns1blankspaceDetailsContactPersonSentTo').val(ns1blankspace.objectContextData.contactpersonsenttotext);	
+							$('#ns1blankspaceDetailsContactPersonSentTo').val(ns1blankspace.objectContextData.contactpersonsenttotext.formatXHTML());	
 							$('[name="radioSent"][value="' + ns1blankspace.objectContextData.sent + '"]').prop('checked', true);
 							$('#ns1blankspaceDetailsSentDate').val(ns1blankspace.objectContextData.sentdate);
 							$('#ns1blankspaceDetailsDueDate').val(ns1blankspace.objectContextData.duedate);
-							$('#ns1blankspaceDetailsDescription').val(ns1blankspace.objectContextData.description);
+							$('#ns1blankspaceDetailsDescription').val(ns1blankspace.objectContextData.description.formatXHTML());
 							$('[name="radioFrequency"][value="' + ns1blankspace.objectContextData.frequency + '"]').prop('checked', true);
 						}
 						else

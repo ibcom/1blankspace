@@ -884,6 +884,7 @@ ns1blankspace.app =
 
 							ns1blankspace.spaceText = oResponse.spacename;
 							ns1blankspace.space = oResponse.space;
+							ns1blankspace.spaceContactBusiness = oResponse.contactbusiness;
 							
 							ns1blankspace.unloadWarning = true;
 
@@ -3998,6 +3999,10 @@ ns1blankspace.util =
 										if (iIndex < oReturn.values.length)
 										{
 											oReturn.value = oReturn.values[iIndex];
+										}
+										else
+										{
+											oReturn.value = undefined;
 										}
 									}
 								}	

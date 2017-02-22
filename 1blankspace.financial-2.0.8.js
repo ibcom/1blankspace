@@ -4153,159 +4153,111 @@ ns1blankspace.financial.item =
 							functionShowRow: ns1blankspace.financial.item.row,
 							functionOnNewPage: ns1blankspace.financial.item.bind
 					   	});
+
 						ns1blankspace.render.page.show(oParam); 	
 					}
 				}	
 			},
 
-	row: function(oRow, oParam)
-	{
-		var oOptions = ns1blankspace.util.getParam(oParam, 'options', {"default": {view: true, remove: true}}).value;
-		var oActions = ns1blankspace.util.getParam(oParam, 'actions', {"default": {add: true}}).value;
-		
-		if (oOptions.view == undefined) {oOptions.view = true}
-		if (oOptions.remove == undefined) {oOptions.remove = true}
-		if (oActions.add == undefined) {oActions.add = true}
+	row: 	function(oRow, oParam)
+			{
+				var oOptions = ns1blankspace.util.getParam(oParam, 'options', {"default": {view: true, remove: true}}).value;
+				var oActions = ns1blankspace.util.getParam(oParam, 'actions', {"default": {add: true}}).value;
+				
+				if (oOptions.view == undefined) {oOptions.view = true}
+				if (oOptions.remove == undefined) {oOptions.remove = true}
+				if (oActions.add == undefined) {oActions.add = true}
 
-		var aHTML = [];
+				var aHTML = [];
 
-		aHTML.push('<tr class="ns1blankspaceRow">');
-								
-		aHTML.push('<td id="ns1blankspaceItem_financialaccounttext-' + oRow.id + '" class="ns1blankspaceRow">' +
-						oRow.financialaccounttext + '</td>');
+				aHTML.push('<tr class="ns1blankspaceRow">');
+										
+				aHTML.push('<td id="ns1blankspaceItem_financialaccounttext-' + oRow.id + '" class="ns1blankspaceRow">' +
+								oRow.financialaccounttext + '</td>');
 
-		aHTML.push('<td id="ns1blankspaceItem_description-' + oRow.id + '" class="ns1blankspaceRow">' +
-						oRow.description + '</td>');
-		
-		aHTML.push('<td id="ns1blankspaceItem_amount-' + oRow.id + '" class="ns1blankspaceRow" style="text-align:right;">' +
-						oRow.amount + '</td>');
+				aHTML.push('<td id="ns1blankspaceItem_description-' + oRow.id + '" class="ns1blankspaceRow">' +
+								oRow.description + '</td>');
+				
+				aHTML.push('<td id="ns1blankspaceItem_amount-' + oRow.id + '" class="ns1blankspaceRow" style="text-align:right;">' +
+								oRow.amount + '</td>');
 
-		aHTML.push('<td id="ns1blankspaceItem_tax-' + oRow.id + '" class="ns1blankspaceRow ns1blankspaceSub" style="text-align:right;">' +
-						oRow.tax + '</td>');
+				aHTML.push('<td id="ns1blankspaceItem_tax-' + oRow.id + '" class="ns1blankspaceRow ns1blankspaceSub" style="text-align:right;">' +
+								oRow.tax + '</td>');
 
-		aHTML.push('<td style="width:60px;text-align:right;" class="ns1blankspaceRow">');
+				aHTML.push('<td style="width:60px;text-align:right;" class="ns1blankspaceRow">');
 
-		if (oOptions.remove)
-		{
-			aHTML.push('<span id="ns1blankspaceRowItem_options_remove-' + oRow.id + '" class="ns1blankspaceItemRemove"></span>');
-		}
+				if (oOptions.remove)
+				{
+					aHTML.push('<span id="ns1blankspaceRowItem_options_remove-' + oRow.id + '" class="ns1blankspaceItemRemove"></span>');
+				}
 
-		if (oActions.add)
-		{
-			aHTML.push('<span id="ns1blankspaceRowItem_options_edit-' + oRow.id + '" class="ns1blankspaceItemEdit"' +
-						' data-amount="' + oRow.amount + '"' +
-						' data-tax="' + oRow.tax + '"' +
-						' data-taxtype="' + oRow.taxtype + '"' +
-						' data-financialaccount="' + oRow.financialaccount + '"' +
-						' data-financialaccounttext="' + oRow.financialaccounttext + '"' +
-						' data-description="' + oRow.description + '"' +
-						'></span>');
-		}
-			
-		aHTML.push('</td></tr>');
+				if (oActions.add)
+				{
+					aHTML.push('<span id="ns1blankspaceRowItem_options_edit-' + oRow.id + '" class="ns1blankspaceItemEdit"' +
+								' data-amount="' + oRow.amount + '"' +
+								' data-tax="' + oRow.tax + '"' +
+								' data-taxtype="' + oRow.taxtype + '"' +
+								' data-financialaccount="' + oRow.financialaccount + '"' +
+								' data-financialaccounttext="' + oRow.financialaccounttext + '"' +
+								' data-description="' + oRow.description + '"' +
+								'></span>');
+				}
+					
+				aHTML.push('</td></tr>');
 
-		return aHTML.join('');
-	},
+				return aHTML.join('');
+			},
 
 	bind: function(oParam)
-	{	
-		var sXHTMLContainerID = ns1blankspace.util.getParam(oParam, 'xhtmlContainerID').value;
+			{	
+				var sXHTMLContainerID = ns1blankspace.util.getParam(oParam, 'xhtmlContainerID').value;
+				var sNamespace = ns1blankspace.util.getParam(oParam, 'namespace').value;
 
-		$('#' + sXHTMLContainerID + ' .ns1blankspaceItemRemove').button(
-		{
-			text: false,
-			icons: {
-				primary: "ui-icon-close"
-			}
-		})
-		.click(function()
-		{
-			ns1blankspace.remove(
-			{
-				xhtmlElementID: this.id,
-				method: 'FINANCIAL_ITEM_MANAGE',
-				ifNoneMessage: 'No items.'
-			});
-		})
-		.css('width', '15px')
-		.css('height', '17px');
-
-		$('#' + sXHTMLContainerID + ' .ns1blankspaceItemEdit').button(
-		{
-			text: false,
-			icons:
-			{
-				primary: "ui-icon-pencil"
-			}
-		})
-		.click(function()
-		{
-			oParam = ns1blankspace.util.setParam(oParam, 'xhtmlElementID', this.id);
-			oParam = ns1blankspace.util.setParam(oParam, 'step', 1);
-			ns1blankspace.financial.item.edit(oParam)
-		})
-		.css('width', '15px')
-		.css('height', '17px');
-	},
-
-	remove:	function (oParam, oResponse)
-			{
-				var sXHTMLElementID;
-				var sNamespace;
-				var iObject = ns1blankspace.object;
-				var iObjectContext = ns1blankspace.objectContext;
-				var sNamespace;
-				
-				if (oParam != undefined)
+				$('#' + sXHTMLContainerID + ' .ns1blankspaceItemRemove').button(
 				{
-					if (oParam.object != undefined) {iObject = oParam.object}
-					if (oParam.objectContext != undefined) {iObjectContext = oParam.objectContext}
-					if (oParam.namespace != undefined) {sNamespace = oParam.namespace}
-					if (oParam.xhtmlElementID != undefined) {sXHTMLElementID = oParam.xhtmlElementID}
-				}		
-
-				var aXHTMLElementID = sXHTMLElementID.split('-');
-				var sID = aXHTMLElementID[1];
-				
-				if (oResponse == undefined)
-				{	
-					$.ajax(
+					text: false,
+					icons:
 					{
-						type: 'POST',
-						url: ns1blankspace.util.endpointURI('FINANCIAL_ITEM_MANAGE'),
-						data: 'remove=1&id=' + sID,
-						dataType: 'json',
-						success: function(data)
-						{
-							var sData = 'object=' + ns1blankspace.object;
-							sData += '&objectcontext=' + ns1blankspace.objectContext;
-							
-							$.ajax(
-							{
-								type: 'POST',
-								url: ns1blankspace.util.endpointURI('FINANCIAL_ITEM_COMPLETE'),
-								data: sData,
-								dataType: 'json',
-								success: function(data)
-								{
-									ns1blankspace.financial.item.remove(oParam, data);	
-								}
-							});				
-						}
+						primary: "ui-icon-close"
+					}
+				})
+				.click(function()
+				{
+					ns1blankspace.remove(
+					{
+						xhtmlElementID: this.id,
+						method: 'FINANCIAL_ITEM_MANAGE',
+						ifNoneMessage: 'No items.',
+						onComplete: ns1blankspace.financial.item.remove,
+						namespace: sNamespace
 					});
-				}	
-				else
+				})
+				.css('width', '15px')
+				.css('height', '17px');
+
+				$('#' + sXHTMLContainerID + ' .ns1blankspaceItemEdit').button(
 				{
-					if (oResponse.status == 'OK')
+					text: false,
+					icons:
 					{
-						$('#' + sXHTMLElementID).parent().parent().fadeOut(500);
-						ns1blankspace.financial[sNamespace].refresh();
+						primary: "ui-icon-pencil"
 					}
-					else
-					{
-						ns1blankspace.status.error(oResponse.error.errornotes);
-					}
-				}	
+				})
+				.click(function()
+				{
+					oParam = ns1blankspace.util.setParam(oParam, 'xhtmlElementID', this.id);
+					oParam = ns1blankspace.util.setParam(oParam, 'step', 1);
+					ns1blankspace.financial.item.edit(oParam)
+				})
+				.css('width', '15px')
+				.css('height', '17px');
+			},
+
+	remove:
+			function (oParam, oResponse)
+			{
+				var sNamespace = ns1blankspace.util.getParam(oParam, 'namespace').value;
+				ns1blankspace.financial[sNamespace].refresh();
 			},
 
 	edit:	function (oParam, oResponse)

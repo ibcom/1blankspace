@@ -1294,7 +1294,7 @@ ns1blankspace.setup.file =
 												type: 'GET',
 												url: '/rpc/core/?method=CORE_SEARCH_MORE',
 												data: oData,
-												type: 'json',
+												dataType: 'json',
 												rows: iRows,
 												success: function(oResponse) 
 												{

@@ -82,11 +82,7 @@ ns1blankspace.financial.credit =
 
 						$('#ns1blankspaceControlContext_tobeapplied').html(sHTML);
 
-						if (ns1blankspace.objectContextData.tobeappliedamount == 0)
-						{
-							$('#ns1blankspaceAppliedToColumn1 .ns1blankspaceAppliedToSelect').hide();
-						}
-						
+						$('#ns1blankspaceAppliedToColumn1 .ns1blankspaceAppliedToSelect')[(ns1blankspace.objectContextData.tobeappliedamount == 0?'hide':'show')]();
 					}
 				},
 
@@ -427,7 +423,7 @@ ns1blankspace.financial.credit =
 						ns1blankspace.actions.show({xhtmlElementID: 'ns1blankspaceMainActions'});
 					});
 
-					$('#ns1blankspaceControlControlAttachments').click(function(event)
+					$('#ns1blankspaceControlAttachments').click(function(event)
 					{
 						ns1blankspace.show({selector: '#ns1blankspaceMainAttachments', refresh: true});
 						ns1blankspace.attachments.show({xhtmlElementID: 'ns1blankspaceMainAttachments'});
@@ -673,16 +669,16 @@ ns1blankspace.financial.credit =
 
 						if (ns1blankspace.objectContextData != undefined)
 						{
-							$('#ns1blankspaceDetailsReference').val(ns1blankspace.objectContextData.reference);
+							$('#ns1blankspaceDetailsReference').val(ns1blankspace.objectContextData.reference.formatXHTML());
 							$('#ns1blankspaceDetailsCreditDate').val(ns1blankspace.objectContextData.creditdate);
 							$('#ns1blankspaceDetailsContactBusiness').attr('data-id', ns1blankspace.objectContextData.contactbusiness);
-							$('#ns1blankspaceDetailsContactBusiness').val(ns1blankspace.objectContextData.contactbusinesstext);
+							$('#ns1blankspaceDetailsContactBusiness').val(ns1blankspace.objectContextData.contactbusinesstext.formatXHTML());
 							$('#ns1blankspaceDetailsContactPerson').attr('data-id', ns1blankspace.objectContextData.contactperson);
-							$('#ns1blankspaceDetailsContactPerson').val(ns1blankspace.objectContextData.contactpersontext);	
+							$('#ns1blankspaceDetailsContactPerson').val(ns1blankspace.objectContextData.contactpersontext.formatXHTML());	
 							$('#ns1blankspaceDetailsAmount').val(ns1blankspace.objectContextData.amount);		
 							$('#ns1blankspaceDetailsNotes').val(ns1blankspace.objectContextData.notes);
 							$('[name="radioType"][value="' + ns1blankspace.objectContextData.type + '"]').attr('checked', true);
-							$('#ns1blankspaceDetailsFinancialAccount').val(ns1blankspace.objectContextData.financialaccounttext)
+							$('#ns1blankspaceDetailsFinancialAccount').val(ns1blankspace.objectContextData.financialaccounttext.formatXHTML())
 							$('#ns1blankspaceDetailsFinancialAccount').attr('data-id', ns1blankspace.objectContextData.financialaccount);
 						}
 						else
@@ -853,7 +849,7 @@ ns1blankspace.financial.credit =
 																this[(ns1blankspace.objectContextData.type=='1'?'invoice':'expense') + 'text'] + '</td>');
 
 												aHTML.push('<td id="ns1blankspaceCreditAppliedTo_date-' + this.id + '" class="ns1blankspaceRow">' +
-																this.appliesdate + '</td>');
+																ns1blankspace.util.fd(this.appliesdate) + '</td>');
 												
 												aHTML.push('<td id="ns1blankspaceCreditAppliedTo_amount-' + this.id + '" class="ns1blankspaceRow" style="text-align:right;">' +
 																this.amount + '</td>');
@@ -862,12 +858,12 @@ ns1blankspace.financial.credit =
 																	
 												iID = this[(ns1blankspace.objectContextData.type=='1'?'invoice':'expense')];
 													
-												if (oActions.remove)
+												if (oOptions.remove)
 												{			
-													aHTML.push('<span id="ns1blankspaceCreditAppliedTo_options_remove-' + iID + '" class="ns1blankspaceAppliedToRemove"></span>');
+													aHTML.push('<span id="ns1blankspaceCreditAppliedTo_options_remove-' + this.id + '" class="ns1blankspaceAppliedToRemove"></span>');
 												}
 
-												if (oActions.view)
+												if (oOptions.view)
 												{
 													aHTML.push('<span id="ns1blankspaceCreditAppliedTo_options_view-' + iID + '" class="ns1blankspaceAppliedToView"></span>');
 												}	
@@ -888,7 +884,15 @@ ns1blankspace.financial.credit =
 											})
 											.click(function()
 											{
-												ns1blankspace.financial.credit.appliedTo.remove({xhtmlElementID: this.id});
+												var sMethod = 'FINANCIAL_' + (ns1blankspace.objectContextData.type == '1'?'INVOICE':'EXPENSE') + '_CREDIT_NOTE_MANAGE';
+												
+												ns1blankspace.remove(
+												{
+													xhtmlElementID: this.id,
+													method: sMethod,
+													ifNoneMessage: 'Not applied.',
+													onComplete: ns1blankspace.financial.credit.refresh
+												});
 											})
 											.css('width', '15px')
 											.css('height', '17px');
@@ -929,7 +933,7 @@ ns1blankspace.financial.credit =
 										if (ns1blankspace.objectContextData.type == '1')
 										{
 											oSearch.method = 'FINANCIAL_INVOICE_SEARCH';
-											oSearch.addField('reference,sentdate,amount,outstandingamount,tax,invoice.lineitem.id,invoice.lineitem.description,invoice.lineitem.amount,invoice.lineitem.tax');
+											oSearch.addField('invoice.lineitem.InvoiceOutstandingAmount,reference,sentdate,amount,outstandingamount,tax,invoice.lineitem.id,invoice.lineitem.description,invoice.lineitem.amount,invoice.lineitem.tax');
 
 											if (ns1blankspace.objectContextData.contactbusiness !== '')
 												{oSearch.addFilter('contactbusinesssentto', 'EQUAL_TO', ns1blankspace.objectContextData.contactbusiness)};
@@ -940,7 +944,7 @@ ns1blankspace.financial.credit =
 										else
 										{
 											oSearch.method = 'FINANCIAL_EXPENSE_SEARCH';
-											oSearch.addField('reference,accrueddate,amount,outstandingamount,tax,expense.lineitem.id,expense.lineitem.description,expense.lineitem.amount,expense.lineitem.tax');
+											oSearch.addField('expense.lineitem.ExpenseOutstandingAmount,reference,accrueddate,amount,outstandingamount,tax,expense.lineitem.id,expense.lineitem.description,expense.lineitem.amount,expense.lineitem.tax');
 
 											if (ns1blankspace.objectContextData.contactbusiness !== '')
 												{oSearch.addFilter('contactbusinesspaidto', 'EQUAL_TO', ns1blankspace.objectContextData.contactbusiness)};
@@ -1000,7 +1004,7 @@ ns1blankspace.financial.credit =
 														else
 														{
 															aHTML.push('<td style="font-size:0.875em; background-color:#f3f3f3;">' +
-																		this.accrueddate + '</td>');
+																		ns1blankspace.util.fd(this.accrueddate) + '</td>');
 														}
 
 														aHTML.push('<td style="text-align:right;font-size:0.875em; background-color:#f3f3f3;">(' +

@@ -56,7 +56,7 @@ ns1blankspace.financial.payment =
 						ns1blankspace.objectContextData.amount = oObjectContext.amount;
 								
 						$('#ns1blankspaceControlContext_paiddate').html(ns1blankspace.objectContextData.paiddate);
-						$('#ns1blankspaceControlContext_amount').html(oObjectContext.amount);
+						$('#ns1blankspaceControlContext_amount').html(ns1blankspace.option.currencySymbol + oObjectContext.amount);
 					}
 				},			
 
@@ -857,16 +857,16 @@ ns1blankspace.financial.payment =
 
 						if (ns1blankspace.objectContextData != undefined)
 						{
-							$('#ns1blankspaceDetailsReference').val(ns1blankspace.objectContextData.reference);
+							$('#ns1blankspaceDetailsReference').val(ns1blankspace.objectContextData.reference.formatXHTML());
 							$('#ns1blankspaceDetailsPaidDate').val(ns1blankspace.objectContextData.paiddate);
 							$('#ns1blankspaceDetailsContactBusinessPaidTo').attr('data-id', ns1blankspace.objectContextData.contactbusinesspaidto);
-							$('#ns1blankspaceDetailsContactBusinessPaidTo').val(ns1blankspace.objectContextData.contactbusinesspaidtotext);
+							$('#ns1blankspaceDetailsContactBusinessPaidTo').val(ns1blankspace.objectContextData.contactbusinesspaidtotext.formatXHTML());
 							$('#ns1blankspaceDetailsContactPersonPaidTo').attr('data-id', ns1blankspace.objectContextData.contactpersonpaidto);
-							$('#ns1blankspaceDetailsContactPersonPaidTo').val(ns1blankspace.objectContextData.contactpersonpaidtotext);	
+							$('#ns1blankspaceDetailsContactPersonPaidTo').val(ns1blankspace.objectContextData.contactpersonpaidtotext.formatXHTML());	
 							$('#ns1blankspaceDetailsAmount').val(ns1blankspace.objectContextData.amount);
 							$('[name="radioTaxCode"][value="' + ns1blankspace.objectContextData.taxtype + '"]').attr('checked', true);
 							$('#ns1blankspaceDetailsTax').val(ns1blankspace.objectContextData.tax);	
-							$('#ns1blankspaceDetailsDescription').val(ns1blankspace.objectContextData.description);
+							$('#ns1blankspaceDetailsDescription').val(ns1blankspace.objectContextData.description.formatXHTML());
 							iDefaultBankAccount = ns1blankspace.objectContextData.bankaccount;
 						}
 						else

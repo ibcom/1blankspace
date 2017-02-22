@@ -167,7 +167,7 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.financial',
-		source: '/site/312/1blankspace.financial-2.0.7.js'
+		source: '/site/312/1blankspace.financial-2.0.8.js'
 	},
 	{
 		nameSpace: '1blankspace.financial.bankAccount',
@@ -175,15 +175,15 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.financial.invoice',
-		source: '/jscripts/1blankspace.financial.invoice-2.0.6.js'
+		source: '/site/312/1blankspace.financial.invoice-2.0.6.js'
 	},
 	{
 		nameSpace: '1blankspace.financial.expense',
-		source: '/jscripts/1blankspace.financial.expense-2.0.5.js'
+		source: '/site/312/1blankspace.financial.expense-2.0.5.js'
 	},
 	{
 		nameSpace: '1blankspace.financial.receipt',
-		source: '/jscripts/1blankspace.financial.receipt-2.0.2.js'
+		source: '/site/312/1blankspace.financial.receipt-2.0.3.js'
 	},
 	{
 		nameSpace: '1blankspace.financial.payment',

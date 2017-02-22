@@ -603,7 +603,7 @@ ns1blankspace.financial.receipt =
 										'<input id="ns1blankspaceDetailsReceivedDate" class="ns1blankspaceDate">' +
 										'</td></tr>');											
 						
-						if (ns1blankspace.objectContext == -1)
+						if (true || ns1blankspace.objectContext == -1)
 						{		
 							aHTML.push('<tr class="ns1blankspaceCaption">' +
 										'<td class="ns1blankspaceCaption">' +
@@ -735,7 +735,7 @@ ns1blankspace.financial.receipt =
 										oParam = ns1blankspace.util.setParam(oParam, 'new', (ns1blankspace.objectContext == -1));
 										ns1blankspace.objectContext = oResponse.id;	
 										
-										if ($('#ns1blankspaceMainDetails').html() != '' && oParam.new)
+										if ($('#ns1blankspaceMainDetails').html())
 										{
 											ns1blankspace.financial.receipt.save.amount(oParam);
 										}
