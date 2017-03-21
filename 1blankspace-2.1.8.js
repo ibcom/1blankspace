@@ -114,6 +114,7 @@ ns1blankspace.user = {};
 ns1blankspace.data = {search: []};
 ns1blankspace.debug = {};
 ns1blankspace.authenticationLevel = 1;
+ns1blankspace.session = {};
 
 ns1blankspace.selector = 'body';
 
@@ -693,7 +694,7 @@ ns1blankspace.app =
 					}	
 				},
 							
-	start: 		function (oParam)
+	start: 	function (oParam)
 				{
 					if (oParam == undefined) {oParam = {}}
 
@@ -732,7 +733,27 @@ ns1blankspace.app =
 								if (ns1blankspace.control.extend !== undefined) {ns1blankspace.control.extend()}
 								if (ns1blankspace.control.doLast !== undefined) {ns1blankspace.control.doLast()}
 								oParam = ns1blankspace.util.setParam(oParam, 'user', data);
-								ns1blankspace.app.show(oParam);
+
+								if (ns1blankspace.session.sid == undefined)
+								{
+									$.ajax(
+									{
+										type: 'GET',
+										url: ns1blankspace.util.endpointURI('CORE_GET_SID'),
+										dataType: 'json',
+										cache: false,
+										global: false,
+										success: function(data, oParam) 
+										{
+											ns1blankspace.session.sid = data.sid;
+											ns1blankspace.app.show(oParam)
+										}
+									});
+								}
+								else
+								{
+									ns1blankspace.app.show(oParam)
+								}
 							}	
 						}
 					});
