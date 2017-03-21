@@ -119,7 +119,7 @@ ns1blankspace.financial.payment =
 						else
 						{
 							aHTML.push('<table id="ns1blankspaceMostLikely">');
-							aHTML.push('<tr><td class="ns1blankspaceCaption" colspan="4">MOST LIKELY</td></tr>');
+							aHTML.push('<tr><td class="ns1blankspaceCaption" colspan="4">RECENT</td></tr>');
 							
 							$.each(oResponse.data.rows, function()
 							{					
@@ -228,6 +228,13 @@ ns1blankspace.financial.payment =
 											oSearch.addFilter('payment.contactbusinesspaidto.tradename', 'TEXT_IS_LIKE', sSearchText);
 											oSearch.addOperator('or');
 											oSearch.addFilter('payment.contactpersonpaidto.surname', 'TEXT_IS_LIKE', sSearchText);
+
+											if (!_.isNaN(_.toNumber(sSearchText)))
+											{
+												oSearch.addOperator('or');
+												oSearch.addFilter('payment.amount', 'APPROX_EQUAL_TO', sSearchText);
+											}
+
 											oSearch.addBracket(')');
 											
 											ns1blankspace.search.advanced.addFilters(oSearch);

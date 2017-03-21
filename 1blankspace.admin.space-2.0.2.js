@@ -22,6 +22,11 @@ ns1blankspace.admin.space =
 					ns1blankspace.objectContextData = undefined;
 					ns1blankspace.objectContext = -1;
 					ns1blankspace.viewName = 'Spaces';
+
+					if (ns1blankspace.option.superUser == undefined)
+					{
+						ns1blankspace.option.superUser = (ns1blankspace.user.space == '1')
+					}
 								
 					ns1blankspace.app.set(oParam);
 				},
@@ -39,7 +44,7 @@ ns1blankspace.admin.space =
 										'<td id="ns1blankspaceMostLikely" class="ns1blankspaceMain">' +
 										ns1blankspace.xhtml.loading +
 										'</td>' +
-										'<td id="ns1blankspaceHomeColumn2" class="ns1blankspaceColumn2Action" style="width:180px;"></td>' +
+										'<td id="ns1blankspaceHomeColumn2" class="ns1blankspaceColumn2Action" style="width:240px;"></td>' +
 										'</tr>');
 						aHTML.push('</table>');	
 											
@@ -53,28 +58,47 @@ ns1blankspace.admin.space =
 												
 						$('#ns1blankspaceControl').html(aHTML.join(''));
 
-						if (ns1blankspace.option.superUser)
-						{	
-							var aHTML = [];
-							
-							aHTML.push('<table class="ns1blankspaceColumn2">' +
-										'<tr><td id="ns1blankspaceSuperUser" class="ns1blankspaceAction">' +
-										'</td></tr></table>');
+						var aHTML = [];
 
-							$('#ns1blankspaceHomeColumn2').html(aHTML.join(''));
+						aHTML.push('<table class="ns1blankspaceColumn2">');
 
-							$('#ns1blankspaceSuperUser').button(
-							{
-								text: true,
-								label: 'Show ' + (ns1blankspace.admin.space.data.superUser?'just mine':'all'),
-							})
-							.click(function()
-							{
-								ns1blankspace.admin.space.data.superUser = !ns1blankspace.admin.space.data.superUser;
-								$('#ns1blankspaceSuperUser').button({label: 'Show ' + (ns1blankspace.admin.space.data.superUser?'just mine':'all')});
-								ns1blankspace.admin.space.home()
-							});
-						}	
+						if (ns1blankspace.option.superUser && ns1blankspace.space == ns1blankspace.user.space)
+						{		
+							aHTML.push('<tr><td><span id="ns1blankspaceSuperUser" class="ns1blankspaceAction">' +
+												'</span></td></tr>');
+						}
+
+						if (ns1blankspace.space != ns1blankspace.user.space)
+						{
+							aHTML.push('<tr><td><span id="ns1blankspaceSwitchBack" class="ns1blankspaceAction">' +
+												'</span></td></tr>');
+						}
+
+						aHTML.push('</table>')
+
+						$('#ns1blankspaceHomeColumn2').html(aHTML.join(''));
+
+						$('#ns1blankspaceSuperUser').button(
+						{
+							text: true,
+							label: 'Show ' + (ns1blankspace.admin.space.data.superUser?'just mine':'all'),
+						})
+						.click(function()
+						{
+							ns1blankspace.admin.space.data.superUser = !ns1blankspace.admin.space.data.superUser;
+							$('#ns1blankspaceSuperUser').button({label: 'Show ' + (ns1blankspace.admin.space.data.superUser?'just mine':'all')});
+							ns1blankspace.admin.space.home()
+						});
+
+						$('#ns1blankspaceSwitchBack').button(
+						{
+							text: true,
+							label: 'Switch back to your space',
+						})
+						.click(function()
+						{
+							ns1blankspace.admin.space.switch.back();
+						});
 						
 						var oSearch = new AdvancedSearch();
 						oSearch.method = 'ADMIN_REGISTRATION_SEARCH';
@@ -97,7 +121,7 @@ ns1blankspace.admin.space =
 						else
 						{
 							aHTML.push('<table>');
-							aHTML.push('<tr><td class="ns1blankspaceCaption">MOST LIKELY</td></tr>');
+							aHTML.push('<tr><td class="ns1blankspaceCaption">RECENT</td></tr>');
 
 							$.each(oResponse.data.rows, function(r, row)
 							{
@@ -197,8 +221,9 @@ ns1blankspace.admin.space =
 					process:	function (oParam, oResponse)
 								{
 									var iColumn = 0;
-									var	iMaximumColumns = 1;
+									var iMaximumColumns = 1;
 									var aHTML = [];
+									ns1blankspace.objectContextData.canSwitchInto = undefined;
 
 									ns1blankspace.search.stop();
 										
@@ -245,7 +270,7 @@ ns1blankspace.admin.space =
 								}			
 				},
 
-	layout:		function ()
+	layout:	function ()
 				{
 					var aHTML = [];
 
@@ -340,6 +365,11 @@ ns1blankspace.admin.space =
 						$('#ns1blankspaceViewControlAction').button({disabled: false});
 						$('#ns1blankspaceViewControlActionOptions').button({disabled: false});
 						
+						if (ns1blankspace.option.superUser)
+						{
+							ns1blankspace.objectContextData.canSwitchInto = true;
+						}
+						
 						ns1blankspace.history.view(
 						{
 							newDestination: 'ns1blankspace.admin.space.init({id: ' + ns1blankspace.objectContext + '})',
@@ -362,46 +392,82 @@ ns1blankspace.admin.space =
 					}
 					else
 					{
-						aHTML.push('<table class="ns1blankspaceMain">' +
-									'<tr class="ns1blankspaceRow">' +
-									'<td id="ns1blankspaceSummaryColumn1" class="ns1blankspaceColumn1Large"></td>' +
-									'<td id="ns1blankspaceSummaryColumn2" class="ns1blankspaceColumn2Action" style="width:100px;"></td>' +
-									'</tr>' +
-									'</table>');				
-						
-						$('#ns1blankspaceMainSummary').html(aHTML.join(''));
-
-						aHTML.push('<table class="ns1blankspace">');
-						
-						aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Space ID</td></tr>' +
-										'<tr><td id="ns1blankspaceSummarySpaceID" class="ns1blankspaceSummary">' +
-										ns1blankspace.objectContextData.space +
-										'</td></tr>');
-
-						aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Initial Logon Name</td></tr>' +
-										'<tr><td id="ns1blankspaceSummaryInitialLogonName" class="ns1blankspaceSummary">' +
-										ns1blankspace.objectContextData.initiallogon +
-										'</td></tr>');
-
-						if (ns1blankspace.objectContextData.initialpassword != '')
-						{	
-							aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Initial Password</td></tr>' +
-										'<tr><td id="ns1blankspaceSummaryInitialPassword" class="ns1blankspaceSummary">' +
-										ns1blankspace.objectContextData.initialpassword +
-										'</td></tr>');
+						if (ns1blankspace.objectContextData.canSwitchInto == undefined)
+						{
+							ns1blankspace.admin.space.switch.check(
+							{
+								onComplete: ns1blankspace.admin.space.summary
+							});
 						}
+						else
+						{
+							aHTML.push('<table class="ns1blankspaceMain">' +
+										'<tr class="ns1blankspaceRow">' +
+										'<td id="ns1blankspaceSummaryColumn1" class="ns1blankspaceColumn1Large"></td>' +
+										'<td id="ns1blankspaceSummaryColumn2" class="ns1blankspaceColumn2Action" style="width:250px;"></td>' +
+										'</tr>' +
+										'</table>');				
+							
+							$('#ns1blankspaceMainSummary').html(aHTML.join(''));
 
-						if (ns1blankspace.objectContextData.registrationdate != '')
-						{	
-							aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Creation Date</td></tr>' +
-										'<tr><td id="ns1blankspaceSummaryCreationDate" class="ns1blankspaceSummary">' +
-										ns1blankspace.objectContextData.registrationdate +
-										'</td></tr>');
-						}
+							var aHTML = [];
+
+							aHTML.push('<table class="ns1blankspace">');
+							
+							aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Space ID</td></tr>' +
+											'<tr><td id="ns1blankspaceSummarySpaceID" class="ns1blankspaceSummary">' +
+											ns1blankspace.objectContextData.space +
+											'</td></tr>');
+
+							aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Initial Logon Name</td></tr>' +
+											'<tr><td id="ns1blankspaceSummaryInitialLogonName" class="ns1blankspaceSummary">' +
+											ns1blankspace.objectContextData.initiallogon +
+											'</td></tr>');
+
+							if (ns1blankspace.objectContextData.initialpassword != '')
+							{	
+								aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Initial Password</td></tr>' +
+											'<tr><td id="ns1blankspaceSummaryInitialPassword" class="ns1blankspaceSummary">' +
+											ns1blankspace.objectContextData.initialpassword +
+											'</td></tr>');
+							}
+
+							if (ns1blankspace.objectContextData.registrationdate != '')
+							{	
+								aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Creation Date</td></tr>' +
+											'<tr><td id="ns1blankspaceSummaryCreationDate" class="ns1blankspaceSummary">' +
+											ns1blankspace.objectContextData.registrationdate +
+											'</td></tr>');
+							}
+									
+							aHTML.push('</table>');					
+							
+							$('#ns1blankspaceSummaryColumn1').html(aHTML.join(''));
+
+							var aHTML = [];
+							
+							aHTML.push('<table class="ns1blankspaceColumn2" style="width: 100%;">');
 								
-						aHTML.push('</table>');					
-						
-						$('#ns1blankspaceSummaryColumn1').html(aHTML.join(''));
+							if (ns1blankspace.objectContextData.canSwitchInto)
+							{	
+								aHTML.push('<tr><td>' +
+											'<span style="font-size:0.75em;" id="ns1blankspaceSwitchInto">Switch Into</span>' +
+											'</td></tr>');
+
+								aHTML.push('<tr><td class="ns1blankspaceSubNote" style="padding-top:10px;">' +
+											 	'To switch back to your space, click the space name at the top right of the page.' +
+												'</td></tr>');			
+							}
+							
+							aHTML.push('</table>');					
+							
+							$('#ns1blankspaceSummaryColumn2').html(aHTML.join(''));	
+
+							$('#ns1blankspaceSwitchInto').button().click(function()
+							{
+								ns1blankspace.admin.space.switch.into();
+							});
+						}	
 					}	
 				},	
 
@@ -997,5 +1063,79 @@ ns1blankspace.admin.space =
 										});
 									}
 								}
-				}				
+				},
+
+	switch:	{
+					into: 	function (oParam, oResponse)
+								{
+									var id = ns1blankspace.util.getParam(oParam, 'space').value;
+									if (id == undefined) {id = ns1blankspace.objectContextData.space}
+
+									$.ajax(
+									{
+										type: 'POST',
+										url: ns1blankspace.util.endpointURI('CORE_SPACE_MANAGE'),
+										data: 'superuseroverride=Y&switch=1&id=' + id,
+										dataType: 'json',
+										success: function(oResponse)
+										{
+											if (oResponse.status == 'OK')
+											{	
+												ns1blankspace.space = oResponse.TargetSpace;
+												ns1blankspace.spaceText = oResponse.SpaceName;
+												ns1blankspace.spaceContactBusiness = oResponse.TargetContactBusiness;
+												ns1blankspace.financial.data = undefined;
+												ns1blankspace.financial.initStatus = undefined;
+												ns1blankspace.extend.structure = undefined;
+												$('#ns1blankspaceSpaceText').html(ns1blankspace.spaceText);
+												ns1blankspace.app.refresh();
+											}	
+										}
+									});
+								},
+
+					back: 	function (oParam, oResponse)
+								{
+									$.ajax(
+									{
+										type: 'POST',
+										url: ns1blankspace.util.endpointURI('CORE_SPACE_MANAGE'),
+										data: 'superuseroverride=Y&switchback=1',
+										dataType: 'json',
+										success: function(data)
+										{
+											if (data.status == 'OK')
+											{	
+												ns1blankspace.space = ns1blankspace.user.space;
+												ns1blankspace.spaceText = ns1blankspace.user.spaceText;
+												ns1blankspace.spaceContactBusiness = ns1blankspace.user.contactBusiness;
+												ns1blankspace.financial.data = undefined;
+												ns1blankspace.financial.initStatus = undefined;
+												ns1blankspace.extend.structure = undefined;
+												$('#ns1blankspaceSpaceText').html(ns1blankspace.spaceText);
+												ns1blankspace.app.refresh();
+											}
+										}
+									});	
+								},
+
+					check: 	function (oParam, oResponse)
+								{
+									if (oResponse == undefined)
+									{
+										ns1blankspace.objectContextData.canSwitchInto = false;
+
+										var oSearch = new AdvancedSearch();
+										oSearch.method = 'CORE_SPACE_SEARCH';
+										oSearch.addField('space,spacetext,unrestrictedaccess');
+										oSearch.addFilter('space', 'EQUAL_TO', ns1blankspace.objectContextData.space)
+										oSearch.getResults(function(data) {ns1blankspace.admin.space.switch.check(oParam, data)});
+									}
+									else
+									{
+										if (oResponse.data.rows.length > 0) {ns1blankspace.objectContextData.canSwitchInto = true;}
+										ns1blankspace.util.onComplete(oParam);
+									}
+								}				
+				}
 }				

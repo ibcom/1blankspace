@@ -39,7 +39,7 @@ ns1blankspace.financial.bankAccount =
 					}	
 				},
 
-	home: 		function ()
+	home: 	function ()
 				{
 					if (ns1blankspace.timer.initData == undefined)
 					{	

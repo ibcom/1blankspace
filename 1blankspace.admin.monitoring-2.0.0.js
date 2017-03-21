@@ -45,6 +45,15 @@ ns1blankspace.admin.monitoring =
 					aHTML.push('<tr><td id="ns1blankspaceControlSummary" class="ns1blankspaceControl ns1blankspaceHighlight">' +
 									'Summary</td></tr>');
 						
+					aHTML.push('<tr><td id="ns1blankspaceControlServiceFaults" class="ns1blankspaceControl">' +
+									'Service Faults</td></tr>');
+
+					aHTML.push('<tr><td id="ns1blankspaceControlRequests" class="ns1blankspaceControl">' +
+									'Requests</td></tr>');
+
+					aHTML.push('<tr><td id="ns1blankspaceControlNews" class="ns1blankspaceControl">' +
+									'News</td></tr>');
+
 					aHTML.push('</table>');		
 					
 					aHTML.push('<table class="ns1blankspaceControl">');
@@ -62,27 +71,54 @@ ns1blankspace.admin.monitoring =
 					var aHTML = [];
 					
 					aHTML.push('<div id="ns1blankspaceMainSummary" class="ns1blankspaceControlMain"></div>');
-					aHTML.push('<div id="ns1blankspaceMainStateChannel" class="ns1blankspaceControlMain"></div>');
+					aHTML.push('<div id="ns1blankspaceMainServiceFaults" class="ns1blankspaceControlMain"></div>');
+					aHTML.push('<div id="ns1blankspaceMainRequests" class="ns1blankspaceControlMain"></div>');
+					aHTML.push('<div id="ns1blankspaceMainNews" class="ns1blankspaceControlMain"></div>');
 
+					aHTML.push('<div id="ns1blankspaceMainStateChannel" class="ns1blankspaceControlMain"></div>');
 
 					$('#ns1blankspaceMain').html(aHTML.join(''));
 					
 					$('#ns1blankspaceControlSummary').click(function(event)
 					{
 						ns1blankspace.show({selector: '#ns1blankspaceMainSummary'});
-						ns1blankspace.setup.financial.summary();
+						ns1blankspace.admin.monitoring.summary();
 					});
 
 					$('#ns1blankspaceControlStateChannelStatus').click(function(event)
 					{
 						ns1blankspace.show({selector: '#ns1blankspaceMainStateChannel'});
-						ns1blankspace.admin.stateChannel.status();
+						ns1blankspace.admin.monitoring.stateChannel.status();
 					});
 				},
 
 	summary:	function ()
 				{
 					var aHTML = [];
+
+					aHTML.push('<table class="ns1blankspaceMain">' +
+								'<tr class="ns1blankspaceRow">' +
+								'<td id="ns1blankspaceSummaryColumn1" class="ns1blankspaceColumn1Flexible"></td>' +
+								'<td id="ns1blankspaceSummaryColumn2" class="ns1blankspaceColumn2" style="width:250px;"></td>' +
+								'</tr>' +
+								'</table>');				
+					
+					$('#ns1blankspaceMainSummary').html(aHTML.join(''));	
+
+					var aHTML = [];
+
+					aHTML.push('<table class="ns1blankspace">');
+
+					aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Service Faults (last 24 hours)</td></tr>' +
+									'<tr><td id="ns1blankspaceSummaryServiceFaults" class="ns1blankspaceSummary">' +
+									ns1blankspace.xhtml.loadingSmall +
+									'</td></tr>');
+
+					aHTML.push('</table>');
+
+					$('#ns1blankspaceSummaryColumn1').html(aHTML.join(''));
+
+					ns1blankspace.admin.monitoring.serviceFaults.count()
 				},
 
 	stateChannel:
@@ -96,7 +132,7 @@ ns1blankspace.admin.monitoring =
 										type: 'GET',
 										url: ns1blankspace.util.endpointURI('ADMIN_MODEL_DATA_AUDIT_SYNC_STATUS'),
 										dataType: 'json',
-										success: function()
+										success: function(data)
 										{
 											ns1blankspace.admin.monitoring.stateChannel.status(oParam, data);
 										}
@@ -122,5 +158,27 @@ ns1blankspace.admin.monitoring =
 										//{"status": "OK","notes": "COMPLETED","xhtmlcontext": "","tobeprocesssed-count": "136401","tobeprocesssed-minimumdate": "9 Feb 2014 22:45:53","tobeprocesssed-sourceminimumdate": "4 Feb 2014 22:29:33","tobeprocesssed-maximumdate": "9 Feb 2014 22:46:05","tobeprocesssed-sourcemaximumdate": "9 Feb 2014 22:36:14","processsed-count": "124717","processsed-maximumdate": "9 Feb 2014 22:46:05","processsed-sourcemaximumdate": "9 Feb 2014 22:42:34","processsed-last24h-count": "37502","processsed-last24h-maximumdate": "9 Feb 2014 22:46:05","processsed-last24h-sourcemaximumdate": "9 Feb 2014 22:42:34"}
 									}	
 								}
-				}				
+				},
+
+	serviceFaults:
+				{
+					count: 	function (oParam, oResponse)
+								{
+									if (oResponse == undefined)
+									{
+										var oSearch = new AdvancedSearch();
+										oSearch.method = 'ADMIN_SERVICE_FAULT_SEARCH';
+										oSearch.addField('id');
+										oSearch.addFilter('createddate', 'NOT_EQUAL_TO', '');
+										oSearch.addFilter('createddate', 'GREATER_THAN_OR_EQUAL_TO', 'hour', '-24', 'now');
+										oSearch.addSummaryField('count(id) count');
+										oSearch.rows = 1;
+										oSearch.getResults(function(data) {ns1blankspace.admin.serviceFaults.count(oParam, data)})	
+									}
+									else
+									{
+										$('#ns1blankspaceSummaryServiceFaults').html(oResponse.summary.count);
+									}	
+								}
+				}										
 	}

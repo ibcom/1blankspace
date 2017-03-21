@@ -4321,12 +4321,15 @@ ns1blankspace.financial.item =
 						}				
 					}
 
+					var sOutstanding = 'expense';
+					if (iObject == 5 || iObject == 6) {sOutstanding = 'invoice'}
+
 					var oSearch = new AdvancedSearch();
 					oSearch.method = 'FINANCIAL_ITEM_SEARCH';
-					oSearch.addField('financialaccount,financialaccounttext,taxtype,tax,issuedamount,amount,description,expenseoutstandingamount,preadjustmentamount');
+					oSearch.addField('financialaccount,financialaccounttext,taxtype,tax,issuedamount,amount,description,' + sOutstanding + 'outstandingamount,preadjustmentamount');
 					oSearch.addFilter('object', 'EQUAL_TO', iObject);
 					oSearch.addFilter('objectcontext', 'EQUAL_TO', iObjectContext);
-					oSearch.sort('financialaccounttext', 'asc');
+					oSearch.sort('id', 'desc');
 					
 					oSearch.getResults(function(data) {ns1blankspace.financial.item.show(oParam, data)});
 				}

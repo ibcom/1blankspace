@@ -50,7 +50,7 @@ ns1blankspace.financial.invoice =
 					}		
 				},
 
-	bind: 		function (oParam)
+	bind: 	function (oParam)
 				{
 					$('#ns1blankspaceControlActionOptionsRemove')
 					.click(function() 
@@ -161,7 +161,7 @@ ns1blankspace.financial.invoice =
 						else
 						{
 							aHTML.push('<table id="ns1blankspaceMostLikely">');
-							aHTML.push('<tr><td class="ns1blankspaceCaption" colspan="4">MOST LIKELY</td></tr>');
+							aHTML.push('<tr><td class="ns1blankspaceCaption" colspan="4">RECENT</td></tr>');
 							
 							$.each(oResponse.data.rows, function()
 							{					
@@ -273,6 +273,13 @@ ns1blankspace.financial.invoice =
 											oSearch.addFilter('invoice.contactbusinesssentto.tradename', 'TEXT_IS_LIKE', sSearchText);
 											oSearch.addOperator('or');
 											oSearch.addFilter('invoice.contactpersonsentto.surname', 'TEXT_IS_LIKE', sSearchText);
+
+											if (!_.isNaN(_.toNumber(sSearchText)))
+											{
+												oSearch.addOperator('or');
+												oSearch.addFilter('invoice.amount', 'APPROX_EQUAL_TO', sSearchText);
+											}
+
 											oSearch.addBracket(')');
 
 											ns1blankspace.search.advanced.addFilters(oSearch);
@@ -1098,6 +1105,7 @@ ns1blankspace.financial.invoice =
 									//$('#ns1blankspaceEmailFrom').val(ns1blankspace.user.email);
 									$('#ns1blankspaceEmailTo').val(ns1blankspace.objectContextData['invoice.contactpersonsentto.email']);
 									$('#ns1blankspaceEmailSubject').val(ns1blankspace.user.contactBusinessText + ' Invoice ' + ns1blankspace.objectContextData['reference']);
+									$('#ns1blankspaceEmailFrom').val(ns1blankspace.user.email);
 
 									if (ns1blankspace.objectContextData['invoice.contactpersonsentto.email'] == '')
 									{
@@ -1152,7 +1160,8 @@ ns1blankspace.financial.invoice =
 												saveagainstobject: 5,
 												saveagainstobjectcontext: ns1blankspace.objectContext,
 												send: 'Y',
-												applysystemtemplate: 'Y'
+												applysystemtemplate: 'Y',
+												fromemail: $('#ns1blankspaceEmailFrom').val()
 											}
 
 											if (iAttachmentLink !== undefined)
@@ -1773,7 +1782,6 @@ ns1blankspace.financial.invoice =
 											ns1blankspace.financial.invoice.refresh();
 										}
 									});
-										
 								},						
 
 					edit:		function (oParam, oResponse)
@@ -1884,11 +1892,12 @@ ns1blankspace.financial.invoice =
 										})
 										.click(function() {
 											ns1blankspace.financial.invoice.receipt.edit($.extend(true, oParam,
-													{	step: 4,
+													{	
+														step: 4,
 														receiptedAmount: cReceiptedAmount,
 														receiptAmount: $('#ns1blankspaceReceiptAmount').val(),
 														date: $('#ns1blankspaceReceiptDate').val()
-													}))
+													}));
 										});
 									}
 									

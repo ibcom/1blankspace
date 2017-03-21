@@ -47,7 +47,8 @@ ns1blankspace.option = $.extend(true, ns1blankspace.option,
 	logonSuffix: undefined,
 	passwordSuffix: undefined,
 	financialShowProjects: true,
-	pdfStyles: '<link rel=stylesheet href="/site/312/1blankspace-2.0.2.css">'
+	pdfStyles: '<link rel=stylesheet href="/site/312/1blankspace-2.0.2.css">',
+	superUser: undefined
 });
 
 ns1blankspace.formFactor.size.value = ns1blankspace.formFactor.size.options.medium;
@@ -182,11 +183,11 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.financial.expense',
-		source: '/site/312/1blankspace.financial.expense-2.0.5.js'
+		source: '/site/312/1blankspace.financial.expense-2.0.6.js'
 	},
 	{
 		nameSpace: '1blankspace.financial.receipt',
-		source: '/site/312/1blankspace.financial.receipt-2.0.3.js'
+		source: '/site/312/1blankspace.financial.receipt-2.0.4.js'
 	},
 	{
 		nameSpace: '1blankspace.financial.payment',
@@ -202,11 +203,11 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.financial.tax',
-		source: '/jscripts/1blankspace.financial.tax-2.0.1.js'
+		source: '/site/312/1blankspace.financial.tax-2.0.2.js'
 	},
 	{
 		nameSpace: '1blankspace.financial.payroll',
-		source: '/site/312/1blankspace.financial.payroll-2.0.9.js'
+		source: '/site/312/1blankspace.financial.payroll-2.1.0.js'
 	},
 	{
 		nameSpace: '1blankspace.financial.budget',
@@ -262,7 +263,7 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.setup.website',
-		source: '/site/312/1blankspace.setup.website-2.0.8.js'
+		source: '/site/312/1blankspace.setup.website-2.0.9.js'
 	},
 	{
 		nameSpace: '1blankspace.setup.websiteForm',
@@ -319,6 +320,18 @@ ns1blankspace.scripts.concat(
 	{
 		nameSpace: '1blankspace.util.financial',
 		source: '/jscripts/1blankspace.util.financial-2.0.0.js'
+	},
+	{
+		nameSpace: '1blankspace.admin.space',
+		source: '/site/312/1blankspace.admin.space-2.0.2.js'
+	},
+	{
+		nameSpace: '1blankspace.admin.monitoring',
+		source: '/site/312/1blankspace.admin.monitoring-2.0.0.js'
+	},
+	{
+		nameSpace: '1blankspace.util.timezone',
+		source: '/site/312/1blankspace.util.timezone-2.0.0.js'
 	}
 ])
 
@@ -940,7 +953,7 @@ ns1blankspace.views =
 	},
 	{
 		title: "Other&nbsp;Spaces",
-		parentNamespace: "developer",
+		parentNamespace: "admin",
 		namespace: "space",
 		endpoint: "SETUP_SPACE", 
 		show: true,
@@ -1937,7 +1950,7 @@ ns1blankspace.control =
 									}
 					},
 					
-	spaces:			{					
+	spaces:		{					
 						show:		function (oElement, oResponse)
 									{
 										var aHTML = [];
@@ -2018,11 +2031,11 @@ ns1blankspace.control =
 											}
 											else
 											{
-												aHTML.push('<tr><td class="ns1blankspaceNothing" style="padding-left:5px;padding-right:10px;">' +
+												aHTML.push('<tr><td class="ns1blankspaceSubNote" style="padding-left:5px;padding-right:10px;">Search for a space to switch to</td></tr>' +
+													'<tr><td class="ns1blankspaceNothing" style="padding-left:5px;padding-right:10px;">' +
 													'<input id="ns1blankspaceControlSpaceSearch" class="ns1blankspaceMainText" style="font-size:1.1em; width:100%; height:23px;"></td></tr>');
 
 												aHTML.push('<tr><td id="ns1blankspaceSpaceSearchResults"></td></tr>');
-
 											}	
 
 											aHTML.push('</table>');
@@ -2069,7 +2082,7 @@ ns1blankspace.control =
 														if (oResponse.status == 'OK')
 														{	
 															ns1blankspace.space = oResponse.TargetSpace;
-															ns1blankspace.spaceText = oResponse.spaceName;
+															ns1blankspace.spaceText = oResponse.SpaceName;
 															ns1blankspace.spaceContactBusiness = oResponse.TargetContactBusiness;
 															ns1blankspace.financial.data = undefined;
 															ns1blankspace.financial.initStatus = undefined;
@@ -2102,7 +2115,7 @@ ns1blankspace.control =
 											oSearch.addField('space,spacetext,unrestrictedaccess');
 											oSearch.addFilter('spacetext', 'TEXT_IS_LIKE', sSearchText);
 											oSearch.sort('spacetext', 'asc');
-											oSearch.rows = 15;
+											oSearch.rows = 20;
 											oSearch.getResults(function(data) {ns1blankspace.control.spaces.process(sXHTMLElementID, data)});
 										}
 										else

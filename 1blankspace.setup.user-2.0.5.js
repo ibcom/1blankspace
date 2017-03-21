@@ -6,7 +6,7 @@
 
 ns1blankspace.setup.user = 
 {
-	init: 		function (oParam)
+	init: 	function (oParam)
 				{
 					ns1blankspace.app.reset();
 
