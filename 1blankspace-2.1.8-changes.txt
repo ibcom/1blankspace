@@ -1,0 +1,6 @@
+Referring to 1blankspace-2.1.8.js:
+
+//Storing the sid so can use it to get sid/logonkey to send with data for MESSAGING_EMAIL_CACHE_CHECK if on different URL.
+
+117: ns1blankspace.session = {};
+2091: ns1blankspace.session = oResponse;
