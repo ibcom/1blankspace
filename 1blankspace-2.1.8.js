@@ -743,7 +743,7 @@ ns1blankspace.app =
 										dataType: 'json',
 										cache: false,
 										global: false,
-										success: function(data, oParam) 
+										success: function(data) 
 										{
 											ns1blankspace.session.sid = data.sid;
 											ns1blankspace.app.show(oParam)

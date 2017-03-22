@@ -257,7 +257,8 @@ ns1blankspace.messaging.imap =
 					if (ns1blankspace.option.messagingCheckURL != undefined)
 					{
 						oData.sid = ns1blankspace.session.sid;
-						//oData.logonkey = ns1blankspace.session.logonkey;
+						oData.logonkey = ns1blankspace.session.logonkey;
+						sURL = ns1blankspace.option.messagingCheckURL;
 					}
 
 					$.ajax(
@@ -339,6 +340,8 @@ ns1blankspace.messaging.imap =
 				if (ns1blankspace.option.messagingCheckURL != undefined)
 				{
 					oData.sid = ns1blankspace.session.sid;
+					oData.logonkey = ns1blankspace.session.logonkey;
+					sURL = ns1blankspace.option.messagingCheckURL;
 				}
 
 				$.ajax(
