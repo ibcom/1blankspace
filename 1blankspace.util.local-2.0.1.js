@@ -150,7 +150,15 @@ ns1blankspace.util.local =
 											{	
 												var sData = oStorage.getItem(sKey);
 												oParam.dataRaw = sData;
-												ns1blankspace.util.local.cache.search(oParam)
+
+												if (bProtect)
+												{
+													ns1blankspace.util.local.cache.search(oParam)
+												}
+												else
+												{
+													return sData
+												}
 											}
 										}
 										else

@@ -725,6 +725,8 @@ ns1blankspace.app =
 								}
 
 								ns1blankspace.logonKey = data.logonkey;
+								ns1blankspace.session.logonkey;
+								ns1blankspace.util.local.cache.save({key: '_lk', data: ns1blankspace.logonKey, persist: true})
 								ns1blankspace.logon.show(oParam);
 							}
 							else
@@ -733,6 +735,11 @@ ns1blankspace.app =
 								if (ns1blankspace.control.extend !== undefined) {ns1blankspace.control.extend()}
 								if (ns1blankspace.control.doLast !== undefined) {ns1blankspace.control.doLast()}
 								oParam = ns1blankspace.util.setParam(oParam, 'user', data);
+
+								if (ns1blankspace.session.logonkey == undefined)
+								{
+									ns1blankspace.session.logonkey = ns1blankspace.util.local.cache.search({key: '_lk', persist: true});
+								}
 
 								if (ns1blankspace.session.sid == undefined)
 								{
@@ -2106,6 +2113,10 @@ ns1blankspace.logon =
 					}
 					else 
 					{
+						ns1blankspace.logonKey = oResponse.logonkey;
+						ns1blankspace.session.logonkey;
+						ns1blankspace.util.local.cache.save({key: '_lk', data: ns1blankspace.logonKey, persist: true})
+
 						$('#ns1blankspaceLogonStatus').html('Logon successful, starting app...');
 						
 						if ($('#ns1blankspaceLogonRemember').attr('checked'))
