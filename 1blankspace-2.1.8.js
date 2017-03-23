@@ -725,7 +725,7 @@ ns1blankspace.app =
 								}
 
 								ns1blankspace.logonKey = data.logonkey;
-								ns1blankspace.session.logonkey;
+								ns1blankspace.session.logonkey = ns1blankspace.logonKey;
 								ns1blankspace.util.local.cache.save({key: '_lk', data: ns1blankspace.logonKey, persist: true})
 								ns1blankspace.logon.show(oParam);
 							}
