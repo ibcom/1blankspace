@@ -333,6 +333,10 @@ ns1blankspace.scripts.concat(
 	{
 		nameSpace: '1blankspace.util.timezone',
 		source: '/site/312/1blankspace.util.timezone-2.0.0.js'
+	},
+	{
+		nameSpace: '1blankspace.util.convert',
+		source: '/site/312/1blankspace.util.convert-2.0.0.js'
 	}
 ])
 
