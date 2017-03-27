@@ -122,7 +122,7 @@ ns1blankspace.scripts =
 [
 	{
 		nameSpace: '1blankspace.advancedsearch',
-		source: '/jscripts/1blankspace.advancedsearch-2.0.3.js'
+		source: '/jscripts/1blankspace.advancedsearch-2.0.4.js'
 	}
 ]
 
@@ -361,46 +361,47 @@ ns1blankspace.app =
 
 						   options.error = function(_jqXHR, _textStatus, _errorThrown)
 						   {
-						   		if (originalOptions.retryLimit == undefined)
-						   		{
-						   			originalOptions.retryLimit = (ns1blankspace.option.retryLimit?ns1blankspace.option.retryLimit:3);
-						   		}
+								if (originalOptions.retryLimit == undefined)
+								{
+									originalOptions.retryLimit = (ns1blankspace.option.retryLimit?ns1blankspace.option.retryLimit:3);
+								}
 
-						   		if (originalOptions.retryCount == undefined) {originalOptions.retryCount = 0}
+								if (originalOptions.retryCount == undefined) {originalOptions.retryCount = 0}
 
-						   		if (originalOptions.retryCount == originalOptions.retryLimit || String(_jqXHR.status).substr(0,1) !== '5')
-						  		{
+								if (originalOptions.retryCount == originalOptions.retryLimit || String(_jqXHR.status).substr(0,1) !== '5')
+								{
 									if (originalOptions._error) {originalOptions._error(_jqXHR, _textStatus, _errorThrown)}
 									return;
-						   		};
+								};
 
-						   		if (originalOptions.retryCount == 0)
-						   		{	
-						   			var oErrors = ns1blankspace.util.local.cache.search({key: '1blankspace-debug.json', persist: true});
-						  			if (oErrors == undefined) {oErrors = []}
-						  			oErrors.unshift(
-						  			{
-						  				time: Date(),
-						  				uri: originalOptions.url,
-						  				instance: _jqXHR.getResponseHeader('X-HTTP-myds-instance'),
-						  				fault: _jqXHR.getResponseHeader('X-HTTP-myds-service-fault'),
-						  				statusCode: _jqXHR.status,
-						  				status: _errorThrown
-						  			});
+								if (originalOptions.retryCount == 0)
+								{	
+									var oErrors = ns1blankspace.util.local.cache.search({key: '1blankspace-debug.json', persist: true});
+									if (oErrors == undefined) {oErrors = []}
+									oErrors.unshift(
+									{
+										time: Date(),
+										uri: originalOptions.url,
+										instance: _jqXHR.getResponseHeader('X-HTTP-myds-instance'),
+										fault: _jqXHR.getResponseHeader('X-HTTP-myds-service-fault'),
+										statusCode: _jqXHR.status,
+										status: _errorThrown
+									});
+
 									ns1blankspace.util.local.cache.save({key: '1blankspace-debug.json', persist: true, data: oErrors});
 								}	
 
-						   		originalOptions.retryCount = originalOptions.retryCount + 1;
+								originalOptions.retryCount = originalOptions.retryCount + 1;
 
-						   		$.ajax(originalOptions);
-						   	}
+								$.ajax(originalOptions);
+							}
 
-						   	options.success = function(data, _textStatus, _jqXHR)
-						   	{
-						   		ns1blankspace.ajaxSettings = undefined;
+					   	options.success = function(data, _textStatus, _jqXHR)
+					   	{
+					   		ns1blankspace.ajaxSettings = undefined;
 
-						   		if (originalOptions.global != false)
-						   		{	
+					   		if (originalOptions.global != false)
+					   		{	
 									if (originalOptions.dataType == 'json' || originalOptions.dataType == '')
 									{	
 										if (data.status == 'ER')
@@ -445,10 +446,15 @@ ns1blankspace.app =
 											}	
 										}
 									}
+								}
+
+								if (originalOptions._managed && originalOptions._rf.toLowerCase() == 'csv')
+								{
+									data = ns1blankspace.util.convert.csvToJSON({response: data})
 								}	
-						   		
-						   		if (originalOptions._success !== undefined) {originalOptions._success(data)};
-						   	}	
+							   		
+								if (originalOptions._success !== undefined) {originalOptions._success(data)};
+						   }	
 						});
 
 						$(document).ajaxError(function(oEvent, oXMLHTTPRequest, oAjaxOptions, oError) 

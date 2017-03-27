@@ -115,12 +115,15 @@ ns1blankspace.financial.credit =
 						oSearch.method = 'FINANCIAL_CREDIT_NOTE_SEARCH';
 						oSearch.addField('reference,contactbusinesstext,amount,notes,type,typetext,creditdate');
 						oSearch.rows = 10;
+						oSearch.rf = 'csv';
 						oSearch.sort('modifieddate', 'desc');
 						oSearch.getResults(function(data) {ns1blankspace.financial.credit.home(oParam, data)});
 					}
 					else
 					{
 						var aHTML = [];
+
+						//oResponse = ns1blankspace.util.convert.csvToJSON({response: oResponse})
 						
 						if (oResponse.data.rows.length == 0)
 						{
@@ -1007,8 +1010,8 @@ ns1blankspace.financial.credit =
 																		ns1blankspace.util.fd(this.accrueddate) + '</td>');
 														}
 
-														aHTML.push('<td style="text-align:right;font-size:0.875em; background-color:#f3f3f3;">(' +
-																	this["amount"]  + ')&nbsp;' + this["outstandingamount"] + '</td>');
+														aHTML.push('<td style="text-align:right;font-size:0.875em; background-color:#f3f3f3;">' +
+																		this["outstandingamount"] + '</td>');
 
 														aHTML.push('<td style="width:30px;text-align:right;font-size:0.875em; background-color:#f3f3f3;"></td>');
 
@@ -1027,7 +1030,7 @@ ns1blankspace.financial.credit =
 
 														aHTML.push('<td id="ns1blankspaceCreditAppliedTo_amount-' + this.id + '"' +
 																	' class="ns1blankspaceRow ns1blankspaceSub" style="text-align:right;">' +
-																	this["invoice.lineitem.amount"] + '</td>');
+																	this["invoice.lineitem.invoiceoutstandingamount"] + '</td>');
 													}	
 													else	
 													{
@@ -1108,7 +1111,7 @@ ns1blankspace.financial.credit =
 												{	
 													$.ajax(
 													{
-														type: 'GET',
+														type: 'POST',
 														url: ns1blankspace.util.endpointURI(sMethod),
 														data: oData,
 														dataType: 'json',
@@ -1116,6 +1119,7 @@ ns1blankspace.financial.credit =
 														{
 															$('#' + sXHTMLElementID).parent().parent().fadeOut(500);
 															ns1blankspace.financial.credit.refresh();
+															ns1blankspace.financial.credit.appliedTo();
 														}
 													});
 												}	

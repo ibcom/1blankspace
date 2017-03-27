@@ -292,7 +292,7 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.util.local',
-		source: '/jscripts/1blankspace.util.local-2.0.0.js'
+		source: '/site/312/1blankspace.util.local-2.0.1.js'
 	},
 	{
 		nameSpace: '1blankspace.util.protect',
@@ -333,6 +333,10 @@ ns1blankspace.scripts.concat(
 	{
 		nameSpace: '1blankspace.util.timezone',
 		source: '/site/312/1blankspace.util.timezone-2.0.0.js'
+	},
+	{
+		nameSpace: '1blankspace.util.convert',
+		source: '/site/312/1blankspace.util.convert-2.0.0.js'
 	}
 ])
 

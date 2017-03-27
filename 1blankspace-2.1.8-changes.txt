@@ -4,3 +4,15 @@ Referring to 1blankspace-2.1.8.js:
 
 117: ns1blankspace.session = {};
 2091: ns1blankspace.session = oResponse;
+
+728: ns1blankspace.session.logonkey = ns1blankspace.logonKey;
+729: ns1blankspace.util.local.cache.save({key: '_lk', data: ns1blankspace.logonKey, persist: true})
+
+739: if (ns1blankspace.session.logonkey == undefined)
+{
+	ns1blankspace.session.logonkey = ns1blankspace.util.local.cache.search({key: '_lk', persist: true});
+}								
+
+2116: ns1blankspace.logonKey = oResponse.logonkey;
+2117: ns1blankspace.session.logonkey;
+2118: ns1blankspace.util.local.cache.save({key: '_lk', data: ns1blankspace.logonKey, persist: true})
