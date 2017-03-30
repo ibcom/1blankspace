@@ -1580,7 +1580,7 @@ ns1blankspace.format.templates.edit =
 						})
 						.click(function()
 						{
-							ns1blankspace.setup.format.templates.edit.save(oParam);
+							ns1blankspace.format.templates.edit.save(oParam);
 						})
 						.css('width', (bVariants?'48px':'54px'))
 						.css('height', '28px')
