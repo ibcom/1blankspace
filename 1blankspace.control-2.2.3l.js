@@ -79,7 +79,8 @@ ns1blankspace.xhtml.templates.source =
 	payroll: '/jscripts/1blankspace.setup.financial.payroll-1.0.0.html',
 	payslip: '/jscripts/1blankspace.setup.financial.payslip-1.0.0.html',
 	invoiceschedule: '/site/1433/1blankspace.setup.financial.invoiceschedule-1.0.0.html',
-	payment: '/site/1433/1blankspace.setup.financial.payment-1.0.0.html'
+	payment: '/site/1433/1blankspace.setup.financial.payment-1.0.0.html',
+	action: '/site/312/1blankspace.setup.action-1.0.0.html'
 }	
 
 ns1blankspace.xhtml.logonNotes =
@@ -116,7 +117,7 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.format',
-		source: '/site/312/1blankspace.format-2.0.7.js'
+		source: '/site/312/1blankspace.format-2.0.8.js'
 	},
 	{
 		nameSpace: '1blankspace.contactPerson',
@@ -229,6 +230,10 @@ ns1blankspace.scripts.concat(
 	{
 		nameSpace: '1blankspace.setup.financial',
 		source: '/site/312/1blankspace.setup.financial-2.0.5.js'
+	},
+	{
+		nameSpace: '1blankspace.setup.action',
+		source: '/site/312/1blankspace.setup.action-2.0.0.js'
 	},
 	{
 		nameSpace: '1blankspace.setup.messaging',
@@ -861,6 +866,15 @@ ns1blankspace.views =
 		type: 2
 	},
 	{
+		title: 'Actions',
+		parentNamespace: "setup",
+		namespace: "action",
+		endpoint: "SETUP", 
+		show: true,
+		group: 9,
+		type: 2
+	},
+	{
 		title: 'Person&nbsp;Groups',
 		namespace: 'setup',
 		namesuffix: 'contactPersonGroup',
@@ -889,16 +903,6 @@ ns1blankspace.views =
 		group: 9,
 		type: 2,
 		param: {viewName: 'Product Categories', method: 'SETUP_PRODUCT_CATEGORY'}														
-	},
-	{
-		title: 'Action Types',
-		namespace: 'setup',
-		namesuffix: 'actionType',
-		endpoint: "SETUP", 
-		show: true,
-		group: 9,
-		type: 2,
-		param: {viewName: 'Action Types', method: 'SETUP_ACTION_TYPE', search: {fields: 'title', sort: [{name: 'title'}], filters: [{name: 'fixed', comparison: 'EQUAL_TO', value1: 'N'}]}}														
 	},
 	{
 		title: 'Project Types',
