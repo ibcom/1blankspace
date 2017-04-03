@@ -49,7 +49,8 @@ ns1blankspace.option = $.extend(true, ns1blankspace.option,
 	financialShowProjects: true,
 	pdfStyles: '<link rel=stylesheet href="/site/312/1blankspace-2.0.2.css">',
 	superUser: undefined,
-	messagingCheckURL: 'https://mail.lab.ibcom.biz'
+	messagingCheckURL: 'https://mail.lab.ibcom.biz',
+	messagingSaveDraft: 99999999
 });
 
 ns1blankspace.formFactor.size.value = ns1blankspace.formFactor.size.options.medium;
@@ -297,7 +298,7 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.util.local',
-		source: '/site/312/1blankspace.util.local-2.0.1.js'
+		source: '/site/312/1blankspace.util.local-2.0.3.js'
 	},
 	{
 		nameSpace: '1blankspace.util.protect',

@@ -39,7 +39,7 @@ ns1blankspace.util.local =
 									return sKey;
 								},			
 
-					save: 		function (oParam)
+					save: 	function (oParam)
 								{
 									if (ns1blankspace.util.local.cache.exists(oParam))
 									{	
