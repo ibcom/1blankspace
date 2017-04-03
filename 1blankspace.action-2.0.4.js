@@ -173,7 +173,10 @@ ns1blankspace.action =
 				if (sSearchText.length >= iMinimumLength || iSource == ns1blankspace.data.searchSource.browse)
 				{
 					ns1blankspace.search.start();
-					
+					var sFirstName = (sSearchText.split(' ').length == 2) ? sSearchText.split(' ').shift() : sSearchText;
+					var sSurname = (sSearchText.split(' ').length == 2) ? sSearchText.split(' ').pop() : sSearchText;
+
+
 					var oSearch = new AdvancedSearch();
 					oSearch.method = 'ACTION_SEARCH';
 					oSearch.addField('subject,date,contactbusinesstext,contactpersontext');
@@ -181,9 +184,13 @@ ns1blankspace.action =
 					oSearch.addBracket('(');
 					oSearch.addFilter('subject', 'TEXT_IS_LIKE', sSearchText);
 					oSearch.addOperator('or');
-					oSearch.addFilter('action.contactperson.surname', 'TEXT_IS_LIKE', sSearchText);
+					oSearch.addFilter('action.description', 'TEXT_IS_LIKE', sSearchText);
 					oSearch.addOperator('or');
-					oSearch.addFilter('action.contactperson.firstname', 'TEXT_IS_LIKE', sSearchText);
+					oSearch.addBracket('(');
+					oSearch.addFilter('action.contactperson.firstname', 'TEXT_IS_LIKE', sFirstName);
+					oSearch.addOperator((sFirstName == sSurname) ? 'or' : 'and');
+					oSearch.addFilter('action.contactperson.surname', 'TEXT_IS_LIKE', sSurname);
+					oSearch.addBracket(')');
 					oSearch.addBracket(')');
 
 					ns1blankspace.search.advanced.addFilters(oSearch);
@@ -411,7 +418,7 @@ ns1blankspace.action =
 				$('#ns1blankspaceViewControlAction').button({disabled: false});
 				$('#ns1blankspaceViewControlActionOptions').button({disabled: false});
 					
-				var oDate = Date.parse(ns1blankspace.objectContextData.duedatetime);
+				var oDate = new Date(ns1blankspace.objectContextData.duedatetime);
 					
 				var sHTML = '';
 											
@@ -481,7 +488,7 @@ ns1blankspace.action =
 		
 			if (ns1blankspace.objectContextData.duedatetime != '')
 			{
-				var oDate = Date.parse(ns1blankspace.objectContextData.duedatetime);
+				var oDate = new Date(ns1blankspace.objectContextData.duedatetime);
 					
 				aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Date</td></tr>' +
 								'<tr><td id="ns1blankspaceSummaryDate" class="ns1blankspaceSummary">' +
@@ -924,34 +931,23 @@ ns1blankspace.action =
 
 		search: function(oParam)
 		{	// Search for reminders 
+			if (oParam == undefined) {oParam = {}}
 			var iObject = ns1blankspace.util.getParam(oParam, 'object', {'default': ns1blankspace.object}).value;
 			var iObjectContext = ns1blankspace.util.getParam(oParam, 'objectContext', {'default': ns1blankspace.objectContext}).value;
+			if (oParam.reminderSearchStep == undefined) {oParam.reminderSearchStep = 1}
 
-			// Find we find the description of the ReminderTemplate if not already found
-			if (ns1blankspace.option.actionReminderTemplate && ns1blankspace.option.actionReminderTemplateText == undefined)
+			// Find we find the ReminderTemplate if not already found
+			if (oParam.reminderSearchStep == 1)
 			{
-				var oSearch = new AdvancedSearch();
-				oSearch.method = 'DOCUMENT_SEARCH'
-				oSearch.addField('title');
-				oSearch.addFilter('id', 'EQUAL_TO', ns1blankspace.option.actionReminderTemplate);
-				oSearch.rows = 1;
-				oSearch.getResults(function(oResponse)
-				{
-					if (oResponse.status == 'OK')
-					{
-						// If not found, we set actionReminderTemplate to undefined so we don't keep looking for it this session 
-						if (oResponse.data.rows.length == 0) {ns1blankspace.option.actionReminderTemplate = undefined}
-						else
-						{
-							ns1blankspace.option.actionReminderTemplateText = oResponse.data.rows[0].title.formatXHTML();
-						}
-					}
-					ns1blankspace.action.reminders.search(oParam);
-				});
+				oParam.reminderSearchStep = 2;	
+				oParam.onComplete = ns1blankspace.action.reminders.search;
+				oParam.template = 'action';
+				ns1blankspace.util.initTemplate(oParam);
 			}
 
-			else 
+			else if (oParam.reminderSearchStep == 2)
 			{
+				delete(oParam.reminderSearchStep);
 				var oSearch = new AdvancedSearch();
 				oSearch.method = 'MESSAGING_OBJECT_ALERT_SEARCH';
 				oSearch.addField('*');
@@ -1178,7 +1174,7 @@ ns1blankspace.action =
 							'<tr><td class="ns1blankspaceSelect">' +
 								'<input class="ns1blankspaceSelect" id="ns1blankspaceReminderEditDocument"' +
 									' data-method="DOCUMENT_SEARCH"' +
-									' data-methodFilter="title-TEXT_IS_LIKE|summary-TEXT_IS_LIKE"' +
+									' data-methodFilter="title-TEXT_IS_LIKE|summary-TEXT_IS_LIKE|type-EQUAL_TO-10|object-EQUAL_TO-17"' +
 									' data-mandatory="1" data-caption="Template Document"' +
 								'>' +
 							'</td></tr>');
@@ -1287,8 +1283,11 @@ ns1blankspace.action =
 				}
 				else
 				{
-					$('#ns1blankspaceReminderEditDocument').val(ns1blankspace.option.actionReminderTemplateText);
-					$('#ns1blankspaceReminderEditDocument').attr('data-id', ns1blankspace.option.actionReminderTemplate);
+					if (ns1blankspace.xhtml.templates.document && ns1blankspace.xhtml.templates.document.action)
+					{
+						$('#ns1blankspaceReminderEditDocument').val('ACTION TEMPLATE');
+						$('#ns1blankspaceReminderEditDocument').attr('data-id', ns1blankspace.xhtml.templates.document.action);
+					}
 					$('[name="radioDeliveryType"][value="1"]').attr('checked', true);
 					$('#ns1blankspaceReminderEditRecipient').attr('data-id', sSendTo);
 					$('#ns1blankspaceReminderEditRecipient').val(sSendToText);
@@ -2284,7 +2283,7 @@ ns1blankspace.action =
 										this.duedate + '</td>');
 
 					sDate = '&nbsp;';
-					var oDate = Date.parse(this.duedate);
+					var oDate = new Date(this.duedate);
 							
 					if (oDate != null)
 					{ 			
