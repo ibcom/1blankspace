@@ -635,14 +635,79 @@ ns1blankspace.financial.credit =
 										'<input id="ns1blankspaceDetailsFinancialAccount" class="ns1blankspaceSelect"' +
 											' data-method="SETUP_FINANCIAL_ACCOUNT_SEARCH"' +
 											' data-columns="title">' +
-										'</td></tr>');						
+										'</td></tr>');
+
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
+										ns1blankspace.option.taxVATCaption + ' Type' +
+										'</td></tr>' +
+										'<tr class="ns1blankspace">' +
+										'<td id="ns1blankspaceFinancialTaxCode" class="ns1blankspaceRadio">' +
+										ns1blankspace.xhtml.loadingSmall +
+										'</td></tr>');	
+
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
+										ns1blankspace.option.taxVATCaption + ' Amount' +
+										'</td></tr>' +
+										'<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceText">' +
+										'<input id="ns1blankspaceItemTax" class="ns1blankspaceText">' +
+										'</td></tr>');									
 											
 						aHTML.push('</table>');				
 						
 						$('#ns1blankspaceDetailsColumn1').html(aHTML.join(''));
 						
 						$('input.ns1blankspaceDate').datepicker({dateFormat: 'dd M yy'});
-						
+
+						ns1blankspace.financial.util.tax.codes({xhtmlElementID: 'ns1blankspaceFinancialTaxCode', id: 1});
+						$('[name="radioType"][value="1"]').attr('checked', true);
+						$('[name="radioTaxCategory"][value="1"]').attr('checked', true);
+
+						$('[name="radioTaxCategory"]').click(function()
+						{
+							ns1blankspace.financial.util.tax.codes(
+							{
+								xhtmlElementID: 'ns1blankspaceFinancialTaxCode',
+								id: 1,
+								type: (this.id).split('-')[1]
+							});
+
+							ns1blankspace.financial.util.tax.calculate(
+							{
+								amountXHTMLElementID: 'ns1blankspaceItemAmount',
+								taxXHTMLElementID: 'ns1blankspaceItemTax'
+							});
+
+							$('[name="radioTaxCode"]').click(function()
+							{
+								ns1blankspace.financial.util.tax.calculate(
+								{
+									amountXHTMLElementID: 'ns1blankspaceItemAmount',
+									taxXHTMLElementID: 'ns1blankspaceItemTax'
+								});
+							});
+						});
+
+						$('#ns1blankspaceItemAmount').keyup(function()
+						{
+							ns1blankspace.financial.util.tax.calculate(
+							{
+								amountXHTMLElementID: 'ns1blankspaceItemAmount',
+								taxXHTMLElementID: 'ns1blankspaceItemTax'
+							});
+						});
+
+						$('[name="radioTaxCode"]').click(function()
+						{
+							ns1blankspace.financial.util.tax.calculate(
+							{
+								amountXHTMLElementID: 'ns1blankspaceItemAmount',
+								taxXHTMLElementID: 'ns1blankspaceItemTax'
+							});
+						});
+		
 						var aHTML = [];
 						
 						aHTML.push('<table class="ns1blankspace">');

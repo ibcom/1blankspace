@@ -118,7 +118,7 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.format',
-		source: '/site/312/1blankspace.format-2.0.8.js'
+		source: '/site/312/1blankspace.format-2.0.9.js'
 	},
 	{
 		nameSpace: '1blankspace.contactPerson',
@@ -174,7 +174,7 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.financial',
-		source: '/site/312/1blankspace.financial-2.0.9.js'
+		source: '/site/312/1blankspace.financial-2.1.0.js'
 	},
 	{
 		nameSpace: '1blankspace.financial.bankAccount',
@@ -182,7 +182,7 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.financial.invoice',
-		source: '/site/312/1blankspace.financial.invoice-2.0.6.js'
+		source: '/site/312/1blankspace.financial.invoice-2.0.7.js'
 	},
 	{
 		nameSpace: '1blankspace.financial.expense',
@@ -198,7 +198,7 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.financial.credit',
-		source: '/site/312/1blankspace.financial.credit-2.0.3.js'
+		source: '/site/312/1blankspace.financial.credit-2.0.4.js'
 	},
 	{
 		nameSpace: '1blankspace.financial.journal',
@@ -234,7 +234,7 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.setup.action',
-		source: '/site/312/1blankspace.setup.action-2.0.0.js'
+		source: '/site/312/1blankspace.setup.action-2.0.1.js'
 	},
 	{
 		nameSpace: '1blankspace.setup.messaging',
