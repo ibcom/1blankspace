@@ -105,7 +105,7 @@ ns1blankspace.financial.journal =
 					}
 				},
 
-	home: 		function (oParam, oResponse)
+	home: 	function (oParam, oResponse)
 				{
 					if (oResponse == undefined)
 					{
@@ -332,7 +332,7 @@ ns1blankspace.financial.journal =
 								}
 				},		
 
-	layout:		function ()
+	layout:	function ()
 				{
 					var aHTML = [];
 					
@@ -1014,7 +1014,7 @@ ns1blankspace.financial.journal =
 										{
 											$.extend(true, oParam, {step: 2});
 											if (ns1blankspace.timer.delayCurrent != 0) {clearTimeout(ns1blankspace.timer.delayCurrent)};
-									        ns1blankspace.timer.delayCurrent = setTimeout(ns1blankspace.financial.journal.item.edit(oParam), ns1blankspace.option.typingWait);
+											ns1blankspace.timer.delayCurrent = setTimeout(ns1blankspace.financial.journal.item.edit(oParam), ns1blankspace.option.typingWait);
 										});	
 											
 										$('#ns1blankspaceItemAmount').focus();

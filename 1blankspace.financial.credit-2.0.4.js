@@ -642,7 +642,7 @@ ns1blankspace.financial.credit =
 										ns1blankspace.option.taxVATCaption + ' Type' +
 										'</td></tr>' +
 										'<tr class="ns1blankspace">' +
-										'<td id="ns1blankspaceFinancialTaxCode" class="ns1blankspaceRadio">' +
+										'<td id="ns1blankspaceDetailsTaxCode" class="ns1blankspaceRadio">' +
 										ns1blankspace.xhtml.loadingSmall +
 										'</td></tr>');	
 
@@ -652,7 +652,7 @@ ns1blankspace.financial.credit =
 										'</td></tr>' +
 										'<tr class="ns1blankspace">' +
 										'<td class="ns1blankspaceText">' +
-										'<input id="ns1blankspaceItemTax" class="ns1blankspaceText">' +
+										'<input id="ns1blankspaceDetailsTax" class="ns1blankspaceText">' +
 										'</td></tr>');									
 											
 						aHTML.push('</table>');				
@@ -661,7 +661,7 @@ ns1blankspace.financial.credit =
 						
 						$('input.ns1blankspaceDate').datepicker({dateFormat: 'dd M yy'});
 
-						ns1blankspace.financial.util.tax.codes({xhtmlElementID: 'ns1blankspaceFinancialTaxCode', id: 1});
+						ns1blankspace.financial.util.tax.codes({xhtmlElementID: 'ns1blankspaceDetailsTaxCode', id: 1});
 						$('[name="radioType"][value="1"]').attr('checked', true);
 						$('[name="radioTaxCategory"][value="1"]').attr('checked', true);
 
@@ -669,33 +669,33 @@ ns1blankspace.financial.credit =
 						{
 							ns1blankspace.financial.util.tax.codes(
 							{
-								xhtmlElementID: 'ns1blankspaceFinancialTaxCode',
+								xhtmlElementID: 'ns1blankspaceDetailsTaxCode',
 								id: 1,
 								type: (this.id).split('-')[1]
 							});
 
 							ns1blankspace.financial.util.tax.calculate(
 							{
-								amountXHTMLElementID: 'ns1blankspaceItemAmount',
-								taxXHTMLElementID: 'ns1blankspaceItemTax'
+								amountXHTMLElementID: 'ns1blankspaceDetailsAmount',
+								taxXHTMLElementID: 'ns1blankspaceDetailsTax'
 							});
 
 							$('[name="radioTaxCode"]').click(function()
 							{
 								ns1blankspace.financial.util.tax.calculate(
 								{
-									amountXHTMLElementID: 'ns1blankspaceItemAmount',
-									taxXHTMLElementID: 'ns1blankspaceItemTax'
+									amountXHTMLElementID: 'ns1blankspaceDetailsAmount',
+									taxXHTMLElementID: 'ns1blankspaceDetailsTax'
 								});
 							});
 						});
 
-						$('#ns1blankspaceItemAmount').keyup(function()
+						$('#ns1blankspaceDetailsAmount').keyup(function()
 						{
 							ns1blankspace.financial.util.tax.calculate(
 							{
-								amountXHTMLElementID: 'ns1blankspaceItemAmount',
-								taxXHTMLElementID: 'ns1blankspaceItemTax'
+								amountXHTMLElementID: 'ns1blankspaceDetailsAmount',
+								taxXHTMLElementID: 'ns1blankspaceDetailsTax'
 							});
 						});
 
@@ -703,8 +703,8 @@ ns1blankspace.financial.credit =
 						{
 							ns1blankspace.financial.util.tax.calculate(
 							{
-								amountXHTMLElementID: 'ns1blankspaceItemAmount',
-								taxXHTMLElementID: 'ns1blankspaceItemTax'
+								amountXHTMLElementID: 'ns1blankspaceDetailsAmount',
+								taxXHTMLElementID: 'ns1blankspaceDetailsTax'
 							});
 						});
 		
@@ -748,6 +748,8 @@ ns1blankspace.financial.credit =
 							$('[name="radioType"][value="' + ns1blankspace.objectContextData.type + '"]').attr('checked', true);
 							$('#ns1blankspaceDetailsFinancialAccount').val(ns1blankspace.objectContextData.financialaccounttext.formatXHTML())
 							$('#ns1blankspaceDetailsFinancialAccount').attr('data-id', ns1blankspace.objectContextData.financialaccount);
+							$('[name="radioTaxCode"][value="' + ns1blankspace.objectContextData.taxtype + '"]').attr('checked', true);
+							$('#ns1blankspaceDetailsTax').val(ns1blankspace.objectContextData.tax);
 						}
 						else
 						{
@@ -784,6 +786,8 @@ ns1blankspace.financial.credit =
 										sData += '&amount=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsAmount').val());
 										sData += '&type=' + $('input[name="radioType"]:checked').val();
 										sData += '&financialaccount=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsFinancialAccount').attr('data-id'));
+										sData += '&taxtype=' + $('input[name="radioTaxCode"]:checked').val();
+										sData += '&tax=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsTax').val());
 									}
 									
 									$.ajax(
@@ -1061,7 +1065,7 @@ ns1blankspace.financial.credit =
 
 														aHTML.push('<tr class="ns1blankspaceRow">');						
 																				
-														aHTML.push('<td class="ns1blankspaceRow1" style="font-size:0.875em; width:100px; background-color:#f3f3f3;">' +
+														aHTML.push('<td class="ns1blankspaceRow1" style="font-size:0.875em; width:100px; background-color:#f3f3f3; font-weight:600;">' +
 																	sReference + '</td>');
 
 														if (ns1blankspace.objectContextData.type == '1')
@@ -1075,7 +1079,7 @@ ns1blankspace.financial.credit =
 																		ns1blankspace.util.fd(this.accrueddate) + '</td>');
 														}
 
-														aHTML.push('<td style="text-align:right;font-size:0.875em; background-color:#f3f3f3;">' +
+														aHTML.push('<td style="text-align:right;font-size:0.875em; background-color:#f3f3f3; padding-right:8px;">' +
 																		this["outstandingamount"] + '</td>');
 
 														aHTML.push('<td style="width:30px;text-align:right;font-size:0.875em; background-color:#f3f3f3;"></td>');
@@ -1085,12 +1089,10 @@ ns1blankspace.financial.credit =
 
 													
 													aHTML.push('<tr class="ns1blankspaceRow">');
-																
-													aHTML.push('<td class="ns1blankspaceRow"></td>');
 													
 													if (ns1blankspace.objectContextData.type == '1')
 													{
-														aHTML.push('<td id="ns1blankspaceCreditAppliedTo_notes-' + this.id + '" class="ns1blankspaceRow ns1blankspaceSub">' +
+														aHTML.push('<td colspan=2 id="ns1blankspaceCreditAppliedTo_notes-' + this.id + '" class="ns1blankspaceRow ns1blankspaceSub">' +
 																	this["invoice.lineitem.description"] + '</td>');
 
 														aHTML.push('<td id="ns1blankspaceCreditAppliedTo_amount-' + this.id + '"' +
@@ -1099,7 +1101,7 @@ ns1blankspace.financial.credit =
 													}	
 													else	
 													{
-														aHTML.push('<td id="ns1blankspaceCreditAppliedTo_notes-' + this.id + '" class="ns1blankspaceRow ns1blankspaceSub">' +
+														aHTML.push('<td colspan=2 id="ns1blankspaceCreditAppliedTo_notes-' + this.id + '" class="ns1blankspaceRow ns1blankspaceSub">' +
 																	this["expense.lineitem.description"] + '</td>');
 
 														aHTML.push('<td id="ns1blankspaceCreditAppliedTo_amount-' + this.id + '"' +
@@ -1109,20 +1111,31 @@ ns1blankspace.financial.credit =
 
 													if (ns1blankspace.objectContextData.tobeappliedamount != 0)
 													{	
+														var sObject = (ns1blankspace.objectContextData.type == '1'?'invoice':'expense')
+														var cOutstandingAmount = _.toNumber(this[sObject + '.lineitem.' + sObject + 'outstandingamount'].replace(',', ''));
+														var cAmount = _.toNumber(this[sObject + '.lineitem.amount'].replace(',', ''));
+														var cTax = _.toNumber(this[sObject + '.lineitem.tax'].replace(',', ''));
+														var cOutstandingTax = cOutstandingAmount * (cTax / cAmount);
+
+														if (cOutstandingTax > ns1blankspace.objectContextData.tobeappliedtax)
+														{
+															cOutstandingTax = ns1blankspace.objectContextData.tobeappliedtax;
+														}
+
 														aHTML.push('<td style="width:30px;text-align:right;" class="ns1blankspaceRow">');
 															
 														if (ns1blankspace.objectContextData.type == '1')
 														{						
 															aHTML.push('<span id="ns1blankspaceCreditAppliedTo_options_select-' + this["invoice.lineitem.id"]  + '"' +
-																			' data-amount="' + this["invoice.lineitem.amount"] + '"' +
-																			' data-tax="' + this["invoice.lineitem.tax"] + '"' +
+																			' data-amount="' + cOutstandingAmount + '"' +
+																			' data-tax="' + cOutstandingTax + '"' +
 																			' class="ns1blankspaceAppliedToSelect"></span>');
 														}
 														else
 														{						
 															aHTML.push('<span id="ns1blankspaceCreditAppliedTo_options_select-' + this["expense.lineitem.id"]  + '"' +
-																			' data-amount="' + this["expense.lineitem.amount"] + '"' +
-																			' data-tax="' + this["expense.lineitem.tax"] + '"' +
+																			' data-amount="' + cOutstandingAmount + '"' +
+																			' data-tax="' + cOutstandingTax + '"' +
 																			' class="ns1blankspaceAppliedToSelect"></span>');
 														}
 

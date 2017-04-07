@@ -89,7 +89,7 @@ ns1blankspace.financial.invoice =
 									_.toNumber(oObjectContext.creditamount.replace(',', ''))).formatMoney(2, ".", ",");
 								
 						$('#ns1blankspaceControlContext_sentdate').html(ns1blankspace.objectContextData.sentdate);
-						$('#ns1blankspaceControlContext_amount').html('$' + oObjectContext.preadjustmentamount);
+						$('#ns1blankspaceControlContext_amount').html('$' + ns1blankspace.objectContextData.preadjustmentamount);
 
 						ns1blankspace.financial.invoice.receipt.refresh();
 					}
