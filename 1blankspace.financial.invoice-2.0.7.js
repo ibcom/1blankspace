@@ -277,7 +277,7 @@ ns1blankspace.financial.invoice =
 											oSearch.addOperator('or');
 											oSearch.addFilter('invoice.contactpersonsentto.surname', 'TEXT_IS_LIKE', sSearchText);
 
-											if (!_.isNaN(_.toNumber(sSearchText)))
+											if (!_.isNaN(_.toNumber(sSearchText) && sSearchText != ''))
 											{
 												oSearch.addOperator('or');
 												oSearch.addFilter('invoice.amount', 'APPROX_EQUAL_TO', sSearchText);

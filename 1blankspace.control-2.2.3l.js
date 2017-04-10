@@ -186,7 +186,7 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.financial.expense',
-		source: '/site/312/1blankspace.financial.expense-2.0.7.js'
+		source: '/site/312/1blankspace.financial.expense-2.0.8.js'
 	},
 	{
 		nameSpace: '1blankspace.financial.receipt',
@@ -238,7 +238,7 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.setup.messaging',
-		source: '/jscripts/1blankspace.setup.messaging-2.0.2.js'
+		source: '/site/312/1blankspace.setup.messaging-2.0.3.js'
 	},
 	{
 		nameSpace: '1blankspace.setup.networkGroup',
