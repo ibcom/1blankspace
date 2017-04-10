@@ -4273,6 +4273,7 @@ ns1blankspace.financial.bankAccount =
 															}
 
 															if (cSearchAmount) {oSearch.addFilter('amount', 'APPROX_EQUAL_TO', cSearchAmount)}
+															if (sSearchReference) {oSearch.addFilter('reference', 'TEXT_IS_LIKE', sSearchReference)}	
 														}
 														else
 														{
