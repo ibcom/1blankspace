@@ -705,9 +705,17 @@ ns1blankspace.financial.bankAccount =
 											mapfromdescription: $('#ns1blankspaceFromMatchDescription').val(),
 											maptofinancialaccount: $('#ns1blankspaceItemAccount').attr('data-id'),
 											taxtype: $('input[name="radioTaxCodeMapping"]:checked').val(),
-											maptocontactbusiness: $('#ns1blankspaceContactBusinessMapTo').attr('data-id'),
-											maptocontactperson: $('#ns1blankspaceContactPersonMapTo').attr('data-id'),
 											id: sID
+										}
+
+										if (_.toNumber($('#ns1blankspaceContactBusinessMapTo').attr('data-id')) != 0)
+										{
+											oData.maptocontactbusiness = $('#ns1blankspaceContactBusinessMapTo').attr('data-id')
+										}
+
+										if (_.toNumber($('#ns1blankspaceContactPersonMapTo').attr('data-id')) != 0)
+										{
+											oData.maptocontactperson = $('#ns1blankspaceContactPersonMapTo').attr('data-id')
 										}
 											
 										$.ajax(
@@ -4273,6 +4281,7 @@ ns1blankspace.financial.bankAccount =
 															}
 
 															if (cSearchAmount) {oSearch.addFilter('amount', 'APPROX_EQUAL_TO', cSearchAmount)}
+															if (sSearchReference) {oSearch.addFilter('reference', 'TEXT_IS_LIKE', sSearchReference)}	
 														}
 														else
 														{
