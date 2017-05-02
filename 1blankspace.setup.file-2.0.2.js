@@ -1,7 +1,8 @@
 /*!
- * ibCom Pty Ltd ATF ibCom Unit Trust & contributors
- * Licensed as Attribution-ShareAlike 4.0 International
- * http://creativecommons.org/licenses/by-sa/4.0/
+ * Copyright 2010, ibCom Pty Ltd ATF ibCom Unit Trust & contributors
+ * Licensed under the MIT license.
+ * http://1blankspace.com/license
+ * 01 FEB 2010
  */
 
 ns1blankspace.setup.file = 
@@ -1253,184 +1254,282 @@ ns1blankspace.setup.file =
 				},
 
 	"export": 	{
+					data: {},
+
 					show: 		function ()
-								{
-									//choose object
-									//holding method
-								},
+					{
+						//choose object
+						//holding method
+					},
 
 					process: 	function (oParam)
+					{
+						var sFormatName = ns1blankspace.util.getParam(oParam, 'name').value;
+						var oSummary = ns1blankspace.util.getParam(oParam, 'summary', {"default": {}}).value;
+						var oItems = ns1blankspace.util.getParam(oParam, 'items', {"default": {}}).value;
+						var bSaveToFile = ns1blankspace.util.getParam(oParam, 'saveToFile', {"default": false}).value;
+						var oFormat = ns1blankspace.util.getParam(oParam, 'format').value;
+						
+						if (oParam.exportProcessStep == undefined) {oParam.exportProcessStep = 1}
+
+						if (oParam.exportProcessStep == 1)
+						{
+							ns1blankspace.setup.file['export'].data.outputFile = [];
+
+							if (sFormatName !== undefined)
+							{
+								oFormat = $.grep(ns1blankspace.setup.file["export"].formats, function (a) {return a.name == sFormatName}).shift();
+								oParam.format = oFormat;
+							}
+
+							if (oFormat != undefined)
+							{
+								// Process header row(s)
+								$.each(oFormat.header, function(i, k)
 								{
-									var sFormatName = ns1blankspace.util.getParam(oParam, 'name').value;
-									var oSummary = ns1blankspace.util.getParam(oParam, 'summary', {"default": {}}).value;
-									var oItems = ns1blankspace.util.getParam(oParam, 'items', {"default": {}}).value;
-									var bSaveToFile = ns1blankspace.util.getParam(oParam, 'saveToFile', {"default": false}).value;
-
-									if (sFormatName !== undefined)
+									$.each(k.fields, function (j, v)
 									{
-										var oFormat = $.grep(ns1blankspace.setup.file["export"].formats, function (a) {return a.name == sFormatName});
-									}
-
-									var aFile = [];
-
-									if (oFormat.length > 0)
-									{
-										oFormat = oFormat[0];
-
-										$.each(oFormat.header, function(i, k)
+										if (v.value !== undefined)
 										{
-											$.each(k.fields, function (j, v)
-											{
-												if (v.value !== undefined)
-												{
-													v.text = v.value;
-													aFile.push(ns1blankspace.util.format(v));
-												}	
-												else if (v.field !== undefined)
-												{
-													if (oSummary[v.field] !== undefined)
-													{
-														v.text = oSummary[v.field];
-														aFile.push(ns1blankspace.util.format(v));
-													}	
-												}
-												else if (v.param !== undefined)
-												{
-													v.text = ns1blankspace.util.getParam(oParam, v.param).value;
-													aFile.push(ns1blankspace.util.format(v));
-												}
-												else
-												{
-													aFile.push(ns1blankspace.util.format(v));
-												}	
-
-											});
-
-											aFile.push('\r\n');
-										});
-
-										if (oFormat.item !== undefined)
+											v.text = v.value;
+											ns1blankspace.setup.file['export'].data.outputFile.push(ns1blankspace.util.format(v));
+										}	
+										else if (v.field !== undefined)
 										{
-											$.each(oItems, function (i, oItem)
+											if (oSummary[v.field] !== undefined)
 											{
-												$.each(oFormat.item[0].fields, function (j, v)
-												{
-													delete v.text;
-
-													if (v.value !== undefined)
-													{
-														v.text = v.value;
-														aFile.push(ns1blankspace.util.format(v));
-													}	
-													else if (v.field !== undefined)
-													{
-														if (oItem[v.field] !== undefined)
-														{
-															v.text = oItem[v.field];
-															aFile.push(ns1blankspace.util.format(v));
-														}	
-													}
-													else if (v.param !== undefined)
-													{
-														v.text = ns1blankspace.util.getParam(oParam, v.param).value;
-														aFile.push(ns1blankspace.util.format(v));
-													}
-													else if (v.calculate !== undefined)
-													{
-														v.text = v.calculate(oItem, oParam);
-														aFile.push(ns1blankspace.util.format(v));
-													}
-													else
-													{
-														aFile.push(ns1blankspace.util.format(v));
-													}	
-												});
-		
-												aFile.push('\r\n');
-											});		
-										}
-
-										$.each(oFormat.footer, function(i, k)
-										{
-											$.each(k.fields, function (j, v)
-											{
-												if (v.value !== undefined)
-												{
-													aFile.push(v.value);
-												}	
-												else if (v.field !== undefined)
-												{
-													if (oSummary[v.field] !== undefined)
-													{
-														v.value = oSummary[v.field];
-														aFile.push(ns1blankspace.util.format(v));
-													}	
-												}
-												else if (v.param !== undefined)
-												{
-													v.value = ns1blankspace.util.getParam(oParam, v.param).value;
-													aFile.push(ns1blankspace.util.format(v));
-												}
-												else
-												{
-													aFile.push(ns1blankspace.util.format(v));
-												}	
-
-											});
-
-											if (i != oFormat.footer.length - 1)
-											{	
-												aFile.push('\r\n');
+												v.text = oSummary[v.field];
+												ns1blankspace.setup.file['export'].data.outputFile.push(ns1blankspace.util.format(v));
 											}	
-										});
+										}
+										else if (v.param !== undefined)
+										{
+											v.text = ns1blankspace.util.getParam(oParam, v.param).value;
+											ns1blankspace.setup.file['export'].data.outputFile.push(ns1blankspace.util.format(v));
+										}
+										else
+										{
+											ns1blankspace.setup.file['export'].data.outputFile.push(ns1blankspace.util.format(v));
+										}	
 
-									}
+									});
 
-									if (bSaveToFile)
+									ns1blankspace.setup.file['export'].data.outputFile.push('\r\n');
+								});
+
+								// Process items, followed by footer rows
+								// v2.0.2 Now calls each line asynchronously
+								if (oFormat.item !== undefined)
+								{
+									oParam.onComplete = ns1blankspace.setup.file['export'].process;
+									ns1blankspace.setup.file['export'].processItems(0, oItems.length, oParam);
+								}
+								else
+								{
+									oParam.exportProcessStep = 2;
+									ns1blankspace.setup.file['export'].process(oParam);
+								}
+							}
+							else
+							{	// No format defined, call back and finish up
+								oParam.exportProcessStep = 10;
+								ns1blankspace.setup.file['export'].process(oParam);
+							}
+						}
+
+						// Process footer rows
+						else if (oParam.exportProcessStep == 2)
+						{
+							if (oFormat.footer)
+							{
+								$.each(oFormat.footer, function(i, k)
+								{
+									$.each(k.fields, function (j, v)
 									{
-										oParam.data = aFile.join('');
-										ns1blankspace.setup.file["export"].saveToFile(oParam);
-									}
+										if (v.value !== undefined)
+										{
+											ns1blankspace.setup.file['export'].data.outputFile.push(v.value);
+										}	
+										else if (v.field !== undefined)
+										{
+											if (oSummary[v.field] !== undefined)
+											{
+												v.value = oSummary[v.field];
+												ns1blankspace.setup.file['export'].data.outputFile.push(ns1blankspace.util.format(v));
+											}	
+										}
+										else if (v.param !== undefined)
+										{
+											v.value = ns1blankspace.util.getParam(oParam, v.param).value;
+											ns1blankspace.setup.file['export'].data.outputFile.push(ns1blankspace.util.format(v));
+										}
+										else
+										{
+											ns1blankspace.setup.file['export'].data.outputFile.push(ns1blankspace.util.format(v));
+										}	
 
-									return aFile.join('');
-								},
+									});
+
+									if (i != oFormat.footer.length - 1)
+									{	
+										ns1blankspace.setup.file['export'].data.outputFile.push('\r\n');
+									}	
+								});
+							}
+
+							oParam.exportProcessStep = 10;		// We're finished processing the footer, call back process function
+							ns1blankspace.setup.file['export'].process(oParam);
+						}
+
+						// Finish up
+						else if (oParam.exportProcessStep == 10)
+						{
+							delete(oParam.exportProcessStep);
+							delete(oParam.format);
+							if (bSaveToFile)
+							{
+								oParam.data = ns1blankspace.setup.file['export'].data.outputFile.join('');
+								ns1blankspace.setup.file["export"].saveToFile(oParam);
+							}
+
+							var sFile = ns1blankspace.setup.file['export'].data.outputFile.join('');
+							delete(ns1blankspace.setup.file['export'].data.outputFile);
+							
+							return sFile;
+						}
+					},
+
+					processItems: function(i, iLastLoop, oParam)
+					{
+						var aItems = ns1blankspace.util.getParam(oParam, 'items', {'default': []}).value;
+						var oFormat = ns1blankspace.util.getParam(oParam, 'format', {'default': {}}).value;
+
+						setTimeout(function()
+						{
+							if (i < iLastLoop)
+							{
+								var aFileLine = [];
+								var oItem = aItems[i];
+								if ((i/10).toString().split('.').length == 1)
+								{
+									ns1blankspace.status.message('Creating file: Row ' + i + ' of ' + iLastLoop);
+								}
+
+								$.each(oFormat.item[0].fields, function (j, v)
+								{
+									delete v.text;
+
+									if (v.value !== undefined)
+									{
+										v.text = v.value;
+										aFileLine.push(ns1blankspace.util.format(v));
+									}	
+									else if (v.field !== undefined)
+									{
+										if (oItem[v.field] !== undefined)
+										{
+											v.text = oItem[v.field];
+											aFileLine.push(ns1blankspace.util.format(v));
+										}	
+									}
+									else if (v.param !== undefined)
+									{
+										v.text = ns1blankspace.util.getParam(oParam, v.param).value;
+										aFileLine.push(ns1blankspace.util.format(v));
+									}
+									else if (v.calculate !== undefined)
+									{
+										v.text = v.calculate(oItem, oParam);
+										aFileLine.push(ns1blankspace.util.format(v));
+									}
+									else
+									{
+										aFileLine.push(ns1blankspace.util.format(v));
+									}	
+								});
+
+								ns1blankspace.setup.file['export'].data.outputFile.push(aFileLine.join('') + '\r\n');
+
+								i++;
+								ns1blankspace.setup.file['export'].processItems(i, iLastLoop, oParam);
+							}
+							else
+							{	// items processing done - call back process function
+								oParam.exportProcessStep = 2;
+								ns1blankspace.setup.file['export'].process(oParam);
+							}
+						}, 0);
+					},
 
 					saveToFile: function(oParam)
-								{
-									var sData = ns1blankspace.util.getParam(oParam, 'data').value;
-									var sFileName = ns1blankspace.util.getParam(oParam, 'fileName', {"default": 'export.csv'}).value;
-									var bOpen = ns1blankspace.util.getParam(oParam, 'open', {"default": false}).value;
-									var sXHTMLElementID = ns1blankspace.util.getParam(oParam, 'xhtmlElementID').value;
-									var sText = ns1blankspace.util.getParam(oParam, 'text', {"default": 'Download'}).value;
+					{	// v2.0.2 Now uses saveAs if linked
+						var sData = ns1blankspace.util.getParam(oParam, 'data').value;
+						var bOpen = ns1blankspace.util.getParam(oParam, 'open', {"default": false}).value;
+						var sFileName = ns1blankspace.util.getParam(oParam, 'fileName', {"default": 'export.csv'}).value;
+						var sXHTMLElementID = ns1blankspace.util.getParam(oParam, 'xhtmlElementID').value;
 
-									var oData =
+						ns1blankspace.status.clear();
+						if (window.saveAs == undefined)
+						{
+							var oData =
+							{
+								filedata: sData,
+								filename: sFileName
+							}
+
+							$.ajax(
+							{
+								type: 'POST',
+								url: ns1blankspace.util.endpointURI('CORE_FILE_MANAGE'),
+								data: oData,
+								dataType: 'json',
+								success: function(data)
+								{
+									ns1blankspace.status.message('File created');
+									
+									if (bOpen)
 									{
-										filedata: sData,
-										filename: sFileName
+										window.open(data.link);
 									}
 
-									$.ajax(
+									if (sXHTMLElementID !== undefined)
 									{
-										type: 'POST',
-										url: ns1blankspace.util.endpointURI('CORE_FILE_MANAGE'),
-										data: oData,
-										dataType: 'json',
-										success: function(data)
-										{
-											ns1blankspace.status.message('File created');
-											
-											if (bOpen)
-											{
-												window.open(data.link);
-											}
+										$('#' + sXHTMLElementID).html('<a target="_blank" href="' + data.link + '"">Download</a>')
+									}	
+								}
+							});	
+						}
 
-											if (sXHTMLElementID !== undefined)
-											{
-												$('#' + sXHTMLElementID).html('<a href="' + data.link + '" class="ns1blankspaceNoUnloadWarn">' + sText + '</a>')
-											}	
-										}
-									});	
-								} 			
+						else
+						{
+							if (bOpen)
+							{
+								ns1blankspace.setup.file['export'].fileOpen(oParam);
+							}
+
+							if (sXHTMLElementID)
+							{
+								$('#' + sXHTMLElementID)
+									.before((ns1blankspace.supportAdmin) ? '<tr><td colspan="3">Creating Export file :' + Date() + '</td></tr>' : '')
+									.html('<a id="ns1blankspaceFileDownload" href="#">Download</a>');
+
+								$('#ns1blankspaceFileDownload')
+									.on('click', function()
+									{
+										ns1blankspace.setup.file['export'].fileOpen(oParam);
+									});
+							}
+						}
+					},
+
+					fileOpen: function(oParam)
+					{
+						var sData = ns1blankspace.util.getParam(oParam, 'data').value;
+						var sFileName = ns1blankspace.util.getParam(oParam, 'fileName', {"default": 'export.csv'}).value;
+						var blob = new Blob([sData], {type: "text/plain;charset=utf-8"});
+
+						saveAs(blob, sFileName);
+					} 			
 				},
 
 	util: 		{
@@ -1668,13 +1767,7 @@ ns1blankspace.setup.file["export"].formats =
 						dateFormat: 'ddMMyyyy'
 					},
 					{
-						value: 'E',
-					},
-					{
-						value: 'P',
-					},
-					{
-						value: 'FEMPA011.0',
+						value: 'EAPFEMPA008.0',
 					},
 					{
 						fill: ' ',
