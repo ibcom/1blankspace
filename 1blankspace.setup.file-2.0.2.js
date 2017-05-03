@@ -1448,7 +1448,8 @@ ns1blankspace.setup.file =
 									}	
 								});
 
-								ns1blankspace.setup.file['export'].data.outputFile.push(aFileLine.join('') + '\r\n');
+								// v2.0.2 Replace line breaks within each row
+								ns1blankspace.setup.file['export'].data.outputFile.push(aFileLine.join('').replace(/\r\n/g, ' ') + '\r\n');
 
 								i++;
 								ns1blankspace.setup.file['export'].processItems(i, iLastLoop, oParam);
