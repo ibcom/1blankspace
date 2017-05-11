@@ -869,6 +869,7 @@ ns1blankspace.format.editor =
 						}
 						else if (sVersion == '3')
 						{
+							if (sSelector && sSelector.indexOf('#') == 0) {sSelector = sSelector.substr(1)}
 							var oInit = 
 							{
 								mode : "none",
@@ -1357,6 +1358,7 @@ ns1blankspace.format.templates =
 				{
 					var iObject = ns1blankspace.util.getParam(oParam, 'object').value;
 					var iDocument = ns1blankspace.util.getParam(oParam, 'document').value;
+					var sTitleText = ns1blankspace.util.getParam(oParam, 'titleText').value;
 					var oTemplate, aTemplate;
 
 					if (iObject != undefined && ns1blankspace.format.templates.data != undefined)
@@ -1369,6 +1371,10 @@ ns1blankspace.format.templates =
 						{
 							aTemplate = $.grep(aTemplate, function (template) {return template.id == iDocument});
 						}	
+						else if (sTitleText)
+						{
+							aTemplate = $.grep(aTemplate, function (template) {return template.title.toLowerCase().indexOf(sTitleText.toLowerCase()) > -1});
+						}
 
 						if (aTemplate.length != 0) {oTemplate = aTemplate[0]}
 					}

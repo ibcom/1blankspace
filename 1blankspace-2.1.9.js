@@ -610,7 +610,8 @@ ns1blankspace.app =
 								}
 							})
 							.click(function() {
-								ns1blankspace.contact.email.search(ns1blankspace.xhtml.divID, {
+								// 2.1.9 Was calling contact.email.search which doesn't exist??
+								ns1blankspace.search.email.show(ns1blankspace.xhtml.divID, {
 										source: 4, 
 										emailOnly: true,
 										contactBusiness: $('#' + ns1blankspace.xhtml.divID).attr('data-contactbusiness'),
@@ -1483,8 +1484,8 @@ ns1blankspace.app =
 							$('#ns1blankspaceViewControlRefresh').unbind('click').click(function(oParam)
 							{
 								oNS.init({showHome: true});	
-							})
-							
+							});
+
 							$('#ns1blankspaceViewControlViewContainer').button(
 							{
 								label: ns1blankspace.viewName
@@ -3119,7 +3120,7 @@ ns1blankspace.search =
 
 										$.each(aColumns, function(i) 
 										{
-											if (this != 'space' && this != 'comma' && this != 'pipe' && this != 'column')
+											if (this != 'space' && this != 'comma' && this != 'pipe' && this != 'column' && this != 'hyphen')
 											{	
 												if (i != 0)
 												{
@@ -3301,7 +3302,6 @@ ns1blankspace.search =
 						if (bCache && oResponse === undefined)
 						{
 							oResponse = ns1blankspace.search.cache.search({method: sMethod, searchText: sSearchText, columns: sColumns, fixedFilter: sMethodFilter});
-							//oResponse = ns1blankspace.search.cache.search({method: sMethod, searchText: sSearchText, columns: sColumns});
 
 							if (oResponse !== undefined)
 							{
@@ -3353,7 +3353,7 @@ ns1blankspace.search =
 										});
 
 										oSearch.addBracket(")"); 
-									}	
+									}
 									
 									if (sMethodFilter != '')
 									{
@@ -4745,6 +4745,8 @@ ns1blankspace.util =
 
 					if (sValue !== undefined && sValue !== null)
 					{
+						if (!_.isString(sValue)) {sValue = sValue.toString()}
+
 						if (sDateFormat !== undefined)
 						{
 							if (!ns1blankspace.util.isDate(sValue)) {sValue = Date.parse(sValue)}
@@ -5356,7 +5358,7 @@ ns1blankspace.search.email =
 {
 	show: 		function (sXHTMLElementID, oParam)
 				{
-							var iSource = ns1blankspace.data.searchSource.text;
+					var iSource = ns1blankspace.data.searchSource.text;
 					var iMinimumLength = 1;
 					var sMethod;
 					var sSearchText;
@@ -5445,16 +5447,18 @@ ns1blankspace.search.email =
 							oSearch.rows = 15;
 							oSearch.method = 'CONTACT_PERSON_SEARCH';
 							oSearch.addField( 'firstname,surname,contactbusinesstext,contactbusiness,email');
+							oSearch.addFilter('contactbusinesstext', 'TEXT_IS_LIKE', sSearchText);
+							oSearch.addOperator('or');
 							oSearch.addBracket('(');
 							oSearch.addFilter('firstname', 'TEXT_IS_LIKE', (sSearchText != sFirstName) ? sFirstName : sSearchText);
-							oSearch.addOperator('or');
+							oSearch.addOperator((sFirstName != sSurname ? 'and' : 'or'));
 							oSearch.addFilter('surname', 'TEXT_IS_LIKE', (sSearchText != sSurname) ? sSurname : sSearchText);
+							oSearch.addBracket(')');
 							if (bEmailOnly)
 							{
 								oSearch.addOperator('or');
 								oSearch.addFilter('email', 'TEXT_IS_LIKE', sSearchText);
 							}
-							oSearch.addBracket(')');
 							
 							if (sParentElementID != undefined)
 							{
@@ -5531,7 +5535,7 @@ ns1blankspace.search.email =
 							type: 'JSON',
 							functionRow: ns1blankspace.search.email.row
 						}));
-					}				
+					}
 				},
 
 	row: 		function (oParam, oRow)
@@ -5832,7 +5836,7 @@ ns1blankspace.render =
 							break;
 						case 'hyphen':
 							aHTML.push('-');
-							break;		
+							break;
 						default:
 							aHTML.push(oRow[aColumns[i]]);
 						}
