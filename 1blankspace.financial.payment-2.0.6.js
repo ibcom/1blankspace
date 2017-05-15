@@ -80,6 +80,11 @@ ns1blankspace.financial.payment =
 						aHTML.push('<table>');
 						aHTML.push('<tr><td><div id="ns1blankspaceViewFinancialLarge" class="ns1blankspaceViewImageLarge"></div></td></tr>');
 
+						aHTML.push('<tr class="ns1blankspaceControl">' +
+									'<td style="padding-top:18px;" id="ns1blankspaceControlUnallocated" class="ns1blankspaceControl">' +
+										'Unallocated<br /><span class="ns1blankspaceSub" style="font-size:0.75em;">Payment items that have been marked as unallocated and not applied to an expense.</span></td>' +
+									'</tr>');
+
 						if (ns1blankspace.option.paymentShowImages)
 						{
 							aHTML.push('<tr class="ns1blankspaceControl">' +
@@ -91,6 +96,11 @@ ns1blankspace.financial.payment =
 						aHTML.push('</table>');		
 						
 						$('#ns1blankspaceControl').html(aHTML.join(''));
+
+						$('#ns1blankspaceControlUnallocated').click(function(event)
+						{
+							ns1blankspace.financial.payment.unallocated.show();
+						});
 
 						$('#ns1blankspaceControlPaymentImages').click(function(event)
 						{
@@ -1006,6 +1016,8 @@ ns1blankspace.financial.payment =
 				},
 
 	expense: {
+					data: 	{},
+
 					show:		function (oParam, oResponse)
 								{
 									var iObjectContext = ns1blankspace.objectContext;
@@ -1026,7 +1038,7 @@ ns1blankspace.financial.payment =
 										aHTML.push('<table class="ns1blankspaceContainer">');
 										aHTML.push('<tr class="ns1blankspaceContainer">' +
 														'<td id="ns1blankspaceExpenseColumn1" class="ns1blankspaceColumn1Flexible"></td>' +
-														'<td id="ns1blankspaceExpenseColumn2" class="ns1blankspaceColumn2" style="width: 200px;></td>' +
+														'<td id="ns1blankspaceExpenseColumn2" class="ns1blankspaceColumn2" style="width:400px;"></td>' +
 														'</tr>');
 										aHTML.push('</table>');					
 														
@@ -1037,10 +1049,13 @@ ns1blankspace.financial.payment =
 											var aHTML = [];
 																			
 											aHTML.push('<table class="ns1blankspaceColumn2">');
-											
+
+											aHTML.push('<tr><td style="padding-top:0px; padding-bottom:0px; font-size:0.75em;" class="ns1blankspaceSub">Unallocated amount</td>' +
+																'<tr><td id="ns1blankspaceFinancialUnallocatedTotal" style="padding-top:0px; padding-bottom:14px; font-size:1.2em;" class="ns1blankspaceSub"></td></tr>');
+
 											if (oActions.add)
 											{
-												aHTML.push('<tr><td class="ns1blankspaceAction">' +
+												aHTML.push('<tr><td class="ns1blankspaceAction" id="ns1blankspaceExpenseApply">' +
 															'<span id="ns1blankspaceExpenseAdd">Add</span>' +
 															'</td></tr>');
 											}
@@ -1051,12 +1066,14 @@ ns1blankspace.financial.payment =
 										
 											$('#ns1blankspaceExpenseAdd').button(
 											{
-												label: "Add"
+												label: "Allocate"
 											})
 											.click(function() {
 												 ns1blankspace.financial.payment.expense.edit(oParam);
 											})
 										}
+
+										ns1blankspace.financial.payment.expense.items(oParam);
 										
 										var oSearch = new AdvancedSearch();
 										oSearch.method = 'FINANCIAL_PAYMENT_EXPENSE_SEARCH';
@@ -1194,7 +1211,7 @@ ns1blankspace.financial.payment =
 									})
 									.css('width', '15px')
 									.css('height', '17px');
-						},			
+								},			
 
 					remove: 	function (oParam)
 								{
@@ -1209,7 +1226,140 @@ ns1blankspace.financial.payment =
 										dataType: 'json',
 										success: function(data){$('#' + sXHTMLElementID).parent().parent().fadeOut(500)}
 									});
-								}
+								},
+
+					edit: 	function (oParam, oResponse)
+								{
+									if (oResponse == undefined)
+									{
+										var oSearch = new AdvancedSearch();
+										oSearch.method = 'FINANCIAL_EXPENSE_SEARCH';
+										oSearch.addField('expense.lineitem.expenseoutstandingamount,reference,accrueddate,amount,outstandingamount,tax,expense.lineitem.id,expense.lineitem.description,expense.lineitem.amount,expense.lineitem.tax');
+
+										if (ns1blankspace.objectContextData.contactbusinesspaidto != '')
+										{
+											oSearch.addFilter('contactbusinesspaidto', 'EQUAL_TO', ns1blankspace.objectContextData.contactbusinesspaidto);
+										}
+											
+										if (ns1blankspace.objectContextData.contactpersonpaidto != '')
+										{
+											oSearch.addFilter('contactbusinesspaidto', 'EQUAL_TO', ns1blankspace.objectContextData.contactpersonpaidto);
+										}
+											
+										oSearch.addFilter('expense.lineitem.expenseoutstandingamount', 'NOT_EQUAL_TO', 0);
+										oSearch.sort('accrueddate', 'asc');
+										oSearch.rows = 250;
+										oSearch.getResults(function(data) {ns1blankspace.financial.payment.expense.edit(oParam, data)});
+									}
+									else
+									{
+										var aHTML = [];
+									
+										if (oResponse.data.rows.length == 0)
+										{
+											aHTML.push('<table class="ns1blankspaceColumn2">' +
+															'<tr><td class="ns1blankspaceNothing ns1blankspaceSub"><b>There are no expenses to apply this payment to.</b></td></tr>' + 
+															'</table>');
+
+											$('#ns1blankspaceExpenseColumn2').html(aHTML.join(''));
+										}
+										else
+										{
+											ns1blankspace.financial.payment.expense.data.expenses = oResponse.data.rows;
+
+											var oExpenses = _.groupBy(oResponse.data.rows, 'id')
+
+											aHTML.push('<table>');
+											
+											$.each(oExpenses, function(i, aExpenses)
+											{
+												aHTML.push('<tr class="ns1blankspaceRow">');
+												aHTML.push('<td style="width:30%;" class="ns1blankspaceRow ns1blankspaceRowShaded">')
+
+													aHTML.push('<table class="ns1blankspace">');
+
+													aHTML.push('<tr><td id="ns1blankspaceInvoice_reference-' + aExpenses[0].id + '">' +
+																aExpenses[0].reference + '</td></tr>');
+																							
+													aHTML.push('<tr><td id="ns1blankspaceInvoice_date-' + this.id + '" class="ns1blankspaceSubNote">' +
+																ns1blankspace.util.fd(aExpenses[0].accrueddate) + '</td></tr>');
+
+													aHTML.push('<tr><td id="ns1blankspaceInvoice_amount-' + this.id + '" class="ns1blankspaceSubNote">' +
+																aExpenses[0].amount + '</td></tr>');
+
+													aHTML.push('</table>');
+
+												aHTML.push('</td><td class="ns1blankspaceRow" style="padding-left:8px;">');
+
+													aHTML.push('<table class="ns1blankspace">');
+						
+													$.each(aExpenses, function(j, oExpense)
+													{
+														aHTML.push('<tr>');
+
+														aHTML.push('<td id="ns1blankspaceExpense_item_description-' + oExpense.id + '" class="ns1blankspace" style="text-align:left;">' +
+																oExpense['expense.lineitem.description'] + '</td>');
+
+														aHTML.push('<td id="ns1blankspaceExpense_item_amount-' + oExpense.id + '" class="ns1blankspace" style="text-align:right;">' +
+																oExpense['expense.lineitem.expenseoutstandingamount'] + '</td>');
+
+														aHTML.push('<td style="width:20px;text-align:right;" class="ns1blankspace">' +
+																		'<span id="ns1blankspaceExpense_options_apply-' + oExpense.id + '" class="ns1blankspaceExpenseApply"></span>' +
+																		'</td></tr>');
+													});
+														
+													aHTML.push('</table>');
+
+												aHTML.push('</td></tr>');	
+											});
+											
+											aHTML.push('</table>');
+
+											$('#ns1blankspaceExpenseApply').html(aHTML.join(''));
+
+											$('#ns1blankspaceExpenseApply .ns1blankspaceExpenseApply').button(
+											{
+												text: false,
+												icons:
+												{
+													primary: "ui-icon-check"
+												}
+											})
+											.click(function()
+											{
+												oParam.xhtmlElementID = this.id;
+												ns1blankspace.financial.payment.expense.apply(oParam);
+											})
+											.css('width', '15px')
+											.css('height', '17px');
+										}	
+									}
+								},
+
+					items: 	function (oParam, oResponse)
+								{
+									if (oResponse == undefined)
+									{
+										var oSearch = new AdvancedSearch();
+										oSearch.method = 'FINANCIAL_ITEM_SEARCH';
+										oSearch.addField('amount,expenseoutstandingamount,preadjustmentamount');
+										oSearch.addFilter('object', 'EQUAL_TO', ns1blankspace.object);
+										oSearch.addFilter('objectcontext', 'EQUAL_TO', ns1blankspace.objectContext);
+										oSearch.addFilter('financialaccount', 'EQUAL_TO', ns1blankspace.financial.data.settings.financialaccountunallocated.outgoing);
+										oSearch.getResults(function(data) {ns1blankspace.financial.payment.expense.items(oParam, data)});
+									}
+									else
+									{
+										ns1blankspace.financial.payment.expense.data.items = oResponse.data.rows;
+
+										ns1blankspace.financial.payment.expense.data.paymentAmountToApply = 
+														_.sum(_.map(ns1blankspace.financial.payment.expense.data.items, 'expenseoutstandingamount'));
+
+										var sTotal = ns1blankspace.option.currencySymbol + _.toNumber(ns1blankspace.financial.payment.expense.data.paymentAmountToApply.replace(',', '')).formatMoney(2, '.', ',');
+										$('#ns1blankspaceFinancialUnallocatedTotal').html(sTotal);
+										//ns1blankspace.financial.payment.expense.apply.init(oParam);
+									}	
+								}							
 				},
 
 	email: 	{
@@ -1458,7 +1608,76 @@ ns1blankspace.financial.payment =
 										}
 									}	
 								}		
-				}																			
+				},
+
+	unallocated:
+				{
+					show: function (oParam, oResponse)
+					{
+						if (oResponse == undefined)
+						{
+							var oSearch = new AdvancedSearch();
+							oSearch.method = 'FINANCIAL_ITEM_SEARCH';
+							oSearch.addField('amount,lineitem.payment.reference,lineitem.payment.id,financialaccount,description,lineitem.payment.contactbusinesspaidtotext');
+							oSearch.addFilter('financialaccount', 'EQUAL_TO', ns1blankspace.financial.data.settings.financialaccountunallocated.outgoing);
+							oSearch.addFilter('lineitem.payment.reference', 'TEXT_IS_NOT_EMPTY');
+							oSearch.addFilter('amount', 'NOT_EQUAL_TO', 0);
+							oSearch.getResults(function(data)
+							{
+								ns1blankspace.financial.payment.unallocated.show(oParam, data)
+							})
+						}
+						else
+						{
+							var aHTML = [];
+
+							if (oResponse.data.rows.length == 0)
+							{
+								aHTML.push('<table><tr><td class="ns1blankspaceNothing">No unallocated payments.</td></tr></table>');
+
+								$('#ns1blankspaceMain').html(aHTML.join(''));
+							}
+							else
+							{
+								aHTML.push('<table id="ns1blankspaceFinancialPaymentsUnallocated">');
+								aHTML.push('<tr class="ns1blankspaceCaption">');
+								aHTML.push('<td class="ns1blankspaceHeaderCaption">Reference</td>');
+								aHTML.push('<td class="ns1blankspaceHeaderCaption">Paid To</td>');
+								aHTML.push('<td class="ns1blankspaceHeaderCaption">Description</td>');
+								aHTML.push('<td class="ns1blankspaceHeaderCaption" style="text-align:right;">Amount</td>');
+								aHTML.push('</tr>');
+
+								$.each(oResponse.data.rows, function()
+								{
+									aHTML.push('<tr class="ns1blankspaceRow">');
+													
+									aHTML.push('<td id="ns1blankspaceFinancialPaymentsUnallocated_reference-' + this['lineitem.payment.id'] + '" class="ns1blankspaceRow ns1blankspaceRowSelect">' +
+													this['lineitem.payment.reference'] + '</td>');
+
+									aHTML.push('<td id="ns1blankspaceFinancialPaymentsUnallocated_reference-' + this['lineitem.payment.id'] + '" class="ns1blankspaceRow">' +
+													this['lineitem.payment.contactbusinesspaidtotext'] + '</td>');
+
+									aHTML.push('<td id="ns1blankspaceFinancialPaymentsUnallocated_reference-' + this['id'] + '" class="ns1blankspaceRow">' +
+													this['description'] + '</td>');
+															
+									aHTML.push('<td id="ns1blankspaceFinancialPaymentsUnallocated_amount-' + this['id'] + '" class="ns1blankspaceRow" style="text-align:right;">' +
+													this['amount'] + '</td>');
+
+									aHTML.push('</tr>');
+								});
+								
+								aHTML.push('</table>');
+
+								$('#ns1blankspaceMain').html(aHTML.join(''));
+											
+								$('#ns1blankspaceFinancialPaymentsUnallocated td.ns1blankspaceRowSelect').click(function()
+								{
+									ns1blankspace.financial.payment.init({id: (this.id).split('-')[1]});
+								});
+							}
+						}	
+					}
+				}																											
 }
 
 ns1blankspace.financial.payment.images =
@@ -1614,5 +1833,5 @@ ns1blankspace.financial.payment.images =
 
 						$('#ns1blankspacePaymentImageDetailsColumn2').html(aHTML.join(''))
 					}
-				}
+				}									
 }			

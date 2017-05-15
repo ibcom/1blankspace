@@ -69,7 +69,7 @@ ns1blankspace.setup.user =
 						
 						var oSearch = new AdvancedSearch();
 						oSearch.method = 'SETUP_USER_SEARCH';
-						oSearch.addField('username,unrestrictedaccess');
+						oSearch.addField('username,unrestrictedaccess,lastlogon');
 						oSearch.rows = 10;
 						oSearch.sort('modifieddate', 'desc');
 						oSearch.getResults(function (data) {ns1blankspace.setup.user.home(oParam, data)});
@@ -435,14 +435,15 @@ ns1blankspace.setup.user =
 
 						aHTML.push('</td></tr>');
 
-						if (ns1blankspace.objectContextData.lastlogon != '')
+						if (ns1blankspace.objectContextData.lastlogon == '')
 						{
-							aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Last Logon</td></tr>' +
+							ns1blankspace.objectContextData.lastlogon = '<i>Never</i>';
+						}
+						
+						aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Last Logon (UTC)</td></tr>' +
 										'<tr><td id="ns1blankspaceSummaryLastLogon" class="ns1blankspaceSummary">' +
 										ns1blankspace.objectContextData.lastlogon +
 										'</td></tr>');
-						}
-
 
 						if (ns1blankspace.objectContextData.passwordexpiry != '')
 						{

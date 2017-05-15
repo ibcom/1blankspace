@@ -4472,6 +4472,7 @@ ns1blankspace.financial.bankAccount =
 															{
 																oParam = ns1blankspace.util.setParam(oParam, 'xhtmlElementID', this.id);
 																oParam = ns1blankspace.util.setParam(oParam, 'xhtmlElement', this);
+																oParam = ns1blankspace.util.setParam(oParam, 'itemIndex', 0);
 																ns1blankspace.financial.bankAccount.reconcile.items.unreconcile(oParam);
 															})
 															.css('width', '15px')

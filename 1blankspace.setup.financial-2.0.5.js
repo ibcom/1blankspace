@@ -269,7 +269,7 @@ ns1blankspace.setup.financial =
 						aHTML.push('<table class="ns1blankspaceMain">' +
 									'<tr class="ns1blankspaceRow">' +
 									'<td id="ns1blankspaceSummaryColumn1" class="ns1blankspaceColumn1Large"></td>' +
-									'<td id="ns1blankspaceSummaryColumn2" class="ns1blankspaceColumn2Action" style="width:445px;"></td>' +
+									'<td id="ns1blankspaceSummaryColumn2" class="ns1blankspaceColumn2Action" style="width:305px; padding-left:75px;"></td>' +
 									'</tr>' +
 									'</table>');		
 						
@@ -302,6 +302,33 @@ ns1blankspace.setup.financial =
 						aHTML.push('</table>');
 
 						$('#ns1blankspaceSummaryColumn1').html(aHTML.join(''));
+
+						if (ns1blankspace.financial.data.settings.financialaccountunallocated.outgoing == undefined ||
+								ns1blankspace.financial.data.settings.financialaccountunallocated.incoming == undefined)
+						{
+								var aHTML = [];
+						
+								aHTML.push('<table class="ns1blankspace">');
+
+								aHTML.push('<tr><td class="ns1blankspaceHeaderCaption" style="color:red;">UNALLOCATED ACCOUNTS</td></tr>');
+
+								aHTML.push('<tr><td class="ns1blankspaceSubNote" style="padding-top:14px;">To assist with balancing your debtor and creditor lists with the ' +
+													'corresponding financial control accounts, you need to set up two <i>Unallocated</i> financial accounts; ' +
+													'one as an <i>Expense</i> type and the other as a <i>Revenue</i> type.' +
+													'</td></tr>');
+
+								aHTML.push('<tr><td class="ns1blankspaceSubNote" style="padding-top:14px;">Any receipts that are received with no invoice to apply it to ' +
+													'or payments made with no expense to apply it to, but most likely will be in the future, are then linked to the appropriate <i>Unallocated</i> account.' +
+													'</td></tr>')
+
+								aHTML.push('<tr><td class="ns1blankspaceSubNote" style="padding-top:14px;">Then in the future once the expense or invoice is created, the unallocated proportion of the payment or ' +
+													' receipt can be applied to it and moved to the creditor or debtor account - keeping them in balance at all times.' +
+													'</td></tr>');
+
+									aHTML.push('</table>');
+
+						$('#ns1blankspaceSummaryColumn2').html(aHTML.join(''));
+						}
 					}	
 				},
 
@@ -1166,8 +1193,9 @@ ns1blankspace.setup.financial =
 					}		
 				},
 
-	accounts: 	{
-					tree: 		function ()
+	accounts: 	
+				{
+					tree: 	function ()
 								{
 									var oAccounts = ns1blankspace.financial.data.accounts;
 
@@ -1926,7 +1954,7 @@ ns1blankspace.setup.financial =
 
 	template:
 				{
-					init: 		function (oParam)
+					init: 	function (oParam)
 								{
 									var bNew = ns1blankspace.util.getParam(oParam, 'new', {"default": false}).value;
 
@@ -1948,7 +1976,7 @@ ns1blankspace.setup.financial =
 									}	
 								},
 
-					show: 		function (oParam)
+					show: 	function (oParam)
 								{
 									var sTemplate = ns1blankspace.util.getParam(oParam, 'template', {"default": 'invoice'}).value;
 									var iObject = ns1blankspace.util.getParam(oParam, 'object', {"default": 5}).value;
@@ -2189,11 +2217,12 @@ ns1blankspace.setup.financial =
 											var sCounter = $('table.ns1blankspaceTemplateText_' + sTemplate).attr('data-editorcount');
 											$('#ns1blankspaceTemplate_variants-' + iDocument).text(sTitle);
 											ns1blankspace.status.message('Saved');
+											ns1blankspace.format.templates.data = []
 										}
 									});
 								},
 
-					remove:		function (oParam)
+					remove:	function (oParam)
 								{
 									var iDocument = ns1blankspace.util.getParam(oParam, 'document').value;
 									

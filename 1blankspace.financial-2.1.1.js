@@ -161,7 +161,7 @@ ns1blankspace.financial.initData = function (oParam, oResponse)
 										$.ajax(
 										{
 											type: 'GET',
-											url: '/ondemand/setup/setup.asp?method=SETUP_FINANCIAL_SETTINGS_SEARCH&all=1&includefinancialaccounttext=1',
+											url: '/ondemand/setup/?method=SETUP_FINANCIAL_SETTINGS_SEARCH&all=1&includefinancialaccounttext=1',
 											dataType: 'json',
 											success: function(data) {ns1blankspace.financial.initData(oParam, data)}
 										});
@@ -177,8 +177,38 @@ ns1blankspace.financial.initData = function (oParam, oResponse)
 									ns1blankspace.financial.initData($.extend(true, oParam, {step: 3}));
 								}
 							}
-							
+
 							if (iStep == 3)
+							{
+								if (oResponse == undefined)
+								{	
+									var oSearch = new AdvancedSearch();
+									oSearch.method = 'SETUP_FINANCIAL_ACCOUNT_SEARCH';
+									oSearch.addField('title,type');
+									oSearch.addFilter('title', 'TEXT_IS_LIKE', 'Unallocated');					
+									oSearch.getResults(function(data) {ns1blankspace.financial.initData(oParam, data)});	
+								}
+								else
+								{
+									ns1blankspace.financial.data.settings.financialaccountunallocated = {incoming: undefined, outgoing: undefined};
+
+									var oUnallocatedAccount = $.grep(oResponse.data.rows, function (account) {return account.type==2})[0];
+									if (oUnallocatedAccount != undefined)
+									{
+										ns1blankspace.financial.data.settings.financialaccountunallocated.incoming = oUnallocatedAccount.id;
+									}
+
+									var oUnallocatedAccount = $.grep(oResponse.data.rows, function (account) {return account.type==1})[0];
+									if (oUnallocatedAccount != undefined)
+									{
+										ns1blankspace.financial.data.settings.financialaccountunallocated.outgoing = oUnallocatedAccount.id;
+									}
+	
+									ns1blankspace.financial.initData($.extend(true, oParam, {step: 4}));
+								}
+							}	
+							
+							if (iStep == 4)
 							{
 								if (oResponse == undefined)
 								{
@@ -226,26 +256,6 @@ ns1blankspace.financial.initData = function (oParam, oResponse)
 									}	
 								}
 							}
-
-							if (iStep == 4)
-							{
-								if (ns1blankspace.financial.unallocatedAccounts == undefined)
-								{	
-									var oSearch = new AdvancedSearch();
-									oSearch.method = 'SETUP_FINANCIAL_ACCOUNT_SEARCH';
-									oSearch.addField('title,type');
-									oSearch.addFilter('title', 'TEXT_IS_LIKE', 'Unallocated');
-									oSearch.async = false;
-									
-									oSearch.getResults(function(oResponse)
-									{
-										if (oResponse.data.rows.length != 0)
-										{
-											ns1blankspace.financial.unallocatedAccounts = oResponse.data.rows;
-										}
-									});	
-								}
-							}	
 						}
 						else
 						{
@@ -2642,35 +2652,17 @@ ns1blankspace.financial.unallocated =
 					{	
 						if (oResponse == undefined)
 						{
-							if (ns1blankspace.financial.unallocatedAccounts == undefined)
-							{	
-								var oSearch = new AdvancedSearch();
-								oSearch.method = 'SETUP_FINANCIAL_ACCOUNT_SEARCH';
-								oSearch.addField('title,type');
-								oSearch.addFilter('title', 'TEXT_IS_LIKE', 'Unallocated');
-								oSearch.async = false;
-								
-								oSearch.getResults(function(oResponse)
-								{
-									if (oResponse.data.rows.length != 0)
-									{
-										ns1blankspace.financial.unallocatedAccounts = oResponse.data.rows;
-									}
-								});	
-							}
-
 							var iAccountType = 1;
 							if (iType==1 || iType==2) {iAccountType = 2}
-							var oUnallocatedAccount = $.grep(ns1blankspace.financial.unallocatedAccounts, function (account) {return account.type==iAccountType})[0];
+
+							ns1blankspace.financial.unallocatedAccount = ns1blankspace.financial.data.settings.financialaccountunallocated[(iAccountType==1?'outgoing':'incoming')];
 								
-							if (oUnallocatedAccount == undefined)
+							if (ns1blankspace.financial.unallocatedAccount == undefined)
 							{
 								$('#ns1blankspaceUnallocatedColumn2').html('<span class="ns1blankspaceNothing">No unallocated account set up.</span>');
 							}
 							else
 							{	
-								ns1blankspace.financial.unallocatedAccount = oUnallocatedAccount.id;
-
 								$('#ns1blankspaceUnallocatedColumn2').html(ns1blankspace.xhtml.loading);
 
 								var oSearch = new AdvancedSearch();
@@ -2679,7 +2671,7 @@ ns1blankspace.financial.unallocated =
 								{
 									oSearch.method = 'FINANCIAL_INVOICE_SEARCH';
 									oSearch.addField('reference,sentdate,invoice.lineitem.amount,invoice.lineitem.description,invoice.lineitem.id');
-									oSearch.addFilter('invoice.lineitem.financialaccount', 'EQUAL_TO', oUnallocatedAccount.id);
+									oSearch.addFilter('invoice.lineitem.financialaccount', 'EQUAL_TO', ns1blankspace.financial.unallocatedAccount);
 									oSearch.addFilter('invoice.lineitem.amount', 'NOT_EQUAL_TO', 0);
 									oSearch.addFilter('invoice.sent', 'EQUAL_TO', 'N');
 
@@ -2692,7 +2684,7 @@ ns1blankspace.financial.unallocated =
 														oRow["reference"] + '</td>'); 
 
 										aHTML.push('<td id="ns1blankspaceUnallocated_date-' + oRow["id"] + '" class="ns1blankspaceRow">' +
-														oRow["sentdate"] + '</td>'); 
+														ns1blankspace.util.fd(oRow["sentdate"]) + '</td>'); 
 
 										aHTML.push('<td id="ns1blankspaceUnallocated_description-' + oRow["id"] + '" class="ns1blankspaceRow">' +
 														oRow["invoice.lineitem.description"] + '</td>'); 
@@ -2712,7 +2704,7 @@ ns1blankspace.financial.unallocated =
 								{
 									oSearch.method = 'FINANCIAL_RECEIPT_SEARCH';
 									oSearch.addField('reference,receiveddate,receipt.lineitem.amount,receipt.lineitem.description,receipt.lineitem.id');
-									oSearch.addFilter('receipt.lineitem.financialaccount', 'EQUAL_TO', oUnallocatedAccount.id);
+									oSearch.addFilter('receipt.lineitem.financialaccount', 'EQUAL_TO', ns1blankspace.financial.unallocatedAccount);
 									oSearch.addFilter('receipt.lineitem.amount', 'NOT_EQUAL_TO', 0);
 
 									ns1blankspace.financial.unallocated.row = function (oRow)
@@ -2724,7 +2716,7 @@ ns1blankspace.financial.unallocated =
 														oRow["reference"] + '</td>'); 
 
 										aHTML.push('<td id="ns1blankspaceUnallocated_date-' + oRow["id"] + '" class="ns1blankspaceRow">' +
-														oRow["receiveddate"] + '</td>'); 
+														ns1blankspace.util.fd(oRow["receiveddate"]) + '</td>'); 
 
 										aHTML.push('<td id="ns1blankspaceUnallocated_description-' + oRow["id"] + '" class="ns1blankspaceRow">' +
 														oRow["receipt.lineitem.description"] + '</td>'); 
@@ -2747,7 +2739,7 @@ ns1blankspace.financial.unallocated =
 								{
 									oSearch.method = 'FINANCIAL_EXPENSE_SEARCH';
 									oSearch.addField('reference,accrueddate,expense.lineitem.amount,expense.lineitem.description,expense.lineitem.id');
-									oSearch.addFilter('expense.lineitem.financialaccount', 'EQUAL_TO', oUnallocatedAccount.id);
+									oSearch.addFilter('expense.lineitem.financialaccount', 'EQUAL_TO', ns1blankspace.financial.unallocatedAccount);
 									oSearch.addFilter('expense.lineitem.amount', 'NOT_EQUAL_TO', 0);
 
 									ns1blankspace.financial.unallocated.row = function (oRow)
@@ -2759,7 +2751,7 @@ ns1blankspace.financial.unallocated =
 														oRow["reference"] + '</td>'); 
 
 										aHTML.push('<td id="ns1blankspaceUnallocated_date-' + oRow["id"] + '" class="ns1blankspaceRow">' +
-														oRow["accrueddate"] + '</td>'); 
+														ns1blankspace.util.fd(oRow["accrueddate"]) + '</td>'); 
 
 										aHTML.push('<td id="ns1blankspaceUnallocated_description-' + oRow["id"] + '" class="ns1blankspaceRow">' +
 														oRow["expense.lineitem.description"] + '</td>'); 
@@ -2779,7 +2771,7 @@ ns1blankspace.financial.unallocated =
 								{
 									oSearch.method = 'FINANCIAL_PAYMENT_SEARCH';
 									oSearch.addField('reference,paiddate,payment.lineitem.amount,payment.lineitem.description,payment.lineitem.id');
-									oSearch.addFilter('payment.lineitem.financialaccount', 'EQUAL_TO', oUnallocatedAccount.id);
+									oSearch.addFilter('payment.lineitem.financialaccount', 'EQUAL_TO', ns1blankspace.financial.unallocatedAccount);
 									oSearch.addFilter('payment.lineitem.amount', 'NOT_EQUAL_TO', 0);
 
 									ns1blankspace.financial.unallocated.row = function (oRow)
@@ -2791,7 +2783,7 @@ ns1blankspace.financial.unallocated =
 														oRow["reference"] + '</td>'); 
 
 										aHTML.push('<td id="ns1blankspaceUnallocated_date-' + oRow["id"] + '" class="ns1blankspaceRow">' +
-														oRow["paiddate"] + '</td>'); 
+														ns1blankspace.util.fd(oRow["paiddate"]) + '</td>'); 
 
 										aHTML.push('<td id="ns1blankspaceUnallocated_description-' + oRow["id"] + '" class="ns1blankspaceRow">' +
 														oRow["payment.lineitem.description"] + '</td>'); 
