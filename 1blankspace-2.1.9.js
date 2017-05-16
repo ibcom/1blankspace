@@ -3050,10 +3050,11 @@ ns1blankspace.container =
 											{'default': [{text: "OK", icons: {primary: 'ui-icon-check'}, click: function() {$(this).dialog('close')}}]}).value;
 					
 
-					$('#ns1blankspaceMultiUseDialog').html(sHTML);
-					$('#ns1blankspaceMultiUseDialog').css('font-size', '0.75em');	
-
-					$('#ns1blankspaceMultiUseDialog').dialog(
+					$('#ns1blankspaceMultiUseDialog')
+						.html(sHTML)
+						.css('font-size', '0.75em')
+						.css('position', 'static')
+						.dialog(
 						{
 							resizable: false,
 							modal: true,
