@@ -3212,7 +3212,7 @@ ns1blankspace.search =
 					var iColumn = 0;
 					var sMethodFilter;
 					var bMultiSelect;
-					var fOnComplete;
+					var fOnComplete = ns1blankspace.util.getParam(oParam, 'onComplete').value;
 						
 					if (oParam != undefined)
 					{
