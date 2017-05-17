@@ -1124,9 +1124,9 @@ ns1blankspace.financial.receipt =
 										});
 
 										ns1blankspace.financial.receipt.invoice.data.receiptAmountToApply = 
-														_.sum(_.map(ns1blankspace.financial.receipt.invoice.data.items, 'invoiceoutstandingamount'));
+														_.sum(_.map(ns1blankspace.financial.receipt.invoice.data.items, function (i) {return _.toNumber(numeral(i.invoiceoutstandingamount).value())}));
 
-										var sTotal = ns1blankspace.option.currencySymbol + _.toNumber(ns1blankspace.financial.receipt.invoice.data.receiptAmountToApply.replace(',', '')).formatMoney(2, '.', ',');
+										var sTotal = ns1blankspace.option.currencySymbol + ns1blankspace.financial.receipt.invoice.data.receiptAmountToApply.formatMoney(2, '.', ',');
 										$('#ns1blankspaceFinancialUnallocatedTotal').html(sTotal);
 									}	
 								},		
@@ -1137,7 +1137,7 @@ ns1blankspace.financial.receipt =
 													var iInvoiceLineItemID = ns1blankspace.util.getParam(oParam, 'xhtmlElementID', {index: 1}).value;
 
 													ns1blankspace.financial.receipt.invoice.data.receiptAmountToApply = 
-															_.sum(_.map(ns1blankspace.financial.receipt.invoice.data.items, 'outstandingamount'));
+															_.sum(_.map(ns1blankspace.financial.receipt.invoice.data.items, function (i) {return _.toNumber(numeral(i.outstandingamount).value())}));
 
 													ns1blankspace.financial.receipt.invoice.data.receiptAmountApplied = 0;
 												
@@ -1186,11 +1186,19 @@ ns1blankspace.financial.receipt =
 															ns1blankspace.financial.receipt.invoice.data.invoiceItemOutstandingAmount -
 															ns1blankspace.financial.receipt.invoice.data.applyAmount;
 
-														
 														var oData =
 														{
-															id: ns1blankspace.financial.receipt.invoice.data.receiptItem.id,
-															amount: ns1blankspace.financial.receipt.invoice.data.receiptItemAmount -
+															id: ns1blankspace.financial.receipt.invoice.data.receiptItem.id
+														}
+
+														if ((ns1blankspace.financial.receipt.invoice.data.receiptItemAmount -
+																			ns1blankspace.financial.receipt.invoice.data.applyAmount) == 0)
+														{
+															oData.remove = 1
+														}
+														else
+														{
+															oData.amount = ns1blankspace.financial.receipt.invoice.data.receiptItemAmount -
 																			ns1blankspace.financial.receipt.invoice.data.applyAmount
 														}
 
@@ -1218,10 +1226,12 @@ ns1blankspace.financial.receipt =
 																	dataType: 'json',
 																	success: function(data)
 																	{
+																		var iReceiptItemDebtorID = data.id;
+
 																		var oData =
 																		{
 																			invoicelineitem: ns1blankspace.financial.receipt.invoice.data.invoiceItem['invoice.lineitem.id'],
-																			receiptlineitem: ns1blankspace.financial.receipt.invoice.data.receiptItem.id,
+																			receiptlineitem: iReceiptItemDebtorID,
 																			amount: ns1blankspace.financial.receipt.invoice.data.applyAmount
 																		};
 
@@ -1245,7 +1255,7 @@ ns1blankspace.financial.receipt =
 													else
 													{
 														ns1blankspace.status.message('Allocated');
-														ns1blankspace.financial.invoice.show();
+														ns1blankspace.financial.receipt.invoice.show();
 													}
 												}
 								},		
@@ -1273,7 +1283,7 @@ ns1blankspace.financial.receipt =
 											var oData = 
 											{
 												id: iReceiptItemID,
-												financialaccount: ns1blankspace.financial.data.settings.financialaccountunallocated.outgoing
+												financialaccount: ns1blankspace.financial.data.settings.financialaccountunallocated.incoming
 											}	
 														
 											$.ajax(
@@ -1284,7 +1294,7 @@ ns1blankspace.financial.receipt =
 												dataType: 'json',
 												success: function(data)
 												{
-													ns1blankspace.financial.invoice.show()
+													ns1blankspace.financial.receipt.invoice.show()
 												}
 											});		
 										}

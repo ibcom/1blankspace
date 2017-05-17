@@ -1788,21 +1788,7 @@ ns1blankspace.financial.invoice =
 											ns1blankspace.financial.invoice.refresh();
 										}
 									});
-								},
-
-					unallocated: function (oParam, oResponse)
-								{
-									var oSearch = new AdvancedSearch();
-									oSearch.method = 'FINANCIAL_ITEM_SEARCH';
-									oSearch.addField(ns1blankspace.financial.invoicing.unsent.preview.data.fields);
-									oSearch.addFilter('object', 'EQUAL_TO', 5);
-									oSearch.addFilter('objectcontext', 'EQUAL_TO', oData.id);
-									oSearch.sort('id', 'asc');
-									oSearch.getResults(function(oResponse)
-									{
-									}
-
-								},						
+								},	
 
 					edit:		function (oParam, oResponse)
 								{
