@@ -60,7 +60,7 @@ ns1blankspace.financial.payment =
 					}
 				},			
 
-	home: 		function (oParam, oResponse)
+	home: 	function (oParam, oResponse)
 				{
 					if (oResponse == undefined)
 					{
@@ -89,7 +89,7 @@ ns1blankspace.financial.payment =
 						{
 							aHTML.push('<tr class="ns1blankspaceControl">' +
 									'<td style="padding-top:15px;" id="ns1blankspaceControlPaymentImages" class="ns1blankspaceControl">' +
-											'Payment<br />Receipts<br /><span class="ns1blankspaceSub" style="font-size:0.75em;">photos</span></td>' +
+											'Payment<br />payments<br /><span class="ns1blankspaceSub" style="font-size:0.75em;">photos</span></td>' +
 									'</tr>');
 						}
 
@@ -1142,16 +1142,16 @@ ns1blankspace.financial.payment =
 
 									aHTML.push('<tr class="ns1blankspaceRow">');
 																							
-									aHTML.push('<td id="ns1blankspaceReceipt_reference-' + oRow.id + '" class="ns1blankspaceRow">' +
+									aHTML.push('<td id="ns1blankspacepayment_reference-' + oRow.id + '" class="ns1blankspaceRow">' +
 													oRow.expensetext + '</td>');
 																								
-									aHTML.push('<td id="ns1blankspaceReceipt_date-' + oRow.id + '" class="ns1blankspaceRow">' +
+									aHTML.push('<td id="ns1blankspacepayment_date-' + oRow.id + '" class="ns1blankspaceRow">' +
 													oRow.appliesdate + '</td>');
 
-									aHTML.push('<td id="ns1blankspaceReceipt_amount-' + oRow.id + '" class="ns1blankspaceRow" style="text-align:right;">' +
+									aHTML.push('<td id="ns1blankspacepayment_amount-' + oRow.id + '" class="ns1blankspaceRow" style="text-align:right;">' +
 													oRow.amount + '</td>');
 
-									aHTML.push('<td id="ns1blankspaceReceipt_tax-' + oRow.id + '" class="ns1blankspaceRow" style="text-align:right;">' +
+									aHTML.push('<td id="ns1blankspacepayment_tax-' + oRow.id + '" class="ns1blankspaceRow" style="text-align:right;">' +
 													oRow.tax + '</td>');
 
 									aHTML.push('<td style="width:60px;text-align:right;" class="ns1blankspaceRow">');
@@ -1297,14 +1297,14 @@ ns1blankspace.financial.payment =
 													{
 														aHTML.push('<tr>');
 
-														aHTML.push('<td id="ns1blankspaceExpense_item_description-' + oExpense.id + '" class="ns1blankspace" style="text-align:left;">' +
+														aHTML.push('<td id="ns1blankspaceExpense_item_description-' + oExpense['expense.lineitem.id'] + '" class="ns1blankspace" style="text-align:left;">' +
 																oExpense['expense.lineitem.description'] + '</td>');
 
-														aHTML.push('<td id="ns1blankspaceExpense_item_amount-' + oExpense.id + '" class="ns1blankspace" style="text-align:right;">' +
+														aHTML.push('<td id="ns1blankspaceExpense_item_amount-' + oExpense['expense.lineitem.id'] + '" class="ns1blankspace" style="text-align:right;">' +
 																oExpense['expense.lineitem.expenseoutstandingamount'] + '</td>');
 
 														aHTML.push('<td style="width:20px;text-align:right;" class="ns1blankspace">' +
-																		'<span id="ns1blankspaceExpense_options_apply-' + oExpense.id + '" class="ns1blankspaceExpenseApply"></span>' +
+																		'<span id="ns1blankspaceExpense_options_apply-' + oExpense['expense.lineitem.id'] + '" class="ns1blankspaceExpenseApply"></span>' +
 																		'</td></tr>');
 													});
 														
@@ -1327,8 +1327,7 @@ ns1blankspace.financial.payment =
 											})
 											.click(function()
 											{
-												oParam.xhtmlElementID = this.id;
-												ns1blankspace.financial.payment.expense.apply(oParam);
+												ns1blankspace.financial.payment.expense.apply.init({xhtmlElementID: this.id});
 											})
 											.css('width', '15px')
 											.css('height', '17px');
@@ -1352,14 +1351,147 @@ ns1blankspace.financial.payment =
 									{
 										ns1blankspace.financial.payment.expense.data.items = oResponse.data.rows;
 
-										ns1blankspace.financial.payment.expense.data.paymentAmountToApply = 
-														_.sum(_.map(ns1blankspace.financial.payment.expense.data.items, 'expenseoutstandingamount'));
+										$.each(ns1blankspace.financial.payment.expense.data.items, function (i, item)
+										{
+											item.outstandingamount = numeral(item['expenseoutstandingamount']).value();
+										});
 
-										var sTotal = ns1blankspace.option.currencySymbol + _.toNumber(ns1blankspace.financial.payment.expense.data.paymentAmountToApply.replace(',', '')).formatMoney(2, '.', ',');
+										ns1blankspace.financial.payment.expense.data.paymentAmountToApply = 
+														_.sum(_.map(ns1blankspace.financial.payment.expense.data.items, function (i) {return _.toNumber(numeral(i.expenseoutstandingamount).value())}));
+
+										var sTotal = ns1blankspace.option.currencySymbol + ns1blankspace.financial.payment.expense.data.paymentAmountToApply.formatMoney(2, '.', ',');
 										$('#ns1blankspaceFinancialUnallocatedTotal').html(sTotal);
-										//ns1blankspace.financial.payment.expense.apply.init(oParam);
 									}	
-								}							
+								},						
+
+					apply: 	{
+									init:		function (oParam)
+												{		
+													var iExpenseLineItemID = ns1blankspace.util.getParam(oParam, 'xhtmlElementID', {index: 1}).value;
+
+													ns1blankspace.financial.payment.expense.data.paymentAmountToApply = 
+														_.sum(_.map(ns1blankspace.financial.payment.expense.data.items, function (i) {return _.toNumber(numeral(i.expenseoutstandingamount).value())}));
+
+													ns1blankspace.financial.payment.expense.data.paymentAmountApplied = 0;
+												
+													if (ns1blankspace.financial.payment.expense.data.expenses != undefined)
+													{
+														ns1blankspace.financial.payment.expense.data.expenseItem = $.grep(ns1blankspace.financial.payment.expense.data.expenses,
+																function (expense) {return expense['expense.lineitem.id'] == iExpenseLineItemID});
+
+														if (ns1blankspace.financial.payment.expense.data.expenseItem.length == 1)
+														{
+															ns1blankspace.financial.payment.expense.data.expenseItem =
+																ns1blankspace.financial.payment.expense.data.expenseItem[0];
+
+															ns1blankspace.financial.payment.expense.data.expenseItemOutstandingAmount = 
+															numeral(ns1blankspace.financial.payment.expense.data.expenseItem['expense.lineitem.expenseoutstandingamount']).value();
+
+															ns1blankspace.util.setParam(oParam, 'index', 0);
+
+															ns1blankspace.status.working('Allocating...')
+
+															ns1blankspace.financial.payment.expense.apply.process(oParam);
+														}	
+													}	
+												},
+
+									process:	function (oParam, oResponse)
+												{												
+													var iIndex = ns1blankspace.util.getParam(oParam, 'index').value;
+
+													if (iIndex < ns1blankspace.financial.payment.expense.data.items.length &&
+															ns1blankspace.financial.payment.expense.data.expenseItemOutstandingAmount != 0)
+													{
+														ns1blankspace.financial.payment.expense.data.paymentItem = ns1blankspace.financial.payment.expense.data.items[iIndex];
+
+														ns1blankspace.financial.payment.expense.data.paymentItemAmount =
+															numeral(ns1blankspace.financial.payment.expense.data.paymentItem.expenseoutstandingamount).value();
+
+														ns1blankspace.financial.payment.expense.data.applyAmount = ns1blankspace.financial.payment.expense.data.paymentItemAmount;
+
+														if (ns1blankspace.financial.payment.expense.data.applyAmount > ns1blankspace.financial.payment.expense.data.expenseItemOutstandingAmount)
+														{
+															ns1blankspace.financial.payment.expense.data.applyAmount = ns1blankspace.financial.payment.expense.data.expenseItemOutstandingAmount
+														}
+
+														ns1blankspace.financial.payment.expense.data.expenseItemOutstandingAmount =
+															ns1blankspace.financial.payment.expense.data.expenseItemOutstandingAmount -
+															ns1blankspace.financial.payment.expense.data.applyAmount;
+
+														var oData =
+														{
+															id: ns1blankspace.financial.payment.expense.data.paymentItem.id
+														}
+
+														if ((ns1blankspace.financial.payment.expense.data.paymentItemAmount -
+																			ns1blankspace.financial.payment.expense.data.applyAmount) == 0)
+														{
+															oData.remove = 1
+														}
+														else
+														{
+															oData.amount = ns1blankspace.financial.payment.expense.data.paymentItemAmount -
+																			ns1blankspace.financial.payment.expense.data.applyAmount
+														}
+
+														$.ajax(
+														{
+															type: 'POST',
+															url: ns1blankspace.util.endpointURI('FINANCIAL_ITEM_MANAGE'),
+															data: oData,
+															dataType: 'json',
+															success: function(data)
+															{
+																var oData =
+																{
+																	financialaccount: ns1blankspace.financial.data.settings.financialaccountcreditor,
+																	amount: ns1blankspace.financial.payment.expense.data.applyAmount,
+																	object: ns1blankspace.object,
+																	objectcontext: ns1blankspace.objectContext
+																}
+
+																$.ajax(
+																{
+																	type: 'POST',
+																	url: ns1blankspace.util.endpointURI('FINANCIAL_ITEM_MANAGE'),
+																	data: oData,
+																	dataType: 'json',
+																	success: function(data)
+																	{
+																		var iPaymentItemCreditorID = data.id;
+
+																		var oData =
+																		{
+																			expenselineitem: ns1blankspace.financial.payment.expense.data.expenseItem['expense.lineitem.id'],
+																			paymentlineitem: iPaymentItemCreditorID,
+																			amount: ns1blankspace.financial.payment.expense.data.applyAmount
+																		};
+
+																		$.ajax(
+																		{
+																			type: 'POST',
+																			url: ns1blankspace.util.endpointURI('FINANCIAL_PAYMENT_EXPENSE_MANAGE'),
+																			data: oData,
+																			dataType: 'json',
+																			success: function(data)
+																			{
+																				ns1blankspace.util.setParam(oParam, 'index', iIndex + 1);
+																				ns1blankspace.financial.payment.expense.apply.process(oParam);
+																			}
+																		});		
+																	}
+																});		
+															}
+														});				
+													}
+													else
+													{
+														ns1blankspace.status.message('Allocated');
+														ns1blankspace.financial.payment.expense.show();
+													}
+												}
+								}
 				},
 
 	email: 	{
@@ -1714,7 +1846,7 @@ ns1blankspace.financial.payment.images =
 						if (oResponse.data.rows.length == 0)
 						{
 							aHTML.push('<table>' +
-											'<tr><td class="ns1blankspaceSubNote">No upload payment receipt photos.</td></tr></table>');
+											'<tr><td class="ns1blankspaceSubNote">No upload payment payment photos.</td></tr></table>');
 
 							$('#ns1blankspacePaymentImagesColumn1').html('');
 						}
