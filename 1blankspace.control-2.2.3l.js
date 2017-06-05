@@ -50,7 +50,8 @@ ns1blankspace.option = $.extend(true, ns1blankspace.option,
 	pdfStyles: '<link rel=stylesheet href="/site/312/1blankspace-2.0.2.css">',
 	superUser: undefined,
 	messagingCheckURL: 'https://mail.lab.ibcom.biz',
-	messagingSaveDraft: 99999999
+	messagingSaveDraft: 99999999,
+	financialOverride: true
 });
 
 ns1blankspace.formFactor.size.value = ns1blankspace.formFactor.size.options.medium;
@@ -206,7 +207,7 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.financial.tax',
-		source: '/site/312/1blankspace.financial.tax-2.0.2.js'
+		source: '/site/312/1blankspace.financial.tax-2.0.3.js'
 	},
 	{
 		nameSpace: '1blankspace.financial.payroll',

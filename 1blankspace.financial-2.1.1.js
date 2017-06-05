@@ -4082,6 +4082,11 @@ ns1blankspace.financial.invoicing =
 											oDataItem.objectContext = oData.id;
 											delete oDataItem.id;
 
+											if (ns1blankspace.option.financialOverride)
+											{
+												oDataItem.override = 'Y'
+											}	
+
 											$.ajax(
 											{
 												type: 'POST',
@@ -4860,6 +4865,11 @@ ns1blankspace.financial.item =
 				if (ns1blankspace.option.financialShowProjects)
 				{
 					oData.project = $('#ns1blankspaceItemProject').attr('data-id');
+				}
+
+				if (ns1blankspace.option.financialOverride)
+				{
+					oData.override = 'Y'
 				}	
 							
 				$.ajax(
@@ -5073,6 +5083,11 @@ ns1blankspace.financial.save =
 							amount: cAmount,
 							description: sItemDescription,
 							taxtype: iTaxType
+						}
+
+						if (ns1blankspace.option.financialOverride)
+						{
+							oData.override = 'Y'
 						}	
 
 						$.ajax(

@@ -1009,7 +1009,7 @@ ns1blankspace.financial.receipt =
 											
 										if (ns1blankspace.objectContextData.contactpersonreceivedfrom != '')
 										{
-											oSearch.addFilter('contactbusinesssentto', 'EQUAL_TO', ns1blankspace.objectContextData.contactpersonreceivedfrom);
+											oSearch.addFilter('contactpersonsentto', 'EQUAL_TO', ns1blankspace.objectContextData.contactpersonreceivedfrom);
 										}
 											
 										oSearch.addFilter('invoice.lineitem.invoiceoutstandingamount', 'NOT_EQUAL_TO', 0);
@@ -1202,6 +1202,11 @@ ns1blankspace.financial.receipt =
 																			ns1blankspace.financial.receipt.invoice.data.applyAmount
 														}
 
+														if (ns1blankspace.option.financialOverride)
+														{
+															oData.override = 'Y'
+														}
+
 														$.ajax(
 														{
 															type: 'POST',
@@ -1284,7 +1289,12 @@ ns1blankspace.financial.receipt =
 											{
 												id: iReceiptItemID,
 												financialaccount: ns1blankspace.financial.data.settings.financialaccountunallocated.incoming
-											}	
+											}
+
+											if (ns1blankspace.option.financialOverride)
+											{
+												oData.override = 'Y'
+											}
 														
 											$.ajax(
 											{
@@ -1311,7 +1321,8 @@ ns1blankspace.financial.receipt =
 						{
 							var oSearch = new AdvancedSearch();
 							oSearch.method = 'FINANCIAL_ITEM_SEARCH';
-							oSearch.addField('amount,lineitem.receipt.reference,lineitem.receipt.id,financialaccount,description,lineitem.receipt.contactbusinessreceivedfromtext');
+							oSearch.addField('amount,lineitem.receipt.reference,lineitem.receipt.id,financialaccount,description,lineitem.receipt.contactbusinessreceivedfromtext,' +
+													'lineitem.receipt.contactpersonreceivedfromtext');
 							oSearch.addFilter('financialaccount', 'EQUAL_TO', ns1blankspace.financial.data.settings.financialaccountunallocated.incoming);
 							oSearch.addFilter('lineitem.receipt.reference', 'TEXT_IS_NOT_EMPTY');
 							oSearch.addFilter('amount', 'NOT_EQUAL_TO', 0);
@@ -1335,7 +1346,8 @@ ns1blankspace.financial.receipt =
 								aHTML.push('<table id="ns1blankspaceFinancialReceiptsUnallocated">');
 								aHTML.push('<tr class="ns1blankspaceCaption">');
 								aHTML.push('<td class="ns1blankspaceHeaderCaption">Reference</td>');
-								aHTML.push('<td class="ns1blankspaceHeaderCaption">Received From</td>');
+								aHTML.push('<td class="ns1blankspaceHeaderCaption">Business</td>');
+								aHTML.push('<td class="ns1blankspaceHeaderCaption">Person</td>');
 								aHTML.push('<td class="ns1blankspaceHeaderCaption">Description</td>');
 								aHTML.push('<td class="ns1blankspaceHeaderCaption" style="text-align:right;">Amount</td>');
 								aHTML.push('</tr>');
@@ -1347,10 +1359,13 @@ ns1blankspace.financial.receipt =
 									aHTML.push('<td id="ns1blankspaceFinancialReceiptsUnallocated_reference-' + this['lineitem.receipt.id'] + '" class="ns1blankspaceRow ns1blankspaceRowSelect">' +
 													this['lineitem.receipt.reference'] + '</td>');
 
-									aHTML.push('<td id="ns1blankspaceFinancialReceiptsUnallocated_reference-' + this['lineitem.receipt.id'] + '" class="ns1blankspaceRow">' +
+									aHTML.push('<td id="ns1blankspaceFinancialReceiptsUnallocated_business-' + this['lineitem.receipt.id'] + '" class="ns1blankspaceRow">' +
 													this['lineitem.receipt.contactbusinessreceivedfromtext'] + '</td>');
 
-									aHTML.push('<td id="ns1blankspaceFinancialReceiptsUnallocated_reference-' + this['id'] + '" class="ns1blankspaceRow">' +
+									aHTML.push('<td id="ns1blankspaceFinancialReceiptsUnallocated_person-' + this['lineitem.receipt.id'] + '" class="ns1blankspaceRow">' +
+													this['lineitem.receipt.contactpersonreceivedfromtext'] + '</td>');
+
+									aHTML.push('<td id="ns1blankspaceFinancialReceiptsUnallocated_description-' + this['id'] + '" class="ns1blankspaceRow">' +
 													this['description'] + '</td>');
 															
 									aHTML.push('<td id="ns1blankspaceFinancialReceiptsUnallocated_amount-' + this['id'] + '" class="ns1blankspaceRow" style="text-align:right;">' +

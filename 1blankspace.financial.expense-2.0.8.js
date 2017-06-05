@@ -1565,7 +1565,7 @@ ns1blankspace.financial.expense.outstanding =
 										sContact + '</td>');
 
 					aHTML.push('<td id="ns1blankspaceExpenseOutstanding_description-' + oRow["id"] + '" class="ns1blankspaceRow">' +
-									oRow["description"] + '</td>');
+									'<div>' + oRow["description"] + '</div><div class="ns1blankspaceSubNote">' + oRow["reference"] + '</div></td>');
 
 					aHTML.push('<td id="ns1blankspaceExpenseOutstanding_amount-' + oRow["id"] + '" class="ns1blankspaceRow" style="text-align:right;">' +
 									oRow["outstandingamount"] + '</td>'); 

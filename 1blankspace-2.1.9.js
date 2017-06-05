@@ -6400,11 +6400,18 @@ ns1blankspace.remove =
 						{	
 							if (oResponse === undefined)
 							{	
+								var oData = {remove: 1, id: sID}
+
+								if (ns1blankspace.option.financialOverride)
+								{
+									oData.override = 'Y'
+								}
+
 								$.ajax(
 								{
 									type: 'POST',
 									url: ns1blankspace.util.endpointURI(sMethod),
-									data: 'remove=1&id=' + sID,
+									data: oData,
 									dataType: 'json',
 									success: function(data){ns1blankspace.remove(oParam, data)}
 								});
