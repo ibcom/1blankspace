@@ -197,7 +197,10 @@ ns1blankspace.financial.payment =
 										oSearch.addField('contactbusinesspaidtotext,contactbusinesspaidto,contactpersonpaidtotext,' +
 																			'contactpersonpaidto,projecttext,project,areatext,' +
 																			'area,reference,paiddate,description,amount,tax,bankaccount,' +
-																			'reconciliation,reconciliationtext,sourcebanktransaction,sourcebanktransactiontext,' +
+																			'reconciliation,reconciliationtext,' +
+																			'payment.sourcebanktransaction.amount,' +
+																			'payment.sourcebanktransaction.posteddate,' +
+																			'payment.sourcebanktransaction.notes,' +
 																			'payment.contactpersonpaidto.email',
 																			'payment.contactbusinesspaidto.email');
 
@@ -521,7 +524,7 @@ ns1blankspace.financial.payment =
 						aHTML.push('<table class="ns1blankspaceMain">' +
 										'<tr class="ns1blankspaceRow">' +
 										'<td id="ns1blankspaceSummaryColumn1" class="ns1blankspaceColumn1Flexible"></td>' +
-										'<td id="ns1blankspaceSummaryColumn2" class="ns1blankspaceColumn2Action" style="width:80px;"></td>' +
+										'<td id="ns1blankspaceSummaryColumn2" class="ns1blankspaceColumn2Action" style="width:260px;"></td>' +
 										'</tr>' +
 										'</table>');				
 						
@@ -613,7 +616,7 @@ ns1blankspace.financial.payment =
 								aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Not paid</td></tr>');			
 							}
 
-							aHTML.push('<tr><td class="ns1blankspaceSub" style="padding-top:12px;">');
+							aHTML.push('<tr><td class="ns1blankspaceSummaryCaption" style="padding-top:12px;">');
 							
 							if (ns1blankspace.objectContextData.reconciliation == '')
 							{
@@ -623,9 +626,21 @@ ns1blankspace.financial.payment =
 							{
 									aHTML.push('This payment has been reconciled!');
 							}
-							
+
 							aHTML.push('</td></tr>');
 
+							if (ns1blankspace.objectContextData['payment.sourcebanktransaction.posteddate'] != '')
+							{
+								aHTML.push('<tr><td id="ns1blankspaceSummaryBankTransaction" class="ns1blankspaceSummary ns1blankspaceSubNote">' +
+												ns1blankspace.util.fd(ns1blankspace.objectContextData['payment.sourcebanktransaction.posteddate'])+
+												'<br />' +
+												ns1blankspace.option.currencySymbol +
+												Math.abs(ns1blankspace.objectContextData['payment.sourcebanktransaction.amount'].replace(',', '')) +
+												'<br />' +
+												ns1blankspace.objectContextData['payment.sourcebanktransaction.notes']+
+												'</td></tr>');
+							}
+							
 							if (ns1blankspace.financial.data.bankaccounts.length == 0)
 							{
 								aHTML.push('<tr><td class="ns1blankspaceSub" style="color:red;">' +
@@ -1077,7 +1092,7 @@ ns1blankspace.financial.payment =
 										
 										var oSearch = new AdvancedSearch();
 										oSearch.method = 'FINANCIAL_PAYMENT_EXPENSE_SEARCH';
-										oSearch.addField('expense,expensetext,appliesdate,amount,tax');
+										oSearch.addField('expense,expensetext,appliesdate,amount,tax,paymentexpense.expense.accrueddate');
 										oSearch.addFilter('payment', 'EQUAL_TO', iObjectContext);
 										oSearch.sort('appliesdate', 'asc');
 										oSearch.rows = 100;
@@ -1146,7 +1161,7 @@ ns1blankspace.financial.payment =
 													oRow.expensetext + '</td>');
 																								
 									aHTML.push('<td id="ns1blankspacepayment_date-' + oRow.id + '" class="ns1blankspaceRow">' +
-													oRow.appliesdate + '</td>');
+													ns1blankspace.util.fd(oRow['paymentexpense.expense.accrueddate']) + '</td>');
 
 									aHTML.push('<td id="ns1blankspacepayment_amount-' + oRow.id + '" class="ns1blankspaceRow" style="text-align:right;">' +
 													oRow.amount + '</td>');

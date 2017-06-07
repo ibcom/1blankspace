@@ -1075,10 +1075,11 @@ ns1blankspace.financial.debtors =
 												oSearch.addFilter('contactpersonsentto', 'EQUAL_TO', (oData.key).split('_')[1]);
 											}	
 											
-											oSearch.addFilter('outstandingamount', 'GREATER_THAN', 0);
-											oSearch.addFilter('duedate', 'LESS_THAN_OR_EQUAL_TO', Date.today().toString("dd MMM yyyy"));
+											oSearch.addFilter('outstandingamount', 'NOT_EQUAL_TO', 0);
+											//oSearch.addFilter('duedate', 'LESS_THAN_OR_EQUAL_TO', Date.today().toString("dd MMM yyyy"));
+											oSearch.addFilter('sentdate', 'LESS_THAN_OR_EQUAL_TO', Date.today().toString("dd MMM yyyy"));
 											oSearch.rows = 200;
-											oSearch.sort('duedate', 'asc');
+											oSearch.sort('sentdate', 'asc');
 											oSearch.getResults(function(oResponse)
 											{
 												oParam.step = 2;
@@ -1196,10 +1197,10 @@ ns1blankspace.financial.debtors =
 												oSearch.addFilter('contactpersonsentto', 'EQUAL_TO', (aID[1]).split('_')[1]);
 											}	
 											
-											oSearch.addFilter('outstandingamount', 'GREATER_THAN', 0);
-											oSearch.addFilter('duedate', 'LESS_THAN_OR_EQUAL_TO', Date.today().toString("dd MMM yyyy"));
+											oSearch.addFilter('outstandingamount', 'NOT_EQUAL_TO', 0);
+											oSearch.addFilter('sentdate', 'LESS_THAN_OR_EQUAL_TO', Date.today().toString("dd MMM yyyy"));
 											oSearch.rows = 200;
-											oSearch.sort('duedate', 'asc');
+											oSearch.sort('sentdate', 'asc');
 											oSearch.getResults(function(oResponse)
 											{
 												ns1blankspace.financial.debtors.invoices.showHide(oParam, oResponse);
@@ -1214,6 +1215,7 @@ ns1blankspace.financial.debtors =
 											$vq.add('<table style="font-size:0.875em;">' +
 														'<tr class="ns1blankspaceCaption">' +
 														'<td class="ns1blankspaceHeaderCaption">#</td>' +
+														'<td class="ns1blankspaceHeaderCaption">Sent</td>' +
 														'<td class="ns1blankspaceHeaderCaption">Due</td>' +
 														'<td class="ns1blankspaceHeaderCaption" style="text-align:right;">Amount</td>' +
 														'<td class="ns1blankspaceHeaderCaption" style="text-align:right;">Amount Owed</td></tr>',
@@ -1224,6 +1226,9 @@ ns1blankspace.financial.debtors =
 												$vq.add('<tr>' +
 															'<td class="ns1blankspaceRow ns1blankspaceSubNote">' +
 															row.reference +
+															'</td>' +
+															'<td class="ns1blankspaceRow ns1blankspaceSubNote">' +
+															row.sentdate +
 															'</td>' +
 															'<td class="ns1blankspaceRow ns1blankspaceSubNote">' +
 															row.duedate +

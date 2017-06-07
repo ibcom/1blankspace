@@ -115,15 +115,12 @@ ns1blankspace.financial.credit =
 						oSearch.method = 'FINANCIAL_CREDIT_NOTE_SEARCH';
 						oSearch.addField('reference,contactbusinesstext,amount,notes,type,typetext,creditdate');
 						oSearch.rows = 10;
-						oSearch.rf = 'csv';
 						oSearch.sort('modifieddate', 'desc');
 						oSearch.getResults(function(data) {ns1blankspace.financial.credit.home(oParam, data)});
 					}
 					else
 					{
 						var aHTML = [];
-
-						//oResponse = ns1blankspace.util.convert.csvToJSON({response: oResponse})
 						
 						if (oResponse.data.rows.length == 0)
 						{
