@@ -134,7 +134,7 @@ ns1blankspace.financial.journal =
 						oSearch.method = 'FINANCIAL_GENERAL_JOURNAL_SEARCH';
 						oSearch.addField('area,areatext,description,id,journaldate,object,objecttext,objectcontext,' +
 											'project,projecttext,reference,status,statustext');
-						oSearch.rows = 10;
+						oSearch.rows = 25;
 						oSearch.sort('modifieddate', 'desc');
 						oSearch.getResults(function(data) {ns1blankspace.financial.journal.home(oParam, data)});
 					}

@@ -114,7 +114,7 @@ ns1blankspace.financial.credit =
 						var oSearch = new AdvancedSearch();
 						oSearch.method = 'FINANCIAL_CREDIT_NOTE_SEARCH';
 						oSearch.addField('reference,contactbusinesstext,amount,notes,type,typetext,creditdate');
-						oSearch.rows = 10;
+						oSearch.rows = 25;
 						oSearch.sort('modifieddate', 'desc');
 						oSearch.getResults(function(data) {ns1blankspace.financial.credit.home(oParam, data)});
 					}

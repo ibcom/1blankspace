@@ -134,7 +134,7 @@ ns1blankspace.financial.journal =
 						oSearch.method = 'FINANCIAL_GENERAL_JOURNAL_SEARCH';
 						oSearch.addField('area,areatext,description,id,journaldate,object,objecttext,objectcontext,' +
 											'project,projecttext,reference,status,statustext');
-						oSearch.rows = 10;
+						oSearch.rows = 25;
 						oSearch.sort('modifieddate', 'desc');
 						oSearch.getResults(function(data) {ns1blankspace.financial.journal.home(oParam, data)});
 					}
@@ -248,6 +248,14 @@ ns1blankspace.financial.journal =
 											oSearch.addFilter('reference', 'TEXT_IS_LIKE', sSearchText);
 											oSearch.addOperator('or');
 											oSearch.addFilter('description', 'TEXT_IS_LIKE', sSearchText);
+
+											var oSearchDate = moment(sSearchText, 'DD MMM YYYY HH:mm:ss')
+  											if (oSearchDate.isValid())
+											{
+												oSearch.addOperator('or');
+												oSearch.addFilter('journaldate', 'EQUAL_TO', sSearchText);
+											}
+
 											oSearch.addBracket(')');
 
 											ns1blankspace.search.advanced.addFilters(oSearch);
@@ -562,12 +570,19 @@ ns1blankspace.financial.journal =
 							var sID = this.id;
 							var aID = sID.split('-');
 							var iStatus = aID[1];
+
+							var oData = {status: iStatus, id: ns1blankspace.objectContext}
+
+							if (ns1blankspace.option.financialOverride)
+							{
+								oData.override = 'Y'
+							}	
 							
 							$.ajax(
 							{
 								type: 'GET',
 								url: ns1blankspace.util.endpointURI('FINANCIAL_GENERAL_JOURNAL_MANAGE'),
-								data: 'status=' + iStatus + '&id=' + ns1blankspace.objectContext,
+								data: oData,
 								dataType: 'json',
 								success: function(oResponse) {ns1blankspace.financial.journal.search.send('-' + ns1blankspace.objectContext)}
 							});
@@ -664,6 +679,11 @@ ns1blankspace.financial.journal =
 										sData += '&journaldate=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsJournalDate').val());
 										sData += '&description=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsDescription').val());
 									}
+
+									if (ns1blankspace.option.financialOverride)
+									{
+										sData += '&override=Y'
+									}	
 									
 									$.ajax(
 									{

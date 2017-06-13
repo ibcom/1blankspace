@@ -183,7 +183,10 @@ ns1blankspace.financial.receipt =
 										oSearch.addField('contactbusinessreceivedfromtext,contactbusinessreceivedfrom,' +
 																'contactpersonreceivedfromtext,contactpersonreceivedfrom,' +
 																'projecttext,project,areatext,area,' +
-																'reference,paymentmethodtext,paymentmethod,receiveddate,description,amount,tax');
+																'receipt.sourcebanktransaction.amount,' +
+																'receipt.sourcebanktransaction.posteddate,' +
+																'receipt.sourcebanktransaction.notes,' +
+																'reference,paymentmethodtext,paymentmethod,receiveddate,description,amount,tax,reconciliation,reconciliationtext');
 
 										oSearch.addField(ns1blankspace.option.auditFields);
 										
@@ -215,7 +218,7 @@ ns1blankspace.financial.receipt =
 											oSearch.method = 'FINANCIAL_RECEIPT_SEARCH';
 											oSearch.addField('contactbusinessreceivedfromtext,contactbusinessreceivedfrom,' +
 																'contactpersonreceivedfromtext,contactpersonreceivedfrom,' +
-																'reference,receiveddate,description,amount,reconciliation,reconciliationtext');
+																'reference,receiveddate,description,amount');
 
 											if (sSearchText != '')
 											{	
@@ -513,7 +516,7 @@ ns1blankspace.financial.receipt =
 						aHTML.push('<table class="ns1blankspaceMain">' +
 										'<tr class="ns1blankspaceRow">' +
 										'<td id="ns1blankspaceSummaryColumn1" class="ns1blankspaceColumn1Flexible"></td>' +
-										'<td id="ns1blankspaceSummaryColumn2" class="ns1blankspaceColumn2" style="width:100px;"></td>' +
+										'<td id="ns1blankspaceSummaryColumn2" class="ns1blankspaceColumn2" style="width:260px;"></td>' +
 										'</tr>' +
 										'</table>');				
 						
@@ -557,6 +560,51 @@ ns1blankspace.financial.receipt =
 						aHTML.push('</table>');		
 
 						$('#ns1blankspaceSummaryColumn1').html(aHTML.join(''));
+
+						var aHTML = [];
+
+						aHTML.push('<table class="ns1blankspaceColumn2">');
+
+						aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Date Received</td></tr>' +
+											'<tr><td id="ns1blankspaceSummaryReceivedDate" class="ns1blankspaceSummary">' +
+											ns1blankspace.objectContextData.receiveddate + 
+											'</td></tr>');
+
+						aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">');
+						
+						if (ns1blankspace.objectContextData.reconciliation == '')
+						{
+								aHTML.push('This receipt is yet to be reconciled.');
+						}
+						else
+						{
+								aHTML.push('This receipt has been reconciled!');
+						}
+
+						aHTML.push('</td></tr>');
+
+						if (ns1blankspace.objectContextData['receipt.sourcebanktransaction.posteddate'] != '')
+						{
+							aHTML.push('<tr><td id="ns1blankspaceSummaryBankTransaction" class="ns1blankspaceSummary ns1blankspaceSubNote">' +
+											ns1blankspace.util.fd(ns1blankspace.objectContextData['receipt.sourcebanktransaction.posteddate'])+
+											'<br />' +
+											ns1blankspace.option.currencySymbol +
+											Math.abs(ns1blankspace.objectContextData['receipt.sourcebanktransaction.amount'].replace(',', '')) +
+											'<br />' +
+											ns1blankspace.objectContextData['receipt.sourcebanktransaction.notes']+
+											'</td></tr>');
+						}
+						
+						if (ns1blankspace.financial.data.bankaccounts.length == 0)
+						{
+							aHTML.push('<tr><td class="ns1blankspaceSub" style="color:red;">' +
+												'No bank accounts set up!' +
+												'</td></tr>');
+						}
+	
+						aHTML.push('</table>');		
+
+						$('#ns1blankspaceSummaryColumn2').html(aHTML.join(''));
 					}	
 				},
 
@@ -1223,6 +1271,11 @@ ns1blankspace.financial.receipt =
 																	objectcontext: ns1blankspace.objectContext
 																}
 
+																if (ns1blankspace.option.financialOverride)
+																{
+																	oData.override = 'Y'
+																}
+
 																$.ajax(
 																{
 																	type: 'POST',
@@ -1238,7 +1291,12 @@ ns1blankspace.financial.receipt =
 																			invoicelineitem: ns1blankspace.financial.receipt.invoice.data.invoiceItem['invoice.lineitem.id'],
 																			receiptlineitem: iReceiptItemDebtorID,
 																			amount: ns1blankspace.financial.receipt.invoice.data.applyAmount
-																		};
+																		}
+
+																		if (ns1blankspace.option.financialOverride)
+																		{
+																			oData.override = 'Y'
+																		}
 
 																		$.ajax(
 																		{

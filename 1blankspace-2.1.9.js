@@ -1780,11 +1780,18 @@ ns1blankspace.app =
 
 												$('#ns1blankspaceControlActionOptionsRemove').html(ns1blankspace.xhtml.loadingSmall);
 
+												var oData = {remove: 1, id: ns1blankspace.objectContext}
+
+												if (ns1blankspace.option.financialOverride)
+												{
+													oData.override = 'Y'
+												}	
+
 												$.ajax(
 												{
 													type: 'POST',
 													url: ns1blankspace.util.endpointURI(sMethod),
-													data: 'remove=1&id=' + ns1blankspace.objectContext,
+													data: oData,
 													dataType: 'json',
 													success: function(data){ns1blankspace.app.options.remove(oParam, data)}
 												});

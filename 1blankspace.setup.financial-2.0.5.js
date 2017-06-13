@@ -1521,30 +1521,33 @@ ns1blankspace.setup.financial =
 															'<br /><input type="radio" id="radioPostableN" name="radioPostable" value="N"/>No (it is a header account)' +
 														'</td></tr>');
 
-										if (iTaxType == 2)
-										{	
-											aHTML.push('<tr class="ns1blankspaceCaption">' +
-														'<td class="ns1blankspaceCaption">' +
-														'Cost of sale' +
-														'</td></tr>' +
-														'<tr class="ns1blankspace">' +
-														'<td class="ns1blankspaceRadio">' +
-														'<input type="radio" id="radioCOSY" name="radioCOS" value="Y"/>Yes' +
-														'<br /><input type="radio" id="radioCOSN" name="radioCOS" value="N"/>No' +
-														'</td></tr>');
-										}	
-
-										if (iTaxType == 1 || iTaxType == 2)
-										{
-											aHTML.push('<tr class="ns1blankspaceCaption">' +
+										if (iType == 1 || iType == 2)
+										{ 
+											if (iTaxType == 2)
+											{	
+												aHTML.push('<tr class="ns1blankspaceCaption">' +
 															'<td class="ns1blankspaceCaption">' +
-															ns1blankspace.option.taxVATCaption + ' Type' +
+															'Cost of sale' +
 															'</td></tr>' +
 															'<tr class="ns1blankspace">' +
-															'<td id="ns1blankspaceFinancialTaxCode" class="ns1blankspaceRadio">' +
-															ns1blankspace.xhtml.loadingSmall +
+															'<td class="ns1blankspaceRadio">' +
+															'<input type="radio" id="radioCOSY" name="radioCOS" value="Y"/>Yes' +
+															'<br /><input type="radio" id="radioCOSN" name="radioCOS" value="N"/>No' +
 															'</td></tr>');
-										}
+											}	
+
+											if (iTaxType == 1 || iTaxType == 2)
+											{
+												aHTML.push('<tr class="ns1blankspaceCaption">' +
+																'<td class="ns1blankspaceCaption">' +
+																ns1blankspace.option.taxVATCaption + ' Type' +
+																'</td></tr>' +
+																'<tr class="ns1blankspace">' +
+																'<td id="ns1blankspaceFinancialTaxCode" class="ns1blankspaceRadio">' +
+																ns1blankspace.xhtml.loadingSmall +
+																'</td></tr>');
+											}
+										}	
 
 										aHTML.push('</table>');					
 										
@@ -1592,7 +1595,7 @@ ns1blankspace.setup.financial =
 												sData += '&expensecostofsale=' + ns1blankspace.util.fs($('input[name="radioCOS"]:checked').val());
 											}	
 
-											if ($('input[name="radioTaxCode"]').length != 0)
+											if ($('input[name="radioTaxCode"]:checked').length != 0)
 											{	
 												sData += '&taxtype=' + ns1blankspace.util.fs($('input[name="radioTaxCode"]:checked').val());
 											}

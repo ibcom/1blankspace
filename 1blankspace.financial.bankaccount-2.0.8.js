@@ -2066,7 +2066,7 @@ ns1blankspace.financial.bankAccount =
 										oSearch.addFilter('bankaccount', 'EQUAL_TO', ns1blankspace.objectContext);
 										oSearch.addFilter('status', 'EQUAL_TO', iMode)
 										oSearch.sort('statementdate', 'desc');
-										oSearch.rows = 12;
+										oSearch.rows = 50;
 										oSearch.getResults(function(data) {ns1blankspace.financial.bankAccount.reconcile.show(oParam, data)});
 									}
 									else
@@ -2114,7 +2114,7 @@ ns1blankspace.financial.bankAccount =
 										else
 										{
 											aHTML.push('<table class="ns1blankspaceColumn2">' +
-														'<tr><td class="ns1blankspaceNothing">The last twelve completed reconciliations are shown.</td></tr></table>')
+														'<tr><td class="ns1blankspaceNothing">The last 50 completed reconciliations are shown.</td></tr></table>')
 										}	
 
 										$('#ns1blankspaceBankAccountColumnReconcile2').html(aHTML.join(''));
