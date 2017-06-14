@@ -1022,54 +1022,56 @@ ns1blankspace.contactBusiness =
 										});
 
 										$('#ns1blankspaceMainFinancials-details').addClass('ns1blankspaceRowShadedHighlight');
-										ns1blankspace.contactBusiness.financials.details();
+										ns1blankspace.contactBusiness.financials.details.show();
 									}
 								},
 
 						details: 
-								function ()
-								{	
-									var aHTML = [];
-									
-									aHTML.push('<table class="ns1blankspace" style="width:350px;">');
-									
-									aHTML.push('<tr class="ns1blankspaceCaption">' +
-													'<td class="ns1blankspaceCaption">' +
-													'Account Name' +
-													'</td></tr>' +
-													'<tr class="ns1blankspace">' +
-													'<td class="ns1blankspaceText">' +
-													'<input id="ns1blankspaceFinancialsAccountName" class="ns1blankspaceText">' +
-													'</td></tr>');
+								{
+									show:	function ()
+											{	
+												var aHTML = [];
+												
+												aHTML.push('<table class="ns1blankspace" style="width:350px;">');
+												
+												aHTML.push('<tr class="ns1blankspaceCaption">' +
+																'<td class="ns1blankspaceCaption">' +
+																'Account Name' +
+																'</td></tr>' +
+																'<tr class="ns1blankspace">' +
+																'<td class="ns1blankspaceText">' +
+																'<input id="ns1blankspaceFinancialsAccountName" class="ns1blankspaceText">' +
+																'</td></tr>');
 
-									aHTML.push('<tr class="ns1blankspaceCaption">' +
-													'<td class="ns1blankspaceCaption">' +
-													'BSB' +
-													'</td></tr>' +
-													'<tr class="ns1blankspace">' +
-													'<td class="ns1blankspaceText">' +
-													'<input id="ns1blankspaceFinancialsBSB" class="ns1blankspaceText">' +
-													'</td></tr>');	
+												aHTML.push('<tr class="ns1blankspaceCaption">' +
+																'<td class="ns1blankspaceCaption">' +
+																'BSB' +
+																'</td></tr>' +
+																'<tr class="ns1blankspace">' +
+																'<td class="ns1blankspaceText">' +
+																'<input id="ns1blankspaceFinancialsBSB" class="ns1blankspaceText">' +
+																'</td></tr>');	
 
-									aHTML.push('<tr class="ns1blankspaceCaption">' +
-													'<td class="ns1blankspaceCaption">' +
-													'Account Number' +
-													'</td></tr>' +
-													'<tr class="ns1blankspace">' +
-													'<td class="ns1blankspaceText">' +
-													'<input id="ns1blankspaceFinancialsAccountNumber" class="ns1blankspaceText">' +
-													'</td></tr>');											
+												aHTML.push('<tr class="ns1blankspaceCaption">' +
+																'<td class="ns1blankspaceCaption">' +
+																'Account Number' +
+																'</td></tr>' +
+																'<tr class="ns1blankspace">' +
+																'<td class="ns1blankspaceText">' +
+																'<input id="ns1blankspaceFinancialsAccountNumber" class="ns1blankspaceText">' +
+																'</td></tr>');											
 
-									aHTML.push('</table>');					
-									
-									$('#ns1blankspaceFinancialsColumn2').html(aHTML.join(''));
-									
-									if (ns1blankspace.objectContextData != undefined)
-									{
-										$('#ns1blankspaceFinancialsBSB').val(ns1blankspace.objectContextData.directdebitbranchnumber);
-										$('#ns1blankspaceFinancialsAccountNumber').val(ns1blankspace.objectContextData.directdebitaccountnumber);
-										$('#ns1blankspaceFinancialsAccountName').val(ns1blankspace.objectContextData.directdebitaccountname);
-									}
+												aHTML.push('</table>');					
+												
+												$('#ns1blankspaceFinancialsColumn2').html(aHTML.join(''));
+												
+												if (ns1blankspace.objectContextData != undefined)
+												{
+													$('#ns1blankspaceFinancialsBSB').val(ns1blankspace.objectContextData.directdebitbranchnumber);
+													$('#ns1blankspaceFinancialsAccountNumber').val(ns1blankspace.objectContextData.directdebitaccountnumber);
+													$('#ns1blankspaceFinancialsAccountName').val(ns1blankspace.objectContextData.directdebitaccountname);
+												}
+											}	
 								},
 
 						invoices:
@@ -1455,7 +1457,106 @@ ns1blankspace.contactBusiness =
 														ns1blankspace.financial.payment.init({id: (this.id).split('-')[1]});
 													});
 												}			
-								}																								
+								},
+
+						credits:
+								{
+									show: 	function (oParam, oResponse)
+												{
+													if (oResponse == undefined)
+													{
+														var oSearch = new AdvancedSearch();
+														
+														oSearch.method = 'FINANCIAL_CREDIT_NOTE_SEARCH';
+														oSearch.addField('reference,amount,notes,type,typetext,creditdate,financialaccounttext');
+														oSearch.addFilter('contactbusiness', 'EQUAL_TO', ns1blankspace.objectContext);
+														oSearch.rows = 25;
+														oSearch.sort('id', 'desc');
+														oSearch.getResults(function (data) {ns1blankspace.contactBusiness.financials.credits.show(oParam, data)});
+													}
+													else
+													{
+														var aHTML = [];
+
+														aHTML.push('<table id="ns1blankspaceFinancialsCredits" class="ns1blankspace">');
+
+														if (oResponse.data.rows.length == 0)
+														{
+															aHTML.push('<tr><td class="ns1blankspaceNothing">No credits.</td></tr></table>');
+															$('#ns1blankspaceFinancialsColumn2').html(aHTML.join(''));
+														}
+														else
+														{
+															aHTML.push('<tr class="ns1blankspaceCaption">');
+															aHTML.push('<td class="ns1blankspaceHeaderCaption">Reference</td>');
+															aHTML.push('<td class="ns1blankspaceHeaderCaption">Description</td>');
+															aHTML.push('<td class="ns1blankspaceHeaderCaption">Date</td>');
+															aHTML.push('<td class="ns1blankspaceHeaderCaption">Type</td>');
+															aHTML.push('<td class="ns1blankspaceHeaderCaption">Financial Account</td>');
+															aHTML.push('<td class="ns1blankspaceHeaderCaption" style="text-align:right;">Amount</td>');
+															aHTML.push('</tr>');
+
+															$.each(oResponse.data.rows, function()
+															{
+																aHTML.push(ns1blankspace.contactBusiness.financials.credits.row(this, oParam));
+															});
+															
+															aHTML.push('</table>');
+
+															ns1blankspace.render.page.show(
+															{
+																type: 'JSON',
+																xhtmlElementID: 'ns1blankspaceFinancialsColumn2',
+																xhtmlContext: 'FinancialsCredits',
+																xhtml: aHTML.join(''),
+																showMore: (oResponse.morerows == "true"),
+																more: oResponse.moreid,
+																rows: 25,
+																functionShowRow: ns1blankspace.contactBusiness.financials.credits.row,
+																functionOpen: undefined,
+																functionOnNewPage: ns1blankspace.contactBusiness.financials.credits.bind
+															});									
+														}
+													}
+												},
+
+									row: 		function (oRow, oParam)	
+												{
+													var aHTML = [];
+
+													aHTML.push('<tr class="ns1blankspaceRow">');
+																				
+													aHTML.push('<td id="ns1blankspaceFinancialPayments_reference-' + oRow.id + '" class="ns1blankspaceRow ns1blankspaceRowSelect">' +
+																	oRow.reference + '</td>');
+
+													aHTML.push('<td id="ns1blankspaceFinancialPayments_notes-' + oRow.id + '" class="ns1blankspaceRow">' +
+																	oRow.notes + '</td>');
+
+													aHTML.push('<td id="ns1blankspaceFinancialPayments_receiveddate-' + oRow.id + '" class="ns1blankspaceRow">' +
+																	ns1blankspace.util.fd(oRow.creditdate) + '</td>');
+																			
+													aHTML.push('<td id="ns1blankspaceFinancialPayments_receiveddate-' + oRow.id + '" class="ns1blankspaceRow ns1blankspaceSub">' +
+																	oRow.typetext + '</td>');
+
+													aHTML.push('<td id="ns1blankspaceFinancialPayments_financialaccounttext-' + oRow.id + '" class="ns1blankspaceRow ns1blankspaceSub">' +
+																	oRow.financialaccounttext + '</td>');				
+
+													aHTML.push('<td id="ns1blankspaceFinancialPayments_amount-' + oRow.id + '" class="ns1blankspaceRow" style="text-align:right;">' +
+																	oRow.amount + '</td>');
+
+													aHTML.push('</tr>');
+
+													return aHTML.join('');
+												},
+
+									bind: 	function (oRow, oParam)	
+												{
+													$('#ns1blankspaceFinancialsCredits td.ns1blankspaceRowSelect').click(function()
+													{
+														ns1blankspace.financial.credit.init({id: (this.id).split('-')[1]});
+													});
+												}			
+								}																													
 				},			
 
 	save: 		{

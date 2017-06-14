@@ -505,7 +505,7 @@ ns1blankspace.financial.credit =
 						{
 
 							aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Business</td></tr>' +
-											'<tr><td id="ns1blankspaceSummaryBusiness" class="ns1blankspaceSummary">' +
+											'<tr><td id="ns1blankspaceSummaryBusiness" data-id="' + ns1blankspace.objectContextData.contactbusiness + '" data-object="contactBusiness" class="ns1blankspaceSummary ns1blankspaceViewLink">' +
 											ns1blankspace.objectContextData.contactbusinesstext +
 											'</td></tr>');
 						}
