@@ -668,9 +668,8 @@ ns1blankspace.financial.expense =
 												
 						if (ns1blankspace.objectContextData.contactbusinesspaidtotext != '')
 						{
-
 							aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Business</td></tr>' +
-											'<tr><td id="ns1blankspaceSummaryBusiness" class="ns1blankspaceSummary">' +
+											'<tr><td id="ns1blankspaceSummaryBusiness" data-id="' + ns1blankspace.objectContextData.contactbusinesspaidto + '" data-object="contactBusiness" class="ns1blankspaceSummary ns1blankspaceViewLink">' +
 											ns1blankspace.objectContextData.contactbusinesspaidtotext +
 											'</td></tr>');
 						}

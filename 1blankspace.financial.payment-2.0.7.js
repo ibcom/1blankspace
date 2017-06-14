@@ -82,14 +82,19 @@ ns1blankspace.financial.payment =
 
 						aHTML.push('<tr class="ns1blankspaceControl">' +
 									'<td style="padding-top:18px;" id="ns1blankspaceControlUnallocated" class="ns1blankspaceControl">' +
-										'Unallocated<br /><span class="ns1blankspaceSub" style="font-size:0.75em;">Payment items that have been marked as unallocated and not applied to an expense.</span></td>' +
+										'Unallocated<br /><span class="ns1blankspaceSub" style="font-size:0.625em;">Payment items that have been marked as unallocated and not applied to an expense.</span></td>' +
+									'</tr>');
+
+						aHTML.push('<tr class="ns1blankspaceControl">' +
+									'<td style="padding-top:18px;" id="ns1blankspaceControlUnreconciled" class="ns1blankspaceControl">' +
+										'Unreconciled<br /><span class="ns1blankspaceSub" style="font-size:0.625em;">Payments that have not been marked as reconciled against a bank account.</span></td>' +
 									'</tr>');
 
 						if (ns1blankspace.option.paymentShowImages)
 						{
 							aHTML.push('<tr class="ns1blankspaceControl">' +
 									'<td style="padding-top:15px;" id="ns1blankspaceControlPaymentImages" class="ns1blankspaceControl">' +
-											'Payment<br />receipts<br /><span class="ns1blankspaceSub" style="font-size:0.75em;">photos</span></td>' +
+											'Payment<br />receipts<br /><span class="ns1blankspaceSub" style="font-size:0.625em;">photos</span></td>' +
 									'</tr>');
 						}
 
@@ -102,6 +107,11 @@ ns1blankspace.financial.payment =
 							ns1blankspace.financial.payment.unallocated.show();
 						});
 
+						$('#ns1blankspaceControlUnreconciled').click(function(event)
+						{
+							ns1blankspace.financial.payment.unreconciled.show();
+						});
+
 						$('#ns1blankspaceControlPaymentImages').click(function(event)
 						{
 							ns1blankspace.financial.payment.images.show();
@@ -112,7 +122,7 @@ ns1blankspace.financial.payment =
 						var oSearch = new AdvancedSearch();
 						oSearch.method = 'FINANCIAL_PAYMENT_SEARCH';
 						oSearch.addField('reference,description,contactbusinesspaidtotext,contactpersonpaidtotext,paiddate,amount');
-						oSearch.rows = 10;
+						oSearch.rows = 25;
 						oSearch.sort('modifieddate', 'desc');
 						oSearch.getResults(function (data) {ns1blankspace.financial.payment.home(oParam, data)});
 					}
@@ -554,11 +564,11 @@ ns1blankspace.financial.payment =
 							else
 							{
 								aHTML.push('<table class="ns1blankspace">');
-
+						
 								if (ns1blankspace.objectContextData.contactbusinesspaidtotext != '')
 								{
 									aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Business</td></tr>' +
-													'<tr><td id="ns1blankspaceSummaryBusiness" class="ns1blankspaceSummary">' +
+													'<tr><td id="ns1blankspaceSummaryBusiness" data-id="' + ns1blankspace.objectContextData.contactbusinesspaidto + '" data-object="contactBusiness" class="ns1blankspaceSummary ns1blankspaceViewLink">' +
 													ns1blankspace.objectContextData.contactbusinesspaidtotext +
 													'</td></tr>');
 								}
@@ -1915,80 +1925,103 @@ ns1blankspace.financial.payment =
 
 	unreconciled:
 				{
-					show: function (oParam, oResponse)
-					{
-						if (oResponse == undefined)
-						{
-							var oSearch = new AdvancedSearch();
-							oSearch.method = 'FINANCIAL_ITEM_SEARCH';
-							oSearch.addField('amount,lineitem.payment.reference,lineitem.payment.id,financialaccount,description,lineitem.payment.contactbusinesspaidtotext,' +
-													'lineitem.payment.contactpersonpaidtotext,lineitem.payment.paiddate');
-							oSearch.addFilter('financialaccount', 'EQUAL_TO', ns1blankspace.financial.data.settings.financialaccountunallocated.outgoing);
-							oSearch.addFilter('lineitem.payment.reference', 'TEXT_IS_NOT_EMPTY');
-							oSearch.addFilter('amount', 'NOT_EQUAL_TO', 0);
-							oSearch.getResults(function(data)
-							{
-								ns1blankspace.financial.payment.unallocated.show(oParam, data)
-							})
-						}
-						else
-						{
-							var aHTML = [];
+					show: 		function (oParam, oResponse)
+									{
+										if (oResponse == undefined)
+										{
+											var oSearch = new AdvancedSearch();
+											oSearch.method = 'FINANCIAL_PAYMENT_SEARCH';
+											oSearch.addField('amount,reference,paiddate,notes,contactbusinesspaidtotext,contactpersonpaidtotext');
+											oSearch.addFilter('reconciliation', 'IS_NULL');
+											oSearch.rows = 25;
+											oSearch.sort('paiddate', 'desc');
+											oSearch.getResults(function(data)
+											{
+												ns1blankspace.financial.payment.unreconciled.show(oParam, data)
+											})
+										}
+										else
+										{
+											var aHTML = [];
 
-							if (oResponse.data.rows.length == 0)
-							{
-								aHTML.push('<table><tr><td class="ns1blankspaceNothing">No unallocated payments.</td></tr></table>');
+											if (oResponse.data.rows.length == 0)
+											{
+												aHTML.push('<table><tr><td class="ns1blankspaceNothing">No unreconciled payments.</td></tr></table>');
 
-								$('#ns1blankspaceMain').html(aHTML.join(''));
-							}
-							else
-							{
-								aHTML.push('<table id="ns1blankspaceFinancialPaymentsUnallocated">');
-								aHTML.push('<tr class="ns1blankspaceCaption">');
-								aHTML.push('<td class="ns1blankspaceHeaderCaption">Reference</td>');
-								aHTML.push('<td class="ns1blankspaceHeaderCaption">Business</td>');
-								aHTML.push('<td class="ns1blankspaceHeaderCaption">Person</td>');
-								aHTML.push('<td class="ns1blankspaceHeaderCaption">Description</td>');
-								aHTML.push('<td class="ns1blankspaceHeaderCaption">Date</td>');
-								aHTML.push('<td class="ns1blankspaceHeaderCaption" style="text-align:right;">Amount</td>');
-								aHTML.push('</tr>');
+												$('#ns1blankspaceMain').html(aHTML.join(''));
+											}
+											else
+											{
+												aHTML.push('<table id="ns1blankspaceFinancialPaymentsUnreconciled">');
+												aHTML.push('<tr class="ns1blankspaceCaption">');
+												aHTML.push('<td class="ns1blankspaceHeaderCaption">Reference</td>');
+												aHTML.push('<td class="ns1blankspaceHeaderCaption">Business</td>');
+												aHTML.push('<td class="ns1blankspaceHeaderCaption">Person</td>');
+												aHTML.push('<td class="ns1blankspaceHeaderCaption">Description</td>');
+												aHTML.push('<td class="ns1blankspaceHeaderCaption">Date</td>');
+												aHTML.push('<td class="ns1blankspaceHeaderCaption" style="text-align:right;">Amount</td>');
+												aHTML.push('</tr>');
 
-								$.each(oResponse.data.rows, function()
-								{
-									aHTML.push('<tr class="ns1blankspaceRow">');
-													
-									aHTML.push('<td id="ns1blankspaceFinancialPaymentsUnallocated_reference-' + this['lineitem.payment.id'] + '" class="ns1blankspaceRow ns1blankspaceRowSelect">' +
-													this['lineitem.payment.reference'] + '</td>');
+												$.each(oResponse.data.rows, function()
+												{
+													aHTML.push(ns1blankspace.financial.payment.unreconciled.row(this, oParam));
+												});
+												
+												aHTML.push('</table>');
 
-									aHTML.push('<td id="ns1blankspaceFinancialPaymentsUnallocated_business-' + this['lineitem.payment.id'] + '" class="ns1blankspaceRow">' +
-													this['lineitem.payment.contactbusinesspaidtotext'] + '</td>');
+												ns1blankspace.render.page.show(
+												{
+													type: 'JSON',
+													xhtmlElementID: 'ns1blankspaceMain',
+													xhtmlContext: 'FinancialPaymentsUnreconciled',
+													xhtml: aHTML.join(''),
+													showMore: (oResponse.morerows == "true"),
+													more: oResponse.moreid,
+													rows: 25,
+													functionShowRow: ns1blankspace.financial.payment.unreconciled.row,
+													functionOpen: undefined,
+													functionOnNewPage: ns1blankspace.financial.payment.unreconciled.bind
+												});									
+											}
+										}	
+									},
 
-									aHTML.push('<td id="ns1blankspaceFinancialPaymentsUnallocated_person-' + this['lineitem.payment.id'] + '" class="ns1blankspaceRow">' +
-													this['lineitem.payment.contactpersonpaidtotext'] + '</td>');
+					row: 			function (oRow, oParam)	
+									{
+										var aHTML = [];
 
-									aHTML.push('<td id="ns1blankspaceFinancialPaymentsUnallocated_reference-' + this['id'] + '" class="ns1blankspaceRow">' +
-													this['description'] + '</td>');
+										aHTML.push('<tr class="ns1blankspaceRow">');
+																	
+										aHTML.push('<td id="ns1blankspaceFinancialPaymentsUnreconciled_reference-' + oRow.id + '" class="ns1blankspaceRow ns1blankspaceRowSelect">' +
+														oRow.reference + '</td>');
 
-									aHTML.push('<td id="ns1blankspaceFinancialPaymentsUnallocated_reference-' + this['id'] + '" class="ns1blankspaceRow">' +
-													ns1blankspace.util.fd(this['lineitem.payment.paiddate']) + '</td>');
-															
-									aHTML.push('<td id="ns1blankspaceFinancialPaymentsUnallocated_amount-' + this['id'] + '" class="ns1blankspaceRow" style="text-align:right;">' +
-													this['amount'] + '</td>');
+										aHTML.push('<td id="ns1blankspaceFinancialPaymentsUnreconciled_business-' + oRow.id + '" class="ns1blankspaceRow">' +
+														oRow.contactbusinesspaidtotext + '</td>');
 
-									aHTML.push('</tr>');
-								});
-								
-								aHTML.push('</table>');
+										aHTML.push('<td id="ns1blankspaceFinancialPaymentsUnreconciled_person-' + oRow.id + '" class="ns1blankspaceRow">' +
+														oRow.contactpersonpaidtotext + '</td>');
 
-								$('#ns1blankspaceMain').html(aHTML.join(''));
-											
-								$('#ns1blankspaceFinancialPaymentsUnallocated td.ns1blankspaceRowSelect').click(function()
-								{
-									ns1blankspace.financial.payment.init({id: (this.id).split('-')[1]});
-								});
-							}
-						}	
-					}
+										aHTML.push('<td id="ns1blankspaceFinancialPaymentsUnreconciled_reference-' + oRow.id + '" class="ns1blankspaceRow">' +
+														oRow.notes + '</td>');
+
+										aHTML.push('<td id="ns1blankspaceFinancialPaymentsUnreconciled_reference-' + oRow.id + '" class="ns1blankspaceRow">' +
+														ns1blankspace.util.fd(oRow.paiddate) + '</td>');
+																
+										aHTML.push('<td id="ns1blankspaceFinancialPaymentsUnreconciled_amount-' + oRow.id + '" class="ns1blankspaceRow" style="text-align:right;">' +
+														oRow.amount + '</td>');
+
+										aHTML.push('</tr>');
+
+										return aHTML.join('');
+									},
+
+					bind: 		function (oRow, oParam)	
+									{
+										$('#ns1blankspaceFinancialPaymentsUnreconciled td.ns1blankspaceRowSelect').click(function()
+										{
+											ns1blankspace.financial.payment.init({id: (this.id).split('-')[1]});
+										});
+									}
 				}																														
 }
 

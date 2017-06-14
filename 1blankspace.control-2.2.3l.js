@@ -127,7 +127,7 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.contactBusiness',
-		source: '/jscripts/1blankspace.contactbusiness-2.0.3.js'
+		source: '/site/312/1blankspace.contactbusiness-2.0.4.js'
 	},
 	{
 		nameSpace: '1blankspace.opportunity',
@@ -191,11 +191,11 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.financial.receipt',
-		source: '/site/312/1blankspace.financial.receipt-2.0.6.js'
+		source: '/site/312/1blankspace.financial.receipt-2.0.7.js'
 	},
 	{
 		nameSpace: '1blankspace.financial.payment',
-		source: '/site/312/1blankspace.financial.payment-2.0.6.js'
+		source: '/site/312/1blankspace.financial.payment-2.0.7.js'
 	},
 	{
 		nameSpace: '1blankspace.financial.credit',

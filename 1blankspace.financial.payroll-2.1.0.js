@@ -904,8 +904,9 @@ ns1blankspace.financial.payroll =
 								}
 				},				
 
-	employees: 	{
-					show: 		function (oParam, oResponse)
+	employees: 	
+				{
+					show: 	function (oParam, oResponse)
 								{
 									var iStep = 1;
 									var iStepAction = 1;

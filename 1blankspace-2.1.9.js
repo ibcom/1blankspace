@@ -690,6 +690,17 @@ ns1blankspace.app =
 							ns1blankspace.inputDetected = true;
 						});
 
+						$('.ns1blankspaceViewLink').live('click', function()
+						{
+							if ($(this).attr('data-id') != undefined && $(this).attr('data-object') != undefined)
+							{
+								if (ns1blankspace[$(this).attr('data-object')] != undefined)
+								{
+									ns1blankspace[$(this).attr('data-object')].init({id: $(this).attr('data-id')});
+								}	
+							}	
+						});
+
 						if (window.location.hash === '#PASSWORDEXPIRED')
 						{
 							ns1blankspace.logon.changePassword.show();

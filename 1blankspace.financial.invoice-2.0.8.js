@@ -666,7 +666,7 @@ ns1blankspace.financial.invoice =
 												{
 
 													aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Business</td></tr>' +
-																	'<tr><td id="ns1blankspaceSummaryBusiness" class="ns1blankspaceSummary">' +
+																	'<tr><td id="ns1blankspaceSummaryBusiness" data-id="' + ns1blankspace.objectContextData.contactbusinesssentto + '" data-object="contactBusiness" class="ns1blankspaceSummary ns1blankspaceViewLink">' +
 																	ns1blankspace.objectContextData.contactbusinesssenttotext +
 																	'</td></tr>');
 												}
@@ -695,7 +695,15 @@ ns1blankspace.financial.invoice =
 												aHTML.push('</table>');			
 											
 												$('#ns1blankspaceSummaryColumn1A').html(aHTML.join(''));
-
+/*
+												$('.ns1blankspaceViewLink').click(function()
+												{
+													if ($(this).attr('data-id') != '' && $(this).attr('data-object') != '')
+													{
+														ns1blankspace[$(this).attr('data-object')].init({id: $(this).attr('data-id')});
+													}	
+												});
+*/
 												var aHTML = [];
 
 												if (ns1blankspace.objectContextData.description != '')
