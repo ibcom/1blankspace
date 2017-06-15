@@ -990,6 +990,9 @@ ns1blankspace.contactBusiness =
 
 										aHTML.push('<table id="ns1blankspaceMainFinancialsOptions" cellpadding=6>');
 
+										aHTML.push('<tr><td id="ns1blankspaceMainFinancials-summary" class="ns1blankspaceRow ns1blankspaceRowSelect">' +
+																'Summary</td></tr>');
+
 										aHTML.push('<tr><td id="ns1blankspaceMainFinancials-details" class="ns1blankspaceRow ns1blankspaceRowSelect">' +
 																'Details</td></tr>');
 
@@ -1021,9 +1024,198 @@ ns1blankspace.contactBusiness =
 											ns1blankspace.contactBusiness.financials[sContext].show();
 										});
 
-										$('#ns1blankspaceMainFinancials-details').addClass('ns1blankspaceRowShadedHighlight');
-										ns1blankspace.contactBusiness.financials.details.show();
+										$('#ns1blankspaceMainFinancials-summary').addClass('ns1blankspaceRowShadedHighlight');
+										ns1blankspace.contactBusiness.financials.summary.show();
 									}
+								},
+
+						summary:
+								{
+									show: 	function (oParam, oResponse)
+												{
+													var aHTML = [];
+
+													aHTML.push('<table class="ns1blankspace">' +
+																		'<tr><td id="ns1blankspaceFinancialsSummaryDebtors">' +
+																		ns1blankspace.xhtml.loadingSmall +
+																		'</td></tr>' +
+																		'<tr><td id="ns1blankspaceFinancialsSummaryCreditors" style="padding-top:26px;">' +
+																		ns1blankspace.xhtml.loadingSmall +
+																		'</td></tr>' +
+																		'</table>');
+													
+													$('#ns1blankspaceFinancialsColumn2').html(aHTML.join(''));
+
+													ns1blankspace.contactBusiness.financials.summary.debtors(oParam);
+												},
+
+									debtors: function (oParam, oResponse)
+												{
+													if (oResponse == undefined)
+													{
+														var oData = {reportby: 4, rows: 1, view: 1, contactbusiness: ns1blankspace.objectContext}
+
+														$.ajax(
+														{
+															type: 'POST',
+															url: ns1blankspace.util.endpointURI('FINANCIAL_DEBTOR_SEARCH'),
+															dataType: 'json',
+															data: oData,
+															global: false,
+															success: function(oResponse)
+															{
+																if (oResponse.status == 'OK')
+																{	
+																	ns1blankspace.contactBusiness.financials.summary.debtors(oParam, oResponse);
+																}
+																else
+																{
+																	if (oResponse.error.errorcode == '4')
+																	{	
+																		if (oResponse.error.errornotes.indexOf('FINANCIAL_DEBTORSCREDITORS_PROCESSING_MANAGE') != -1)
+																		{	
+																			ns1blankspace.status.working('Optimising debtors');
+																			oParam = ns1blankspace.util.setParam(oParam, 'onComplete', ns1blankspace.contactBusiness.financials.summary.debtors)
+																			ns1blankspace.financial.optimise.start(oParam);
+																		}
+																	}
+																}	
+															}
+														});			
+													}
+													else
+													{
+														ns1blankspace.contactBusiness.financials.summary.creditors(oParam);
+
+														var oRow;
+														var cAmount = 0;
+														var aHTML = [];
+
+														if (oResponse.data.rows.length != 0)
+														{
+															oRow = oResponse.data.rows[0];
+															cAmount = oResponse.data.rows[0].total
+														
+															aHTML.push('<table class="ns1blankspace">' +
+																		'<tr>' +
+																		'<td class="ns1blankspaceHeaderCaption" style="text-align:left;">' +
+																		'<span style="font-weight:600;">Amount Owed To You</span><br /><span style="font-size:0.625em;">(As Debtor)</span></td>' +
+																		'<td class="ns1blankspaceHeaderCaption" style="text-align:right;color:#A0A0A0;">' +
+																		_.first(_.split(oResponse.CurrentDescription, ',')) +
+																		'<br /><span style="font-size:0.625em;">(0&nbsp;to&nbsp;30)</span></td>' +
+																		'<td class="ns1blankspaceHeaderCaption" style="text-align:right;color:#A0A0A0;">' +
+																		_.first(_.split(oResponse['31-60Description'], ',')) +
+																		'<br /><span style="font-size:0.625em;">(31&nbsp;to&nbsp;60)</span></td>' +
+																		'<td class="ns1blankspaceHeaderCaption" style="text-align:right;color:#A0A0A0;">' +
+																		_.first(_.split(oResponse['61-90Description'], ',')) +
+																		'<br /><span style="font-size:0.625em;">(61&nbsp;to&nbsp;90)</span></td>' +
+																		'<td class="ns1blankspaceHeaderCaption" style="text-align:right;color:#A0A0A0;">' +
+																		(_.first(_.split(oResponse['91Description'], ','))).replace(' or ', '<br />or&nbsp;') +
+																		'<br /><span style="font-size:0.625em;">(91&nbsp;+)</span></td>' +
+																		'</tr><tr>' +
+																		'<td id="ns1blankspaceDebtors_current-" class="ns1blankspaceRow" style="text-align:left;color:#A0A0A0; font-weight:600;">' +
+																		cAmount + '</td>' +
+																		'<td id="ns1blankspaceDebtors_current-" class="ns1blankspaceRow" style="text-align:right;color:#A0A0A0;">' +
+																		oRow.current + '</td>' +
+																		'<td id="ns1blankspaceDebtors_current-" class="ns1blankspaceRow" style="text-align:right;color:#A0A0A0;">' +
+																		oRow['31-60'] + '</td>' +
+																		'<td id="ns1blankspaceDebtors_current-" class="ns1blankspaceRow" style="text-align:right;color:#A0A0A0;">' +
+																		oRow['61-90'] + '</td>' +
+																		'<td id="ns1blankspaceDebtors_current-" class="ns1blankspaceRow" style="text-align:right;color:#A0A0A0;">' +
+																		oRow['91'] + '</td></tr>' +
+																		'</table>');
+														}
+														else
+														{
+															aHTML.push('<div class="ns1blankspaceNothing">Nothing owed to you.</div>');
+														}
+
+														$('#ns1blankspaceFinancialsSummaryDebtors').html(aHTML.join(''))					
+													}
+												},
+
+									creditors: function (oParam, oResponse)
+												{
+													if (oResponse == undefined)
+													{
+														var oData = {reportby: 4, rows: 1, view: 1, contactbusiness: ns1blankspace.objectContext}
+
+														$.ajax(
+														{
+															type: 'POST',
+															url: ns1blankspace.util.endpointURI('FINANCIAL_CREDITOR_SEARCH'),
+															dataType: 'json',
+															data: oData,
+															global: false,
+															success: function(oResponse)
+															{
+																if (oResponse.status == 'OK')
+																{	
+																	ns1blankspace.contactBusiness.financials.summary.creditors(oParam, oResponse);
+																}
+																else
+																{
+																	if (oResponse.error.errorcode == '4')
+																	{	
+																		if (oResponse.error.errornotes.indexOf('FINANCIAL_DEBTORSCREDITORS_PROCESSING_MANAGE') != -1)
+																		{	
+																			ns1blankspace.status.working('Optimising creditors');
+																			oParam = ns1blankspace.util.setParam(oParam, 'onComplete', ns1blankspace.contactBusiness.financials.summary.creditors)
+																			ns1blankspace.financial.optimise.start(oParam);
+																		}
+																	}
+																}	
+															}
+														});			
+													}
+													else
+													{
+														var oRow;
+														var cAmount = 0;
+														var aHTML = [];
+
+														if (oResponse.data.rows.length != 0)
+														{
+															oRow = oResponse.data.rows[0];
+															cAmount = oResponse.data.rows[0].total
+														
+															aHTML.push('<table class="ns1blankspace">' +
+																		'<tr>' +
+																		'<td class="ns1blankspaceHeaderCaption" style="text-align:left;">' +
+																		'<span style="font-weight:600;">Amount You Owe Them</span><br /><span style="font-size:0.625em;">(As Creditor)</span></td>' +
+																		'<td class="ns1blankspaceHeaderCaption" style="text-align:right;color:#A0A0A0;">' +
+																		_.first(_.split(oResponse.CurrentDescription, ',')) +
+																		'<br /><span style="font-size:0.625em;">(0&nbsp;to&nbsp;30)</span></td>' +
+																		'<td class="ns1blankspaceHeaderCaption" style="text-align:right;color:#A0A0A0;">' +
+																		_.first(_.split(oResponse['31-60Description'], ',')) +
+																		'<br /><span style="font-size:0.625em;">(31&nbsp;to&nbsp;60)</span></td>' +
+																		'<td class="ns1blankspaceHeaderCaption" style="text-align:right;color:#A0A0A0;">' +
+																		_.first(_.split(oResponse['61-90Description'], ',')) +
+																		'<br /><span style="font-size:0.625em;">(61&nbsp;to&nbsp;90)</span></td>' +
+																		'<td class="ns1blankspaceHeaderCaption" style="text-align:right;color:#A0A0A0;">' +
+																		(_.first(_.split(oResponse['91Description'], ','))).replace(' or ', '<br />or&nbsp;') +
+																		'<br /><span style="font-size:0.625em;">(91&nbsp;+)</span></td>' +
+																		'</tr><tr>' +
+																		'<td id="ns1blankspaceCreditors_current-" class="ns1blankspaceRow" style="text-align:left;color:#A0A0A0; font-weight:600;">' +
+																		cAmount + '</td>' +
+																		'<td id="ns1blankspaceCreditors_current-" class="ns1blankspaceRow" style="text-align:right;color:#A0A0A0;">' +
+																		oRow.current + '</td>' +
+																		'<td id="ns1blankspaceCreditors_current-" class="ns1blankspaceRow" style="text-align:right;color:#A0A0A0;">' +
+																		oRow['31-60'] + '</td>' +
+																		'<td id="ns1blankspaceCreditors_current-" class="ns1blankspaceRow" style="text-align:right;color:#A0A0A0;">' +
+																		oRow['61-90'] + '</td>' +
+																		'<td id="ns1blankspaceCreditors_current-" class="ns1blankspaceRow" style="text-align:right;color:#A0A0A0;">' +
+																		oRow['91'] + '</td></tr>' +
+																		'</table>');
+														}
+														else
+														{
+															aHTML.push('<div class="ns1blankspaceNothing">You owe them nothing.</div>');
+														}
+
+														$('#ns1blankspaceFinancialsSummaryCreditors').html(aHTML.join(''))					
+													}
+												}			
 								},
 
 						details: 

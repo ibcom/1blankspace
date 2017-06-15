@@ -873,17 +873,17 @@ ns1blankspace.financial.debtors =
 								else
 								{
 									aHTML.push('<td class="ns1blankspaceHeaderCaption" style="text-align:right;color:#A0A0A0;">' +
-													(oResponse['91Description']).replace(' or ', '<br />or&nbsp;') +
-													'<br /><span style="font-size:0.625em;">(91&nbsp;+)</span></td>' +
-												'<td class="ns1blankspaceHeaderCaption" style="text-align:right;color:#A0A0A0;">' +
+													oResponse.CurrentDescription +
+													'<br /><span style="font-size:0.625em;">(0&nbsp;to&nbsp;30)</span></td>' +
+													'<td class="ns1blankspaceHeaderCaption" style="text-align:right;color:#A0A0A0;">' +
+													oResponse['31-60Description'] +
+													'<br /><span style="font-size:0.625em;">(31&nbsp;to&nbsp;60)</span></td>' +
+													'<td class="ns1blankspaceHeaderCaption" style="text-align:right;color:#A0A0A0;">' +
 													oResponse['61-90Description'] +
 													'<br /><span style="font-size:0.625em;">(61&nbsp;to&nbsp;90)</span></td>' +
-												'<td class="ns1blankspaceHeaderCaption" style="text-align:right;color:#A0A0A0;">' +
-													oResponse['31-60Description'] +
-													'<br /><span style="font-size:0.625em;">(31&nbsp;to&nbsp;60)</span></td>' +	
-												'<td class="ns1blankspaceHeaderCaption" style="text-align:right;color:#A0A0A0;">' +
-													oResponse.CurrentDescription +
-													'<br /><span style="font-size:0.625em;">(0&nbsp;to&nbsp;30)</span></td>');	
+													'<td class="ns1blankspaceHeaderCaption" style="text-align:right;color:#A0A0A0;">' +
+													(oResponse['91Description']).replace(' or ', '<br />or&nbsp;') +
+													'<br /><span style="font-size:0.625em;">(91&nbsp;+)</span></td>');	
 								}				
 
 								aHTML.push('<td class="ns1blankspaceHeaderCaption">&nbsp;</td>' +
@@ -949,14 +949,14 @@ ns1blankspace.financial.debtors =
 					}
 					else
 					{
-						aHTML.push(	'<td id="ns1blankspaceDebtors_current-" class="ns1blankspaceRow" style="text-align:right;color:#A0A0A0;">' +
-									oRow['91'] + '</td>' +
-									'<td id="ns1blankspaceDebtors_current-" class="ns1blankspaceRow" style="text-align:right;color:#A0A0A0;">' +
-									oRow['61-90'] + '</td>' +
+						aHTML.push('<td id="ns1blankspaceDebtors_current-" class="ns1blankspaceRow" style="text-align:right;color:#A0A0A0;">' +
+									oRow.current + '</td>' +
 									'<td id="ns1blankspaceDebtors_current-" class="ns1blankspaceRow" style="text-align:right;color:#A0A0A0;">' +
 									oRow['31-60'] + '</td>' +
 									'<td id="ns1blankspaceDebtors_current-" class="ns1blankspaceRow" style="text-align:right;color:#A0A0A0;">' +
-									oRow.current + '</td>');
+									oRow['61-90'] + '</td>' +
+									'<td id="ns1blankspaceDebtors_current-" class="ns1blankspaceRow" style="text-align:right;color:#A0A0A0;">' +
+									oRow['91'] + '</td>');
 					}
 
 					aHTML.push('<td style="width:60px;text-align:right;" class="ns1blankspaceRow">' +
