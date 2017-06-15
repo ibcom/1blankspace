@@ -123,7 +123,7 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.contactPerson',
-		source: '/jscripts/1blankspace.contactperson-2.0.3.js'
+		source: '/site/312/1blankspace.contactperson-2.0.4.js'
 	},
 	{
 		nameSpace: '1blankspace.contactBusiness',
