@@ -119,7 +119,7 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.format',
-		source: '/site/312/1blankspace.format-2.0.9.js'
+		source: '/site/312/1blankspace.format-2.1.0.js'
 	},
 	{
 		nameSpace: '1blankspace.contactPerson',
@@ -175,7 +175,7 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.financial',
-		source: '/site/312/1blankspace.financial-2.1.1.js'
+		source: '/site/312/1blankspace.financial-2.1.2.js'
 	},
 	{
 		nameSpace: '1blankspace.financial.bankAccount',
@@ -219,7 +219,7 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.report',
-		source: '/site/312/1blankspace.report-2.0.5.js'
+		source: '/site/312/1blankspace.report-2.0.6.js'
 	},
 	{
 		nameSpace: '1blankspace.setup',
