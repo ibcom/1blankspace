@@ -1603,8 +1603,8 @@ ns1blankspace.report =
 				$.each(aGroups, function()
 				{
 					aHTML.push('<div id="ns1blankspaceReportGroupHeader_' + this.id + '"' + 
-								'style="font-size:0.75em;padding:4px;">' + this.name + '</div>');
-					aHTML.push('<div id="ns1blankspaceReportGroupContent_' + this.id + '" style="padding:0.5em;margin-top:0px;"></div>');
+								'style="font-size:0.75em; padding:4px; background-image:none !important;">' + this.name + '</div>');
+					aHTML.push('<div id="ns1blankspaceReportGroupContent_' + this.id + '" style="padding:0.5em; margin-top:0px; top:-1px;"></div>');
 				});
 
 				aHTML.push('</div></tr></table>');
