@@ -256,6 +256,13 @@ ns1blankspace.financial.payment =
 											{
 												oSearch.addOperator('or');
 												oSearch.addFilter('payment.amount', 'APPROX_EQUAL_TO', sSearchText);
+
+												var oSearchDate = moment(sSearchText, 'DD MMM YYYY HH:mm:ss')
+	  											if (oSearchDate.isValid())
+												{
+													oSearch.addOperator('or');
+													oSearch.addFilter('paiddate', 'EQUAL_TO', oSearchDate.format('DD MMM YYYY'));
+												}
 											}
 
 											oSearch.addBracket(')');

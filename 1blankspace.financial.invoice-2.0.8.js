@@ -146,7 +146,7 @@ ns1blankspace.financial.invoice =
 						
 						var oSearch = new AdvancedSearch();
 						oSearch.method = 'FINANCIAL_INVOICE_SEARCH';
-						oSearch.addField('reference,description,contactbusinesssenttotext,contactpersonsenttotext,duedate,amount');
+						oSearch.addField('reference,description,contactbusinesssenttotext,contactpersonsenttotext,sentdate,amount');
 						oSearch.rows = 10;
 						oSearch.sort('modifieddate', 'desc');
 						oSearch.getResults(function (data) {ns1blankspace.financial.invoice.home(oParam, data)});
@@ -177,7 +177,7 @@ ns1blankspace.financial.invoice =
 														'$' + this.amount + '</td>');
 																		
 								aHTML.push('<td id="ns1blankspaceMostLikely_DueDate-' + this.id + '" class="ns1blankspaceMostLikelySub" style="width:90px;text-align:right;padding-right:15px;">' +
-														this.duedate + '</td>');
+														this.sentdate + '</td>');
 																										
 								var sContact = this.contactbusinesssenttotext;
 								if (sContact == '') {sContact = this.contactpersonsenttotext}
@@ -277,11 +277,21 @@ ns1blankspace.financial.invoice =
 											oSearch.addOperator('or');
 											oSearch.addFilter('invoice.contactpersonsentto.surname', 'TEXT_IS_LIKE', sSearchText);
 
-											if (!_.isNaN(_.toNumber(sSearchText) && sSearchText != ''))
+											if (sSearchText != '')
 											{
-												oSearch.addOperator('or');
-												oSearch.addFilter('invoice.amount', 'APPROX_EQUAL_TO', sSearchText);
-											}
+												if (!_.isNaN(_.toNumber(sSearchText)))
+												{
+													oSearch.addOperator('or');
+													oSearch.addFilter('invoice.amount', 'APPROX_EQUAL_TO', sSearchText);
+												}
+
+												var oSearchDate = moment(sSearchText, 'DD MMM YYYY HH:mm:ss')
+	  											if (oSearchDate.isValid())
+												{
+													oSearch.addOperator('or');
+													oSearch.addFilter('sentdate', 'EQUAL_TO', oSearchDate.format('DD MMM YYYY'));
+												}
+											}	
 
 											oSearch.addBracket(')');
 

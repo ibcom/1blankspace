@@ -366,11 +366,21 @@ ns1blankspace.financial.expense =
 												oSearch.addOperator('or');
 												oSearch.addFilter('expense.payeereference', 'TEXT_IS_LIKE', sSearchText);
 
-												if (!_.isNaN(_.toNumber(sSearchText)))
-												{
-													oSearch.addOperator('or');
-													oSearch.addFilter('expense.amount', 'APPROX_EQUAL_TO', sSearchText);
-												}
+												if (sSearchText != '')
+												{	
+													if (!_.isNaN(_.toNumber(sSearchText)))
+													{
+														oSearch.addOperator('or');
+														oSearch.addFilter('expense.amount', 'APPROX_EQUAL_TO', sSearchText);
+													}
+
+													var oSearchDate = moment(sSearchText, 'DD MMM YYYY HH:mm:ss')
+		  											if (oSearchDate.isValid())
+													{
+														oSearch.addOperator('or');
+														oSearch.addFilter('accrueddate', 'EQUAL_TO', oSearchDate.format('DD MMM YYYY'));
+													}
+												}	
 
 												oSearch.addBracket(')');
 											}	

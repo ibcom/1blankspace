@@ -245,6 +245,13 @@ ns1blankspace.financial.receipt =
 													oSearch.addFilter('receipt.amount', 'APPROX_EQUAL_TO', sSearchText);
 												}
 
+												var oSearchDate = moment(sSearchText, 'DD MMM YYYY HH:mm:ss')
+	  											if (oSearchDate.isValid())
+												{
+													oSearch.addOperator('or');
+													oSearch.addFilter('receiveddate', 'EQUAL_TO', oSearchDate.format('DD MMM YYYY'));
+												}
+
 												oSearch.addBracket(')');
 											}	
 
