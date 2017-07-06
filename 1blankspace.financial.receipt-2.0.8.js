@@ -86,7 +86,7 @@ ns1blankspace.financial.receipt =
 
 						aHTML.push('<tr class="ns1blankspaceControl">' +
 									'<td style="padding-top:18px;" id="ns1blankspaceControlUnreconciled" class="ns1blankspaceControl">' +
-										'Unreconciled<br /><span class="ns1blankspaceSub" style="font-size:0.625em;">Receipts that have not been marked as reconciled against a bank account.</span></td>' +
+										'Unreconciled<br /><span class="ns1blankspaceSub" style="font-size:0.625em;">Receipts that have not been reconciled against a bank account.</span></td>' +
 									'</tr>');
 
 						aHTML.push('</table>');		
@@ -108,7 +108,7 @@ ns1blankspace.financial.receipt =
 						var oSearch = new AdvancedSearch();
 						oSearch.method = 'FINANCIAL_RECEIPT_SEARCH';
 						oSearch.addField('reference,description,contactbusinessreceivedfromtext,contactpersonreceivedfromtext,receiveddate,amount');
-						oSearch.rows = 10;
+						oSearch.rows = 20;
 						oSearch.sort('modifieddate', 'desc');
 						oSearch.getResults(function (data) {ns1blankspace.financial.receipt.home(oParam, data)});
 					}

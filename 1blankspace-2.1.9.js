@@ -339,6 +339,16 @@ ns1blankspace.app =
 						ns1blankspace.history.lastDestinationInstruction = '';
 						ns1blankspace.history.list = [];
 
+						if (ns1blankspace.option.defaultRowsSmall == undefined)
+						{
+							ns1blankspace.option.defaultRowsSmall = 10
+						}
+
+						if (ns1blankspace.option.defaultRows == undefined)
+						{
+							ns1blankspace.option.defaultRows = 20
+						}
+
 						ns1blankspace.user.networkGroups = '';
 						ns1blankspace.setupShow = false;
 
@@ -5687,11 +5697,10 @@ ns1blankspace.render =
 
 	showMore:	function (oParam, oResponse)
 				{
-					
 					var sXHTMLElementID = '';
 					var iMore = -1;
-					var iStartRow = 10;
-					var iRows = 10;
+					var iStartRow = ns1blankspace.option.defaultRowsSmall;
+					var iRows = ns1blankspace.option.defaultRowsSmall;
 					var iColumn = 0;
 					var iMaximumColumns = 1;
 					var sColumns = "title";
@@ -5704,6 +5713,8 @@ ns1blankspace.render =
 					var sIDSeperator = '-';
 					var sWidth = 250;
 					var fFunctionRow = ns1blankspace.render.row;
+
+
 					
 					if (oParam != undefined)
 					{

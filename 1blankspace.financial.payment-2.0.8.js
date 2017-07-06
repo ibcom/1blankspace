@@ -87,7 +87,7 @@ ns1blankspace.financial.payment =
 
 						aHTML.push('<tr class="ns1blankspaceControl">' +
 									'<td style="padding-top:18px;" id="ns1blankspaceControlUnreconciled" class="ns1blankspaceControl">' +
-										'Unreconciled<br /><span class="ns1blankspaceSub" style="font-size:0.625em;">Payments that have not been marked as reconciled against a bank account.</span></td>' +
+										'Unreconciled<br /><span class="ns1blankspaceSub" style="font-size:0.625em;">Payments that have not been reconciled against a bank account.</span></td>' +
 									'</tr>');
 
 						if (ns1blankspace.option.paymentShowImages)
@@ -122,7 +122,7 @@ ns1blankspace.financial.payment =
 						var oSearch = new AdvancedSearch();
 						oSearch.method = 'FINANCIAL_PAYMENT_SEARCH';
 						oSearch.addField('reference,description,contactbusinesspaidtotext,contactpersonpaidtotext,paiddate,amount');
-						oSearch.rows = 25;
+						oSearch.rows = 20;
 						oSearch.sort('modifieddate', 'desc');
 						oSearch.getResults(function (data) {ns1blankspace.financial.payment.home(oParam, data)});
 					}
@@ -243,7 +243,7 @@ ns1blankspace.financial.payment =
 											var oSearch = new AdvancedSearch();
 											oSearch.method = 'FINANCIAL_PAYMENT_SEARCH';
 											oSearch.addField('contactbusinesspaidtotext,contactbusinesspaidto,contactpersonpaidtotext,contactpersonpaidto,' +
-																'reference,paiddate,amount,reconciliation,reconciliationtext');
+																'reference,paiddate,amount,reconciliation,reconciliationtext,description');
 
 											oSearch.addBracket('(');
 											oSearch.addFilter('reference', 'TEXT_IS_LIKE', sSearchText);
@@ -292,51 +292,11 @@ ns1blankspace.financial.payment =
 									}
 									else
 									{		
-										aHTML.push('<table class="ns1blankspaceSearchMedium" style="width:400px;">');
+										aHTML.push('<table class="ns1blankspaceSearchMedium" style="width:520px;">');
 											
 										$.each(oResponse.data.rows, function()
 										{	
-											iColumn = iColumn + 1;
-											
-											if (iColumn == 1)
-											{
-												aHTML.push('<tr class="ns1blankspaceSearch">');
-											}
-										
-											aHTML.push('<td class="ns1blankspaceSearch" id="' +
-															'search-' + this.id + '">' +
-															this.reference +
-															'</td>');
-
-											aHTML.push('<td class="ns1blankspaceSearch" id="' +
-													'search-' + this.id + '">' +
-													ns1blankspace.util.fd(this.paiddate) +
-													'</td>');
-
-											aHTML.push('<td class="ns1blankspaceSearch" id="' +
-													'search-' + this.id + '" style="text-align:right;">' +
-													this.amount +
-													'</td>');
-
-											if (this.contactbusinesspaidtotext != '')
-											{
-												sContact = this.contactbusinesspaidtotext;
-											}
-											else
-											{
-												sContact = this.contactpersonpaidtotext;
-											}	
-											
-											aHTML.push('<td class="ns1blankspaceSearchSub" id="' +
-															'searchContact-' + this.id + '">' +
-															sContact +
-															'</td>');
-											
-											if (iColumn == iMaximumColumns)
-											{
-												aHTML.push('</tr>');
-												iColumn = 0;
-											}	
+											aHTML.push(ns1blankspace.financial.payment.search.row(oParam, this));
 										});
 								    	
 										aHTML.push('</table>');
@@ -346,7 +306,8 @@ ns1blankspace.financial.payment =
 											{
 												html: aHTML.join(''),
 												more: (oResponse.morerows == "true"),
-												header: false
+												header: false,
+												width: 520
 											}) 
 										);		
 										
@@ -361,13 +322,59 @@ ns1blankspace.financial.payment =
 										{
 											columns: 'reference',
 											more: oResponse.moreid,
-											width: 400,
+											width: 520,
 											startRow: parseInt(oResponse.startrow) + parseInt(oResponse.rows),
-											functionSearch: ns1blankspace.financial.payment.search.send
+											functionSearch: ns1blankspace.financial.payment.search.send,
+											functionRow: ns1blankspace.financial.payment.search.row
 										}); 
-									}				
-											
-								}
+									}									
+								},
+
+						row: 	function (oParam, oRow)
+								{
+									var aHTML = [];
+									var sContact;
+												
+									aHTML.push('<tr class="ns1blankspaceSearch">');
+								
+									aHTML.push('<td class="ns1blankspaceSearch" id="' +
+													'search-' + oRow.id + '">' +
+													oRow.reference +
+													'</td>');
+
+									aHTML.push('<td class="ns1blankspaceSearch" id="' +
+													'searchContact-' + oRow.id + '">' +
+													ns1blankspace.util.fd(oRow.paiddate) +
+													'</td>');
+
+									aHTML.push('<td class="ns1blankspaceSearch" style="text-align:right;" id="' +
+													'searchContact-' + oRow.id + '">' +
+													oRow.amount +
+													'</td>');
+
+									if (oRow.contactbusinesspaidtotext != '')
+									{
+										sContact = oRow.contactbusinesspaidtotext;
+									}
+									else
+									{
+										sContact = oRow.contactpersonpaidtotext;
+									}	
+									
+									aHTML.push('<td class="ns1blankspaceSearch ns1blankspaceSearchSub" id="' +
+													'searchContact-' + oRow.id + '">' +
+													sContact +
+													'</td>');
+
+									aHTML.push('<td class="ns1blankspaceSearch ns1blankspaceSearchSub" id="' +
+													'searchContact-' + oRow.id + '">' +
+													oRow.description +
+													'</td>');
+
+									aHTML.push('</tr>');
+									
+									return aHTML.join('')
+								}					
 				},				
 
 	layout: 	function ()

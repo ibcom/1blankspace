@@ -223,8 +223,7 @@ ns1blankspace.admin.space =
 									var iColumn = 0;
 									var iMaximumColumns = 1;
 									var aHTML = [];
-									ns1blankspace.objectContextData.canSwitchInto = undefined;
-
+									
 									ns1blankspace.search.stop();
 										
 									if (oResponse.data.rows.length == 0)

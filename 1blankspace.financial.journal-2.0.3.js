@@ -241,7 +241,7 @@ ns1blankspace.financial.journal =
 											
 											var oSearch = new AdvancedSearch();
 											oSearch.method = 'FINANCIAL_GENERAL_JOURNAL_SEARCH';
-											oSearch.addField('area,areatext,description,id,journaldate,object,objecttext,objectcontext,' +
+											oSearch.addField('id,area,areatext,description,id,journaldate,object,objecttext,objectcontext,' +
 															'project,projecttext,reference,status,statustext');
 
 											oSearch.addBracket('(');
@@ -272,7 +272,7 @@ ns1blankspace.financial.journal =
 								{
 									var iColumn = 0;
 									var aHTML = [];
-									var	iMaximumColumns = 1;
+									var iMaximumColumns = 1;
 									var sContact;
 										
 									ns1blankspace.search.stop();
@@ -283,32 +283,11 @@ ns1blankspace.financial.journal =
 									}
 									else
 									{		
-										aHTML.push('<table class="ns1blankspaceSearchMedium" style="width:400px;">');
+										aHTML.push('<table class="ns1blankspaceSearchMedium" style="width:520px;">');
 											
 										$.each(oResponse.data.rows, function()
 										{	
-											iColumn = iColumn + 1;
-											
-											if (iColumn == 1)
-											{
-												aHTML.push('<tr class="ns1blankspaceSearch">');
-											}
-										
-											aHTML.push('<td class="ns1blankspaceSearch" id="' +
-														'search-' + this.id + '">' +
-														this.journaldate +
-														'</td>');
-
-											aHTML.push('<td class="ns1blankspaceSearch" id="' +
-															'searchContact-' + this.id + '">' +
-															this.description +
-															'</td>');
-	
-											if (iColumn == iMaximumColumns)
-											{
-												aHTML.push('</tr>');
-												iColumn = 0;
-											}	
+											aHTML.push(ns1blankspace.financial.journal.search.row(oParam, this));
 										});
 								    	
 										aHTML.push('</table>');
@@ -318,7 +297,7 @@ ns1blankspace.financial.journal =
 											{
 												html: aHTML.join(''),
 												more: (oResponse.morerows == "true"),
-												width: 400,
+												width: 520,
 												header: false
 											}) 
 										);
@@ -334,11 +313,40 @@ ns1blankspace.financial.journal =
 										{
 											columns: 'reference',
 											more: oResponse.moreid,
+											width: 520,
 											startRow: parseInt(oResponse.startrow) + parseInt(oResponse.rows),
-											functionSearch: ns1blankspace.financial.journal.search.send
+											functionSearch: ns1blankspace.financial.journal.search.send,
+											functionRow: ns1blankspace.financial.journal.search.row
 										});   
 									}				
-								}
+								},
+
+						row: 	function (oParam, oRow)
+								{
+									var aHTML = [];
+									var sContact;
+												
+									aHTML.push('<tr class="ns1blankspaceSearch">');
+								
+									aHTML.push('<td class="ns1blankspaceSearch" id="' +
+													'search-' + oRow.id + '">' +
+													oRow.reference +
+													'</td>');
+
+									aHTML.push('<td class="ns1blankspaceSearch" id="' +
+													'searchContact-' + oRow.id + '">' +
+													ns1blankspace.util.fd(oRow.journaldate) +
+													'</td>');
+
+									aHTML.push('<td class="ns1blankspaceSearch ns1blankspaceSearchSub" id="' +
+													'searchContact-' + oRow.id + '">' +
+													oRow.description +
+													'</td>');
+
+									aHTML.push('</tr>');
+									
+									return aHTML.join('')
+								}								
 				},		
 
 	layout:	function ()

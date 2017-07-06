@@ -11,6 +11,7 @@ ns1blankspace.xhtml.editorCSS = '';
 ns1blankspace.option = $.extend(true, ns1blankspace.option, 
 {
 	defaultRows: 20,
+	defaultRowsSmall: 10,
 	defaultView: "Select...",
 	defaultSetupView: "Website",
 	returnToLast: true,
@@ -78,7 +79,7 @@ ns1blankspace.xhtml.templates.source =
 {
 	invoice: '/jscripts/1blankspace.setup.financial.invoice-1.0.0.html',
 	statement: '/jscripts/1blankspace.setup.financial.statement-1.0.0.html',
-	payroll: '/jscripts/1blankspace.setup.financial.payroll-1.0.0.html',
+	payroll: '/site/312/1blankspace.setup.financial.payroll-1.0.1.html',
 	payslip: '/jscripts/1blankspace.setup.financial.payslip-1.0.0.html',
 	invoiceschedule: '/site/1433/1blankspace.setup.financial.invoiceschedule-1.0.0.html',
 	payment: '/site/1433/1blankspace.setup.financial.payment-1.0.0.html',
@@ -191,19 +192,19 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.financial.receipt',
-		source: '/site/312/1blankspace.financial.receipt-2.0.7.js'
+		source: '/site/312/1blankspace.financial.receipt-2.0.8.js'
 	},
 	{
 		nameSpace: '1blankspace.financial.payment',
-		source: '/site/312/1blankspace.financial.payment-2.0.7.js'
+		source: '/site/312/1blankspace.financial.payment-2.0.8.js'
 	},
 	{
 		nameSpace: '1blankspace.financial.credit',
-		source: '/site/312/1blankspace.financial.credit-2.0.4.js'
+		source: '/site/312/1blankspace.financial.credit-2.0.5.js'
 	},
 	{
 		nameSpace: '1blankspace.financial.journal',
-		source: '/jscripts/1blankspace.financial.journal-2.0.1.js'
+		source: '/site/312/1blankspace.financial.journal-2.0.3.js'
 	},
 	{
 		nameSpace: '1blankspace.financial.tax',
@@ -211,7 +212,7 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.financial.payroll',
-		source: '/site/312/1blankspace.financial.payroll-2.1.0.js'
+		source: '/site/312/1blankspace.financial.payroll-2.1.3.js'
 	},
 	{
 		nameSpace: '1blankspace.financial.budget',
@@ -239,7 +240,7 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.setup.messaging',
-		source: '/site/312/1blankspace.setup.messaging-2.0.3.js'
+		source: '/site/312/1blankspace.setup.messaging-2.0.4.js'
 	},
 	{
 		nameSpace: '1blankspace.setup.networkGroup',
@@ -263,7 +264,7 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.setup.user',
-		source: '/jscripts/1blankspace.setup.user-2.0.4.js'
+		source: '/site/312/1blankspace.setup.user-2.0.5.js'
 	},
 	{
 		nameSpace: '1blankspace.setup.userRole',

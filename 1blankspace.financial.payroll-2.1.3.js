@@ -122,7 +122,7 @@ ns1blankspace.financial.payroll =
 										{
 											$('#ns1blankspaceViewControlNew').button({disabled: false});
 											ns1blankspace.show({selector: '#ns1blankspaceMainPayRun', refresh: true, context: {inContext: false, action: true, actionOptions: true}});
-											ns1blankspace.financial.payroll.home();
+											ns1blankspace.financial.payroll.home.show();
 										});
 									
 										$('#ns1blankspaceControl-employees').click(function(event)
@@ -180,7 +180,7 @@ ns1blankspace.financial.payroll =
 										else
 										{	
 											aHTML.push('<table id="ns1blankspaceMostLikely">');
-											//aHTML.push('<tr><td class="ns1blankspaceCaption">MOST RECENT</td></tr>');
+											aHTML.push('<tr><td class="ns1blankspaceCaption">RECENT</td></tr>');
 
 											$.each(oResponse.data.rows, function()
 											{
@@ -202,7 +202,7 @@ ns1blankspace.financial.payroll =
 											functionShowRow: ns1blankspace.financial.payroll.home.row,
 											functionOpen: undefined,
 											functionOnNewPage: ns1blankspace.financial.payroll.home.bind,
-											headerRow: false
+											headerRow: true
 										});		
 									}	
 								},
@@ -3829,7 +3829,9 @@ ns1blankspace.financial.payroll.totals =
 										oSearch.addField('employee.contactpersontext,employee.employmentstartdate,employee.statustext,employee.employeenumber,employee.taxfilenumber,' +
 															'employee.contactperson,employee.contactperson.firstname,employee.contactperson.surname,employee.contactperson.email,' +
 															'employee.contactperson.streetaddress1,employee.contactperson.streetaddress2,employee.contactperson.streetsuburb,' +
-															'employee.contactperson.streetstate,employee.contactperson.streetpostcode,employee.contactperson.dateofbirth');
+															'employee.contactperson.streetstate,employee.contactperson.streetpostcode,employee.contactperson.dateofbirth,' +
+															'employee.contactbusiness.tradename,employee.contactbusiness.abn,employee.contactbusiness.streetaddress1,employee.contactbusiness.streetaddress2,' +
+															'employee.contactbusiness.streetsuburb,employee.contactbusiness.streetstate,employee.contactbusiness.streetpostcode');
 
 										if (sStartDate != undefined)
 										{
@@ -4308,7 +4310,7 @@ ns1blankspace.financial.payroll.totals =
 																		ns1blankspace.financial.payroll.data.summaries[iDataIndex].superannuation = (oResponse.summary.superannuation).parseCurrency().formatMoney(0, '.', ',');
 																		ns1blankspace.financial.payroll.data.summaries[iDataIndex].taxbeforerebate = (oResponse.summary.taxbeforerebate).parseCurrency().formatMoney(0, '.', ',');
 																		ns1blankspace.financial.payroll.data.summaries[iDataIndex].allowances = (oResponse.summary.allowances).parseCurrency().formatMoney(0, '.', ',');
-																		ns1blankspace.financial.payroll.data.summaries[iDataIndex].contactbusinesstext = ns1blankspace.user.contactBusinessText;
+																		ns1blankspace.financial.payroll.data.summaries[iDataIndex].contactbusinesstext = ns1blankspace.financial.payroll.data.summaries[iDataIndex]['employee.contactbusiness.tradename'];
 																		ns1blankspace.financial.payroll.data.summaries[iDataIndex].year = Date.parse(oResponse.summary.paydate).getFullYear();
 																		ns1blankspace.financial.payroll.data.summaries[iDataIndex].startdate = sStartDate;
 																		ns1blankspace.financial.payroll.data.summaries[iDataIndex].enddate = sEndDate;
@@ -4401,7 +4403,7 @@ ns1blankspace.financial.payroll.totals =
 								},
 
 					email: 		{
-									init: 		function (oParam, oResponse)
+									init: 	function (oParam, oResponse)
 												{
 													ns1blankspace.financial.payroll.totals.employees.email.send({dataIndex: 0})
 												},
@@ -4444,7 +4446,7 @@ ns1blankspace.financial.payroll.totals =
 
 																if (oSummary.xhtml === undefined)
 																{
-																	var oTemplate = ns1blankspace.format.templates.get(oParam);
+																	var oTemplate = ns1blankspace.format.templates.get({object: 37});
 
 																	oSummary.xhtml = ns1blankspace.format.render(
 																	{
@@ -4462,7 +4464,8 @@ ns1blankspace.financial.payroll.totals =
 																	message: oSummary.xhtml,
 																	to: oSummary['employee.contactperson.email'],
 																	object: 37,
-																	objectContext: oSummary.id
+																	objectContext: oSummary.id,
+																	fromemail: ns1blankspace.user.email
 																}
 
 																//

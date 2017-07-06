@@ -234,7 +234,7 @@ ns1blankspace.financial.expense =
 						var oSearch = new AdvancedSearch();
 						oSearch.method = 'FINANCIAL_EXPENSE_SEARCH';
 						oSearch.addField('reference,description,amount,accrueddate,contactbusinesspaidtotext,contactpersonpaidtotext,object,objectcontext,payeereference');
-						oSearch.rows = 10;
+						oSearch.rows = 20;
 						oSearch.sort('modifieddate', 'desc');
 						oSearch.getResults(function (data) {ns1blankspace.financial.expense.home(oParam, data)});
 					}
@@ -351,7 +351,7 @@ ns1blankspace.financial.expense =
 											
 											var oSearch = new AdvancedSearch();
 											oSearch.method = 'FINANCIAL_EXPENSE_SEARCH';
-											oSearch.addField('reference,accrueddate,amount,contactbusinesspaidtotext,contactpersonpaidtotext,payeereference');
+											oSearch.addField('reference,accrueddate,amount,contactbusinesspaidtotext,contactpersonpaidtotext,payeereference,description');
 											
 											if (sSearchText != '')
 											{	
@@ -388,6 +388,7 @@ ns1blankspace.financial.expense =
 											ns1blankspace.search.advanced.addFilters(oSearch);
 
 											oSearch.sort('accrueddate', 'DESC');
+											oSearch.rows = ns1blankspace.option.defaultRowsSmall;
 											
 											oSearch.getResults(function(data) {ns1blankspace.financial.expense.search.process(oParam, data)});	
 										}
@@ -409,56 +410,11 @@ ns1blankspace.financial.expense =
 									}
 									else
 									{		
-										aHTML.push('<table class="ns1blankspaceSearchMedium" style="width:400px;">');
+										aHTML.push('<table class="ns1blankspaceSearchMedium" style="width:520px;">');
 											
 										$.each(oResponse.data.rows, function()
 										{	
-											iColumn = iColumn + 1;
-											
-											if (iColumn == 1)
-											{
-												aHTML.push('<tr class="ns1blankspaceSearch">');
-											}
-										
-											aHTML.push('<td class="ns1blankspaceSearch" id="' +
-															'search-' + this.id + '">' +
-															this.reference +
-															'</td>');
-
-											aHTML.push('<td class="ns1blankspaceSearch" id="' +
-															'search-' + this.id + '">' +
-															ns1blankspace.util.fd(this.accrueddate) +
-															'</td>');
-
-											aHTML.push('<td class="ns1blankspaceSearch" style="text-align:right;" id="' +
-															'search-' + this.id + '">' +
-															this.amount +
-															'</td>');
-
-											if (this.contactbusinesspaidtotext != '')
-											{
-												sContact = this.contactbusinesspaidtotext;
-											}
-											else
-											{
-												sContact = this.contactpersonpaidtotext;
-											}
-	
-											aHTML.push('<td class="ns1blankspaceSearchSub" id="' +
-															'searchContact-' + this.id + '">' +
-															sContact +
-															'</td>');
-
-											aHTML.push('<td class="ns1blankspaceSearchSub" id="' +
-															'searchContact-' + this.id + '">' +
-															this.payeereference +
-															'</td>');
-
-											if (iColumn == iMaximumColumns)
-											{
-												aHTML.push('</tr>');
-												iColumn = 0;
-											}	
+											aHTML.push(ns1blankspace.financial.expense.search.row(oParam, this));
 										});
 								    	
 										aHTML.push('</table>');
@@ -468,7 +424,8 @@ ns1blankspace.financial.expense =
 											{
 												html: aHTML.join(''),
 												more: (oResponse.morerows == "true"),
-												header: false
+												header: false,
+												width: 520
 											}) 
 										);
 										
@@ -483,12 +440,64 @@ ns1blankspace.financial.expense =
 										{
 											columns: 'reference-accrueddate-amount',
 											more: oResponse.moreid,
-											width: 400,
+											width: 520,
 											startRow: parseInt(oResponse.startrow) + parseInt(oResponse.rows),
-											functionSearch: ns1blankspace.financial.expense.search.send
+											functionSearch: ns1blankspace.financial.expense.search.send,
+											functionRow: ns1blankspace.financial.expense.search.row
 										});  
 									}		
-								}
+								},
+
+						row: 	function (oParam, oRow)
+								{
+									var aHTML = [];
+									var sContact;
+												
+									aHTML.push('<tr class="ns1blankspaceSearch">');
+								
+									aHTML.push('<td class="ns1blankspaceSearch" id="' +
+													'search-' + oRow.id + '">' +
+													oRow.reference +
+													'</td>');
+
+									aHTML.push('<td class="ns1blankspaceSearch" id="' +
+													'searchContact-' + oRow.id + '">' +
+													ns1blankspace.util.fd(oRow.accrueddate) +
+													'</td>');
+
+									aHTML.push('<td class="ns1blankspaceSearch" style="text-align:right;" id="' +
+													'searchContact-' + oRow.id + '">' +
+													oRow.amount +
+													'</td>');
+
+									if (oRow.contactbusinesspaidtotext != '')
+									{
+										sContact = oRow.contactbusinesspaidtotext;
+									}
+									else
+									{
+										sContact = oRow.contactpersonpaidtotext;
+									}	
+									
+									aHTML.push('<td class="ns1blankspaceSearch ns1blankspaceSearchSub" id="' +
+													'searchContact-' + oRow.id + '">' +
+													sContact +
+													'</td>');
+
+									aHTML.push('<td class="ns1blankspaceSearch ns1blankspaceSearchSub" id="' +
+															'searchContact-' + oRow.id + '">' +
+															oRow.payeereference +
+															'</td>');
+
+									aHTML.push('<td class="ns1blankspaceSearch ns1blankspaceSearchSub" id="' +
+													'searchContact-' + oRow.id + '">' +
+													oRow.description +
+													'</td>');
+
+									aHTML.push('</tr>');
+									
+									return aHTML.join('')
+								}		
 				},				
 
 	layout: 	function ()

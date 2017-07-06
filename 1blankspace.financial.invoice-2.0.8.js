@@ -84,6 +84,7 @@ ns1blankspace.financial.invoice =
 							
 						ns1blankspace.objectContextData.sentdate = ns1blankspace.util.fd(oObjectContext.sentdate);
 						ns1blankspace.objectContextData.amount = oObjectContext.amount;
+						ns1blankspace.objectContextData.tax = oObjectContext.tax;
 						ns1blankspace.objectContextData.preadjustmentamount =
 							(_.toNumber(oObjectContext.amount.replace(',', '')) +
 									_.toNumber(oObjectContext.creditamount.replace(',', ''))).formatMoney(2, ".", ",");
@@ -147,7 +148,7 @@ ns1blankspace.financial.invoice =
 						var oSearch = new AdvancedSearch();
 						oSearch.method = 'FINANCIAL_INVOICE_SEARCH';
 						oSearch.addField('reference,description,contactbusinesssenttotext,contactpersonsenttotext,sentdate,amount');
-						oSearch.rows = 10;
+						oSearch.rows = 20;
 						oSearch.sort('modifieddate', 'desc');
 						oSearch.getResults(function (data) {ns1blankspace.financial.invoice.home(oParam, data)});
 					}
@@ -298,6 +299,7 @@ ns1blankspace.financial.invoice =
 											ns1blankspace.search.advanced.addFilters(oSearch);
 											
 											oSearch.sort('reference', 'desc');
+											oSearch.rows = ns1blankspace.option.defaultRowsSmall;
 
 											oSearch.getResults(function(data) {ns1blankspace.financial.invoice.search.process(oParam, data)});	
 										}
@@ -307,7 +309,7 @@ ns1blankspace.financial.invoice =
 					process:	function (oParam, oResponse)
 								{
 									var iColumn = 0;
-									var	iMaximumColumns = 1;
+									var iMaximumColumns = 1;
 									var aHTML = [];
 									var sContact;
 									
@@ -319,51 +321,11 @@ ns1blankspace.financial.invoice =
 									}
 									else
 									{		
-										aHTML.push('<table class="ns1blankspaceSearchMedium" style="width:400px;">');
+										aHTML.push('<table class="ns1blankspaceSearchMedium" style="width:520px;">');
 											
 										$.each(oResponse.data.rows, function()
 										{	
-											iColumn = iColumn + 1;
-											
-											if (iColumn == 1)
-											{
-												aHTML.push('<tr class="ns1blankspaceSearch">');
-											}
-										
-											aHTML.push('<td class="ns1blankspaceSearch" id="' +
-														'search-' + this.id + '">' +
-														this.reference +
-														'</td>');
-
-											if (this.contactbusinesssenttotext != '')
-											{
-												sContact = this.contactbusinesssenttotext;
-											}
-											else
-											{
-												sContact = this.contactpersonsenttotext;
-											}	
-											
-											aHTML.push('<td class="ns1blankspaceSearch" id="' +
-															'searchContact-' + this.id + '">' +
-															sContact +
-															'</td>');
-
-											aHTML.push('<td class="ns1blankspaceSearch" id="' +
-															'searchContact-' + this.id + '">' +
-															ns1blankspace.util.fd(this.sentdate) +
-															'</td>');
-
-											aHTML.push('<td class="ns1blankspaceSearch" style="text-align:right;" id="' +
-															'searchContact-' + this.id + '">$' +
-															this.amount +
-															'</td>');
-
-											if (iColumn == iMaximumColumns)
-											{
-												aHTML.push('</tr>');
-												iColumn = 0;
-											}	
+											aHTML.push(ns1blankspace.financial.invoice.search.row(oParam, this));
 										});
 								    	
 										aHTML.push('</table>');
@@ -373,7 +335,7 @@ ns1blankspace.financial.invoice =
 											{
 												html: aHTML.join(''),
 												more: (oResponse.morerows == "true"),
-												width: 400,
+												width: 520,
 												header: false
 											}) 
 										);		
@@ -389,12 +351,59 @@ ns1blankspace.financial.invoice =
 										{
 											columns: 'reference-contactbusinesssenttotext-sentdate-amount',
 											more: oResponse.moreid,
-											width: 400,
+											width: 520,
 											startRow: parseInt(oResponse.startrow) + parseInt(oResponse.rows),
-											functionSearch: ns1blankspace.financial.invoice.search.send
+											functionSearch: ns1blankspace.financial.invoice.search.send,
+											functionRow: ns1blankspace.financial.invoice.search.row
 										});   				
 									}			
-								}
+								},
+
+						row: 	function (oParam, oRow)
+								{
+									var aHTML = [];
+									var sContact;
+												
+									aHTML.push('<tr class="ns1blankspaceSearch">');
+								
+									aHTML.push('<td class="ns1blankspaceSearch" id="' +
+													'search-' + oRow.id + '">' +
+													oRow.reference +
+													'</td>');
+
+									aHTML.push('<td class="ns1blankspaceSearch" id="' +
+													'searchContact-' + oRow.id + '">' +
+													ns1blankspace.util.fd(oRow.sentdate) +
+													'</td>');
+
+									aHTML.push('<td class="ns1blankspaceSearch" style="text-align:right;" id="' +
+													'searchContact-' + oRow.id + '">' +
+													oRow.amount +
+													'</td>');
+
+									if (oRow.contactbusinesssenttotext != '')
+									{
+										sContact = oRow.contactbusinesssenttotext;
+									}
+									else
+									{
+										sContact = oRow.contactpersonsenttotext;
+									}	
+									
+									aHTML.push('<td class="ns1blankspaceSearch ns1blankspaceSearchSub" id="' +
+													'searchContact-' + oRow.id + '">' +
+													sContact +
+													'</td>');
+
+									aHTML.push('<td class=" ns1blankspaceSearch ns1blankspaceSearchSub" id="' +
+													'searchContact-' + oRow.id + '">' +
+													oRow.description +
+													'</td>');
+
+									aHTML.push('</tr>');
+									
+									return aHTML.join('')
+								}		
 				},				
 
 	layout: 	function ()
