@@ -4582,7 +4582,7 @@ ns1blankspace.financial.payroll.totals =
 													}
 													else
 													{
-														var sHTML = '<style>td {padding:8px;}</style>' +
+														var sHTML = '<style>div.summary {font-size: 125%;} td {padding:8px;}</style>' +
 																			_.join(_.map(ns1blankspace.financial.payroll.data.summaries, 'xhtml'), '<div style="page-break-after:always;"></div>');
 
 														var sURL = document.location.protocol + '//' + document.location.host;
