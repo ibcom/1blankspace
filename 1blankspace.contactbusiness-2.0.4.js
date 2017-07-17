@@ -212,7 +212,9 @@ ns1blankspace.contactBusiness =
 											}	
 
 											ns1blankspace.search.advanced.addFilters(oSearch);
-											
+											oSearch.rows = ns1blankspace.option.defaultRowsSmall;
+											oSearch.sort('tradename', 'ASC');
+
 											oSearch.getResults(function(data) {ns1blankspace.contactBusiness.search.process(oParam, data)});
 										}
 									}
@@ -232,31 +234,11 @@ ns1blankspace.contactBusiness =
 									}
 									else
 									{	
-										aHTML.push('<table class="ns1blankspaceSearchMedium">');
+										aHTML.push('<table class="ns1blankspaceSearchMedium" style="width:520px;">');
 											
 										$.each(oResponse.data.rows, function()
 										{
-											iColumn = iColumn + 1;
-											
-											if (iColumn == 1)
-											{
-												aHTML.push('<tr class="ns1blankspaceSearch">');
-											}
-											
-											aHTML.push('<td class="ns1blankspaceSearch" id="contactbusiness' +
-															'-' + this.id + '">' +
-															this.tradename + 
-															'</td>');
-											
-											aHTML.push('<td class="ns1blankspaceSearch" id="contactbusiness' +
-															'-' + this.id + '">' +
-															this.legalname + '</td>');
-															
-											if (iColumn == iMaximumColumns)
-											{
-												aHTML.push('</tr>');
-												iColumn = 0;
-											}	
+											aHTML.push(ns1blankspace.contactBusiness.search.row(oParam, this));
 										});
 								    	
 										aHTML.push('</table>');
@@ -266,7 +248,8 @@ ns1blankspace.contactBusiness =
 											{
 												html: aHTML.join(''),
 												more: (oResponse.morerows == "true"),
-												header: false
+												header: false,
+												width: 520
 											}) 
 										);		
 										
@@ -285,13 +268,36 @@ ns1blankspace.contactBusiness =
 										{
 											columns: 'tradename-legalname',
 											more: oResponse.moreid,
-											rows: 15,
+											width: 520,
 											startRow: parseInt(oResponse.startrow) + parseInt(oResponse.rows),
-											functionSearch: ns1blankspace.contactBusiness.search.send
+											functionSearch: ns1blankspace.contactBusiness.search.send,
+											functionRow: ns1blankspace.contactBusiness.search.row
 										});   
 										
 									}	
 								},
+
+						row: 	function (oParam, oRow)
+								{
+									var aHTML = [];
+									var sContact;
+												
+									aHTML.push('<tr class="ns1blankspaceSearch">');
+								
+									aHTML.push('<td class="ns1blankspaceSearch" id="' +
+													'search-' + oRow.id + '">' +
+													oRow.tradename +
+													'</td>');
+
+									aHTML.push('<td class="ns1blankspaceSearch ns1blankspaceSearchSub" id="' +
+													'searchContact-' + oRow.id + '">' +
+													oRow.legalname +
+													'</td>');
+
+									aHTML.push('</tr>');
+									
+									return aHTML.join('')
+								}							
 				},						
 
 	layout:		function ()

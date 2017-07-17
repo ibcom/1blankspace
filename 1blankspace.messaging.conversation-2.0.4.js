@@ -77,7 +77,7 @@ ns1blankspace.messaging.conversation =
 						else
 						{
 							aHTML.push('<table>');
-							aHTML.push('<tr><td class="ns1blankspaceCaption">MOST LIKELY</td></tr>');
+							aHTML.push('<tr><td class="ns1blankspaceCaption">MOST RECENT</td></tr>');
 
 							$.each(oResponse.data.rows, function()
 							{
@@ -163,12 +163,14 @@ ns1blankspace.messaging.conversation =
 											
 											var oSearch = new AdvancedSearch();
 											oSearch.method = 'MESSAGING_CONVERSATION_SEARCH';
-											oSearch.addField('title');
+											oSearch.addField('title,notes');
 											oSearch.addFilter('title', 'TEXT_IS_LIKE', sSearchText);
 
 											ns1blankspace.search.advanced.addFilters(oSearch);
 											
 											oSearch.sort('title', 'asc');
+											oSearch.rows = ns1blankspace.option.defaultRowsSmall;
+
 											oSearch.getResults(function(data) {ns1blankspace.messaging.conversation.search.process(oParam, data)});
 										}
 									};	
@@ -189,7 +191,7 @@ ns1blankspace.messaging.conversation =
 									}
 									else
 									{	
-										aHTML.push('<table class="ns1blankspaceSearchMedium">');
+										aHTML.push('<table class="ns1blankspaceSearchMedium" style="width:520px;">');
 									
 										$.each(oResponse.data.rows, function()
 										{
@@ -217,6 +219,7 @@ ns1blankspace.messaging.conversation =
 											{
 												html: aHTML.join(''),
 												more: (oResponse.morerows == "true"),
+												width: 520,
 												header: false
 											}) 
 										);		
@@ -227,8 +230,39 @@ ns1blankspace.messaging.conversation =
 											$(ns1blankspace.xhtml.dropDownContainer).hide(ns1blankspace.option.hideSpeedOptions)
 											ns1blankspace.messaging.conversation.search.send(event.target.id, {source: 1});
 										});
+
+										ns1blankspace.render.bind(
+										{
+											more: oResponse.moreid,
+											width: 520,
+											startRow: parseInt(oResponse.startrow) + parseInt(oResponse.rows),
+											functionSearch: ns1blankspace.messaging.conversation.search.send,
+											functionRow: ns1blankspace.messaging.conversation.search.row
+										});   
 									}	
-								}
+								},
+
+						row: 	function (oParam, oRow)
+								{
+									var aHTML = [];
+									var sContact;
+												
+									aHTML.push('<tr class="ns1blankspaceSearch">');
+								
+									aHTML.push('<td class="ns1blankspaceSearch" id="' +
+													'search-' + oRow.id + '">' +
+													oRow.title +
+													'</td>');
+
+									aHTML.push('<td class="ns1blankspaceSearch ns1blankspaceSearchSub" id="' +
+													'searchContact-' + oRow.id + '">' +
+													oRow.notes +
+													'</td>');
+
+									aHTML.push('</tr>');
+									
+									return aHTML.join('')
+								}				
 				},
 
 	layout: 	function ()

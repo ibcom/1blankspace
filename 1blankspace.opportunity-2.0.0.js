@@ -79,7 +79,7 @@ ns1blankspace.opportunity =
 						else
 						{
 							aHTML.push('<table id="ns1blankspaceMostLikely">' +
-											'<tr><td colspan=2 class="ns1blankspaceCaption">MOST LIKELY</td></tr>');
+											'<tr><td colspan=2 class="ns1blankspaceCaption">MOST RECENT</td></tr>');
 
 							$.each(oResponse.data.rows, function()
 							{
@@ -175,7 +175,7 @@ ns1blankspace.opportunity =
 											var oSearch = new AdvancedSearch();
 											oSearch.method = 'OPPORTUNITY_SEARCH';
 											
-											oSearch.addField('businessname,firstname,surname,requestbycontactbusinesstext,status,statustext');
+											oSearch.addField('reference,businessname,firstname,surname,requestbycontactbusinesstext,status,statustext,startdate,notes');
 											
 											if (iSource == ns1blankspace.data.searchSource.text)
 											{	
@@ -187,7 +187,9 @@ ns1blankspace.opportunity =
 											}
 											
 											ns1blankspace.search.advanced.addFilters(oSearch);
-											
+											oSearch.rows = ns1blankspace.option.defaultRowsSmall;
+											oSearch.sort('startdate', 'DESC');
+
 											oSearch.getResults(function(data){ns1blankspace.opportunity.search.process(oParam, data)}) 
 										}
 									}	
@@ -207,31 +209,11 @@ ns1blankspace.opportunity =
 									}
 									else
 									{	
-										aHTML.push('<table class="ns1blankspaceSearchMedium">');
+										aHTML.push('<table class="ns1blankspaceSearchMedium" style="width:520px;">');
 											
 										$.each(oResponse.data.rows, function()
 										{
-											iColumn = iColumn + 1;
-											
-											if (iColumn == 1)
-											{
-												aHTML.push('<tr class="ns1blankspaceSearch">');
-											}
-											
-											aHTML.push('<td class="ns1blankspaceSearch ns1blankspaceOpportunity' + this.statustext + '" id="opportunity' +
-															'-' + this.id + '">' +
-															this.businessname + 
-															'</td>');
-											
-											aHTML.push('<td class="ns1blankspaceSearch ns1blankspaceOpportunity' + this.statustext + '" id="opportunity' +
-															'-' + this.id + '">' +
-															this.firstname + ' ' + this.surname + '</td>');
-															
-											if (iColumn == iMaximumColumns)
-											{
-												aHTML.push('</tr>');
-												iColumn = 0;
-											}	
+											aHTML.push(ns1blankspace.opportunity.search.row(oParam, this));
 										});
 								    	
 										aHTML.push('</table>');
@@ -241,7 +223,8 @@ ns1blankspace.opportunity =
 											{
 												html: aHTML.join(''),
 												more: (oResponse.morerows == "true"),
-												header: false
+												header: false,
+												width: 520
 											}) 
 										);		
 										
@@ -256,12 +239,45 @@ ns1blankspace.opportunity =
 										{
 											columns: 'businessname-firstname-surname',
 											more: oResponse.moreid,
-											rows: 15,
+											width: 520,
 											startRow: parseInt(oResponse.startrow) + parseInt(oResponse.rows),
-											functionSearch: ns1blankspace.opportunity.search.send
+											functionSearch: ns1blankspace.opportunity.search.send,
+											functionRow: ns1blankspace.opportunity.search.row
 										});   
 									}
-								}	
+								},
+
+						row: 	function (oParam, oRow)
+								{
+									var aHTML = [];
+									var sContact;
+												
+									aHTML.push('<tr class="ns1blankspaceSearch">');
+								
+									aHTML.push('<td class="ns1blankspaceSearch" id="' +
+													'search-' + oRow.id + '">' +
+													oRow.reference +
+													'</td>');
+
+									aHTML.push('<td class="ns1blankspaceSearch" id="' +
+													'searchContact-' + oRow.id + '">' +
+													ns1blankspace.util.fd(oRow.startdate) +
+													'</td>');
+
+									aHTML.push('<td class="ns1blankspaceSearch ns1blankspaceSearchSub" id="' +
+													'searchContact-' + oRow.id + '">' +
+													oRow.statustext +
+													'</td>');
+
+									aHTML.push('<td class="ns1blankspaceSearch ns1blankspaceSearchSub" id="' +
+													'searchContact-' + oRow.id + '">' +
+													oRow.notes +
+													'</td>');
+
+									aHTML.push('</tr>');
+									
+									return aHTML.join('')
+								}								
 				},
 
 	layout: 	function ()

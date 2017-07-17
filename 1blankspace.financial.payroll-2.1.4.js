@@ -367,7 +367,7 @@ ns1blankspace.financial.payroll =
 
 										ns1blankspace.render.bind(
 										{
-											columns: 'notes',
+											columns: 'paydate',
 											more: oResponse.moreid,
 											startRow: parseInt(oResponse.startrow) + parseInt(oResponse.rows),
 											functionSearch: ns1blankspace.financial.payroll.search.send

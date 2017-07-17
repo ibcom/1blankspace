@@ -132,7 +132,7 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.opportunity',
-		source: '/jscripts/1blankspace.opportunity-2.0.0.js'
+		source: '/site/312/1blankspace.opportunity-2.0.0.js'
 	},
 	{
 		nameSpace: '1blankspace.action',
@@ -140,7 +140,7 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.messaging.conversation',
-		source: '/jscripts/1blankspace.messaging.conversation-2.0.4.js'
+		source: '/site/312/1blankspace.messaging.conversation-2.0.4.js'
 	},
 	{
 		nameSpace: '1blankspace.messaging.imap',
