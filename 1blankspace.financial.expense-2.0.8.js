@@ -234,7 +234,7 @@ ns1blankspace.financial.expense =
 						var oSearch = new AdvancedSearch();
 						oSearch.method = 'FINANCIAL_EXPENSE_SEARCH';
 						oSearch.addField('reference,description,amount,accrueddate,contactbusinesspaidtotext,contactpersonpaidtotext,object,objectcontext,payeereference');
-						oSearch.rows = 20;
+						oSearch.rows = ns1blankspace.option.defaultRows;
 						oSearch.sort('modifieddate', 'desc');
 						oSearch.getResults(function (data) {ns1blankspace.financial.expense.home(oParam, data)});
 					}
@@ -1382,7 +1382,7 @@ ns1blankspace.financial.expense.outstanding =
 						oSearch.method = 'FINANCIAL_EXPENSE_SEARCH';
 						oSearch.addField('reference,amount,outstandingamount,description,contactbusinesspaidto,contactbusinesspaidtotext,contactpersonpaidto,contactpersonpaidtotext,paymentduedate');
 						oSearch.addFilter('PayStatus', 'EQUAL_TO', 1);
-						oSearch.addFilter('outstandingamount', 'GREATER_THAN', 0);
+						oSearch.addFilter('outstandingamount', 'NOT_EQUAL_TO', 0);
 
 						if (sSearchText != undefined)
 						{

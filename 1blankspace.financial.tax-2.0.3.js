@@ -105,8 +105,8 @@ ns1blankspace.financial.tax =
 								
 						var oSearch = new AdvancedSearch();
 						oSearch.method = 'FINANCIAL_TAX_REPORT_SEARCH';
-						oSearch.addField('taxstartdate,enddate,taxofficereference,statustext');
-						oSearch.rows = 10;
+						oSearch.addField('taxstartdate,enddate,taxofficereference,statustext,reference');
+						oSearch.rows = ns1blankspace.option.defaultRows;
 						oSearch.sort('enddate', 'desc');
 						oSearch.getResults(function(data){ns1blankspace.financial.tax.home(oParam, data)});
 						
@@ -124,16 +124,20 @@ ns1blankspace.financial.tax =
 						else
 						{
 							aHTML.push('<table id="ns1blankspaceMostLikely">');
+							aHTML.push('<tr><td class="ns1blankspaceCaption" colspan="4">RECENT</td></tr>');
 
 							$.each(oResponse.data.rows, function()
 							{
 								aHTML.push('<tr class="ns1blankspaceRow">');
 								
-								aHTML.push('<td id="ns1blankspaceMostLikely_enddate-' + this.id + '" class="ns1blankspaceMostLikely" style="width:150px;">' +
+								aHTML.push('<td id="ns1blankspaceMostLikely_enddate-' + this.id + '" class="ns1blankspaceMostLikely" style="width:130px;">' +
 														this.enddate + '</td>');
 
 								aHTML.push('<td id="ns1blankspaceMostLikely_status-' + this.id + '" class="ns1blankspaceMostLikelySub" style="width:90px;">' +
 														this.statustext  + '</td>');
+
+								aHTML.push('<td id="ns1blankspaceMostLikely_reference-' + this.id + '" class="ns1blankspaceMostLikelySub" style="width:90px;">' +
+														this.reference  + '</td>');
 							
 								aHTML.push('<td>&nbsp;</td></tr>');
 							});
@@ -211,12 +215,13 @@ ns1blankspace.financial.tax =
 											var oSearch = new AdvancedSearch();
 											oSearch.method = 'FINANCIAL_TAX_REPORT_SEARCH';
 											oSearch.addField('enddate,taxofficereference');
-											oSearch.addFilter('taxofficereference', 'TEXT_IS_LIKE', sSearchText);
+											oSearch.addFilter('reference', 'TEXT_IS_LIKE', sSearchText);
 
 											ns1blankspace.search.advanced.addFilters(oSearch);
 
 											oSearch.sort('enddate', 'DESC');
-											
+											oSearch.rows = ns1blankspace.option.defaultRowsSmall;
+
 											oSearch.getResults(function(data) {ns1blankspace.financial.tax.search.process(oParam, data)});	
 										}
 									};	

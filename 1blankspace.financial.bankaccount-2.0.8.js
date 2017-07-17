@@ -4109,7 +4109,7 @@ ns1blankspace.financial.bankAccount =
 
 									locked: 	function(oParam, oResponse)
 												{
-													var iType = 1;
+													var iType = 2;
 													var iSource = 1;
 													var iStatus = 2;
 													var dSearchDate;
@@ -4391,7 +4391,6 @@ ns1blankspace.financial.bankAccount =
 															{
 																var sourceBankTransactions = _.groupBy(items, 'sourcebanktransaction');
 																
-
 																ns1blankspace.financial.bankAccount.reconcile.items.data.reconciled['transactions'] = sourceBankTransactions;
 
 																if (iSource == 1)
@@ -4429,10 +4428,14 @@ ns1blankspace.financial.bankAccount =
 																	var sourceBankTransaction = sourceBankTransactions[value.sourcebanktransaction];
 																	var sReference = _.join(_.map(sourceBankTransaction, 'reference'), ', ');
 																	var id = value.sourcebanktransaction;
+																	var sReferenceLinks = _.join(_.map(sourceBankTransaction, function (transaction)
+																										{
+																											return '<span class="ns1blankspaceViewLink" id="-' + transaction.id + '" title="' + transaction.amount + '">' + transaction.reference + '</span>'
+																										}), ', ');
 
 																	aHTML.push(
 																		'<tr class="ns1blankspaceRow">' +
-																		'<td class="ns1blankspaceRow ns1blankspaceRowSelect">' +
+																		'<td class="ns1blankspaceRow">' +
 																		'<table cellspacing=0 cellpadding=0><tr>');
 
 																	aHTML.push('<td id="ns1blankspaceReconcileItems_date-' + id + '-3" class="recoitemstatement">' +
@@ -4442,9 +4445,11 @@ ns1blankspace.financial.bankAccount =
 																						' class="recoitem">' +
 																						cAmount + '</td>');
 																	
-																	aHTML.push('</tr><tr><td colspan=2 id="ns1blankspaceReconcileItems_reference-' + id + '" style="font-size:0.75;color:#B8B8B8"' +
-																						' class="recoitem" title="' + sReference + '">' +
-																						sNotes + '</td>');
+																	aHTML.push('</tr><tr><td colspan=2 id="ns1blankspaceReconcileItems_reference-' + id + '" style="font-size:0.75;"' +
+																						' class="recoitem">' +
+																						'<div>' + sNotes + '</div>' +
+																						'<div>' + sReferenceLinks + '</div>' +
+																						'</td>');
 																					
 																	aHTML.push('</tr></table></td>');	
 
@@ -4477,7 +4482,12 @@ ns1blankspace.financial.bankAccount =
 															})
 															.css('width', '15px')
 															.css('height', '20px');
-														}	
+														}
+
+														$('span.ns1blankspaceViewLink').click(function()
+														{
+															ns1blankspace.financial[namespace[iNamespace]].init({id: (this.id).split('-')[1]})
+														});
 													}
 												},
 
