@@ -8,7 +8,7 @@ ns1blankspace.contactPerson =
 {
 	data: 		[],
 
-	init: 		function (oParam)
+	init: 	function (oParam)
 				{
 					ns1blankspace.app.reset();
 
@@ -30,7 +30,7 @@ ns1blankspace.contactPerson =
 					ns1blankspace.app.set(oParam);
 				},
 
-	home: 		function (oParam, oResponse)
+	home: 	function (oParam, oResponse)
 				{
 					if (oResponse == undefined)
 					{
@@ -1649,7 +1649,7 @@ ns1blankspace.contactPerson =
 													return aHTML.join('');
 												},
 
-									bind: 		function ()
+									bind: 	function ()
 												{
 													$('#ns1blankspaceContactPersonGroup .ns1blankspaceRowSelect')
 													.click(function()
@@ -2248,7 +2248,7 @@ ns1blankspace.contactPerson =
 
 									bind: 	function (oRow, oParam)	
 												{
-													$('#ns1blankspaceFinancialsInvoices td.ns1blankspaceRowSelect').click(function()
+													$('div.ns1blankspaceRenderPage td.ns1blankspaceRowSelect:visible').click(function()
 													{
 														ns1blankspace.financial.invoice.init({id: (this.id).split('-')[1]});
 													});
@@ -2348,7 +2348,7 @@ ns1blankspace.contactPerson =
 
 									bind: 	function (oRow, oParam)	
 												{
-													$('#ns1blankspaceFinancialsExpenses td.ns1blankspaceRowSelect').click(function()
+													$('div.ns1blankspaceRenderPage td.ns1blankspaceRowSelect:visible').click(function()
 													{
 														ns1blankspace.financial.expense.init({id: (this.id).split('-')[1]});
 													});
@@ -2443,7 +2443,7 @@ ns1blankspace.contactPerson =
 
 									bind: 	function (oRow, oParam)	
 												{
-													$('#ns1blankspaceFinancialsReceipts td.ns1blankspaceRowSelect').click(function()
+													$('div.ns1blankspaceRenderPage td.ns1blankspaceRowSelect:visible').click(function()
 													{
 														ns1blankspace.financial.receipt.init({id: (this.id).split('-')[1]});
 													});
@@ -2538,7 +2538,7 @@ ns1blankspace.contactPerson =
 
 									bind: 	function (oRow, oParam)	
 												{
-													$('#ns1blankspaceFinancialsPayments td.ns1blankspaceRowSelect').click(function()
+													$('div.ns1blankspaceRenderPage td.ns1blankspaceRowSelect:visible').click(function()
 													{
 														ns1blankspace.financial.payment.init({id: (this.id).split('-')[1]});
 													});
@@ -2637,7 +2637,7 @@ ns1blankspace.contactPerson =
 
 									bind: 	function (oRow, oParam)	
 												{
-													$('#ns1blankspaceFinancialsCredits td.ns1blankspaceRowSelect').click(function()
+													$('div.ns1blankspaceRenderPage td.ns1blankspaceRowSelect:visible').click(function()
 													{
 														ns1blankspace.financial.credit.init({id: (this.id).split('-')[1]});
 													});

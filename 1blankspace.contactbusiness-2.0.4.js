@@ -1360,7 +1360,7 @@ ns1blankspace.contactBusiness =
 
 									bind: 	function (oRow, oParam)	
 												{
-													$('#ns1blankspaceFinancialsInvoices td.ns1blankspaceRowSelect').click(function()
+													$('div.ns1blankspaceRenderPage td.ns1blankspaceRowSelect:visible').click(function()
 													{
 														ns1blankspace.financial.invoice.init({id: (this.id).split('-')[1]});
 													});
@@ -1460,7 +1460,7 @@ ns1blankspace.contactBusiness =
 
 									bind: 	function (oRow, oParam)	
 												{
-													$('#ns1blankspaceFinancialsExpenses td.ns1blankspaceRowSelect').click(function()
+													$('div.ns1blankspaceRenderPage td.ns1blankspaceRowSelect:visible').click(function()
 													{
 														ns1blankspace.financial.expense.init({id: (this.id).split('-')[1]});
 													});
@@ -1555,7 +1555,7 @@ ns1blankspace.contactBusiness =
 
 									bind: 	function (oRow, oParam)	
 												{
-													$('#ns1blankspaceFinancialsReceipts td.ns1blankspaceRowSelect').click(function()
+													$('div.ns1blankspaceRenderPage td.ns1blankspaceRowSelect:visible').click(function()
 													{
 														ns1blankspace.financial.receipt.init({id: (this.id).split('-')[1]});
 													});
@@ -1650,7 +1650,7 @@ ns1blankspace.contactBusiness =
 
 									bind: 	function (oRow, oParam)	
 												{
-													$('#ns1blankspaceFinancialsPayments td.ns1blankspaceRowSelect').click(function()
+													$('div.ns1blankspaceRenderPage td.ns1blankspaceRowSelect:visible').click(function()
 													{
 														ns1blankspace.financial.payment.init({id: (this.id).split('-')[1]});
 													});
@@ -1749,7 +1749,7 @@ ns1blankspace.contactBusiness =
 
 									bind: 	function (oRow, oParam)	
 												{
-													$('#ns1blankspaceFinancialsCredits td.ns1blankspaceRowSelect').click(function()
+													$('div.ns1blankspaceRenderPage td.ns1blankspaceRowSelect:visible').click(function()
 													{
 														ns1blankspace.financial.credit.init({id: (this.id).split('-')[1]});
 													});

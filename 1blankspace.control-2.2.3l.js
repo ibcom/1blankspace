@@ -180,7 +180,7 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.financial.bankAccount',
-		source: '/site/312/1blankspace.financial.bankaccount-2.0.8.js'
+		source: '/site/312/1blankspace.financial.bankaccount-2.0.9.js'
 	},
 	{
 		nameSpace: '1blankspace.financial.invoice',

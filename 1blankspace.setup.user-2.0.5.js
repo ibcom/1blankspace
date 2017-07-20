@@ -1341,7 +1341,7 @@ ns1blankspace.setup.user =
 										{
 											var oSearch = new AdvancedSearch();
 											oSearch.method = 'SETUP_EXTERNAL_USER_ACCESS_SEARCH';
-											oSearch.addField('userlogon,spacetext,usercontactpersontext,unrestrictedaccess,user,targetuser,targetusertext');
+											oSearch.addField('userlogon,spacetext,usercontactpersontext,unrestrictedaccess,user,targetuser,targetusertext,createddate');
 											oSearch.rows = 50;
 											oSearch.sort('userlogon', 'asc');
 											oSearch.getResults(function(data) {ns1blankspace.setup.user.external.show(oParam, data)});
@@ -1405,6 +1405,7 @@ ns1blankspace.setup.user =
 																			'" data-unrestrictedaccess="' + this.unrestrictedaccess +
 																			'" data-targetuser="' + this.targetuser +
 																			'" data-targetusertext="' + this.targetusertext +
+																			'" data-created="' + this.createddate +
 																			'" class="ns1blankspaceRow ns1blankspaceRowSelect ns1blankspaceSetupUserExternal">' +
 																			this.userlogon);
 													
@@ -1416,7 +1417,7 @@ ns1blankspace.setup.user =
 
 									 				aHTML.push('</td>');						
 
-									 				aHTML.push('<td style="width:30px;text-align:right;" class="interfaceMainRow">');
+									 				aHTML.push('<td style="width:30px;text-align:right;" class="ns1blankspaceRow">');
 													aHTML.push('<span id="ns1blankspaceSetupUserExternal_options_remove-' + this.id + '" class="ns1blankspaceRowRemove"></span>');
 													aHTML.push('</td>');		
 
@@ -1470,14 +1471,6 @@ ns1blankspace.setup.user =
 
 											aHTML.push('<tr><td style="padding-bottom:10px;" class="ns1blankspaceNothing">You need to enter all the surname for the search to work.</td></tr>');
 									
-											aHTML.push('<tr><td class="ns1blankspaceCaption">Access</td></tr>' +
-															'<tr><td class="ns1blankspaceRadio">' +
-															'<input type="radio" id="radioExternalAccessUnrestrictedY" name="radioExternalAccessUnrestricted" value="Y"/>Access&nbsp;to&nbsp;everything<br />' +
-															'<input type="radio" id="radioExternalAccessUnrestrictedN" name="radioExternalAccessUnrestricted" value="N"/>Restricted by role' +
-															'</td></tr>');
-										
-											aHTML.push('<tr><td style="padding-top:10px;" id="ns1blankspaceExternalRoles"></td></tr>');
-
 											aHTML.push('<tr class="ns1blankspaceCaption">' +
 															'<td class="ns1blankspaceCaption">' +
 															'Target User (optional)' +
@@ -1488,6 +1481,14 @@ ns1blankspace.setup.user =
 																' data-method="SETUP_USER_SEARCH"' +
 																' data-columns="username">' +
 															'</td></tr>');
+
+											aHTML.push('<tr><td class="ns1blankspaceCaption">Access <span class="ns1blankspaceNothing" style="font-weight:300;" id="ns1blankspaceExternalCreated"></span></td></tr>' +
+															'<tr><td class="ns1blankspaceRadio">' +
+															'<input type="radio" id="radioExternalAccessUnrestrictedY" name="radioExternalAccessUnrestricted" value="Y"/>Access&nbsp;to&nbsp;everything<br />' +
+															'<input type="radio" id="radioExternalAccessUnrestrictedN" name="radioExternalAccessUnrestricted" value="N"/>Restricted by role' +
+															'</td></tr>');
+										
+											aHTML.push('<tr><td style="padding-top:10px;" id="ns1blankspaceExternalRoles"></td></tr>');
 
 											aHTML.push('</table>');					
 											
@@ -1589,6 +1590,8 @@ ns1blankspace.setup.user =
 												$('#ns1blankspaceSetupUserExternalTargetUser').attr('data-id', $('#ns1blankspaceUserExternal_title-' + aXHTMLElementID[1]).attr("data-targetuser"));
 												$('#ns1blankspaceSetupUserExternalTargetUser').val($('#ns1blankspaceUserExternal_title-' + aXHTMLElementID[1]).attr("data-targetusertext"));
 												
+												$('#ns1blankspaceExternalCreated').html(' (granted ' + ns1blankspace.util.formatDate($('#ns1blankspaceUserExternal_title-' + aXHTMLElementID[1]).attr("data-created"), {format:'DD MMM YYYY HH:mm'}) + ')')
+
 												oParam.user = $('#ns1blankspaceUserExternal_title-' + aXHTMLElementID[1]).attr("data-user");
 												oParam.step = 3;
 												ns1blankspace.setup.user.external.show(oParam);
