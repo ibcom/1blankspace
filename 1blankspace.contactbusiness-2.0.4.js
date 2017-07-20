@@ -1486,7 +1486,7 @@ ns1blankspace.contactBusiness =
 													{
 														var aHTML = [];
 
-														aHTML.push('<table id="ns1blankspaceFinancialsExpenses" class="ns1blankspace">');
+														aHTML.push('<table id="ns1blankspaceFinancialsReceipts" class="ns1blankspace">');
 
 														if (oResponse.data.rows.length == 0)
 														{
