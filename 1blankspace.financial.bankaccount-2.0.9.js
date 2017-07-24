@@ -6,7 +6,9 @@
  
 ns1blankspace.financial.bankAccount = 
 {
-	init: 		function (oParam)
+	data: 	{},
+
+	init: 	function (oParam)
 				{
 					ns1blankspace.app.reset();
 
@@ -178,7 +180,7 @@ ns1blankspace.financial.bankAccount =
 					
 					$('#ns1blankspaceControlSummary').click(function(event)
 					{
-						ns1blankspace.show({selector: '#ns1blankspaceMainSummary'});
+						ns1blankspace.show({selector: '#ns1blankspaceMainSummary', refresh: true});
 						ns1blankspace.financial.bankAccount.summary();
 					});
 					
@@ -1058,8 +1060,9 @@ ns1blankspace.financial.bankAccount =
 							}								
 				},
 
-	"import": 	{		
-					init: 		function (oParam)
+	"import": 	
+				{		
+					init: 	function (oParam)
 								{
 									ns1blankspace.financial.bankAccount.reconcile.current.refresh(
 									{
@@ -1165,6 +1168,14 @@ ns1blankspace.financial.bankAccount =
 
 					add:		function (oParam, oResponse)
 								{
+									ns1blankspace.financial.bankAccount["import"].items.latest(
+									{
+										onComplete: ns1blankspace.financial.bankAccount["import"].edit
+									});
+								},
+
+					edit:		function (oParam, oResponse)
+								{
 									var iObjectContext = ns1blankspace.objectContext;
 									var oOptions = {view: true, remove: true, automation: true};
 									var oActions = {add: true};
@@ -1183,7 +1194,18 @@ ns1blankspace.financial.bankAccount =
 
 										var aHTML = [];
 										
-										aHTML.push('<table class="ns1blankspaceColumn2"><tr><td class="ns1blankspaceSubNote">Select an existing import to view and confirm transactions, or choose a file to upload.</td></tr>');		
+										aHTML.push('<table class="ns1blankspaceColumn2" style="width:98%;">')
+
+										if (ns1blankspace.financial.bankAccount.data.latestBankTransaction != undefined)
+										{
+											var oTran = ns1blankspace.financial.bankAccount.data.latestBankTransaction;
+											aHTML.push('<tr><td class="ns1blankspaceSubNote ns1blankspaceRowShaded" style="width:80%; padding:6px;">' +
+																'The last transaction imported <span style="font-size:0.875em; font-style:italic;">"' + oTran.description + '"</span><br/ >was for $' + 
+																parseFloat(Math.abs((oTran.amount).parseCurrency())).formatMoney() + ' on the ' + oTran.posteddate + 
+																'.</td></tr>');		
+										}
+
+										aHTML.push('<tr><td class="ns1blankspaceSubNote" style="padding-top:14px;">Select an existing import to view and confirm transactions, or choose a file to upload.</td></tr>');		
 
 										aHTML.push('<tr><td>');							
 										aHTML.push(ns1blankspace.attachments.upload.show(
@@ -1223,7 +1245,7 @@ ns1blankspace.financial.bankAccount =
 															data: sData,
 															dataType: 'json',
 															success: function(data) {
-																ns1blankspace.financial.bankAccount["import"].add(oParam, data);
+																ns1blankspace.financial.bankAccount["import"].edit(oParam, data);
 															}
 														});
 													}
@@ -1347,8 +1369,31 @@ ns1blankspace.financial.bankAccount =
 												}				
 								},					
 
-					items:   	{
-									data: 		{},
+					items:   {
+									data: 	{},
+
+									latest: 	function (oParam, oResponse)
+												{
+													if (oResponse == undefined)
+													{
+														var oSearch = new AdvancedSearch();
+														oSearch.method = 'FINANCIAL_BANK_ACCOUNT_TRANSACTION_SEARCH';
+														oSearch.addField('amount,posteddate,description');
+														oSearch.sort('posteddate', 'desc');
+														oSearch.addFilter('bankaccount', 'EQUAL_TO', ns1blankspace.objectContext);
+														oSearch.rows = 1;
+														oSearch.getResults(function(data) {ns1blankspace.financial.bankAccount["import"].items.latest(oParam, data)});
+													}
+													else
+													{
+														if (ns1blankspace.financial.bankAccount.data == undefined) {ns1blankspace.financial.bankAccount.data = {}}
+														if (oResponse.data.rows.length > 0)
+														{
+															ns1blankspace.financial.bankAccount.data.latestBankTransaction = oResponse.data.rows[0];
+														}
+														ns1blankspace.util.onComplete(oParam)
+													}
+												},	
 
 									show:		function(oParam, oResponse)
 												{
@@ -2105,6 +2150,8 @@ ns1blankspace.financial.bankAccount =
 											}
 											else
 											{	
+												ns1blankspace.financial.bankAccount.reconcile.current.refresh();
+
 												aHTML.push('<table class="ns1blankspaceColumn2">' +
 																'<tr><td class="ns1blankspaceNothing" style="width:300px;padding-right:20px;">All current reconciliations are shown.<br /><br />Click Completed to see past reconcilations.');
 											}	
@@ -2179,6 +2226,7 @@ ns1blankspace.financial.bankAccount =
 												oParam.reconciliation = aID[1];
 												oParam.status = aID[2];
 												oParam.reconciliationEndDate = $(this).attr('data-date');
+												oParam.type = 2;
 
 												if (iMode == 1)
 												{	
@@ -2265,7 +2313,7 @@ ns1blankspace.financial.bankAccount =
 									return aHTML.join('');
 								},
 
-					current: 	{
+					current: {
 									data: 		{},
 
 									refresh:	function (oParam, oResponse)
@@ -2545,11 +2593,11 @@ ns1blankspace.financial.bankAccount =
 												
 										aHTML.push('<tr class="ns1blankspaceCaption">' +
 														'<td class="ns1blankspaceCaption">' +
-														'Closing Balance Date' +
+														'Opening Balance' +
 														'</td></tr>' +
 														'<tr class="ns1blankspace">' +
 														'<td class="ns1blankspaceText">' +
-														'<input id="ns1blankspaceReconcileEditStatementDate" class="ns1blankspaceDate">' +
+														'<input id="ns1blankspaceReconcileEditPreviousStatementBalance" class="ns1blankspaceText">' +
 														'</td></tr>');
 													
 										aHTML.push('<tr class="ns1blankspaceCaption">' +
@@ -2559,6 +2607,15 @@ ns1blankspace.financial.bankAccount =
 														'<tr class="ns1blankspace">' +
 														'<td class="ns1blankspaceText">' +
 														'<input id="ns1blankspaceReconcileEditStatementBalance" class="ns1blankspaceText">' +
+														'</td></tr>');
+
+										aHTML.push('<tr class="ns1blankspaceCaption">' +
+														'<td class="ns1blankspaceCaption">' +
+														'Closing Balance Date' +
+														'</td></tr>' +
+														'<tr class="ns1blankspace">' +
+														'<td class="ns1blankspaceText">' +
+														'<input id="ns1blankspaceReconcileEditStatementDate" class="ns1blankspaceDate">' +
 														'</td></tr>');
 
 										aHTML.push('<tr class="ns1blankspaceCaption">' +
@@ -2580,14 +2637,6 @@ ns1blankspace.financial.bankAccount =
 														'<br /><input type="radio" id="radioStatus2" name="radioStatus" value="2"/>Locked <span class="ns1blankspaceSub">(Completed)</span>' +
 														'</td></tr>');
 
-										aHTML.push('<tr class="ns1blankspaceCaption">' +
-														'<td class="ns1blankspaceCaption">' +
-														'Opening Balance<br /><span class="ns1blankspaceSubNote">(set automatically, if left blank)</span>' +
-														'</td></tr>' +
-														'<tr class="ns1blankspace">' +
-														'<td class="ns1blankspaceText">' +
-														'<input id="ns1blankspaceReconcileEditPreviousStatementBalance" class="ns1blankspaceText">' +
-														'</td></tr>');
 																															
 										aHTML.push('</table>');					
 										
@@ -2659,7 +2708,15 @@ ns1blankspace.financial.bankAccount =
 										}
 										else
 										{
-											$('[name="radioStatus"][value="1"]').attr('checked', true);	
+											$('[name="radioStatus"][value="1"]').attr('checked', true);
+											
+											var cAmount = ns1blankspace.objectContextData.lastreconciledamount;
+											if (ns1blankspace.financial.bankAccount.reconcile.current.data.statementbalance != undefined)
+											{
+												cAmount = ns1blankspace.financial.bankAccount.reconcile.current.data.statementbalance
+											}
+											
+											$('#ns1blankspaceReconcileEditPreviousStatementBalance').val(cAmount);
 										}
 									}
 									else
@@ -2676,8 +2733,8 @@ ns1blankspace.financial.bankAccount =
 									}
 								},
 
-					items: 		{	
-									data: 		{unreconciled: {}},
+					items: 	{	
+									data: 	{unreconciled: {}},
 
 									show:		function (oParam, oResponse)
 												{
@@ -2919,6 +2976,9 @@ ns1blankspace.financial.bankAccount =
 														{
 															cAllocated += (this.amount).parseCurrency();
 														});
+
+														cAllocated = numeral(cAllocated).format('0.00');
+														cAllocated = numeral(cAllocated).value();
 
 														$('#' + sSourceXHTMLElementID).attr('data-allocatedAmount', cAllocated);
 
