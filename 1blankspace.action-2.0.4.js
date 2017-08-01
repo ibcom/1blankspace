@@ -194,6 +194,7 @@ ns1blankspace.action =
 					oSearch.addBracket(')');
 
 					ns1blankspace.search.advanced.addFilters(oSearch);
+					oSearch.rows = ns1blankspace.option.defaultRowsSmall;
 
 					oSearch.sort('subject', 'asc');
 
@@ -217,43 +218,11 @@ ns1blankspace.action =
 			}
 			else
 			{		
-				aHTML.push('<table class="ns1blankspaceSearchMedium">');
+				aHTML.push('<table class="ns1blankspaceSearchMedium" style="width:520px;">');
 					
 				$.each(oResponse.data.rows, function()
 				{	
-					iColumn = iColumn + 1;
-					
-					if (iColumn == 1)
-					{
-						aHTML.push('<tr class="ns1blankspaceSearch">');
-					}
-				
-					aHTML.push('<td class="ns1blankspaceSearch" id="' +
-								'search-' + this.id + '">' +
-								this.subject +
-								'</td>');
-
-					sContact = '';
-
-					if (this.contactbusinesstext != '')
-					{
-						sContact = this.contactbusinesstext;
-					}
-					else
-					{
-						sContact = this.contactpersontext;
-					}	
-					
-					aHTML.push('<td class="ns1blankspaceSearchSub" id="' +
-									'searchContact-' + this.id + '">' +
-									sContact +
-									'</td>');
-
-					if (iColumn == iMaximumColumns)
-					{
-						aHTML.push('</tr>');
-						iColumn = 0;
-					}	
+					aHTML.push(ns1blankspace.action.search.row(oParam, this));
 				});
 		    	
 				aHTML.push('</table>');
@@ -263,7 +232,8 @@ ns1blankspace.action =
 					{
 						html: aHTML.join(''),
 						more: (oResponse.morerows == "true"),
-						header: false
+						header: false,
+						width: 520
 					}) 
 				);
 				
@@ -279,10 +249,48 @@ ns1blankspace.action =
 					columns: 'subject',
 					more: oResponse.moreid,
 					startRow: parseInt(oResponse.startrow) + parseInt(oResponse.rows),
-					functionSearch: ns1blankspace.project.search.send
+					functionSearch: ns1blankspace.action.search.send,
+					row: ns1blankspace.action.search.row,
+					width: 520
 				}); 
 			}			
-		}
+		},
+
+		row: function (oParam, oRow)
+		{
+			var aHTML = [];
+			var sContact;
+						
+			aHTML.push('<tr class="ns1blankspaceSearch">');
+		
+			aHTML.push('<td class="ns1blankspaceSearch" id="' +
+							'search-' + oRow.id + '">' +
+							oRow.subject.formatXHTML() +
+							'</td>');
+
+			aHTML.push('<td class="ns1blankspaceSearch" id="' +
+							'searchContact-' + oRow.id + '">' +
+							ns1blankspace.util.fd(oRow.date) +
+							'</td>');
+
+			if (oRow.contactbusinesstext != '')
+			{
+				sContact = oRow.contactbusinesstext;
+			}
+			else
+			{
+				sContact = oRow.contactpersontext;
+			}	
+			
+			aHTML.push('<td class="ns1blankspaceSearch ns1blankspaceSearchSub" id="' +
+							'searchContact-' + oRow.id + '">' +
+							sContact +
+							'</td>');	
+
+			aHTML.push('</tr>');
+			
+			return aHTML.join('')
+		}					
 	},				
 
 	layout: function ()
@@ -428,7 +436,7 @@ ns1blankspace.action =
 								oDate.toString("h:mm tt")  + '</span>';
 				}		
 					
-				$('#ns1blankspaceControlContext').html(ns1blankspace.objectContextData.subject +
+				$('#ns1blankspaceControlContext').html(ns1blankspace.objectContextData.subject.formatXHTML() +
 					'<br /><span id="ns1blankspaceControlContext_date" class="ns1blankspaceSub">' + ns1blankspace.objectContextData.duedate + '</span>' + sHTML);
 						
 				ns1blankspace.history.view(
@@ -533,7 +541,7 @@ ns1blankspace.action =
 			{
 				aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Description</td></tr>' +
 								'<tr><td id="ns1blankspaceSummaryDescription" class="ns1blankspaceSummary">' +
-								ns1blankspace.objectContextData.description +
+								ns1blankspace.objectContextData.description.formatXHTML() +
 								'</td></tr>');
 			}
 

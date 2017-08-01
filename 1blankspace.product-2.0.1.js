@@ -58,7 +58,7 @@ ns1blankspace.product =
 		
 						var oSearch = new AdvancedSearch();
 						oSearch.method = 'PRODUCT_SEARCH';
-						oSearch.addField('reference,title,currentretailprice');
+						oSearch.addField('reference,title,currentretailprice,description');
 						oSearch.rf = 'json';
 						oSearch.rows = 10;  
 						oSearch.sort('modifieddate', 'desc');
@@ -77,20 +77,20 @@ ns1blankspace.product =
 						}
 						else
 						{
-							aHTML.push('<table style="width:350px;">');
-							aHTML.push('<tr><td class="ns1blankspaceCaption">MOST LIKELY</td></tr>');
+							aHTML.push('<table>');
+							aHTML.push('<tr><td class="ns1blankspaceCaption">RECENT</td></tr>');
 
 							$.each(oResponse.data.rows, function()
 							{
 								aHTML.push('<tr class="ns1blankspaceRow">');
 								
 								aHTML.push('<td id="ns1blankspaceMostLikely_title-' + this.id + 
-														'" class="ns1blankspaceMostLikely" style="width:200px;">' +
+														'" class="ns1blankspaceMostLikely" style="width:175px;">' +
 														this.title + '</td>');
 
 								aHTML.push('<td id="ns1blankspaceMostLikely_reference-' + this.id + 
-														'" class="ns1blankspaceMostLikelySub" style="width:75px;">' +
-														this.reference + '</td>');
+														'" class="ns1blankspaceMostLikelySub" style="width:300px;">' +
+														this.description + '</td>');
 
 								aHTML.push('<td id="ns1blankspaceMostLikely_currentretailprice-' + this.id + 
 														'" class="ns1blankspaceMostLikelySub" style="width:75px; text-align:right;">' +
@@ -187,6 +187,7 @@ ns1blankspace.product =
 											}	
 
 											ns1blankspace.search.advanced.addFilters(oSearch);
+											oSearch.rows = ns1blankspace.option.defaultRowsSmall;
 										
 											oSearch.getResults(function(data){ns1blankspace.product.search.process(oParam, data)});
 										}

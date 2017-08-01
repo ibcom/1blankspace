@@ -165,7 +165,7 @@ ns1blankspace.project =
 
 											var oSearch = new AdvancedSearch();
 											oSearch.method = 'PROJECT_SEARCH';
-											oSearch.addField('reference,description');
+											oSearch.addField('reference,description,contactpersontext,contactbusinesstext,startdate');
 											oSearch.addFilter('reference', 'TEXT_IS_LIKE', sSearchText);
 
 											ns1blankspace.search.advanced.addFilters(oSearch);
@@ -197,24 +197,6 @@ ns1blankspace.project =
 										$.each(oResponse.data.rows, function()
 										{
 											aHTML.push(ns1blankspace.project.search.row(oParam, this));
-
-											iColumn = iColumn + 1;
-											
-											if (iColumn == 1)
-											{
-												aHTML.push('<tr class="ns1blankspaceSearch">');
-											}
-											
-											aHTML.push('<td class="ns1blankspaceSearch" id="' +
-															'-' + this.id + '">' +
-															this.reference +
-															'</td>');
-											
-											if (iColumn == iMaximumColumns)
-											{
-												aHTML.push('</tr>');
-												iColumn = 0;
-											}	
 										});
 								    	
 										aHTML.push('</table>');
@@ -242,6 +224,7 @@ ns1blankspace.project =
 											more: oResponse.moreid,
 											startRow: parseInt(oResponse.startrow) + parseInt(oResponse.rows),
 											functionSearch: ns1blankspace.project.search.send,
+											row: ns1blankspace.project.search.row,
 											width: 520
 										});   
 									}	
