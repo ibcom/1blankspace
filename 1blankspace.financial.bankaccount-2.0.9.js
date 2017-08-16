@@ -1205,7 +1205,7 @@ ns1blankspace.financial.bankAccount =
 																'.</td></tr>');		
 										}
 
-										aHTML.push('<tr><td class="ns1blankspaceSubNote" style="padding-top:14px;">Select an existing import to view and confirm transactions, or choose a file to upload.</td></tr>');		
+										aHTML.push('<tr><td class="ns1blankspaceSubNote" style="padding-top:14px;">Select an existing import to view and confirm transactions, or choose a QIF file to upload.</td></tr>');		
 
 										aHTML.push('<tr><td>');							
 										aHTML.push(ns1blankspace.attachments.upload.show(
