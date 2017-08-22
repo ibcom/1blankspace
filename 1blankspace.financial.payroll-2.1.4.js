@@ -412,7 +412,7 @@ ns1blankspace.financial.payroll =
 						if (ns1blankspace.objectContextData.status == 2)
 						{
 							aHTML.push('<tr><td id="ns1blankspaceControlExpenses" class="ns1blankspaceControl">' +
-										'Expenses</td></tr>' +
+										'Financials<br /><div class="ns1blankspaceSubNote">Expenses & journals</div></td></tr>' +
 										'</table>');
 
 							aHTML.push('<table class="ns1blankspaceControl">' +
@@ -3329,7 +3329,7 @@ ns1blankspace.financial.payroll =
 															this["description"]);
 
 									aHTML.push('<div id="ns1blankspaceFinancialPayPeriodExpenseItem_Amount-' + this.id + '" class="ns1blankspaceSub">$' +
-															 parseFloat(this["amount"]).toFixed(2) + '</div></td>');
+															 parseFloat(this["amount"].replace(',', '')).toFixed(2) + '</div></td>');
 
 									aHTML.push('<td class="ns1blankspaceRow" style="width:30px;text-align:right;">' +
 													'<span id="ns1blankspacePayrollPayExpense_view-' + this.id + '" class="ns1blankspaceRowView"></span></td>');						 					
