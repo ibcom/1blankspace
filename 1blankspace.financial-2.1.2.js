@@ -31,6 +31,8 @@ ns1blankspace.financial.init = function (oParam)
 						$('#ns1blankspaceViewControlNew').button({disabled: true});
 					}
 
+ns1blankspace.financial.search = {send: function () {}};
+
 ns1blankspace.financial.initData = function (oParam, oResponse)
 					{
 						var bRefresh = false;

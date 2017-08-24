@@ -114,7 +114,141 @@ ns1blankspace.financial.bankAccount =
 					}	
 				},		
 
-	search: 	{send: function (sID) {ns1blankspace.financial.bankAccount.show({id: (sID).split('-')[1]})}},
+	searchx: 	{
+					send: function (sID)
+					{
+						ns1blankspace.financial.bankAccount.show({id: (sID).split('-')[1]})
+					}
+				},
+
+	search: 	{
+					send:		function (sXHTMLElementID, oParam)
+								{
+									var aSearch = sXHTMLElementID.split('-');
+									var sElementID = aSearch[0];
+									var sSearchContext = aSearch[1];
+									var iMinimumLength = 0;
+									var iSource = ns1blankspace.data.searchSource.text;
+									var sSearchText;
+									var iMaximumColumns = 1;
+									
+									if (oParam != undefined)
+									{
+										if (oParam.source != undefined) {iSource = oParam.source}
+										if (oParam.searchText != undefined) {sSearchText = oParam.searchText}
+										if (oParam.rows != undefined) {iRows = oParam.rows}
+										if (oParam.searchContext != undefined) {sSearchContext = oParam.searchContext}
+										if (oParam.minimumLength != undefined) {iMinimumLength = oParam.minimumLength}
+										if (oParam.maximumColumns != undefined) {iMaximumColumns = oParam.maximumColumns}
+									}
+									
+									if (sSearchContext != undefined  && iSource != ns1blankspace.data.searchSource.browse)
+									{
+										$('#ns1blankspaceControl').html(ns1blankspace.xhtml.loading);
+										
+										ns1blankspace.objectContext = sSearchContext;
+										oParam.id = sSearchContext;
+										ns1blankspace.financial.bankAccount.show(oParam, data);
+									}
+									else
+									{
+										if (sSearchText == undefined)
+										{
+											sSearchText = $('#ns1blankspaceViewControlSearch').val();
+										}	
+										
+										if (iSource == ns1blankspace.data.searchSource.browse)
+										{
+											iMinimumLength = 1;
+											iMaximumColumns = 4;
+											var aSearch = sSearch.split('-');
+											sSearchText = aSearch[1];
+										}
+										
+										if (sSearchText.length >= iMinimumLength || iSource == ns1blankspace.data.searchSource.browse)
+										{
+											ns1blankspace.search.start();
+
+											var data = {data: {rows:
+												$.grep(ns1blankspace.financial.data.bankaccounts, function (bankAccount)
+												{ 
+													return _.includes(bankAccount.title.toLowerCase(), sSearchText.toLowerCase());
+												})}}
+
+											ns1blankspace.financial.bankAccount.search.process(oParam, data);	
+										}
+									};	
+								},
+
+					process:	function (oParam, oResponse)
+								{
+									var iColumn = 0;
+									var aHTML = [];
+									var iMaximumColumns = 1;
+									var sContact;
+										
+									ns1blankspace.search.stop();
+										
+									if (oResponse.data.rows.length == 0)
+									{
+										$(ns1blankspace.xhtml.searchContainer).html('<table class="ns1blankspaceSearchMedium"><tr><td class="ns1blankspaceSubNote">Nothing to show</td></tr></table>');
+									}
+									else
+									{		
+										aHTML.push('<table class="ns1blankspaceSearchMedium" style="width:520px;">');
+											
+										$.each(oResponse.data.rows, function()
+										{	
+											aHTML.push(ns1blankspace.financial.bankAccount.search.row(oParam, this));
+										});
+								    	
+										aHTML.push('</table>');
+
+										$(ns1blankspace.xhtml.searchContainer).html(
+											ns1blankspace.render.init(
+											{
+												html: aHTML.join(''),
+												more: (oResponse.morerows == "true"),
+												width: 520,
+												header: false
+											}) 
+										);
+										
+										$('td.ns1blankspaceSearch').click(function(event)
+										{
+											$(ns1blankspace.xhtml.dropDownContainer).html('&nbsp;');
+											$(ns1blankspace.xhtml.dropDownContainer).hide(ns1blankspace.option.hideSpeedOptions)
+											ns1blankspace.financial.bankAccount.search.send(event.target.id, {source: 1});
+										});
+
+										ns1blankspace.render.bind(
+										{
+											more: oResponse.moreid,
+											width: 520,
+											startRow: parseInt(oResponse.startrow) + parseInt(oResponse.rows),
+											functionSearch: ns1blankspace.financial.bankAccount.search.send,
+											functionRow: ns1blankspace.financial.bankAccount.search.row
+										});   
+									}				
+								},
+
+						row: 	function (oParam, oRow)
+								{
+									var aHTML = [];
+									var sContact;
+												
+									aHTML.push('<tr class="ns1blankspaceSearch">');
+								
+									aHTML.push('<td class="ns1blankspaceSearch" id="' +
+													'search-' + oRow.id + '">' +
+													oRow.title +
+													'</td>');
+
+									aHTML.push('</tr>');
+									
+									return aHTML.join('')
+								}								
+				},					
 				
 	layout: 	function ()
 				{	
@@ -330,7 +464,7 @@ ns1blankspace.financial.bankAccount =
 					$('#ns1blankspaceSummaryColumn1').html(aHTML.join(''));	
 				},
 
-	mapping: 	{
+	mapping: {
 					show:	function (oParam, oResponse)
 							{
 								var iObject = ns1blankspace.object;
@@ -2456,6 +2590,12 @@ ns1blankspace.financial.bankAccount =
 											oParam = ns1blankspace.util.setParam(oParam, 'type', parseInt(aID[1]));
 											oParam = ns1blankspace.util.setParam(oParam, 'reconciliation', parseInt(aID[2]));
 
+											delete oParam.searchSourceID;
+											delete oParam.searchDate;
+											delete oParam.searchAmount;
+											delete oParam.searchReference;
+											delete oParam.searchDescription;
+
 											if (iMode == 1)
 											{	
 												oParam.editAction = undefined;
@@ -2476,6 +2616,12 @@ ns1blankspace.financial.bankAccount =
 
 											oParam = ns1blankspace.util.setParam(oParam, 'mode', iMode);
 											oParam = ns1blankspace.util.setParam(oParam, 'reconciliation', parseInt(aID[2]));
+
+											delete oParam.searchSourceID;
+											delete oParam.searchDate;
+											delete oParam.searchAmount;
+											delete oParam.searchReference;
+											delete oParam.searchDescription;
 
 											if (iMode == 1)
 											{	
@@ -2910,7 +3056,7 @@ ns1blankspace.financial.bankAccount =
 																	searchDescription: sDescription,
 																	step: 0
 																});
-																
+
 																$('#ns1blankspaceBankAccountReconcileColumnItemEdit').html('');
 
 																oParam.onComplete = ns1blankspace.financial.bankAccount.reconcile.items.init;
@@ -3166,8 +3312,8 @@ ns1blankspace.financial.bankAccount =
 												{
 													show:		function (oParam)
 																{
-																	var iType = ns1blankspace.util.getParam(oParam, 'type', {"default": 1});
-																	var sLabel = (iType==1?'to <i>' + ns1blankspace.objectContextData.title + '</i> from':'from <i>' + ns1blankspace.objectContextData.title + '</i> to');
+																	var iType = ns1blankspace.util.getParam(oParam, 'type', {"default": 1}).value;
+																	var sLabel = (iType==2?'to <i>' + ns1blankspace.objectContextData.title + '</i> from':'from <i>' + ns1blankspace.objectContextData.title + '</i> to');
 																
 																	var aHTML = [];
 										
@@ -3218,16 +3364,17 @@ ns1blankspace.financial.bankAccount =
 																			bankAccountTo: $('input[name="radioTransferBankAccount"]:checked').val(),
 																			amount: oParam.searchAmount,
 																			date: oParam.searchDate,
-																			description: 'Bank Transfer',
 																			onComplete: ns1blankspace.financial.bankAccount.reconcile.items.transfer.process,
 																			persistData: ns1blankspace.financial.bankAccount.reconcile.items.transfer.data
 																		});
 
-																		if (iType == 1)
+																		if (iType == 2)
 																		{
 																			oParam.bankAccountTo = ns1blankspace.objectContext;
 																			oParam.bankAccountFrom = $('input[name="radioTransferBankAccount"]:checked').val();
 																		}
+
+																		delete oParam.itemType;
 
 																		ns1blankspace.financial.bankAccount.transfer.save.send(oParam);
 																	})
@@ -3390,7 +3537,7 @@ ns1blankspace.financial.bankAccount =
 																iSource == 2))
 														{	
 															aHTML.push('<tr><td class="ns1blankspaceCaption" style="padding-top:15px;">' +
-																		'Reconcile as a' +
+																		'Reconcile as<br />a new' +
 																		'</td></tr>');
 
 															aHTML.push('<tr><td class="ns1blankspaceAction">' +
@@ -5030,16 +5177,19 @@ ns1blankspace.financial.bankAccount =
 													}
 													else
 													{
-														oParam.financialAccountFrom = ($.grep(ns1blankspace.financial.data.bankaccounts, function (a) { return a.id == oParam.bankAccountFrom;}))[0].financialaccount;
-														oParam.financialAccountTo = ($.grep(ns1blankspace.financial.data.bankaccounts, function (a) { return a.id == oParam.bankAccountTo;}))[0].financialaccount;
+														var oBankAccountFrom = ($.grep(ns1blankspace.financial.data.bankaccounts, function (a) { return a.id == oParam.bankAccountFrom;}))[0];
+														var oBankAccountTo = ($.grep(ns1blankspace.financial.data.bankaccounts, function (a) { return a.id == oParam.bankAccountTo;}))[0];
+
+														oParam.financialAccountFrom = oBankAccountFrom.financialaccount;
+														oParam.financialAccountTo = oBankAccountTo.financialaccount;
 
 														var oData =
 														{
 															journaldate: oParam.date,
-															description: 'Transfer between Bank Accounts'
+															description: 'Bank transfer from ' + oBankAccountFrom.title + ' to ' + oBankAccountTo.title
 														}
 
-														if (oParam.description != '') {oData.description = oParam.description}
+														if (oParam.description != '' && oParam.description != undefined) {oData.description = oParam.description}
 														
 														$.ajax(
 														{
@@ -5102,7 +5252,10 @@ ns1blankspace.financial.bankAccount =
 														{
 															if (iType == iItemType)
 															{	
-																ns1blankspace.financial.bankAccount.reconcile.items.transfer.data.push(_.clone(oResponse));
+																if (ns1blankspace.financial.bankAccount.reconcile.items.transfer.data != undefined)
+																{	
+																	ns1blankspace.financial.bankAccount.reconcile.items.transfer.data.push(_.clone(oResponse));
+																}	
 															}	
 
 															if (iItemType == 1)

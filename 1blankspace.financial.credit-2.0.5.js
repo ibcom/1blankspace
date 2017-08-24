@@ -86,7 +86,7 @@ ns1blankspace.financial.credit =
 					}
 				},
 
-	home: 		function (oParam, oResponse)
+	home: 	function (oParam, oResponse)
 				{
 					if (oResponse == undefined)
 					{
@@ -245,6 +245,7 @@ ns1blankspace.financial.credit =
 											oSearch.addBracket(')');
 
 											ns1blankspace.search.advanced.addFilters(oSearch);
+											oSearch.rows = ns1blankspace.option.defaultRowsSmall;
 
 											oSearch.getResults(function(data) {ns1blankspace.financial.credit.search.process(oParam, data)});	
 										}

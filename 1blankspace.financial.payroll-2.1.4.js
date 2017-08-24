@@ -180,8 +180,7 @@ ns1blankspace.financial.payroll =
 										else
 										{	
 											aHTML.push('<table id="ns1blankspaceMostLikely">');
-											aHTML.push('<tr><td class="ns1blankspaceCaption">RECENT</td></tr>');
-
+	
 											$.each(oResponse.data.rows, function()
 											{
 												aHTML.push(ns1blankspace.financial.payroll.home.row(this, oParam));
