@@ -196,8 +196,6 @@ ns1blankspace.product =
 
 					process:	function (oParam, oResponse)
 								{
-									var iColumn = 0;
-									var	iMaximumColumns = 1;
 									var aHTML = [];
 
 									ns1blankspace.search.stop();
@@ -208,42 +206,28 @@ ns1blankspace.product =
 									}
 									else
 									{	
-										aHTML.push('<table class="ns1blankspaceSearchMedium">');
-										
+										aHTML.push('<table class="ns1blankspaceSearchMedium" style="width:520px;">');
+											
 										$.each(oResponse.data.rows, function()
-										{	
-											iColumn = iColumn + 1;
-											
-											if (iColumn == 1)
-											{
-												aHTML.push('<tr class="ns1blankspaceSearch">');
-											}
-											
-											aHTML.push('<td class="ns1blankspaceSearch" id="' +
-															'search-' + this.id + '">' +
-															this.reference + '</td>');
-											
-											aHTML.push('<td class="ns1blankspaceSearchSub" id="' +
-															'searchTitle-' + this.id + '">' +
-															this.title + '</td>');
-
-											if (iColumn == iMaximumColumns)
-											{
-												aHTML.push('</tr>');
-												iColumn = 0;
-											}	
+										{
+											aHTML.push(ns1blankspace.product.search.row(oParam, this));
 										});
 								    	
 										aHTML.push('</table>');
-
+										
 										$(ns1blankspace.xhtml.searchContainer).html(
 											ns1blankspace.render.init(
 											{
 												html: aHTML.join(''),
 												more: (oResponse.morerows == "true"),
-												header: false
+												header: false,
+												width: 520
 											}) 
-										);
+										);		
+										
+										$(ns1blankspace.xhtml.container).show(ns1blankspace.option.showSpeedOptions);
+										
+										ns1blankspace.search.stop();
 										
 										$('td.ns1blankspaceSearch').click(function(event)
 										{
@@ -251,17 +235,45 @@ ns1blankspace.product =
 											$(ns1blankspace.xhtml.dropDownContainer).hide(ns1blankspace.option.hideSpeedOptions)
 											ns1blankspace.product.search.send(event.target.id, {source: 1});
 										});
-									
+										
 										ns1blankspace.render.bind(
 										{
-											columns: 'reference-title',
+											columns: 'tradename-legalname',
 											more: oResponse.moreid,
+											width: 520,
 											startRow: parseInt(oResponse.startrow) + parseInt(oResponse.rows),
-											functionSearch: ns1blankspace.product.search.send
-										}); 
+											functionSearch: ns1blankspace.product.search.send,
+											functionRow: ns1blankspace.product.search.row
+										});   
+										
 									}
-		
-								}
+								},
+
+						row: 	function (oParam, oRow)
+								{
+									var aHTML = [];
+									
+									aHTML.push('<tr class="ns1blankspaceSearch">');
+								
+									aHTML.push('<td class="ns1blankspaceSearch" id="' +
+													'search-' + oRow.id + '">' +
+													oRow.reference +
+													'</td>');
+
+									aHTML.push('<td class="ns1blankspaceSearch" id="' +
+													'searchContact-' + oRow.id + '">' +
+													oRow.title +
+													'</td>');
+
+									aHTML.push('<td class="ns1blankspaceSearch ns1blankspaceSearchSub" id="' +
+													'searchContact-' + oRow.id + '" style="text-align:right;">' +
+													oRow.currentretailprice +
+													'</td>');
+
+									aHTML.push('</tr>');
+									
+									return aHTML.join('')
+								}							
 				},				
 
 	layout: 	function ()

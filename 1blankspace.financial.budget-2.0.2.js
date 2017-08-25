@@ -203,7 +203,18 @@ ns1blankspace.financial.budget =
 											oSearch.method = 'FINANCIAL_BUDGET_SEARCH';
 											oSearch.addField('startdate,enddate,notes');
 											oSearch.addFilter('notes', 'TEXT_IS_LIKE', sSearchText);
-											
+
+											var oSearchDate = moment(sSearchText, 'DD MMM YYYY HH:mm:ss')
+  											if (oSearchDate.isValid())
+											{
+												oSearch.addOperator('or');
+												oSearch.addBracket('(');
+												oSearch.addFilter('startdate', 'LESS_THAN_OR_EQUAL_TO', oSearchDate.format('DD MMM YYYY'));
+												oSearch.addOperator('and');
+												oSearch.addFilter('enddate', 'GREATER_THAN_OR_EQUAL_TO', oSearchDate.format('DD MMM YYYY'));
+												oSearch.addBracket(')');
+											}
+
 											ns1blankspace.search.advanced.addFilters(oSearch);
 
 											oSearch.sort('enddate', 'desc');

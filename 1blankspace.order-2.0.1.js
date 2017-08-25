@@ -87,7 +87,7 @@ ns1blankspace.order =
 									});
 								},
 
-					recent:		function (oResponse)
+					recent:	function (oResponse)
 								{
 									if (oResponse == undefined)
 									{
@@ -121,7 +121,7 @@ ns1blankspace.order =
 																		this.reference + '</td>');
 												
 												aHTML.push('<td id="ns1blankspaceMostLikely_orderdate-' + this.id + '" class="ns1blankspaceMostLikelySub" style="width:100px;">' +
-																		this.orderdate + '</td>');
+																		ns1blankspace.util.fd(this.orderdate) + '</td>');
 																		
 												var sContact = this.orderbybusinesstext;
 												if (sContact == '') {sContact = this.orderbypersontext}
@@ -214,7 +214,7 @@ ns1blankspace.order =
 																		oRow.reference + '</td>');
 												
 													aHTML.push('<td id="ns1blankspaceMostLikely_orderdate-' + oRow.id + '" class="ns1blankspaceMostLikelySub" style="width:100px;">' +
-																		oRow.orderdate + '</td>');
+																		ns1blankspace.util.fd(oRow.orderdate) + '</td>');
 																		
 													var sContact = oRow.orderbybusinesstext;
 													if (sContact == '') {sContact = oRow.orderbypersontext}
@@ -301,9 +301,23 @@ ns1blankspace.order =
 											
 											var oSearch = new AdvancedSearch();
 											oSearch.method = 'PRODUCT_ORDER_SEARCH';
-											oSearch.addField('reference,orderbybusinesstext,orderbypersontext');
+											oSearch.addField('reference,orderbybusinesstext,orderbypersontext,orderdate');
 											oSearch.addFilter('reference', 'TEXT_IS_LIKE', sSearchText);
 
+											oSearch.addOperator('or');
+											oSearch.addFilter('order.orderbybusiness.tradename', 'TEXT_IS_LIKE', sSearchText);
+											oSearch.addOperator('or');
+											oSearch.addFilter('order.orderbyperson.surname', 'TEXT_IS_LIKE', sSearchText);
+
+
+											var oSearchDate = moment(sSearchText, 'DD MMM YYYY HH:mm:ss')
+  											if (oSearchDate.isValid())
+											{
+												oSearch.addOperator('or');
+												oSearch.addFilter('orderdate', 'EQUAL_TO', oSearchDate.format('DD MMM YYYY'));
+											}
+
+											oSearch.rows = ns1blankspace.option.defaultRowsSmall;
 											ns1blankspace.search.advanced.addFilters(oSearch);
 
 											oSearch.getResults(function(data) {ns1blankspace.order.search.process(oParam, data)});
@@ -314,7 +328,7 @@ ns1blankspace.order =
 					process:	function (oParam, oResponse)
 								{
 									var iColumn = 0;
-									var	iMaximumColumns = 1;
+									variMaximumColumns = 1;
 									var aHTML = [];
 
 									ns1blankspace.search.stop();
@@ -325,70 +339,82 @@ ns1blankspace.order =
 									}
 									else
 									{
-										aHTML.push('<table class="ns1blankspaceSearchMedium">');
+										aHTML.push('<table class="ns1blankspaceSearchMedium" style="width:520px;">');
 											
 										$.each(oResponse.data.rows, function()
 										{
-											iColumn = iColumn + 1;
-											
-											if (iColumn == 1)
-											{
-												aHTML.push('<tr class="ns1blankspaceSearch">');
-											}
-
-											aHTML.push('<td class="ns1blankspaceSearch" id="' +
-															'-' + this.id + '">' +
-															this.reference +
-															'</td>');
-											
-											if (this.orderbybusinesstext != '')
-											{
-												sContact = this.orderbybusinesstext;
-											}
-											else
-											{
-												sContact = this.orderbypersontext;
-											}	
-											
-											aHTML.push('<td class="ns1blankspaceSearchSub" id="' +
-															'searchContact-' + this.id + '">' +
-															sContact +
-															'</td>');
-
-											if (iColumn == iMaximumColumns)
-											{
-												aHTML.push('</tr>');
-												iColumn = 0;
-											}	
+											aHTML.push(ns1blankspace.order.search.row(oParam, this));
 										});
 								    	
 										aHTML.push('</table>');
-
+										
 										$(ns1blankspace.xhtml.searchContainer).html(
 											ns1blankspace.render.init(
 											{
 												html: aHTML.join(''),
 												more: (oResponse.morerows == "true"),
-												header: false
+												header: false,
+												width: 520
 											}) 
-										);	
-
+										);		
+										
+										$(ns1blankspace.xhtml.container).show(ns1blankspace.option.showSpeedOptions);
+										
+										ns1blankspace.search.stop();
+										
 										$('td.ns1blankspaceSearch').click(function(event)
 										{
 											$(ns1blankspace.xhtml.dropDownContainer).html('&nbsp;');
 											$(ns1blankspace.xhtml.dropDownContainer).hide(ns1blankspace.option.hideSpeedOptions)
 											ns1blankspace.order.search.send(event.target.id, {source: 1});
 										});
-
+										
 										ns1blankspace.render.bind(
 										{
-											columns: 'reference',
 											more: oResponse.moreid,
+											width: 520,
 											startRow: parseInt(oResponse.startrow) + parseInt(oResponse.rows),
-											functionSearch: ns1blankspace.order.search.send
+											functionSearch: ns1blankspace.order.search.send,
+											functionRow: ns1blankspace.order.search.row
 										});   
 									}			
-								}
+								},
+
+					row: 		function (oParam, oRow)
+								{
+									var aHTML = [];
+									var sContact;
+												
+									aHTML.push('<tr class="ns1blankspaceSearch">');
+								
+									aHTML.push('<td class="ns1blankspaceSearch" id="' +
+															'-' + oRow.id + '">' +
+															oRow.reference +
+															'</td>');
+
+									aHTML.push('<td class="ns1blankspaceSearch" id="' +
+															'-' + oRow.id + '">' +
+															ns1blankspace.util.fd(oRow.orderdate) +
+															'</td>');
+											
+									if (this.orderbybusinesstext != '')
+									{
+										sContact = oRow.orderbybusinesstext;
+									}
+									else
+									{
+										sContact = oRow.orderbypersontext;
+									}	
+									
+									aHTML.push('<td class="ns1blankspaceSearchSub" id="' +
+													'searchContact-' + oRow.id + '">' +
+													sContact +
+													'</td>');
+
+									aHTML.push('</tr>');
+									
+									return aHTML.join('')
+								}							
 				},
 
 	layout: 	function ()
@@ -555,7 +581,7 @@ ns1blankspace.order =
 						aHTML.push('<table class="ns1blankspaceMain">' +
 									'<tr class="ns1blankspaceRow">' +
 									'<td id="ns1blankspaceSummaryColumn1" class="ns1blankspaceColumn1Flexible"></td>' +
-									'<td id="ns1blankspaceSummaryColumn2" class="ns1blankspaceColumn2Action" style="width:200px;"></td>' +
+									'<td id="ns1blankspaceSummaryColumn2" class="ns1blankspaceColumn2Action" style="width:300px;"></td>' +
 									'</tr>' +
 									'</table>');				
 						
@@ -786,7 +812,7 @@ ns1blankspace.order =
 						if (ns1blankspace.objectContextData != undefined)
 						{
 							$('#ns1blankspaceDetailsReference').val(ns1blankspace.objectContextData.reference);
-							$('#ns1blankspaceDetailsOrderDate').val(ns1blankspace.objectContextData.orderdate);
+							$('#ns1blankspaceDetailsOrderDate').val(ns1blankspace.util.fd(ns1blankspace.objectContextData.orderdate));
 							$('#ns1blankspaceDetailsOrderByBusiness').attr('data-id', ns1blankspace.objectContextData.orderbybusiness);
 							$('#ns1blankspaceDetailsOrderByBusiness').val(ns1blankspace.objectContextData.orderbybusinesstext);
 							$('#ns1blankspaceDetailsOrderByPerson').attr('data-id', ns1blankspace.objectContextData.orderbyperson);
@@ -1836,7 +1862,7 @@ ns1blankspace.order =
 											aHTML.push('<table id="ns1blankspaceOrderInvoices" class="ns1blankspaceContainer">');
 											aHTML.push('<tr class="ns1blankspaceCaption">');
 											aHTML.push('<td class="ns1blankspaceHeaderCaption">Reference</td>');
-											aHTML.push('<td class="ns1blankspaceHeaderCaption" style="text-align:right;">Date</td>');
+											aHTML.push('<td class="ns1blankspaceHeaderCaption">Date</td>');
 											aHTML.push('<td class="ns1blankspaceHeaderCaption" style="text-align:right;">Amount</td>');
 											aHTML.push('<td class="ns1blankspaceHeaderCaption">&nbsp;</td>');
 											aHTML.push('</tr>');
@@ -1875,8 +1901,8 @@ ns1blankspace.order =
 									aHTML.push('<td id="ns1blankspaceOrderInvoices_title-' + oRow.id + '" class="ns1blankspaceRow">' +
 															oRow.reference + '</td>');
 															
-									aHTML.push('<td id="ns1blankspaceOrderInvoices_quantity-' + oRow.id + '" class="ns1blankspaceRow"' +
-															' style="text-align:right;">' +
+									aHTML.push('<td id="ns1blankspaceOrderInvoices_date-' + oRow.id + '" class="ns1blankspaceRow"' +
+															'>' +
 															oRow.sentdate + '</td>');						
 																
 									aHTML.push('<td id="ns1blankspaceOrderInvoices_price-' + oRow.id + '" class="ns1blankspaceRow"' +

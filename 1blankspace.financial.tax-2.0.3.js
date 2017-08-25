@@ -217,6 +217,12 @@ ns1blankspace.financial.tax =
 											oSearch.addField('enddate,taxofficereference');
 											oSearch.addFilter('reference', 'TEXT_IS_LIKE', sSearchText);
 
+											var oSearchDate = moment(sSearchText, 'DD MMM YYYY HH:mm:ss')
+  											if (oSearchDate.isValid())
+											{
+												oSearch.addFilter('enddate', 'APPROX_EQUAL_TO', oSearchDate.format('DD MMM YYYY'));	
+											}
+
 											ns1blankspace.search.advanced.addFilters(oSearch);
 
 											oSearch.sort('enddate', 'DESC');

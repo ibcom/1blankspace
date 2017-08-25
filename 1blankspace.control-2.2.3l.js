@@ -172,7 +172,7 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.order',
-		source: '/jscripts/1blankspace.order-2.0.1.js'
+		source: '/site/312/1blankspace.order-2.0.1.js'
 	},
 	{
 		nameSpace: '1blankspace.financial',

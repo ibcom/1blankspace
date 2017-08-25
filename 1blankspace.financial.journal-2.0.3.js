@@ -124,7 +124,7 @@ ns1blankspace.financial.journal =
 					aHTML.push('<tr><td><div id="ns1blankspaceViewFinancialLarge" class="ns1blankspaceViewImageLarge"></div></td></tr>');
 
 					aHTML.push('<tr class="ns1blankspaceControl">' +
-									'<td id="ns1blankspaceControlFinalised" class="nns1blankspaceControl ns1blankspaceHighlight">Finalised</td>' +
+									'<td id="ns1blankspaceControlFinalised" class="ns1blankspaceControl ns1blankspaceHighlight">Finalised</td>' +
 									'</tr>');			
 								
 					aHTML.push('<tr class="ns1blankspaceControl">' +
@@ -135,65 +135,110 @@ ns1blankspace.financial.journal =
 					
 					$('#ns1blankspaceControl').html(aHTML.join(''));
 
+					$('#ns1blankspaceControlFinalised').click(function(event)
+					{
+						ns1blankspace.financial.journal.finalised.show();
+					});
+
+					$('#ns1blankspaceControlPending').click(function(event)
+					{
+						ns1blankspace.financial.journal.pending.show();
+					});
+
 					ns1blankspace.financial.journal.finalised.show(oParam);
 				},
 
-	pending: function (oParam, oResponse)
-				{	
-					if (oResponse == undefined)
-					{	
-						$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions);
-						
-						var oSearch = new AdvancedSearch();
-						oSearch.method = 'FINANCIAL_GENERAL_JOURNAL_SEARCH';
-						oSearch.addField('area,areatext,description,id,journaldate,object,objecttext,objectcontext,' +
-											'project,projecttext,reference,status,statustext');
-						oSearch.rows = 25;
-						oSearch.sort('modifieddate', 'desc');
-						oSearch.getResults(function(data) {ns1blankspace.financial.journal.home(oParam, data)});
-					}
-					else
-					{
-						var aHTML = [];
-						
-						if (oResponse.data.rows.length == 0)
-						{
-							aHTML.push('<table id="ns1blankspaceMostLikely">');
-							aHTML.push('<tr><td class="ns1blankspaceNothing">Click New to add a general journal.</td></tr>');
-							aHTML.push('</table>');
-						}
-						else
-						{
-							aHTML.push('<table id="ns1blankspaceMostLikely">');
-							aHTML.push('<td class="ns1blankspaceCaption">RECENT</td>');
+	pending:
+				{			
+					show: 	function (oParam, oResponse)
+								{	
+									if (oResponse == undefined)
+									{	
+										ns1blankspace.status.working();
 
-							$.each(oResponse.data.rows, function()
-							{					
-								aHTML.push('<tr class="ns1blankspaceRow">');
-									
-								aHTML.push('<td id="ns1blankspaceMostLikely_Title-' + this.id + '" class="ns1blankspaceMostLikely" style="width:60px;">' +
-														this.reference + '</td>');
+										$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions);
 										
-								aHTML.push('<td id="ns1blankspaceMostLikely_Date-' + this.id + '" class="ns1blankspaceMostLikelySub" style="width:90px;">' +
-														this.journaldate + '</td>');
+										var oSearch = new AdvancedSearch();
+										oSearch.method = 'FINANCIAL_GENERAL_JOURNAL_SEARCH';
+										oSearch.addField('area,areatext,description,id,journaldate,object,objecttext,objectcontext,' +
+															'project,projecttext,reference,status,statustext');
+										oSearch.rows = 20;
+										//oSearch.addFilter('status', 'EQUAL_TO', 1);
+										oSearch.sort('journaldate', 'desc');
+										oSearch.getResults(function(data) {ns1blankspace.financial.journal.pending.show(oParam, data)});
+									}
+									else
+									{
+										ns1blankspace.status.clear();
 
-								aHTML.push('<td id="ns1blankspaceMostLikely_Description-' + this.id + '" class="ns1blankspaceMostLikelySub">' +
-														this.description + '</td>');
-																											
-								aHTML.push('</tr>');
-							});
-							
-							aHTML.push('</table>');
-						}
-						
-						$('#ns1blankspaceMostLikely').html(aHTML.join(''));
-					
-						$('td.ns1blankspaceMostLikely').click(function(event)
-						{
-							 ns1blankspace.financial.journal.search.send(event.target.id, {source: 1});
-						});
-					}
-				},
+										var aHTML = [];
+										
+										if (oResponse.data.rows.length == 0)
+										{
+											aHTML.push('<table id="ns1blankspaceMostLikely">');
+											aHTML.push('<tr><td class="ns1blankspaceNothing">Click New to add a general journal.</td></tr>');
+											aHTML.push('</table>');
+										}
+										else
+										{
+											aHTML.push('<table class="ns1blankspace" id="ns1blankspaceFinancialJournalPending">');
+
+											aHTML.push('<tr class="ns1blankspaceCaption">');
+											aHTML.push('<td class="ns1blankspaceHeaderCaption">Reference</td>');
+											aHTML.push('<td class="ns1blankspaceHeaderCaption">Date</td>');
+											aHTML.push('<td class="ns1blankspaceHeaderCaption">Description</td>');
+											aHTML.push('</tr>');
+
+											$.each(oResponse.data.rows, function()
+											{					
+												aHTML.push(ns1blankspace.financial.journal.pending.row(this));
+											});
+											
+											aHTML.push('</table>');
+										}
+									
+										ns1blankspace.render.page.show(
+										{
+											xhtmlElementID: 'ns1blankspaceMostLikely',
+											xhtmlContext: 'FinancialJournalPending',
+											xhtml: aHTML.join(''),
+											showMore: (oResponse.morerows == "true"),
+											more: oResponse.moreid,
+											rows: ns1blankspace.option.defaultRows,
+											functionShowRow: ns1blankspace.financial.journal.pending.row,
+											functionOnNewPage: ns1blankspace.financial.journal.pending.bind,
+											type: 'json'
+										}); 
+									}
+								},
+
+					row: 		function (oRow)
+								{
+									var aHTML = [];
+								
+									aHTML.push('<tr class="ns1blankspace">');
+															
+									aHTML.push('<td id="reference-' + oRow.id + '" class="ns1blankspaceRow ns1blankspaceRowSelect">' +
+															oRow.reference + '</td>' +
+													'<td id="date-' + oRow.id + '" class="ns1blankspaceRow">' +
+															oRow.journaldate + '</td>' +
+													'<td id="description-' + oRow.id + '" class="ns1blankspaceRow">' +
+															oRow.description + '</td>');
+															
+									aHTML.push('</tr>');
+												
+									return aHTML.join('');
+								},
+
+					bind: 	function ()
+								{
+									$('#ns1blankspaceFinancialJournalPending .ns1blankspaceRowSelect')
+									.click(function()
+									{
+										ns1blankspace.financial.journal.init({id: (this.id).split('-')[1]});
+									});
+								}	
+				},				
 
 	search: 	{
 					send:		function (sXHTMLElementID, oParam)
@@ -1214,7 +1259,7 @@ finalised: 	{
 										if (oParam.xhtmlElementID != undefined) {sXHTMLElementID = oParam.xhtmlElementID}
 									}
 
-									//var aXHTMLElementId = sXHTMLElementID.split('-')
+									ns1blankspace.status.working();
 									
 									if (oResponse == undefined)
 									{	
@@ -1228,6 +1273,8 @@ finalised: 	{
 									}
 									else
 									{
+										ns1blankspace.status.clear()
+
 										var aHTML = [];
 										
 										if (oResponse.data.rows.length == 0)
@@ -1275,7 +1322,7 @@ finalised: 	{
 								
 									aHTML.push('<tr class="ns1blankspace">');
 															
-									aHTML.push('<td id="reference-' + oRow.id + '" class="ns1blankspaceRow ns1blankspaceRowSelect">' +
+									aHTML.push('<td id="reference-' + oRow.reference + '" class="ns1blankspaceRow ns1blankspaceRowSelect">' +
 															oRow.reference + '</td>' +
 													'<td id="date-' + oRow.id + '" class="ns1blankspaceRow">' +
 															oRow.journaldate + '</td>' +
@@ -1294,7 +1341,15 @@ finalised: 	{
 									$('#ns1blankspaceFinancialJournalFinalised .ns1blankspaceRowSelect')
 									.click(function()
 									{
-										ns1blankspace.financial.journal.init({id: (this.id).split('-')[1]});
+										var oSearch = new AdvancedSearch();
+										oSearch.method = 'FINANCIAL_GENERAL_JOURNAL_SEARCH';
+										oSearch.addField('id');
+										oSearch.addFilter('reference', 'EQUAL_TO', (this.id).split('-')[1]);
+										oSearch.getResults(function(oResponse)
+										{
+											ns1blankspace.financial.journal.init({id: oResponse.data.rows[0].id})
+										});	
+										;
 									});
 								}	
 				}								
