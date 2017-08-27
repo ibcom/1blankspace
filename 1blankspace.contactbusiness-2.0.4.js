@@ -101,7 +101,7 @@ ns1blankspace.contactBusiness =
 						{
 							aHTML.push('<table>');
 							aHTML.push('<tr>');
-							aHTML.push('<td class="ns1blankspaceCaption">MOST LIKELY</td>');
+							aHTML.push('<td class="ns1blankspaceCaption">RECENT</td>');
 							aHTML.push('</tr>');
 
 							$.each(oResponse.data.rows, function()

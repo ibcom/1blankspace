@@ -74,7 +74,7 @@ ns1blankspace.news =
 						
 							aHTML.push('<table id="ns1blankspaceMostLikely">');
 							aHTML.push('<tr>');
-							aHTML.push('<td class="ns1blankspaceCaption">MOST LIKELY</td>');
+							aHTML.push('<td class="ns1blankspaceCaption">RECENT</td>');
 							aHTML.push('</tr>');
 
 							$.each(oResponse.data.rows, function()

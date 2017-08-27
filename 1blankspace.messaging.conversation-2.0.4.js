@@ -39,7 +39,7 @@ ns1blankspace.messaging.conversation =
 									
 						aHTML.push('<table class="ns1blankspaceMain">');
 						aHTML.push('<tr class="ns1blankspaceMain">' +
-										'<td id="ns1blankspaceMostLikely" class="ins1blankspaceMain">' +
+										'<td id="ns1blankspaceMostLikely" class="ns1blankspaceMain">' +
 										ns1blankspace.xhtml.loading +
 										'</td>' +
 										'</tr>');
@@ -77,7 +77,7 @@ ns1blankspace.messaging.conversation =
 						else
 						{
 							aHTML.push('<table>');
-							aHTML.push('<tr><td class="ns1blankspaceCaption">MOST RECENT</td></tr>');
+							aHTML.push('<tr><td class="ns1blankspaceCaption">RECENT</td></tr>');
 
 							$.each(oResponse.data.rows, function()
 							{

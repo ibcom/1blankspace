@@ -115,7 +115,7 @@ ns1blankspace.financial.budget =
 						else
 						{
 							$vq.add('<table id="ns1blankspaceMostLikely">' +
-										'<tr><td class="ns1blankspaceCaption" colspan="4">MOST LIKELY</td></tr>', {queue: 'home'});
+										'<tr><td class="ns1blankspaceCaption" colspan="4">RECENT</td></tr>', {queue: 'home'});
 							
 							$.each(oResponse.data.rows, function(r, row)
 							{					

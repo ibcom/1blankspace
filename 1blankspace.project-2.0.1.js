@@ -66,7 +66,7 @@ ns1blankspace.project =
 						else
 						{
 							aHTML.push('<table>');
-							aHTML.push('<tr><td class="ns1blankspaceCaption">MOST LIKELY</td></tr>');
+							aHTML.push('<tr><td class="ns1blankspaceCaption">RECENT</td></tr>');
 
 							$.each(oResponse.data.rows, function()
 							{

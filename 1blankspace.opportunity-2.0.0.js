@@ -79,7 +79,7 @@ ns1blankspace.opportunity =
 						else
 						{
 							aHTML.push('<table id="ns1blankspaceMostLikely">' +
-											'<tr><td colspan=2 class="ns1blankspaceCaption">MOST RECENT</td></tr>');
+											'<tr><td colspan=2 class="ns1blankspaceCaption">RECENT</td></tr>');
 
 							$.each(oResponse.data.rows, function()
 							{

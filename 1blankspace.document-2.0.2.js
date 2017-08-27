@@ -73,7 +73,7 @@ ns1blankspace.document =
 						else
 						{
 							aHTML.push('<table>');
-							aHTML.push('<tr><td class="ns1blankspaceCaption">MOST LIKELY</td></tr>');
+							aHTML.push('<tr><td class="ns1blankspaceCaption">RECENT</td></tr>');
 
 							$.each(oResponse.data.rows, function()
 							{
@@ -170,6 +170,7 @@ ns1blankspace.document =
 											}
 
 											ns1blankspace.search.advanced.addFilters(oSearch);
+											oSearch.rows = ns1blankspace.option.defaultRowsSmall;
 
 											oSearch.getResults(function(data) {ns1blankspace.document.search.process(oParam, data)});
 										}
@@ -178,10 +179,8 @@ ns1blankspace.document =
 
 					process:	function (oParam, oResponse)
 								{
-									var iColumn = 0;
 									var aHTML = [];
-									var	iMaximumColumns = 1;
-											
+																
 									ns1blankspace.search.stop();
 												
 									if (oResponse.data.rows.length == 0)
@@ -190,26 +189,11 @@ ns1blankspace.document =
 									}
 									else
 									{
-										aHTML.push('<table class="ns1blankspaceSearchMedium">');
+											aHTML.push('<table class="ns1blankspaceSearchMedium" style="width:520px;">');
 											
 										$.each(oResponse.data.rows, function()
-										{
-											iColumn = iColumn + 1;
-											
-											if (iColumn == 1)
-											{
-												aHTML.push('<tr class="ns1blankspaceSearch">');
-											}
-											
-											aHTML.push('<td class="ns1blankspaceSearch" id="' +
-															'-' + this.id + '">' +
-															this.title + '</td>');
-											
-											if (iColumn == iMaximumColumns)
-											{
-												aHTML.push('</tr>');
-												iColumn = 0;
-											}	
+										{	
+											aHTML.push(ns1blankspace.document.search.row(oParam, this));
 										});
 								    	
 										aHTML.push('</table>');
@@ -219,26 +203,45 @@ ns1blankspace.document =
 											{
 												html: aHTML.join(''),
 												more: (oResponse.morerows == "true"),
+												width: 520,
 												header: false
 											}) 
-										);	
+										);		
 										
 										$('td.ns1blankspaceSearch').click(function(event)
 										{
 											$(ns1blankspace.xhtml.dropDownContainer).html('&nbsp;');
 											$(ns1blankspace.xhtml.dropDownContainer).hide(ns1blankspace.option.hideSpeedOptions)
-											ns1blankspace.document.search.send(event.target.id, 1);
+											ns1blankspace.document.search.send(event.target.id, {source: 1});
 										});
-
+										
 										ns1blankspace.render.bind(
 										{
-											columns: 'title',
 											more: oResponse.moreid,
+											width: 520,
 											startRow: parseInt(oResponse.startrow) + parseInt(oResponse.rows),
-											functionSearch: ns1blankspace.document.search.send
-										});   
+											functionSearch: ns1blankspace.document.search.send,
+											functionRow: ns1blankspace.document.search.row
+										});   				
 									}	
-								}
+								},
+
+					row: 		function (oParam, oRow)
+								{
+									var aHTML = [];
+									var sContact;
+												
+									aHTML.push('<tr class="ns1blankspaceSearch">');
+								
+									aHTML.push('<td class="ns1blankspaceSearch" id="' +
+													'search-' + oRow.id + '">' +
+													oRow.title +
+													'</td>');
+
+									aHTML.push('</tr>');
+									
+									return aHTML.join('')
+								}					
 				},
 
 	layout: 	function ()

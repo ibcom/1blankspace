@@ -246,11 +246,10 @@ ns1blankspace.action =
 
 				ns1blankspace.render.bind(
 				{
-					columns: 'subject',
 					more: oResponse.moreid,
 					startRow: parseInt(oResponse.startrow) + parseInt(oResponse.rows),
 					functionSearch: ns1blankspace.action.search.send,
-					row: ns1blankspace.action.search.row,
+					functionRow: ns1blankspace.action.search.row,
 					width: 520
 				}); 
 			}			

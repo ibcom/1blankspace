@@ -220,7 +220,7 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.report',
-		source: '/site/312/1blankspace.report-2.0.7.js'
+		source: '/site/312/1blankspace.report-2.0.8.js'
 	},
 	{
 		nameSpace: '1blankspace.setup',
