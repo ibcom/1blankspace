@@ -1227,7 +1227,7 @@ ns1blankspace.financial.bankAccount =
 										oSearch.addField('startdate,enddate,processeddate');
 										oSearch.addFilter('bankaccount', 'EQUAL_TO', ns1blankspace.objectContext);
 										oSearch.sort('processeddate', 'desc');
-										oSearch.rows = 10;
+										oSearch.rows = 15;
 										oSearch.getResults(function(data) {ns1blankspace.financial.bankAccount["import"].show(oParam, data)});
 									}
 									else
@@ -1256,16 +1256,23 @@ ns1blankspace.financial.bankAccount =
 											aHTML.push('</table>');
 											
 											$('#ns1blankspaceBankAccountImportColumn1').html(aHTML.join(''));
+
+											ns1blankspace.render.page.show(
+											{
+												type: 'JSON',
+												xhtmlElementID: 'ns1blankspaceBankAccountImportColumn1',
+												xhtmlContext: 'FinancialBankAccountImport',
+												xhtml: aHTML.join(''),
+												showMore: (oResponse.morerows == "true"),
+												more: oResponse.moreid,
+												rows: 15,
+												functionShowRow: ns1blankspace.financial.bankAccount["import"].row,
+												functionOpen: undefined,
+												functionOnNewPage: ns1blankspace.financial.bankAccount["import"].bind,
+												headerRow: false
+											});					
 										}
 											
-										$('.ns1blankspaceBankAccountImportRowSelect').click(function()
-										{
-											$('#ns1blankspaceBankAccountImportSources td.ns1blankspaceRowShaded').removeClass('ns1blankspaceRowShaded');
-											$('#' + this.id).addClass('ns1blankspaceRowShaded');
-											var aID = (this.id).split('-');
-											ns1blankspace.financial.bankAccount["import"].items.show({fileSource: aID[1]});
-										});
-
 										ns1blankspace.financial.bankAccount["import"].add();
 									}
 								},
@@ -1292,13 +1299,22 @@ ns1blankspace.financial.bankAccount =
 											aHTML.push(' to ' + oRow.startdate + '<br />');	
 										}
 									
-										//aHTML.push('<span class="ns1blankspaceSub">' + oRow.processeddate + '</span></td>');
-
 										aHTML.push('</tr>');
 									}
 										
 									return aHTML.join('');
 								},
+
+					bind:		function (oRow)
+								{
+									$('.ns1blankspaceBankAccountImportRowSelect:visible').click(function()
+									{
+										$('#ns1blankspaceBankAccountImportSources td.ns1blankspaceRowShaded').removeClass('ns1blankspaceRowShaded');
+										$('#' + this.id).addClass('ns1blankspaceRowShaded');
+										var aID = (this.id).split('-');
+										ns1blankspace.financial.bankAccount["import"].items.show({fileSource: aID[1]});
+									});
+								},			
 
 					add:		function (oParam, oResponse)
 								{

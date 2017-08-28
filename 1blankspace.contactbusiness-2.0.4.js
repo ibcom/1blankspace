@@ -130,7 +130,7 @@ ns1blankspace.contactBusiness =
 				},
 
 	search: 	{
-					send: 		function (sXHTMLElementId, oParam)
+					send: 	function (sXHTMLElementId, oParam)
 								{
 									
 									var aSearch = sXHTMLElementId.split('-');

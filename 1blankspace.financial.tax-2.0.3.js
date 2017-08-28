@@ -220,6 +220,7 @@ ns1blankspace.financial.tax =
 											var oSearchDate = moment(sSearchText, 'DD MMM YYYY HH:mm:ss')
   											if (oSearchDate.isValid())
 											{
+												oSearch.addFilter('or');
 												oSearch.addFilter('enddate', 'APPROX_EQUAL_TO', oSearchDate.format('DD MMM YYYY'));	
 											}
 
