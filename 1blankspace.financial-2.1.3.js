@@ -860,6 +860,7 @@ ns1blankspace.financial.debtors =
 
 						if (sEndDate !== undefined)
 						{
+							oParam.endDate = sEndDate;
 							oData.enddate = sEndDate;
 							$('#ns1blankspaceDebtorsEndDate').removeClass('ns1blankspaceWatermark').val(sEndDate);
 						}
@@ -946,7 +947,7 @@ ns1blankspace.financial.debtors =
 					{
 						if (oParam != undefined)
 						{
-							ns1blankspace.financial.data.defaults = {enddate: oParam.endDate}
+							ns1blankspace.financial.data.defaults.enddate = oParam.endDate;
 						}	
 
 						var aHTML = [];
@@ -1674,6 +1675,7 @@ ns1blankspace.financial.creditors =
 
 						if (sEndDate !== undefined)
 						{
+							oParam.endDate = sEndDate;
 							oData.enddate = sEndDate;
 							$('#ns1blankspaceCreditorsEndDate').removeClass('ns1blankspaceWatermark').val(sEndDate);
 						}
@@ -1710,7 +1712,7 @@ ns1blankspace.financial.creditors =
 					{
 						if (oParam != undefined)
 						{
-							ns1blankspace.financial.data.defaults = {enddate: oParam.endDate}
+							ns1blankspace.financial.data.defaults.enddate = oParam.endDate;
 						}	
 
 						var aHTML = [];
@@ -1948,6 +1950,26 @@ ns1blankspace.financial.profitLoss =
 						if (oParam.noZero != undefined) {bNoZero = oParam.noZero}
 					}
 
+					if (sStartDate == undefined)
+					{
+						if (ns1blankspace.financial.data.defaults.startdate != undefined)
+						{
+							sStartDate = ns1blankspace.financial.data.defaults.startdate;
+						}
+					}
+
+					if (sEndDate == undefined)
+					{
+						if (ns1blankspace.financial.data.defaults.enddate != undefined)
+						{
+							sEndDate = ns1blankspace.financial.data.defaults.enddate;
+						}
+						else
+						{
+							sEndDate = Date.today().toString("dd MMM yyyy");
+						}
+					}
+
 					if (oResponse == undefined)
 					{
 						var aHTML = [];
@@ -2082,12 +2104,14 @@ ns1blankspace.financial.profitLoss =
 
 						if (sStartDate != undefined)
 						{
+							oParam.startDate = sStartDate;
 							sData += '&startdate=' + ns1blankspace.util.fs(sStartDate);
 							$('#ns1blankspacePLStartDate').val(sStartDate);
 						}
 							
 						if (sEndDate != undefined)
 						{
+							oParam.endDate = sEndDate;
 							sData += '&enddate=' + ns1blankspace.util.fs(sEndDate);
 							$('#ns1blankspacePLEndDate').val(sEndDate);
 						}
@@ -2276,6 +2300,26 @@ ns1blankspace.financial.balanceSheet =
 						if (oParam.endDate != undefined) {sEndDate = oParam.endDate}
 					}
 
+					if (sStartDate == undefined)
+					{
+						if (ns1blankspace.financial.data.defaults.startdate != undefined)
+						{
+							sStartDate = ns1blankspace.financial.data.defaults.startdate;
+						}
+					}
+
+					if (sEndDate == undefined)
+					{
+						if (ns1blankspace.financial.data.defaults.enddate != undefined)
+						{
+							sEndDate = ns1blankspace.financial.data.defaults.enddate;
+						}
+						else
+						{
+							sEndDate = Date.today().toString("dd MMM yyyy");
+						}
+					}
+
 					if (oResponse == undefined)
 					{
 						var aHTML = [];
@@ -2404,12 +2448,14 @@ ns1blankspace.financial.balanceSheet =
 
 						if (sStartDate != undefined && sStartDate != '1 Jul 1900')
 						{
+							oParam.startDate = sStartDate;
 							sData += '&startdate=' + ns1blankspace.util.fs(sStartDate);
 							$('#ns1blankspaceBSStartDate').val(sStartDate);
 						}
 							
 						if (sEndDate != undefined)
 						{
+							oParam.endDate = sEndDate;
 							sData += '&enddate=' + ns1blankspace.util.fs(sEndDate);
 							$('#ns1blankspaceBSEndDate').val(sEndDate);
 						}
@@ -5993,6 +6039,26 @@ ns1blankspace.financial.taxSummary =
 						if (oParam.endDate != undefined) {sEndDate = oParam.endDate}
 					}
 
+					if (sStartDate == undefined)
+					{
+						if (ns1blankspace.financial.data.defaults.startdate != undefined)
+						{
+							sStartDate = ns1blankspace.financial.data.defaults.startdate;
+						}
+					}
+
+					if (sEndDate == undefined)
+					{
+						if (ns1blankspace.financial.data.defaults.enddate != undefined)
+						{
+							sEndDate = ns1blankspace.financial.data.defaults.enddate;
+						}
+						else
+						{
+							sEndDate = Date.today().toString("dd MMM yyyy");
+						}
+					}
+
 					if (oResponse == undefined)
 					{
 						var aHTML = [];
@@ -6110,14 +6176,16 @@ ns1blankspace.financial.taxSummary =
 						oSearch.addSummaryField('sum(g20) totalg20');
 						oSearch.addSummaryField('sum(w2) totalw2');
 
-						if (sStartDate != undefined)
+						if (sStartDate != undefined && sStartDate != '')
 						{
+							oParam.startDate = sStartDate;
 							oSearch.addFilter('enddate', 'GREATER_THAN_OR_EQUAL_TO', sStartDate);
 							$('#ns1blankspaceTaxStartDate').val(sStartDate);
 						}
 							
-						if (sEndDate != undefined)
+						if (sEndDate != undefined && sEndDate != '')
 						{
+							oParam.endDate = sEndDate;
 							oSearch.addFilter('enddate', 'LESS_THAN_OR_EQUAL_TO', sEndDate);
 							$('#ns1blankspaceTaxEndDate').val(sEndDate);
 						}
@@ -6128,9 +6196,6 @@ ns1blankspace.financial.taxSummary =
 					}
 					else
 					{	
-						oParam.startDate = oResponse.startdate;
-						oParam.endDate = oResponse.enddate;
-
 						if ($('#ns1blankspaceTaxStartDate').val() == '') {$('#ns1blankspaceTaxStartDate').val(oResponse.startdate)}
 						if ($('#ns1blankspaceTaxEndDate').val() == '') {$('#ns1blankspaceTaxEndDate').val(oResponse.enddate)}
 
@@ -6148,38 +6213,51 @@ ns1blankspace.financial.taxSummary =
 						}
 
 						var aHTML = [];
-					
-						aHTML.push('<table>');
-					
-						aHTML.push('<tr>');
-						aHTML.push('<td class="ns1blankspaceHeaderCaption">Date</td>');
-						aHTML.push('<td class="ns1blankspaceHeaderCaption" style="text-align:right;">GST on<br/>Sales</td>');
-						aHTML.push('<td class="ns1blankspaceHeaderCaption" style="text-align:right;">GST on<br/>Purchases</td>');
-						aHTML.push('<td class="ns1blankspaceHeaderCaption" style="text-align:right;">GST<br/>Payable</td>');
-						aHTML.push('<td class="ns1blankspaceHeaderCaption" style="text-align:right;">Employee<br/>Tax Payable</td>');
-						aHTML.push('<td class="ns1blankspaceHeaderCaption" style="text-align:right;">Total<br/>Tax Payable</td>');
-						aHTML.push('</tr>');
-						
-						$(oResponse.data.rows).each(function() 
-						{
-							aHTML.push(ns1blankspace.financial.taxSummary.row(this));
-						});
-					
-						aHTML.push('</table>');
 
-						ns1blankspace.render.page.show(
-					   {
-							type: 'JSON',
-							xhtmlElementID: 'ns1blankspaceTaxColumn2',
-							xhtmlContext: 'FinancialTaxSummary',
-							xhtml: aHTML.join(''),
-							showMore: (oResponse.morerows == "true"),
-							more: oResponse.moreid,
-							rows: 20,
-							functionShowRow: ns1blankspace.financial.taxSummary.row,
-							functionOpen: undefined,
-							functionOnNewPage: undefined
-					   });
+						if (oResponse.data.rows.length == 0)
+						{
+							aHTML.push('<table>' +
+										'<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceNothing">Nothing to show.</td>' +
+										'</tr></table>');
+
+							$('#ns1blankspaceTaxColumn2').html(aHTML.join(''));
+						}
+						else
+						{
+					
+							aHTML.push('<table id="ns1blankspaceFinancialTaxSummary">');
+						
+							aHTML.push('<tr>');
+							aHTML.push('<td class="ns1blankspaceHeaderCaption">Date</td>');
+							aHTML.push('<td class="ns1blankspaceHeaderCaption" style="text-align:right;">GST on<br/>Sales</td>');
+							aHTML.push('<td class="ns1blankspaceHeaderCaption" style="text-align:right;">GST on<br/>Purchases</td>');
+							aHTML.push('<td class="ns1blankspaceHeaderCaption" style="text-align:right;">GST<br/>Payable</td>');
+							aHTML.push('<td class="ns1blankspaceHeaderCaption" style="text-align:right;">Employee<br/>Tax Payable</td>');
+							aHTML.push('<td class="ns1blankspaceHeaderCaption" style="text-align:right;">Total<br/>Tax Payable</td>');
+							aHTML.push('</tr>');
+							
+							$(oResponse.data.rows).each(function() 
+							{
+								aHTML.push(ns1blankspace.financial.taxSummary.row(this));
+							});
+						
+							aHTML.push('</table>');
+
+							ns1blankspace.render.page.show(
+						   {
+								type: 'JSON',
+								xhtmlElementID: 'ns1blankspaceTaxColumn2',
+								xhtmlContext: 'FinancialTaxSummary',
+								xhtml: aHTML.join(''),
+								showMore: (oResponse.morerows == "true"),
+								more: oResponse.moreid,
+								rows: 20,
+								functionShowRow: ns1blankspace.financial.taxSummary.row,
+								functionOpen: undefined,
+								functionOnNewPage: undefined
+						   });
+						}   
 
 						var aHTML = [];
 
@@ -6252,6 +6330,8 @@ ns1blankspace.financial.taxSummary =
 
 	bind: 	function(oParam)
 				{
-				
+					$('#ns1blankspaceFinancialTaxSummary .ns1blankspaceRowSelect:visible').click(function(event) {
+						ns1blankspace.financial.tax.init({id: event.target.id.split('-')[1]});
+					});
 				}					
 }				

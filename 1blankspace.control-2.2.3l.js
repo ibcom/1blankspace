@@ -295,8 +295,8 @@ ns1blankspace.scripts.concat(
 		source: '/site/312/1blankspace.setup.file-2.0.2.js'
 	},
 	{
-		nameSpace: '1blankspace.developer.space',
-		source: '/jscripts/1blankspace.developer.space-2.0.1.js'
+		nameSpace: '1blankspace.developer.membership',
+		source: '/site/312/1blankspace.developer.membership-2.0.1.js'
 	},
 	{
 		nameSpace: '1blankspace.util.local',
@@ -332,7 +332,7 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.admin.space',
-		source: '/site/312/1blankspace.admin.space-2.0.2.js'
+		source: '/site/312/1blankspace.admin.space-2.0.3.js'
 	},
 	{
 		nameSpace: '1blankspace.admin.monitoring',
