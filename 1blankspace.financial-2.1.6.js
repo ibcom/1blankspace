@@ -557,28 +557,37 @@ ns1blankspace.financial.summary = function (oParam, oResponse)
 									'</td></tr>');
 					*/
 
-					aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Unallocated Receipts</td></tr>' +
-									'<tr><td class="ns1blankspaceSummary" id="ns1blankspaceFinancialSummaryUnallocatedReceipts">' +
+					aHTML.push('<tr><td id="ns1blankspaceFinancialSummaryReceipts" class="ns1blankspaceSummaryCaption" style="cursor:pointer;">Receipts</td></tr>' +
+									'<tr><td><table>' +
+										'<tr><td class="ns1blankspaceHeaderCaption" style="font-size:0.875em;">Unallocated</td><td class="ns1blankspaceHeaderCaption" style="font-size:0.875em;">Unreconciled</td></tr>' + 
+										'<tr><td class="ns1blankspaceSummary" id="ns1blankspaceFinancialSummaryUnallocatedReceipts">-</td>' +
+												'<td class="ns1blankspaceSummary" id="ns1blankspaceFinancialSummaryUnreconciledReceipts">-</td></tr>' +
+										'</table>' +
 									'</td></tr>');
 
-					aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Unallocated Payments</td></tr>' +
-									'<tr><td class="ns1blankspaceSummary" id="ns1blankspaceFinancialSummaryUnallocatedPayments">' +
+					aHTML.push('<tr><td id="ns1blankspaceFinancialSummaryPayments" class="ns1blankspaceSummaryCaption" style="cursor:pointer;">Payments</td></tr>' +
+									'<tr><td><table>' +
+										'<tr><td class="ns1blankspaceHeaderCaption" style="font-size:0.875em;">Unallocated</td><td class="ns1blankspaceHeaderCaption" style="font-size:0.875em;">Unreconciled</td></tr>' + 
+										'<tr><td class="ns1blankspaceSummary" id="ns1blankspaceFinancialSummaryUnallocatedPayments">-</td>' +
+												'<td class="ns1blankspaceSummary" id="ns1blankspaceFinancialSummaryUnreconciledPayments"></td></tr>' +
+										'</table>' +
 									'</td></tr>');
 
-
-					aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Unreconciled Receipts</td></tr>' +
-									'<tr><td class="ns1blankspaceSummary" id="ns1blankspaceFinancialSummaryUnreconciledReceipts">' +
-									'</td></tr>');
-
-					aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Unreconciled Payments</td></tr>' +
-									'<tr><td class="ns1blankspaceSummary" id="ns1blankspaceFinancialSummaryUnreconciledPayments">' +
-									'</td></tr>');										
-											
 					aHTML.push('</table>');
 
 					$('#ns1blankspaceSummaryColumn3').html(aHTML.join(''));
 
-					ns1blankspace.financial.summaryData()
+					$('#ns1blankspaceFinancialSummaryReceipts').click(function(event)
+					{
+						ns1blankspace.financial.receipt.init();
+					});
+
+					$('#ns1blankspaceFinancialSummaryPayments').click(function(event)
+					{
+						ns1blankspace.financial.payment.init();
+					});		
+
+					ns1blankspace.financial.summaryData();
 				}
 
 ns1blankspace.financial.summaryData = function (oParam, oResponse)
@@ -764,7 +773,9 @@ ns1blankspace.financial.debtors =
 					{
 						bShowInvoices = false;
 						oParam = ns1blankspace.util.setParam(oParam, 'showInvoices', false);
-					}	
+					}
+
+					if (oParam == undefined) {oParam = {}}
 
 					if (oResponse == undefined)
 					{
@@ -1588,7 +1599,9 @@ ns1blankspace.financial.creditors =
 					{
 						bShowExpenses = false;
 						oParam = ns1blankspace.util.setParam(oParam, 'showExpenses', false);
-					}	
+					}
+
+					if (oParam == undefined) {oParam = {}}
 
 					if (oResponse == undefined)
 					{	
