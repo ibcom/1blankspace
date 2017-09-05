@@ -1124,7 +1124,7 @@ ns1blankspace.financial.invoice =
 													'<tr>' +
 													'<td class="ns1blankspaceCaption">Attach</td></tr>' +
 													'<tr><td>' +
-													'<div class="ns1blankspaceSubNote"><input type="checkbox" id="ns1blankspaceEmailAttachPDF">a PDF of the invoice</div>' +
+													'<div class="ns1blankspaceSubNote"><input type="checkbox" id="ns1blankspaceEmailAttachPDF">a new PDF of the invoice</div>' +
 													'<div id="ns1blankspaceEmailAttachFiles"></div>' +
 													'</td></tr></table>');		
 						
