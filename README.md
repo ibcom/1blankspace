@@ -11,32 +11,33 @@ Scripts are highly dependent on jQuery and jQueryUI/themeroller.
 
 <a href="https://github.com/ibcom/1blankspace/blob/master/about.json">about.json</a>
 
+Updates:
+
+<a href="http://1blankspace.com/updates">1blankspace.com/updates</a>
+
 Dependencies:
 
 <pre>
-link rel=stylesheet href="/jscripts/fullcalendar-1.5.4/fullcalendar.css"
-script src="/jscripts/jquery-1.8.3.min.js"
-script src="/jscripts/jquery-ui-1.9.2/jquery-ui-1.9.2.min.js"
-script src="/jscripts/jquery-ui-timepicker-addon.js
-script src="/jscripts/jquery.cookie.js"
-script src="/jscripts/tiny_mce-3.5.8/tiny_mce.js"
-script src="/jscripts/fullcalendar-1.5.4/fullcalendar.min.js"
-script src="/jscripts/date.js"
-script src="/jscripts/md5-min.js"
-</pre>
-
-For medium to large form factor use dependencies + 
-
-<pre>
-link rel=stylesheet href="/jscripts/1blankspace-2.0.0.css"
-script src="/jscripts/1blankspace-2.0.3.js"
-script src="/jscripts/1blankspace.control-2.0.1.js"
-</pre>
-
-For small form factor use dependencies + 
-
-<pre>
-link rel=stylesheet href="/jscripts/1blankspace.small-2.0.0.css"
-script src="/jscripts/1blankspace-2.0.3.js"
-script src="/jscripts/1blankspace.small.control-2.0.0.js"
+<link rel=stylesheet href='/jscripts/fullcalendar-1.5.4/fullcalendar.css'>
+<link rel=stylesheet href='/site/1433/1blankspace-2.0.4.css'>
+<script src="/jscripts/jquery-1.8.3.min.js"></script>
+<script src="/site/1433/lodash-4.13.1.min.js"></script>
+<script src="/jscripts/jqueryui/jqueryui-1.8.12.min.js"></script>
+<script src="/jscripts/jqueryui/jquery-ui-1.8.11.custom.min.js" type="text/javascript"></script>
+<script src="/jscripts/jqueryui/jqueryui-timepicker.js"></script>
+<script src="/jscripts/jquery.cookie.js"></script>
+<script src="/jscripts/modernizr-load.js"></script>
+<script src="/jscripts/md5-min.js"></script>
+<script src="/jscripts/cryptojs-3.1.2/pbkdf2.js"></script>
+<script src="/jscripts/cryptojs-3.1.2/aes.js"></script>
+<script src="/jscripts/tinymce-4.1.5/tinymce.min.js"></script>
+<script src="/jscripts/fullcalendar.min.js"></script>
+<script src="/jscripts/date-2.0.0.js"></script>
+<script src="/jscripts/moment.min.js"></script>
+<script src="/jscripts/accounting.min.js"></script>
+<script src="/jscripts/toword.js"></script>
+<script src="/jscripts/chart.min.js"></script>
+<script src="/jscripts/chart.HorizontalBar.js"></script>
+<script src="/site/1433/FileSaver.min.js"></script>
+<script src="/site/1433/numeral.min.js"></script>
 </pre>
