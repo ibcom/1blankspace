@@ -16,11 +16,12 @@ Updates:
 <a href="http://1blankspace.com/updates">1blankspace.com/updates</a>
 
 Dependencies:
+
 <pre>
 /jscripts/fullcalendar-1.5.4/fullcalendar.css
-/site/1433/1blankspace-2.0.4.css
+/jscripts/1blankspace-2.0.4.css
 /jscripts/jquery-1.8.3.min.js
-/site/1433/lodash-4.13.1.min.js
+/jscripts/lodash-4.13.1.min.js
 /jscripts/jqueryui/jqueryui-1.8.12.min.js
 /jscripts/jqueryui/jquery-ui-1.8.11.custom.min.js
 /jscripts/jqueryui/jqueryui-timepicker.js
@@ -37,6 +38,6 @@ Dependencies:
 /jscripts/toword.js
 /jscripts/chart.min.js
 /jscripts/chart.HorizontalBar.js
-/site/1433/FileSaver.min.js
-/site/1433/numeral.min.js
+/jscripts/FileSaver.min.js
+/jscripts/numeral.min.js
 </pre>
