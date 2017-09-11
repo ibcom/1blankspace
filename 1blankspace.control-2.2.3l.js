@@ -22,7 +22,7 @@ ns1blankspace.option = $.extend(true, ns1blankspace.option,
 	loadControl: false,
 	httpsOnly: true,
 	viewShowSearch: true,
-	passwordExpiry: {site: 1533, days: 36500},
+	passwordExpiry: {site: 312, days: 36500},
 	showBrowsing: false,
 	messagingEmailShowCount: false,
 	messagingCheckForNew: 60000,
@@ -288,7 +288,7 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.supportIssue',
-		source: '/jscripts/1blankspace.supportissue-2.0.1.js'
+		source: '/site/312/1blankspace.supportissue-2.0.2.js'
 	},
 	{
 		nameSpace: '1blankspace.setup.file',
