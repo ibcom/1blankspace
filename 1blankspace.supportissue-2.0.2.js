@@ -1115,10 +1115,16 @@ ns1blankspace.supportIssue =
 				aHTML.push('<table class="ns1blankspaceColumn">');
 										
 				if (ns1blankspace.objectContextData.email == '')
-				{}
+				{
+					aHTML.push('<tr><td class="ns1blankspaceSub">There is no email address for this contact, so no email alerts can be sent. </td></tr>');
+
+					aHTML.push('</table>');
+
+					$('#ns1blankspaceAlert1').html(aHTML.join(''));
+				}
 				else
 				{
-					aHTML.push('<tr><td class="ns1blankspaceSub">Send an email alert about this update to ' + ns1blankspace.objectContextData.usercontactemail + '?</td></tr>');
+					aHTML.push('<tr><td class="ns1blankspaceSub">Send an email alert about this update to ' + ns1blankspace.objectContextData.email + '?</td></tr>');
 
 					aHTML.push('<tr><td class="ns1blankspaceRadio" style="padding-top:15px;">' +
 								'<input type="checkbox" id="ns1blankspaceAlertClassic">Use "classic" back link</div>' +
@@ -1146,10 +1152,10 @@ ns1blankspace.supportIssue =
 					})
 					.click(function(event)
 					{
-						oParam.classic = ($('#ns1blankspaceAlertClassic:checked').length == 0);
+						oParam.classic = !($('#ns1blankspaceAlertClassic:checked').length == 0);
 						oParam.onComplete = ns1blankspace.supportIssue.init;
 						ns1blankspace.supportIssue.alert.send(oParam);
-						$('#ns1blankspaceMainAlert').html('Sending alert.');
+						$('#ns1blankspaceMainAlert').html('<div class="ns1blankspaceSub">Sending alert...</div>');
 					});
 				}	
 			}	
@@ -1162,7 +1168,7 @@ ns1blankspace.supportIssue =
 				var sIssueText = ns1blankspace.util.getParam(oParam, 'issueText').value;
 				var sSolutionText = ns1blankspace.util.getParam(oParam, 'solutionText').value;
 				var bClassic = ns1blankspace.util.getParam(oParam, 'classic', {"default": false}).value;
-				var sLinkUser = window.location.href + '#/supportIssue/';
+				var sLinkUser = window.location.href.replace('#', '') + '#/supportIssue/';
 				var sLinkSupport = sLinkUser;
 
 				if (bClassic)
@@ -1176,13 +1182,14 @@ ns1blankspace.supportIssue =
 
 				if (aUser.length > 0)
 				{	
+					ns1blankspace.status.working();
+
 					if (sIssueText == undefined) {sIssueText = ns1blankspace.objectContextData.description}
 					if (sSolutionText == undefined) {sSolutionText = ns1blankspace.objectContextData.solution}
 
 					var oData = 
 					{
-						subject: 'Support Issue ' + ns1blankspace.objectContextData.reference + ': ' + ns1blankspace.objectContextData['title'].formatXHTML(),
-						to: aUser[0].email
+						subject: 'Support Issue ' + ns1blankspace.objectContextData.reference + ': ' + ns1blankspace.objectContextData['title'].formatXHTML()
 					}
 
 					var aMessage = [];
@@ -1190,14 +1197,19 @@ ns1blankspace.supportIssue =
 					if (ns1blankspace.supportIssue.data.mode.value == ns1blankspace.supportIssue.data.mode.options.byMe)
 					{
 						//USER TO SUPPORT
-						aMessage.push(sIssueText, '<a href="' + sLinkSupport + ns1blankspace.objectContext +'">View Issue</a>');
-						aMessage.push('<strong>Severity:</strong> ' + ns1blankspace.objectContextData['severitytext']);
+						oData.to = aUser[0].email;
+						if (sIssueText != '') {aMessage.push(sIssueText)};
+						aMessage.push('<a href="' + sLinkSupport + ns1blankspace.objectContext +'">View Issue</a>');
+						aMessage.push('<strong>SEVERITY</strong><br />' + ns1blankspace.objectContextData['severitytext']);
 					}
 					else
 					{
 						//SUPPORT SUPPORT TO USER
-						aMessage.push(sIssueText, sSolutionText, '<a href="' + sLinkUser + ns1blankspace.objectContext +'">View Issue</a>');
-						aMessaage.push('<strong>Status:</strong> ' + ns1blankspace.objectContextData['statustext']);
+						oData.to = ns1blankspace.objectContextData.email;
+						if (sIssueText != '') {aMessage.push(sIssueText)};
+						aMessage.push('<a href="' + sLinkUser + ns1blankspace.objectContext +'">View Issue</a>');
+						if (sSolutionText != '') {aMessage.push('<strong>POTENTIAL SOLUTION</strong><br />' + sSolutionText)};
+						aMessage.push('<strong>STATUS</strong><br />' + ns1blankspace.objectContextData['statustext']);
 					}	
 
 					oData.message = aMessage.join('<br /><br />');
