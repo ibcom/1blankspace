@@ -6,7 +6,7 @@
  
 ns1blankspace.contactBusiness = 
 {
-	init: 		function (oParam)
+	init: 	function (oParam)
 				{
 					ns1blankspace.app.reset();
 
@@ -31,7 +31,7 @@ ns1blankspace.contactBusiness =
 					ns1blankspace.app.set(oParam);
 				},
 
-	home: 		function (oParam, oResponse)
+	home: 	function (oParam, oResponse)
 				{
 					if (oResponse == undefined)
 					{
@@ -221,7 +221,7 @@ ns1blankspace.contactBusiness =
 								},
 
 	
-					process: 	function (oParam, oResponse)
+					process: function (oParam, oResponse)
 								{
 									var iColumn = 0;
 									var aHTML = [];
@@ -300,7 +300,7 @@ ns1blankspace.contactBusiness =
 								}							
 				},						
 
-	layout:		function ()
+	layout:	function ()
 				{
 					
 					var aHTML = [];

@@ -1111,7 +1111,7 @@ ns1blankspace.financial.payroll =
 																'annualleaveentitlement,longserviceentitlement,sickleaveentitlement,' +
 																'internalrelationships,jobdetails,kpi,responsibilities,tasks,copyreceived,expirydate,' +
 																'inductionprogram,medicalreport,medicalreportdate,programdate,registrationnumber,workerscompform,workhoursform,' +
-																'employee.contactperson.firstname,employee.contactperson.surname,employee.contactperson.email');
+																'employee.contactperson.firstname,employee.contactperson.surname,employee.contactperson.email,employee.contactperson.dateofbirth');
 											oSearch.addFilter('id', 'EQUAL_TO', iEmployee);
 											oSearch.getResults(function(data) {ns1blankspace.financial.payroll.employees.show(oParam, data)});
 										}
@@ -1241,6 +1241,14 @@ ns1blankspace.financial.payroll =
 
 										aHTML.push('<tr class="ns1blankspaceCaption">' +
 														'<td class="ns1blankspaceCaption">' +
+														'Employee Number' +
+														'</td></tr>' +	
+														'<tr><td class="ns1blankspaceText">' +
+														'<input id="ns1blankspaceDetailsEmployeeNumber" class="ns1blankspaceText">' +
+														'</td></tr>');
+
+										aHTML.push('<tr class="ns1blankspaceCaption">' +
+														'<td class="ns1blankspaceCaption">' +
 														'Start Date' +
 														'</td></tr>' +
 														'<tr><td class="ns1blankspaceDate">' +
@@ -1279,6 +1287,7 @@ ns1blankspace.financial.payroll =
 											$('#ns1blankspaceDetailsNotes').val(ns1blankspace.financial.employee["notes"]);
 											$('#ns1blankspaceDetailsStartDate').val(ns1blankspace.financial.employee["employmentstartdate"]);
 											$('#ns1blankspaceDetailsEndDate').val(ns1blankspace.financial.employee["employmentenddate"]);
+											$('#ns1blankspaceDetailsEmployeeNumber').val(ns1blankspace.financial.employee["employeenumber"]);
 										}
 										else
 										{
@@ -1307,6 +1316,7 @@ ns1blankspace.financial.payroll =
 												status: $('input[name="radioStatus"]:checked').val(),
 												employmentstartdate: $('#ns1blankspaceDetailsStartDate').val(),
 												employmentenddate: $('#ns1blankspaceDetailsEndDate').val(),
+												employeenumber: $('#ns1blankspaceDetailsEmployeeNumber').val(),
 												notes: $('#ns1blankspaceDetailsNotes').val()
 											}	
 
@@ -1539,6 +1549,17 @@ ns1blankspace.financial.payroll =
 														'<br /><input type="radio" id="radioSuperContributionType2" name="radioSuperContributionType" value="2"/>Percentage of pay' +
 														'</td></tr>');
 
+										aHTML.push('<tr class="ns1blankspaceCaption">' +
+															'<td class="ns1blankspaceCaption">' +
+															'Superannuation Fund<br /><span class="ns1blankspaceSubNote">The default fund will be used if no alternate employee choice of fund.</span>' +
+															'</td></tr>' +
+															'<tr class="ns1blankspace">' +
+															'<td class="ns1blankspaceSelect">' +
+															'<input id="ns1blankspacePayrollSuperannuationBusiness" class="ns1blankspaceSelect"' +
+																' data-method="CONTACT_BUSINESS_SEARCH"' +
+																' data-columns="tradename">' +
+															'</td></tr>');					
+
 										aHTML.push('</table>');					
 											
 										$('#ns1blankspacePayrollEmployeeDetails15Column1').html(aHTML.join(''));
@@ -1548,7 +1569,9 @@ ns1blankspace.financial.payroll =
 											$('[name="radioSuperContributionType"][value="' + ns1blankspace.financial.employee["pretaxsupertype"] + '"]').attr('checked', true);
 											$('#ns1blankspaceDetailsFundName').val(ns1blankspace.financial.employee["superfundname"]);
 											$('#ns1blankspaceDetailsFundMemberNumber').val(ns1blankspace.financial.employee["supermembernumber"]);
-											$('#ns1blankspaceDetailsEmployerSuperannuationRate').val(ns1blankspace.financial.employee["superannuationrate"]);
+											$('#ns1blankspaceDetailsEmployerSuperannuationRate').val(ns1blankspace.financial.employee["superannuationrate"]);	
+											$('#ns1blankspacePayrollSuperannuationBusiness').attr('data-id', ns1blankspace.financial.employee["supercontactbusiness"]);
+											$('#ns1blankspacePayrollSuperannuationBusiness').val(ns1blankspace.financial.employee["supercontactbusinesstext"]);
 										}
 										else
 										{
@@ -1576,7 +1599,8 @@ ns1blankspace.financial.payroll =
 											sData += '&superfundname=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsFundName').val());
 											sData += '&supermembernumber=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsFundMemberNumber').val());
 											sData += '&superannuationrate=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsEmployerSuperannuationRate').val());
-											
+											sData += '&supercontactbusiness=' + ns1blankspace.util.fs($('#ns1blankspacePayrollSuperannuationBusiness').attr('data-id'));
+
 											$.ajax(
 											{
 												type: 'POST',

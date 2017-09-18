@@ -1111,7 +1111,7 @@ ns1blankspace.financial.payroll =
 																'annualleaveentitlement,longserviceentitlement,sickleaveentitlement,' +
 																'internalrelationships,jobdetails,kpi,responsibilities,tasks,copyreceived,expirydate,' +
 																'inductionprogram,medicalreport,medicalreportdate,programdate,registrationnumber,workerscompform,workhoursform,' +
-																'employee.contactperson.firstname,employee.contactperson.surname,employee.contactperson.email');
+																'employee.contactperson.firstname,employee.contactperson.surname,employee.contactperson.email,employee.contactperson.dateofbirth');
 											oSearch.addFilter('id', 'EQUAL_TO', iEmployee);
 											oSearch.getResults(function(data) {ns1blankspace.financial.payroll.employees.show(oParam, data)});
 										}
@@ -1538,6 +1538,17 @@ ns1blankspace.financial.payroll =
 														'<input type="radio" id="radioSuperContributionType1" name="radioSuperContributionType" value="1"/>Dollar amount per pay' +
 														'<br /><input type="radio" id="radioSuperContributionType2" name="radioSuperContributionType" value="2"/>Percentage of pay' +
 														'</td></tr>');
+
+										aHTML.push('<tr class="ns1blankspaceCaption">' +
+															'<td class="ns1blankspaceCaption">' +
+															'Superannuation Fund<br /><span class="ns1blankspaceSubNote">The default fund will be used if no employee chosen fund.</span>' +
+															'</td></tr>' +
+															'<tr class="ns1blankspace">' +
+															'<td class="ns1blankspaceSelect">' +
+															'<input id="ns1blankspacePayrollSuperannuationBusiness" class="ns1blankspaceSelect"' +
+																' data-method="CONTACT_BUSINESS_SEARCH"' +
+																' data-columns="tradename">' +
+															'</td></tr>');					
 
 										aHTML.push('</table>');					
 											

@@ -909,7 +909,7 @@ ns1blankspace.contactPerson =
 					}	
 				},
 
-	address: 	function (oParam)
+	address: function (oParam)
 				{
 					var aHTML = [];
 					var bTwoLineAddress = true;

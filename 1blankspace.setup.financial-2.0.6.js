@@ -2341,15 +2341,16 @@ ns1blankspace.setup.financial =
 								{
 									var aHTML = [];
 									
-									if ($('#ns1blankspaceMainPayroll').attr('data-loading') == '1')
+									if (oResponse == undefined)
 									{
-										if (oResponse != undefined)
+										if ($('#ns1blankspaceMainPayroll').attr('data-loading') == '1')
 										{
+										
 											$('#ns1blankspaceMainPayroll').attr('data-loading', '');
 																	
 											aHTML.push('<table class="ns1blankspaceContainer">' +
 															'<tr class="ns1blankspaceContainer">' +
-															'<td id="ns1blankspacePayrollColumn1" class="ns1blankspaceColumn1" style="width:200px;"></td>' +
+															'<td id="ns1blankspacePayrollColumn1" class="ns1blankspaceColumn1" style="width:350px;"></td>' +
 															'<td id="ns1blankspacePayrollColumn2" class="ns1blankspaceColumn2"></td>' +
 															'</tr>' + 
 															'</table>');	
@@ -2374,11 +2375,11 @@ ns1blankspace.setup.financial =
 
 											aHTML.push('<tr class="ns1blankspaceCaption">' +
 															'<td class="ns1blankspaceCaption">' +
-															'Default superannuation' +
+															'Default Superannuation Fund' +
 															'</td></tr>' +
 															'<tr class="ns1blankspace">' +
 															'<td class="ns1blankspaceSelect">' +
-															'<input id="ns1blankspacePayrollBusiness" class="ns1blankspaceSelect"' +
+															'<input id="ns1blankspacePayrollSuperannuationBusiness" class="ns1blankspaceSelect"' +
 																' data-method="CONTACT_BUSINESS_SEARCH"' +
 																' data-columns="tradename">' +
 															'</td></tr>');						
@@ -2390,26 +2391,26 @@ ns1blankspace.setup.financial =
 											if (ns1blankspace.objectContextData != undefined)
 											{
 												$('[name="radioPeriodDefault"][value="' + ns1blankspace.objectContextData.payrollpayperiod + '"]').attr('checked', true);
-												$('#ns1blankspacePayrollBusiness').attr('data-id', ns1blankspace.objectContextData.contactbusiness);
+												$('#ns1blankspacePayrollSuperannuationBusiness').attr('data-id', ns1blankspace.objectContextData.payrollsuperannuationcontactbusiness);
 												
-												if (ns1blankspace.objectContextData.contactbusiness != '')
+												if (ns1blankspace.objectContextData.payrollsuperannuationcontactbusiness != '')
 												{
 													var oSearch = new AdvancedSearch();
-													oSearch.method = 'FINANCIAL_PAYROLL_EMPLOYEE_SEARCH';
+													oSearch.method = 'CONTACT_BUSINESS_SEARCH';
 													oSearch.addField('tradename');
-													oSearch.addFilter('id', 'EQUAL_TO', ns1blankspace.objectContextData.contactbusiness);
+													oSearch.addFilter('id', 'EQUAL_TO', ns1blankspace.objectContextData.payrollsuperannuationcontactbusiness);
 													oSearch.getResults(function(data) {ns1blankspace.setup.financial.payroll.show(oParam, data)});
 												}	
 											}
 										}
-										else
+									}	
+									else
+									{
+										if (oResponse.data.rows.length > 0)
 										{
-											if (oResponse.data.rows.length > 0)
-											{
-												$('#ns1blankspacePayrollBusiness').val(oResponse.data.rows[0].tradename);
-											}	
+											$('#ns1blankspacePayrollSuperannuationBusiness').val(oResponse.data.rows[0].tradename);
 										}	
-									}
+									}	
 								},
 							
 				linetypes: 	{
@@ -2817,6 +2818,7 @@ ns1blankspace.setup.financial =
 									if ($('#ns1blankspaceMainPayroll').html() != '')
 									{
 										sData += '&payrollpayperiod=' + ns1blankspace.util.fs($('input[name="radioPeriodDefault"]:checked').val());
+										sData += '&payrollsuperannuationcontactbusiness=' + ns1blankspace.util.fs($('#ns1blankspacePayrollSuperannuationBusiness').attr('data-id'));
 									};
 
 									$.ajax(
