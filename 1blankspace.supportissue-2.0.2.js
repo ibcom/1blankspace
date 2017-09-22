@@ -715,7 +715,7 @@ ns1blankspace.supportIssue =
 		}	
 	},
 
-	details: 	function ()
+	details: function ()
 	{
 		var aHTML = [];
 
@@ -822,7 +822,6 @@ ns1blankspace.supportIssue =
 							'<br /><input type="radio" id="radioSeverity4" name="radioSeverity" value="4"/>Not Sure' +
 							'</td></tr>');
 
-
 			aHTML.push('</table>');					
 
 			$('#ns1blankspaceDetailsColumn2').html(aHTML.join(''));
@@ -847,88 +846,115 @@ ns1blankspace.supportIssue =
 
 				ns1blankspace.supportIssue.getContact();
 			}
-
 		}	
 	},
 
-	solution: 	function ()
+	solution: function ()
 	{
 		var aHTML = [];
 
-		if ($('#ns1blankspaceMainSolution').attr('data-loading') == '1')
+		if (ns1blankspace.supportIssue.data.statusValues == undefined)
 		{
-			$('#ns1blankspaceMainSolution').attr('data-loading', '');
-			
-			aHTML.push('<table class="ns1blankspaceContainer">' +
-							'<tr class="ns1blankspaceContainer">' +
-							'<td id="ns1blankspaceSolutionColumn1" class="ns1blankspaceColumn1"></td>' +
-							'<td id="ns1blankspaceSolutionColumn2" class="ns1blankspaceColumn2"></td>' +
-							'</tr>' + 
-							'</table>');					
-			
-			$('#ns1blankspaceMainSolution').html(aHTML.join(''));
-			
-			var aHTML = [];
-			
-			aHTML.push('<table class="ns1blankspace">');
-
-			aHTML.push('<tr class="ns1blankspaceCaption">' +
-							'<td class="ns1blankspaceCaption">' +
-							'Solution (shared with user)' +
-							'</td></tr>' +
-							'<tr class="ns1blankspace">' +
-							'<td class="ns1blankspaceRadio">' +
-							'<textarea id="ns1blankspaceSolutionSolution" style="width: 100%;" rows="10" cols="35" class="ns1blankspaceTextMulti"></textarea>' +
-							'</td></tr>');
-
-			aHTML.push('<tr class="ns1blankspaceCaption">' +
-							'<td class="ns1blankspaceCaption">' +
-							'Internal technical notes' +
-							'</td></tr>' +
-							'<tr class="ns1blankspace">' +
-							'<td class="ns1blankspaceRadio">' +
-							'<textarea id="ns1blankspaceSolutionTechnicalNotes" style="width: 100%;" rows="10" cols="35" class="ns1blankspaceTextMulti"></textarea>' +
-							'</td></tr>');	
-
-			aHTML.push('</table>');					
-
-			$('#ns1blankspaceSolutionColumn1').html(aHTML.join(''));
-
-			var aHTML = [];
-			
-			aHTML.push('<table class="ns1blankspaceMain">');
-
-			aHTML.push('<tr><td class="ns1blankspaceCaption">' +
-							'Processing Type' +
-							'</td></tr>' +
-							'<tr class="ns1blankspace">' +
-							'<td class="ns1blankspaceRadio">' +
-							'<input type="radio" id="radioProcessingType5" name="radioProcessingType" value="5"/>Not sure' +
-							'<br /><input type="radio" id="radioProcessingType2" name="radioProcessingType" value="2"/>Internet issue' +
-							'<br /><input type="radio" id="radioProcessingType3" name="radioProcessingType" value="3"/>Fault' +
-							'<br /><input type="radio" id="radioProcessingType3" name="radioProcessingType" value="4"/>Suggestion' +
-							'</td></tr>')
-
-			aHTML.push('</table>');					
-
-			$('#ns1blankspaceSolutionColumn2').html(aHTML.join(''));
-
-			if (ns1blankspace.objectContextData != undefined)
+			ns1blankspace.supportIssue.getStatusValues(
 			{
-				$('#ns1blankspaceSolutionSolution').val(ns1blankspace.objectContextData.solution.formatXHTML());
-				$('#ns1blankspaceSolutionTechnicalNotes').val(ns1blankspace.objectContextData.technicalnotes.formatXHTML());
-				$('[name="radioProcessingType"][value="' + ns1blankspace.objectContextData.processingtype + '"]').attr('checked', true);
-			}
-			else
+				onComplete: ns1blankspace.supportIssue.solution
+			});
+		}
+		else
+		{
+			if ($('#ns1blankspaceMainSolution').attr('data-loading') == '1')
 			{
-				$('[name="radioProcessingType"][value="5"]').attr('checked', true);
-			}
-		}	
+				$('#ns1blankspaceMainSolution').attr('data-loading', '');
+				
+				aHTML.push('<table class="ns1blankspaceContainer">' +
+								'<tr class="ns1blankspaceContainer">' +
+								'<td id="ns1blankspaceSolutionColumn1" class="ns1blankspaceColumn1"></td>' +
+								'<td id="ns1blankspaceSolutionColumn2" class="ns1blankspaceColumn2"></td>' +
+								'</tr>' + 
+								'</table>');					
+				
+				$('#ns1blankspaceMainSolution').html(aHTML.join(''));
+				
+				var aHTML = [];
+				
+				aHTML.push('<table class="ns1blankspace">');
+
+				aHTML.push('<tr class="ns1blankspaceCaption">' +
+								'<td class="ns1blankspaceCaption">' +
+								'Solution (shared with user)' +
+								'</td></tr>' +
+								'<tr class="ns1blankspace">' +
+								'<td class="ns1blankspaceRadio">' +
+								'<textarea id="ns1blankspaceSolutionSolution" style="width: 100%;" rows="10" cols="35" class="ns1blankspaceTextMulti"></textarea>' +
+								'</td></tr>');
+
+				aHTML.push('<tr class="ns1blankspaceCaption">' +
+								'<td class="ns1blankspaceCaption">' +
+								'Internal technical notes' +
+								'</td></tr>' +
+								'<tr class="ns1blankspace">' +
+								'<td class="ns1blankspaceRadio">' +
+								'<textarea id="ns1blankspaceSolutionTechnicalNotes" style="width: 100%;" rows="10" cols="35" class="ns1blankspaceTextMulti"></textarea>' +
+								'</td></tr>');	
+
+				aHTML.push('</table>');					
+
+				$('#ns1blankspaceSolutionColumn1').html(aHTML.join(''));
+
+				var aHTML = [];
+				
+				aHTML.push('<table class="ns1blankspaceMain">');
+
+				aHTML.push('<tr><td class="ns1blankspaceCaption">' +
+								'Processing Type' +
+								'</td></tr>' +
+								'<tr class="ns1blankspace">' +
+								'<td class="ns1blankspaceRadio">' +
+								'<input type="radio" id="radioProcessingType5" name="radioProcessingType" value="5"/>Not sure' +
+								'<br /><input type="radio" id="radioProcessingType2" name="radioProcessingType" value="2"/>Internet issue' +
+								'<br /><input type="radio" id="radioProcessingType3" name="radioProcessingType" value="3"/>Fault' +
+								'<br /><input type="radio" id="radioProcessingType3" name="radioProcessingType" value="4"/>Suggestion' +
+								'</td></tr>')
+
+				if (ns1blankspace.supportIssue.data.mode.value==ns1blankspace.supportIssue.data.mode.options.forMe)
+				{
+					var aHTMLStatus = _.map(ns1blankspace.supportIssue.data.statusValues, function (statusValue)
+					{
+						return '<input type="radio" id="radioStatus' + statusValue.id + '" name="radioStatus" value="' + statusValue.id + '"/>' + statusValue.title
+					});
+
+					aHTML.push('<tr><td class="ns1blankspaceCaption">' +
+									'Status' +
+									'</td></tr>' +
+									'<tr class="ns1blankspace">' +
+									'<td class="ns1blankspaceRadio">' +
+									aHTMLStatus.join('<br />') +
+									'</td></tr>');
+				}	
+
+				aHTML.push('</table>');					
+
+				$('#ns1blankspaceSolutionColumn2').html(aHTML.join(''));
+
+				if (ns1blankspace.objectContextData != undefined)
+				{
+					$('#ns1blankspaceSolutionSolution').val(ns1blankspace.objectContextData.solution.formatXHTML());
+					$('#ns1blankspaceSolutionTechnicalNotes').val(ns1blankspace.objectContextData.technicalnotes.formatXHTML());
+					$('[name="radioProcessingType"][value="' + ns1blankspace.objectContextData.processingtype + '"]').attr('checked', true);
+					$('[name="radioStatus"][value="' + ns1blankspace.objectContextData.status + '"]').attr('checked', true);
+				}
+				else
+				{
+					$('[name="radioProcessingType"][value="5"]').attr('checked', true);
+					$('[name="radioStatus"][value="1"]').attr('checked', true);
+				}
+			}	
+		}
 	},
 
 	save: 		
 	{
-		send:		function ()
+		send: function ()
 		{
 			ns1blankspace.status.working();
 			
@@ -955,6 +981,8 @@ ns1blankspace.supportIssue =
 			{
 				oData.solution = $('#ns1blankspaceSolutionSolution').val();
 				oData.technicalnotes = $('#ns1blankspaceSolutionTechnicalNotes').val();
+				oData.processingtype = $('input[name="radioProcessingType"]:checked').val();
+				oData.status = $('input[name="radioStatus"]:checked').val();
 			}	
 
 			if (!ns1blankspace.util.isEmpty(oData))
@@ -1180,8 +1208,8 @@ ns1blankspace.supportIssue =
 
 				var aUser = $.grep(ns1blankspace.supportIssue.data.users, function (a) {return a.id == ns1blankspace.objectContextData.user});
 
-				if (aUser.length > 0)
-				{	
+				if (true)
+				{
 					ns1blankspace.status.working();
 
 					if (sIssueText == undefined) {sIssueText = ns1blankspace.objectContextData.description}
@@ -1196,43 +1224,53 @@ ns1blankspace.supportIssue =
 
 					if (ns1blankspace.supportIssue.data.mode.value == ns1blankspace.supportIssue.data.mode.options.byMe)
 					{
-						//USER TO SUPPORT
-						oData.to = aUser[0].email;
-						if (sIssueText != '') {aMessage.push(sIssueText)};
-						aMessage.push('<a href="' + sLinkSupport + ns1blankspace.objectContext +'">View Issue</a>');
-						aMessage.push('<strong>SEVERITY</strong><br />' + ns1blankspace.objectContextData['severitytext']);
+						if (aUser.length > 0)
+						{
+							//USER TO SUPPORT
+							oData.to = aUser[0].email;
+							if (sIssueText != '') {aMessage.push(sIssueText)};
+							aMessage.push('<a href="' + sLinkSupport + ns1blankspace.objectContext +'">View Issue</a>');
+							aMessage.push('<strong>SEVERITY</strong><br />' + ns1blankspace.objectContextData['severitytext']);
+						}
+						else
+						{
+							ns1blankspace.status.error('No one to email');
+							$('#ns1blankspaceMainAlert').html('');
+						}			
 					}
 					else
 					{
 						//SUPPORT SUPPORT TO USER
 						oData.to = ns1blankspace.objectContextData.email;
-						if (sIssueText != '') {aMessage.push(sIssueText)};
-						aMessage.push('<a href="' + sLinkUser + ns1blankspace.objectContext +'">View Issue</a>');
 						if (sSolutionText != '') {aMessage.push('<strong>POTENTIAL SOLUTION</strong><br />' + sSolutionText)};
 						aMessage.push('<strong>STATUS</strong><br />' + ns1blankspace.objectContextData['statustext']);
+						if (sIssueText != '')
+						{
+							aMessage.push('<strong>ISSUE</strong><br />' + ns1blankspace.util.toBR(sIssueText))
+						};
+						aMessage.push('<a href="' + sLinkUser + ns1blankspace.objectContext +'">View Issue</a>');
 					}	
 
-					oData.message = aMessage.join('<br /><br />');
-
-					$.ajax(
+					if (oData.to != undefined)
 					{
-						type: 'POST',
-						url: ns1blankspace.util.endpointURI('MESSAGING_EMAIL_SEND'),
-						data: oData,
-						dataType: 'json',
-						success: function (data) {ns1blankspace.supportIssue.alert.send(oParam, data)}
-					});
+						oData.message = aMessage.join('<br /><br />');
+
+						$.ajax(
+						{
+							type: 'POST',
+							url: ns1blankspace.util.endpointURI('MESSAGING_EMAIL_SEND'),
+							data: oData,
+							dataType: 'json',
+							success: function (data) {ns1blankspace.supportIssue.alert.send(oParam, data)}
+						});
+					}	
 				}
-				else
-				{
-					ns1blankspace.status.error('No one to email');
-				}	
 			}
 			else
 			{
 				ns1blankspace.status.message('Alert sent');
 				ns1blankspace.util.onComplete(oParam);
-			}	
+			}				
 		}			
 	},
 
