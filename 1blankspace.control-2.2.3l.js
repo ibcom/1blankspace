@@ -176,7 +176,7 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.financial',
-		source: '/site/312/1blankspace.financial-2.1.6.js'
+		source: '/site/312/1blankspace.financial-2.1.7.js'
 	},
 	{
 		nameSpace: '1blankspace.financial.bankAccount',
@@ -288,11 +288,11 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.supportIssue',
-		source: '/site/312/1blankspace.supportissue-2.0.2.js'
+		source: '/site/312/1blankspace.supportissue-2.0.3.js'
 	},
 	{
 		nameSpace: '1blankspace.setup.file',
-		source: '/site/312/1blankspace.setup.file-2.0.2.js'
+		source: '/site/312/1blankspace.setup.file-2.0.4.js'
 	},
 	{
 		nameSpace: '1blankspace.developer.membership',
