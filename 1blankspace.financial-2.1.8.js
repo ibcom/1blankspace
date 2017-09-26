@@ -2838,15 +2838,61 @@ ns1blankspace.financial.balanceSheet =
 		 		{
 		 			var iFinancialAccount = ns1blankspace.util.getParam(oParam, 'id').value;
 		 			var aXHTMLElementID = ns1blankspace.util.getParam(oParam, 'xhtmlElementID', {split: '-'}).values;
-		 			var sXHTMLElementID = aXHTMLElementID[0] + '-' + aXHTMLElementID[1];
+		 			//var sXHTMLElementID = aXHTMLElementID[0] + '-' + aXHTMLElementID[1];
+		 			var sXHTMLElementID = ns1blankspace.util.getParam(oParam, 'xhtmlElementID').value;
 		 			var oXHTMLElement = $('#' + sXHTMLElementID);
-		 			var bInline = ns1blankspace.util.getParam(oParam, 'inline', {"default": false}).value;
+					var oXHTMLElementTransactions = $('#' + sXHTMLElementID + '-transactions-container-' + iFinancialAccount);
+		 			var bInline = ns1blankspace.util.getParam(oParam, 'inline', {"default": true}).value;
+		 			var sClass = '';
 
 		 			var sXHTML = '<div id="ns1blankspaceFinancialTransactions" style="background-color:#F3F3F3; width:395px; padding:6px; opacity:1; font-size:0.75em; ' +
 		 								' border-style:solid; border-width:4px; border-color:white ;">' + ns1blankspace.xhtml.loadingSmall + '</div>'
 	 					
 		 			if (bInline)
-		 			{}	
+		 			{
+		 				if (oXHTMLElementTransactions.length == 0)
+		 				{
+		 					if (oXHTMLElement.hasClass('ns1blankspaceRowShaded'))
+		 					{
+		 						sClass = ' ns1blankspaceRowShaded';
+		 					}
+
+		 					var sFileName = 'export-balance-sheet-' + _.kebabCase( oXHTMLElement.text()) + '.csv';
+
+		 					oXHTMLElement.parent().after('<tr id="' + sXHTMLElementID + '-transactions-container-' + iFinancialAccount + '">' +
+		 													'<td class="ns1blankspaceTreeColumn1' + sClass + '" style="' +
+		 													' width:100%; padding:6px; opacity:1; font-size:0.875em; border-style:solid;' +
+		 													' border-top-width:0px; border-top-color:white;' +
+		 													' border-right-width:0px; border-right-color:white;' +
+		 													' border-bottom-width:0px; border-bottom-color:white;"' +
+		 													' colspan=2>' + 
+		 													'<div id="' + sXHTMLElementID + '-transactions-' + iFinancialAccount + '" data-filename="' + sFileName + '">' + 
+		 														ns1blankspace.xhtml.loadingSmall + '</div>' +
+		 													'<div style="text-align:right; margin-right:8px; margin-bottom:4px; margin-top:2px; font-size:0.875em;">' + 
+		 														'<span id="' + sXHTMLElementID + '-export-' + iFinancialAccount + '" style="cursor:pointer; color:#EE8F00;">Export</span></div>' +
+		 													'</td></tr>');
+
+		 					$('#' + sXHTMLElementID + '-export-' + iFinancialAccount)
+							.click(function()
+							{
+								ns1blankspace.financial.accounts.export({xhtmlContext: (this.id).replace('-export-', '-transactions-')})
+							});
+
+		 					ns1blankspace.financial.transactions.show(
+			 				{
+			 					xhtmlElementID: sXHTMLElementID + '-transactions-' + iFinancialAccount,
+			 					financialAccount: iFinancialAccount,
+			 					setWidth: true,
+			 					namespace: 'balanceSheet',
+			 					rows: 5,
+			 					fileName: sFileName
+			 				});
+		 				}
+		 				else
+		 				{
+		 					oXHTMLElementTransactions.remove()
+		 				}
+		 			}	
 		 			else
 		 			{
 		 				if (ns1blankspace.container.show(
