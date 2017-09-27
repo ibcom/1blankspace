@@ -2788,12 +2788,17 @@ ns1blankspace.financial.balanceSheet =
 		 			var sXHTMLElementID = aXHTMLElementID[0] + '-' + aXHTMLElementID[1];
 		 			var oXHTMLElement = $('#' + sXHTMLElementID);
 
+		 			var sXHTML = '<div>' +
+		 								'<div>Export</div>' + 
+		 								'<div id="ns1blankspaceFinancialTransactions" style="background-color:#F3F3F3; width:395px; padding:6px; opacity: 1; font-size:0.75em; ' +
+		 								' border-style:solid; border-width:4px; border-color:white ;">' + ns1blankspace.xhtml.loadingSmall + '</div></div>'
+	 					
 	 				if (ns1blankspace.container.show(
 	 				{
 	 					xhtmlElement: oXHTMLElement,
 	 					topOffset: 1,
 	 					leftOffset: 3,
-	 					xhtml: '<div id="ns1blankspaceFinancialTransactions" style="background-color:#F3F3F3; width:395px; padding:6px; opacity: 0.95; font-size:0.75em; border-style:solid; border-width:4px; border-color:white ;">' + ns1blankspace.xhtml.loadingSmall + '</div>',
+	 					xhtml: sXHTML,
 	 					setWidth: true
 	 				}))
 	 				{	
