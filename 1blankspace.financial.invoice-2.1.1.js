@@ -894,7 +894,7 @@ ns1blankspace.financial.invoice =
 				},
 
 	email: 	{
-					init: 		function (oParam)
+					init: 	function (oParam)
 								{
 									var iDocument = ns1blankspace.util.getParam(oParam, 'document', {"default": ns1blankspace.financial.invoice.data.templateDocument}).value;
 									
@@ -1055,7 +1055,7 @@ ns1blankspace.financial.invoice =
 
 										if (oResponse.data.rows.length == 0)
 										{
-											aHTML.push('<div class="ns1blankspaceSubNote" style="padding-top:12px;">If you attach files to this invoice, you will be able to select them as attachments.</div>');
+											aHTML.push('<div class="ns1blankspaceSubNote" style="padding-top:12px;">If you attach files to this invoice, you will be able to select them to send with the email.</div>');
 										}
 										else
 										{
@@ -1121,11 +1121,11 @@ ns1blankspace.financial.invoice =
 
 									aHTML.push('</table>');
 
-									aHTML.push('<table>' +
+									aHTML.push('<table style="margin-bottom:16px;">' +
 													'<tr>' +
 													'<td class="ns1blankspaceCaption">Attach</td></tr>' +
 													'<tr><td>' +
-													'<div class="ns1blankspaceSubNote"><input type="checkbox" id="ns1blankspaceEmailAttachPDF">a new PDF of the invoice</div>' +
+													'<div class="ns1blankspaceSubNote"><input type="checkbox" checked="checked" id="ns1blankspaceEmailAttachPDF">a PDF version of this invoice</div>' +
 													'<div id="ns1blankspaceEmailAttachFiles"></div>' +
 													'</td></tr></table>');		
 						

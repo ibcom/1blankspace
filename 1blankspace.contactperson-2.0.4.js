@@ -680,7 +680,7 @@ ns1blankspace.contactPerson =
 					}	
 				},
 
-	details: 	function ()
+	details: function ()
 				{
 					var aHTML = [];
 					
