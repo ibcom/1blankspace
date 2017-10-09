@@ -1327,16 +1327,16 @@ ns1blankspace.setup.file =
 										surroundWith: '"'
 									}
 
-									if (oFormat.options != undefined)
-									{
-										oOptions = oFormat.options;
-									}
-
 									var aFile = [];
 
 									if (oFormat.length > 0)
 									{
 										oFormat = oFormat[0];
+
+										if (oFormat.options != undefined)
+										{
+											oOptions = oFormat.options;
+										}
 
 										if (oFormat.header == undefined) {oFormat.header = []}
 										if (oFormat.footer == undefined) {oFormat.footer = []}
@@ -1755,6 +1755,7 @@ ns1blankspace.setup.file["export"].formats =
 [
 	{
 		name: 'Payment Summary - AU',
+		options: {delimiter: '', surroundWith: ''},
 		header:
 		[
 			{
@@ -1793,7 +1794,7 @@ ns1blankspace.setup.file["export"].formats =
 						value: 'P',
 					},
 					{
-						value: 'FEMPA011.0',
+						value: 'FEMPA012.0',
 					},
 					{
 						fill: ' ',
@@ -1954,8 +1955,7 @@ ns1blankspace.setup.file["export"].formats =
 					{
 						param: 'year',
 						length: 4,
-						"default": Date.today(),
-						dateFormat: 'yyyy'
+						value: moment().format('YYYY')
 					},
 					{
 						param: 'legalName',
@@ -2227,8 +2227,11 @@ ns1blankspace.setup.file["export"].formats =
 						fillLeft: '0'
 					},
 					{
+						value: ' ',
+					},
+					{
 						fill: ' ',
-						length: (628 - 354 + 1)
+						length: (628 - 355 + 1)
 					}
 				]
 			}
