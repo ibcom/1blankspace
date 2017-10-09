@@ -1090,9 +1090,9 @@ ns1blankspace.financial.invoice =
 														'From</td></tr>' +
 														'<tr>' +
 														'<td class="ns1blankspaceText" style="padding-right:15px; padding-left:0px;">' +
-														'<input id="ns1blankspaceEmailTo" class="ns1blankspaceText">' +
+														'<input id="ns1blankspaceEmailTo" class="ns1blankspaceText" data-1blankspace="ignore">' +
 														'</td><td class="ns1blankspaceText">' +
-														'<input id="ns1blankspaceEmailFrom" class="ns1blankspaceSelect"' +
+														'<input id="ns1blankspaceEmailFrom" class="ns1blankspaceSelect" data-1blankspace="ignore"' +
 																	' data-method="SETUP_MESSAGING_ACCOUNT_SEARCH"' +
 																	' data-methodFilter="type-EQUAL_TO-5"' +
 																	' data-customOption="hasaccess-Y"' +
@@ -1105,7 +1105,7 @@ ns1blankspace.financial.invoice =
 
 									aHTML.push('<tr class="ns1blankspace">' +
 													'<td class="ns1blankspaceText">' +
-													'<input id="ns1blankspaceEmailSubject" class="ns1blankspaceText" style="width:100%;">' +
+													'<input id="ns1blankspaceEmailSubject" class="ns1blankspaceText" style="width:100%;" data-1blankspace="ignore">' +
 													'</td></tr>');
 
 									//80%
