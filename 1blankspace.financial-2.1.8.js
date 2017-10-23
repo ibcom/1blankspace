@@ -137,7 +137,7 @@ ns1blankspace.financial.initData = function (oParam, oResponse)
 									{
 										var oSearch = new AdvancedSearch();
 										oSearch.method = 'FINANCIAL_BANK_ACCOUNT_SEARCH';
-										oSearch.addField('title,lastreconciledamount,lastreconcileddate,notes,status,financialaccount,accountname,bsb,accountnumber,defaultpaymentaccount,defaultreceiptaccount');
+										oSearch.addField('title,lastreconciledamount,lastreconcileddate,notes,status,financialaccount,accountname,bsb,accountnumber,defaultpaymentaccount,defaultreceiptaccount,bank');
 										oSearch.addFilter('status', 'EQUAL_TO', 1)
 										oSearch.rows = 100;
 										oSearch.getResults(function(data) {ns1blankspace.financial.initData(oParam, data)});
