@@ -1392,7 +1392,7 @@ ns1blankspace.financial.bankAccount =
 
 											if (ns1blankspace.objectContextData.bank != '')
 											{
-												aHTML.push(' from <span id="ns1blankspaceBankAccountImportBank"></span>')
+												aHTML.push(' from <span id="ns1blankspaceBankAccountImportBank">' + ns1blankspace.objectContextData.bank + '</span>')
 											}
 
 											aHTML.push('.</td></tr>');		
