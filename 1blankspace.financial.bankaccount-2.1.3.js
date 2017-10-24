@@ -1461,6 +1461,33 @@ ns1blankspace.financial.bankAccount =
 									}	
 								},
 
+					delete:	function (oParam, oResponse)
+								{
+									if (oResponse == undefined)
+									{
+										var sID = ns1blankspace.util.getParam(oParam, 'id').value;
+
+										var oData = {remove: 1, id: sID};
+
+										$.ajax(
+										{
+											type: 'POST',
+											url: ns1blankspace.util.endpointURI('FINANCIAL_BANK_ACCOUNT_TRANSACTION_SOURCE_MANAGE'),
+											data: oData,
+											dataType: 'json',
+											success: function(data)
+											{
+												ns1blankspace.financial.bankAccount["import"].delete(oParam, data);
+											}
+										});
+									}
+									else
+									{
+										ns1blankspace.status.message('Deleted')
+										ns1blankspace.financial.bankAccount["import"].show();
+									}
+								},	
+
 					process:	function (oResponse)
 								{
 									if (oResponse == undefined)
@@ -1690,7 +1717,7 @@ ns1blankspace.financial.bankAccount =
 																
 														if (oResponse.data.rows.length == 0)
 														{
-															aHTML.push('<tr><td><span id="ns1blankspaceBankAccountImportDelete" class="ns1blankspaceAction">' +
+															aHTML.push('<tr><td><span id="ns1blankspaceBankAccountImportDelete" data-id="' + iFileSource + '" class="ns1blankspaceAction">' +
 																			'Delete</span></td></tr>');
 														}		
 														else if (bNeedConfirm)
@@ -1773,7 +1800,8 @@ ns1blankspace.financial.bankAccount =
 														})
 														.click(function()
 														{	
-															ns1blankspace.financial.bankAccount["import"].delete()
+
+															ns1blankspace.financial.bankAccount["import"].delete({id: $(this).attr('data-id')})
 														})
 														.css('width', '70px');
 													}
@@ -1840,7 +1868,7 @@ ns1blankspace.financial.bankAccount =
 														}
 														else if (oRow.status == 1)
 														{
-															aHTML.push('<span id="nns1blankspaceFinancialImportItem_options_remove-' + oRow.id + '" class="ns1blankspaceRemove"></span>');
+															aHTML.push('<span id="ns1blankspaceFinancialImportItem_options_remove-' + oRow.id + '" class="ns1blankspaceRemove"></span>');
 														}
 
 														aHTML.push('</td></tr>');
@@ -1878,10 +1906,21 @@ ns1blankspace.financial.bankAccount =
 															$(ns1blankspace.xhtml.container).attr('data-source', '');
 															$(ns1blankspace.xhtml.container).hide();
 
+															$('#ns1blankspaceFinancialImportItem_status-' + iID).html($(this).html());
+
 															ns1blankspace.status.working();
 
 															var sID = this.id;
 															var aID = sID.split('-');
+
+															if (aID[1] != 1)
+															{
+																$('#ns1blankspaceFinancialImportItem_options_remove-' + iID).hide();
+															}
+															else
+															{
+																$('#ns1blankspaceFinancialImportItem_options_remove-' + iID).show();
+															}
 
 															var oData =
 															{
@@ -1900,11 +1939,11 @@ ns1blankspace.financial.bankAccount =
 																	if (data.status == 'OK')
 																	{
 																		ns1blankspace.status.message('Updated');
-																		ns1blankspace.financial.bankAccount["import"].items.show(oParam);
 																	}
 																	else
 																	{
 																		ns1blankspace.status.error(data.error.errornotes);
+																		ns1blankspace.financial.bankAccount["import"].items.show(oParam);
 																	}
 																}
 															});
