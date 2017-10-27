@@ -6,7 +6,7 @@
 
 ns1blankspace.financial.credit = 
 {
-	init: 		function (oParam)
+	init: 	function (oParam)
 				{
 					var bInitialised = false;
 					
@@ -570,7 +570,7 @@ ns1blankspace.financial.credit =
 					}	
 				},
 
-	details: 	function ()
+	details: function ()
 				{
 					var aHTML = [];
 				

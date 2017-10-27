@@ -4705,11 +4705,13 @@ ns1blankspace.financial.bankAccount =
 																
 														$('#ns1blankspaceItemsLockedSearch').button( {
 															label: 'Search',
-															icons: {
+															icons:
+															{
 																primary: "ui-icon-search"
 															}
 														})
-														.click(function() {
+														.click(function()
+														{
 															oParam.searchDate = $('#ns1blankspaceItemsLockedSearchDate').val();
 															oParam.searchAmount = $('#ns1blankspaceItemsLockedSearchAmount').val();
 															oParam.searchReference = $('#ns1blankspaceItemsLockedSearchReference').val();
@@ -4718,7 +4720,8 @@ ns1blankspace.financial.bankAccount =
 
 														$('#ns1blankspaceItemsLockedClearSearch').button( {
 															label: 'Clear',
-															icons: {
+															icons:
+															{
 																primary: "ui-icon-close"
 															}
 														})
@@ -4864,6 +4867,14 @@ ns1blankspace.financial.bankAccount =
 															}
 															else
 															{
+																_.each(items, function (item)
+																{
+																	if (item.sourcebanktransaction == 0)
+																	{
+																		item.sourcebanktransaction = -1 * item.id
+																	}
+																});
+
 																var sourceBankTransactions = _.groupBy(items, 'sourcebanktransaction');
 																
 																ns1blankspace.financial.bankAccount.reconcile.items.data.reconciled['transactions'] = sourceBankTransactions;
@@ -4911,21 +4922,32 @@ ns1blankspace.financial.bankAccount =
 																	var sContactBusiness = transaction['contactbusinessreceivedfromtext'];
 																	if (sContactBusiness == undefined) {sContactBusiness = transaction['contactbusinesspaidtotext']}
 
-																	aHTML.push(
-																		'<tr class="ns1blankspaceRow">' +
-																			'<td class="ns1blankspaceRow">' +
-																				'<table cellspacing=0 cellpadding=0>' +
-																					'<tr>' +
-																						'<td id="ns1blankspaceReconcileItems_date-' + id + '-3" class="recoitemstatement">' +
-																							'<div style="font-weight:100;font-size:1.2em;">' + sDate + '</div>' + 
-																							'<div style="padding-top:4px;">' + sNotes + '</div>' +
-																						'</td>' +
-																						'<td id="ns1blankspaceReconcileItems_amount-' + id + '" style="text-align:right; font-weight:100; font-size:1.2em;"' +
-																							' class="recoitem">' + cAmount +
-																						'</td>' +
-																					'</tr>' +
-																				'</table>' +
-																			'</td>');
+																	if (value.sourcebanktransaction > 0)
+																	{
+																		aHTML.push(
+																			'<tr class="ns1blankspaceRow">' +
+																				'<td class="ns1blankspaceRow">' +
+																					'<table cellspacing=0 cellpadding=0>' +
+																						'<tr>' +
+																							'<td id="ns1blankspaceReconcileItems_date-' + id + '-3" class="recoitemstatement">' +
+																								'<div style="font-weight:100;font-size:1.2em;">' + sDate + '</div>' + 
+																								'<div style="padding-top:4px;">' + sNotes + '</div>' +
+																							'</td>' +
+																							'<td id="ns1blankspaceReconcileItems_amount-' + id + '" style="text-align:right; font-weight:100; font-size:1.2em;"' +
+																								' class="recoitem">' + cAmount +
+																							'</td>' +
+																						'</tr>' +
+																					'</table>' +
+																				'</td>');
+																	}
+																	else
+																	{
+																		aHTML.push(
+																			'<tr class="ns1blankspaceRow">' +
+																				'<td class="ns1blankspaceRow">' +
+																					'<span class="ns1blankspaceSubNote">No imported bank transaction.</span>' +
+																				'</td>');
+																	}	
 
 																	if (transaction.amount != undefined)
 																	{

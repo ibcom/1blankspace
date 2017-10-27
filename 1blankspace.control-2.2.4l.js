@@ -176,11 +176,11 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.financial',
-		source: '/site/312/1blankspace.financial-2.1.8.js'
+		source: '/site/312/1blankspace.financial-2.1.9.js'
 	},
 	{
 		nameSpace: '1blankspace.financial.bankAccount',
-		source: '/site/312/1blankspace.financial.bankaccount-2.1.3.js'
+		source: '/site/312/1blankspace.financial.bankaccount-2.1.4.js'
 	},
 	{
 		nameSpace: '1blankspace.financial.invoice',
@@ -192,11 +192,11 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.financial.receipt',
-		source: '/site/312/1blankspace.financial.receipt-2.0.8.js'
+		source: '/site/312/1blankspace.financial.receipt-2.0.9.js'
 	},
 	{
 		nameSpace: '1blankspace.financial.payment',
-		source: '/site/312/1blankspace.financial.payment-2.0.8.js'
+		source: '/site/312/1blankspace.financial.payment-2.0.9.js'
 	},
 	{
 		nameSpace: '1blankspace.financial.credit',

@@ -1385,11 +1385,11 @@ ns1blankspace.financial.expense.outstanding =
 					if (oSearchText.exists)
 					{
 						sSearchText = oSearchText.value;
-						ns1blankspace.setup.website.pages.data.searchText = sSearchText;
+						ns1blankspace.financial.expense.outstanding.searchText = sSearchText;
 					}
 					else
 					{	
-						sSearchText = ns1blankspace.setup.website.pages.data.searchText;
+						sSearchText = ns1blankspace.financial.expense.outstanding.data.searchText;
 					}	
 
 					if (oResponse == undefined)
