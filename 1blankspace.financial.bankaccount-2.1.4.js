@@ -112,14 +112,7 @@ ns1blankspace.financial.bankAccount =
 							}	
 						}	
 					}	
-				},		
-
-	searchx: 	{
-					send: function (sID)
-					{
-						ns1blankspace.financial.bankAccount.show({id: (sID).split('-')[1]})
-					}
-				},
+				},	
 
 	search: 	{
 					send:		function (sXHTMLElementID, oParam)
@@ -2626,6 +2619,9 @@ ns1blankspace.financial.bankAccount =
 									}
 									else
 									{
+										//XXX Stop response local - for adjustment - ie local: true =, passed amount/object,
+										// get oResponse from local data and then adjust/set/use
+
 										var aHTML = [];
 
 										aHTML.push('<div style="font-style:italic; margin-top: 4px; margin-right:3px; margin-bottom:7px; font-size:0.875em;" class="ns1blankspaceSub">' +
@@ -2810,7 +2806,8 @@ ns1blankspace.financial.bankAccount =
 												url: ns1blankspace.util.endpointURI('FINANCIAL_RECONCILIATION_MANAGE'),
 												data: oData,
 												dataType: 'json',
-												success: function() {
+												success: function()
+												{
 													ns1blankspace.financial.bankAccount.init({id: ns1blankspace.objectContext});
 													ns1blankspace.status.message('Reconciliation locked.');
 												}
@@ -2995,7 +2992,7 @@ ns1blankspace.financial.bankAccount =
 									}
 								},
 
-					items: 	{	
+						items: 	{	
 									data: 	{unreconciled: {}},
 
 									show:		function (oParam, oResponse)
@@ -4216,6 +4213,10 @@ ns1blankspace.financial.bankAccount =
 																{
 																	$('#' + sXHTMLElementID).parent().parent().fadeOut(500);
 																}
+
+																//short circuit with local adjustment
+																// 
+																//XXX ns1blankspace.financial.bankAccount.reconcile.refresh(oParam);
 															}
 														});
 													}	
