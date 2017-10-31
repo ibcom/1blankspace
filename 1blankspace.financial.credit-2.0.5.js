@@ -774,19 +774,9 @@ ns1blankspace.financial.credit =
 							$('[name="radioType"][value="1"]').attr('checked', true);
 						}
 					}	
-				},
+				},	
 
-	new2:		function (oParam)
-				{
-					ns1blankspace.objectContextData = undefined
-					ns1blankspace.objectContext = -1;
-					ns1blankspace.financial.credit.init();
-					$('#ns1blankspaceViewControlAction').button({disabled: false});
-					ns1blankspace.show({selector: '#ns1blankspaceMainDetails'});
-					ns1blankspace.financial.credit.details();
-				},		
-
-	save: 		{
+	save: 	{
 					send:		function (oParam, oResponse)
 								{
 									ns1blankspace.status.working();

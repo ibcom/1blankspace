@@ -914,6 +914,8 @@ ns1blankspace.financial.payment =
 							
 						$('#ns1blankspaceDetailsColumn2').html(aHTML.join(''));
 
+						var iDefaultBankAccount;
+
 						if (ns1blankspace.objectContextData != undefined)
 						{
 							$('#ns1blankspaceDetailsReference').val(ns1blankspace.objectContextData.reference.formatXHTML());

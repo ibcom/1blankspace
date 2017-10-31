@@ -4207,16 +4207,16 @@ ns1blankspace.financial.bankAccount =
 																		$('#' + sXHTMLElementID).parent().parent().fadeOut(500);
 																	}	
 
+																	oParam.reset = false;
+																	oParam.onComplete = ns1blankspace.financial.bankAccount.reconcile.refresh;
 																	ns1blankspace.financial.bankAccount.reconcile.items.refresh(oParam);		
 																}
 																else
 																{
 																	$('#' + sXHTMLElementID).parent().parent().fadeOut(500);
+																	oParam.reset = false;
+																	ns1blankspace.financial.bankAccount.reconcile.refresh(oParam);
 																}
-
-																//short circuit with local adjustment
-																// 
-																//XXX ns1blankspace.financial.bankAccount.reconcile.refresh(oParam);
 															}
 														});
 													}	
@@ -4921,7 +4921,8 @@ ns1blankspace.financial.bankAccount =
 																	}), ', ');
 
 																	var sContactBusiness = transaction['contactbusinessreceivedfromtext'];
-																	if (sContactBusiness == undefined) {sContactBusiness = transaction['contactbusinesspaidtotext']}
+																	if (sContactBusiness == '') {sContactBusiness = transaction['contactbusinesspaidtotext']}
+																	if (sContactBusiness == '') {sContactBusiness = '<span class="ns1blankspaceSubNote">Not linked to a contact.</span>'}
 
 																	if (value.sourcebanktransaction > 0)
 																	{

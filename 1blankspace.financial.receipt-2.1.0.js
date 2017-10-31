@@ -789,10 +789,32 @@ ns1blankspace.financial.receipt =
 										'<td class="ns1blankspaceTextMulti">' +
 										'<textarea id="ns1blankspaceDetailsDescription" class="ns1blankspaceTextMulti" rows="10" cols="35" ></textarea>' +
 										'</td></tr>');
-						
+
+						aHTML.push('<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceCaption">' +
+										'Bank Account' +
+										'</td></tr>' +
+										'<tr class="ns1blankspaceRadio">' +
+										'<td id="ns1blankspaceDetailsBankAccount" class="ns1blankspaceRadio">');
+										
+										$.each(ns1blankspace.financial.data.bankaccounts, function()
+										{
+											if (_.isObject(ns1blankspace.objectContextData))
+											{
+												if (ns1blankspace.objectContextData.bankaccount == undefined) {ns1blankspace.objectContextData.bankaccount = this.id}
+											}		
+													
+											aHTML.push('<input type="radio" id="radioBankAccount' + this.id + '" name="radioBankAccount" value="' + this.id + '"/>' +
+																this.title + '<br />');				
+										});
+										
+						aHTML.push('</td></tr>');										
+										
 						aHTML.push('</table>');					
 							
 						$('#ns1blankspaceDetailsColumn2').html(aHTML.join(''));
+
+						var iDefaultBankAccount;
 
 						if (ns1blankspace.objectContextData != undefined)
 						{
@@ -806,11 +828,27 @@ ns1blankspace.financial.receipt =
 							$('[name="radioTaxCode"][value="' + ns1blankspace.objectContextData.taxtype + '"]').attr('checked', true);
 							$('#ns1blankspaceDetailsTax').val(ns1blankspace.objectContextData.tax);	
 							$('#ns1blankspaceDetailsDescription').val(ns1blankspace.objectContextData.description.formatXHTML());
+							iDefaultBankAccount = ns1blankspace.objectContextData.bankaccount;
 						}
 						else
 						{
 							$('#ns1blankspaceDetailsReceivedDate').val(Date.today().toString("dd MMM yyyy"));
+
+							var oDefaultBankAccount = _.find(ns1blankspace.financial.data.bankaccounts, function (ba) {return ba.defaultreceiptaccount == 'Y'});
+
+							if (_.isUndefined(oDefaultBankAccount))
+							{
+								iDefaultBankAccount = _.first(ns1blankspace.financial.data.bankaccounts).id;
+							}
+							else
+							{
+								iDefaultBankAccount = oDefaultBankAccount.id
+							}
+
+							$('#ns1blankspaceDetailsPaidDate').val(Date.today().toString("dd MMM yyyy"));
 						}
+
+						$('[name="radioBankAccount"][value="' + iDefaultBankAccount + '"]').attr('checked', true);
 					}	
 				},
 
@@ -828,6 +866,7 @@ ns1blankspace.financial.receipt =
 										sData += '&description=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsDescription').val());
 										sData += '&contactbusinessreceivedfrom=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsContactBusinessReceivedFrom').attr("data-id"));
 										sData += '&contactpersonreceivedfrom=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsContactPersonReceivedFrom').attr("data-id"));
+										sData += '&bankaccount=' + $('[name="radioBankAccount"]:checked').val();
 									}
 									
 									$.ajax(
