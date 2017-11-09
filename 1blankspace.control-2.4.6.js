@@ -138,7 +138,7 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.messaging.conversation',
-		source: '/jscripts/1blankspace.messaging.conversation-2.0.4.js'
+		source: '/jscripts/1blankspace.messaging.conversation-2.0.5.js'
 	},
 	{
 		nameSpace: '1blankspace.messaging.imap',
@@ -286,7 +286,7 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.supportIssue',
-		source: '/jscripts/1blankspace.supportissue-2.0.6.js'
+		source: '/jscripts/1blankspace.supportissue-2.0.7.js'
 	},
 	{
 		nameSpace: '1blankspace.setup.file',
