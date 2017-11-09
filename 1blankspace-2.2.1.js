@@ -6179,7 +6179,8 @@ ns1blankspace.render.page =
 											primary: "ui-icon-play"
 										}
 									})
-									.click(function() {
+									.click(function()
+									{
 										eval(sFunctionOpen);
 									})
 									.css('width', '15px')
@@ -6197,7 +6198,7 @@ ns1blankspace.render.page =
 									ns1blankspace.render.page.showPage(this.id, sXHTMLContext);
 								});
 							
-								$('.ns1blankspaceRenderHeaderPage').removeClass('ns1blankspaceRenderHeaderPageSelected');
+								$('#ns1blankspaceRenderHeaderPage_' + sXHTMLContext + ' .ns1blankspaceRenderHeaderPage').removeClass('ns1blankspaceRenderHeaderPageSelected');
 								$('#ns1blankspaceRenderHeaderPage_' + sXHTMLContext + '-' + (iStartRow)).addClass('ns1blankspaceRenderHeaderPageSelected');
 
 								if (bMoreRows)
@@ -6237,11 +6238,11 @@ ns1blankspace.render.page =
 				{
 					var aElement = sXHTMLElementID.split('-');
 					
-					$('.ns1blankspaceRenderHeaderPage').removeClass('ns1blankspaceRenderHeaderPageSelected');
+					$('#ns1blankspaceRenderHeaderPage_' + sXHTMLContext + ' .ns1blankspaceRenderHeaderPage').removeClass('ns1blankspaceRenderHeaderPageSelected');
 					$('#' + sXHTMLElementID).addClass('ns1blankspaceRenderHeaderPageSelected');
 
 					$('.ns1blankspaceRenderPage_' + sXHTMLContext).hide();
-					$('#ns1blankspaceRenderPage_' + sXHTMLContext + '-' + aElement[1]).show();
+					$('#ns1blankspaceRenderPage_' + sXHTMLContext + '-' + aElement.pop()).show();
 				}
 }
 
