@@ -213,6 +213,7 @@ ns1blankspace.app =
 											'<div id="ns1blankspaceFooter"></div>' +
 											'<div id="ns1blankspaceMultiUseContainer"></div>' +
 											'<div id="ns1blankspaceMultiUseDialog"></div>' +
+											'<div id="ns1blankspaceToolTip" style="display:none;"></div>' +
 											'</div>');
 					}		
 
@@ -1344,7 +1345,9 @@ ns1blankspace.app =
 						});
 					}	
 
-					$('#ns1blankspaceLogonName').click(function(event)
+					$('#ns1blankspaceLogonName')
+					.off('click')
+					.on('click', function(event)
 					{
 						ns1blankspace.control.user.show(this);
 					});
@@ -1668,6 +1671,7 @@ ns1blankspace.app =
 
 	context: 	function (oParam)
 				{
+					oParam = oParam || {};
 					var bNew = ns1blankspace.util.getParam(oParam, 'new', {"default": false}).value;
 					var bAction = ns1blankspace.util.getParam(oParam, 'action', {"default": false}).value;
 					var bActionOptions = ns1blankspace.util.getParam(oParam, 'actionOptions', {"default": false}).value;
@@ -1675,7 +1679,7 @@ ns1blankspace.app =
 					if (bContext == undefined) {bContext = ns1blankspace.util.getParam(oParam, 'inContext', {"default": true}).value};
 					var bAll = ns1blankspace.util.getParam(oParam, 'all', {"default": true}).value;
 
-					var bSpecific = (bNew || bAction || bActionOptions);
+					var bSpecific = (oParam['new'] != undefined || oParam.action != undefined || oParam.actionOptions != undefined);
 
 					if (bAll || bNew) {$('#ns1blankspaceViewControlNew').button({disabled: !bContext && (!bSpecific || bNew)})};
 					if (bAll || bAction) {$('#ns1blankspaceViewControlAction').button({disabled: !bContext && (!bSpecific || bAction)})};
@@ -2336,7 +2340,10 @@ ns1blankspace.logon.changePassword =
 							url: ns1blankspace.util.endpointURI('SITE_USER_PASSWORD_MANAGE'),
 							data: oData,
 							dataType: 'json',
-							success: this.process
+							success: function(oResponse)
+							{
+								ns1blankspace.logon.changePassword.process(oResponse);
+							}
 						});
 					}	
 				},
@@ -2345,9 +2352,13 @@ ns1blankspace.logon.changePassword =
 				{	
 					if (oResponse.status === 'ER') 
 					{
-						if (oResponse.error.errornotes === 'PASSWORD_LESS_THAN_6_CHAR') 
+						if (oResponse.error.errornotes.toUpperCase() === 'PASSWORD_LESS_THAN_6_CHAR') 
 						{
 							$('#ns1blankspaceLogonChangePasswordStatus').html('New password needs to be at least 6 characters.');
+						}
+						else if (oResponse.error.errornotes.toUpperCase().indexOf('PASSWORD NOT STRONG ENOUGH') > -1)
+						{
+							$('#ns1blankspaceLogonChangePasswordStatus').html('Password is not strong enough.' + ns1blankspace.option.passwordErrorMessage);
 						}
 						else
 						{
@@ -2408,7 +2419,7 @@ ns1blankspace.logon.getPassword =
 											offsetTop: -15
 										});	
 					
-					$('#ns1blankspaceGetPasswordLogon').focus();
+					$('#ns1blankspaceGetPasswordLogonName').focus();
 					
 					$('#ns1blankspaceGetPassword').button(
 					{
@@ -3003,7 +3014,7 @@ ns1blankspace.container =
 					var bDropdown = ns1blankspace.util.getParam(oParam, 'dropdown', {"default": false}).value;
 					if (bDropdown) {sContainerID = ns1blankspace.xhtml.dropDownContainer}
 					
-					if (oXHTMLElement === undefined && sXHTMLElementID != undefined)
+					if (oXHTMLElement === undefined && sXHTMLElementID != undefined && $('#' + sXHTMLElementID.replace('#', '')).is('*'))
 					{
 						oXHTMLElement = $('#' + sXHTMLElementID)
 					}
@@ -3111,12 +3122,14 @@ ns1blankspace.container =
 					var sHTML = ns1blankspace.util.getParam(oParam, 'html', {'default': ''}).value;
 					var sTitle = ns1blankspace.util.getParam(oParam, 'title', {'default': ''}).value;
 					var aButtons = ns1blankspace.util.getParam(oParam, 'buttons', 
-											{'default': [{text: "OK", icons: {primary: 'ui-icon-check'}, click: function() {$(this).dialog('close')}}]}).value;
+											{'default': 
+												[{text: "OK", icons: {primary: 'ui-icon-check'}, 
+												click: function() {$(this).dialog('destroy')}}]
+											}).value;
 					
 
 					$('#ns1blankspaceMultiUseDialog')
-						.html(sHTML)
-						.css('font-size', '0.75em')
+						.html('<span style="font-size: 0.75em">' + sHTML + '</span>')
 						.css('position', 'static')
 						.dialog(
 						{
@@ -3654,6 +3667,15 @@ ns1blankspace.search =
 										ns1blankspace.search.show(oParam);
 									}
 								});
+
+								if (oResponse.data.rows.length > 1)
+								{
+									$(ns1blankspace.xhtml.container).show(ns1blankspace.option.showSpeedOptions);
+								}
+								else
+								{	// if only one result row, auto-populate the source field
+									$('td.ns1blankspaceSearch').first().click();
+								}
 							}	
 						}
 					}		
@@ -4121,8 +4143,8 @@ ns1blankspace.util =
 							}
 
 							if (bRemove) {delete oParam[sParam]};
-							if (bSet) {oParam[sParam] = oReturn.value}
 						}
+						if (bSet) {oParam[sParam] = oReturn.value}
 					}	
 
 					return oReturn;
@@ -4297,8 +4319,7 @@ ns1blankspace.util =
 								sReturn = oDate.format(sFormat);
 							}	
 						}
-					}
-					
+					}					
 					return sReturn
 				},
 
@@ -5768,7 +5789,7 @@ ns1blankspace.render =
 					var sXHTMLElementID = '';
 					var iMore = -1;
 					var iStartRow = ns1blankspace.option.defaultRowsSmall;
-					var iRows = ns1blankspace.option.defaultRowsSmall;
+					var iRows = $('#ns1blankspaceSearch-0 .ns1blankspaceSearchMedium').children().children().length;
 					var iColumn = 0;
 					var iMaximumColumns = 1;
 					var sColumns = "title";
@@ -5853,7 +5874,7 @@ ns1blankspace.render =
 												
 								$.each(oResponse.data.rows, function()
 								{		
-									aHTML.push(fFunctionRow(oParam, this));
+									aHTML.push(fFunctionRow(this, oParam));
 								});
 							
 								aHTML.push('</table>');
@@ -5885,16 +5906,16 @@ ns1blankspace.render =
 					}
 				},
 
-	row:		function (oParam, oRow)
+	row:		function (oRow, oParam)
 				{
 					var aHTML = [];
-					var sClass;
+					var sClass = 'ns1blankspaceSearch';
 
 					var sXHTMLElementID = ns1blankspace.util.getParam(oParam, 'xhtmlElementID').value;
 					var sIDColumns = ns1blankspace.util.getParam(oParam, 'idColumns', {"default": ''}).value;
 					var sColumns = ns1blankspace.util.getParam(oParam, 'columns', {"default": 'title'}).value;
 					var fFunctionClass = ns1blankspace.util.getParam(oParam, 'functionClass').value;
-					var sIdAdditional = ns1blankspace.util.getParam(oParam, 'idAdditional').value;
+					var sIdAdditional = ns1blankspace.util.getParam(oParam, 'idAdditional', {"default": 'title'}).value;
 
 					aHTML.push('<tr class="ns1blankspaceSearch">');
 					
@@ -5907,19 +5928,22 @@ ns1blankspace.render =
 						sIDData += '-' + oRow[aIDColumns[i]];
 					}
 					
+					if (sColumns.indexOf('-space-') == -1 && sColumns.indexOf('-comma-') == -1 && sColumns.indexOf('-pipe-') == -1 &&
+						sColumns.indexOf('-hyphen-') == -1 && sColumns.indexOf('-column-') == -1)
+					{
+						sColumns = sColumns.split('-').join('-column-');
+					}
 					var aColumns = sColumns.split("-");
 					
+					if (fFunctionClass != undefined)
+					{
+						sClass = sClass + fFunctionClass(oRow);
+					}	
+					aHTML.push('<td class="' + sClass + '" id="' +
+										sXHTMLElementID + '-' + oRow.id + sIDData + sIdAdditional + '">');
+
 					for (var i = 0; i < aColumns.length; i++)
 					{
-						sClass = 'ns1blankspaceSearch';
-
-						if (fFunctionClass != undefined)
-						{
-							sClass = sClass + fFunctionClass(oRow);
-						}	
-					
-						aHTML.push('<td class="' + sClass + '" id="' +
-											sXHTMLElementID + '-' + oRow.id + sIDData + sIdAdditional + '">');
 											
 						switch (aColumns[i])
 						{
@@ -5939,8 +5963,8 @@ ns1blankspace.render =
 							aHTML.push(oRow[aColumns[i]]);
 						}
 						
-						aHTML.push('</td>');
 					}
+					aHTML.push('</td>');
 										
 					aHTML.push('</tr>');
 
@@ -6715,7 +6739,7 @@ ns1blankspace.extend =
 								sAlias = k.alias;
 								if (sAlias == undefined) {sAlias = 'se' + k.reference}
 
-								if (k.datatype == 2 || k.datatype == 7)
+								if (k.datatype == 2 || k.datatype == 6)
 								{	
 									aElements.push(sAlias + 'text');
 								}	
@@ -6865,8 +6889,8 @@ ns1blankspace.extend =
 
 									if (this.datatype == 2)
 									{	
-										$('#ns1blankspaceStructure_' + this.id).val(ns1blankspace.objectContextData[sAlias + 'text']);
-										$('#ns1blankspaceStructure_' + this.id).attr('data-id', ns1blankspace.objectContextData[sAlias]);
+										$('#ns1blankspaceStructure_' + this.id).val(ns1blankspace.objectContextData[sAlias + 'text'].formatXHTML());
+										$('#ns1blankspaceStructure_' + this.id).attr('data-id', ns1blankspace.objectContextData[sAlias].formatXHTML());
 									}
 									else
 									{
