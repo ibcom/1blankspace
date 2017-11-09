@@ -50,7 +50,7 @@ ns1blankspace.option = $.extend(true, ns1blankspace.option,
 	pdfStyles: '<link rel=stylesheet href="/jscripts/1blankspace-2.0.2.css">',
 	messagingCheckURL: 'http://api.mydigitalstructure.com',
 	financialOverride: true,
-	showProductCodes = true,
+	showProductCodes: true,
 
 });
 
