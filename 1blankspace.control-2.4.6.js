@@ -2492,41 +2492,28 @@ ns1blankspace.attachments =
 	upload: 	{ 
 						show: 	function (oParam)
 								{
-									var aHTML = [];
-									var h = -1;
-
-									var iMaxFiles = 1
-									var iObject = ns1blankspace.object
-									var lObjectContext = ns1blankspace.objectContext
-									var sLabel = '';
-									var sObjectName = '';
-									var iAttachmentType = '';
-									var bShowUpload = true;
-									var sXHTML = '';
-									var sHelpNotes;
-									var aInputs = [];
-									var sURL = '/rpc/attach/?method=ATTACH_FILE&rf=TEXT';
-									var aInputParams = [];
-									var iPublicType;
+									var iObject = ns1blankspace.util.getParam(oParam, 'object', {'default': ns1blankspace.object}).value;
+									var lObjectContext = ns1blankspace.util.getParam(oParam, 'objectContext', {'default': ns1blankspace.objectContext}).value;
+									var sObjectName = ns1blankspace.util.getParam(oParam, 'objectName', {'default': ''}).value;
+									var bShowAdd = ns1blankspace.util.getParam(oParam, 'showAdd', {'default': true}).value;
+									var iAttachmentType = ns1blankspace.util.getParam(oParam, 'attachmentType', {'default': ''}).value;
+									var oActions = ns1blankspace.util.getParam(oParam, 'showAdd', {'default': {add: true}}).value;
+									var sHelpNotes = ns1blankspace.util.getParam(oParam, 'helpNotes', {'default': ''}).value;
+									var oContext = ns1blankspace.util.getParam(oParam, 'context', {'default': {inContext: false}}).value;
+									var sXHTML = ns1blankspace.util.getParam(oParam, 'xhtml', {"default": ''}).value;
+									var sURL = ns1blankspace.util.getParam(oParam, 'attachmentTypes', {"url": '/rpc/attach/?method=ATTACH_FILE&rf=TEXT'}).value;
+									
+									var iMaxFiles = ns1blankspace.util.getParam(oParam, 'maxFiles', {"default": 1}).value;
+									var sLabel = ns1blankspace.util.getParam(oParam, 'label', {"default": ''}).value;
+									var bShowUpload =ns1blankspace.util.getParam(oParam, 'showUpload', {"default": true}).value;
+									var aInputs = ns1blankspace.util.getParam(oParam, 'inputs', {"default": []}).value;
+									var aInputParams = ns1blankspace.util.getParam(oParam, 'inputParams', {"default": []}).value;
+									var iPublicType = ns1blankspace.util.getParam(oParam, 'publicType').value;
+									var aAttachmentTypes = ns1blankspace.util.getParam(oParam, 'attachmentTypes', {"default": []}).value;
 									var iBucket = ns1blankspace.util.getParam(oParam, 'bucket').value;
 									var bImage = ns1blankspace.util.getParam(oParam, 'image').value;
-									
-									if (oParam != undefined)
-									{
-										if (oParam.maxFiles != undefined) {iMaxFiles = oParam.maxFiles}
-										if (oParam.object != undefined || iObject === '') {iObject = oParam.object}
-										if (oParam.objectName != undefined) {sObjectName = oParam.objectName}
-										if (oParam.objectContext != undefined ) {lObjectContext = oParam.objectContext}
-										if (oParam.label != undefined) {sLabel = oParam.label}
-										if (oParam.attachmentType != undefined) {iAttachmentType = oParam.attachmentType}
-										if (oParam.showUpload != undefined) {bShowUpload = oParam.showUpload}
-										if (oParam.xhtml != undefined) {sXHTML = oParam.xhtml}
-										if (oParam.helpNotes != undefined) {sHelpNotes = oParam.helpNotes}
-										if (oParam.inputs != undefined) {aInputs = oParam.inputs}
-										if (oParam.url != undefined) {sURL = oParam.url}
-										if (oParam.inputParams != undefined) {aInputParams = oParam.inputParams}
-										if (oParam.publicType != undefined) {iPublicType = oParam.publicType}
-									}	
+
+									var aHTML = [];
 
 									$('[name="ns1blankspaceFileUpload"]').remove();
 
@@ -2576,9 +2563,31 @@ ns1blankspace.attachments =
 										
 									for (var i = 0; i < iMaxFiles; i++) 	
 									{
-										aHTML.push('<div id="ns1blankspaceUploadFile' + i + '" class="ns1blankspaceUpload">' +
+										aHTML.push('<div id="ns1blankspaceUploadFile' + i + '" class="ns1blankspaceUpload" style="padding:3px;">' +
 														'<input class="ns1blankspaceUpload" type="file" name="oFile' + i + '" id="oFile' + i + '"' +
-														(bImage?' accept="image/*" capture="camera"':'') + '></div>');
+														(bImage?' accept="image/*" capture="camera"':'') + '>');
+										
+										if (aAttachmentTypes.length > 0)
+										{
+											aHTML.push('<select class="ns1blankspaceAttachmentType">');
+											
+											aHTML.push('<option class="optionType" id="optionType-' + i + '--' +
+																'" value="' + i + '-">' +
+																'[Not Set]' +
+																'</option>');
+																
+											$.each(aAttachmentTypes, function(index, t) 
+											{
+												aHTML.push('<option class="optionType" id="optionType-' + i + '-' + index + '-' + t.type +
+																'" value="' + i + '-' + t.type + '">' +
+																t.typetext +
+																'</option>');
+											});
+										
+											aHTML.push('</select>');
+											
+										}
+										aHTML.push('</div>');
 									}
 
 									if (bShowUpload)
