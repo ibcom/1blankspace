@@ -295,10 +295,6 @@ ns1blankspace.scripts.concat(
 		source: '/site/312/1blankspace.setup.file-2.0.5.js'
 	},
 	{
-		nameSpace: '1blankspace.developer.membership',
-		source: '/site/312/1blankspace.developer.membership-2.0.1.js'
-	},
-	{
 		nameSpace: '1blankspace.util.local',
 		source: '/site/312/1blankspace.util.local-2.0.3.js'
 	},
@@ -337,6 +333,10 @@ ns1blankspace.scripts.concat(
 	{
 		nameSpace: '1blankspace.admin.monitoring',
 		source: '/site/312/1blankspace.admin.monitoring-2.0.0.js'
+	},
+	{
+		nameSpace: '1blankspace.developer.membership',
+		source: '/site/312/1blankspace.developer.membership-2.0.1.js'
 	},
 	{
 		nameSpace: '1blankspace.util.timezone',
