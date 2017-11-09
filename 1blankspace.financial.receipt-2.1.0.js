@@ -192,7 +192,7 @@ ns1blankspace.financial.receipt =
 										oSearch.method = 'FINANCIAL_RECEIPT_SEARCH';
 										oSearch.addField('contactbusinessreceivedfromtext,contactbusinessreceivedfrom,' +
 																'contactpersonreceivedfromtext,contactpersonreceivedfrom,' +
-																'projecttext,project,areatext,area,' +
+																'projecttext,project,areatext,area,bankaccount,' +
 																'receipt.sourcebanktransaction.amount,' +
 																'receipt.sourcebanktransaction.posteddate,' +
 																'receipt.sourcebanktransaction.notes,' +
@@ -697,8 +697,8 @@ ns1blankspace.financial.receipt =
 										'<input id="ns1blankspaceDetailsReceivedDate" class="ns1blankspaceDate">' +
 										'</td></tr>');											
 						
-						if (ns1blankspace.objectContext == -1)
-						{		
+						//if (ns1blankspace.objectContext == -1)
+						//{		
 							aHTML.push('<tr class="ns1blankspaceCaption">' +
 										'<td class="ns1blankspaceCaption">' +
 										'Amount' +
@@ -744,7 +744,7 @@ ns1blankspace.financial.receipt =
 										'<td class="ns1blankspaceText">' +
 										'<input id="ns1blankspaceDetailsTax" class="ns1blankspaceText">' +
 										'</td></tr>');
-						}	
+						//}	
 
 						aHTML.push('</table>');				
 						
@@ -823,7 +823,7 @@ ns1blankspace.financial.receipt =
 							$('#ns1blankspaceDetailsContactBusinessReceivedFrom').attr('data-id', ns1blankspace.objectContextData.contactbusinessreceivedfrom);
 							$('#ns1blankspaceDetailsContactBusinessReceivedFrom').val(ns1blankspace.objectContextData.contactbusinessreceivedfromtext.formatXHTML());
 							$('#ns1blankspaceDetailsContactPersonReceivedFrom').attr('data-id', ns1blankspace.objectContextData.contactpersonreceivedfrom);
-							$('#ns1blankspaceDetailsContactPersonReceivedFrom').val(ns1blankspace.objectContextData.contactpersonreceivedfromtext.formatXHTML());	
+							$('#ns1blankspaceDetailsContactPersonReceivedFrom').val(ns1blankspace.objectContextData.contactpersonreceivedfromtext.formatXHTML());
 							$('#ns1blankspaceDetailsAmount').val(ns1blankspace.objectContextData.amount);
 							$('[name="radioTaxCode"][value="' + ns1blankspace.objectContextData.taxtype + '"]').attr('checked', true);
 							$('#ns1blankspaceDetailsTax').val(ns1blankspace.objectContextData.tax);	

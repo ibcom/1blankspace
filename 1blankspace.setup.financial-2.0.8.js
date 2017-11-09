@@ -2343,9 +2343,27 @@ ns1blankspace.setup.financial =
 	payroll:	{
 					data: 	{},
 
-					init: 	function (oParam)
+					init: 	function (oParam, oResponse)
 								{
-									ns1blankspace.setup.financial.payroll.show(oParam);
+									if (oResponse == undefined)
+									{
+										var oSearch = new AdvancedSearch();
+										oSearch.method = 'CORE_SPACE_PROFILE_SEARCH';
+										oSearch.addField('attribute,value');
+										oSearch.addFilter('attribute', 'EQUAL_TO', 526);
+										oSearch.getResults(function(data) {ns1blankspace.setup.financial.payroll.init(oParam, data)});
+									}
+									else
+									{
+										ns1blankspace.objectContextData.payrollfinancialsexpenseonly = 'N';
+
+										if (oResponse.data.rows.length > 0)
+										{
+											ns1blankspace.objectContextData.payrollfinancialsexpenseonly = oResponse.data.rows[0].value;
+										}
+
+										ns1blankspace.setup.financial.payroll.show(oParam);
+									}
 								},
 
 					show: 	function (oParam, oResponse)
@@ -2361,7 +2379,7 @@ ns1blankspace.setup.financial =
 																	
 											aHTML.push('<table class="ns1blankspaceContainer">' +
 															'<tr class="ns1blankspaceContainer">' +
-															'<td id="ns1blankspacePayrollColumn1" class="ns1blankspaceColumn1" style="width:350px;"></td>' +
+															'<td id="ns1blankspacePayrollColumn1" class="ns1blankspaceColumn1" style="width:420px;"></td>' +
 															'<td id="ns1blankspacePayrollColumn2" class="ns1blankspaceColumn2"></td>' +
 															'</tr>' + 
 															'</table>');	
@@ -2395,14 +2413,15 @@ ns1blankspace.setup.financial =
 																' data-columns="tradename">' +
 															'</td></tr>');
 
-												aHTML.push('<tr class="ns1blankspace">' +
+												aHTML.push(
+															'<tr class="ns1blankspace">' +
 															'<td class="ns1blankspaceCaption">' +
-															'Financials' +
+															'On completion of the payroll period, financial items are created for each of the employees as' +
 															'</td></tr>' +
 															'<tr class="ns1blankspace">' +
 															'<td class="ns1blankspaceRadio">' +
-															'<input type="radio" id="radioPayrollFinancialsJournalN" name="radioPayrollFinancialsJournal" value="N"/>Create as one expense (traditional)' +
-															'<br /><input type="radio" id="radioPayrollFinancialsJournalY" name="radioPayrollFinancialsJournal" value="Y"/>Create as expense for wages and journal for tax' +
+															'<input type="radio" id="radioPayrollFinancialsExpenseOnlyN" name="radioPayrollFinancialsExpenseOnly" value="N"/>an expense for wages (P/L) and journal for tax (B/S)' +
+															'<br /><input type="radio" id="radioPayrollFinancialsExpenseOnlyY" name="radioPayrollFinancialsExpenseOnly" value="Y"/>one expense for wages & tax (P/L)' +
 															'</td></tr>');								
 																	
 											aHTML.push('</table>');					
@@ -2412,6 +2431,7 @@ ns1blankspace.setup.financial =
 											if (ns1blankspace.objectContextData != undefined)
 											{
 												$('[name="radioPeriodDefault"][value="' + ns1blankspace.objectContextData.payrollpayperiod + '"]').attr('checked', true);
+												$('[name="radioPayrollFinancialsExpenseOnly"][value="' + ns1blankspace.objectContextData.payrollfinancialsexpenseonly + '"]').attr('checked', true);
 												$('#ns1blankspacePayrollSuperannuationBusiness').attr('data-id', ns1blankspace.objectContextData.payrollsuperannuationcontactbusiness);
 												
 												if (ns1blankspace.objectContextData.payrollsuperannuationcontactbusiness != '')
@@ -2840,9 +2860,9 @@ ns1blankspace.setup.financial =
 									{
 										sData += '&payrollpayperiod=' + ns1blankspace.util.fs($('input[name="radioPeriodDefault"]:checked').val());
 										sData += '&payrollsuperannuationcontactbusiness=' + ns1blankspace.util.fs($('#ns1blankspacePayrollSuperannuationBusiness').attr('data-id'));
-										sData += '&payrollfinancialsjournal=' + ns1blankspace.util.fs($('input[name="radioPayrollFinancialsJournal"]:checked').val());
+										sData += '&payrollfinancialsexpenseonly=' + ns1blankspace.util.fs($('input[name="radioPayrollFinancialsExpenseOnly"]:checked').val());
 										
-										ns1blankspace.setup.financial.save.profile({attribute: 526, value: $('#radioPayrollFinancialsJourna').val()})
+										ns1blankspace.setup.financial.save.profile({attribute: 526, value: $('input[name="radioPayrollFinancialsExpenseOnly"]:checked').val()})
 									};
 
 									$.ajax(

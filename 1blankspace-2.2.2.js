@@ -665,7 +665,10 @@ ns1blankspace.app =
 
 						$('input.ns1blankspaceText').live('keyup', function() 
 						{
-							ns1blankspace.inputDetected = true;
+							if ($(this).attr('data-1blankspace') != 'ignore')
+							{
+								ns1blankspace.inputDetected = true;
+							}	
 						});
 							
 						$('input.ns1blankspaceText').live('blur', function() 
@@ -682,6 +685,10 @@ ns1blankspace.app =
 						$('input.ns1blankspaceDate').live('blur', function() 
 						{
 							$(this).removeClass('ns1blankspaceHighlight');
+							if ($(this).attr('data-1blankspace') != 'ignore')
+							{
+								ns1blankspace.inputDetected = true;
+							}
 						});
 
 						$('.ns1blankspaceTextMulti').live('focus', function()
@@ -697,7 +704,10 @@ ns1blankspace.app =
 
 						$('.ns1blankspaceTextMulti').live('keyup', function() 
 						{
-							ns1blankspace.inputDetected = true;
+							if ($(this).attr('data-1blankspace') != 'ignore')
+							{
+								ns1blankspace.inputDetected = true;
+							}
 						});
 
 						$('.ns1blankspaceViewLink').live('click', function()
@@ -711,6 +721,14 @@ ns1blankspace.app =
 							}	
 						});
 
+						$('.ns1blankspaceRadio').live('click', function()
+						{
+							if ($(this).attr('data-1blankspace') != 'ignore')
+							{
+								ns1blankspace.inputDetected = true;
+							}
+						});
+						
 						if (window.location.hash === '#PASSWORDEXPIRED')
 						{
 							ns1blankspace.logon.changePassword.show();
@@ -1073,7 +1091,10 @@ ns1blankspace.app =
 								}})
 						.click(function(event)
 						{
-							ns1blankspace.home.init();
+							if (ns1blankspace.util.checkIfInput())
+							{
+								ns1blankspace.home.init();
+							}	
 						})
 								
 						.next()
@@ -1250,7 +1271,10 @@ ns1blankspace.app =
 						.css('font-size', '0.75em')			
 						.click(function() 
 						{
-							ns1blankspace.setup["switch"]();
+							if (ns1blankspace.util.checkIfInput())
+							{
+								ns1blankspace.setup["switch"]();
+							}	
 						});	
 					
 					$('#ns1blankspaceViewControlHelp')
@@ -1261,7 +1285,10 @@ ns1blankspace.app =
 								}})
 						.click(function() 
 						{
-							ns1blankspace.supportIssue.init();
+							if (ns1blankspace.util.checkIfInput())
+							{
+								ns1blankspace.supportIssue.init();
+							}	
 						});		
 					
 					$('#ns1blankspaceLogonOptions').button(
@@ -1386,7 +1413,7 @@ ns1blankspace.app =
 					}	
 				},		
 
-	reset:		function ()
+	reset:	function ()
 				{	
 					$(ns1blankspace.xhtml.container).html('');			
 					$(ns1blankspace.xhtml.container).hide();
@@ -1408,7 +1435,7 @@ ns1blankspace.app =
 					$('#ns1blankspaceViewControlAction').button({label: "Save"});
 					if (ns1blankspace.timer.messaging != 0) {clearInterval(ns1blankspace.timer.messaging)};
 					ns1blankspace.util.app.option({titleSuffix: ''});
-					ns1blankspace.inputDetected = false;
+//					ns1blankspace.inputDetected = false;
 					ns1blankspace.xhtml.action = '';
 					ns1blankspace.object = undefined;
 					ns1blankspace.objectParentName = undefined;
@@ -1420,43 +1447,46 @@ ns1blankspace.app =
 					ns1blankspace.viewOptionsBind = undefined;
 				},
 
-	clean:		function()
+	clean:	function()
 				{	
 					$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions);
 					$(ns1blankspace.xhtml.dropDownContainer).hide(ns1blankspace.option.hideSpeedOptions);
 				},			
 
-	refresh: 	function (oParam)
+	refresh: function (oParam)
 				{
-					var sParentNamespace = ns1blankspace.objectParentName;
-					var sNamespace = ns1blankspace.objectName;
-					var oRoot = ns1blankspace.util.getParam(oParam, 'rootnamespace', {"default": ns1blankspace}).value
-							
-					if (oParam != undefined)
+					if (ns1blankspace.util.checkIfInput())
 					{
-						if (oParam.namespace != undefined) {sNamespace = oParam.namespace}
-						if (oParam.parentNamespace != undefined) {sParentNamespace = oParam.parentNamespace}
-					}	
+						var sParentNamespace = ns1blankspace.objectParentName;
+						var sNamespace = ns1blankspace.objectName;
+						var oRoot = ns1blankspace.util.getParam(oParam, 'rootnamespace', {"default": ns1blankspace}).value
+								
+						if (oParam != undefined)
+						{
+							if (oParam.namespace != undefined) {sNamespace = oParam.namespace}
+							if (oParam.parentNamespace != undefined) {sParentNamespace = oParam.parentNamespace}
+						}	
 
-					if (sNamespace)
-					{
-						if (sParentNamespace)
+						if (sNamespace)
 						{
-							var oNS = oRoot[sParentNamespace][sNamespace];
-						}
-						else
-						{
-							var oNS = oRoot[sNamespace];
-						}
+							if (sParentNamespace)
+							{
+								var oNS = oRoot[sParentNamespace][sNamespace];
+							}
+							else
+							{
+								var oNS = oRoot[sNamespace];
+							}
 
-						if (oNS.init)
-						{
-							oNS.init();
-						}
-						else
-						{
-							ns1blankspace.home.show();
-						}
+							if (oNS.init)
+							{
+								oNS.init();
+							}
+							else
+							{
+								ns1blankspace.home.show();
+							}
+						}	
 					}	
 				},		
 
@@ -1504,7 +1534,10 @@ ns1blankspace.app =
 
 							$('#ns1blankspaceViewControlRefresh').unbind('click').click(function(oParam)
 							{
-								oNS.init({showHome: true});	
+								if (ns1blankspace.util.checkIfInput())
+								{
+									oNS.init({showHome: true});
+								}		
 							});
 
 							$('#ns1blankspaceViewControlViewContainer').button(
@@ -1545,7 +1578,10 @@ ns1blankspace.app =
 							{
 								if ($(this).attr("disabled") != 'disabled')
 								{	
-									oNS.init({"new": true});
+									if (ns1blankspace.util.checkIfInput())
+									{
+										oNS.init({"new": true});
+									}	
 								}	
 							});
 							
@@ -2642,8 +2678,7 @@ ns1blankspace.history.view =
 									data: 'advanced=4&rf=TEXT',
 									dataType: 'text',
 									async: false,
-									success: function(data)
-									{
+									success: function(data) {
 										data = data.replace('OK|RETURNED|', '')
 										if (data === '')
 										{
@@ -3227,7 +3262,7 @@ ns1blankspace.search =
 								}
 				},
 
-	show: 		function (oParam, oResponse)
+	show: 	function (oParam, oResponse)
 				{
 					var sXHTMLElementID;
 					var sXHTMLInputElementID;
@@ -3525,6 +3560,9 @@ ns1blankspace.search =
 							}
 							else
 							{
+								var data1blankspace = $('#' + sXHTMLInputElementID).attr('data-1blankspace');
+								if (data1blankspace == undefined) {data1blankspace = ''}
+
 								aHTML.push('<table class="ns1blankspaceSearchMedium" style="width:' +
 												$('#' + sXHTMLInputElementID).width() + 'px;">');
 							
@@ -3540,14 +3578,14 @@ ns1blankspace.search =
 									if (sColumns.length == 0)
 									{
 										aHTML.push('<td class="ns1blankspaceSearch" id="' + sXHTMLInputElementID +
-															'-' + v.id + '">' + v.title + '</td>');
+															'-' + v.id + '" data-1blankspace="' + data1blankspace + '">' + v.title + '</td>');
 									}
 									else
 									{
 										var bNewTD = true;
 
 										aHTML.push('<td class="ns1blankspaceSearch" id="' + sXHTMLInputElementID +
-																	'-' + v.id + '">');
+																	'-' + v.id + '" data-1blankspace="' + data1blankspace + '">');
 
 										$.each(aColumns, function(j, k) 
 										{
@@ -3576,7 +3614,7 @@ ns1blankspace.search =
 													if (bNewTD)
 													{
 														aHTML.push('</td><td class="ns1blankspaceSearch" id="' + sXHTMLInputElementID +
-																	'-' + v.id + '">');
+																	'-' + v.id + '" data-1blankspace="' + data1blankspace + '">');
 													}				
 																
 													aHTML.push(v[k]);
@@ -3601,6 +3639,10 @@ ns1blankspace.search =
 							
 								$('td.ns1blankspaceSearch').click(function(event)
 								{
+									if ($(this).attr('data-1blankspace') != 'ignore')
+									{
+										ns1blankspace.inputDetected = true;
+									}	
 									$(ns1blankspace.xhtml.container).hide(200);
 									$.extend(true, oParam, {xhtmlElementID: event.target.id})
 									if (bMultiSelect)
@@ -5181,7 +5223,24 @@ ns1blankspace.util =
 					var sTitle = ns1blankspace.util.getParam(oParam, 'title').value;
 					var aRole = $.grep(ns1blankspace.user.roles, function (role) {return role.title==sTitle})
 					return (aRole.length!=0)
-				}													
+				},
+
+	checkIfInput: function (oParam)
+				{
+					var bContinue = true;
+
+					if (ns1blankspace.inputDetected)
+					{
+						 bContinue = confirm("You have edited this page.  Do you want to continue moving to the new page?")
+					}	
+							
+					if (bContinue)
+					{	
+						ns1blankspace.inputDetected = false;
+					}
+					
+					return bContinue	
+				}														
 }
 
 ns1blankspace.debug = 

@@ -1052,7 +1052,7 @@ ns1blankspace.financial.bankAccount =
 																		'matchtype,matchtypetext,project,projecttext,status,statustext,' +
 																		'taxtype,taxtypeexpensetext,taxtyperevenuetext,type,typetext');
 
-														oSearch.rows = 200;
+														oSearch.rows = 1000;
 														
 														oSearch.getResults(function(oResponse)
 														{
@@ -1084,7 +1084,7 @@ ns1blankspace.financial.bankAccount =
 													oSearch.sort('posteddate', 'asc');
 													oSearch.addFilter('bankaccount', 'EQUAL_TO', ns1blankspace.objectContext);
 													if (iFileSource) {oSearch.addFilter('source', 'EQUAL_TO', iFileSource);}
-													oSearch.rows = 100;
+													oSearch.rows = 1000;
 													oSearch.getResults(function(data) {ns1blankspace.financial.bankAccount.mapping.apply.init(oParam, data)});
 												}
 
@@ -2075,7 +2075,7 @@ ns1blankspace.financial.bankAccount =
 															oSearch.addField('reference,amount,receiveddate,contactbusinessreceivedfromtext,contactpersonreceivedfromtext');
 															oSearch.addFilter('sourcebanktransaction', 'EQUAL_TO', sKey);
 															oSearch.addFilter('bankaccount', 'EQUAL_TO', ns1blankspace.objectContext)
-															oSearch.rows = 200;
+															oSearch.rows = 1000;
 															oSearch.getResults(function(oResponse)
 															{
 																var cAmountAsReceipts = 0;
@@ -3197,7 +3197,7 @@ ns1blankspace.financial.bankAccount =
 														oSearch.method = (iType==1?'FINANCIAL_PAYMENT_SEARCH':'FINANCIAL_RECEIPT_SEARCH');
 														oSearch.addField('amount');	
 														oSearch.addFilter('sourcebanktransaction', 'EQUAL_TO', iTransactionID);
-														oSearch.rows = 200;
+														oSearch.rows = 1000;
 														oSearch.getResults(function(data)
 														{
 															oParam = ns1blankspace.util.setParam(oParam, 'refreshStep', 2);
@@ -3212,7 +3212,7 @@ ns1blankspace.financial.bankAccount =
 														oSearch.method = 'FINANCIAL_GENERAL_JOURNAL_ITEM_SEARCH';
 														oSearch.addField('debitamount,creditamount');
 														oSearch.addFilter('sourcebanktransaction', 'EQUAL_TO', iTransactionID);
-														oSearch.rows = 200;
+														oSearch.rows = 1000;
 														oSearch.getResults(function(data)
 														{
 															oParam = ns1blankspace.util.setParam(oParam, 'refreshStep', 3);
@@ -3364,7 +3364,7 @@ ns1blankspace.financial.bankAccount =
 														
 															oSearch.addFilter('reconciliation', 'IS_NULL');
 															oSearch.addFilter('bankaccount', 'EQUAL_TO', ns1blankspace.objectContext)
-															oSearch.rows = 200;
+															oSearch.rows = 1000;
 															oSearch.getResults(function(data) {ns1blankspace.financial.bankAccount.reconcile.items.init(oParam, data)});
 														}
 														else
@@ -3399,7 +3399,7 @@ ns1blankspace.financial.bankAccount =
 																oSearch.addFilter('generaljournalitem.generaljournal.status', 'EQUAL_TO', 2);
 																oSearch.addFilter('financialaccount', 'EQUAL_TO', ns1blankspace.objectContextData.financialaccount);
 																oSearch.addFilter('generaljournalitem.generaljournal.journaldate', 'LESS_THAN_OR_EQUAL_TO', dReconciliationEndDate);
-																oSearch.rows = 200;
+																oSearch.rows = 1000;
 																oSearch.getResults(function(data) {ns1blankspace.financial.bankAccount.reconcile.items.init(oParam, data)});
 															}
 															else
@@ -3837,7 +3837,8 @@ ns1blankspace.financial.bankAccount =
 																	function (a)
 																	{
 																		return ((cSearchAmount !== ''?a.searchAmount == cSearchAmount:false) ||
-																					(sSearchReference !== ''?a.reference == sSearchReference:false) ||
+																					(sSearchReference !== ''?_.includes(a.reference, sSearchReference):false) ||
+																					(sSearchReference !== ''?_.includes(a.description, sSearchReference):false) ||
 																					(dSearchDate !== ''?a.date == dSearchDate:false));
 																	});  
 															}
@@ -4014,7 +4015,7 @@ ns1blankspace.financial.bankAccount =
 
 																oSearch.addFilter('outstandingamount', 'GREATER_THAN', 0)
 																
-																oSearch.rows = (sSearchReference == ''?50:200);
+																oSearch.rows = (sSearchReference == ''?50:1000);
 																oSearch.getResults(function(data) {ns1blankspace.financial.bankAccount.reconcile.items.edit(oParam, data)});
 															}
 															else
@@ -4783,7 +4784,7 @@ ns1blankspace.financial.bankAccount =
 														}	
 
 														oSearch.addFilter('reconciliation', 'EQUAL_TO', iReconciliation);
-														oSearch.rows = 200;
+														oSearch.rows = 1000;
 
 														oSearch.getResults(function(data) {ns1blankspace.financial.bankAccount.reconcile.items.locked(oParam, data)});
 													}
