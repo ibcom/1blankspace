@@ -49,7 +49,9 @@ ns1blankspace.option = $.extend(true, ns1blankspace.option,
 	financialShowProjects: true,
 	pdfStyles: '<link rel=stylesheet href="/jscripts/1blankspace-2.0.2.css">',
 	messagingCheckURL: 'http://api.mydigitalstructure.com',
-	financialOverride: true
+	financialOverride: true,
+	showProductCodes = true,
+
 });
 
 ns1blankspace.formFactor.size.value = ns1blankspace.formFactor.size.options.medium;
@@ -1463,7 +1465,7 @@ ns1blankspace.control =
 										
 										$('#ns1blankspaceViewControlFavourites').button({disabled: false});
 
-										var oFavourites = ns1blankspace.util.copy(ns1blankspace.views);
+										var oFavourites = $.map(ns1blankspace.views, function(x) {return x;});;
 										oFavourites = $.grep(oFavourites, function (favourite) {return favourite.visits!=0});
 										ns1blankspace.control.favourites.data.views = [];
 
@@ -2217,6 +2219,8 @@ ns1blankspace.attachments =
 							
 						$('#' + sXHTMLElementID).html(aHTML.join(''));
 
+						oParam = ns1blankspace.util.setParam(oParam, 'xhtmlElementID', 'ns1blankspaceAttachmentsColumn1');
+
 						var aHTML = [];
 						
 						aHTML.push('<table class="ns1blankspaceColumn2">');
@@ -2325,9 +2329,9 @@ ns1blankspace.attachments =
 
 	process: function (oResponse, oParam)
 				{	
-					var sXHTMLElementID = 'ns1blankspaceAttachmentsColumn1'
+					var sXHTMLElementID = ns1blankspace.util.getParam(oParam, 'xhtmlElementID').value;
 					var bShowUser = ns1blankspace.util.getParam(oParam, 'showUser', {"default": false}).value;
-
+					var fFunctionSearch = ns1blankspace.util.getParam(oParam, 'functionSearch', {'default': ns1blankspace.attachments.show}).value;
 					var aHTML = [];
 						
 					if (oResponse.data.rows.length === 0)
@@ -2373,7 +2377,7 @@ ns1blankspace.attachments =
 							columns: 'subject-actiondate',
 							more: oResponse.moreid,
 							rows: ns1blankspace.option.defaultRows,
-							functionSearch: ns1blankspace.attachments.show,
+							functionSearch: fFunctionSearch,
 							functionShowRow: ns1blankspace.attachments.row,
 							functionOnNewPage: ns1blankspace.attachments.bind,
 							type: 'json'
@@ -2601,8 +2605,7 @@ ns1blankspace.attachments =
 									var oFrame = document.getElementById('ns1blankspaceUploadProxy');
 									var sStatus;
 									var sCurrentState;
-
-									var fFunctionPostUpdate = ns1blankspace.attachments.show;
+									var fFunctionPostUpdate = ns1blankspace.util.getParam(ns1blankspace.param, 'functionPostUpdate', {'default': ns1blankspace.attachments.show}).value;
 									
 									if (ns1blankspace.param != undefined)
 									{
