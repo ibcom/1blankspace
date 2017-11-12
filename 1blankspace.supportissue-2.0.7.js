@@ -788,10 +788,13 @@ ns1blankspace.supportIssue =
 			ns1blankspace.messaging.conversation.linkedToObject.search(
 			{
 				xhtmlElementID: 'ns1blankspaceMainConversations', 
-				object: ns1blankspace.object,
-				objectContext: ns1blankspace.objectContext,
-				subject: ns1blankspace.objectContextData.reference,
-				description: ns1blankspace.objectContextData.title
+				conversationData:
+				{
+					object: ns1blankspace.object,
+					objectContext: ns1blankspace.objectContext,
+					title: "Support Issue " + ns1blankspace.objectContextData.reference,
+					description: ns1blankspace.objectContextData.title
+				}
 			});
 		});
 	},
