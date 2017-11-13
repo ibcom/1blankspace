@@ -2785,14 +2785,14 @@ ns1blankspace.financial.payroll =
 												oRow["taxbeforerebate"] +
 												'</td></tr>');
 
-								aHTML.push('<tr><td class="ns1blankspaceRow ns1blankspaceCaption">Superannuation</td>' +
-												'<td class="ns1blankspaceRow" style="text-align:right;">' +
-												oRow["superannuation"] +
-												'</td></tr>');
-
 								aHTML.push('<tr><td class="ns1blankspaceRow ns1blankspaceCaption">Net</td>' +
 												'<td class="ns1blankspaceRow" style="text-align:right;">' +
 												oRow["netsalary"] +
+												'</td></tr>');
+
+								aHTML.push('<tr><td class="ns1blankspaceRow ns1blankspaceCaption">Superannuation</td>' +
+												'<td class="ns1blankspaceRow" style="text-align:right;">' +
+												oRow["superannuation"] +
 												'</td></tr>');
 
 								aHTML.push('<tr><td colspan=2 class="ns1blankspaceCaption" style="font-size:0.875em;">' +

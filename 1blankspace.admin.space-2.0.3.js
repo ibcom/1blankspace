@@ -997,35 +997,38 @@ ns1blankspace.admin.space =
 	save:		{
 					send:		function ()
 								{
-									if (ns1blankspace.objectContextData.billing != undefined)
+									if (ns1blankspace.objectContextData != undefined)
 									{
-										var oData =
+										if (ns1blankspace.objectContextData.billing != undefined)
 										{
-											id: ns1blankspace.objectContextData.billing.id,
-											status: $('input[name="radioStatus"]:checked').val(),
-											disabled: $('input[name="radioDisabled"]:checked').val()
-										}
-
-										$.ajax(
-										{
-											type: 'POST',
-											url: '/rpc/admin/?method=ADMIN_SPACE_MANAGE',
-											data: oData,
-											dataType: 'json',
-											success: function(response)
+											var oData =
 											{
-												if (response.status == "OK")
-												{
-													ns1blankspace.status.message('Updated');
-													ns1blankspace.inputDetected = false;
-													ns1blankspace.admin.space.init({id: ns1blankspace.objectContext});
-												}
-												else
-												{
-													ns1blankspace.status.error(response.error.errornotes);
-												}
+												id: ns1blankspace.objectContextData.billing.id,
+												status: $('input[name="radioStatus"]:checked').val(),
+												disabled: $('input[name="radioDisabled"]:checked').val()
 											}
-										});
+
+											$.ajax(
+											{
+												type: 'POST',
+												url: '/rpc/admin/?method=ADMIN_SPACE_MANAGE',
+												data: oData,
+												dataType: 'json',
+												success: function(response)
+												{
+													if (response.status == "OK")
+													{
+														ns1blankspace.status.message('Updated');
+														ns1blankspace.inputDetected = false;
+														ns1blankspace.admin.space.init({id: ns1blankspace.objectContext});
+													}
+													else
+													{
+														ns1blankspace.status.error(response.error.errornotes);
+													}
+												}
+											});
+										}	
 									}	
 									else
 									{

@@ -330,7 +330,7 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.admin.space',
-		source: '/jscripts/1blankspace.admin.space-2.0.3.js'
+		source: '/site/312/1blankspace.admin.space-2.0.3.js'
 	},
 	{
 		nameSpace: '1blankspace.admin.monitoring',
