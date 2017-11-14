@@ -2501,7 +2501,7 @@ ns1blankspace.attachments =
 									var sHelpNotes = ns1blankspace.util.getParam(oParam, 'helpNotes', {'default': ''}).value;
 									var oContext = ns1blankspace.util.getParam(oParam, 'context', {'default': {inContext: false}}).value;
 									var sXHTML = ns1blankspace.util.getParam(oParam, 'xhtml', {"default": ''}).value;
-									var sURL = ns1blankspace.util.getParam(oParam, 'attachmentTypes', {"url": '/rpc/attach/?method=ATTACH_FILE&rf=TEXT'}).value;
+									var sURL = ns1blankspace.util.getParam(oParam, "url", {'default': '/rpc/attach/?method=ATTACH_FILE&rf=TEXT'}).value;
 									
 									var iMaxFiles = ns1blankspace.util.getParam(oParam, 'maxFiles', {"default": 1}).value;
 									var sLabel = ns1blankspace.util.getParam(oParam, 'label', {"default": ''}).value;
