@@ -5824,7 +5824,7 @@ ns1blankspace.financial.payroll.superannuation =
 						aHTML.push('<tr><td id="ns1blankspacePayrollSuperannuationExpenseTotal" style="padding-top:0px; font-size:1.2em; padding-bottom:16px;" class="ns1blankspaceSub">' +
 										'</td></tr>');
 
-						aHTML.push('<tr><td id="ns1blankspacePayrollSuperannuationExpenseURLs" style="padding-top:0px; font-size:1.2em; padding-bottom:16px;" class="ns1blankspaceSub">' +
+						aHTML.push('<tr><td id="ns1blankspacePayrollSuperannuationExpenseURLs" style="padding-top:0px; font-size:1em; padding-bottom:16px;" class="ns1blankspaceSub">' +
 										'</td></tr>');
 
 						aHTML.push('<tr><td id="ns1blankspacePayrollSuperannuationExpenseTotals" style="padding-top:0px; padding-bottom:6px;" class="ns1blankspaceSub">' +
@@ -5881,10 +5881,10 @@ ns1blankspace.financial.payroll.superannuation =
 						else
 						{
 							$('#ns1blankspacePayrollSuperannuationExpenseURLs').html(
-								'<div class="ns1blankspaceSub" style="font-size:0.75em;">Make a payment using...</div>' +
+								'<div style="font-size:0.75em;">Make a payment using...</div>' +
 								_.join(_.map(ns1blankspace.financial.payroll.data.urls, function (provider)
 								{
-									return '<div><a style="font-size:0.75em;" href="' + (provider.url.indexOf('http')==-1?'http://':'') + provider.url + '" target="_blank" title="' + provider.urllogon + '">' +
+									return '<div><a style="font-size:0.875em;" href="' + (provider.url.indexOf('http')==-1?'http://':'') + provider.url + '" target="_blank" title="' + provider.urllogon + '">' +
 										 provider.title + '</a></div>'
 								}), '')
 							)
