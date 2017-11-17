@@ -269,7 +269,7 @@ ns1blankspace.financial.expense =
 								var sContact = this.contactbusinesspaidtotext
 								if (sContact == '') {sContact = this.contactpersonpaidtotext}
 			
-								aHTML.push('<td id="ns1blankspaceMostLikely_contact-' + this.id + '" class="ns1blankspaceMostLikelySub" style="width:130px;padding-right:15px;">' +
+								aHTML.push('<td id="ns1blankspaceMostLikely_contact-' + this.id + '" class="ns1blankspaceMostLikelySub" style="width:200px;padding-right:15px;">' +
 														sContact + '</td>');
 
 								aHTML.push('<td id="ns1blankspaceMostLikely_contact-' + this.id + '" class="ns1blankspaceMostLikelySub">' +
@@ -1390,7 +1390,7 @@ ns1blankspace.financial.expense.outstanding =
 					if (oSearchText.exists)
 					{
 						sSearchText = oSearchText.value;
-						ns1blankspace.financial.expense.outstanding.searchText = sSearchText;
+						ns1blankspace.financial.expense.outstanding.data.searchText = sSearchText;
 					}
 					else
 					{	
@@ -1423,7 +1423,7 @@ ns1blankspace.financial.expense.outstanding =
 						if (sSearchText != undefined)
 						{
 							oSearch.addBracket('(');
-							oSearch.addFilter('contactbusinesspaidtotext', 'TEXT_IS_LIKE', sSearchText);
+							oSearch.addFilter('contactpersonpaidtotext', 'TEXT_IS_LIKE', sSearchText);
 							oSearch.addOperator('or');
 							oSearch.addFilter('contactbusinesspaidtotext', 'TEXT_IS_LIKE', sSearchText);
 							oSearch.addOperator('or');

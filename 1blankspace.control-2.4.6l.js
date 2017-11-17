@@ -210,7 +210,7 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.financial.payroll',
-		source: '/jscripts/1blankspace.financial.payroll-2.1.8.js'
+		source: '/site/312/1blankspace.financial.payroll-2.1.9.js'
 	},
 	{
 		nameSpace: '1blankspace.financial.budget',
@@ -230,7 +230,7 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.setup.financial',
-		source: '/jscripts/1blankspace.setup.financial-2.0.8.js'
+		source: '/site/312/1blankspace.setup.financial-2.0.9.js'
 	},
 	{
 		nameSpace: '1blankspace.setup.action',

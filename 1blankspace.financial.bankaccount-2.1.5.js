@@ -1645,7 +1645,7 @@ ns1blankspace.financial.bankAccount =
 														oSearch.sort('posteddate', 'asc');
 														oSearch.addFilter('bankaccount', 'EQUAL_TO', ns1blankspace.objectContext);
 														if (iFileSource) {oSearch.addFilter('source', 'EQUAL_TO', iFileSource);}
-														oSearch.rows = 200;
+														oSearch.rows = 1000;
 														oSearch.getResults(function(data) {ns1blankspace.financial.bankAccount["import"].items.show(oParam, data)});
 													}
 													else
@@ -3044,7 +3044,7 @@ ns1blankspace.financial.bankAccount =
 														oSearch.addFilter('category', 'EQUAL_TO', (iType==1?2:1));
 														oSearch.addFilter('posteddate', 'LESS_THAN_OR_EQUAL_TO', dReconciliationEndDate);
 														oSearch.sort('posteddate', 'asc');
-														oSearch.rows = 200;
+														oSearch.rows = 1000;
 														oSearch.getResults(function(data) {ns1blankspace.financial.bankAccount.reconcile.items.show(oParam, data)});		
 													}
 													else
