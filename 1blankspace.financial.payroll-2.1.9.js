@@ -5620,11 +5620,70 @@ ns1blankspace.financial.payroll.superannuation =
 					ns1blankspace.financial.payroll.superannuation.urls(
 					{
 						onComplete: ns1blankspace.financial.payroll.superannuation.providers,
-						onCompleteWhenCan: ns1blankspace.financial.payroll.superannuation.show
+						onCompleteWhenCan: ns1blankspace.financial.payroll.superannuation.expenses
 					});
 				},
 
-	show:		function (oParam, oResponse)
+	summary:	function (oParam, oResponse)
+				{
+					if (oResponse == undefined)
+					{	
+						var aHTML = [];
+	
+						ns1blankspace.financial.payroll.superannuation.data.summary = [];
+
+						var aContactBusiness = _.map(ns1blankspace.financial.payroll.superannuation.data.providers, 'supercontactbusiness');
+						aContactBusiness.push(ns1blankspace.financial.data.settings.payrollsuperannuationcontactbusiness);
+
+						var oSearch = new AdvancedSearch();
+						oSearch.method = 'FINANCIAL_EXPENSE_SEARCH';
+						oSearch.addField('reference,amount,outstandingamount,description,contactbusinesspaidto,contactbusinesspaidtotext,contactpersonpaidto,contactpersonpaidtotext,paymentduedate');
+						oSearch.addFilter('paystatus', 'EQUAL_TO', 1);
+						oSearch.addFilter('outstandingamount', 'NOT_EQUAL_TO', 0);
+						oSearch.addFilter('contactbusinesspaidto', 'IN_LIST', aContactBusiness.join(','));
+
+						var sSearchText = ns1blankspace.financial.payroll.superannuation.data.searchText;
+
+						if (sSearchText != undefined)
+						{
+							oSearch.addBracket('(');
+							oSearch.addFilter('contactpersonpaidtotext', 'TEXT_IS_LIKE', sSearchText);
+							oSearch.addOperator('or');
+							oSearch.addFilter('contactbusinesspaidtotext', 'TEXT_IS_LIKE', sSearchText);
+							oSearch.addOperator('or');
+							oSearch.addFilter('description', 'TEXT_IS_LIKE', sSearchText);
+							oSearch.addBracket(')');
+						}
+
+						oSearch.rows = 10000;
+						oSearch.getResults(function(data) {ns1blankspace.financial.payroll.superannuation.summary(oParam, data)});
+					}
+					else
+					{
+						ns1blankspace.financial.payroll.superannuation.data.summary = oResponse.data.rows;
+
+						ns1blankspace.financial.payroll.superannuation.data.summaryReduced = _.groupBy(
+								ns1blankspace.financial.payroll.superannuation.data.summary, function (summary)
+								{
+									return _.last(_.split(_.first(_.split(summary.description, ' -')), 'for '))
+								})
+
+						var aHTML = [];
+
+						_.each(ns1blankspace.financial.payroll.superannuation.data.summaryReduced, function (values, key)
+						{
+							if (key != '')
+							{
+								aHTML.push('<div class="ns1blankspaceSubNote">' + key + '</div>' + 
+												'<div class="ns1blankspaceSubNote" style="font-weight:600; padding-bottom:6px;">' + numeral(_.sum(_.map(values, function (v) {return numeral(v.outstandingamount).value()}))).format('(0,0.00)') + '</div>');
+							}
+						});
+
+						$('#ns1blankspacePayrollSuperannuationExpenseTotals').html(aHTML.join(''));
+					}	
+				},			
+
+	expenses:	function (oParam, oResponse)
 				{
 					var iSearchBankAccount = ns1blankspace.util.getParam(oParam, 'searchBankAccount', {"default": -1}).value;
 					var oSearchText = ns1blankspace.util.getParam(oParam, 'searchText');
@@ -5662,16 +5721,15 @@ ns1blankspace.financial.payroll.superannuation =
 
 						var oSearch = new AdvancedSearch();
 						oSearch.method = 'FINANCIAL_EXPENSE_SEARCH';
-						oSearch.addField('reference,amount,outstandingamount,description,contactbusinesspaidto,contactbusinesspaidtotext,contactpersonpaidto,contactpersonpaidtotext,paymentduedate');
+						oSearch.addField('reference,amount,outstandingamount,description,contactbusinesspaidto,contactbusinesspaidtotext,contactpersonpaidto,contactpersonpaidtotext,accrueddate');
 						oSearch.addFilter('paystatus', 'EQUAL_TO', 1);
 						oSearch.addFilter('outstandingamount', 'NOT_EQUAL_TO', 0);
-
 						oSearch.addFilter('contactbusinesspaidto', 'IN_LIST', aContactBusiness.join(','));
 
 						if (sSearchText != undefined)
 						{
 							oSearch.addBracket('(');
-							oSearch.addFilter('contactbusinesspaidtotext', 'TEXT_IS_LIKE', sSearchText);
+							oSearch.addFilter('contactpersonpaidtotext', 'TEXT_IS_LIKE', sSearchText);
 							oSearch.addOperator('or');
 							oSearch.addFilter('contactbusinesspaidtotext', 'TEXT_IS_LIKE', sSearchText);
 							oSearch.addOperator('or');
@@ -5687,8 +5745,8 @@ ns1blankspace.financial.payroll.superannuation =
 						oSearch.addSummaryField('sum(amount) totalamount')
 
 						oSearch.rows = 100;
-						oSearch.sort('paymentduedate', 'asc');
-						oSearch.getResults(function(data) {ns1blankspace.financial.payroll.superannuation.show(oParam, data)});
+						oSearch.sort('description', 'asc');
+						oSearch.getResults(function(data) {ns1blankspace.financial.payroll.superannuation.expenses(oParam, data)});
 					}
 					else
 					{
@@ -5704,11 +5762,6 @@ ns1blankspace.financial.payroll.superannuation =
 						else
 						{
 							var iPaymentAccount = ns1blankspace.util.getParam(oParam, 'paymentAccount').value;
-
-							//Clearing house links
-							//aHTML.push('<table class="ns1blankspaceColumn2">' +
-							//			'<tr><td class="ns1blankspaceNothing" style="font-size:0.75em;">If you set up a ABA Direct Entry File payments account you can make bulk payments.</td></tr>' +
-							//			'</table>');
 
 							$('#ns1blankspacePayrollSuperannuationExpenseColumn2').html(aHTML.join(''));
 						
@@ -5771,7 +5824,10 @@ ns1blankspace.financial.payroll.superannuation =
 						aHTML.push('<tr><td id="ns1blankspacePayrollSuperannuationExpenseTotal" style="padding-top:0px; font-size:1.2em; padding-bottom:16px;" class="ns1blankspaceSub">' +
 										'</td></tr>');
 
-						aHTML.push('<tr><td id="ns1blankspacePayrollSuperannuationExpenseURLs" style="padding-top:16px; font-size:1.2em; padding-bottom:16px;" class="ns1blankspaceSub">' +
+						aHTML.push('<tr><td id="ns1blankspacePayrollSuperannuationExpenseURLs" style="padding-top:0px; font-size:1.2em; padding-bottom:16px;" class="ns1blankspaceSub">' +
+										'</td></tr>');
+
+						aHTML.push('<tr><td id="ns1blankspacePayrollSuperannuationExpenseTotals" style="padding-top:0px; padding-bottom:6px;" class="ns1blankspaceSub">' +
 										'</td></tr>');
 						
 						aHTML.push('</table>');
@@ -5792,7 +5848,7 @@ ns1blankspace.financial.payroll.superannuation =
 						.click(function() 
 						{
 							oParam = ns1blankspace.util.setParam(oParam, 'searchText', $('#ns1blankspacePayrollSuperannuationExpenseSearchText').val());
-							ns1blankspace.financial.payroll.superannuation.show(oParam);
+							ns1blankspace.financial.payroll.superannuation.expenses(oParam);
 						})
 						.css('width', '65px');
 
@@ -5803,7 +5859,7 @@ ns1blankspace.financial.payroll.superannuation =
 						.click(function() 
 						{
 							oParam = ns1blankspace.util.setParam(oParam, 'searchText', undefined);
-							ns1blankspace.financial.payroll.superannuation.show(oParam);
+							ns1blankspace.financial.payroll.superannuation.expenses(oParam);
 						})
 						.css('width', '57px');
 
@@ -5812,7 +5868,7 @@ ns1blankspace.financial.payroll.superannuation =
 							if (e.which === 13)
 					    	{
 					    		oParam = ns1blankspace.util.setParam(oParam, 'searchText', $('#ns1blankspacePayrollSuperannuationExpenseSearchText').val())
-					    		ns1blankspace.financial.payroll.superannuation.show(oParam);
+					    		ns1blankspace.financial.payroll.superannuation.expenses(oParam);
 					    	}
 						});				
 
@@ -5832,7 +5888,9 @@ ns1blankspace.financial.payroll.superannuation =
 										 provider.title + '</a></div>'
 								}), '')
 							)
-						}	
+						}
+
+						ns1blankspace.financial.payroll.superannuation.summary();
 
 						ns1blankspace.financial.payroll.superannuation.refresh();		
 					}
@@ -5872,7 +5930,7 @@ ns1blankspace.financial.payroll.superannuation =
 									oRow["outstandingamount"] + '</td>'); 
 
 					aHTML.push('<td id="ns1blankspacePayrollSuperannuationExpense_paymentduedate-' + oRow["id"] + '" class="ns1blankspaceRow ns1blankspaceSub" style="text-align:right;">' +
-									ns1blankspace.util.fd(oRow["paymentduedate"]) + '</td>');
+									ns1blankspace.util.fd(oRow["accrueddate"]) + '</td>');
 
 					aHTML.push('<td style="text-align:right;" class="ns1blankspaceRow">');
 
