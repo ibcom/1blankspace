@@ -5637,7 +5637,7 @@ ns1blankspace.financial.payroll.superannuation =
 
 						var oSearch = new AdvancedSearch();
 						oSearch.method = 'FINANCIAL_EXPENSE_SEARCH';
-						oSearch.addField('reference,amount,outstandingamount,description,contactbusinesspaidto,contactbusinesspaidtotext,contactpersonpaidto,contactpersonpaidtotext,paymentduedate');
+						oSearch.addField('reference,amount,outstandingamount,description');
 						oSearch.addFilter('paystatus', 'EQUAL_TO', 1);
 						oSearch.addFilter('outstandingamount', 'NOT_EQUAL_TO', 0);
 						oSearch.addFilter('contactbusinesspaidto', 'IN_LIST', aContactBusiness.join(','));
@@ -5745,7 +5745,7 @@ ns1blankspace.financial.payroll.superannuation =
 						oSearch.addSummaryField('sum(amount) totalamount')
 
 						oSearch.rows = 100;
-						oSearch.sort('description', 'asc');
+						oSearch.sort('accrueddate', 'asc');
 						oSearch.getResults(function(data) {ns1blankspace.financial.payroll.superannuation.expenses(oParam, data)});
 					}
 					else

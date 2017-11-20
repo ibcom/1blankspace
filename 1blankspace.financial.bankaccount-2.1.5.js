@@ -3977,6 +3977,8 @@ ns1blankspace.financial.bankAccount =
 																		oSearch.addBracket('(');
 																		oSearch.addFilter('reference', 'TEXT_IS_LIKE', sSearchReference);
 																		oSearch.addOperator('or');
+																		oSearch.addFilter('description', 'TEXT_IS_LIKE', sSearchReference);
+																		oSearch.addOperator('or');
 																		oSearch.addFilter('expense.contactbusinesspaidto.tradename', 'TEXT_IS_LIKE', sSearchReference);
 																		oSearch.addOperator('or');
 																		oSearch.addFilter('expense.contactpersonpaidto.surname', 'TEXT_IS_LIKE', sSearchReference);
@@ -4001,6 +4003,8 @@ ns1blankspace.financial.bankAccount =
 																	{
 																		oSearch.addBracket('(');
 																		oSearch.addFilter('reference', 'TEXT_IS_LIKE', sSearchReference);
+																		oSearch.addOperator('or');
+																		oSearch.addFilter('description', 'TEXT_IS_LIKE', sSearchReference);
 																		oSearch.addOperator('or');
 																		oSearch.addFilter('invoice.contactbusinesssentto.tradename', 'TEXT_IS_LIKE', sSearchReference);
 																		oSearch.addOperator('or');

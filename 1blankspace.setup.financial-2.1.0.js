@@ -2328,7 +2328,7 @@ ns1blankspace.setup.financial =
 
 						aHTML.push('<tr class="ns1blankspaceCaption">' +
 										'<td class="ns1blankspaceCaption">' +
-										'Tax Expense Description <span class="ns1blankspaceSub" style="font-size:0.75em; vertical-align:middle; padding-left:3px;">Created when the tax report completed.</span>' +
+										'Tax Expense Description<br /><span class="ns1blankspaceSub" style="font-size:0.75em; vertical-align:middle; padding-left:3px;">When a tax report is completed, the tax payable expense will be created with this description.</span>' +
 										'</td></tr>' +
 										'<tr class="ns1blankspace">' +
 										'<td class="ns1blankspaceText">' +
@@ -2346,7 +2346,7 @@ ns1blankspace.setup.financial =
 							$('[name="radioTaxReportingFrequency"][value="' + ns1blankspace.objectContextData.taxreportfrequency + '"]').attr('checked', true);
 							$('[name="radioTaxPayrollReportingFrequency"][value="' + ns1blankspace.objectContextData.taxreportfrequencyemployee + '"]').attr('checked', true);
 							$('[name="radioTaxDefault"][value="' + ns1blankspace.objectContextData.classicincludestax + '"]').attr('checked', true);
-							$('#ns1blankspaceTaxExpenseDescription').html(ns1blankspace.financial.data.settings.taxexpensedescription);
+							$('#ns1blankspaceTaxExpenseDescription').val(ns1blankspace.financial.data.settings.taxexpensedescription);
 						}
 					}	
 				},
