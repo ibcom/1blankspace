@@ -50,7 +50,8 @@ ns1blankspace.option = $.extend(true, ns1blankspace.option,
 	pdfStyles: '<link rel=stylesheet href="/jscripts/1blankspace-2.0.2.css">',
 	messagingCheckURL: 'http://api.mydigitalstructure.com',
 	financialOverride: true,
-	showProductCodes: true
+	showProductCodes: true,
+	logonIdentityProvider: 'https://accounts.google.com/o/saml2/idp?idpid=C00mem5jv'
 });
 
 ns1blankspace.formFactor.size.value = ns1blankspace.formFactor.size.options.medium;
@@ -347,6 +348,10 @@ ns1blankspace.scripts.concat(
 	{
 		nameSpace: '1blankspace.util.convert',
 		source: '/jscripts/1blankspace.util.convert-2.0.0.js'
+	},
+	{
+		nameSpace: '1blankspace.util.convert',
+		source: '/site/312/1blankspace.util.saml-2.0.0.js'
 	}
 ])
 
