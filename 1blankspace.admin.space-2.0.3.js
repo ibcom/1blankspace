@@ -66,6 +66,9 @@ ns1blankspace.admin.space =
 						{		
 							aHTML.push('<tr><td><span id="ns1blankspaceSuperUser" class="ns1blankspaceAction">' +
 												'</span></td></tr>');
+
+							aHTML.push('<tr><td><span id="ns1blankspaceSuperUserMonitoring" class="ns1blankspaceAction">' +
+												'</span></td></tr>');
 						}
 
 						if (ns1blankspace.space != ns1blankspace.user.space)
@@ -81,14 +84,26 @@ ns1blankspace.admin.space =
 						$('#ns1blankspaceSuperUser').button(
 						{
 							text: true,
-							label: 'Show ' + (ns1blankspace.admin.space.data.superUser?'just mine':'all'),
+							label: 'Show ' + (ns1blankspace.admin.space.data.superUser?'just mine':'all') + ' spaces',
 						})
 						.click(function()
 						{
 							ns1blankspace.admin.space.data.superUser = !ns1blankspace.admin.space.data.superUser;
-							$('#ns1blankspaceSuperUser').button({label: 'Show ' + (ns1blankspace.admin.space.data.superUser?'just mine':'all')});
+							$('#ns1blankspaceSuperUser').button({label: 'Show ' + (ns1blankspace.admin.space.data.superUser?'just mine':'all') + ' spaces'});
 							ns1blankspace.admin.space.home()
-						});
+						})
+						.css('width', '100px');
+
+						$('#ns1blankspaceSuperUserMonitoring').button(
+						{
+							text: true,
+							label: 'Monitoring',
+						})
+						.click(function()
+						{
+							ns1blankspace.admin.monitoring.init()
+						})
+						.css('width', '100px');
 
 						$('#ns1blankspaceSwitchBack').button(
 						{
