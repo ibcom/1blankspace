@@ -4076,7 +4076,7 @@ ns1blankspace.util =
 
 					if (oParam === undefined) {oParam = {}}
 
-					if (oParam.hasOwnProperty(sParam))
+					if (oParam.hasOwnProperty(sParam) && oParam[sParam] != undefined)
 					{
 						if (!bOnlyIfMissing) {oParam[sParam] = sValue};
 					}
@@ -4115,7 +4115,7 @@ ns1blankspace.util =
 
 					if (oParam !== undefined) 
 					{ 
-						if (oParam.hasOwnProperty(sParam))
+						if (oParam.hasOwnProperty(sParam) && oParam[sParam] != undefined)
 						{
 							oReturn.value = oParam[sParam];
 							oReturn.exists = true;
@@ -4211,7 +4211,7 @@ ns1blankspace.util =
 
 					if (oParam !== undefined) 
 					{ 
-						if (oParam.hasOwnProperty(sParam))
+						if (oParam.hasOwnProperty(sParam) && oParam[sParam] != undefined)
 						{
 							oReturn.value = oParam[sParam];
 							oReturn.exists = true;

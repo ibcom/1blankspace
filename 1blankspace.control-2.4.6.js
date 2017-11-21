@@ -48,7 +48,7 @@ ns1blankspace.option = $.extend(true, ns1blankspace.option,
 	passwordSuffix: undefined,
 	financialShowProjects: true,
 	pdfStyles: '<link rel=stylesheet href="/jscripts/1blankspace-2.0.2.css">',
-	messagingCheckURL: 'http://api.mydigitalstructure.com',
+	messagingCheckURL: 'https://api.mydigitalstructure.com',
 	financialOverride: true,
 	showProductCodes: true
 });

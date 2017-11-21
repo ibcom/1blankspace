@@ -4,6 +4,9 @@
  * http://creativecommons.org/licenses/by-sa/4.0/
  */
  
+
+/* ToDo: If Participant is removed, they currently can't be re-added as they need to be re-activated */
+
 if (ns1blankspace.messaging === undefined) {ns1blankspace.messaging = {}}
  
 ns1blankspace.messaging.conversation = 
@@ -657,7 +660,7 @@ ns1blankspace.messaging.conversation =
 				oSearch.method = 'MESSAGING_CONVERSATION_PARTICIPANT_SEARCH';
 				oSearch.addField('user,username');
 				oSearch.addCustomOption('conversation', iConversationID);
-				oSearch.addFilter('status', 'EQUAL_TO', 1)
+				oSearch.addFilter('status', 'EQUAL_TO', '1')
 				oSearch.rows = 100;
 				oSearch.getResults(function(oResponse)
 				{
@@ -779,15 +782,6 @@ ns1blankspace.messaging.conversation =
 								'<input id="ns1blankspaceParticipantsTradeName" class="ns1blankspaceText">' +
 								'</td></tr>');
 			
-				aHTML.push('<tr class="ns1blankspaceCaption">' +
-								'<td class="ns1blankspaceCaption"' + sStyle + '>' +
-								'Logon Name' +
-								'</td></tr>' +
-								'<tr class="ns1blankspace">' +
-								'<td class="ns1blankspaceText">' +
-								'<input id="ns1blankspaceParticipantsLogonName" class="ns1blankspaceText">' +
-								'</td></tr>');
-							
 				aHTML.push('</table>');		
 				
 				aHTML.push('<table class="ns1blankspaceMainColumn2Action">');
@@ -796,9 +790,6 @@ ns1blankspace.messaging.conversation =
 								'<span id="ns1blankspaceParticipantsAddSearch" class="ns1blankspaceAction">Search</span>' +
 								'</td></tr>');
 							
-				aHTML.push('<tr><td class="ns1blankspaceSub" style="font-size:0.75em; padding-top:7px;">' +
-								'You must enter full names.  eg First Name "John"' +
-								'</td></tr>');
 											
 				aHTML.push('</table>');					
 			
@@ -812,7 +803,7 @@ ns1blankspace.messaging.conversation =
 				
 					var oSearch = new AdvancedSearch();
 					oSearch.method = 'MESSAGING_CONVERSATION_POSSIBLE_PARTICIPANT_SEARCH';
-					oSearch.addField('mydigitalspaceid,mydigitalspaceusername,firstname,surname,tradename');
+					oSearch.addField('mydigitalspaceid,firstname,surname,tradename');
 
 
 					if ($('#ns1blankspaceParticipantsFirstName').val() != '')
@@ -826,10 +817,6 @@ ns1blankspace.messaging.conversation =
 					if ($('#ns1blankspaceParticipantsTradeName').val() != '')
 					{
 						oSearch.addFilter('tradename', 'TEXT_IS_LIKE', $('#ns1blankspaceParticipantsTradeName').val());
-					}
-					if ($('#ns1blankspaceParticipantsLogonName').val() != '')
-					{
-						oSearch.addFilter('mydigitalspaceusername', 'TEXT_IS_LIKE', $('#ns1blankspaceParticipantsLogonName').val());
 					}
 
 					if (oSearch.criteria.filterField.length > 0)
@@ -866,14 +853,15 @@ ns1blankspace.messaging.conversation =
 					}
 					else
 					{
-						aHTML.push('<table id="ns1blankspaceParticpantsAddSelect" class="ns1blankspaceColumn2">');
+						aHTML.push('<table id="ns1blankspaceParticpantsAddSelect" class="ns1blankspaceColumn' + (bLinkedToObject ? '': '2') + '">');
 						
 						$.each(oResponse.data.rows, function()
 						{	
 							aHTML.push('<tr class="ns1blankspaceRow">');
 							aHTML.push('<td id="ns1blankspaceParticpantsAddSelect_title-' +
-													this.mydigitalspaceid + '" class="ns1blankspaceRow">' +
-													this.mydigitalspaceusername + '</td>');
+													this.mydigitalspaceid + '" class="ns1blankspaceRow"' + (bLinkedToObject ? ' style="font-size: 0.825em;"' : '') + '>' +
+													this.firstname.formatXHTML() + ' ' + this.surname.formatXHTML() + '<br />' + 
+													'<span style=font-size:0.825em;">' + this.tradename.formatXHTML() + '</span></td>');
 							
 							aHTML.push('<td style="width:60px;text-align:right;" class="ns1blankspaceRow">' +
 											'<span id="ns1blankspaceParticipantAddSelect-' + this.mydigitalspaceid + '" class="ns1blankspaceRowSelect"></span>' +
@@ -1004,6 +992,7 @@ ns1blankspace.messaging.conversation =
 
 		show: function (oParam, oResponse)
 		{
+			oParam = oParam || {};
 			var iID = ns1blankspace.util.getParam(oParam, 'id').value;
 			var oSearchText = ns1blankspace.util.getParam(oParam, 'searchText');
 			var iObject = ns1blankspace.util.getParam(oParam, 'object').value;
@@ -1013,6 +1002,7 @@ ns1blankspace.messaging.conversation =
 			var sXHTMLElementID = ns1blankspace.util.getParam(oParam, 'xhtmlElementID', {'default': 'ns1blankspaceMainPosts'}).value;
 			var bLinkedToObject = ns1blankspace.util.getParam(oParam, 'linkedToObject', {'default': false}).value;
 
+			delete (ns1blankspace.param);
 			if (oSearchText.exists)
 			{
 				sSearchText = oSearchText.value;
@@ -1021,6 +1011,15 @@ ns1blankspace.messaging.conversation =
 			else
 			{	
 				sSearchText = ns1blankspace.messaging.conversation.posts.data.searchText;
+			}
+
+			if (bLinkedToObject)
+			{
+				if (oParam.object == 50)
+				{
+					delete(oParam.object);
+					delete(oParam.objectContext);
+				}
 			}
 
 			if (oResponse == undefined)
@@ -1085,6 +1084,23 @@ ns1blankspace.messaging.conversation =
 
 						aHTML.push('<tr><td>&nbsp;</td></tr>' +
 								   '<tr><td id="ns1blankspacePostsParticipantSelect"></td></tr>');
+
+						aHTML.push('<tr><td style="border-bottom: 1px solid #B8B8B8;">&nbsp;</td></tr>' +
+								   '<tr><td>' +
+									'<table class="ns1blankspace">' +
+										'<tr><td class="ns1blankspace" style="font-size: 0.75em; font-weight: bold;">Attachments</td>' +
+											'<td style="width:60px;text-align:right;padding-right: 8px;"><span id="ns1blankspacePostsAttachmentAdd"' +
+												' style="font-size: 0.75em;">' +
+												'</span>' +
+											'</td>' +
+										'</tr></table>' +
+									'</td></tr>');
+
+						aHTML.push('<tr><td>' +
+									'<table class="ns1blankspace"><tr>' +
+										'<td id="ns1blankspacePostsAttachmentList"></td>' +
+									'</tr></table>' +
+								   	'</td></tr>');
 					}
 								
 					aHTML.push('</table>');					
@@ -1095,6 +1111,8 @@ ns1blankspace.messaging.conversation =
 					{
 						oParam.xhtmlParticipantElementID = 'ns1blankspacePostsParticipantList';
 						ns1blankspace.messaging.conversation.participants.show(oParam);
+						oParam.xhtmlAttachmentElementID = 'ns1blankspacePostsAttachmentList';
+						ns1blankspace.messaging.conversation.posts.attachments.show(oParam);
 					}
 
 					$('#ns1blankspacePostsAdd').button(
@@ -1344,7 +1362,91 @@ ns1blankspace.messaging.conversation =
 						conversationID: oParam.conversationID
 					});
 				})
-		},								
+		},	
+
+		attachments:
+		{
+			show: function(oParam, oResponse)
+			{
+				var sXHTMLElementID = ns1blankspace.util.getParam(oParam, 'xhtmlAttachmentElementID', {'default': 'ns1blankspacePostsAttachmentList'}).value;
+				var aHTML = [];
+
+				if (oResponse == undefined)
+				{
+					var oSearch = new AdvancedSearch();
+					oSearch.method = 'CORE_ATTACHMENT_SEARCH';
+					oSearch.addField('filename,download,createdusertext,createduser,createddate,attachment');
+					oSearch.addFilter('object', 'EQUAL_TO', '50');
+					oSearch.addFilter('objectcontext', 'EQUAL_TO', oParam.conversationID);
+					oSearch.rows = 50;
+					oSearch.getResults(function(oResponse)
+					{
+						if (oResponse.status == 'OK')
+						{
+							ns1blankspace.messaging.conversation.posts.attachments.show(oParam, oResponse);
+						}
+						else
+						{
+							ns1blankspace.status.error('Error finding attachments: ' + oResponse.error.errornotes)
+						}
+					});
+				}
+				else
+				{
+					if (oResponse.data.rows.length === 0)
+					{
+						aHTML.push('<table style="margin-top:5px;">');
+						aHTML.push('<tr class="ns1blankspaceAttachments">');
+						aHTML.push('<td class="ns1blankspaceNothing">No attachments.</td>');
+						aHTML.push('</tr>');
+						aHTML.push('</table>');
+						
+						$('#' + sXHTMLElementID).html(aHTML.join(''));
+						$('#' + sXHTMLElementID).show(ns1blankspace.option.showSpeed);
+					}
+					else
+					{
+						aHTML.push('<table id="ns1blankspaceAttachments">');
+
+						$.each(oResponse.data.rows, function()
+						{
+							aHTML.push(ns1blankspace.messaging.conversation.posts.attachments.row(this, oParam));
+						});
+				    	
+						aHTML.push('</table>');
+
+						ns1blankspace.render.page.show(
+						{
+							xhtmlElementID: sXHTMLElementID,
+							xhtmlContext: 'Attachment',
+							xhtml: aHTML.join(''),
+							showMore: (oResponse.morerows === "true"),
+							more: oResponse.moreid,
+							rows: ns1blankspace.option.defaultRows,
+							functionShowRow: ns1blankspace.messaging.conversation.posts.attachments.row,
+							functionOnNewPage: ns1blankspace.messaging.conversation.posts.attachments.bind,
+							type: 'json'
+						}); 	
+							
+						ns1blankspace.attachments.bind();
+					}
+				}
+			},
+
+			row: function(oRow, oParam)
+			{
+				var aHTML = [];
+
+				aHTML.push('<tr class="ns1blankspaceAttachments">');
+				
+				aHTML.push('<td id="ns1blankspaceAttachment_filename-' + oRow.id + '" class="ns1blankspaceRow" style="font-size: 0.75em;">' +
+									'<a href="' + oRow.download + '" class="ns1blankspaceNoUnloadWarn">' + oRow.filename + '</a></td>');
+									
+				aHTML.push('</tr>');
+				
+				return aHTML.join('');
+			}
+		},
 
 		comments:	
 		{
@@ -1555,7 +1657,8 @@ ns1blankspace.messaging.conversation =
 			var sXHTMLElementContextID;
 			var iPost;
 			var sXHTMLElementID = ns1blankspace.util.getParam(oParam, 'xhtmlElementID', {'default': 'ns1blankspaceMainPosts'}).value;
-							
+			var iConversationID = ns1blankspace.util.getParam(oParam, 'conversationID', {'default': ns1blankspace.objectContext}).value;
+
 			ns1blankspace.counter.editor = ns1blankspace.counter.editor + 1;		
 			
 			if (oParam != undefined)
@@ -1626,7 +1729,12 @@ ns1blankspace.messaging.conversation =
 						$('#message').val(tinyMCE.get('ns1blankspacePostMessage' + ns1blankspace.counter.editor).getContent());
 						ns1blankspace.attachments.upload.process(
 						{
-							functionPostUpdate: ns1blankspace.messaging.conversation.posts.show,
+							functionPostUpdate: ns1blankspace.messaging.conversation.posts.send,
+							conversationID: iConversationID,
+							linkedToObject: oParam.linkedToObject,
+							object: 50,
+							objectContext: iConversationID,
+							xhtmlElementID: oParam.xhtmlElementID
 						});
 					}	
 				})
@@ -1658,7 +1766,12 @@ ns1blankspace.messaging.conversation =
 							url: '/ondemand/attach/progress/',
 							xhtml: aHTML.join(''),
 							label: '',
-							inputs: ['message']
+							inputs: ['message'],
+							object: 50,
+							objectContext: iConversationID,
+							linkedToObject: oParam.linkedToObject,
+							conversationID: iConversationID,
+							xhtmlElementID: oParam.xhtmlElementID
 						})
 				);
 				
@@ -1683,11 +1796,14 @@ ns1blankspace.messaging.conversation =
 
 		send:		function (oParam)
 		{
+			oParam = oParam || ns1blankspace.param || {};
 			var iConversationID = ns1blankspace.util.getParam(oParam, 'conversationID', {'default': ns1blankspace.objectContext}).value;
 			var sData = 'conversation=' + ns1blankspace.util.fs(iConversationID);
 			sData += '&subject=' + ns1blankspace.util.fs($('#ns1blankspacePostSubject').val());
 			sData += '&message=' + ns1blankspace.util.fs(tinyMCE.get('ns1blankspacePostMessage' + ns1blankspace.counter.editor).getContent()) 
 			
+			delete(ns1blankspace.param);
+
 			$.ajax(
 			{
 				type: 'POST',
@@ -1899,7 +2015,7 @@ ns1blankspace.messaging.conversation =
 			var iObject = ns1blankspace.util.getParam(oParam, 'object', {'default': ns1blankspace.object}).value;
 			var iObjectContext = ns1blankspace.util.getParam(oParam, 'objectContext', {'default': ns1blankspace.objectContext}).value;
 
-			// If Con COnversation object, just call conversation object's show!
+			// If Conversation object, just call conversation object's show!
 			if (iObject != 50)
 			{
 				// Let's find the conversation (should only be one) that's linked to this passed object/objectcontext
