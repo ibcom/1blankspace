@@ -321,7 +321,7 @@ ns1blankspace.financial.expense =
 										var oSearch = new AdvancedSearch();
 										oSearch.method = 'FINANCIAL_EXPENSE_SEARCH';
 										oSearch.addField('contactbusinesspaidtotext,contactbusinesspaidto,contactpersonpaidtotext,contactpersonpaidto,projecttext,project,projecttext,areatext,' +
-																'area,reference,accrueddate,description,amount,outstandingamount,tax,object,objectcontext,paymentduedate,payeereference,creditamount,bankaccount' +
+																'area,reference,accrueddate,description,amount,outstandingamount,tax,object,objectcontext,paymentduedate,payeereference,creditamount,bankaccount,' +
 																'paystatus,paystatustext');
 
 										oSearch.addField(ns1blankspace.option.auditFields);
@@ -816,7 +816,19 @@ ns1blankspace.financial.expense =
 										'<tr class="ns1blankspace">' +
 										'<td class="ns1blankspaceDate">' +
 										'<input id="ns1blankspaceDetailsDueDate" class="ns1blankspaceDate">' +
-										'</td></tr>');		
+										'</td></tr>');
+
+
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
+										'Payment Status' +
+										'</td></tr>' +
+										'<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceRadio">' +
+										'<input type="radio" id="radioPayStatus1" name="radioPayStatus" value="1"/>Can Be Paid When Due' +
+										'<br /><input type="radio" id="radioPayStatus2" name="radioPayStatus" value="2"/>Don\'t Pay - In Dispute' +
+										'<br /><input type="radio" id="radioPayStatus3" name="radioPayStatus" value="3"/>Don\'t Pay - Awaiting Goods/Services' +
+										'</td></tr>');					
 						
 						aHTML.push('</table>');					
 						
@@ -877,6 +889,7 @@ ns1blankspace.financial.expense =
 							$('[name="radioPaid"][value="' + ns1blankspace.objectContextData.paid + '"]').attr('checked', true);
 							$('#ns1blankspaceDetailsDescription').val(ns1blankspace.objectContextData.description.formatXHTML());
 							$('#ns1blankspaceDetailsPayeeReference').val(ns1blankspace.objectContextData.payeereference.formatXHTML());
+							$('[name="radioPayStatus"][value="' + ns1blankspace.objectContextData.paystatus + '"]').attr('checked', true);
 							iDefaultBankAccount = ns1blankspace.objectContextData.bankaccount;
 						}
 						else
@@ -893,6 +906,7 @@ ns1blankspace.financial.expense =
 							}	
 
 							$('[name="radioPaid"][value="N"]').attr('checked', true);
+							$('[name="radioPayStatus"][value="1"]').attr('checked', true);
 							$('#ns1blankspaceDetailsAccruedDate').val(Date.today().toString("dd MMM yyyy"));
 						}
 
@@ -900,7 +914,7 @@ ns1blankspace.financial.expense =
 					}	
 				},
 			
-	save: 		{
+	save: 	{
 					send: 		function (oParam, oResponse)
 								{
 									if (oResponse == undefined)
@@ -937,11 +951,11 @@ ns1blankspace.financial.expense =
 										if (oResponse.status == 'OK')
 										{	
 											ns1blankspace.status.message('Saved');
+											ns1blankspace.inputDetected = false;
 											
 											if (ns1blankspace.objectContext == -1)
 											{
 												ns1blankspace.objectContext = oResponse.id;
-												ns1blankspace.inputDetected = false;
 												ns1blankspace.financial.expense.search.send('-' + ns1blankspace.objectContext, {source: 1});
 											}	
 										}
