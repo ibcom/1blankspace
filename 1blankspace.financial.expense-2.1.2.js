@@ -821,7 +821,7 @@ ns1blankspace.financial.expense =
 
 						aHTML.push('<tr class="ns1blankspaceCaption">' +
 										'<td class="ns1blankspaceCaption">' +
-										'Payment Status' +
+										'Pay Status' +
 										'</td></tr>' +
 										'<tr class="ns1blankspace">' +
 										'<td class="ns1blankspaceRadio">' +
