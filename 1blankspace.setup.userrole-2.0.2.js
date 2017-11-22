@@ -894,7 +894,8 @@ ns1blankspace.setup.userRole =
 																			'Add</span></td></tr>' +
 																			'</table>');									
 															
-															$('#ns1blankspaceAccessColumnAction').html(aHTML.join(''));
+															//$('#ns1blankspaceAccessColumnAction').html(aHTML.join(''));
+															$('#ns1blankspaceAccessColumnAction').html('');
 														
 															$('#ns1blankspaceUserAccessAdd').button(
 															{
