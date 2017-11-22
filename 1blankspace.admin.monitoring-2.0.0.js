@@ -8,7 +8,9 @@ if (ns1blankspace.admin === undefined) {ns1blankspace.admin = {}}
 
 ns1blankspace.admin.monitoring = 
 {
-	init: 		function (oParam)
+	data: 	{lab: (window.location.host.indexOf('lab.ibcom.biz') != -1)},
+
+	init: 	function (oParam)
 				{
 					var bShowHome = true
 					
@@ -44,15 +46,22 @@ ns1blankspace.admin.monitoring =
 					
 					aHTML.push('<tr><td id="ns1blankspaceControlSummary" class="ns1blankspaceControl ns1blankspaceHighlight">' +
 									'Summary</td></tr>');
+
+					aHTML.push('</table>');		
 						
+					aHTML.push('<table class="ns1blankspaceControl" style="padding-top:10px;">');
+					
 					aHTML.push('<tr><td id="ns1blankspaceControlServiceFaults" class="ns1blankspaceControl">' +
 									'Service Faults</td></tr>');
 
 					aHTML.push('<tr><td id="ns1blankspaceControlRequests" class="ns1blankspaceControl">' +
 									'Requests</td></tr>');
-
-					aHTML.push('<tr><td id="ns1blankspaceControlNews" class="ns1blankspaceControl">' +
+				
+					if (ns1blankspace.space == 1)
+					{
+						aHTML.push('<tr><td id="ns1blankspaceControlNews" class="ns1blankspaceControl">' +
 									'News</td></tr>');
+					}					
 
 					aHTML.push('</table>');		
 					
@@ -97,6 +106,17 @@ ns1blankspace.admin.monitoring =
 						ns1blankspace.admin.monitoring.serviceFaults.show();
 					});
 
+					$('#ns1blankspaceControlRequests').click(function(event)
+					{
+						ns1blankspace.show({selector: '#ns1blankspaceMainRequests'});
+						ns1blankspace.admin.monitoring.requests.show();
+					});
+
+					$('#ns1blankspaceControlNews').click(function(event)
+					{
+						ns1blankspace.show({selector: '#ns1blankspaceMainNews'});
+						ns1blankspace.admin.monitoring.news.show();
+					});
 
 					ns1blankspace.show({selector: '#ns1blankspaceMainSummary'});
 					ns1blankspace.admin.monitoring.summary();
@@ -119,16 +139,36 @@ ns1blankspace.admin.monitoring =
 
 					aHTML.push('<table class="ns1blankspace">');
 
-					aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Service Faults (last 24 hours)</td></tr>' +
+					aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Requests in last 24 hours</td></tr>' +
+									'<tr><td id="ns1blankspaceSummaryRequests" class="ns1blankspaceSummary">' +
+									ns1blankspace.xhtml.loadingSmall +
+									'</td></tr>');
+
+					aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Service faults in last 24 hours' + 
+									(ns1blankspace.admin.monitoring.requests.data.superUser?' (All spaces)':'') + '</td></tr>' +
 									'<tr><td id="ns1blankspaceSummaryServiceFaults" class="ns1blankspaceSummary">' +
 									ns1blankspace.xhtml.loadingSmall +
 									'</td></tr>');
+
+					if (ns1blankspace.space == 1)
+					{
+						aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">News sent in last 24 hours (All spaces)</td></tr>' +
+									'<tr><td id="ns1blankspaceSummaryNews" class="ns1blankspaceSummary">' +
+									ns1blankspace.xhtml.loadingSmall +
+									'</td></tr>');
+					}	
 
 					aHTML.push('</table>');
 
 					$('#ns1blankspaceSummaryColumn1').html(aHTML.join(''));
 
-					ns1blankspace.admin.monitoring.serviceFaults.count()
+					ns1blankspace.admin.monitoring.serviceFaults.count();
+					ns1blankspace.admin.monitoring.requests.count();
+
+					if (ns1blankspace.space == 1)
+					{
+						ns1blankspace.admin.monitoring.news.count();
+					}	
 				},
 
 	stateChannel:
@@ -173,18 +213,13 @@ ns1blankspace.admin.monitoring =
 				}
 }				
 
-
 ns1blankspace.admin.monitoring.serviceFaults =
 {
 	data: 	{searchText: undefined, superUser: true},
 
 	init: 	function (oParam, oResponse)
 				{
-					ns1blankspace.financial.payroll.superannuation.urls(
-					{
-						onComplete: ns1blankspace.financial.payroll.superannuation.providers,
-						onCompleteWhenCan: ns1blankspace.financial.payroll.superannuation.expenses
-					});
+					ns1blankspace.admin.monitoring.serviceFaults.show(oParam)
 				},
 
 	count: 	function (oParam, oResponse)
@@ -196,6 +231,7 @@ ns1blankspace.admin.monitoring.serviceFaults =
 						oSearch.addField('id');
 						oSearch.addFilter('createddate', 'GREATER_THAN_OR_EQUAL_TO', 'hour', '-24', '');
 						oSearch.addSummaryField('count(id) count');
+						oSearch.addCustomOption('allspaces', (ns1blankspace.admin.monitoring.serviceFaults.data.superUser?'Y':'N'));
 						oSearch.rows = 1;
 						oSearch.getResults(function(data) {ns1blankspace.admin.monitoring.serviceFaults.count(oParam, data)})	
 					}
@@ -204,14 +240,6 @@ ns1blankspace.admin.monitoring.serviceFaults =
 						$('#ns1blankspaceSummaryServiceFaults').html(oResponse.summary.count);
 					}	
 				},	
-
-	summary:	function (oParam, oResponse)
-				{
-					if (oResponse == undefined)
-					{}
-					else
-					{}	
-				},			
 
 	show:		function (oParam, oResponse)
 				{
@@ -243,11 +271,27 @@ ns1blankspace.admin.monitoring.serviceFaults =
 
 						$('#ns1blankspaceAdminMonitoringServiceFaultsColumn1').html(ns1blankspace.xhtml.loading);
 
-						ns1blankspace.admin.monitoring.serviceFaults.data.rows = [];
+						ns1blankspace.admin.monitoring.serviceFaults.data.details = [];
 
 						var oSearch = new AdvancedSearch();
 						oSearch.method = 'ADMIN_SERVICE_FAULT_SEARCH';
-						oSearch.addField('description,method,page,parameters,site,sitetext,space,spacetext,createddate');
+						
+						if (ns1blankspace.admin.monitoring.serviceFaults.data.superUser)
+						{
+							if (ns1blankspace.admin.monitoring.data.lab) //until detail in production
+							{
+								oSearch.addField('description,method,page,parameters,site,sitetext,space,spacetext,createddate,details');
+							}
+							else
+							{
+								oSearch.addField('description,method,page,parameters,site,sitetext,space,spacetext,createddate');
+							}
+						}
+						else
+						{
+							oSearch.addField('description,method,parameters,site,sitetext,createddate');
+						}	
+
 						oSearch.addCustomOption('allspaces', (ns1blankspace.admin.monitoring.serviceFaults.data.superUser?'Y':'N'));
 
 						if (sSearchText != undefined)
@@ -276,9 +320,7 @@ ns1blankspace.admin.monitoring.serviceFaults =
 							}
 
 							oSearch.addBracket(')');
-						}	
-
-						//oSearch.addSummaryField('sum(amount) totalamount')
+						}
 
 						oSearch.rows = 100;
 						oSearch.sort('createddate', 'desc');
@@ -293,21 +335,24 @@ ns1blankspace.admin.monitoring.serviceFaults =
 							aHTML.push('<table id="ns1blankspaceAdminMonitoringServiceFaults">' +
 											'<tr><td class="ns1blankspaceSub">No service faults.</td></tr></table>');
 
-							$('#ns1blankspaceAdminMonitoringServiceFaultsColumn1').html('');
+							$('#ns1blankspaceAdminMonitoringServiceFaultsColumn1').html(aHTML.join(''));
 						}
 						else
 						{
-							$('#ns1blankspaceAdminMonitoringServiceFaultsColumn2').html(aHTML.join(''));
-						
 							var aHTML = [];
 
 							aHTML.push('<table id="ns1blankspaceAdminMonitoringServiceFaults" class="ns1blankspace" style="font-size:0.875em;">' +
 										'<tr class="ns1blankspaceHeaderCaption">' +
 										'<td class="ns1blankspaceHeaderCaption" style="width:40px;">ID</td>' +
 										'<td class="ns1blankspaceHeaderCaption" style="width:70px;">When</td>' +
-										'<td class="ns1blankspaceHeaderCaption">Description</td>' +
-										'<td class="ns1blankspaceHeaderCaption" style="width:50px;">Space</td>' +
-										'</tr>');
+										'<td class="ns1blankspaceHeaderCaption">Description</td>')
+
+							if (ns1blankspace.admin.monitoring.serviceFaults.data.superUser)
+							{
+								aHTML.push('<td class="ns1blankspaceHeaderCaption" style="width:50px;">Space</td>')
+							}
+
+							aHTML.push('</tr>');
 
 							$(oResponse.data.rows).each(function() 
 							{
@@ -340,21 +385,19 @@ ns1blankspace.admin.monitoring.serviceFaults =
 												'</td></tr>');
 																			
 						aHTML.push('<tr><td style="padding-top:0px;">' +
-										'<span id="ns1blankspaceAdminMonitoringServiceFaultsSearch" class="ns1blankspaceAction">Search</span>' +
-										'');
+										'<span id="ns1blankspaceAdminMonitoringServiceFaultsSearch" class="ns1blankspaceAction">Search</span>');
 
 						if (sSearchText != undefined)
 						{	
-							aHTML.push('' +
-										' <span id="ns1blankspaceAdminMonitoringServiceFaultsSearchClear" class="ns1blankspaceAction">Clear</span>' +
-										'</td></tr>');
+							aHTML.push(' <span id="ns1blankspaceAdminMonitoringServiceFaultsSearchClear" class="ns1blankspaceAction">Clear</span>');
 						}
 
-						//aHTML.push('<tr><td style="padding-top:15px; padding-bottom:0px; font-size:0.75em;" class="ns1blankspaceSub">' +
-						//				'Selected expenses total</td></tr>');
+						aHTML.push('</td></tr>');
 
-						//aHTML.push('<tr><td id="ns1blankspacePayrollSuperannuationExpenseTotal" style="padding-top:0px; font-size:1.2em; padding-bottom:16px;" class="ns1blankspaceSub">' +
-						//				'</td></tr>');
+						if (ns1blankspace.admin.monitoring.requests.data.superUser)
+						{
+							aHTML.push('<tr><td style="padding-top:12px;" class="ns1blankspaceSummaryCaption">All spaces</td></tr>');
+						}
 
 						aHTML.push('</table>');
 
@@ -406,18 +449,604 @@ ns1blankspace.admin.monitoring.serviceFaults =
 				{
 					var aHTML = [];
 
-					ns1blankspace.admin.monitoring.serviceFaults.data.rows.push(oRow);
+					ns1blankspace.admin.monitoring.serviceFaults.data.details.push(oRow);
 
-					aHTML.push('<td id="ns1blankspaceAdminMonitoringServiceFaults_id-' + oRow["id"] + '" class="ns1blankspaceRow ns1blankspaceRowSelect">' +
+					aHTML.push('<tr id="ns1blankspaceAdminMonitoringServiceFaults_container-' + oRow["id"] + '">');
+
+					if (ns1blankspace.admin.monitoring.serviceFaults.data.superUser)
+					{
+						aHTML.push('<td id="ns1blankspaceAdminMonitoringServiceFaults_id-' + oRow["id"] + '" class="ns1blankspaceRow ns1blankspaceRowSelect">' +
 										oRow["id"] + '</td>');
+					}
+					else
+					{
+						aHTML.push('<td id="ns1blankspaceAdminMonitoringServiceFaults_id-' + oRow["id"] + '" class="ns1blankspaceRow">' +
+										oRow["id"] + '</td>');
+					}	
 
-					aHTML.push('<td id="ns1blankspaceAdminMonitoringServiceFaults_space-' + oRow["description"] + '" class="ns1blankspaceRow">' +
+					aHTML.push('<td id="ns1blankspaceAdminMonitoringServiceFaults_space-' + oRow["id"] + '" class="ns1blankspaceRow">' +
 										oRow["createddate"] + '</td>');
 
-					aHTML.push('<td id="ns1blankspaceAdminMonitoringServiceFaults_description-' + oRow["description"] + '" class="ns1blankspaceRow">' +
+					aHTML.push('<td id="ns1blankspaceAdminMonitoringServiceFaults_description-' + oRow["id"] + '" class="ns1blankspaceRow">' +
 										oRow["description"] + '</td>');
 
-					aHTML.push('<td id="ns1blankspaceAdminMonitoringServiceFaults_space-' + oRow["description"] + '" class="ns1blankspaceRow">' +
+					if (ns1blankspace.admin.monitoring.serviceFaults.data.superUser)
+					{
+						aHTML.push('<td id="ns1blankspaceAdminMonitoringServiceFaults_space-' + oRow["id"] + '" class="ns1blankspaceRow">' +
+										oRow["spacetext"] + '</td>');
+					}	
+
+					aHTML.push('</tr>');
+
+					return aHTML.join('');
+				},
+
+	bind: 	function ()
+				{
+					$('#ns1blankspaceAdminMonitoringServiceFaults .ns1blankspaceRowSelect').click(function()
+					{
+						ns1blankspace.admin.monitoring.serviceFaults.details({xhtmlElementID: this.id})
+					});		
+				},
+
+	details: 	
+				function (oParam)
+				{
+					var sXHTMLElementID;
+					var sKey;
+
+					if (ns1blankspace.util.param(oParam, 'xhtmlElementID').exists)
+					{
+						sXHTMLElementID = ns1blankspace.util.param(oParam, 'xhtmlElementID').value
+						sKey = ns1blankspace.util.param(oParam, 'xhtmlElementID', '-').values[1];
+					}
+
+					if ($('#ns1blankspaceAdminMonitoringServiceFaults_container_details-' + sKey).length != 0)
+					{
+						$('#ns1blankspaceAdminMonitoringServiceFaults_container_details-' + sKey).remove();
+					}
+					else
+					{
+						var sHTML = 'No details';
+
+						var oDetail = $.grep(ns1blankspace.admin.monitoring.serviceFaults.data.details, function (a) {return a.id == sKey;})[0];
+
+						if (oDetail)
+						{
+							if (oDetail.details == undefined)
+							{
+								sHTML = 'Available after next mydigitalstructure update (as at 23NOV17)'
+							}
+							else
+							{
+								sHTML = (oDetail.details).formatXHTML();
+							}	
+							
+							$('#ns1blankspaceAdminMonitoringServiceFaults_container-' + sKey).after('<tr id="ns1blankspaceAdminMonitoringServiceFaults_container_details-' + sKey + '">' +
+								'<td colspan=4><div style="background-color:#F3F3F3; padding:8px; color:#444444; font-weight:100; font-size:0.75em; word-break: break-all;" class="ns1blankspaceSubNote"><pre>' + sHTML + '</pre></div></td></tr>');	
+						}
+					}
+				}						
+}
+
+ns1blankspace.admin.monitoring.requests =
+{
+	data: 	{searchText: undefined, superUser: true},
+
+	init: 	function (oParam, oResponse)
+				{
+					ns1blankspace.admin.monitoring.requests.show(oParam);
+				},
+
+	count: 	function (oParam, oResponse)
+				{
+					if (oResponse == undefined)
+					{
+						var oSearch = new AdvancedSearch();
+						oSearch.method = 'ADMIN_REQUEST_SEARCH';
+						oSearch.addField('id');
+						oSearch.addFilter('createddate', 'GREATER_THAN_OR_EQUAL_TO', 'hour', '-24', '');
+						oSearch.addFilter('method', 'NOT_IN_LIST', (ns1blankspace.admin.monitoring.data.lab?986:'955,212,1075'));
+						oSearch.addCustomOption('allspaces', (ns1blankspace.admin.monitoring.requests.data.superUser?'Y':'N'));
+						oSearch.addSummaryField('count(id) count');
+						oSearch.rows = 1;
+						oSearch.getResults(function(data) {ns1blankspace.admin.monitoring.requests.count(oParam, data)})	
+					}
+					else
+					{
+						$('#ns1blankspaceSummaryRequests').html(oResponse.summary.count);
+					}	
+				},	
+	
+	show:		function (oParam, oResponse)
+				{
+					var oSearchText = ns1blankspace.util.getParam(oParam, 'searchText');
+					var sSearchText;
+
+					if (oSearchText.exists)
+					{
+						sSearchText = oSearchText.value;
+						ns1blankspace.admin.monitoring.requests.data.searchText = sSearchText;
+					}
+					else
+					{	
+						sSearchText = ns1blankspace.admin.monitoring.requests.data.searchText;
+					}	
+
+					if (oResponse == undefined)
+					{	
+						var aHTML = [];
+	
+						aHTML.push('<table class="ns1blankspaceContainer">' +
+										'<tr class="ns1blankspaceContainer">' +
+										'<td id="ns1blankspaceAdminMonitoringRequestsColumn1"></td>' +
+										'<td id="ns1blankspaceAdminMonitoringRequestsColumn2" style="width:115px;"></td>' +
+										'</tr>' +
+										'</table>');				
+						
+						$('#ns1blankspaceMainRequests').html(aHTML.join(''));
+
+						$('#ns1blankspaceAdminMonitoringRequestsColumn1').html(ns1blankspace.xhtml.loading);
+
+						ns1blankspace.admin.monitoring.requests.data.details = [];
+
+						var oSearch = new AdvancedSearch();
+						oSearch.method = 'ADMIN_REQUEST_SEARCH';
+						oSearch.addField('method,methodtext,postdata,querystring,returntext,sourcehost,version,createddate,createdusertext');
+						oSearch.addCustomOption('allspaces', (ns1blankspace.admin.monitoring.requests.data.superUser?'Y':'N'));
+						oSearch.addFilter('method', 'NOT_IN_LIST', (ns1blankspace.admin.monitoring.data.lab?986:'955,212,1075'));
+
+						if (sSearchText != undefined)
+						{
+							oSearch.addBracket('(');
+							oSearch.addFilter('methodtext', 'TEXT_IS_LIKE', sSearchText);
+							oSearch.addOperator('or');
+							//oSearch.addFilter('postdata', 'TEXT_IS_LIKE', sSearchText);
+							//oSearch.addOperator('or');
+							oSearch.addFilter('sourcehost', 'TEXT_IS_LIKE', sSearchText);
+							
+							if (sSearchText != '')
+							{	
+								if (!_.isNaN(_.toNumber(sSearchText)))
+								{
+									oSearch.addOperator('or');
+									oSearch.addFilter('id', 'EQUAL_TO', sSearchText);
+								}
+
+								var oSearchDate = moment(sSearchText, 'DD MMM YYYY HH:mm:ss')
+								if (oSearchDate.isValid())
+								{
+									oSearch.addOperator('or');
+									oSearch.addFilter('createddate', 'EQUAL_TO', oSearchDate.format('DD MMM YYYY'));
+								}
+							}
+
+							oSearch.addBracket(')');
+						}
+
+						oSearch.rows = 100;
+						oSearch.sort('createddate', 'desc');
+						oSearch.getResults(function(data) {ns1blankspace.admin.monitoring.requests.show(oParam, data)});
+					}
+					else
+					{
+						var aHTML = [];
+						
+						if (oResponse.data.rows.length == 0)
+						{
+							aHTML.push('<table id="ns1blankspaceAdminMonitoringRequests">' +
+											'<tr><td class="ns1blankspaceSub">No requests.</td></tr></table>');
+
+							$('#ns1blankspaceAdminMonitoringRequestsColumn1').html(aHTML.join(''));
+						}
+						else
+						{
+							var aHTML = [];
+
+							aHTML.push('<table id="ns1blankspaceAdminMonitoringRequests" class="ns1blankspace" style="font-size:0.875em;">' +
+										'<tr class="ns1blankspaceHeaderCaption">' +
+										'<td class="ns1blankspaceHeaderCaption" style="width:65px;">When</td>' +
+										'<td class="ns1blankspaceHeaderCaption">Method</td>' +
+										'<td class="ns1blankspaceHeaderCaption">User</td>' +
+										'<td class="ns1blankspaceHeaderCaption">Source</td>' +
+										'</tr>');
+
+							$(oResponse.data.rows).each(function() 
+							{
+								aHTML.push(ns1blankspace.admin.monitoring.requests.row(this));
+							});
+							
+							aHTML.push('</table>');
+						}
+
+						ns1blankspace.render.page.show(
+						{
+							type: 'JSON',
+							xhtmlElementID: 'ns1blankspaceAdminMonitoringRequestsColumn1',
+							xhtmlContext: 'AdminMonitoringRequests',
+							xhtml: aHTML.join(''),
+							showMore: (oResponse.morerows == "true"),
+							more: oResponse.moreid,
+							rows: 100,
+							functionShowRow: ns1blankspace.admin.monitoring.requests.row,
+							functionOpen: undefined,
+							functionOnNewPage: ns1blankspace.admin.monitoring.requests.bind
+						});
+
+						var aHTML = [];
+
+						aHTML.push('<table class="ns1blankspaceColumn2">');
+
+						aHTML.push('<tr><td class="ns1blankspaceText" style="padding-top:14px;">' +
+												'<input id="ns1blankspaceAdminMonitoringRequestsSearchText" class="ns1blankspaceText" style="width:130px;">' +
+												'</td></tr>');
+																			
+						aHTML.push('<tr><td style="padding-top:0px;">' +
+										'<span id="ns1blankspaceAdminMonitoringRequestsSearch" class="ns1blankspaceAction">Search</span>' +
+										'');
+
+						if (sSearchText != undefined)
+						{	
+							aHTML.push('' +
+										' <span id="ns1blankspaceAdminMonitoringRequestsSearchClear" class="ns1blankspaceAction">Clear</span>' +
+										'</td></tr>');
+						}
+
+						aHTML.push('</table>');
+
+						if ($('#ns1blankspaceAdminMonitoringRequestsColumn2 table').length == 0)
+						{
+							$('#ns1blankspaceAdminMonitoringRequestsColumn2').html(aHTML.join(''));
+						}
+						else
+						{
+							$('#ns1blankspaceAdminMonitoringRequestsColumn2 table').before(aHTML.join(''));
+						}
+
+						$('#ns1blankspaceAdminMonitoringRequestsSearch').button(
+						{
+							label: 'Search'
+						})
+						.click(function() 
+						{
+							oParam = ns1blankspace.util.setParam(oParam, 'searchText', $('#ns1blankspaceAdminMonitoringRequestsSearchText').val());
+							ns1blankspace.admin.monitoring.requests.show(oParam);
+						})
+						.css('width', '65px');
+
+						$('#ns1blankspaceAdminMonitoringRequestsSearchClear').button(
+						{
+							label: 'Clear'
+						})
+						.click(function() 
+						{
+							oParam = ns1blankspace.util.setParam(oParam, 'searchText', undefined);
+							ns1blankspace.admin.monitoring.requests.show(oParam);
+						})
+						.css('width', '57px');
+
+						$('#ns1blankspaceAdminMonitoringRequestsSearchText').keyup(function(e)
+						{
+							if (e.which === 13)
+					    	{
+					    		oParam = ns1blankspace.util.setParam(oParam, 'searchText', $('#ns1blankspaceAdminMonitoringRequestsSearchText').val())
+					    		ns1blankspace.admin.monitoring.requests.show(oParam);
+					    	}
+						});				
+
+						$('#ns1blankspaceAdminMonitoringRequestsSearchText').val(sSearchText);
+					}
+				},	
+
+	row: 		function (oRow)	
+				{
+					var aHTML = [];
+
+					ns1blankspace.admin.monitoring.requests.data.details.push(oRow);
+
+					aHTML.push('<tr id="ns1blankspaceAdminMonitoringRequests_container-' + oRow["id"] + '">');
+
+					aHTML.push('<td id="ns1blankspaceAdminMonitoringRequests_id-' + oRow["id"] + '" class="ns1blankspaceRow ns1blankspaceRowSelect">' +
+										oRow["createddate"] + '</td>');
+
+					aHTML.push('<td id="ns1blankspaceAdminMonitoringRequests_space-' + oRow["id"] + '" class="ns1blankspaceRow">' +
+										oRow["methodtext"] + '</td>');
+
+					aHTML.push('<td id="ns1blankspaceAdminMonitoringRequests_description-' + oRow["id"] + '" class="ns1blankspaceRow">' +
+										oRow["createdusertext"] + '</td>');
+
+					aHTML.push('<td id="ns1blankspaceAdminMonitoringRequests_space-' + oRow["id"] + '" class="ns1blankspaceRow">' +
+										oRow["sourcehost"] + '</td>');
+
+					aHTML.push('</tr>');
+
+					return aHTML.join('');
+				},
+
+	bind: 	function ()
+				{
+					$('#ns1blankspaceAdminMonitoringRequests .ns1blankspaceRowSelect').click(function()
+					{
+						ns1blankspace.admin.monitoring.requests.details({xhtmlElementID: this.id})
+					});		
+				},
+
+	details: 	
+				function (oParam)
+				{
+					var sXHTMLElementID;
+					var sKey;
+
+					if (ns1blankspace.util.param(oParam, 'xhtmlElementID').exists)
+					{
+						sXHTMLElementID = ns1blankspace.util.param(oParam, 'xhtmlElementID').value
+						sKey = ns1blankspace.util.param(oParam, 'xhtmlElementID', '-').values[1];
+					}
+
+					if ($('#ns1blankspaceAdminMonitoringRequests_container_details-' + sKey).length != 0)
+					{
+						$('#ns1blankspaceAdminMonitoringRequests_container_details-' + sKey).remove();
+					}
+					else
+					{
+						var sHTML = 'No details';
+
+						var oDetail = $.grep(ns1blankspace.admin.monitoring.requests.data.details, function (a) {return a.id == sKey;})[0];
+
+						if (oDetail)
+						{
+							sHTML = '<div class="ns1blankspaceSummaryCaption">Query String:</div><div>' + oDetail.querystring + '</div>' +
+										'<div class="ns1blankspaceSummaryCaption">Data:</div><div>' + oDetail.postdata + '</div>' +
+										'<div class="ns1blankspaceSummaryCaption">Response:</div><div>' + oDetail.returntext + '</div>';
+							
+							$('#ns1blankspaceAdminMonitoringRequests_container-' + sKey).after('<tr id="ns1blankspaceAdminMonitoringRequests_container_details-' + sKey + '">' +
+								'<td colspan=4><div style="background-color: #F3F3F3; padding:8px; color:#444444; font-weight:100; font-size:0.75em;">' + sHTML + '</div></td></tr>');	
+						}
+					}
+				}						
+}
+
+ns1blankspace.admin.monitoring.news =
+{
+	data: 	{searchText: undefined, superUser: true},
+
+	init: 	function (oParam, oResponse)
+				{
+					ns1blankspace.admin.monitoring.news.show(oParam);
+				},
+
+	count: 	function (oParam, oResponse)
+				{
+					if (oResponse == undefined)
+					{
+						var oSearch = new AdvancedSearch();
+						oSearch.method = 'ADMIN_NEWS_SCHEDULE_SEARCH';
+						oSearch.addField('id');
+						oSearch.addFilter('createddate', 'GREATER_THAN_OR_EQUAL_TO', 'hour', '-24', '');
+						oSearch.addSummaryField('count(id) count');
+						oSearch.rows = 1;
+						oSearch.getResults(function(data) {ns1blankspace.admin.monitoring.news.count(oParam, data)})	
+					}
+					else
+					{
+						if (oResponse.status == 'ER')
+						{
+							$('#ns1blankspaceSummaryNews').html(oResponse.error.errornotes)
+						}
+						else
+						{
+							$('#ns1blankspaceSummaryNews').html(oResponse.summary.count);
+						}	
+					}	
+				},	
+	
+	show:		function (oParam, oResponse)
+				{
+					var oSearchText = ns1blankspace.util.getParam(oParam, 'searchText');
+					var sSearchText;
+
+					if (oSearchText.exists)
+					{
+						sSearchText = oSearchText.value;
+						ns1blankspace.admin.monitoring.news.data.searchText = sSearchText;
+					}
+					else
+					{	
+						sSearchText = ns1blankspace.admin.monitoring.news.data.searchText;
+					}	
+
+					if (oResponse == undefined)
+					{	
+						var aHTML = [];
+	
+						aHTML.push('<table class="ns1blankspaceContainer">' +
+										'<tr class="ns1blankspaceContainer">' +
+										'<td id="ns1blankspaceAdminMonitoringNewsColumn1"></td>' +
+										'<td id="ns1blankspaceAdminMonitoringNewsColumn2" style="width:115px;"></td>' +
+										'</tr>' +
+										'</table>');				
+						
+						$('#ns1blankspaceMainNews').html(aHTML.join(''));
+
+						$('#ns1blankspaceAdminMonitoringNewsColumn1').html(ns1blankspace.xhtml.loading);
+
+						ns1blankspace.admin.monitoring.requests.data.details = [];
+
+						var oSearch = new AdvancedSearch();
+						oSearch.method = 'ADMIN_NEWS_SCHEDULE_SEARCH';
+						oSearch.addField('body,fromaccount,fromaccounttext,id,news,newstext,recipients,space,spacetext,subject');
+	
+						if (sSearchText != undefined)
+						{
+							oSearch.addBracket('(');
+							oSearch.addFilter('subject', 'TEXT_IS_LIKE', sSearchText);
+							oSearch.addOperator('or');
+							oSearch.addFilter('spacetext', 'TEXT_IS_LIKE', sSearchText);
+							oSearch.addOperator('or');
+							oSearch.addFilter('newstext', 'TEXT_IS_LIKE', sSearchText);
+							
+							if (sSearchText != '')
+							{	
+								if (!_.isNaN(_.toNumber(sSearchText)))
+								{
+									oSearch.addOperator('or');
+									oSearch.addFilter('id', 'EQUAL_TO', sSearchText);
+								}
+
+								var oSearchDate = moment(sSearchText, 'DD MMM YYYY HH:mm:ss')
+								if (oSearchDate.isValid())
+								{
+									oSearch.addOperator('or');
+									oSearch.addFilter('createddate', 'EQUAL_TO', oSearchDate.format('DD MMM YYYY'));
+								}
+							}
+
+							oSearch.addBracket(')');
+						}
+
+						oSearch.rows = 100;
+						oSearch.sort('createddate', 'desc');
+						oSearch.getResults(function(data) {ns1blankspace.admin.monitoring.news.show(oParam, data)});
+					}
+					else
+					{
+						var aHTML = [];
+
+						if (oResponse.status == 'ER')
+						{
+							aHTML.push('<table id="ns1blankspaceAdminMonitoringNews">' +
+												'<tr><td class="ns1blankspaceSub">' + oResponse.error.errornotes + '</td></tr></table>');
+
+							$('#ns1blankspaceAdminMonitoringNewsColumn1').html(aHTML.join(''));
+						}
+						else
+						{
+							if (oResponse.data.rows.length == 0)
+							{
+								aHTML.push('<table id="ns1blankspaceAdminMonitoringNews">' +
+												'<tr><td class="ns1blankspaceSub">No news sent.</td></tr></table>');
+
+								$('#ns1blankspaceAdminMonitoringNewsColumn1').html(aHTML.join(''));
+							}
+							else
+							{							
+								var aHTML = [];
+
+								aHTML.push('<table id="ns1blankspaceAdminMonitoringRequests" class="ns1blankspace" style="font-size:0.875em;">' +
+											'<tr class="ns1blankspaceHeaderCaption">' +
+											'<td class="ns1blankspaceHeaderCaption" style="width:65px;">When</td>' +
+											'<td class="ns1blankspaceHeaderCaption">News</td>' +
+											'<td class="ns1blankspaceHeaderCaption">From Account</td>' +
+											'<td class="ns1blankspaceHeaderCaption">Space</td>' +
+											'</tr>');
+
+								$(oResponse.data.rows).each(function() 
+								{
+									aHTML.push(ns1blankspace.admin.monitoring.news.row(this));
+								});
+								
+								aHTML.push('</table>');
+							}
+
+							ns1blankspace.render.page.show(
+							{
+								type: 'JSON',
+								xhtmlElementID: 'ns1blankspaceAdminMonitoringNewsColumn1',
+								xhtmlContext: 'AdminMonitoringNews',
+								xhtml: aHTML.join(''),
+								showMore: (oResponse.morerows == "true"),
+								more: oResponse.moreid,
+								rows: 100,
+								functionShowRow: ns1blankspace.admin.monitoring.news.row,
+								functionOpen: undefined,
+								functionOnNewPage: ns1blankspace.admin.monitoring.news.bind
+							});
+
+							var aHTML = [];
+
+							aHTML.push('<table class="ns1blankspaceColumn2">');
+
+							aHTML.push('<tr><td class="ns1blankspaceText" style="padding-top:14px;">' +
+													'<input id="ns1blankspaceAdminMonitoringNewsSearchText" class="ns1blankspaceText" style="width:130px;">' +
+													'</td></tr>');
+																				
+							aHTML.push('<tr><td style="padding-top:0px;">' +
+											'<span id="ns1blankspaceAdminMonitoringNewsSearch" class="ns1blankspaceAction">Search</span>');
+
+							if (sSearchText != undefined)
+							{	
+								aHTML.push(' <span id="ns1blankspaceAdminMonitoringNewsSearchClear" class="ns1blankspaceAction">Clear</span>');
+							}
+
+							aHTML.push('</td></tr>');
+
+							aHTML.push('<tr><td style="padding-top:12px;" class="ns1blankspaceSummaryCaption">All spaces</td></tr>');
+
+							aHTML.push('</table>');
+
+							if ($('#ns1blankspaceAdminMonitoringNewsColumn2 table').length == 0)
+							{
+								$('#ns1blankspaceAdminMonitoringNewsColumn2').html(aHTML.join(''));
+							}
+							else
+							{
+								$('#ns1blankspaceAdminMonitoringNewsColumn2 table').before(aHTML.join(''));
+							}
+
+							$('#ns1blankspaceAdminMonitoringNewsSearch').button(
+							{
+								label: 'Search'
+							})
+							.click(function() 
+							{
+								oParam = ns1blankspace.util.setParam(oParam, 'searchText', $('#ns1blankspaceAdminMonitoringNewsSearchText').val());
+								ns1blankspace.admin.monitoring.requests.show(oParam);
+							})
+							.css('width', '65px');
+
+							$('#ns1blankspaceAdminMonitoringNewsSearchClear').button(
+							{
+								label: 'Clear'
+							})
+							.click(function() 
+							{
+								oParam = ns1blankspace.util.setParam(oParam, 'searchText', undefined);
+								ns1blankspace.admin.monitoring.news.show(oParam);
+							})
+							.css('width', '57px');
+
+							$('#ns1blankspaceAdminMonitoringNewsSearchText').keyup(function(e)
+							{
+								if (e.which === 13)
+						    	{
+						    		oParam = ns1blankspace.util.setParam(oParam, 'searchText', $('#ns1blankspaceAdminMonitoringNewsSearchText').val())
+						    		ns1blankspace.admin.monitoring.news.show(oParam);
+						    	}
+							});				
+
+							$('#ns1blankspaceAdminMonitoringNewsSearchText').val(sSearchText);
+						}	
+					}
+				},	
+
+	row: 		function (oRow)	
+				{
+					var aHTML = [];
+
+					ns1blankspace.admin.monitoring.news.data.details.push(oRow);
+
+					aHTML.push('<tr id="ns1blankspaceAdminMonitoringNews_container-' + oRow["id"] + '">');
+
+					aHTML.push('<td id="ns1blankspaceAdminMonitoringNews_id-' + oRow["id"] + '" class="ns1blankspaceRow ns1blankspaceRowSelect">' +
+										oRow["createddate"] + '</td>');
+
+					aHTML.push('<td id="ns1blankspaceAdminMonitoringNews_space-' + oRow["id"] + '" class="ns1blankspaceRow">' +
+										oRow["newstext"] + '</td>');
+
+					aHTML.push('<td id="ns1blankspaceAdminMonitoringNews_description-' + oRow["id"] + '" class="ns1blankspaceRow">' +
+										oRow["fromaccounttext"] + '</td>');
+
+					aHTML.push('<td id="ns1blankspaceAdminMonitoringNews_space-' + oRow["id"] + '" class="ns1blankspaceRow">' +
 										oRow["spacetext"] + '</td>');
 
 					aHTML.push('</tr>');
@@ -425,11 +1054,46 @@ ns1blankspace.admin.monitoring.serviceFaults =
 					return aHTML.join('');
 				},
 
-	bind: 		function ()
+	bind: 	function ()
 				{
-					$('#ns1blankspaceAdminMonitoringServiceFaults .ns1blankspaceRowSelect').click(function()
+					$('#ns1blankspaceAdminMonitoringNews .ns1blankspaceRowSelect').click(function()
 					{
-						//ns1blankspace.financial.expense.init({id: (this.id).split('-')[1]});
+						ns1blankspace.admin.monitoring.news.details({xhtmlElementID: this.id})
 					});		
-				}	
+				},
+
+	details: 	
+				function (oParam)
+				{
+					var sXHTMLElementID;
+					var sKey;
+
+					if (ns1blankspace.util.param(oParam, 'xhtmlElementID').exists)
+					{
+						sXHTMLElementID = ns1blankspace.util.param(oParam, 'xhtmlElementID').value
+						sKey = ns1blankspace.util.param(oParam, 'xhtmlElementID', '-').values[1];
+					}
+
+					if ($('#ns1blankspaceAdminMonitoringNews_container_details-' + sKey).length != 0)
+					{
+						$('#ns1blankspaceAdminMonitoringNews_container_details-' + sKey).remove();
+					}
+					else
+					{
+						var sHTML = 'No details';
+
+						var oDetail = $.grep(ns1blankspace.admin.monitoring.news.data.details, function (a) {return a.id == sKey;})[0];
+
+						if (oDetail)
+						{
+							sHTML = '<div class="ns1blankspaceSummaryCaption">Subject:</div><div>' + oDetail.subject + '</div>' +
+										'<div class="ns1blankspaceSummaryCaption">Message:</div><div>' + oDetail.body + '</div>' +
+										'<div class="ns1blankspaceSummaryCaption">Recipients:</div><div>' + oDetail.recipients + '</div>';
+							
+							$('#ns1blankspaceAdminMonitoringNews_container-' + sKey).after('<tr id="ns1blankspaceAdminMonitoringNews_container_details-' + sKey + '">' +
+								'<td colspan=4><div style="background-color: #F3F3F3; padding:8px; color:#444444; font-weight:100; font-size:0.75em;">' + sHTML + '</div></td></tr>');	
+						}
+					}
+				}						
 }
+
