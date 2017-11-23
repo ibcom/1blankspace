@@ -65,15 +65,18 @@ ns1blankspace.admin.monitoring =
 
 					aHTML.push('</table>');		
 					
-					aHTML.push('<table class="ns1blankspaceControl">');
-					
-					aHTML.push('<tr><td class="ns1blankspaceSub" style="font-size:0.875em; border-bottom-style:solid; border-width: 0px; border-color: #D0D0D0;">' +
-									'STATE CHANNEL</td></tr>');
+					if (ns1blankspace.space == 1)
+					{
+						aHTML.push('<table class="ns1blankspaceControl">');
+						
+						aHTML.push('<tr><td class="ns1blankspaceSub" style="font-size:0.875em; border-bottom-style:solid; border-width: 0px; border-color: #D0D0D0;">' +
+										'STATE CHANNEL</td></tr>');
 
-					aHTML.push('<tr><td id="ns1blankspaceControlStateChannelStatus" class="ns1blankspaceControl">' +
-									'Status</td></tr>');
+						aHTML.push('<tr><td id="ns1blankspaceControlStateChannelStatus" class="ns1blankspaceControl">' +
+										'Status</td></tr>');
 
-					aHTML.push('</table>');
+						aHTML.push('</table>');
+					}	
 
 					$('#ns1blankspaceControl').html(aHTML.join(''));	
 					
