@@ -592,7 +592,7 @@ ns1blankspace.admin.monitoring.requests =
 
 						var oSearch = new AdvancedSearch();
 						oSearch.method = 'ADMIN_REQUEST_SEARCH';
-						oSearch.addField('method,methodtext,postdata,querystring,returntext,sourcehost,version,createddate,createdusertext');
+						oSearch.addField('method,methodtext,postdata,querystring,returntext,sourcehost,version,createddate,createdusertext,modifieddate');
 						oSearch.addCustomOption('allspaces', (ns1blankspace.admin.monitoring.requests.data.superUser?'Y':'N'));
 						oSearch.addFilter('method', 'NOT_IN_LIST', (ns1blankspace.admin.monitoring.data.lab?986:'955,212,1075'));
 
