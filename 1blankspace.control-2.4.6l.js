@@ -51,7 +51,11 @@ ns1blankspace.option = $.extend(true, ns1blankspace.option,
 	messagingCheckURL: 'http://api.mydigitalstructure.com',
 	financialOverride: true,
 	showProductCodes: true,
-	logonIdentityProvider: 'https://accounts.google.com/o/saml2/idp?idpid=C00mem5jv'
+	trustedLogon:
+	{
+		name: 'Google',
+		identityProviderEntityID: 'https://accounts.google.com/o/saml2/idp?idpid=C00mem5jv',
+	}	
 });
 
 ns1blankspace.formFactor.size.value = ns1blankspace.formFactor.size.options.medium;
@@ -351,7 +355,7 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.util.convert',
-		source: '/site/312/1blankspace.util.saml-2.0.0.js'
+		source: '/site/312/1blankspace.util.saml-2.0.1.js'
 	}
 ])
 

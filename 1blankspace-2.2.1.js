@@ -1950,13 +1950,31 @@ ns1blankspace.logon =
 								'<td class="ns1blankspaceLogon" style="width:110px">' +
 								'<span id="ns1blankspaceLogonSend">Log on</span>' +
 								'</td>');
-				
+
 					aHTML.push('<td id="ns1blankspaceLogonStatus" style="vertical-align:middle;">' +
 								'&nbsp;' +
 								'</td></tr>');
 
 					aHTML.push('<tr><td id="ns1blankspaceLogonMessage" class="ns1blankspaceSub" colspan=2 style="padding-top: 15px;">' +
-									sMessage + '</td></tr>');	
+									sMessage + '</td></tr>');
+
+					if (ns1blankspace.option.trustedLogon != undefined)
+					{
+						if (ns1blankspace.util.saml != undefined)
+						{
+							var sTrustedURI = ns1blankspace.util.saml.identityProviderURI();
+							var sName = ns1blankspace.option.trustedLogon.name;
+							if (sName == undefined) {sName = 'Indentity Provider'}
+
+							if (sTrustedURI != undefined)
+							{
+								aHTML.push('<tr>' +
+									'<td class="ns1blankspaceLogon" style="padding-top:10px; color: #999999; font-size: 0.875em; border-top-style:solid; border-width:1px; border-color:#B8B8B8;" colspan=2 >' +
+									'<a id="ns1blankspaceLogonTrusted" href="' + sTrustedURI + '">Logon using ' + ns1blankspace.option.trustedLogon.name + '...</a>' +
+									'</td></tr>');
+							}	
+						}	
+					}
 
 					aHTML.push('</table>');					
 					
