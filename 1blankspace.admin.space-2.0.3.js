@@ -84,7 +84,7 @@ ns1blankspace.admin.space =
 						$('#ns1blankspaceSuperUser').button(
 						{
 							text: true,
-							label: 'Show ' + (ns1blankspace.admin.space.data.superUser?'just mine':'all') + ' spaces',
+							label: 'Show ' + (ns1blankspace.admin.space.data.superUser?'just my':'all') + ' spaces',
 						})
 						.click(function()
 						{
@@ -448,11 +448,16 @@ ns1blankspace.admin.space =
 
 							if (ns1blankspace.objectContextData.registrationdate != '')
 							{	
-								aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Creation Date</td></tr>' +
-											'<tr><td id="ns1blankspaceSummaryCreationDate" class="ns1blankspaceSummary">' +
+								aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Created Date</td></tr>' +
+											'<tr><td id="ns1blankspaceSummaryCreatedDate" class="ns1blankspaceSummary">' +
 											ns1blankspace.objectContextData.registrationdate +
 											'</td></tr>');
 							}
+
+							aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Created By</td></tr>' +
+											'<tr><td id="ns1blankspaceSummaryCreatedBy" class="ns1blankspaceSummary">' +
+											ns1blankspace.objectContextData.registrationspacetext +
+											'</td></tr>');
 									
 							aHTML.push('</table>');					
 							
