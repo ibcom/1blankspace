@@ -37,7 +37,7 @@ ns1blankspace.setup.website =
 
 	siteTemplate: 
 				{
-					init: 	function (oParam)
+					init: function (oParam)
 							{
 								ns1blankspace.status.working();
 
@@ -1107,7 +1107,7 @@ ns1blankspace.setup.website =
 														'</td></tr>');
 										
 										aHTML.push('<tr><td class="ns1blankspaceText" style="padding-top:30px;">' +
-														'<input id="ns1blankspacePagesSearchText" class="ns1blankspaceText" style="width:62px;">' +
+														'<input id="ns1blankspacePagesSearchText" class="ns1blankspaceText" data-1blankspace="ignore" style="width:62px;">' +
 														'</td></tr>');
 																					
 										aHTML.push('<tr><td style="padding-top:0px;">' +

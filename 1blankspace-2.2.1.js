@@ -1955,7 +1955,7 @@ ns1blankspace.logon =
 								'&nbsp;' +
 								'</td></tr>');
 
-					aHTML.push('<tr><td id="ns1blankspaceLogonMessage" class="ns1blankspaceSub" colspan=2 style="padding-top: 15px;">' +
+					aHTML.push('<tr><td id="ns1blankspaceLogonMessage" class="ns1blankspaceSub" colspan=2 style="padding-top:15px; padding-bottom:15px;">' +
 									sMessage + '</td></tr>');
 
 					if (ns1blankspace.option.trustedLogon != undefined)

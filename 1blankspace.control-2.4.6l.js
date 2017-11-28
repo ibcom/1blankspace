@@ -207,7 +207,7 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.financial.journal',
-		source: '/jscripts/1blankspace.financial.journal-2.0.3.js'
+		source: '/site/312/1blankspace.financial.journal-2.0.4.js'
 	},
 	{
 		nameSpace: '1blankspace.financial.tax',
@@ -355,7 +355,7 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.util.convert',
-		source: '/site/312/1blankspace.util.saml-2.0.1.js'
+		source: '/site/312/1blankspace.util.saml-2.0.2.js'
 	}
 ])
 
