@@ -5934,6 +5934,7 @@ ns1blankspace.render =
 					var sColumns = ns1blankspace.util.getParam(oParam, 'columns', {"default": 'title'}).value;
 					var fFunctionClass = ns1blankspace.util.getParam(oParam, 'functionClass').value;
 					var sIdAdditional = ns1blankspace.util.getParam(oParam, 'idAdditional', {"default": 'title'}).value;
+					var bAddColumns = false;
 
 					aHTML.push('<tr class="ns1blankspaceSearch">');
 					
@@ -5976,6 +5977,10 @@ ns1blankspace.render =
 							break;
 						case 'hyphen':
 							aHTML.push('-');
+							break;
+						case 'column':
+							aHTML.push('</td><td class=' + sClass + '" id="' +
+											sXHTMLElementID + '-' + oRow.id + sIDData + sIdAdditional + '">');
 							break;
 						default:
 							aHTML.push(oRow[aColumns[i]]);

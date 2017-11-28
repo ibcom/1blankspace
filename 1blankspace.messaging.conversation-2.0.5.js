@@ -364,7 +364,7 @@ ns1blankspace.messaging.conversation =
 		$('#ns1blankspaceControlAttachments').click(function(event)
 		{
 			ns1blankspace.show({selector: '#ns1blankspaceMainAttachments', refresh: true});
-			ns1blankspace.attachments.show();
+			ns1blankspace.messaging.conversation.attachments.show();
 		});
 	},
 
@@ -894,34 +894,64 @@ ns1blankspace.messaging.conversation =
 
 		select:		function (sXHTMLElementID, oParam)
 		{
-			var aSearch = sXHTMLElementID.split('-');
-			var sElementID = aSearch[0];
-			var sContext = aSearch[1];
+			oParam = oParam || {};
+			var sElementID = sXHTMLElementID.split('-').shift();
+			var sContext = sXHTMLElementID.split('-').pop();
 			var iConversationID = ns1blankspace.util.getParam(oParam, 'conversationID', {'default': ns1blankspace.objectContext}).value;
-			var sXHTMLElementID = ns1blankspace.util.getParam(oParam, 'xhtmlSelectElementID', {'default': 'ns1blankspaceMainParticipantsAdd'}).value;
+			var sXHTMLSelectElementID = ns1blankspace.util.getParam(oParam, 'xhtmlSelectElementID', {'default': 'ns1blankspaceMainParticipantsAdd'}).value;
 			
-			var sData = 'user=' + sContext + '&conversation=' + iConversationID;
-						
-			$.ajax(
+			if (oParam.response == undefined)
 			{
-				type: 'POST',
-				url: ns1blankspace.util.endpointURI('MESSAGING_CONVERSATION_PARTICIPANT_MANAGE'),
-				data: sData,
-				dataType: 'json',
-				success: function(data)
+				// Search to see if participant has been removed from the conversation - if so, we just need to change the status
+				var oSearch = new AdvancedSearch();
+				oSearch.method = 'MESSAGING_CONVERSATION_PARTICIPANT_SEARCH';
+				oSearch.addField('user,username,status,id');
+				oSearch.addFilter('user', 'EQUAL_TO', sContext);
+				oSearch.addFilter('status', 'EQUAL_TO', '2');
+				oSearch.addCustomOption('conversation', iConversationID);
+				oSearch.getResults(function(oResponse)
 				{
-					if (iConversationID == ns1blankspace.objectContext)
+					if (oResponse.status == 'OK')
 					{
-						$('#' + sXHTMLElementID).parent().parent().fadeOut(500);
+						if (oResponse.data.rows.length > 0)
+						{
+							oParam.participantID = oResponse.data.rows[0].id;
+						}
 					}
 					else
 					{
-						oParam.xhtmlParticipantElementID = 'ns1blankspacePostsParticipantList';
-						$('#' + sXHTMLElementID).html('');
-						ns1blankspace.messaging.conversation.participants.show(oParam);
+						ns1blankspace.status.error('Error checking if participant had been removed: ' + oResponse.error.errornotes);
 					}
-				}
-			});	
+					oParam.response = oResponse;
+					ns1blankspace.messaging.conversation.participants.select(sXHTMLElementID, oParam);
+				});
+			}
+			else
+			{
+				var sData = 'user=' + sContext + '&conversation=' + iConversationID;
+				sData += (oParam.participantID ? '&id=' + oParam.participantID + '&status=1' : '');
+							
+				$.ajax(
+				{
+					type: 'POST',
+					url: ns1blankspace.util.endpointURI('MESSAGING_CONVERSATION_PARTICIPANT_MANAGE'),
+					data: sData,
+					dataType: 'json',
+					success: function(data)
+					{
+						if (iConversationID == ns1blankspace.objectContext)
+						{
+							$('#' + sXHTMLElementID).parent().parent().fadeOut(500);
+						}
+						else
+						{
+							oParam.xhtmlParticipantElementID = 'ns1blankspacePostsParticipantList';
+							$('#' + sXHTMLSelectElementID).html('');
+							ns1blankspace.messaging.conversation.participants.show(oParam);
+						}
+					}
+				});	
+			}
 		},
 						
 		remove:		function (sXHTMLElementID, oParam)
@@ -1374,10 +1404,11 @@ ns1blankspace.messaging.conversation =
 				if (oResponse == undefined)
 				{
 					var oSearch = new AdvancedSearch();
-					oSearch.method = 'CORE_ATTACHMENT_SEARCH';
-					oSearch.addField('filename,download,createdusertext,createduser,createddate,attachment');
-					oSearch.addFilter('object', 'EQUAL_TO', '50');
-					oSearch.addFilter('objectcontext', 'EQUAL_TO', oParam.conversationID);
+					oSearch.method = 'MESSAGING_CONVERSATION_POST_SEARCH';
+					oSearch.addField('post.attachment.filename,post.attachment.download,post.attachment.createdusertext,' +
+									 'post.attachment.createduser,post.attachment.createddate,post.attachment.attachment,post.attachment.id');
+					oSearch.addFilter('post.attachment.id', 'IS_NOT_NULL');
+					oSearch.addCustomOption('conversation', oParam.conversationID);
 					oSearch.rows = 50;
 					oSearch.getResults(function(oResponse)
 					{
@@ -1439,8 +1470,8 @@ ns1blankspace.messaging.conversation =
 
 				aHTML.push('<tr class="ns1blankspaceAttachments">');
 				
-				aHTML.push('<td id="ns1blankspaceAttachment_filename-' + oRow.id + '" class="ns1blankspaceRow" style="font-size: 0.75em;">' +
-									'<a href="' + oRow.download + '" class="ns1blankspaceNoUnloadWarn">' + oRow.filename + '</a></td>');
+				aHTML.push('<td id="ns1blankspaceAttachment_filename-' + oRow['post.attachment.id'] + '" class="ns1blankspaceRow" style="font-size: 0.75em;">' +
+									'<a href="' + oRow['post.attachment.download'] + '" class="ns1blankspaceNoUnloadWarn">' + oRow.filename + '</a></td>');
 									
 				aHTML.push('</tr>');
 				
@@ -2103,6 +2134,117 @@ ns1blankspace.messaging.conversation =
 					}
 				});
 			});
+		}
+	},
+
+	attachments:
+	{
+		show: function (oParam)
+		{
+			var sXHTMLElementID = ns1blankspace.util.getParam(oParam, 'xhtmlElementID', {'default': 'ns1blankspaceMainAttachments'}).value;
+			var iObject = ns1blankspace.util.getParam(oParam, 'object', {'default': ns1blankspace.object}).value;
+			var iObjectContext = ns1blankspace.util.getParam(oParam, 'objectContext', {'default': ns1blankspace.objectContext}).value;
+			var bShowAdd = ns1blankspace.util.getParam(oParam, 'showAdd', {'default': true}).value;
+			var iAttachmentType = ns1blankspace.util.getParam(oParam, 'attachmentType').value;
+			var oActions = ns1blankspace.util.getParam(oParam, 'actions', {'default': {add: true}}).value;
+			var sHelpNotes = ns1blankspace.util.getParam(oParam, 'helpNotes').value;
+			var oContext = ns1blankspace.util.getParam(oParam, 'context', {'default': {inContext: false}}).value;
+			var sObjectPrefix = ns1blankspace.util.getParam(oParam, 'objectPrefix', {'default': 'conversation'}).value
+
+			var sSortBy = ns1blankspace.util.getParam(oParam, 'sortBy', {"default": sObjectPrefix + '.attachment.filename'}).value;
+			var sSortDirection = ns1blankspace.util.getParam(oParam, 'sortDirection', {"default": 'asc'}).value;
+			
+			if (oActions.add)
+			{
+				if (ns1blankspace.app.context) {ns1blankspace.app.context(oContext)};
+
+				var aHTML = [];
+							
+				aHTML.push('<table>' +
+							'<tr>' +
+							'<td id="ns1blankspaceAttachmentsColumn1" class="ns1blankspaceColumn1Flexible">' +
+							ns1blankspace.xhtml.loading + '</td>' +
+							'<td id="ns1blankspaceAttachmentsColumn2" class="ns1blankspaceColumn2" style="width:100px;"></td></tr>' +
+							'</table>');					
+					
+				$('#' + sXHTMLElementID).html(aHTML.join(''));
+
+				oParam = ns1blankspace.util.setParam(oParam, 'xhtmlElementID', 'ns1blankspaceAttachmentsColumn1');
+				
+				var aHTML = [];
+				
+				aHTML.push('<table class="ns1blankspaceColumn2">');
+				
+				aHTML.push('<tr><td class="ns1blankspaceAction">' +
+								'<span id="ns1blankspaceAttachmentsAdd">Add</span>' +
+								'</td></tr>');
+
+				if (sHelpNotes != undefined)
+				{
+					aHTML.push('<tr><td class="ns1blankspaceAction">' +
+								'<hr />' +
+								'</td></tr>');
+								
+					aHTML.push('<tr><td id="ns1blankspaceAttachmentsAddHelpNotes" class="ns1blankspaceAction" style="font-size:0.75em;color:#404040;">' +
+								sHelpNotes +
+								'</td></tr>');
+				}
+				
+				aHTML.push('</table>');					
+				
+				$('#ns1blankspaceAttachmentsColumn2').html(aHTML.join(''));
+			
+				$('#ns1blankspaceAttachmentsAdd').button(
+				{
+					label: "Add"
+				})
+				.click(function()
+				{
+					 ns1blankspace.attachments.add(oParam);
+				});
+
+				sXHTMLElementID = 'ns1blankspaceAttachmentsColumn1';
+			}
+			
+			if (iObjectContext != -1)
+			{	
+				// To pick up attachments from the customer's space, weget attchments from the support_issue subsearch
+				var oSearch = new AdvancedSearch();
+				oSearch.method = 'MESSAGING_CONVERSATION_SEARCH';
+				oSearch.addField(sObjectPrefix + '.attachment.type,' + sObjectPrefix + '.attachment.filename,' + 
+								 sObjectPrefix + '.attachment.title,' + sObjectPrefix + '.attachment.description,' + 
+								 sObjectPrefix + '.attachment.download,' + sObjectPrefix + '.attachment.modifieddate,' +
+								 sObjectPrefix + '.attachment.attachment,' + sObjectPrefix + '.attachment.bucket,' + 
+								 sObjectPrefix + '.attachment.createddate,' + sObjectPrefix + '.attachment.createdusertext,' + 
+								 sObjectPrefix + '.attachment.id');
+				oSearch.addFilter('id', 'EQUAL_TO', iObjectContext)
+				oSearch.rows = ns1blankspace.option.defaultRows;
+				
+				if (iAttachmentType != undefined)
+				{
+					oSearch.addFilter(sObjectPrefix + '.attachment.type', 'EQUAL_TO', iAttachmentType);
+				}
+				
+				oSearch.sort(sSortBy, sSortDirection);
+				oSearch.getResults(function(data) 
+				{
+					if (data.status == 'OK')
+					{
+						data.data.rows = $.map(data.data.rows, function(x)
+						{
+							var y = {};
+							$.each(Object.keys(x), function()
+							{
+								y[this.replace(sObjectPrefix + '.attachment.', '')] = x[this];
+							});
+							return y;
+						});
+					}
+					oParam.functionSearch = ns1blankspace.supportIssue.attachments.show;
+					oParam.functionPostUpdate = ns1blankspace.supportIssue.attachments.show;
+					ns1blankspace.attachments.process(data, oParam)
+				});
+			}
 		}
 	}	
 }
