@@ -235,7 +235,8 @@ ns1blankspace.setup.website =
 										oSearch.method = 'SETUP_SITE_SEARCH';
 										oSearch.addField('bodytag,cancreatespace,columns,cssattachment,cssattachmenttext,default,developeremail,documenttype,email,' +
 															'footerheight,footerscript,headerheight,headerscript,headertitle,hidestandardlinks,layout,layouttext,ondemandstatus,ondemandstatustext,' +
-															'reference,status,statustext,templatedocument,templatedocumenttext,title,usekeywordsastitle');
+															'reference,status,statustext,templatedocument,templatedocumenttext,title,usekeywordsastitle,' + 
+															'samlidentityprovidercertificate,samlidentityproviderid,samlidentityprovidername');
 										oSearch.addFilter('id', 'EQUAL_TO', ns1blankspace.objectContext);
 										oSearch.rows = 1;
 										
@@ -381,6 +382,9 @@ ns1blankspace.setup.website =
 
 						aHTML.push('<tr><td id="ns1blankspaceControlRedirects" class="ns1blankspaceControl">' +
 										'Redirects</td></tr>');
+
+						aHTML.push('<tr><td id="ns1blankspaceControlSAML" class="ns1blankspaceControl">' +
+										'SAML</td></tr>');
 					}	
 
 					aHTML.push('</table>');					
@@ -402,7 +406,8 @@ ns1blankspace.setup.website =
 					aHTML.push('<div id="ns1blankspaceMainForms" class="ns1blankspaceControlMain"></div>');	
 					aHTML.push('<div id="ns1blankspaceMainHTTPHeaders" class="ns1blankspaceControlMain"></div>');
 					aHTML.push('<div id="ns1blankspaceMainRedirects" class="ns1blankspaceControlMain"></div>');			
-						
+					aHTML.push('<div id="ns1blankspaceMainSAML" class="ns1blankspaceControlMain"></div>');
+
 					$('#ns1blankspaceMain').html(aHTML.join(''));
 						
 					$('#ns1blankspaceControlSummary').click(function(event)
@@ -481,6 +486,12 @@ ns1blankspace.setup.website =
 					{
 						ns1blankspace.show({selector: '#ns1blankspaceMainRedirects', context: {inContext: false}});
 						ns1blankspace.setup.website.redirects.show();
+					});
+
+					$('#ns1blankspaceControlSAML').click(function(event)
+					{
+						ns1blankspace.show({selector: '#ns1blankspaceMainSAML', context: {inContext: false}});
+						ns1blankspace.setup.website.saml();
 					});
 				},
 
@@ -995,7 +1006,7 @@ ns1blankspace.setup.website =
 					}	
 				},
 
-	scripts: 	function ()
+	scripts: function ()
 				{
 					if ($('#ns1blankspaceMainScripts').attr('data-loading') == '1')
 					{
@@ -1035,7 +1046,7 @@ ns1blankspace.setup.website =
 					}	
 				},
 
-	pages: 		{	
+	pages: 	{	
 						data: {searchText: undefined},
 
 						show: function (oParam, oResponse)
@@ -2553,7 +2564,68 @@ ns1blankspace.setup.website =
 										}
 									}		
 								}
-				},						
+				},
+
+	saml: 	function ()
+				{
+					if ($('#ns1blankspaceMainSAML').attr('data-loading') == '1')
+					{
+						$('#ns1blankspaceMainSAML').attr('data-loading', '');
+						
+						var aHTML = [];
+											
+						aHTML.push('<table class="ns1blankspace">');
+
+						aHTML.push('<tr>' +
+										'<td class="ns1blankspaceSubNote" style="padding-top:8px; padding-bottom:10px; padding-right:100px;">As part of a single-sign-on (SSO) security architecture, you can set up a SAML based Identity Provider to use as an additional form of user authentication.' +
+										'  In its standard implementation the user <i>logon name</i> has to match the email address of the user at the Indentity Provider - <a href="http://docs.mydigitalstructure.com/gettingstarted_authentication_sso" target="_blank">more on implementing SSO using SAML.</a>' +
+										'</td>' +
+										'</tr>');
+
+						aHTML.push('<tr>' +
+										'<td class="ns1blankspaceSubNote" style="padding-top:8px; padding-bottom:10px; padding-right:100px;"></a></td>' +
+										'</tr>');
+
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
+										'Entity ID' +
+										'</td></tr>' +
+										'<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceText">' +
+										'<input id="ns1blankspaceSAMLIdentityProviderEntityID" class="ns1blankspaceText">' +
+										'</td></tr>');	
+
+							aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
+										'Name' +
+										'</td></tr>' +
+										'<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceText">' +
+										'<input id="ns1blankspaceSAMLIdentityProviderName" class="ns1blankspaceText">' +
+										'</td></tr>');	
+
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
+										'Certificate (X509 PEM)' +
+										'</td></tr>' +
+										'<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceTextMulti">' +
+										'<textarea style="height: 350px;" rows="20" cols="80" id="ns1blankspaceSAMLIdentityProviderCertificate" class="ns1blankspaceTextMultiLarge"></textarea>' +
+										'</td></tr>');		
+						
+														
+						aHTML.push('</table>');					
+						
+						$('#ns1blankspaceMainSAML').html(aHTML.join(''));
+						
+						if (ns1blankspace.objectContextData != undefined)
+						{
+							$('#ns1blankspaceSAMLIdentityProviderEntityID').val((ns1blankspace.objectContextData.samlidentityproviderid).formatXHTML());
+							$('#ns1blankspaceSAMLIdentityProviderName').val((ns1blankspace.objectContextData.samlidentityprovidername).formatXHTML());
+							$('#ns1blankspaceSAMLIdentityProviderCertificate').val((ns1blankspace.objectContextData.samlidentityprovidercertificate).formatXHTML());
+						}
+					}	
+				},								
 
 	save: 	{
 					send:		function (oParam, oResponse)
@@ -2619,6 +2691,13 @@ ns1blankspace.setup.website =
 											{
 												oData.headerscript = $('#ns1blankspaceScriptsHeader').val();
 												oData.footerscript = $('#ns1blankspaceScriptsFooter').val();
+											}
+
+											if ($('#ns1blankspaceMainSAML').html() != '')
+											{
+												oData.samlidentityproviderid = $('#ns1blankspaceSAMLIdentityProviderEntityID').val();
+												oData.samlidentityprovidername = $('#ns1blankspaceSAMLIdentityProviderName').val();
+												oData.samlidentityprovidercertificate = $('#ns1blankspaceSAMLIdentityProviderCertificate').val();
 											}
 											
 											if (sCSSAttachment != undefined)
