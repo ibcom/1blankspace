@@ -236,7 +236,7 @@ ns1blankspace.setup.website =
 										oSearch.addField('bodytag,cancreatespace,columns,cssattachment,cssattachmenttext,default,developeremail,documenttype,email,' +
 															'footerheight,footerscript,headerheight,headerscript,headertitle,hidestandardlinks,layout,layouttext,ondemandstatus,ondemandstatustext,' +
 															'reference,status,statustext,templatedocument,templatedocumenttext,title,usekeywordsastitle,' + 
-															'samlidentityprovidercertificate,samlidentityproviderid,samlidentityprovidername');
+															'samlidentityprovidercertificate,samlidentityproviderid,samlidentityprovidername,samlidentityproviderurl');
 										oSearch.addFilter('id', 'EQUAL_TO', ns1blankspace.objectContext);
 										oSearch.rows = 1;
 										
@@ -490,7 +490,7 @@ ns1blankspace.setup.website =
 
 					$('#ns1blankspaceControlSAML').click(function(event)
 					{
-						ns1blankspace.show({selector: '#ns1blankspaceMainSAML', context: {inContext: false}});
+						ns1blankspace.show({selector: '#ns1blankspaceMainSAML'});
 						ns1blankspace.setup.website.saml();
 					});
 				},
@@ -2582,9 +2582,34 @@ ns1blankspace.setup.website =
 										'</td>' +
 										'</tr>');
 
+						var appName = 
+						aHTML.push('<tr>' +
+										'<td class="ns1blankspaceSubNote" style="padding-top:8px; padding-bottom:0px; padding-right:100px;">' +
+										' When setting up the SAML options with your Identity Provider, set the <i>App Name</i> as <b>' + window.location.host + '</b>.' +
+										'</td>' +
+										'</tr>');
+
 						aHTML.push('<tr>' +
 										'<td class="ns1blankspaceSubNote" style="padding-top:8px; padding-bottom:10px; padding-right:100px;"></a></td>' +
 										'</tr>');
+
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
+										'Name (eg Google)' +
+										'</td></tr>' +
+										'<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceText">' +
+										'<input id="ns1blankspaceSAMLIdentityProviderName" class="ns1blankspaceText">' +
+										'</td></tr>');
+
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
+										'URL' +
+										'</td></tr>' +
+										'<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceText">' +
+										'<input id="ns1blankspaceSAMLIdentityProviderURL" class="ns1blankspaceText">' +
+										'</td></tr>');	
 
 						aHTML.push('<tr class="ns1blankspaceCaption">' +
 										'<td class="ns1blankspaceCaption">' +
@@ -2593,15 +2618,6 @@ ns1blankspace.setup.website =
 										'<tr class="ns1blankspace">' +
 										'<td class="ns1blankspaceText">' +
 										'<input id="ns1blankspaceSAMLIdentityProviderEntityID" class="ns1blankspaceText">' +
-										'</td></tr>');	
-
-							aHTML.push('<tr class="ns1blankspaceCaption">' +
-										'<td class="ns1blankspaceCaption">' +
-										'Name' +
-										'</td></tr>' +
-										'<tr class="ns1blankspace">' +
-										'<td class="ns1blankspaceText">' +
-										'<input id="ns1blankspaceSAMLIdentityProviderName" class="ns1blankspaceText">' +
 										'</td></tr>');	
 
 						aHTML.push('<tr class="ns1blankspaceCaption">' +
@@ -2620,6 +2636,7 @@ ns1blankspace.setup.website =
 						
 						if (ns1blankspace.objectContextData != undefined)
 						{
+							$('#ns1blankspaceSAMLIdentityProviderURL').val((ns1blankspace.objectContextData.samlidentityproviderurl).formatXHTML());
 							$('#ns1blankspaceSAMLIdentityProviderEntityID').val((ns1blankspace.objectContextData.samlidentityproviderid).formatXHTML());
 							$('#ns1blankspaceSAMLIdentityProviderName').val((ns1blankspace.objectContextData.samlidentityprovidername).formatXHTML());
 							$('#ns1blankspaceSAMLIdentityProviderCertificate').val((ns1blankspace.objectContextData.samlidentityprovidercertificate).formatXHTML());
@@ -2695,6 +2712,7 @@ ns1blankspace.setup.website =
 
 											if ($('#ns1blankspaceMainSAML').html() != '')
 											{
+												oData.samlidentityproviderurl = $('#ns1blankspaceSAMLIdentityProviderURL').val();
 												oData.samlidentityproviderid = $('#ns1blankspaceSAMLIdentityProviderEntityID').val();
 												oData.samlidentityprovidername = $('#ns1blankspaceSAMLIdentityProviderName').val();
 												oData.samlidentityprovidercertificate = $('#ns1blankspaceSAMLIdentityProviderCertificate').val();
@@ -2724,11 +2742,11 @@ ns1blankspace.setup.website =
 										if (oResponse.status == 'OK')
 										{	
 											ns1blankspace.status.message('Saved');
+											ns1blankspace.inputDetected = false;
 											
 											if (ns1blankspace.objectContext == -1)
 											{
 												ns1blankspace.objectContext = oResponse.id;
-												ns1blankspace.inputDetected = false;
 												ns1blankspace.setup.website.search.send('-' + ns1blankspace.objectContext, {source: 1});
 											}	
 										}

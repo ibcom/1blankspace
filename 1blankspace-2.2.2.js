@@ -772,12 +772,19 @@ ns1blankspace.app =
 								}
 
 								ns1blankspace.saml = undefined;
+
 								if (data.SAMLIdentityProviderId != undefined)
 								{
 									ns1blankspace.saml =
 									{
 										entityID: data.SAMLIdentityProviderId,
-										name: data.SAMLIdentityProviderName
+										name: data.SAMLIdentityProviderName,
+										url: data.SAMLIdentityProviderURL
+									}
+								
+									if (window.location.hash.toLowerCase().indexOf('logonerror') != -1)
+									{
+										oParam.message = 'There was an error logging on (' + decodeURIComponent(window.location.hash.split('=')[1]).replace(/\+/g, ' ') + ')'
 									}
 								}
 								
@@ -1968,19 +1975,32 @@ ns1blankspace.logon =
 					aHTML.push('<tr><td id="ns1blankspaceLogonMessage" class="ns1blankspaceSub" colspan=2 style="padding-top:15px; padding-bottom:15px;">' +
 									sMessage + '</td></tr>');
 
-					if (ns1blankspace.option.trustedLogon != undefined)
+					var bSAML = (ns1blankspace.option.trustedLogon != undefined)
+					if (!bSAML) {bSAML = (ns1blankspace.saml != undefined)}
+
+					if (bSAML)
 					{
 						if (ns1blankspace.util.saml != undefined)
 						{
 							var sTrustedURI = ns1blankspace.util.saml.identityProviderURI();
-							var sName = ns1blankspace.option.trustedLogon.name;
-							if (sName == undefined) {sName = 'Indentity Provider'}
+
+							var sName = 'Indentity Provider';
+
+							if (ns1blankspace.option.trustedLogon != undefined)
+							{
+								sName = ns1blankspace.option.trustedLogon.name;
+							}
+
+							if (ns1blankspace.saml != undefined)
+							{
+								sName = ns1blankspace.saml.name;
+							}
 
 							if (sTrustedURI != undefined)
 							{
 								aHTML.push('<tr>' +
 									'<td class="ns1blankspaceLogon" style="padding-top:10px; color: #999999; font-size: 0.875em; border-top-style:solid; border-width:1px; border-color:#B8B8B8;" colspan=2 >' +
-									'<a id="ns1blankspaceLogonTrusted" href="' + sTrustedURI + '">Logon using ' + ns1blankspace.option.trustedLogon.name + '...</a>' +
+									'<a id="ns1blankspaceLogonTrusted" href="' + sTrustedURI + '">Logon using ' + sName + '...</a>' +
 									'</td></tr>');
 							}	
 						}	

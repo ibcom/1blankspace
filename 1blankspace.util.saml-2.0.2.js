@@ -26,6 +26,15 @@ ns1blankspace.util.saml =
     {
         var oOptionsTrustedLogon = ns1blankspace.util.getParam(oParam, 'options', {"default": ns1blankspace.option.trustedLogon}).value;
 
+        if (oOptionsTrustedLogon == undefined && ns1blankspace.saml != undefined)
+        {
+            oOptionsTrustedLogon =
+            {
+                identityProviderEntityID: ns1blankspace.saml.entityID,
+                name: ns1blankspace.saml.name
+            }
+        }
+
         if (oOptionsTrustedLogon != undefined)
         {
             if (oOptionsTrustedLogon.type == undefined)
@@ -48,7 +57,20 @@ ns1blankspace.util.saml =
             if (oOptionsTrustedLogon.identityProviderAppName == undefined)
             {
                 oOptionsTrustedLogon.identityProviderAppName =
-                    'site-' + ns1blankspace.user.site;
+                    window.location.host;
+            }
+
+            if (ns1blankspace.saml != undefined)
+            {
+                if (ns1blankspace.saml.entityID != undefined)
+                {
+                    oOptionsTrustedLogon.identityProviderEntityID = ns1blankspace.saml.entityID
+                }
+
+                if (ns1blankspace.saml.url != undefined)
+                {
+                    oOptionsTrustedLogon.identityProviderURL = ns1blankspace.saml.url
+                }
             }
 
             if (oOptionsTrustedLogon.type == 'SAML2.0')
@@ -71,8 +93,14 @@ ns1blankspace.util.saml =
 
                 var sURISAMLRequest = btoa(sSAMLRequest);
                 sURISAMLRequest = encodeURIComponent(sURISAMLRequest);
+
+                if (oOptionsTrustedLogon.identityProviderURL == undefined)
+                {
+                    oOptionsTrustedLogon.identityProviderURL = 
+                        oOptionsTrustedLogon.identityProviderEntityID
+                }
     
-                var sURI = oOptionsTrustedLogon.identityProviderEntityID + '&SAMLRequest=' + sURISAMLRequest;
+                var sURI = oOptionsTrustedLogon.identityProviderURL + '&SAMLRequest=' + sURISAMLRequest;
 
                 return sURI
             }

@@ -51,10 +51,11 @@ ns1blankspace.option = $.extend(true, ns1blankspace.option,
 	messagingCheckURL: 'http://api.mydigitalstructure.com',
 	financialOverride: true,
 	showProductCodes: true,
-	trustedLogon:
+	_trustedLogon:
 	{
 		name: 'Google',
-		identityProviderEntityID: 'https://accounts.google.com/o/saml2/idp?idpid=C00mem5jv',
+		identityProviderEntityID: 'https://accounts.google.com/o/saml2?idpid=C00mem5jv',
+		identityProviderURL: 'https://accounts.google.com/o/saml2/idp?idpid=C00mem5jv',
 	}	
 });
 
