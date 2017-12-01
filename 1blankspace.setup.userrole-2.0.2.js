@@ -230,7 +230,7 @@ ns1blankspace.setup.userRole =
 								}
 				},
 
-	layout:		function ()
+	layout:	function ()
 				{
 					var aHTML = [];
 
@@ -261,7 +261,7 @@ ns1blankspace.setup.userRole =
 						aHTML.push('<table class="ns1blankspaceControl">');
 
 						aHTML.push('<tr><td id="ns1blankspaceControlUsers" class="ns1blankspaceControl">' +
-										'Users</td></tr>');
+										'Users<br /><span class="ns1blankspaceSubNote">assigned this role</span></td></tr>');
 					}	
 
 					aHTML.push('</table>');					
@@ -1460,17 +1460,20 @@ ns1blankspace.setup.userRole =
 								},						
 				},
 
-	users: 		{
+	users: 	{
 					show:		function (oParam, oResponse)
 								{
 									if (oResponse == undefined)
 									{	
 										var oSearch = new AdvancedSearch();
 										oSearch.method = 'SETUP_USER_ROLE_SEARCH';
-										oSearch.addField('usertext,user');
+										oSearch.addField('usertext,user,userrole.user.lastlogon,userrole.user.disabled,userrole.user.contactbusinesstext,' +
+																'userrole.user.contactperson.firstname,userrole.user.contactperson.surname,' +
+																'userrole.user.contactbusiness');
+
 										oSearch.addFilter('role', 'EQUAL_TO', ns1blankspace.objectContext)
-										oSearch.rows = 50;
-										oSearch.sort('roletext', 'asc');
+										oSearch.rows = 200;
+										oSearch.sort('usertext', 'asc');
 										oSearch.getResults(function(data) {ns1blankspace.setup.userRole.users.show(oParam, data)});
 									}
 									else
@@ -1486,10 +1489,14 @@ ns1blankspace.setup.userRole =
 										}
 										else
 										{		
-											$vq.init('<table id="ns1blankspaceUserRoleAccessUsers" class="ns1blankspaceContainer" style="width:250px;">');
+											$vq.init('<table id="ns1blankspaceUserRoleAccessUsers" class="ns1blankspace">');
 											
 											$vq.add('<tr class="ns1blankspaceCaption">');
-											$vq.add('<td class="ns1blankspaceHeaderCaption">Users assigned this role</td>');
+											$vq.add('<td class="ns1blankspaceHeaderCaption">Logon name</td>');
+											$vq.add('<td class="ns1blankspaceHeaderCaption">First name</td>');
+											$vq.add('<td class="ns1blankspaceHeaderCaption">Last name</td>');
+											$vq.add('<td class="ns1blankspaceHeaderCaption">Status</td>');
+											$vq.add('<td class="ns1blankspaceHeaderCaption">Business</td>');			
 											$vq.add('<td class="ns1blankspaceHeaderCaption">&nbsp;</td>');
 											$vq.add('</tr>');
 
@@ -1507,7 +1514,7 @@ ns1blankspace.setup.userRole =
 												xhtml: $vq.get(),
 												showMore: (oResponse.morerows == "true"),
 												more: oResponse.moreid,
-												rows: ns1blankspace.option.defaultRows,
+												rows: 200,
 												functionShowRow: ns1blankspace.setup.userRole.users.row,
 												functionOnNewPage: ns1blankspace.setup.userRole.users.bind,
 												headerRow: true,
@@ -1522,7 +1529,25 @@ ns1blankspace.setup.userRole =
 																
 									$vq.add('<td id="ns1blankspaceUsers_logonname-' + oRow.user + '" class="ns1blankspaceRow ns1blankspaceRowSelect">' +
 															oRow.usertext + '</td>');
-																							
+
+									var sContactBusiness = oRow['userrole.user.contactbusinesstext'];
+									if (ns1blankspace.spaceContactBusiness == oRow['userrole.user.contactbusiness'])
+									{
+										sContactBusiness = '<div class="ns1blankspaceSub">Internal</div>'
+									}
+
+									$vq.add('<td id="ns1blankspaceUsers_firstname-' + oRow.user + '" class="ns1blankspaceRow">' +
+															oRow['userrole.user.contactperson.firstname'] + '</td>');
+
+									$vq.add('<td id="ns1blankspaceUsers_firstname-' + oRow.user + '" class="ns1blankspaceRow">' +
+															oRow['userrole.user.contactperson.surname'] + '</td>');
+
+									$vq.add('<td id="ns1blankspaceUsers_disabled-' + oRow.user + '" class="ns1blankspaceRow">' +
+															(oRow['userrole.user.disabled']=='Y'?'Disabled':'Enabled') + '</td>');
+
+									$vq.add('<td id="ns1blankspaceUsers_contactbusiness-' + oRow.user + '" class="ns1blankspaceRow">' +
+															sContactBusiness + '</td>');
+												
 									$vq.add('<td style="width:30px; text-align:right;" class="ns1blankspaceRow">');
 									
 									$vq.add('<span id="ns1blankspaceUsersremove-' + oRow.id + '" class="ns1blankspaceRowRemove"></span>');
@@ -1532,7 +1557,7 @@ ns1blankspace.setup.userRole =
 									return $vq.get('');
 								},
 
-					bind: 		function (oParam)
+					bind: 	function (oParam)
 								{
 									$('#ns1blankspaceUserRoleAccessUsers td.ns1blankspaceRowSelect')
 									.click(function()

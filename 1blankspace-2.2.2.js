@@ -785,6 +785,7 @@ ns1blankspace.app =
 									if (window.location.hash.toLowerCase().indexOf('logonerror') != -1)
 									{
 										oParam.message = 'There was an error logging on (' + decodeURIComponent(window.location.hash.split('=')[1]).replace(/\+/g, ' ') + ')'
+										window.location.hash = '';
 									}
 								}
 								
