@@ -1849,8 +1849,8 @@ ns1blankspace.financial.bankAccount =
 														if (oRow.status == 3 || oRow.status == 7)
 														{	
 															aHTML.push('<span id="ns1blankspaceFinancialImportItem_options_edit-' + oRow.id + '" class="ns1blankspaceRowEdit"' +
-																		' data-amount="' + Math.abs(oRow.amount) + '"' +
-																		' data-type="' + (oRow.amount<0?1:2) + '"' +
+																		' data-amount="' + Math.abs(numeral(oRow.amount).value()) + '"' +
+																		' data-type="' + (numeral(oRow.amount).value()<0?1:2) + '"' +
 																		' data-taxtype="' + oRow.taxtype + '"' +
 																		' data-financialaccount="' + oRow.financialaccount + '"' +
 																		' data-financialaccounttext="' + oRow.financialaccounttext + '"' +
