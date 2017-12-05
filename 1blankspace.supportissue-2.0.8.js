@@ -1440,7 +1440,7 @@ ns1blankspace.supportIssue =
 
 			if (ns1blankspace.supportIssue.data.mode.value == ns1blankspace.supportIssue.data.mode.options.forMe)
 			{
-				/*if (ns1blankspace.objectContext == -1)
+				if (ns1blankspace.objectContext == -1)
 				{
 					aHTML.push('<tr class="ns1blankspaceCaption">' +
 									'<td class="ns1blankspaceCaption">' +
@@ -1448,14 +1448,14 @@ ns1blankspace.supportIssue =
 									'</td></tr>' +
 									'<tr class="ns1blankspace">' +
 									'<td class="ns1blankspaceSelect">' +
-									'<input class="ns1blankspaceSelect" id="ns1blankspaceDetailsCustomerBusiness"' +
-										' data-method="CONTACT_BUSINESS_SEARCH"' +
-										' data-methodFilter="tradename-TEXT_IS_LIKE|legalname-TEXT_IS_LIKE"' +
-										' data-columns="tradename"' + 
+									'<input class="ns1blankspaceSelect" id="ns1blankspaceDetailsSourceSpace"' +
+										' data-method="CORE_SPACE_SEARCH"' +
+										' data-methodFilter="spacetext-TEXT_IS_LIKE"' +
+										' data-columns="spacetext"' + 
 										' data-column="contactbusiness">' +
 									'</td></tr>');	
 
-				}*/
+				}
 
 				aHTML.push('<tr class="ns1blankspaceCaption">' +
 								'<td class="ns1blankspaceCaption">' +
@@ -1621,10 +1621,12 @@ ns1blankspace.supportIssue =
 			});
 
 			if (ns1blankspace.objectContextData != undefined)
-			{
+			{	
 				$('#ns1blankspaceDetailsTitle').val(ns1blankspace.objectContextData.title.formatXHTML());
 				$('#ns1blankspaceDetailsDescription').val(ns1blankspace.objectContextData.description.formatXHTML());
 				$('#ns1blankspaceDetailsName').val(ns1blankspace.objectContextData.name.formatXHTML());
+				$('#ns1blankspaceDetailsSourceSpace').val(ns1blankspace.objectContextData.sourcespacetext.formatXHTML());
+				$('#ns1blankspaceDetailsSourceSpace').attr('data-id', ns1blankspace.objectContextData.sourcespace.formatXHTML());
 				$('#ns1blankspaceDetailsCustomerBusiness').val(ns1blankspace.objectContextData.contactbusinesstext.formatXHTML());
 				$('#ns1blankspaceDetailsCustomerBusiness').attr('data-id', ns1blankspace.objectContextData.contactbusiness.formatXHTML());
 				$('#ns1blankspaceDetailsCustomerPerson').val(ns1blankspace.objectContextData.contactpersontext.formatXHTML());
@@ -1869,7 +1871,7 @@ ns1blankspace.supportIssue =
 			
 			if (iObjectContext != -1)
 			{	
-				// To pick up attachments from the customer's space, weget attchments from the support_issue subsearch
+				// To pick up attachments from the customer's space, we get attchments from the support_issue subsearch
 				var oSearch = new AdvancedSearch();
 				oSearch.method = 'SUPPORT_ISSUE_SEARCH';
 				oSearch.addField('supportissue.attachment.type,supportissue.attachment.filename,supportissue.attachment.title,' +
@@ -1877,6 +1879,7 @@ ns1blankspace.supportIssue =
 									'supportissue.attachment.attachment,supportissue.attachment.bucket,supportissue.attachment.createddate,' +
 									'supportissue.attachment.createdusertext,supportissue.attachment.id');
 				oSearch.addFilter('id', 'EQUAL_TO', iObjectContext)
+				oSearch.addField('supportissue.attachment.id', 'IS_NOT_NULL');
 				oSearch.rows = ns1blankspace.option.defaultRows;
 				
 				if (iAttachmentType != undefined)
