@@ -163,7 +163,7 @@ ns1blankspace.financial.journal =
 										oSearch.addField('area,areatext,description,id,journaldate,object,objecttext,objectcontext,' +
 															'project,projecttext,reference,status,statustext');
 										oSearch.rows = 20;
-										//oSearch.addFilter('status', 'EQUAL_TO', 1);
+										oSearch.addFilter('status', 'EQUAL_TO', 1);
 										oSearch.sort('journaldate', 'desc');
 										oSearch.getResults(function(data) {ns1blankspace.financial.journal.pending.show(oParam, data)});
 									}

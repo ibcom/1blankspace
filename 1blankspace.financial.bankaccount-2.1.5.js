@@ -1208,10 +1208,10 @@ ns1blankspace.financial.bankAccount =
 															dataType: 'json',
 															global: false,
 															success: 	function(data)
-																		{
-																			oParam = ns1blankspace.util.setParam(oParam, 'index', iIndex + 1);
-																			ns1blankspace.financial.bankAccount.mapping.apply.process(oParam)
-																		}
+															{
+																oParam = ns1blankspace.util.setParam(oParam, 'index', iIndex + 1);
+																ns1blankspace.financial.bankAccount.mapping.apply.process(oParam)
+															}
 														});
 													}
 													else

@@ -8,3 +8,5 @@
 
 *.db:encryptable
 /.brackets.json
+
+jquery.form.min.js
