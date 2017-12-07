@@ -434,8 +434,8 @@ ns1blankspace.setup.website =
 						ns1blankspace.attachments.show(
 						{
 							xhtmlElementID: 'ns1blankspaceMainAttachments',
-							label: 'Select the file attachment:',
-							maxFiles: 1,
+							label: 'Select the files to attach to this website...',
+							maxFiles: 3,
 							helpNotes: 'If you upload a file with the same name as an existing attachment it will automatically be replaced.'
 						});
 					});

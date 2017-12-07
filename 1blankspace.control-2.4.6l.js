@@ -144,7 +144,7 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.messaging.conversation',
-		source: '/jscripts/1blankspace.messaging.conversation-2.0.4.js'
+		source: '/site/312/1blankspace.messaging.conversation-2.0.5.js'
 	},
 	{
 		nameSpace: '1blankspace.messaging.imap',
@@ -2511,6 +2511,7 @@ ns1blankspace.attachments =
 			$('#ns1blankspaceAttachmentsColumn1').html(ns1blankspace.attachments.upload.show(oParam));
 
 			oParam.xhtmlElementID = 'divInterfaceMainAttachments';
+
 			if (bShowUpload)
 			{
 				ns1blankspace.attachments.upload.submit(oParam);
@@ -2597,7 +2598,7 @@ ns1blankspace.attachments =
 			
 			if (sLabel != '') 
 			{
-				aHTML.push('<div id="ns1blankspaceUploadLabel" class="ns1blankspaceUpload">' + sLabel + '</div>');
+				aHTML.push('<div id="ns1blankspaceUploadLabel" class="ns1blankspaceUpload ns1blankspaceSubNote" style="margin-bottom:10px;">' + sLabel + '</div>');
 			}	
 				
 			for (var i = 0; i < iMaxFiles; i++) 	
@@ -2631,12 +2632,12 @@ ns1blankspace.attachments =
 
 			if (bShowUpload)
 			{
-				aHTML.push('<span style="margin-top:10px;">' +
-							'<input id="ns1blankspaceUpload" class="ns1blankspaceAction" type="submit" value="Upload">' +
-							'</span><br /><br />');
+				aHTML.push('<div style="margin-left:3px; margin-top:10px;">' +
+							'<input id="ns1blankspaceUpload" class="ns1blankspaceAction ns1blankspaceAction ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" type="submit" value="Upload">' +
+							'</div>');
 			}	
 				
-			aHTML.push('<div id="ns1blankspaceUploadStatus" class="ns1blankspaceUpload"></div>')
+			aHTML.push('<div id="ns1blankspaceUploadStatus" class="ns1blankspaceUpload" style="margin-top:20px; font-size:0.875em;"></div>')
 			aHTML.push('<iframe style="display:none;" name="ns1blankspaceUploadProxy" id="ns1blankspaceUploadProxy" class="ns1blankspaceUpload" frameborder="0"></iframe>' +
 							'</form>');
 			
@@ -2736,7 +2737,7 @@ ns1blankspace.attachments =
 			ns1blankspace.timer.delay = setInterval('ns1blankspace.attachments.upload.status()', 1000);
 		},
 
-		status:		function ()
+		status: function ()
 		{
 			var oDivStatus = document.getElementById('ns1blankspaceFileUploadStatus');
 			var oFrame = document.getElementById('ns1blankspaceUploadProxy');

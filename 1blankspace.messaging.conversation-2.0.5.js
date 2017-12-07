@@ -1322,7 +1322,7 @@ ns1blankspace.messaging.conversation =
 									ns1blankspace.util.cleanURL({text: (oRow.message).formatXHTML()}) + '</div>');
 
 
-			aHTML.push('</td><td style="width:80px; text-align:right; vertical-align:bottom; padding-bottom:4px;" class="ns1blankspaceRow">' +
+			aHTML.push('</td><td style="width:100px; text-align:right; vertical-align:bottom; padding-bottom:4px;" class="ns1blankspaceRow">' +
 							'<div id="ns1blankspaceMessagingConversationPosts_comment_container-' + oRow.id + '">' +
 							'<span id="ns1blankspaceMessagingConversationPosts_comment_view-' + oRow.id + '" class="ns1blankspaceRowAddCommentView"></span>' +
 							'<span id="ns1blankspaceMessagingConversationPosts_comment_add-' + oRow.id + '">&nbsp;</span>' +
