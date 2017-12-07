@@ -132,7 +132,7 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.contactBusiness',
-		source: '/jscripts/1blankspace.contactbusiness-2.0.5.js'
+		source: '/site/312/1blankspace.contactbusiness-2.0.6.js'
 	},
 	{
 		nameSpace: '1blankspace.opportunity',
