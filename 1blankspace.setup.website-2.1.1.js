@@ -29,7 +29,7 @@ ns1blankspace.setup.website =
 					});
 				},
 
-	new:   		function ()
+	new:   	function ()
 				{
 					ns1blankspace.show({selector: '#ns1blankspaceMain'});
 					ns1blankspace.setup.website.siteTemplate.init();

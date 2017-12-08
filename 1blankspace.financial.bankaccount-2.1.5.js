@@ -2249,9 +2249,9 @@ ns1blankspace.financial.bankAccount =
 																		dataType: 'json',
 																		global: false,
 																		success: function(data)
-																					{
-																						ns1blankspace.financial.bankAccount["import"].items.save.reconcile(oParam)
-																					}
+																		{
+																			ns1blankspace.financial.bankAccount["import"].items.save.reconcile(oParam)
+																		}
 																	});
 																},
 

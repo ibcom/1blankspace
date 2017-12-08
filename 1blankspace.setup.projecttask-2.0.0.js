@@ -644,7 +644,11 @@ ns1blankspace.setup.projectTask =
 										url: ns1blankspace.util.endpointURI('PROJECT_TASK_MANAGE'),
 										data: sData,
 										dataType: 'json',
-										success: function(data){ns1blankspace.status.message('Saved')}
+										success: function(data)
+										{
+											ns1blankspace.status.message('Saved');
+											ns1blankspace.inputDetected = false;
+										}
 									});		
 								}
 				}

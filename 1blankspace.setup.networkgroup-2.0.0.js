@@ -760,7 +760,7 @@ ns1blankspace.setup.networkGroup =
 								}			
 				},				
 
-	save: 		{
+	save: 	{
 					send: 		function ()
 								{
 									ns1blankspace.status.working();
@@ -788,11 +788,11 @@ ns1blankspace.setup.networkGroup =
 										success: function(data) 
 													{ 
 														ns1blankspace.status.message('Saved');
+														ns1blankspace.inputDetected = false;
 
 														if (ns1blankspace.objectContext == -1)
 														{	
 															ns1blankspace.objectContext = data.id;
-															ns1blankspace.inputDetected = false;
 															ns1blankspace.setup.networkGroup.search.send('-' + ns1blankspace.objectContext);
 														}
 															

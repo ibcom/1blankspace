@@ -689,6 +689,7 @@ ns1blankspace.financial.payroll =
 											success: function(data)
 											{
 												ns1blankspace.status.message('Saved.');
+												ns1blankspace.inputDetected = false;
 											}	
 										});		
 									}	
@@ -914,7 +915,7 @@ ns1blankspace.financial.payroll =
 									}
 								},
 
-					process: 	function (oParam)
+					process: function (oParam)
 								{
 									var iContactBusiness = ns1blankspace.user.contactBusiness;
 									var iContactPerson;

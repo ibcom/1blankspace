@@ -413,6 +413,7 @@ ns1blankspace.setup.space =
 										success: function (data)
 										{
 											ns1blankspace.status.message('Settings saved');
+											ns1blankspace.inputDetected = false;
 
 											if ($('#ns1blankspaceMainAdvanced').html() != '')
 											{

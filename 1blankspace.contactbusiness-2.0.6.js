@@ -1791,8 +1791,8 @@ ns1blankspace.contactBusiness =
 								}																													
 				},			
 
-	save: 		{
-					send: 		function ()
+	save: 	{
+					send: 	function ()
 								{
 									ns1blankspace.status.working();
 

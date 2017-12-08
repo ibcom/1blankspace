@@ -495,11 +495,11 @@ ns1blankspace.setup.websiteForm =
 									if (oResponse.status == 'OK')
 									{	
 										ns1blankspace.status.message('Saved');
+										ns1blankspace.inputDetected = false;
 										
 										if (ns1blankspace.objectContext == -1)
 										{
 											ns1blankspace.objectContext = oResponse.id;
-											ns1blankspace.inputDetected = false;
 											ns1blankspace.setup.websiteForm.search('-' + ns1blankspace.objectContext, {source: 1});
 										}	
 									}

@@ -144,7 +144,7 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.messaging.conversation',
-		source: '/site/312/1blankspace.messaging.conversation-2.0.5.js'
+		source: '/site/312/1blankspace.messaging.conversation-2.0.6.js'
 	},
 	{
 		nameSpace: '1blankspace.messaging.imap',
@@ -461,7 +461,7 @@ ns1blankspace.views =
 		namespace: "contactsearch",
 		endpoint: "CONTACT_BUSINESS",
 		object: 12,
-		show: true,
+		show: false,
 		group: 1,
 		type: 1
 	},
@@ -766,7 +766,7 @@ ns1blankspace.views =
 		namespace: "credit",
 		endpoint: "FINANCIAL_CREDIT",
 		show: true,
-		group: 5,
+		group: 6,
 		type: 1
 	},
 	{
@@ -1289,9 +1289,13 @@ ns1blankspace.control =
 				{	
 					aHTML.push('<tr class="ns1blankspaceViewControl">');
 
-					aHTML.push('<td class="ns1blankspaceViewControl" colspan=' + ns1blankspace.viewGroups.length + ' style="text-align: right; color: #999999; font-size:0.825em; padding-top:6px;">' +
-								'<span id="ns1blankspaceViewControl_report" class="ns1blankspaceViewControl">' +
-								'Search... report, export, update, email & SMS</span></td>');
+					aHTML.push('<td class="ns1blankspaceViewControlx" colspan=' + ns1blankspace.viewGroups.length + ' style="text-align:left; color: #999999; font-size:0.825em; padding-top:6px;">' +
+								'<div class="ns1blankspaceSub"><i>Explore...</i></div>' +
+								'<div class="ns1blankspaceViewControl" style="cursor:pointer;"><span id="ns1blankspaceViewControl_report" class="ns1blankspaceViewControl">' +
+								' Customised reporting with exporting, updating, emailing & SMS sending</span></div>' +
+								'<div class="ns1blankspaceViewControl" style="cursor:pointer;"><span id="ns1blankspaceViewControl_contactsearch" class="ns1blankspaceViewControl">' +
+								' Search Contacts</span></div>' +
+								'</td>');
 
 					aHTML.push('</tr>');
 				}	
@@ -1310,7 +1314,7 @@ ns1blankspace.control =
 			ns1blankspace.control.views.bind();	
 		},
 
-		bind: 			function ()
+		bind: function ()
 		{
 			$($.grep(ns1blankspace.views, function (a) {return a.type == 1;})).each(function()
 			{
@@ -2256,7 +2260,7 @@ ns1blankspace.attachments =
 							'</td></tr>');
 
 			aHTML.push('<tr><td class="ns1blankspaceText" style="padding-top:12px;">' +
-									'<input id="ns1blankspaceAttachmentsSearchText" class="ns1blankspaceText" style="width:80px;">' +
+									'<input id="ns1blankspaceAttachmentsSearchText" class="ns1blankspaceText" data-1blankspace="ignore" style="width:80px;">' +
 									'</td></tr>');
 																
 			aHTML.push('<tr><td style="padding-top:0px;">' +
@@ -2648,8 +2652,9 @@ ns1blankspace.attachments =
 		{
 			var fFunctionPostUpdate = (oParam && oParam.functionPostUpdate) ? oParam.functionPostUpdate : ns1blankspace.attachments.show;
 			var fFunctionValidate = ns1blankspace.util.getParam(oParam, 'functionValidate', {'default': ns1blankspace.attachments.upload.validate}).value;
+			var bSubmit = ns1blankspace.util.getParam(oParam, 'submit', {'default': false}).value;
 
-			$('[name="ns1blankspaceFileUpload"]').ajaxForm(
+			$('[name="ns1blankspaceFileUpload"]')['ajax' + (bSubmit?'Submit':'Form')](
 			{
 				beforeSubmit: function()
 				{
@@ -2680,7 +2685,7 @@ ns1blankspace.attachments =
 					{
 						if (fFunctionPostUpdate)
 						{
-							fFunctionPostUpdate(oParam);
+							fFunctionPostUpdate(oParam, oResponse);
 						}
 					}
 					else
@@ -2955,7 +2960,7 @@ ns1blankspace.actions =
 		}
 	},
 
-	bind: 		function (oParam)
+	bind: function (oParam)
 	{
 		var sXHTMLContainerID = ns1blankspace.util.getParam(oParam, 'xhtmlContainerID', {"default": 'ns1blankspaceRenderPage_Action-0'}).value;
 

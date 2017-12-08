@@ -781,18 +781,7 @@ ns1blankspace.opportunity =
 					}	
 				},
 
-	new2: 		function ()
-				{
-					ns1blankspace.objectContextData = undefined;
-					ns1blankspace.objectContext = -1;
-					ns1blankspace.opportunity.init();
-					ns1blankspace.show({selector: '#ns1blankspaceMainDetails'});
-					$('#ns1blankspaceViewControlAction').button({disabled: false});
-					$('#ns1blankspaceViewControlActionOptions').button({disabled: true});
-					ns1blankspace.opportunity.details();
-				},
-
-	save: 		{
+	save: 	{
 					validate: 	function ()
 								{
 									if ($('#ns1blankspaceContactFirstName').val() != '' && $('#ns1blankspaceContactSurname').val() == '')
@@ -864,6 +853,7 @@ ns1blankspace.opportunity =
 									if (oResponse.status == 'OK')
 									{
 										ns1blankspace.status.message('Saved');
+										ns1blankspace.inputDetected = false;
 										if (ns1blankspace.objectContext == -1) {var bNew = true}
 										ns1blankspace.objectContext = oResponse.id;	
 										

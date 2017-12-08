@@ -921,15 +921,15 @@ ns1blankspace.developer.membership =
 										data: oData,
 										dataType: 'json',
 										success: 	function()
-													{
-														oParam.step = 1;
-														ns1blankspace.status.message('Saved');
-														ns1blankspace.developer.membership.subscriptions.show(oParam);
-													}
+										{
+											oParam.step = 1;
+											ns1blankspace.status.message('Saved');
+											ns1blankspace.developer.membership.subscriptions.show(oParam);
+										}
 									});
 								},		
 
-					search:		function (sXHTMLInputElementID, oResponse)
+					search:	function (sXHTMLInputElementID, oResponse)
 								{
 									var aHTML = [];
 									var sSearchText;
@@ -1021,11 +1021,11 @@ ns1blankspace.developer.membership =
 											if (oResponse.status == 'OK')
 											{	
 												ns1blankspace.status.message('Saved');
+												ns1blankspace.inputDetected = false;
 												
 												if (ns1blankspace.objectContext == -1)
 												{
 													ns1blankspace.objectContext = oResponse.id;
-													ns1blankspace.inputDetected = false;
 													ns1blankspace.developer.membership.search.send('-' + ns1blankspace.objectContext, {source: 1});
 												}	
 											}

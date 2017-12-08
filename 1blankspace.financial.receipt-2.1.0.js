@@ -959,9 +959,10 @@ ns1blankspace.financial.receipt =
 													dataType: 'json',
 													success: function(oResponse)
 													{
+														ns1blankspace.inputDetected = false;
+
 														if (ns1blankspace.util.getParam(oParam, 'new').value)
-														{
-															ns1blankspace.inputDetected = false;
+														{	
 															ns1blankspace.financial.receipt.search.send('-' + ns1blankspace.objectContext, {source: 1});
 														}
 														else

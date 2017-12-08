@@ -1266,7 +1266,7 @@ ns1blankspace.financial.tax =
 									});
 								},
 
-					process: 	function (oResponse)
+					process: function (oResponse)
 								{	
 									if (oResponse.status == 'OK')
 									{

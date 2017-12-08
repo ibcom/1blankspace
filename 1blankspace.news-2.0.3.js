@@ -1261,6 +1261,8 @@ search: 		{
 									if (oResponse.status == 'OK')
 									{
 										ns1blankspace.status.message('Saved');
+										ns1blankspace.inputDetected = false;
+
 										if (ns1blankspace.objectContext == -1)
 										{
 											var bNew = true;
@@ -1309,7 +1311,6 @@ search: 		{
 
 										if (bNew)
 										{
-											ns1blankspace.inputDetected = false;
 											ns1blankspace.news.search.send('-' + ns1blankspace.objectContext)
 										}
 									}

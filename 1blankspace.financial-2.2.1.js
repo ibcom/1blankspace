@@ -5750,6 +5750,7 @@ ns1blankspace.financial.item =
 					success: function(oResponse)
 					{
 						ns1blankspace.status.message('Saved');
+						ns1blankspace.inputDetected = false;
 
 						var sData = 'object=' + ns1blankspace.object;
 						sData += '&objectcontext=' + ns1blankspace.objectContext;

@@ -768,11 +768,11 @@ ns1blankspace.financial.journal =
 									if (oResponse.status == 'OK')
 									{
 										ns1blankspace.status.message('Saved');
+										ns1blankspace.inputDetected = false;
 
 										if (ns1blankspace.objectContext == -1)
 										{
 											ns1blankspace.objectContext = oResponse.id;
-											ns1blankspace.inputDetected = false;
 											ns1blankspace.financial.journal.search.send('-' + ns1blankspace.objectContext, {source: 1});
 										}
 									}

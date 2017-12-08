@@ -533,7 +533,8 @@ $.extend(true, ns1blankspace.setup,
 																	.css('height', '20px');
 															}
 															
-															ns1blankspace.status.message('Saved')
+															ns1blankspace.status.message('Saved');
+															ns1blankspace.inputDetected = false;
 															$('#ns1blankspaceViewControlNew').button({disabled: false});
 															$('#ns1blankspaceSetupAdd').button({disabled: false});
 															$('#ns1blankspaceNothingToShow').hide();

@@ -23,7 +23,7 @@ ns1blankspace.event =
 					{
 						tinyMCE.init(
 						{
-					        mode : "none",
+							mode : "none",
 							height : "370px", 
 							width : "100%",
 							theme : "advanced",
@@ -791,11 +791,12 @@ ns1blankspace.event =
 										data: sData,
 										dataType: 'json',
 										success: function(data) 
-													{ 
-														if (ns1blankspace.objectContext == -1) {var bNew = true}
-														if (bNew) {ns1blankspace.objectContext = data.id};
-														ns1blankspace.status.message('Event saved.');
-													}
+										{ 
+											if (ns1blankspace.objectContext == -1) {var bNew = true}
+											if (bNew) {ns1blankspace.objectContext = data.id};
+											ns1blankspace.status.message('Event saved.');
+											ns1blankspace.inputDetected = false;
+										}
 									});
 										
 								}

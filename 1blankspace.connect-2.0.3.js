@@ -871,7 +871,7 @@ ns1blankspace.connect =
 					}	
 				},			
 
-	save: 		{
+	save: 	{
 					send:		function (oParam)
 								{
 									var sURLPassword = $('#ns1blankspaceLogonPassword') && $('#ns1blankspaceLogonPassword').val();

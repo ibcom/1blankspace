@@ -1534,6 +1534,7 @@ ns1blankspace.order =
 			if (ns1blankspace.okToSave)
 			{	
 				ns1blankspace.status.working('Saving');
+				ns1blankspace.inputDetected = false;
 
 				var oData = 
 				{

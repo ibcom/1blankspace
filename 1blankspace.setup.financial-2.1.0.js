@@ -2231,6 +2231,7 @@ ns1blankspace.setup.financial =
 											var sCounter = $('table.ns1blankspaceTemplateText_' + sTemplate).attr('data-editorcount');
 											$('#ns1blankspaceTemplate_variants-' + iDocument).text(sTitle);
 											ns1blankspace.status.message('Saved');
+											ns1blankspace.inputDetected = false;
 											ns1blankspace.format.templates.data = []
 										}
 									});

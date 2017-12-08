@@ -645,7 +645,7 @@ ns1blankspace.document =
 					}	
 				},
 
-	save: 		{
+	save: 	{
 					send: 		function ()
 								{
 									ns1blankspace.status.working();

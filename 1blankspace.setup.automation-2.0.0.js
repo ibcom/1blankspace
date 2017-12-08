@@ -823,12 +823,12 @@ ns1blankspace.setup.automation =
 									{
 										if (oResponse.status == 'OK')
 										{	
-											ns1blankspace.status.message('Saved')
+											ns1blankspace.status.message('Saved');
+											ns1blankspace.inputDetected = false;
 											
 											if (ns1blankspace.objectContext == -1)
 											{
 												ns1blankspace.objectContext = oResponse.id;
-												ns1blankspace.inputDetected = false;
 												ns1blankspace.setup.automation.search.send('-' + ns1blankspace.objectContext, {source: 1});
 											}
 										}	

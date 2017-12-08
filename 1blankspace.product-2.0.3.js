@@ -1362,9 +1362,10 @@ ns1blankspace.product =
 					}	
 				}
 
+				ns1blankspace.inputDetected = false;
+
 				if (bNew)
-				{
-					ns1blankspace.inputDetected = false;
+				{	
 					ns1blankspace.product.search.send('-' + ns1blankspace.objectContext, {source: 1});
 				}	
 			}

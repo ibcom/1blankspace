@@ -737,6 +737,7 @@ ns1blankspace.setup.project =
 														success: function ()
 														{
 															ns1blankspace.status.message("Task saved");
+															ns1blankspace.inputDetected = false;
 															ns1blankspace.setup.project.tasks.show();
 														}
 													});

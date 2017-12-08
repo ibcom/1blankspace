@@ -865,8 +865,10 @@ ns1blankspace.project =
 										url: ns1blankspace.util.endpointURI('PROJECT_TASK_MANAGE'),
 										data: sData,
 										dataType: 'json',
-										success: function(data){
-											ns1blankspace.status.message('Task added')
+										success: function(data)
+										{
+											ns1blankspace.status.message('Task added');
+											ns1blankspace.inputDetected = false;
 											//ns1blankspace.show({selector: 'ns1blankspaceMainTasks', refresh: true});
 											ns1blankspace.project.tasks.show();
 										}
@@ -922,11 +924,11 @@ ns1blankspace.project =
 									if (oResponse.status == 'OK')
 									{
 										ns1blankspace.status.message('Saved');
+										ns1blankspace.inputDetected = false;
 
 										if (ns1blankspace.objectContext == -1)
 										{
 											ns1blankspace.objectContext = oResponse.id;
-											ns1blankspace.inputDetected = false;
 											ns1blankspace.project.search.send('-' + ns1blankspace.objectContext, {source: 1});
 										}	
 									}
