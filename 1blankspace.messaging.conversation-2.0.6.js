@@ -2298,6 +2298,7 @@ ns1blankspace.messaging.conversation =
 							return y;
 						});
 					}
+					
 					oParam.functionSearch = ns1blankspace.messaging.conversation.attachments.show;
 					oParam.functionPostUpdate = ns1blankspace.messaging.conversation.attachments.show;
 					ns1blankspace.attachments.process(data, oParam)
