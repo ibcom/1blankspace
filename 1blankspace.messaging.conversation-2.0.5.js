@@ -11,7 +11,7 @@ if (ns1blankspace.messaging === undefined) {ns1blankspace.messaging = {}}
  
 ns1blankspace.messaging.conversation = 
 {
-	init: 		function (oParam)
+	init: function (oParam)
 	{
 		var bNew = false;
 		
@@ -32,7 +32,7 @@ ns1blankspace.messaging.conversation =
 		ns1blankspace.app.set(oParam);
 	},
 
-	home: 		function (oParam, oResponse)
+	home: function (oParam, oResponse)
 	{
 		if (oResponse == undefined)
 		{
@@ -108,7 +108,7 @@ ns1blankspace.messaging.conversation =
 
 	search: 	
 	{
-		send:		function (sXHTMLElementID, oParam)
+		send:	function (sXHTMLElementID, oParam)
 		{
 			var aSearch = sXHTMLElementID.split('-');
 			var sElementID = aSearch[0];
@@ -246,7 +246,7 @@ ns1blankspace.messaging.conversation =
 			}	
 		},
 
-		row: 	function (oParam, oRow)
+		row: function (oParam, oRow)
 		{
 			var aHTML = [];
 			var sContact;
@@ -269,7 +269,7 @@ ns1blankspace.messaging.conversation =
 		}				
 	},
 
-	layout: 	function ()
+	layout: function ()
 	{
 		var aHTML = [];
 
@@ -368,7 +368,7 @@ ns1blankspace.messaging.conversation =
 		});
 	},
 
-	show: 		function (oParam, oResponse)
+	show: function (oParam, oResponse)
 	{
 		ns1blankspace.app.clean();
 		
@@ -495,7 +495,7 @@ ns1blankspace.messaging.conversation =
 		}	
 	},
 
-	details: 	function ()
+	details: function ()
 	{
 		var aHTML = [];
 
@@ -607,7 +607,7 @@ ns1blankspace.messaging.conversation =
 
 	participants: 
 	{
-		init:		function (oParam)
+		init: function (oParam)
 		{
 			var aHTML = [];
 			
@@ -647,7 +647,7 @@ ns1blankspace.messaging.conversation =
 			ns1blankspace.messaging.conversation.participants.show();
 		},		
 
-		show: 		function (oParam, oResponse)
+		show: function (oParam, oResponse)
 		{
 			oParam = oParam || {};
 			var iOption = 1;
@@ -727,7 +727,7 @@ ns1blankspace.messaging.conversation =
 			}	
 		},	
 
-		add: 		function (oParam, oResponse)
+		add: function (oParam, oResponse)
 		{
 			var sXHTMLElementID = ns1blankspace.util.getParam(oParam, 'xhtmlSelectElementID', {'default': 'ns1blankspaceMainParticipantsAdd'}).value;
 			var bLinkedToObject = ns1blankspace.util.getParam(oParam, 'linkedToObject', {'default': false}).value;
@@ -892,7 +892,7 @@ ns1blankspace.messaging.conversation =
 			}
 		},
 
-		select:		function (sXHTMLElementID, oParam)
+		select: function (sXHTMLElementID, oParam)
 		{
 			oParam = oParam || {};
 			var sElementID = sXHTMLElementID.split('-').shift();
@@ -975,7 +975,7 @@ ns1blankspace.messaging.conversation =
 			}	
 		},
 
-		leave:		function (oParam)
+		leave: function (oParam)
 		{
 			var iConversationID = ns1blankspace.util.getParam(oParam, 'conversationID', {'default': ns1blankspace.objectContext}).value;
 			var oSearch = new AdvancedSearch();
@@ -1299,7 +1299,7 @@ ns1blankspace.messaging.conversation =
 			}	
 		},
 
-		row:		function (oRow, oParam)
+		row: function (oRow, oParam)
 		{
 			var aHTML = [];
 
@@ -1332,7 +1332,7 @@ ns1blankspace.messaging.conversation =
 			return aHTML.join('');						
 		},
 
-		bind: 	function (oParam)
+		bind: function (oParam)
 		{
 			var sXHTMLContainerID = ns1blankspace.util.getParam(oParam, 'xhtmlContainerID').value;
 
@@ -1481,7 +1481,7 @@ ns1blankspace.messaging.conversation =
 
 		comments:	
 		{
-			showHide: 	function (oParam)
+			showHide: function (oParam)
 			{
 				var sXHTMLElementID = ns1blankspace.util.getParam(oParam, 'xhtmlElementID').value;
 				var sKey = ns1blankspace.util.getParam(oParam, 'xhtmlElementID', {index: 1}).value
@@ -1550,7 +1550,7 @@ ns1blankspace.messaging.conversation =
 
 			search: 	
 			{
-				send: 		function (oParam)
+				send: function (oParam)
 				{
 					var sKey = ns1blankspace.util.getParam(oParam, 'xhtmlElementID', {index: 1}).value;
 					var iPost = ns1blankspace.util.getParam(oParam, 'xhtmlElementID', {index: 1}).value;
@@ -1569,7 +1569,7 @@ ns1blankspace.messaging.conversation =
 					oSearch.getResults(function(data) {ns1blankspace.messaging.conversation.posts.comments.search.process(oParam, data)});
 				},
 
-				process: 	function (oParam, oResponse)
+				process: function (oParam, oResponse)
 				{
 					var sKey = ns1blankspace.util.getParam(oParam, 'xhtmlElementID', {index: 1}).value;
 					var bNew = ns1blankspace.util.getParam(oParam, 'new', {"default": false}).value;
@@ -1612,7 +1612,7 @@ ns1blankspace.messaging.conversation =
 
 			"new":		
 			{
-				show:  		function (oParam)
+				show: function (oParam)
 				{
 					var sXHTMLElementID = ns1blankspace.util.getParam(oParam, 'xhtmlElementID').value;
 					var sKey = ns1blankspace.util.getParam(oParam, 'xhtmlElementID', {index: 1}).value
@@ -1646,7 +1646,7 @@ ns1blankspace.messaging.conversation =
 					
 				},						
 
-				send:		function (oParam)
+				send:	function (oParam)
 				{
 					var sKey = ns1blankspace.util.getParam(oParam, 'xhtmlElementID', {index: 1}).value
 					var iPost = ns1blankspace.util.getParam(oParam, 'xhtmlElementID', {index: 1}).value
@@ -1683,7 +1683,7 @@ ns1blankspace.messaging.conversation =
 			}
 		},								
 
-		add:		function (oParam, oResponse)
+		add: function (oParam, oResponse)
 		{
 			var sXHTMLElementContextID;
 			var iPost;
@@ -1825,7 +1825,7 @@ ns1blankspace.messaging.conversation =
 			}	
 		},	
 
-		send:		function (oParam)
+		send:	function (oParam)
 		{
 			oParam = oParam || ns1blankspace.param || {};
 			var iConversationID = ns1blankspace.util.getParam(oParam, 'conversationID', {'default': ns1blankspace.objectContext}).value;
@@ -1848,7 +1848,7 @@ ns1blankspace.messaging.conversation =
 
 	comments: 	
 	{
-		show:		function (oParam, oResponse)
+		show:	function (oParam, oResponse)
 		{
 			var sXHTMLElementID = 'ns1blankspaceMainComments';
 			var iPost;
@@ -1977,7 +1977,7 @@ ns1blankspace.messaging.conversation =
 	{
 		validate: 	true,
 
-		send:		function ()
+		send:	function ()
 		{
 			if (ns1blankspace.messaging.conversation.save.validate)
 			{	
@@ -2208,7 +2208,6 @@ ns1blankspace.messaging.conversation =
 			
 			if (iObjectContext != -1)
 			{	
-				// To pick up attachments from the customer's space, weget attchments from the support_issue subsearch
 				var oSearch = new AdvancedSearch();
 				oSearch.method = 'MESSAGING_CONVERSATION_SEARCH';
 				oSearch.addField(sObjectPrefix + '.attachment.type,' + sObjectPrefix + '.attachment.filename,' + 
@@ -2230,12 +2229,12 @@ ns1blankspace.messaging.conversation =
 				{
 					if (data.status == 'OK')
 					{
-						data.data.rows = $.map(data.data.rows, function(x)
+						data.data.rows = $.map(data.data.rows, function(row)
 						{
 							var y = {};
-							$.each(Object.keys(x), function()
+							$.each(Object.keys(row), function()
 							{
-								y[this.replace(sObjectPrefix + '.attachment.', '')] = x[this];
+								y[this.replace(sObjectPrefix + '.attachment.', '')] = row[this];
 							});
 							return y;
 						});
