@@ -178,7 +178,7 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.financial.bankAccount',
-		source: '/jscripts/1blankspace.financial.bankaccount-2.1.5.js'
+		source: '/site/312/1blankspace.financial.bankaccount-2.1.6.js'
 	},
 	{
 		nameSpace: '1blankspace.financial.invoice',
@@ -186,7 +186,7 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.financial.expense',
-		source: '/jscripts/1blankspace.financial.expense-2.1.2.js'
+		source: '/site/312/1blankspace.financial.expense-2.1.2.js'
 	},
 	{
 		nameSpace: '1blankspace.financial.receipt',
@@ -2633,6 +2633,10 @@ ns1blankspace.attachments =
 				aHTML.push('<div style="margin-left:3px; margin-top:10px;">' +
 							'<input id="ns1blankspaceUpload" class="ns1blankspaceAction ns1blankspaceAction ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" type="submit" value="Upload">' +
 							'</div>');
+			}
+			else
+			{
+				aHTML.push('<div style="margin-left:3px; margin-top:10px;" id="ns1blankspaceUpload"></div>')
 			}	
 				
 			aHTML.push('<div id="ns1blankspaceUploadStatus" class="ns1blankspaceUpload" style="margin-top:20px; font-size:0.875em;"></div>')
@@ -2786,7 +2790,6 @@ ns1blankspace.attachments =
 				
 				$('#ns1blankspaceUploadStatus').html('File Upload Complete...');
 				fFunctionPostUpdate();
-				
 			}
 		}
 	}						

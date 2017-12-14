@@ -116,7 +116,7 @@ ns1blankspace.financial.payroll =
 
 										aHTML.push('<tr class="ns1blankspaceControl">' +
 													'<td id="ns1blankspaceControl_superannuation" class="ns1blankspaceControl" style="padding-top:6px;">Superannuation' +
-													'<br /><div class="ns1blankspaceSubNote">To Be Paid</div></td>' +
+													'<br /><div class="ns1blankspaceSubNote">to be paid</div></td>' +
 													'</tr>');
 																						
 										aHTML.push('</table>');

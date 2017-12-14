@@ -5453,7 +5453,7 @@ ns1blankspace.financial.item =
 										'</td></tr>' +
 										'<tr class="ns1blankspace">' +
 										'<td class="ns1blankspaceText">' +
-										'<input id="ns1blankspaceItemAccount" class="ns1blankspaceText">' +
+										'<input id="ns1blankspaceItemAccount" class="ns1blankspaceText" data-1blankspace="ignore">' +
 										'</td></tr>');
 							
 							aHTML.push('<tr><td style="padding-bottom:5px;" id="ns1blankspaceItemAddSearchResults">' +
@@ -5466,7 +5466,7 @@ ns1blankspace.financial.item =
 										'</td></tr>' +
 										'<tr class="ns1blankspace">' +
 										'<td class="ns1blankspaceText">' +
-										'<input id="ns1blankspaceItemAmount" class="ns1blankspaceText">' +
+										'<input id="ns1blankspaceItemAmount" class="ns1blankspaceText" data-1blankspace="ignore">' +
 										'</td></tr>');
 
 						aHTML.push('<tr class="ns1blankspaceCaption">' +
@@ -5495,7 +5495,7 @@ ns1blankspace.financial.item =
 										'</td></tr>' +
 										'<tr class="ns1blankspace">' +
 										'<td class="ns1blankspaceText">' +
-										'<input id="ns1blankspaceItemProject" class="ns1blankspaceSelect"' +
+										'<input id="ns1blankspaceItemProject" class="ns1blankspaceSelect" data-1blankspace="ignore"' +
 											' data-method="PROJECT_SEARCH"' +
 											' data-columns="reference-space-description"' +
 											' data-methodFilter="reference-TEXT_IS_LIKE|description-TEXT_IS_LIKE">' +
@@ -5508,7 +5508,7 @@ ns1blankspace.financial.item =
 										'</td></tr>' +
 										'<tr class="ns1blankspace">' +
 										'<td class="ns1blankspaceTextMulti">' +
-										'<textarea id="ns1blankspaceItemDescription" class="ns1blankspaceTextMulti" style="height:50px; width:200px;" rows="3" cols="35" ></textarea>' +
+										'<textarea id="ns1blankspaceItemDescription" class="ns1blankspaceTextMulti" data-1blankspace="ignore" style="height:50px; width:200px;" rows="3" cols="35" ></textarea>' +
 										'</td></tr>');		
 		
 						aHTML.push('</table>');		

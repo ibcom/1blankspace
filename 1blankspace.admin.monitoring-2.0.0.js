@@ -281,13 +281,13 @@ ns1blankspace.admin.monitoring.serviceFaults =
 						
 						if (ns1blankspace.admin.monitoring.serviceFaults.data.superUser)
 						{
-							if (ns1blankspace.admin.monitoring.data.lab) //until detail in production
+							if (ns1blankspace.data.beta)
 							{
 								oSearch.addField('description,method,page,parameters,site,sitetext,space,spacetext,createddate,details');
 							}
 							else
 							{
-								oSearch.addField('description,method,page,parameters,site,sitetext,space,spacetext,createddate');
+								oSearch.addField('description,method,page,parameters,site,sitetext,space,spacetext,createddate,details');
 							}
 						}
 						else

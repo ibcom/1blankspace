@@ -326,7 +326,7 @@ ns1blankspace.financial.invoice =
 											
 										$.each(oResponse.data.rows, function()
 										{	
-											aHTML.push(ns1blankspace.financial.invoice.search.row(oParam, this));
+											aHTML.push(ns1blankspace.financial.invoice.search.row(this, oParam));
 										});
 								    	
 										aHTML.push('</table>');
@@ -360,7 +360,7 @@ ns1blankspace.financial.invoice =
 									}			
 								},
 
-						row: 	function (oParam, oRow)
+						row: 	function (oRow, oParam)
 								{
 									var aHTML = [];
 									var sContact;

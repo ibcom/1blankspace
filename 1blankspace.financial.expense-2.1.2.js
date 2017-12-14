@@ -415,7 +415,7 @@ ns1blankspace.financial.expense =
 											
 										$.each(oResponse.data.rows, function()
 										{	
-											aHTML.push(ns1blankspace.financial.expense.search.row(oParam, this));
+											aHTML.push(ns1blankspace.financial.expense.search.row(this, oParam));
 										});
 								    	
 										aHTML.push('</table>');
@@ -449,7 +449,7 @@ ns1blankspace.financial.expense =
 									}		
 								},
 
-						row: 	function (oParam, oRow)
+						row: 	function (oRow, oParam)
 								{
 									var aHTML = [];
 									var sContact;

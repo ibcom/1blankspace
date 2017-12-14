@@ -238,7 +238,7 @@ ns1blankspace.contactBusiness =
 											
 										$.each(oResponse.data.rows, function()
 										{
-											aHTML.push(ns1blankspace.contactBusiness.search.row(oParam, this));
+											aHTML.push(ns1blankspace.contactBusiness.search.row(this, oParam));
 										});
 								    	
 										aHTML.push('</table>');
@@ -277,7 +277,7 @@ ns1blankspace.contactBusiness =
 									}	
 								},
 
-						row: 	function (oParam, oRow)
+						row: 	function (oRow, oParam)
 								{
 									var aHTML = [];
 									var sContact;

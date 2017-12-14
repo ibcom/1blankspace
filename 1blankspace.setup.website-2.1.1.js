@@ -235,8 +235,8 @@ ns1blankspace.setup.website =
 										oSearch.method = 'SETUP_SITE_SEARCH';
 										oSearch.addField('bodytag,cancreatespace,columns,cssattachment,cssattachmenttext,default,developeremail,documenttype,email,' +
 															'footerheight,footerscript,headerheight,headerscript,headertitle,hidestandardlinks,layout,layouttext,ondemandstatus,ondemandstatustext,' +
-															'reference,status,statustext,templatedocument,templatedocumenttext,title,usekeywordsastitle,' + 
-															'samlidentityprovidercertificate,samlidentityproviderid,samlidentityprovidername,samlidentityproviderurl');
+															'reference,status,statustext,templatedocument,templatedocumenttext,title,usekeywordsastitle' + 
+															(ns1blankspace.data.beta?',samlidentityprovidercertificate,samlidentityproviderid,samlidentityprovidername,samlidentityproviderurl':''));
 										oSearch.addFilter('id', 'EQUAL_TO', ns1blankspace.objectContext);
 										oSearch.rows = 1;
 										

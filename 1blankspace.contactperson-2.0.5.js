@@ -242,7 +242,7 @@ ns1blankspace.contactPerson =
 											
 										$.each(oResponse.data.rows, function()
 										{
-											aHTML.push(ns1blankspace.contactPerson.search.row(oParam, this));
+											aHTML.push(ns1blankspace.contactPerson.search.row(this, oParam));
 										});
 								    	
 										aHTML.push('</table>');
@@ -276,7 +276,7 @@ ns1blankspace.contactPerson =
 									}	
 								},
 
-						row: 	function (oParam, oRow)
+						row: 	function (oRow, oParam)
 								{
 									var aHTML = [];
 									var sContact;

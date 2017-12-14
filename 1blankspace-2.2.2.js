@@ -764,6 +764,9 @@ ns1blankspace.app =
 							ns1blankspace.status.message('');
 							$('#ns1blankspaceMultiUseDialog').hide();
 
+							ns1blankspace.data.beta = (data.instance.toLowerCase().indexOf('dbg') != -1
+																	|| data.instance.toLowerCase().indexOf('lab') != -1)
+
 							if (data.status === 'ER')
 							{
 								if (data.error.errornotes == 'No rights (No Access to method)')

@@ -1239,6 +1239,8 @@ ns1blankspace.financial.journal =
 												{
 													ns1blankspace.status.message('Added.');
 													ns1blankspace.financial.journal.item.show();
+													ns1blankspace.financial.journal.refresh();
+													ns1blankspace.inputDetected = false;
 												}
 											});
 										})
