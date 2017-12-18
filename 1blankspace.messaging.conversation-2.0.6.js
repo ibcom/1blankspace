@@ -760,7 +760,7 @@ ns1blankspace.messaging.conversation =
 								'</td></tr>' +
 								'<tr class="ns1blankspace">' +
 								'<td class="ns1blankspaceText">' +
-								'<input id="ns1blankspaceParticipantsFirstName" class="ns1blankspaceText">' +
+								'<input id="ns1blankspaceParticipantsFirstName" class="ns1blankspaceText" data-1blankspace="ignore">' +
 								'</td></tr>');	
 
 				aHTML.push('<tr class="ns1blankspaceCaption">' +
@@ -769,7 +769,7 @@ ns1blankspace.messaging.conversation =
 								'</td></tr>' +
 								'<tr class="ns1blankspace">' +
 								'<td class="ns1blankspaceText">' +
-								'<input id="ns1blankspaceParticipantsSurname" class="ns1blankspaceText">' +
+								'<input id="ns1blankspaceParticipantsSurname" class="ns1blankspaceText" data-1blankspace="ignore">' +
 								'</td></tr>');	
 							
 
@@ -779,7 +779,7 @@ ns1blankspace.messaging.conversation =
 								'</td></tr>' +
 								'<tr class="ns1blankspace">' +
 								'<td class="ns1blankspaceText">' +
-								'<input id="ns1blankspaceParticipantsTradeName" class="ns1blankspaceText">' +
+								'<input id="ns1blankspaceParticipantsTradeName" class="ns1blankspaceText" data-1blankspace="ignore">' +
 								'</td></tr>');
 			
 				aHTML.push('</table>');		
@@ -1079,7 +1079,7 @@ ns1blankspace.messaging.conversation =
 									'</td></tr>');
 
 					aHTML.push('<tr><td class="ns1blankspaceText" style="padding-top:30px;">' +
-								'<input id="ns1blankspacePostsSearchText" class="ns1blankspaceText">' +
+								'<input id="ns1blankspacePostsSearchText" class="ns1blankspaceText" data-1blankspace="ignore">' +
 								'</td></tr>');		//  style="width:62px;"
 															
 					aHTML.push('<tr><td style="padding-top:0px;">' +

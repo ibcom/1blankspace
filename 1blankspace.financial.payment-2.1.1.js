@@ -2082,7 +2082,7 @@ ns1blankspace.financial.payment.images =
 						if (oResponse.data.rows.length == 0)
 						{
 							aHTML.push('<table>' +
-											'<tr><td class="ns1blankspaceSubNote">No upload payment payment photos.</td></tr></table>');
+											'<tr><td class="ns1blankspaceSubNote">No upload payment receipt photos.</td></tr></table>');
 
 							$('#ns1blankspacePaymentImagesColumn1').html('');
 						}
