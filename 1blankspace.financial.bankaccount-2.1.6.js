@@ -1391,16 +1391,16 @@ ns1blankspace.financial.bankAccount =
 											aHTML.push('.</td></tr>');		
 										}
 
-										aHTML.push('<tr><td class="ns1blankspaceSubNote" style="padding-top:14px;">Select an existing import to view and confirm transactions, or choose a QIF file to upload.</td></tr>');		
+										//aHTML.push('<tr><td class="ns1blankspaceSubNote" style="padding-top:14px;">Select an existing import to view and confirm transactions, or choose a QIF file to upload.</td></tr>');		
 
-										aHTML.push('<tr><td>');
+										aHTML.push('<tr><td style="padding-top:12px;">');
 
 
 										aHTML.push(ns1blankspace.attachments.upload.show(
 										{	
 											object: 28,
 											objectContext: -1,
-											label: 'Upload Bank File',
+											label: 'Select an existing import to view and confirm transactions, or choose a QIF file to upload',
 											showUpload: false
 										}));
 
@@ -1421,7 +1421,7 @@ ns1blankspace.financial.bankAccount =
 											{
 												$('#ns1blankspaceUpload').button(
 												{
-													label: ''
+													label: 'Upload'
 												})
 												.css('font-size', '0.75em')
 												.click(function()
