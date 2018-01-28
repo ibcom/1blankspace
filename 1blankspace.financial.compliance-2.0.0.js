@@ -539,6 +539,38 @@ ns1blankspace.financial.compliance =
 					row.taxtype = row._financialAccount.taxtype;
 				});
 
+				ns1blankspace.financial.compliance.initData.payments(oParam);
+			}
+		},
+
+		payments: function (oParam, oResponse)
+		{
+			var sStartDate = ns1blankspace.util.getParam(oParam, 'startDate').value;
+			var sEndDate = ns1blankspace.util.getParam(oParam, 'endDate').value;
+			var iProject = ns1blankspace.util.getParam(oParam, 'project').value;
+			
+			if (oResponse == undefined)
+			{			
+				var oSearch = new AdvancedSearch();
+				oSearch.method = 'FINANCIAL_PAYMENT_SEARCH';
+				oSearch.rows = 100;
+
+				oSearch.addField('bankaccount,sum(amount) total,sum(tax) taxtotal');
+
+				if (sStartDate != '') {oSearch.addFilter('paiddate', 'GREATER_THAN_OR_EQUAL_TO', sStartDate)};
+				if (sEndDate != '') {oSearch.addFilter('paiddate', 'LESS_THAN_OR_EQUAL_TO', sEndDate)};
+
+				if (iProject != undefined)
+				{
+					oSearch.addFilter('project', 'EQUAL_TO', iProject);
+				}
+
+				oSearch.addSummaryField('sum(tax) taxtotal')
+				oSearch.getResults(function(data) {ns1blankspace.financial.compliance.initData.payments(oParam, data)});
+			}
+			else
+			{	
+				ns1blankspace.financial.compliance.data.payments = oResponse;
 				ns1blankspace.financial.compliance.initData.debtors(oParam);
 			}
 		},
@@ -1068,7 +1100,6 @@ ns1blankspace.financial.compliance.tax =
 							'</tbody></table>');
 
 			$('#' + sXHTMLElementID).html(aHTML.join(''));
-
 		}
 		else
 		{
@@ -1122,7 +1153,9 @@ ns1blankspace.financial.compliance.tax =
 			var taxSalesTotal = numeral(_.sumBy(aTaxSales, function (taxSale) {return numeral(taxSale.total).value()}));
 			var taxExpensesTotal = numeral(_.sumBy(aTaxExpenses, function (taxExpense) {return numeral(taxExpense.total).value()}));
 
-			aHTML.push('<tr><td class="ns1blankspaceRow">Tax Payable</td>' +
+			aHTML.push('<tr><td class="ns1blankspaceRow"><div>Tax Paid</div>' +
+							'<div class="ns1blankspaceSubNote">' + ns1blankspace.financial.data.settings.taxreportfinancialaccountpayabletext + '</div>' + 
+									'</td>' +
 									'<td class="ns1blankspaceRow" style="text-align:right;">' + numeral(taxTotalPayable).format('0,0.00') + '</td></tr>');
 
 			aHTML.push('<tr><td class="ns1blankspaceRow ns1blankspaceSub">Sales</td>' +
@@ -1171,8 +1204,10 @@ ns1blankspace.financial.compliance.tax =
 
 			var taxExpensesTotal = numeral(_.sumBy(aTaxExpenses, function (taxExpense) {return numeral(taxExpense.total).value()}));
 
-			aHTML.push('<tr><td class="ns1blankspaceRow">Tax Payable</td>' +
-									'<td class="ns1blankspaceRow" style="text-align:right;">' + numeral(sTaxTotalPayable).format('0,0.00') + '</td></tr>');
+			aHTML.push('<tr><td class="ns1blankspaceRow"><div>Tax Paid</div>' +
+							'<div class="ns1blankspaceSubNote">' + ns1blankspace.financial.data.settings.taxreportfinancialaccountemployeetext + '</div>' + 
+								'</td>' +
+								'<td class="ns1blankspaceRow" style="text-align:right;">' + numeral(sTaxTotalPayable).format('0,0.00') + '</td></tr>');
 
 			aHTML.push('<tr><td class="ns1blankspaceRow">Expenses (that related to payroll)</td>' +
 									'<td class="ns1blankspaceRow" style="text-align:right;">' + taxExpensesTotal.format('0,0.00') + '</td></tr>');
