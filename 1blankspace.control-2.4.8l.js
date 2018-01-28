@@ -19,7 +19,7 @@ ns1blankspace.option = $.extend(true, ns1blankspace.option,
 	passwordhash: true,
 	classicURI: '/index.asp?Site=475&p=asms%2Fmystartpage.asp',
 	loadControl: false,
-	httpsOnly: true,
+	httpsOnly: false,
 	viewShowSearch: true,
 	passwordExpiry: {site: 1533, days: 36500},
 	showBrowsing: false,
@@ -47,7 +47,7 @@ ns1blankspace.option = $.extend(true, ns1blankspace.option,
 	logonSuffix: undefined,
 	passwordSuffix: undefined,
 	financialShowProjects: true,
-	pdfStyles: '<link rel=stylesheet href="/jscripts/1blankspace-2.0.2.css">',
+	pdfStyles: '<link rel=stylesheet href="/site/312/1blankspace-2.0.3.css">',
 	messagingCheckURL: 'https://api.mydigitalstructure.com',
 	financialOverride: true,
 	showProductCodes: true
@@ -149,7 +149,7 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.messaging.imap',
-		source: '/site/312/1blankspace.messaging.imap-2.1.1.js'
+		source: '/jscripts/1blankspace.messaging.imap-2.1.0.js'
 	},
 	{
 		nameSpace: '1blankspace.document',
@@ -185,7 +185,7 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.financial.bankAccount',
-		source: '/site/312/1blankspace.financial.bankaccount-2.1.8.js'
+		source: '/site/312/1blankspace.financial.bankaccount-2.1.9.js'
 	},
 	{
 		nameSpace: '1blankspace.financial.invoice',

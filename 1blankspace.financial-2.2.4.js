@@ -504,10 +504,19 @@ ns1blankspace.financial.home = function (oParam)
 									
 						aHTML.push('<tr class="ns1blankspaceControl">' +
 									'<td id="ns1blankspaceControlUnallocated" class="ns1blankspaceControl">Unallocated</td>' +
-									'</tr>');	
-									
-						aHTML.push('</table>');
+									'</tr>');
 
+						aHTML.push('</table>');	
+
+						if (ns1blankspace.financial.compliance != undefined)
+						{
+							aHTML.push('<table class="ns1blankspaceControl">');
+							aHTML.push('<tr class="ns1blankspaceControl">' +
+									'<td id="ns1blankspaceControlCompliance" class="ns1blankspaceControl">Compliance<br /><span class="ns1blankspaceSub" style="font-size:0.75em;">for auditing</span></td>' +
+									'</tr>');
+							aHTML.push('</table>');
+						}	
+									
 						$('#ns1blankspaceControl').html(aHTML.join(''));	
 						
 						var aHTML = [];
@@ -522,6 +531,7 @@ ns1blankspace.financial.home = function (oParam)
 						aHTML.push('<div id="ns1blankspaceMainAccounts" class="ns1blankspaceControlMain"></div>');
 						aHTML.push('<div id="ns1blankspaceMainUnallocated" class="ns1blankspaceControlMain"></div>');
 						aHTML.push('<div id="ns1blankspaceMainInvoicing" class="ns1blankspaceControlMain"></div>');
+						aHTML.push('<div id="ns1blankspaceMainCompliance" class="ns1blankspaceControlMain"></div>');
 						
 						$('#ns1blankspaceMain').html(aHTML.join(''));
 						
@@ -583,7 +593,16 @@ ns1blankspace.financial.home = function (oParam)
 						{
 							ns1blankspace.show({selector: '#ns1blankspaceMainInvoicing'});
 							ns1blankspace.financial.invoicing.show();
-						});	
+						});
+
+						if (ns1blankspace.financial.compliance != undefined)
+						{
+							$('#ns1blankspaceControlCompliance').click(function(event)
+							{
+								ns1blankspace.show({selector: '#ns1blankspaceMainCompliance'});
+								ns1blankspace.financial.compliance.init();
+							});
+						}	
 
 						$('#ns1blankspaceControlSummary').addClass('ns1blankspaceHighlight');
 
@@ -667,14 +686,14 @@ ns1blankspace.financial.summary = function (oParam, oResponse)
 									'<tr><td><table>' +
 										'<tr><td class="ns1blankspaceHeaderCaption" style="font-size:0.875em;">Unallocated</td><td class="ns1blankspaceHeaderCaption" style="font-size:0.875em;">Unreconciled</td></tr>' + 
 										'<tr><td class="ns1blankspaceSummary" id="ns1blankspaceFinancialSummaryUnallocatedPayments">-</td>' +
-												'<td class="ns1blankspaceSummary" id="ns1blankspaceFinancialSummaryUnreconciledPayments"></td></tr>' +
+												'<td class="ns1blankspaceSummary" id="ns1blankspaceFinancialSummaryUnreconciledPayments">-</td></tr>' +
 										'</table>' +
 									'</td></tr>');
 
 					aHTML.push('<tr><td id="ns1blankspaceFinancialSummaryBankAccountTransactions" class="ns1blankspaceSummaryCaption" style="cursor:pointer;">Bank Account Transactions</td></tr>' +
 									'<tr><td><table>' +
-										'<tr><td class="ns1blankspaceHeaderCaption" style="font-size:0.875em;">Unconfirmed</td></tr>' + 
-										'<tr><td class="ns1blankspaceSummary" id="ns1blankspaceFinancialSummaryUnconfirmedBankAccountTransactions"></td></tr>' +
+										'<tr><td class="ns1blankspaceHeaderCaption" style="font-size:0.875em;">Unconfirmed</td><td class="ns1blankspaceHeaderCaption" style="font-size:0.875em;">Unreconciled</td></tr>' + 
+										'<tr><td class="ns1blankspaceSummary" id="ns1blankspaceFinancialSummaryUnconfirmedBankAccountTransactions">-</td><td class="ns1blankspaceSummary" id="ns1blankspaceFinancialSummaryUnreconciledBankAccountTransactions">-</td></tr>' +
 										'</table>' +
 									'</td></tr>');
 
@@ -691,7 +710,12 @@ ns1blankspace.financial.summary = function (oParam, oResponse)
 					$('#ns1blankspaceFinancialSummaryPayments').click(function(event)
 					{
 						ns1blankspace.financial.payment.init();
-					});		
+					});
+
+					$('#ns1blankspaceFinancialSummaryBankAccountTransactions').click(function(event)
+					{
+						ns1blankspace.financial.bankAccount.init();
+					});	
 
 					ns1blankspace.financial.summaryData();
 				}
@@ -764,12 +788,29 @@ ns1blankspace.financial.summaryData = function (oParam, oResponse)
 					{
 							var oSearch = new AdvancedSearch();
 							oSearch.method = 'FINANCIAL_BANK_ACCOUNT_TRANSACTION_SEARCH';
-							oSearch.addField('id');
+							oSearch.addField('bankaccounttext,count(id) bankaccounttotal');
 							oSearch.addSummaryField('count(id) total');
 							oSearch.addFilter('status', 'EQUAL_TO', 1);
+							oSearch.addFilter('bankaccount', 'IS_NOT_NULL');
+							oSearch.rows = 100;
 							oSearch.getResults(function(oResponse)
 							{
 								$('#ns1blankspaceFinancialSummaryUnconfirmedBankAccountTransactions').html(oResponse.summary.total);
+								ns1blankspace.financial.summaryData({step: 6});
+							})
+					}
+
+					if (iStep == 6)
+					{
+							var oSearch = new AdvancedSearch();
+							oSearch.method = 'FINANCIAL_BANK_ACCOUNT_TRANSACTION_SEARCH';
+							oSearch.addField('bankaccounttext,count(id) bankaccounttotal');
+							oSearch.addSummaryField('count(id) total');
+							oSearch.addFilter('status', 'EQUAL_TO', 3);
+							oSearch.addFilter('bankaccount', 'IS_NOT_NULL');
+							oSearch.getResults(function(oResponse)
+							{
+								$('#ns1blankspaceFinancialSummaryUnreconciledBankAccountTransactions').html(oResponse.summary.total);
 							})
 					}
 				}		
@@ -5156,7 +5197,7 @@ ns1blankspace.financial.transactions =
 	bind: 	function()
 				{
 
-				},			
+				}			
 }
 
 ns1blankspace.financial.item =

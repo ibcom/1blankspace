@@ -16,8 +16,11 @@ ns1blankspace.setup.userRole =
 					ns1blankspace.objectContextData = undefined;
 					ns1blankspace.objectContext = -1;
 					ns1blankspace.viewName = 'User Roles';
+					ns1blankspace.objectMethod = 'SETUP_ROLE';
 
 					ns1blankspace.app.set(oParam);
+
+
 				},
 
 	home: 		function (oParam, oResponse)
