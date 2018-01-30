@@ -494,9 +494,16 @@ ns1blankspace.financial.home = function (oParam)
 									'<td id="ns1blankspaceControlTax" class="ns1blankspaceControl">Tax<br /><span class="ns1blankspaceSub" style="font-size:0.75em;">GST &<br />Employee</span></td>' +
 									'</tr>');				
 						
-						aHTML.push('</table>');		
-						
+						aHTML.push('</table>');	
+
 						aHTML.push('<table class="ns1blankspaceControl">');
+
+						if (ns1blankspace.financial.compliance != undefined)
+						{
+							aHTML.push('<tr class="ns1blankspaceControl">' +
+									'<td id="ns1blankspaceControlCompliance" class="ns1blankspaceControl">Compliance<br /><span class="ns1blankspaceSub" style="font-size:0.75em;">for auditing</span></td>' +
+									'</tr>');
+						}
 						
 						aHTML.push('<tr class="ns1blankspaceControl">' +
 									'<td id="ns1blankspaceControlAccounts" class="ns1blankspaceControl">Accounts</td>' +
@@ -508,14 +515,7 @@ ns1blankspace.financial.home = function (oParam)
 
 						aHTML.push('</table>');	
 
-						if (ns1blankspace.financial.compliance != undefined)
-						{
-							aHTML.push('<table class="ns1blankspaceControl">');
-							aHTML.push('<tr class="ns1blankspaceControl">' +
-									'<td id="ns1blankspaceControlCompliance" class="ns1blankspaceControl">Compliance<br /><span class="ns1blankspaceSub" style="font-size:0.75em;">for auditing</span></td>' +
-									'</tr>');
-							aHTML.push('</table>');
-						}	
+					
 									
 						$('#ns1blankspaceControl').html(aHTML.join(''));	
 						
@@ -3186,6 +3186,34 @@ ns1blankspace.financial.accounts =
 
 					var sStartDate = ns1blankspace.util.getParam(oParam, 'startDate').value;
 					var sEndDate = ns1blankspace.util.getParam(oParam, 'endDate').value;
+
+					if (sStartDate == undefined)
+					{
+						if (ns1blankspace.financial.data.defaults.startdate != undefined)
+						{
+							sStartDate = ns1blankspace.financial.data.defaults.startdate;
+						}
+						else
+						{
+							sStartDate = moment().subtract('year', 1).month('July').startOf('month').format('DD MMM YYYY');
+						}
+					}
+
+					ns1blankspace.financial.data.defaults.startdate = sStartDate;
+
+					if (sEndDate == undefined)
+					{
+						if (ns1blankspace.financial.data.defaults.enddate != undefined)
+						{
+							sEndDate = ns1blankspace.financial.data.defaults.enddate;
+						}
+						else
+						{
+							sEndDate = Date.today().toString("dd MMM yyyy");
+						}
+					}
+
+					ns1blankspace.financial.data.defaults.enddate = sEndDate;
 					
 					if (iStep == 1)	
 					{

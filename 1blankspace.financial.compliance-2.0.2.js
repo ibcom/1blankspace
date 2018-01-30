@@ -290,38 +290,48 @@ ns1blankspace.financial.compliance =
 
 		aHTML.push('</div>');
 
-		//Transactions
+		//NOT PDF
+
+		//Search
 
 		aHTML.push('<div style="background-color:#f5f5f5; margin-bottom:16px; padding:12px;">');
-			aHTML.push('<div style="color:#666666; font-weight:100; margin-bottom:6px; font-size:1.5em;">TRANSACTIONS</div>');
-			aHTML.push('<div style="color:#666666; font-weight:100; margin-left:1px; margin-bottom:6px; font-size:0.75em;">Search for financial accounts (general ledger) transactions and export.</div>');
+			aHTML.push('<div style="color:#666666; font-weight:100; margin-bottom:6px; font-size:1.5em;">SEARCH FOR</div>');
+			//aHTML.push('<div style="color:#666666; font-weight:100; margin-left:1px; margin-bottom:6px; font-size:0.75em;">Search for financial transactions and export.</div>');
 		
-			//Search
-			aHTML.push('<div>' +
-					'<input id="ns1blankspaceComplianceTransactionsSearch" class="ns1blankspaceText" data-1blankspace="ignore" style="width:50%;">' +
-					'</div>');
+			aHTML.push('<div style="margin-left:0px; margin-right:0px; margin-bottom:8px;" id="ns1blankspaceComplianceSearchObjects">' +										
+							'<input style="width: 100%;" type="radio" id="ns1blankspaceComplianceSearchObject-transactions" name="radioObject" checked="checked" />' +
+							'<label for="ns1blankspaceComplianceSearchObject-transactions" style="margin-bottom:1px;">' +
+											'Financial Accounts (GL)</label>' +
+							'<input style="width: 100%;" type="radio" id="ns1blankspaceComplianceSearchObject-payments" name="radioObject"/>' +
+							'<label for="ns1blankspaceComplianceSearchObject-payments" style="margin-bottom:1px;">' +
+											'Payments</label>' +
+							'<input style="width: 100%;" type="radio" id="ns1blankspaceComplianceSearchObject-receipts" name="radioObject"/>' +
+							'<label for="ns1blankspaceComplianceSearchObject-receipts" style="margin-bottom:1px;">' +
+											'Receipts</label>' +
+							'<input style="width: 100%;" type="radio" id="ns1blankspaceComplianceSearchObject-credits" name="radioObject"/>' +
+							'<label for="ns1blankspaceComplianceSearchObject-credits" style="margin-bottom:1px;">' +
+											'Credits</label>' +
+							'<input style="width: 100%;" type="radio" id="ns1blankspaceComplianceSearchObject-journals" name="radioObject"/>' +
+							'<label for="ns1blankspaceComplianceSearchObject-journals" style="margin-bottom:1px;">' +
+											'Journals</label>' +						
+							'</div>')
 
-			aHTML.push('<div id="ns1blankspaceComplianceTransactionsShow" style="font-size: 0.875em;" data-filename="compliance-transactions.csv">' +
-								ns1blankspace.xhtml.loadingSmall +
-								'</div>');
-
-			aHTML.push('<div id="ns1blankspaceComplianceTransactionsShow" style="margin-top:12px;">' +
-								'<span class="ns1blankspaceAction" id="ns1blankspaceComplianceTransactionsExport">' +
-										'Export</span>' +
-								'</div>');
+			aHTML.push('<div id="ns1blankspaceComplianceSearchContainer">' + ns1blankspace.xhtml.loadingSmall + ' </div>');
 
 		aHTML.push('</div>');	
 
-			
 		$('#ns1blankspaceComplianceColumn2').html(aHTML.join(''));
 
-		$('#ns1blankspaceComplianceTransactionsExport').button(
+		$('#ns1blankspaceComplianceSearchObjects').buttonset().css('font-size', '0.625em');
+		
+		$('#ns1blankspaceComplianceSearchObjects :radio').click(function()
 		{
-			label: 'Export'
-		})
-		.click(function(event)
-		{
-			ns1blankspace.financial.compliance.export.transactions({xhtmlElementID: 'ns1blankspaceComplianceTransactionsShow'})
+			var sObject = (this.id).split('-')[1];
+
+			ns1blankspace.financial.compliance[sObject].show(
+			{
+				xhtmlElementID: 'ns1blankspaceComplianceSearchContainer'
+			});
 		});
 
 		ns1blankspace.financial.compliance.initData.balanceSheet(oParam);
@@ -739,7 +749,12 @@ ns1blankspace.financial.compliance =
 			ns1blankspace.financial.compliance.balanceSheet.show(oParam);
 			ns1blankspace.financial.compliance.tax.show(oParam);
 			ns1blankspace.financial.compliance.superannuation.show(oParam);
-			ns1blankspace.financial.compliance.transactions.show(oParam);
+			//ns1blankspace.financial.compliance.transactions.show(oParam);
+			//ns1blankspace.financial.compliance.payments.show(oParam);
+			ns1blankspace.financial.compliance.transactions.show(
+			{
+				xhtmlElementID: 'ns1blankspaceComplianceSearchContainer'
+			});
 		}
 	},
 
@@ -800,6 +815,7 @@ ns1blankspace.financial.compliance =
 						fields:
 						[
 							{value: 'Date'},
+							{value: 'Financial Account'},
 							{value: 'Description'},
 							{value: 'Amount'},
 							{value: 'Reference'},
@@ -814,10 +830,11 @@ ns1blankspace.financial.compliance =
 						fields:
 						[
 							{field: 'date'},
+							{field: 'financialaccounttext'},
 							{field: 'description'},
 							{field: 'amount'},
-							{field: 'objecttext'},
-							{field: 'reference'}
+							{field: 'reference'},
+							{field: 'objecttext'}
 						]
 					}		
 				]
@@ -833,7 +850,118 @@ ns1blankspace.financial.compliance =
 				open: true,
 				fileName: sFileName
 			});
-		} 	
+		},
+
+		items: function (oParam, oResponse)
+		{
+			var sXHTMLContext = ns1blankspace.util.getParam(oParam, 'xhtmlContext', {'default': 'ns1blankspaceCompliancePaymentsShow'}).value;
+			var sDateAttribute = ns1blankspace.util.getParam(oParam, 'dateAttribute', {'default': 'paiddate'}).value;
+
+			var oFormat =
+			[{
+				options:
+				{
+					delimiter: ",",
+					surroundWith: '"'
+				},
+
+				header:
+				[
+					{
+						line: 1,
+						fields:
+						[
+							{value: 'Reference'},
+							{value: 'Date'},
+							{value: 'Description'},
+							{value: 'Amount'},
+							{value: 'Tax'}
+						]
+					}	
+				],
+
+				item:
+				[
+					{
+						fields:
+						[
+							{field: 'reference'},
+							{field: sDateAttribute},
+							{field: 'description'},
+							{field: 'amount'},
+							{field: 'tax'}
+						]
+					}		
+				]
+			}]
+
+			var sFileName = $('#' + sXHTMLContext).attr('data-filename');
+
+			ns1blankspace.setup.file.export.data.get(
+		   {
+				xhtmlContext: sXHTMLContext,
+				format: oFormat,
+				saveToFile: true,
+				open: true,
+				fileName: sFileName
+			});
+		},
+
+		credits: function (oParam, oResponse)
+		{
+			var sXHTMLContext = ns1blankspace.util.getParam(oParam, 'xhtmlContext', {'default': 'ns1blankspaceComplianceCreditsShow'}).value;
+
+			var oFormat =
+			[{
+				options:
+				{
+					delimiter: ",",
+					surroundWith: '"'
+				},
+
+				header:
+				[
+					{
+						line: 1,
+						fields:
+						[
+							{value: 'Date'},
+							{value: 'Financial Account'},
+							{value: 'Notes'},
+							{value: 'Amount'},
+							{value: 'Reference'},
+							{value: 'Type'}
+						]
+					}	
+				],
+
+				item:
+				[
+					{
+						fields:
+						[
+							{field: 'creditdate'},
+							{field: 'financialaccounttext'},
+							{field: 'notes'},
+							{field: 'amount'},
+							{field: 'reference'},
+							{field: 'typetext'}
+						]
+					}		
+				]
+			}]
+
+			var sFileName = $('#' + sXHTMLContext).attr('data-filename');
+
+			ns1blankspace.setup.file.export.data.get(
+		   {
+				xhtmlContext: sXHTMLContext,
+				format: oFormat,
+				saveToFile: true,
+				open: true,
+				fileName: sFileName
+			});
+		}
 	},
 
 	_util:
@@ -1534,7 +1662,7 @@ ns1blankspace.financial.compliance.transactions =
 		var iObjectContext = ns1blankspace.objectContext;
 		var iProject = ns1blankspace.util.getParam(oParam, 'project').value;
 		var iFinancialAccount;
-		var sXHTMLElementID = ns1blankspace.util.getParam(oParam, 'xhtmlElementID', {"default": 'ns1blankspaceComplianceTransactionsShow'}).value;
+		var sXHTMLElementID = ns1blankspace.util.getParam(oParam, 'xhtmlElementID', {"default": 'ns1blankspaceComplianceSearchContainer'}).value;
 		var iRows = ns1blankspace.util.getParam(oParam, 'rows', {"default": 8}).value;
 		
 		var sSearchText = $('#ns1blankspaceComplianceTransactionsSearch').val();
@@ -1547,7 +1675,45 @@ ns1blankspace.financial.compliance.transactions =
 		}		
 			
 		if (oResponse == undefined)
-		{			
+		{		
+			if (sSearchText == undefined)
+			{
+				var aHTML = [];
+
+				aHTML.push('<div>' +
+							'<input id="ns1blankspaceComplianceTransactionsSearch" class="ns1blankspaceText" data-1blankspace="ignore" style="width:50%;">' +
+							'</div>');
+
+				aHTML.push('<div id="ns1blankspaceComplianceTransactionsShow" style="font-size: 0.875em;"' +
+							' data-filename="compliance-transactions-' + _.kebabCase(sStartDate) + '-to-' + _.kebabCase(sEndDate) + '.csv">' +
+							ns1blankspace.xhtml.loadingSmall +
+							'</div>');
+
+				aHTML.push('<div style="margin-top:12px;">' +
+							'<div class="ns1blankspaceAction" id="ns1blankspaceComplianceTransactionsExport" style="font-size:0.875em;">' +
+									'</div>' +
+							'</div>');
+
+				aHTML.push('</div>');
+
+				$('#' + sXHTMLElementID).html(aHTML.join(''));
+
+				$('#ns1blankspaceComplianceTransactionsSearch').unbind('keyup').keyup(function(event)
+				{
+					if (ns1blankspace.timer.delayCurrent != 0) {clearTimeout(ns1blankspace.timer.delayCurrent)};
+			        ns1blankspace.timer.delayCurrent = setTimeout('ns1blankspace.financial.compliance.transactions.show()', ns1blankspace.option.typingWait);
+				});
+
+				$('#ns1blankspaceComplianceTransactionsExport').button(
+				{
+					label: 'Export'
+				})
+				.click(function(event)
+				{
+					ns1blankspace.financial.compliance.export.transactions({xhtmlElementID: 'ns1blankspaceComplianceTransactionsShow'})
+				});
+			}	
+
 			var oSearch = new AdvancedSearch();
 			oSearch.method = 'FINANCIAL_TRANSACTION_SEARCH';
 			oSearch.rows = iRows;
@@ -1589,9 +1755,7 @@ ns1blankspace.financial.compliance.transactions =
 			var aHTML = [];
 			
 			if (oResponse.data.rows.length == 0)
-			{
-				//$('#' + sXHTMLElementID.replace('-transactions-', '-export-')).hide();
-				
+			{	
 				aHTML.push('<table><tbody>' +
 								'<tr class="ns1blankspace">' +
 								'<td class="ns1blankspaceNothing">No financial transactions.</td>' +
@@ -1603,6 +1767,8 @@ ns1blankspace.financial.compliance.transactions =
 			}
 			else
 			{
+				sXHTMLElementID = 'ns1blankspaceComplianceTransactionsShow';
+
 				aHTML.push('<table class="ns1blankspace">');
 
 				aHTML.push('<tr class="ns1blankspaceHeaderCaption">');
@@ -1671,13 +1837,7 @@ ns1blankspace.financial.compliance.transactions =
 
 	bind: 	function()
 	{
-		$('#ns1blankspaceComplianceTransactionsSearch').unbind('keyup').keyup(function(event)
-		{
-			if (ns1blankspace.timer.delayCurrent != 0) {clearTimeout(ns1blankspace.timer.delayCurrent)};
-	        ns1blankspace.timer.delayCurrent = setTimeout('ns1blankspace.financial.compliance.transactions.show()', ns1blankspace.option.typingWait);
-		});
-
-		$('div[data-object]').click(function (event)
+		$('div[data-object]:visible').click(function (event)
 		{
 			var iObject = $(this).attr('data-object');
 			var iObjectContext = $(this).attr('data-objectcontext');
@@ -1688,3 +1848,745 @@ ns1blankspace.financial.compliance.transactions =
 	}	
 }
 
+ns1blankspace.financial.compliance.payments =
+{
+	show: function (oParam, oResponse)
+	{
+		var sStartDate = ns1blankspace.util.getParam(oParam, 'startDate', {"default":ns1blankspace.financial.data.defaults.startdate}).value;
+		var sEndDate = ns1blankspace.util.getParam(oParam, 'endDate', {"default":ns1blankspace.financial.data.defaults.enddate}).value;
+		var iProject = ns1blankspace.util.getParam(oParam, 'project').value;
+		var sXHTMLElementID = ns1blankspace.util.getParam(oParam, 'xhtmlElementID', {"default": 'ns1blankspaceComplianceSearchContainer'}).value;
+		var iRows = ns1blankspace.util.getParam(oParam, 'rows', {"default": 8}).value;
+		
+		var sSearchText = $('#ns1blankspaceCompliancePaymentsSearch').val();
+			
+		if (oResponse == undefined)
+		{			
+			if (sSearchText == undefined)
+			{
+				var aHTML = [];
+
+				aHTML.push('<div>' +
+				'<input id="ns1blankspaceCompliancePaymentsSearch" class="ns1blankspaceText" data-1blankspace="ignore" style="width:50%;">' +
+				'</div>');
+
+				aHTML.push('<div id="ns1blankspaceCompliancePaymentsShow" style="font-size: 0.875em;"' +
+							'data-filename="compliance-payments-' + _.kebabCase(sStartDate) + '-to-' + _.kebabCase(sEndDate) + '.csv">' +
+							ns1blankspace.xhtml.loadingSmall +
+							'</div>');
+
+				aHTML.push('<div style="margin-top:12px;">' +
+							'<div class="ns1blankspaceAction" id="ns1blankspaceCompliancePaymentsExport" style="font-size:0.875em;">' +
+									'</div>' +
+							'</div>');
+
+				aHTML.push('</div>');
+
+				$('#' + sXHTMLElementID).html(aHTML.join(''));
+
+				$('#ns1blankspaceCompliancePaymentsSearch').unbind('keyup').keyup(function(event)
+				{
+					if (ns1blankspace.timer.delayCurrent != 0) {clearTimeout(ns1blankspace.timer.delayCurrent)};
+			        ns1blankspace.timer.delayCurrent = setTimeout('ns1blankspace.financial.compliance.payments.show()', ns1blankspace.option.typingWait);
+				});
+
+				$('#ns1blankspaceCompliancePaymentsExport').button(
+				{
+					label: 'Export'
+				})
+				.click(function(event)
+				{
+					ns1blankspace.financial.compliance.export.items(
+					{
+						xhtmlContext: 'ns1blankspaceCompliancePaymentsShow',
+						dateAttribute: 'paiddate'
+					})
+				});
+			}	
+
+			var oSearch = new AdvancedSearch();
+			oSearch.method = 'FINANCIAL_PAYMENT_SEARCH';
+			oSearch.rows = iRows;
+
+			oSearch.addField('amount,tax,paiddate,description,reference,reconciliation');
+			if (sSearchText != '')
+			{
+				oSearch.addBracket('(');
+				oSearch.addFilter('reference', 'TEXT_IS_LIKE', sSearchText);
+				oSearch.addFilter('or')
+				oSearch.addFilter('description', 'TEXT_IS_LIKE', sSearchText);
+
+				var oSearchDate = moment(sSearchText, 'DD MMM YYYY HH:mm:ss')
+				if (oSearchDate.isValid())
+				{
+					oSearch.addOperator('or');
+					oSearch.addFilter('paiddate', 'EQUAL_TO', oSearchDate.format('DD MMM YYYY'));
+				}
+				oSearch.addBracket(')')
+			}
+
+			oSearch.addSummaryField('count(id) count');
+			oSearch.sort('paiddate', 'asc');
+
+			if (sStartDate != '') {oSearch.addFilter('paiddate', 'GREATER_THAN_OR_EQUAL_TO', sStartDate)};
+			if (sEndDate != '') {oSearch.addFilter('paiddate', 'LESS_THAN_OR_EQUAL_TO', sEndDate)};
+
+			if (iProject != undefined)
+			{
+				oSearch.addFilter('project', 'EQUAL_TO', iProject);
+			}
+
+			oSearch.getResults(function(data) {ns1blankspace.financial.compliance.payments.show(oParam, data)});
+		}
+		else
+		{
+			sXHTMLElementID = 'ns1blankspaceCompliancePaymentsShow';
+
+			var aHTML = [];
+			
+			if (oResponse.data.rows.length == 0)
+			{
+				aHTML.push('<table><tbody>' +
+								'<tr class="ns1blankspace">' +
+								'<td class="ns1blankspaceNothing">No payments.</td>' +
+								'</tr>' +
+								'</tbody></table>');
+
+				$('#' + sXHTMLElementID).html(aHTML.join(''));
+
+			}
+			else
+			{
+				aHTML.push('<table class="ns1blankspace">');
+
+				aHTML.push('<tr class="ns1blankspaceHeaderCaption">');
+
+				aHTML.push('<td class="ns1blankspaceHeaderCaption">Reference</td>' +
+								'<td class="ns1blankspaceHeaderCaption" style="width:75px;">Date</td>' +
+								'<td class="ns1blankspaceHeaderCaption">Description</td>' +
+								'<td class="ns1blankspaceHeaderCaption" style="width:100px; text-align:right;">Amount</td>' +
+								'<td class="ns1blankspaceHeaderCaption" style="width:100px; text-align:right;">Tax</td>' +
+								'</tr>')
+
+				$.each(oResponse.data.rows, function()
+				{
+					aHTML.push(ns1blankspace.financial.compliance.payments.row(this));
+				});
+				
+				aHTML.push('</table>');
+
+				ns1blankspace.render.page.show(
+				{
+					xhtmlElementID: sXHTMLElementID,
+					xhtmlContext: sXHTMLElementID,
+					xhtml: aHTML.join(''),
+					showMore: (oResponse.morerows == "true"),
+					more: oResponse.moreid,
+					rows: iRows,
+					functionShowRow: ns1blankspace.financial.compliance.payments.row,
+					functionNewPage: 'ns1blankspace.financial.compliance.payments.bind()',
+					headerRow: true,
+					summary: oResponse.summary
+				}); 	
+					
+				ns1blankspace.financial.compliance.payments.bind();
+			}
+		}	
+	},
+
+	row: function(oRow)
+	{
+		var aHTML = [];
+		
+		aHTML.push('<tr class="ns1blankspaceRow">');
+			
+								
+		aHTML.push('<td id="ns1blankspaceFinancialTransaction_financialaccounttext-' + oRow.id + '" data-id="' + oRow.id + '" class="ns1blankspaceRow ns1blankspaceRowSelect">' +
+								oRow.reference + '</td>');
+								
+		aHTML.push('<td id="ns1blankspaceFinancialTransaction_date-' + oRow.id + '" class="ns1blankspaceRow" style="color:#666666;">' +
+								ns1blankspace.util.fd(oRow.paiddate) + '</td>');
+										
+		aHTML.push('<td id="ns1blankspaceFinancialTransaction_description-' + oRow.id + '" class="ns1blankspaceRow" style="color:#666666;">' + 
+								oRow.description + '</td>');
+							
+		aHTML.push('<td id="ns1blankspaceFinancialTransaction_amount-' + oRow.id + '" style="text-align:right; color:#666666;" class="ns1blankspaceRow">' +
+								oRow.amount + '</td>');
+
+		aHTML.push('<td id="ns1blankspaceFinancialTransaction_amount-' + oRow.id + '" style="text-align:right; color:#666666;" class="ns1blankspaceRow">' +
+								oRow.tax + '</td>');
+																				
+		aHTML.push('</td></tr>');
+
+		return aHTML.join('');
+	},
+
+	bind: function()
+	{
+		$('#ns1blankspaceCompliancePaymentsShow td.ns1blankspaceRowSelect:visible').click(function (event)
+		{
+			var iObjectContext = $(this).attr('data-id');
+			var sNamespace = 'payment'
+			ns1blankspace.financial[sNamespace].init({id: iObjectContext});
+		});	
+	}	
+}
+
+ns1blankspace.financial.compliance.receipts =
+{
+	show: function (oParam, oResponse)
+	{
+		var sStartDate = ns1blankspace.util.getParam(oParam, 'startDate', {"default":ns1blankspace.financial.data.defaults.startdate}).value;
+		var sEndDate = ns1blankspace.util.getParam(oParam, 'endDate', {"default":ns1blankspace.financial.data.defaults.enddate}).value;
+		var iProject = ns1blankspace.util.getParam(oParam, 'project').value;
+		var sXHTMLElementID = ns1blankspace.util.getParam(oParam, 'xhtmlElementID', {"default": 'ns1blankspaceComplianceSearchContainer'}).value;
+		var iRows = ns1blankspace.util.getParam(oParam, 'rows', {"default": 8}).value;
+		
+		var sSearchText = $('#ns1blankspaceComplianceReceiptsSearch').val();
+
+		if (oResponse == undefined)
+		{			
+			if (sSearchText == undefined)
+			{
+				var aHTML = [];
+
+				aHTML.push('<div>' +
+				'<input id="ns1blankspaceComplianceReceiptsSearch" class="ns1blankspaceText" data-1blankspace="ignore" style="width:50%;">' +
+				'</div>');
+
+				aHTML.push('<div id="ns1blankspaceComplianceReceiptsShow" style="font-size: 0.875em;"' +
+							'data-filename="compliance-receipts-' + _.kebabCase(sStartDate) + '-to-' + _.kebabCase(sEndDate) + '.csv">' +
+							ns1blankspace.xhtml.loadingSmall +
+							'</div>');
+
+				aHTML.push('<div style="margin-top:12px;">' +
+							'<div class="ns1blankspaceAction" id="ns1blankspaceComplianceReceiptsExport" style="font-size:0.875em;">' +
+									'</div>' +
+							'</div>');
+
+				aHTML.push('</div>');
+
+				$('#' + sXHTMLElementID).html(aHTML.join(''));
+
+				$('#ns1blankspaceComplianceReceiptsSearch').unbind('keyup').keyup(function(event)
+				{
+					if (ns1blankspace.timer.delayCurrent != 0) {clearTimeout(ns1blankspace.timer.delayCurrent)};
+			        ns1blankspace.timer.delayCurrent = setTimeout('ns1blankspace.financial.compliance.receipts.show()', ns1blankspace.option.typingWait);
+				});
+
+				$('#ns1blankspaceComplianceReceiptsExport').button(
+				{
+					label: 'Export'
+				})
+				.click(function(event)
+				{
+					ns1blankspace.financial.compliance.export.items(
+					{
+						xhtmlContext: 'ns1blankspaceComplianceReceiptsShow',
+						dateAttribute: 'receiveddate'
+					})
+				});
+			}	
+
+			var oSearch = new AdvancedSearch();
+			oSearch.method = 'FINANCIAL_RECEIPT_SEARCH';
+			oSearch.rows = iRows;
+
+			oSearch.addField('amount,tax,receiveddate,description,reference,reconciliation');
+			if (sSearchText != '')
+			{
+				oSearch.addBracket('(');
+				oSearch.addFilter('reference', 'TEXT_IS_LIKE', sSearchText);
+				oSearch.addFilter('or')
+				oSearch.addFilter('description', 'TEXT_IS_LIKE', sSearchText);
+
+				var oSearchDate = moment(sSearchText, 'DD MMM YYYY HH:mm:ss')
+				if (oSearchDate.isValid())
+				{
+					oSearch.addOperator('or');
+					oSearch.addFilter('receiveddate', 'EQUAL_TO', oSearchDate.format('DD MMM YYYY'));
+				}
+				oSearch.addBracket(')')
+			}
+
+			oSearch.addSummaryField('count(id) count');
+			oSearch.sort('receiveddate', 'asc');
+
+			if (sStartDate != '') {oSearch.addFilter('receiveddate', 'GREATER_THAN_OR_EQUAL_TO', sStartDate)};
+			if (sEndDate != '') {oSearch.addFilter('receiveddate', 'LESS_THAN_OR_EQUAL_TO', sEndDate)};
+
+			if (iProject != undefined)
+			{
+				oSearch.addFilter('project', 'EQUAL_TO', iProject);
+			}
+
+			oSearch.getResults(function(data) {ns1blankspace.financial.compliance.receipts.show(oParam, data)});
+		}
+		else
+		{
+			sXHTMLElementID = 'ns1blankspaceComplianceReceiptsShow';
+
+			var aHTML = [];
+			
+			if (oResponse.data.rows.length == 0)
+			{
+				aHTML.push('<table><tbody>' +
+								'<tr class="ns1blankspace">' +
+								'<td class="ns1blankspaceNothing">No receipts.</td>' +
+								'</tr>' +
+								'</tbody></table>');
+
+				$('#' + sXHTMLElementID).html(aHTML.join(''));
+
+			}
+			else
+			{
+				aHTML.push('<table class="ns1blankspace">');
+
+				aHTML.push('<tr class="ns1blankspaceHeaderCaption">');
+
+				aHTML.push('<td class="ns1blankspaceHeaderCaption">Reference</td>' +
+								'<td class="ns1blankspaceHeaderCaption" style="width:75px;">Date</td>' +
+								'<td class="ns1blankspaceHeaderCaption">Description</td>' +
+								'<td class="ns1blankspaceHeaderCaption" style="width:100px; text-align:right;">Amount</td>' +
+								'<td class="ns1blankspaceHeaderCaption" style="width:100px; text-align:right;">Tax</td>' +
+								'</tr>')
+
+				$.each(oResponse.data.rows, function()
+				{
+					aHTML.push(ns1blankspace.financial.compliance.receipts.row(this));
+				});
+				
+				aHTML.push('</table>');
+
+				ns1blankspace.render.page.show(
+				{
+					xhtmlElementID: sXHTMLElementID,
+					xhtmlContext: sXHTMLElementID,
+					xhtml: aHTML.join(''),
+					showMore: (oResponse.morerows == "true"),
+					more: oResponse.moreid,
+					rows: iRows,
+					functionShowRow: ns1blankspace.financial.compliance.receipts.row,
+					functionNewPage: 'ns1blankspace.financial.compliance.receipts.bind()',
+					headerRow: true,
+					summary: oResponse.summary
+				}); 	
+					
+				ns1blankspace.financial.compliance.receipts.bind();
+			}
+		}	
+	},
+
+	row: function(oRow)
+	{
+		var aHTML = [];
+		
+		aHTML.push('<tr class="ns1blankspaceRow">');
+			
+								
+		aHTML.push('<td id="ns1blankspaceFinancialTransaction_financialaccounttext-' + oRow.id + '" data-id="' + oRow.id + '" class="ns1blankspaceRow ns1blankspaceRowSelect">' +
+								oRow.reference + '</td>');
+								
+		aHTML.push('<td id="ns1blankspaceFinancialTransaction_date-' + oRow.id + '" class="ns1blankspaceRow" style="color:#666666;">' +
+								ns1blankspace.util.fd(oRow.receiveddate) + '</td>');
+										
+		aHTML.push('<td id="ns1blankspaceFinancialTransaction_description-' + oRow.id + '" class="ns1blankspaceRow" style="color:#666666;">' + 
+								oRow.description + '</td>');
+							
+		aHTML.push('<td id="ns1blankspaceFinancialTransaction_amount-' + oRow.id + '" style="text-align:right; color:#666666;" class="ns1blankspaceRow">' +
+								oRow.amount + '</td>');
+
+		aHTML.push('<td id="ns1blankspaceFinancialTransaction_amount-' + oRow.id + '" style="text-align:right; color:#666666;" class="ns1blankspaceRow">' +
+								oRow.tax + '</td>');
+																				
+		aHTML.push('</td></tr>');
+
+		return aHTML.join('');
+	},
+
+	bind: function()
+	{
+		$('#ns1blankspaceComplianceReceiptsShow td.ns1blankspaceRowSelect:visible').click(function (event)
+		{
+			var iObjectContext = $(this).attr('data-id');
+			ns1blankspace.financial['receipt'].init({id: iObjectContext});
+		});	
+	}	
+}
+
+ns1blankspace.financial.compliance.credits =
+{
+	show: function (oParam, oResponse)
+	{
+		var sStartDate = ns1blankspace.util.getParam(oParam, 'startDate', {"default":ns1blankspace.financial.data.defaults.startdate}).value;
+		var sEndDate = ns1blankspace.util.getParam(oParam, 'endDate', {"default":ns1blankspace.financial.data.defaults.enddate}).value;
+		var iProject = ns1blankspace.util.getParam(oParam, 'project').value;
+		var sXHTMLElementID = ns1blankspace.util.getParam(oParam, 'xhtmlElementID', {"default": 'ns1blankspaceComplianceSearchContainer'}).value;
+		var iRows = ns1blankspace.util.getParam(oParam, 'rows', {"default": 8}).value;
+		
+		var sSearchText = $('#ns1blankspaceComplianceCreditsSearch').val();
+
+		if (oResponse == undefined)
+		{			
+			if (sSearchText == undefined)
+			{
+				var aHTML = [];
+
+				aHTML.push('<div>' +
+				'<input id="ns1blankspaceComplianceCreditsSearch" class="ns1blankspaceText" data-1blankspace="ignore" style="width:50%;">' +
+				'</div>');
+
+				aHTML.push('<div id="ns1blankspaceComplianceCreditsShow" style="font-size: 0.875em;"' +
+							'data-filename="compliance-credits-' + _.kebabCase(sStartDate) + '-to-' + _.kebabCase(sEndDate) + '.csv">' +
+							ns1blankspace.xhtml.loadingSmall +
+							'</div>');
+
+				aHTML.push('<div style="margin-top:12px;">' +
+							'<div class="ns1blankspaceAction" id="ns1blankspaceComplianceCreditsExport" style="font-size:0.875em;">' +
+									'</div>' +
+							'</div>');
+
+				aHTML.push('</div>');
+
+				$('#' + sXHTMLElementID).html(aHTML.join(''));
+
+				$('#ns1blankspaceComplianceCreditsSearch').unbind('keyup').keyup(function(event)
+				{
+					if (ns1blankspace.timer.delayCurrent != 0) {clearTimeout(ns1blankspace.timer.delayCurrent)};
+			        ns1blankspace.timer.delayCurrent = setTimeout('ns1blankspace.financial.compliance.credits.show()', ns1blankspace.option.typingWait);
+				});
+
+				$('#ns1blankspaceComplianceCreditsExport').button(
+				{
+					label: 'Export'
+				})
+				.click(function(event)
+				{
+					ns1blankspace.financial.compliance.export.credits(
+					{
+						xhtmlContext: 'ns1blankspaceComplianceCreditsShow'
+					})
+				});
+			}	
+
+			var oSearch = new AdvancedSearch();
+			oSearch.method = 'FINANCIAL_CREDIT_NOTE_SEARCH';
+			oSearch.rows = iRows;
+
+			oSearch.addField('amount,tax,creditdate,notes,reference,typetext,financialaccounttext');
+			if (sSearchText != '')
+			{
+				oSearch.addBracket('(');
+				oSearch.addFilter('reference', 'TEXT_IS_LIKE', sSearchText);
+				oSearch.addFilter('or')
+				oSearch.addFilter('notes', 'TEXT_IS_LIKE', sSearchText);
+
+				var oSearchDate = moment(sSearchText, 'DD MMM YYYY HH:mm:ss')
+				if (oSearchDate.isValid())
+				{
+					oSearch.addOperator('or');
+					oSearch.addFilter('creditdate', 'EQUAL_TO', oSearchDate.format('DD MMM YYYY'));
+				}
+				oSearch.addBracket(')')
+			}
+
+			oSearch.addSummaryField('count(id) count');
+			oSearch.sort('creditdate', 'asc');
+
+			if (sStartDate != '') {oSearch.addFilter('creditdate', 'GREATER_THAN_OR_EQUAL_TO', sStartDate)};
+			if (sEndDate != '') {oSearch.addFilter('creditdate', 'LESS_THAN_OR_EQUAL_TO', sEndDate)};
+
+			if (iProject != undefined)
+			{
+				oSearch.addFilter('project', 'EQUAL_TO', iProject);
+			}
+
+			oSearch.getResults(function(data) {ns1blankspace.financial.compliance.credits.show(oParam, data)});
+		}
+		else
+		{
+			sXHTMLElementID = 'ns1blankspaceComplianceCreditsShow';
+
+			var aHTML = [];
+			
+			if (oResponse.data.rows.length == 0)
+			{
+				aHTML.push('<table><tbody>' +
+								'<tr class="ns1blankspace">' +
+								'<td class="ns1blankspaceNothing">No credits.</td>' +
+								'</tr>' +
+								'</tbody></table>');
+
+				$('#' + sXHTMLElementID).html(aHTML.join(''));
+			}
+			else
+			{
+				aHTML.push('<table class="ns1blankspace">');
+
+				aHTML.push('<tr class="ns1blankspaceHeaderCaption">');
+
+				aHTML.push('<td class="ns1blankspaceHeaderCaption">Reference</td>' +
+								'<td class="ns1blankspaceHeaderCaption" style="width:75px;">Date</td>' +
+								'<td class="ns1blankspaceHeaderCaption">Type</td>' +
+								'<td class="ns1blankspaceHeaderCaption">Financial Account</td>' +
+								'<td class="ns1blankspaceHeaderCaption">Notes</td>' +
+								'<td class="ns1blankspaceHeaderCaption" style="width:100px; text-align:right;">Amount</td>' +
+								'<td class="ns1blankspaceHeaderCaption" style="width:100px; text-align:right;">Tax</td>' +
+								'</tr>')
+
+				$.each(oResponse.data.rows, function()
+				{
+					aHTML.push(ns1blankspace.financial.compliance.credits.row(this));
+				});
+				
+				aHTML.push('</table>');
+
+				ns1blankspace.render.page.show(
+				{
+					xhtmlElementID: sXHTMLElementID,
+					xhtmlContext: sXHTMLElementID,
+					xhtml: aHTML.join(''),
+					showMore: (oResponse.morerows == "true"),
+					more: oResponse.moreid,
+					rows: iRows,
+					functionShowRow: ns1blankspace.financial.compliance.credits.row,
+					functionNewPage: 'ns1blankspace.financial.compliance.credits.bind()',
+					headerRow: true,
+					summary: oResponse.summary
+				}); 	
+					
+				ns1blankspace.financial.compliance.credits.bind();
+			}
+		}	
+	},
+
+	row: function(oRow)
+	{
+		var aHTML = [];
+		
+		aHTML.push('<tr class="ns1blankspaceRow">');
+			
+								
+		aHTML.push('<td id="ns1blankspaceFinancialTransaction_reference-' + oRow.id + '" data-id="' + oRow.id + '" class="ns1blankspaceRow ns1blankspaceRowSelect">' +
+								oRow.reference + '</td>');
+								
+		aHTML.push('<td id="ns1blankspaceFinancialTransaction_date-' + oRow.id + '" class="ns1blankspaceRow" style="color:#666666;">' +
+								ns1blankspace.util.fd(oRow.creditdate) + '</td>');
+
+		aHTML.push('<td id="ns1blankspaceFinancialTransaction_type-' + oRow.id + '" class="ns1blankspaceRow" style="color:#666666;">' + 
+								oRow.typetext + '</td>');
+										
+		aHTML.push('<td id="ns1blankspaceFinancialTransaction_financialaccounttext-' + oRow.id + '" class="ns1blankspaceRow" style="color:#666666;">' + 
+								oRow.financialaccounttext + '</td>');
+																
+		aHTML.push('<td id="ns1blankspaceFinancialTransaction_notes-' + oRow.id + '" class="ns1blankspaceRow" style="color:#666666;">' + 
+								oRow.notes + '</td>');
+							
+		aHTML.push('<td id="ns1blankspaceFinancialTransaction_amount-' + oRow.id + '" style="text-align:right; color:#666666;" class="ns1blankspaceRow">' +
+								oRow.amount + '</td>');
+
+		aHTML.push('<td id="ns1blankspaceFinancialTransaction_amount-' + oRow.id + '" style="text-align:right; color:#666666;" class="ns1blankspaceRow">' +
+								oRow.tax + '</td>');
+																				
+		aHTML.push('</td></tr>');
+
+		return aHTML.join('');
+	},
+
+	bind: function()
+	{
+		$('#ns1blankspaceComplianceCreditsShow td.ns1blankspaceRowSelect:visible').click(function (event)
+		{
+			var iObjectContext = $(this).attr('data-id');
+			ns1blankspace.financial.credit.init({id: iObjectContext});
+		});	
+	}	
+}
+
+ns1blankspace.financial.compliance.journals =
+{
+	show: function (oParam, oResponse)
+	{
+		var sStartDate = ns1blankspace.util.getParam(oParam, 'startDate', {"default":ns1blankspace.financial.data.defaults.startdate}).value;
+		var sEndDate = ns1blankspace.util.getParam(oParam, 'endDate', {"default":ns1blankspace.financial.data.defaults.enddate}).value;
+		var iProject = ns1blankspace.util.getParam(oParam, 'project').value;
+		var sXHTMLElementID = ns1blankspace.util.getParam(oParam, 'xhtmlElementID', {"default": 'ns1blankspaceComplianceSearchContainer'}).value;
+		var iRows = ns1blankspace.util.getParam(oParam, 'rows', {"default": 8}).value;
+		
+		var sSearchText = $('#ns1blankspaceComplianceJournalsSearch').val();
+
+		if (oResponse == undefined)
+		{			
+			if (sSearchText == undefined)
+			{
+				var aHTML = [];
+
+				aHTML.push('<div>' +
+				'<input id="ns1blankspaceComplianceJournalsSearch" class="ns1blankspaceText" data-1blankspace="ignore" style="width:50%;">' +
+				'</div>');
+
+				aHTML.push('<div id="ns1blankspaceComplianceJournalsShow" style="font-size: 0.875em;"' +
+							'data-filename="compliance-journals-' + _.kebabCase(sStartDate) + '-to-' + _.kebabCase(sEndDate) + '.csv">' +
+							ns1blankspace.xhtml.loadingSmall +
+							'</div>');
+
+				aHTML.push('<div style="margin-top:12px;">' +
+							'<div class="ns1blankspaceAction" id="ns1blankspaceComplianceJournalsExport" style="font-size:0.875em; float:left;"></div>' +
+							'<div class="ns1blankspaceAction" id="ns1blankspaceComplianceJournalsNew" style="font-size:0.875em;"></div>' +
+							'</div>');
+
+				aHTML.push('</div>');
+
+				$('#' + sXHTMLElementID).html(aHTML.join(''));
+
+				$('#ns1blankspaceComplianceJournalsSearch').unbind('keyup').keyup(function(event)
+				{
+					if (ns1blankspace.timer.delayCurrent != 0) {clearTimeout(ns1blankspace.timer.delayCurrent)};
+			        ns1blankspace.timer.delayCurrent = setTimeout('ns1blankspace.financial.compliance.journals.show()', ns1blankspace.option.typingWait);
+				});
+
+				$('#ns1blankspaceComplianceJournalsExport').button(
+				{
+					label: 'Export'
+				})
+				.click(function(event)
+				{
+					ns1blankspace.financial.compliance.export.journals(
+					{
+						xhtmlContext: 'ns1blankspaceComplianceJournalsShow'
+					})
+				});
+
+				$('#ns1blankspaceComplianceJournalsNew').button(
+				{
+					label: 'Manage Journals'
+				})
+				.click(function(event)
+				{
+					ns1blankspace.financial.compliance.export.journal.init()
+				});
+			}	
+
+			var oSearch = new AdvancedSearch();
+			oSearch.method = 'FINANCIAL_GENERAL_JOURNAL_SEARCH';
+
+			oSearch.addField('id,reference,journaldate,description,sum(generaljournal.generaljournalitem.creditamount) amount');
+										oSearch.addFilter('status', 'EQUAL_TO', 2);
+
+			if (sSearchText != '')
+			{
+				oSearch.addBracket('(');
+				oSearch.addFilter('reference', 'TEXT_IS_LIKE', sSearchText);
+				oSearch.addFilter('or')
+				oSearch.addFilter('description', 'TEXT_IS_LIKE', sSearchText);
+
+				var oSearchDate = moment(sSearchText, 'DD MMM YYYY HH:mm:ss')
+				if (oSearchDate.isValid())
+				{
+					oSearch.addOperator('or');
+					oSearch.addFilter('journaldate', 'EQUAL_TO', oSearchDate.format('DD MMM YYYY'));
+				}
+				oSearch.addBracket(')')
+			}
+
+			oSearch.rows = iRows;
+			oSearch.addSummaryField('count(id) count');
+			oSearch.sort('journaldate', 'asc');
+
+			if (sStartDate != '') {oSearch.addFilter('journaldate', 'GREATER_THAN_OR_EQUAL_TO', sStartDate)};
+			if (sEndDate != '') {oSearch.addFilter('journaldate', 'LESS_THAN_OR_EQUAL_TO', sEndDate)};
+
+			if (iProject != undefined)
+			{
+				oSearch.addFilter('project', 'EQUAL_TO', iProject);
+			}
+
+			oSearch.getResults(function(data) {ns1blankspace.financial.compliance.journals.show(oParam, data)});
+		}
+		else
+		{
+			sXHTMLElementID = 'ns1blankspaceComplianceJournalsShow';
+
+			var aHTML = [];
+			
+			if (oResponse.data.rows.length == 0)
+			{
+				aHTML.push('<table><tbody>' +
+								'<tr class="ns1blankspace">' +
+								'<td class="ns1blankspaceNothing">No journals.</td>' +
+								'</tr>' +
+								'</tbody></table>');
+
+				$('#' + sXHTMLElementID).html(aHTML.join(''));
+			}
+			else
+			{
+				aHTML.push('<table class="ns1blankspace">');
+
+				aHTML.push('<tr class="ns1blankspaceHeaderCaption">');
+
+				aHTML.push('<td class="ns1blankspaceHeaderCaption">Reference</td>' +
+								'<td class="ns1blankspaceHeaderCaption" style="width:75px;">Date</td>' +
+								'<td class="ns1blankspaceHeaderCaption">Description</td>' +
+								'<td class="ns1blankspaceHeaderCaption" style="width:100px; text-align:right;">Amount</td>' +
+								'</tr>')
+
+				$.each(oResponse.data.rows, function()
+				{
+					aHTML.push(ns1blankspace.financial.compliance.journals.row(this));
+				});
+				
+				aHTML.push('</table>');
+
+				ns1blankspace.render.page.show(
+				{
+					xhtmlElementID: sXHTMLElementID,
+					xhtmlContext: sXHTMLElementID,
+					xhtml: aHTML.join(''),
+					showMore: (oResponse.morerows == "true"),
+					more: oResponse.moreid,
+					rows: iRows,
+					functionShowRow: ns1blankspace.financial.compliance.journals.row,
+					functionNewPage: 'ns1blankspace.financial.compliance.journals.bind()',
+					headerRow: true,
+					summary: oResponse.summary
+				}); 	
+					
+				ns1blankspace.financial.compliance.journals.bind();
+			}
+		}	
+	},
+
+	row: function(oRow)
+	{
+		var aHTML = [];
+		
+		aHTML.push('<tr class="ns1blankspaceRow">');
+									
+		aHTML.push('<td id="ns1blankspaceFinancialTransaction_reference-' + oRow.id + '" data-id="' + oRow.id + '" class="ns1blankspaceRow ns1blankspaceRowSelect">' +
+								oRow.reference + '</td>');
+								
+		aHTML.push('<td id="ns1blankspaceFinancialTransaction_date-' + oRow.id + '" class="ns1blankspaceRow" style="color:#666666;">' +
+								ns1blankspace.util.fd(oRow.journaldate) + '</td>');
+																
+		aHTML.push('<td id="ns1blankspaceFinancialTransaction_description-' + oRow.id + '" class="ns1blankspaceRow" style="color:#666666;">' + 
+								oRow.description + '</td>');
+							
+		aHTML.push('<td id="ns1blankspaceFinancialTransaction_amount-' + oRow.id + '" style="text-align:right; color:#666666;" class="ns1blankspaceRow">' +
+								oRow.amount + '</td>');
+																		
+		aHTML.push('</td></tr>');
+
+		return aHTML.join('');
+	},
+
+	bind: function()
+	{
+		$('#ns1blankspaceComplianceJournalsShow td.ns1blankspaceRowSelect:visible').click(function (event)
+		{
+			var iObjectContext = $(this).attr('data-id');
+			ns1blankspace.financial.journal.init({id: iObjectContext});
+		});	
+	}	
+}

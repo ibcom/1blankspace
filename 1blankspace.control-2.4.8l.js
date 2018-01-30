@@ -225,7 +225,7 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.financial.compliance',
-		source: '/site/312/1blankspace.financial.compliance-2.0.1.js'
+		source: '/site/312/1blankspace.financial.compliance-2.0.2.js'
 	},
 	{
 		nameSpace: '1blankspace.report',
