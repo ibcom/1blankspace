@@ -888,6 +888,7 @@ ns1blankspace.financial.compliance =
 		{
 			var sXHTMLContext = ns1blankspace.util.getParam(oParam, 'xhtmlContext', {'default': 'ns1blankspaceCompliancePaymentsShow'}).value;
 			var sDateAttribute = ns1blankspace.util.getParam(oParam, 'dateAttribute', {'default': 'paiddate'}).value;
+			var sSuffix = ns1blankspace.util.getParam(oParam, 'suffix', {'default': 'paidto'}).value;
 
 			var oFormat =
 			[{
@@ -907,7 +908,9 @@ ns1blankspace.financial.compliance =
 							{value: 'Date'},
 							{value: 'Description'},
 							{value: 'Amount'},
-							{value: 'Tax'}
+							{value: 'Tax'},
+							{value: 'Contact (Business)'},
+							{value: 'Contact (Person)'}
 						]
 					}	
 				],
@@ -921,7 +924,9 @@ ns1blankspace.financial.compliance =
 							{field: sDateAttribute},
 							{field: 'description'},
 							{field: 'amount'},
-							{field: 'tax'}
+							{field: 'tax'},
+							{field: 'contactbusiness' + sSuffix + 'text'},
+							{field: 'contactperson' + sSuffix + 'text'}
 						]
 					}		
 				]
@@ -957,12 +962,15 @@ ns1blankspace.financial.compliance =
 						line: 1,
 						fields:
 						[
+							{value: 'Reference'},
+							{value: 'Type'},
 							{value: 'Date'},
 							{value: 'Financial Account'},
 							{value: 'Notes'},
+							{value: 'Contact (Business)'},
+							{value: 'Contact (Person)'},
 							{value: 'Amount'},
-							{value: 'Reference'},
-							{value: 'Type'}
+							{value: 'Tax'}
 						]
 					}	
 				],
@@ -972,12 +980,15 @@ ns1blankspace.financial.compliance =
 					{
 						fields:
 						[
+							{field: 'reference'},
+							{field: 'typetext'},
 							{field: 'creditdate'},
 							{field: 'financialaccounttext'},
 							{field: 'notes'},
+							{field: 'contactbusinesstext'},
+							{field: 'contactpersontext'},
 							{field: 'amount'},
-							{field: 'reference'},
-							{field: 'typetext'}
+							{field: 'tax'}
 						]
 					}		
 				]
@@ -1939,7 +1950,8 @@ ns1blankspace.financial.compliance.payments =
 					ns1blankspace.financial.compliance.export.items(
 					{
 						xhtmlContext: 'ns1blankspaceCompliancePaymentsShow',
-						dateAttribute: 'paiddate'
+						dateAttribute: 'paiddate',
+						suffix: 'paidto'
 					})
 				});
 			}	
@@ -1948,7 +1960,7 @@ ns1blankspace.financial.compliance.payments =
 			oSearch.method = 'FINANCIAL_PAYMENT_SEARCH';
 			oSearch.rows = iRows;
 
-			oSearch.addField('amount,tax,paiddate,description,reference,reconciliation');
+			oSearch.addField('amount,tax,paiddate,description,reference,reconciliation,contactbusinesspaidtotext,contactpersonpaidtotext');
 			if (sSearchText != '')
 			{
 				oSearch.addBracket('(');
@@ -1997,6 +2009,7 @@ ns1blankspace.financial.compliance.payments =
 			}
 			else
 			{
+
 				aHTML.push('<table class="ns1blankspace">');
 
 				aHTML.push('<tr class="ns1blankspaceHeaderCaption">');
@@ -2004,8 +2017,9 @@ ns1blankspace.financial.compliance.payments =
 				aHTML.push('<td class="ns1blankspaceHeaderCaption">Reference</td>' +
 								'<td class="ns1blankspaceHeaderCaption" style="width:75px;">Date</td>' +
 								'<td class="ns1blankspaceHeaderCaption">Description</td>' +
-								'<td class="ns1blankspaceHeaderCaption" style="width:100px; text-align:right;">Amount</td>' +
-								'<td class="ns1blankspaceHeaderCaption" style="width:100px; text-align:right;">Tax</td>' +
+								'<td class="ns1blankspaceHeaderCaption">Paid To</td>' +
+								'<td class="ns1blankspaceHeaderCaption" style="width:60px; text-align:right;">Amount</td>' +
+								'<td class="ns1blankspaceHeaderCaption" style="width:60px; text-align:right;">Tax</td>' +
 								'</tr>')
 
 				$.each(oResponse.data.rows, function()
@@ -2036,6 +2050,12 @@ ns1blankspace.financial.compliance.payments =
 
 	row: function(oRow)
 	{
+		var sContact = oRow.contactbusinesspaidtotext;
+		if (oRow.contactpersonpaidtotext != '')
+		{
+			sContact = oRow.contactpersonpaidtotext
+		}
+
 		var aHTML = [];
 		
 		aHTML.push('<tr class="ns1blankspaceRow">');
@@ -2049,7 +2069,10 @@ ns1blankspace.financial.compliance.payments =
 										
 		aHTML.push('<td id="ns1blankspaceFinancialTransaction_description-' + oRow.id + '" class="ns1blankspaceRow" style="color:#666666;">' + 
 								oRow.description + '</td>');
-							
+			
+		aHTML.push('<td id="ns1blankspaceFinancialTransaction_contact-' + oRow.id + '" class="ns1blankspaceRow" style="color:#666666;">' + 
+								sContact + '</td>');
+												
 		aHTML.push('<td id="ns1blankspaceFinancialTransaction_amount-' + oRow.id + '" style="text-align:right; color:#666666;" class="ns1blankspaceRow">' +
 								oRow.amount + '</td>');
 
@@ -2123,7 +2146,8 @@ ns1blankspace.financial.compliance.receipts =
 					ns1blankspace.financial.compliance.export.items(
 					{
 						xhtmlContext: 'ns1blankspaceComplianceReceiptsShow',
-						dateAttribute: 'receiveddate'
+						dateAttribute: 'receiveddate',
+						suffix: 'receivedfrom'
 					})
 				});
 			}	
@@ -2132,7 +2156,7 @@ ns1blankspace.financial.compliance.receipts =
 			oSearch.method = 'FINANCIAL_RECEIPT_SEARCH';
 			oSearch.rows = iRows;
 
-			oSearch.addField('amount,tax,receiveddate,description,reference,reconciliation');
+			oSearch.addField('amount,tax,receiveddate,description,reference,reconciliation,contactbusinessreceivedfromtext,contactpersonreceivedfromtext');
 			if (sSearchText != '')
 			{
 				oSearch.addBracket('(');
@@ -2188,6 +2212,7 @@ ns1blankspace.financial.compliance.receipts =
 				aHTML.push('<td class="ns1blankspaceHeaderCaption">Reference</td>' +
 								'<td class="ns1blankspaceHeaderCaption" style="width:75px;">Date</td>' +
 								'<td class="ns1blankspaceHeaderCaption">Description</td>' +
+								'<td class="ns1blankspaceHeaderCaption">Received From</td>' +
 								'<td class="ns1blankspaceHeaderCaption" style="width:100px; text-align:right;">Amount</td>' +
 								'<td class="ns1blankspaceHeaderCaption" style="width:100px; text-align:right;">Tax</td>' +
 								'</tr>')
@@ -2220,6 +2245,13 @@ ns1blankspace.financial.compliance.receipts =
 
 	row: function(oRow)
 	{
+		var sContact = oRow.contactbusinessreceivedfromtext;
+
+		if (oRow.contactpersonreceivedfromtext != '')
+		{
+			sContact = oRow.contactpersonreceivedfromtext
+		}
+
 		var aHTML = [];
 		
 		aHTML.push('<tr class="ns1blankspaceRow">');
@@ -2233,6 +2265,9 @@ ns1blankspace.financial.compliance.receipts =
 										
 		aHTML.push('<td id="ns1blankspaceFinancialTransaction_description-' + oRow.id + '" class="ns1blankspaceRow" style="color:#666666;">' + 
 								oRow.description + '</td>');
+
+		aHTML.push('<td id="ns1blankspaceFinancialTransaction_contact-' + oRow.id + '" class="ns1blankspaceRow" style="color:#666666;">' + 
+								sContact + '</td>');
 							
 		aHTML.push('<td id="ns1blankspaceFinancialTransaction_amount-' + oRow.id + '" style="text-align:right; color:#666666;" class="ns1blankspaceRow">' +
 								oRow.amount + '</td>');
@@ -2306,7 +2341,8 @@ ns1blankspace.financial.compliance.invoices =
 					ns1blankspace.financial.compliance.export.items(
 					{
 						xhtmlContext: 'ns1blankspaceComplianceInvoicesShow',
-						dateAttribute: 'sentdate'
+						dateAttribute: 'sentdate',
+						suffix: 'sentto'
 					})
 				});
 			}	
@@ -2315,7 +2351,7 @@ ns1blankspace.financial.compliance.invoices =
 			oSearch.method = 'FINANCIAL_INVOICE_SEARCH';
 			oSearch.rows = iRows;
 
-			oSearch.addField('amount,tax,sentdate,description,reference');
+			oSearch.addField('amount,tax,sentdate,description,reference,contactbusinesssenttotext,contactpersonsenttotext');
 			if (sSearchText != '')
 			{
 				oSearch.addBracket('(');
@@ -2371,6 +2407,7 @@ ns1blankspace.financial.compliance.invoices =
 				aHTML.push('<td class="ns1blankspaceHeaderCaption">Reference</td>' +
 								'<td class="ns1blankspaceHeaderCaption" style="width:75px;">Date</td>' +
 								'<td class="ns1blankspaceHeaderCaption">Description</td>' +
+								'<td class="ns1blankspaceHeaderCaption">Sent To</td>' +
 								'<td class="ns1blankspaceHeaderCaption" style="width:100px; text-align:right;">Amount</td>' +
 								'<td class="ns1blankspaceHeaderCaption" style="width:100px; text-align:right;">Tax</td>' +
 								'</tr>')
@@ -2403,6 +2440,13 @@ ns1blankspace.financial.compliance.invoices =
 
 	row: function(oRow)
 	{
+		var sContact = oRow.contactbusinesssenttotext;
+
+		if (oRow.contactpersonsenttotext != '')
+		{
+			sContact = oRow.contactpersonsenttotext
+		}
+
 		var aHTML = [];
 		
 		aHTML.push('<tr class="ns1blankspaceRow">');
@@ -2413,7 +2457,10 @@ ns1blankspace.financial.compliance.invoices =
 								
 		aHTML.push('<td id="ns1blankspaceFinancialTransaction_date-' + oRow.id + '" class="ns1blankspaceRow" style="color:#666666;">' +
 								ns1blankspace.util.fd(oRow.sentdate) + '</td>');
-										
+				
+		aHTML.push('<td id="ns1blankspaceFinancialTransaction_contact-' + oRow.id + '" class="ns1blankspaceRow" style="color:#666666;">' + 
+								sContact + '</td>');
+																
 		aHTML.push('<td id="ns1blankspaceFinancialTransaction_description-' + oRow.id + '" class="ns1blankspaceRow" style="color:#666666;">' + 
 								oRow.description + '</td>');
 							
@@ -2489,7 +2536,8 @@ ns1blankspace.financial.compliance.expenses =
 					ns1blankspace.financial.compliance.export.items(
 					{
 						xhtmlContext: 'ns1blankspaceComplianceExpensesShow',
-						dateAttribute: 'accrueddate'
+						dateAttribute: 'accrueddate',
+						suffix: 'paidto'
 					})
 				});
 			}	
@@ -2498,7 +2546,7 @@ ns1blankspace.financial.compliance.expenses =
 			oSearch.method = 'FINANCIAL_EXPENSE_SEARCH';
 			oSearch.rows = iRows;
 
-			oSearch.addField('amount,tax,accrueddate,description,reference');
+			oSearch.addField('amount,tax,accrueddate,description,reference,contactbusinesspaidtotext,contactpersonpaidtotext');
 			if (sSearchText != '')
 			{
 				oSearch.addBracket('(');
@@ -2554,6 +2602,7 @@ ns1blankspace.financial.compliance.expenses =
 				aHTML.push('<td class="ns1blankspaceHeaderCaption">Reference</td>' +
 								'<td class="ns1blankspaceHeaderCaption" style="width:75px;">Date</td>' +
 								'<td class="ns1blankspaceHeaderCaption">Description</td>' +
+								'<td class="ns1blankspaceHeaderCaption">Paid To</td>' +
 								'<td class="ns1blankspaceHeaderCaption" style="width:100px; text-align:right;">Amount</td>' +
 								'<td class="ns1blankspaceHeaderCaption" style="width:100px; text-align:right;">Tax</td>' +
 								'</tr>')
@@ -2586,6 +2635,13 @@ ns1blankspace.financial.compliance.expenses =
 
 	row: function(oRow)
 	{
+		var sContact = oRow.contactbusinesspaidtotext;
+
+		if (oRow.contactpersonpaidtotext != '')
+		{
+			sContact = oRow.contactpersonpaidtotext
+		}
+
 		var aHTML = [];
 		
 		aHTML.push('<tr class="ns1blankspaceRow">');
@@ -2599,7 +2655,10 @@ ns1blankspace.financial.compliance.expenses =
 										
 		aHTML.push('<td id="ns1blankspaceFinancialTransaction_description-' + oRow.id + '" class="ns1blankspaceRow" style="color:#666666;">' + 
 								oRow.description + '</td>');
-							
+		
+		aHTML.push('<td id="ns1blankspaceFinancialTransaction_contact-' + oRow.id + '" class="ns1blankspaceRow" style="color:#666666;">' + 
+								sContact + '</td>');
+
 		aHTML.push('<td id="ns1blankspaceFinancialTransaction_amount-' + oRow.id + '" style="text-align:right; color:#666666;" class="ns1blankspaceRow">' +
 								oRow.amount + '</td>');
 
@@ -2680,7 +2739,7 @@ ns1blankspace.financial.compliance.credits =
 			oSearch.method = 'FINANCIAL_CREDIT_NOTE_SEARCH';
 			oSearch.rows = iRows;
 
-			oSearch.addField('amount,tax,creditdate,notes,reference,typetext,financialaccounttext');
+			oSearch.addField('amount,tax,creditdate,notes,reference,typetext,financialaccounttext,contactbusinesstext,contactpersontext');
 			if (sSearchText != '')
 			{
 				oSearch.addBracket('(');
@@ -2737,6 +2796,7 @@ ns1blankspace.financial.compliance.credits =
 								'<td class="ns1blankspaceHeaderCaption">Type</td>' +
 								'<td class="ns1blankspaceHeaderCaption">Financial Account</td>' +
 								'<td class="ns1blankspaceHeaderCaption">Notes</td>' +
+								'<td class="ns1blankspaceHeaderCaption">Contact</td>' +
 								'<td class="ns1blankspaceHeaderCaption" style="width:100px; text-align:right;">Amount</td>' +
 								'<td class="ns1blankspaceHeaderCaption" style="width:100px; text-align:right;">Tax</td>' +
 								'</tr>')
@@ -2769,6 +2829,13 @@ ns1blankspace.financial.compliance.credits =
 
 	row: function(oRow)
 	{
+		var sContact = oRow.contactbusinesstext;
+
+		if (oRow.contactpersontext != '')
+		{
+			sContact = oRow.contactpersontext
+		}
+
 		var aHTML = [];
 		
 		aHTML.push('<tr class="ns1blankspaceRow">');
@@ -2788,6 +2855,9 @@ ns1blankspace.financial.compliance.credits =
 																
 		aHTML.push('<td id="ns1blankspaceFinancialTransaction_notes-' + oRow.id + '" class="ns1blankspaceRow" style="color:#666666;">' + 
 								oRow.notes + '</td>');
+
+			aHTML.push('<td id="ns1blankspaceFinancialTransaction_contact-' + oRow.id + '" class="ns1blankspaceRow" style="color:#666666;">' + 
+								sContact + '</td>');
 							
 		aHTML.push('<td id="ns1blankspaceFinancialTransaction_amount-' + oRow.id + '" style="text-align:right; color:#666666;" class="ns1blankspaceRow">' +
 								oRow.amount + '</td>');
