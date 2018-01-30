@@ -302,15 +302,27 @@ ns1blankspace.financial.compliance =
 							'<input style="width: 100%;" type="radio" id="ns1blankspaceComplianceSearchObject-transactions" name="radioObject" checked="checked" />' +
 							'<label for="ns1blankspaceComplianceSearchObject-transactions" style="margin-bottom:1px;">' +
 											'Financial Accounts (GL)</label>' +
-							'<input style="width: 100%;" type="radio" id="ns1blankspaceComplianceSearchObject-payments" name="radioObject"/>' +
-							'<label for="ns1blankspaceComplianceSearchObject-payments" style="margin-bottom:1px;">' +
-											'Payments</label>' +
+
 							'<input style="width: 100%;" type="radio" id="ns1blankspaceComplianceSearchObject-receipts" name="radioObject"/>' +
 							'<label for="ns1blankspaceComplianceSearchObject-receipts" style="margin-bottom:1px;">' +
 											'Receipts</label>' +
+
+							'<input style="width: 100%;" type="radio" id="ns1blankspaceComplianceSearchObject-payments" name="radioObject"/>' +
+							'<label for="ns1blankspaceComplianceSearchObject-payments" style="margin-bottom:1px;">' +
+											'Payments</label>' +
+
+							'<input style="width: 100%;" type="radio" id="ns1blankspaceComplianceSearchObject-invoices" name="radioObject"/>' +
+							'<label for="ns1blankspaceComplianceSearchObject-invoices" style="margin-bottom:1px;">' +
+											'Invoices</label>' +			
+
+							'<input style="width: 100%;" type="radio" id="ns1blankspaceComplianceSearchObject-expenses" name="radioObject"/>' +
+							'<label for="ns1blankspaceComplianceSearchObject-expenses" style="margin-bottom:1px;">' +
+											'Expenses</label>' +
+							
 							'<input style="width: 100%;" type="radio" id="ns1blankspaceComplianceSearchObject-credits" name="radioObject"/>' +
 							'<label for="ns1blankspaceComplianceSearchObject-credits" style="margin-bottom:1px;">' +
 											'Credits</label>' +
+
 							'<input style="width: 100%;" type="radio" id="ns1blankspaceComplianceSearchObject-journals" name="radioObject"/>' +
 							'<label for="ns1blankspaceComplianceSearchObject-journals" style="margin-bottom:1px;">' +
 											'Journals</label>' +						
@@ -1690,7 +1702,7 @@ ns1blankspace.financial.compliance.transactions =
 							'</div>');
 
 				aHTML.push('<div style="margin-top:12px;">' +
-							'<div class="ns1blankspaceAction" id="ns1blankspaceComplianceTransactionsExport" style="font-size:0.875em;">' +
+							'<div class="ns1blankspaceAction" id="ns1blankspaceComplianceTransactionsExport" style="font-size:0.75em;">' +
 									'</div>' +
 							'</div>');
 
@@ -1876,7 +1888,7 @@ ns1blankspace.financial.compliance.payments =
 							'</div>');
 
 				aHTML.push('<div style="margin-top:12px;">' +
-							'<div class="ns1blankspaceAction" id="ns1blankspaceCompliancePaymentsExport" style="font-size:0.875em;">' +
+							'<div class="ns1blankspaceAction" id="ns1blankspaceCompliancePaymentsExport" style="font-size:0.75em;">' +
 									'</div>' +
 							'</div>');
 
@@ -2060,7 +2072,7 @@ ns1blankspace.financial.compliance.receipts =
 							'</div>');
 
 				aHTML.push('<div style="margin-top:12px;">' +
-							'<div class="ns1blankspaceAction" id="ns1blankspaceComplianceReceiptsExport" style="font-size:0.875em;">' +
+							'<div class="ns1blankspaceAction" id="ns1blankspaceComplianceReceiptsExport" style="font-size:0.75em;">' +
 									'</div>' +
 							'</div>');
 
@@ -2215,6 +2227,372 @@ ns1blankspace.financial.compliance.receipts =
 	}	
 }
 
+ns1blankspace.financial.compliance.invoices =
+{
+	show: function (oParam, oResponse)
+	{
+		var sStartDate = ns1blankspace.util.getParam(oParam, 'startDate', {"default":ns1blankspace.financial.data.defaults.startdate}).value;
+		var sEndDate = ns1blankspace.util.getParam(oParam, 'endDate', {"default":ns1blankspace.financial.data.defaults.enddate}).value;
+		var iProject = ns1blankspace.util.getParam(oParam, 'project').value;
+		var sXHTMLElementID = ns1blankspace.util.getParam(oParam, 'xhtmlElementID', {"default": 'ns1blankspaceComplianceSearchContainer'}).value;
+		var iRows = ns1blankspace.util.getParam(oParam, 'rows', {"default": 8}).value;
+		
+		var sSearchText = $('#ns1blankspaceComplianceInvoicesSearch').val();
+
+		if (oResponse == undefined)
+		{			
+			if (sSearchText == undefined)
+			{
+				var aHTML = [];
+
+				aHTML.push('<div>' +
+				'<input id="ns1blankspaceComplianceInvoicesSearch" class="ns1blankspaceText" data-1blankspace="ignore" style="width:50%;">' +
+				'</div>');
+
+				aHTML.push('<div id="ns1blankspaceComplianceInvoicesShow" style="font-size: 0.875em;"' +
+							'data-filename="compliance-invoices-' + _.kebabCase(sStartDate) + '-to-' + _.kebabCase(sEndDate) + '.csv">' +
+							ns1blankspace.xhtml.loadingSmall +
+							'</div>');
+
+				aHTML.push('<div style="margin-top:12px;">' +
+							'<div class="ns1blankspaceAction" id="ns1blankspaceComplianceInvoicesExport" style="font-size:0.75em;">' +
+									'</div>' +
+							'</div>');
+
+				aHTML.push('</div>');
+
+				$('#' + sXHTMLElementID).html(aHTML.join(''));
+
+				$('#ns1blankspaceComplianceInvoicesSearch').unbind('keyup').keyup(function(event)
+				{
+					if (ns1blankspace.timer.delayCurrent != 0) {clearTimeout(ns1blankspace.timer.delayCurrent)};
+			        ns1blankspace.timer.delayCurrent = setTimeout('ns1blankspace.financial.compliance.invoices.show()', ns1blankspace.option.typingWait);
+				});
+
+				$('#ns1blankspaceComplianceInvoicesExport').button(
+				{
+					label: 'Export'
+				})
+				.click(function(event)
+				{
+					ns1blankspace.financial.compliance.export.items(
+					{
+						xhtmlContext: 'ns1blankspaceComplianceInvoicesShow',
+						dateAttribute: 'sentdate'
+					})
+				});
+			}	
+
+			var oSearch = new AdvancedSearch();
+			oSearch.method = 'FINANCIAL_INVOICE_SEARCH';
+			oSearch.rows = iRows;
+
+			oSearch.addField('amount,tax,sentdate,description,reference');
+			if (sSearchText != '')
+			{
+				oSearch.addBracket('(');
+				oSearch.addFilter('reference', 'TEXT_IS_LIKE', sSearchText);
+				oSearch.addFilter('or')
+				oSearch.addFilter('description', 'TEXT_IS_LIKE', sSearchText);
+
+				var oSearchDate = moment(sSearchText, 'DD MMM YYYY HH:mm:ss')
+				if (oSearchDate.isValid())
+				{
+					oSearch.addOperator('or');
+					oSearch.addFilter('sentdate', 'EQUAL_TO', oSearchDate.format('DD MMM YYYY'));
+				}
+				oSearch.addBracket(')')
+			}
+
+			oSearch.addSummaryField('count(id) count');
+			oSearch.sort('sentdate', 'asc');
+
+			if (sStartDate != '') {oSearch.addFilter('sentdate', 'GREATER_THAN_OR_EQUAL_TO', sStartDate)};
+			if (sEndDate != '') {oSearch.addFilter('sentdate', 'LESS_THAN_OR_EQUAL_TO', sEndDate)};
+
+			if (iProject != undefined)
+			{
+				oSearch.addFilter('project', 'EQUAL_TO', iProject);
+			}
+
+			oSearch.getResults(function(data) {ns1blankspace.financial.compliance.invoices.show(oParam, data)});
+		}
+		else
+		{
+			sXHTMLElementID = 'ns1blankspaceComplianceInvoicesShow';
+
+			var aHTML = [];
+			
+			if (oResponse.data.rows.length == 0)
+			{
+				aHTML.push('<table><tbody>' +
+								'<tr class="ns1blankspace">' +
+								'<td class="ns1blankspaceNothing">No invoices.</td>' +
+								'</tr>' +
+								'</tbody></table>');
+
+				$('#' + sXHTMLElementID).html(aHTML.join(''));
+
+			}
+			else
+			{
+				aHTML.push('<table class="ns1blankspace">');
+
+				aHTML.push('<tr class="ns1blankspaceHeaderCaption">');
+
+				aHTML.push('<td class="ns1blankspaceHeaderCaption">Reference</td>' +
+								'<td class="ns1blankspaceHeaderCaption" style="width:75px;">Date</td>' +
+								'<td class="ns1blankspaceHeaderCaption">Description</td>' +
+								'<td class="ns1blankspaceHeaderCaption" style="width:100px; text-align:right;">Amount</td>' +
+								'<td class="ns1blankspaceHeaderCaption" style="width:100px; text-align:right;">Tax</td>' +
+								'</tr>')
+
+				$.each(oResponse.data.rows, function()
+				{
+					aHTML.push(ns1blankspace.financial.compliance.invoices.row(this));
+				});
+				
+				aHTML.push('</table>');
+
+				ns1blankspace.render.page.show(
+				{
+					xhtmlElementID: sXHTMLElementID,
+					xhtmlContext: sXHTMLElementID,
+					xhtml: aHTML.join(''),
+					showMore: (oResponse.morerows == "true"),
+					more: oResponse.moreid,
+					rows: iRows,
+					functionShowRow: ns1blankspace.financial.compliance.invoices.row,
+					functionNewPage: 'ns1blankspace.financial.compliance.invoices.bind()',
+					headerRow: true,
+					summary: oResponse.summary
+				}); 	
+					
+				ns1blankspace.financial.compliance.invoices.bind();
+			}
+		}	
+	},
+
+	row: function(oRow)
+	{
+		var aHTML = [];
+		
+		aHTML.push('<tr class="ns1blankspaceRow">');
+			
+								
+		aHTML.push('<td id="ns1blankspaceFinancialTransaction_financialaccounttext-' + oRow.id + '" data-id="' + oRow.id + '" class="ns1blankspaceRow ns1blankspaceRowSelect">' +
+								oRow.reference + '</td>');
+								
+		aHTML.push('<td id="ns1blankspaceFinancialTransaction_date-' + oRow.id + '" class="ns1blankspaceRow" style="color:#666666;">' +
+								ns1blankspace.util.fd(oRow.sentdate) + '</td>');
+										
+		aHTML.push('<td id="ns1blankspaceFinancialTransaction_description-' + oRow.id + '" class="ns1blankspaceRow" style="color:#666666;">' + 
+								oRow.description + '</td>');
+							
+		aHTML.push('<td id="ns1blankspaceFinancialTransaction_amount-' + oRow.id + '" style="text-align:right; color:#666666;" class="ns1blankspaceRow">' +
+								oRow.amount + '</td>');
+
+		aHTML.push('<td id="ns1blankspaceFinancialTransaction_amount-' + oRow.id + '" style="text-align:right; color:#666666;" class="ns1blankspaceRow">' +
+								oRow.tax + '</td>');
+																				
+		aHTML.push('</td></tr>');
+
+		return aHTML.join('');
+	},
+
+	bind: function()
+	{
+		$('#ns1blankspaceComplianceInvoicesShow td.ns1blankspaceRowSelect:visible').click(function (event)
+		{
+			var iObjectContext = $(this).attr('data-id');
+			ns1blankspace.financial.invoice.init({id: iObjectContext});
+		});	
+	}	
+}
+
+ns1blankspace.financial.compliance.expenses =
+{
+	show: function (oParam, oResponse)
+	{
+		var sStartDate = ns1blankspace.util.getParam(oParam, 'startDate', {"default":ns1blankspace.financial.data.defaults.startdate}).value;
+		var sEndDate = ns1blankspace.util.getParam(oParam, 'endDate', {"default":ns1blankspace.financial.data.defaults.enddate}).value;
+		var iProject = ns1blankspace.util.getParam(oParam, 'project').value;
+		var sXHTMLElementID = ns1blankspace.util.getParam(oParam, 'xhtmlElementID', {"default": 'ns1blankspaceComplianceSearchContainer'}).value;
+		var iRows = ns1blankspace.util.getParam(oParam, 'rows', {"default": 8}).value;
+		
+		var sSearchText = $('#ns1blankspaceComplianceExpensesSearch').val();
+
+		if (oResponse == undefined)
+		{			
+			if (sSearchText == undefined)
+			{
+				var aHTML = [];
+
+				aHTML.push('<div>' +
+				'<input id="ns1blankspaceComplianceExpensesSearch" class="ns1blankspaceText" data-1blankspace="ignore" style="width:50%;">' +
+				'</div>');
+
+				aHTML.push('<div id="ns1blankspaceComplianceExpensesShow" style="font-size: 0.875em;"' +
+							'data-filename="compliance-expenses-' + _.kebabCase(sStartDate) + '-to-' + _.kebabCase(sEndDate) + '.csv">' +
+							ns1blankspace.xhtml.loadingSmall +
+							'</div>');
+
+				aHTML.push('<div style="margin-top:12px;">' +
+							'<div class="ns1blankspaceAction" id="ns1blankspaceComplianceExpensesExport" style="font-size:0.75em;">' +
+									'</div>' +
+							'</div>');
+
+				aHTML.push('</div>');
+
+				$('#' + sXHTMLElementID).html(aHTML.join(''));
+
+				$('#ns1blankspaceComplianceExpensesSearch').unbind('keyup').keyup(function(event)
+				{
+					if (ns1blankspace.timer.delayCurrent != 0) {clearTimeout(ns1blankspace.timer.delayCurrent)};
+			        ns1blankspace.timer.delayCurrent = setTimeout('ns1blankspace.financial.compliance.expenses.show()', ns1blankspace.option.typingWait);
+				});
+
+				$('#ns1blankspaceComplianceExpensesExport').button(
+				{
+					label: 'Export'
+				})
+				.click(function(event)
+				{
+					ns1blankspace.financial.compliance.export.items(
+					{
+						xhtmlContext: 'ns1blankspaceComplianceExpensesShow',
+						dateAttribute: 'accrueddate'
+					})
+				});
+			}	
+
+			var oSearch = new AdvancedSearch();
+			oSearch.method = 'FINANCIAL_EXPENSE_SEARCH';
+			oSearch.rows = iRows;
+
+			oSearch.addField('amount,tax,accrueddate,description,reference');
+			if (sSearchText != '')
+			{
+				oSearch.addBracket('(');
+				oSearch.addFilter('reference', 'TEXT_IS_LIKE', sSearchText);
+				oSearch.addFilter('or')
+				oSearch.addFilter('description', 'TEXT_IS_LIKE', sSearchText);
+
+				var oSearchDate = moment(sSearchText, 'DD MMM YYYY HH:mm:ss')
+				if (oSearchDate.isValid())
+				{
+					oSearch.addOperator('or');
+					oSearch.addFilter('accrueddate', 'EQUAL_TO', oSearchDate.format('DD MMM YYYY'));
+				}
+				oSearch.addBracket(')')
+			}
+
+			oSearch.addSummaryField('count(id) count');
+			oSearch.sort('accrueddate', 'asc');
+
+			if (sStartDate != '') {oSearch.addFilter('accrueddate', 'GREATER_THAN_OR_EQUAL_TO', sStartDate)};
+			if (sEndDate != '') {oSearch.addFilter('accrueddate', 'LESS_THAN_OR_EQUAL_TO', sEndDate)};
+
+			if (iProject != undefined)
+			{
+				oSearch.addFilter('project', 'EQUAL_TO', iProject);
+			}
+
+			oSearch.getResults(function(data) {ns1blankspace.financial.compliance.expenses.show(oParam, data)});
+		}
+		else
+		{
+			sXHTMLElementID = 'ns1blankspaceComplianceExpensesShow';
+
+			var aHTML = [];
+			
+			if (oResponse.data.rows.length == 0)
+			{
+				aHTML.push('<table><tbody>' +
+								'<tr class="ns1blankspace">' +
+								'<td class="ns1blankspaceNothing">No expenses.</td>' +
+								'</tr>' +
+								'</tbody></table>');
+
+				$('#' + sXHTMLElementID).html(aHTML.join(''));
+
+			}
+			else
+			{
+				aHTML.push('<table class="ns1blankspace">');
+
+				aHTML.push('<tr class="ns1blankspaceHeaderCaption">');
+
+				aHTML.push('<td class="ns1blankspaceHeaderCaption">Reference</td>' +
+								'<td class="ns1blankspaceHeaderCaption" style="width:75px;">Date</td>' +
+								'<td class="ns1blankspaceHeaderCaption">Description</td>' +
+								'<td class="ns1blankspaceHeaderCaption" style="width:100px; text-align:right;">Amount</td>' +
+								'<td class="ns1blankspaceHeaderCaption" style="width:100px; text-align:right;">Tax</td>' +
+								'</tr>')
+
+				$.each(oResponse.data.rows, function()
+				{
+					aHTML.push(ns1blankspace.financial.compliance.expenses.row(this));
+				});
+				
+				aHTML.push('</table>');
+
+				ns1blankspace.render.page.show(
+				{
+					xhtmlElementID: sXHTMLElementID,
+					xhtmlContext: sXHTMLElementID,
+					xhtml: aHTML.join(''),
+					showMore: (oResponse.morerows == "true"),
+					more: oResponse.moreid,
+					rows: iRows,
+					functionShowRow: ns1blankspace.financial.compliance.expenses.row,
+					functionNewPage: 'ns1blankspace.financial.compliance.expenses.bind()',
+					headerRow: true,
+					summary: oResponse.summary
+				}); 	
+					
+				ns1blankspace.financial.compliance.expenses.bind();
+			}
+		}	
+	},
+
+	row: function(oRow)
+	{
+		var aHTML = [];
+		
+		aHTML.push('<tr class="ns1blankspaceRow">');
+			
+								
+		aHTML.push('<td id="ns1blankspaceFinancialTransaction_financialaccounttext-' + oRow.id + '" data-id="' + oRow.id + '" class="ns1blankspaceRow ns1blankspaceRowSelect">' +
+								oRow.reference + '</td>');
+								
+		aHTML.push('<td id="ns1blankspaceFinancialTransaction_date-' + oRow.id + '" class="ns1blankspaceRow" style="color:#666666;">' +
+								ns1blankspace.util.fd(oRow.accrueddate) + '</td>');
+										
+		aHTML.push('<td id="ns1blankspaceFinancialTransaction_description-' + oRow.id + '" class="ns1blankspaceRow" style="color:#666666;">' + 
+								oRow.description + '</td>');
+							
+		aHTML.push('<td id="ns1blankspaceFinancialTransaction_amount-' + oRow.id + '" style="text-align:right; color:#666666;" class="ns1blankspaceRow">' +
+								oRow.amount + '</td>');
+
+		aHTML.push('<td id="ns1blankspaceFinancialTransaction_tax-' + oRow.id + '" style="text-align:right; color:#666666;" class="ns1blankspaceRow">' +
+								oRow.tax + '</td>');
+																				
+		aHTML.push('</td></tr>');
+
+		return aHTML.join('');
+	},
+
+	bind: function()
+	{
+		$('#ns1blankspaceComplianceExpensesShow td.ns1blankspaceRowSelect:visible').click(function (event)
+		{
+			var iObjectContext = $(this).attr('data-id');
+			ns1blankspace.financial.expense.init({id: iObjectContext});
+		});	
+	}	
+}
+
 ns1blankspace.financial.compliance.credits =
 {
 	show: function (oParam, oResponse)
@@ -2243,7 +2621,7 @@ ns1blankspace.financial.compliance.credits =
 							'</div>');
 
 				aHTML.push('<div style="margin-top:12px;">' +
-							'<div class="ns1blankspaceAction" id="ns1blankspaceComplianceCreditsExport" style="font-size:0.875em;">' +
+							'<div class="ns1blankspaceAction" id="ns1blankspaceComplianceCreditsExport" style="font-size:0.75em;">' +
 									'</div>' +
 							'</div>');
 
@@ -2432,8 +2810,8 @@ ns1blankspace.financial.compliance.journals =
 							'</div>');
 
 				aHTML.push('<div style="margin-top:12px;">' +
-							'<div class="ns1blankspaceAction" id="ns1blankspaceComplianceJournalsExport" style="font-size:0.875em; float:left;"></div>' +
-							'<div class="ns1blankspaceAction" id="ns1blankspaceComplianceJournalsNew" style="font-size:0.875em;"></div>' +
+							'<div class="ns1blankspaceAction" id="ns1blankspaceComplianceJournalsExport" style="font-size:0.75em; float:left;"></div>' +
+							'<div class="ns1blankspaceAction" id="ns1blankspaceComplianceJournalsNew" style="font-size:0.75em;"></div>' +
 							'</div>');
 
 				aHTML.push('</div>');
@@ -2464,7 +2842,7 @@ ns1blankspace.financial.compliance.journals =
 				})
 				.click(function(event)
 				{
-					ns1blankspace.financial.compliance.export.journal.init()
+					ns1blankspace.financial.journal.init()
 				});
 			}	
 
