@@ -506,7 +506,7 @@ ns1blankspace.financial.home = function (oParam)
 						}
 						
 						aHTML.push('<tr class="ns1blankspaceControl">' +
-									'<td id="ns1blankspaceControlAccounts" class="ns1blankspaceControl">Accounts</td>' +
+									'<td id="ns1blankspaceControlAccounts" class="ns1blankspaceControl">Accounts<br /><span class="ns1blankspaceSub" style="font-size:0.75em;">& transactions</span></td>' +
 									'</tr>');
 									
 						aHTML.push('<tr class="ns1blankspaceControl">' +
@@ -3348,7 +3348,7 @@ ns1blankspace.financial.accounts =
 									}
 								
 									aHTML.push('<tr><td id="ns1blankspaceAccountTransactions_title-' + this.id + '" class="ns1blankspaceRow ns1blankspaceRowSelect ns1blankspaceFinancialAccountRowSelect"' +
-													'>' + this.title + '</td></tr>');
+													'><div>' + this.title + '</div><div class="ns1blankspaceSubNote">' + this.typetext + '</div></td></tr>');
 								});
 							
 								aHTML.push('</table>');
