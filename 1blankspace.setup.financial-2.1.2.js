@@ -362,6 +362,16 @@ ns1blankspace.setup.financial =
 						
 						aHTML.push('<tr class="ns1blankspaceCaption">' +
 										'<td class="ns1blankspaceCaption">' +
+										'Accounting Method' +
+										'</td></tr>' +
+										'<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceRadio">' +
+										'<input type="radio" id="radioAccountingMethod1" name="radioAccountingMethod" value="1"/>Cash' +
+										'<br /><input type="radio" id="radioAccountingMethod2" name="radioAccountingMethod" value="2"/>Accrual' +
+										'</td></tr>');			
+
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
 										'Taxation Method' +
 										'</td></tr>' +
 										'<tr class="ns1blankspace">' +
@@ -436,14 +446,14 @@ ns1blankspace.setup.financial =
 
 						if (ns1blankspace.objectContextData != undefined)
 						{
-							$('[name="radioTaxationMethod"][value="' + ns1blankspace.objectContextData.taxreportcalculationmethod + '"]').attr('checked', true);	
+							$('[name="radioAccountingMethod"][value="' + ns1blankspace.objectContextData.accountingmethod + '"]').attr('checked', true);	
+							$('[name="radioTaxationMethod"][value="' + ns1blankspace.objectContextData.taxreportcalculationmethod + '"]').attr('checked', true);
 							$('#ns1blankspaceGeneralAccountingYear').val(ns1blankspace.objectContextData.endoffinancialyear);
 							$('[name="radioDefaultInvoiceSentValue"][value="' + ns1blankspace.objectContextData.defaultinvoicesentvalue + '"]').attr('checked', true);
 							$('#ns1blankspaceGeneralLockedDateDebtors').val(ns1blankspace.objectContextData.lockeddatedebtors);
 							$('#ns1blankspaceGeneralLockedDateCreditors').val(ns1blankspace.objectContextData.lockeddatecreditors);
 							$('#ns1blankspaceGeneralLockedDateJournals').val(ns1blankspace.objectContextData.lockeddatejournals);
 						}
-
 					}	
 				},
 
@@ -2864,6 +2874,7 @@ ns1blankspace.setup.financial =
 
 									if ($('#ns1blankspaceMainGeneral').html() != '')
 									{
+										sData += '&accountingmethod=' + ns1blankspace.util.fs($('input[name="radioAccountingMethod"]:checked').val());
 										sData += '&taxreportcalculationmethod=' + ns1blankspace.util.fs($('input[name="radioTaxationMethod"]:checked').val());
 										sData += '&endoffinancialyear=' + ns1blankspace.util.fs($('input[name="inputns1blankspaceGeneralAccountingYear"]:checked').val());
 										sData += '&defaultinvoicesentvalue=' + ns1blankspace.util.fs($('input[name="radioDefaultInvoiceSentValue"]:checked').val());
