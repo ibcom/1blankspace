@@ -1694,7 +1694,9 @@ ns1blankspace.financial.bankAccount =
 								},					
 
 					items:   {
-									data: 	{searchText: undefined},
+									data: 		{},
+
+									searchText: undefined,
 
 									latest: 	function (oParam, oResponse)
 												{
@@ -1723,7 +1725,7 @@ ns1blankspace.financial.bankAccount =
 												{
 													var iFileSource;
 													var iStatus = ns1blankspace.util.getParam(oParam, 'status').value;
-													var bAll = ns1blankspace.util.getParam(oParam, 'all').value;
+													var bAll = ns1blankspace.util.getParam(oParam, 'all', {"default": false}).value;
 								
 													if (oParam != undefined)
 													{
@@ -1732,6 +1734,13 @@ ns1blankspace.financial.bankAccount =
 
 													if (oResponse === undefined)
 													{	
+														var oSearchText = ns1blankspace.util.getParam(oParam, 'searchText');
+
+														if (oSearchText.exists)
+														{
+															ns1blankspace.financial.bankAccount.import.items.searchText = oSearchText.value;
+														}
+
 														ns1blankspace.financial.bankAccount["import"].items.data = {};
 
 														var aHTML = [];
@@ -1740,10 +1749,7 @@ ns1blankspace.financial.bankAccount =
 																		'<tr class="ns1blankspaceContainer">' +
 																		'<td id="ns1blankspaceImportItemsColumn1">' + ns1blankspace.xhtml.loading + '</td>')
 
-														if (!bAll)
-														{
-															aHTML.push('<td id="ns1blankspaceImportItemsColumn2" style="width:100px;"></td>')
-														}
+														aHTML.push('<td id="ns1blankspaceImportItemsColumn2" style="width:100px;"></td>');
 
 														aHTML.push('</tr>' +
 																		'</table>');				
@@ -1835,43 +1841,75 @@ ns1blankspace.financial.bankAccount =
 														
 														aHTML.push('<table class="ns1blankspaceColumn2">');
 																
-														if (oResponse.data.rows.length == 0)
-														{
-															if (iFileSource != undefined)
+														if (!bAll)
+														{		
+															if (oResponse.data.rows.length == 0)
 															{
-																aHTML.push('<tr><td><span id="ns1blankspaceBankAccountImportDelete" data-id="' + iFileSource + '" class="ns1blankspaceAction">' +
-																			'Delete</span></td></tr>');
-															}	
-														}		
-														else if (bNeedConfirm)
-														{			
-															aHTML.push('<tr><td><span id="ns1blankspaceBankAccountImportMappingsApply" class="ns1blankspaceAction">' +
-																		'Confirm & apply mappings</span></td></tr>');
+																if (iFileSource != undefined)
+																{
+																	aHTML.push('<tr><td><span id="ns1blankspaceBankAccountImportDelete" data-id="' + iFileSource + '" class="ns1blankspaceAction">' +
+																				'Delete</span></td></tr>');
+																}	
+															}		
+															else if (bNeedConfirm)
+															{			
+																aHTML.push('<tr><td><span id="ns1blankspaceBankAccountImportMappingsApply" class="ns1blankspaceAction">' +
+																			'Confirm & apply mappings</span></td></tr>');
 
-															aHTML.push('<tr><td id="ns1blankspaceBankAccountImportMappingsApplyStatus" style="padding-top:5px; padding-bottom:12px; font-size:0.75em;" class="ns1blankspaceSub">' +
-																		'Confirm uploaded bank transactions and apply any configured mappings.</td></tr>');
-														}	
-														else
-														{	
-															if (ns1blankspace.financial.data.settings.taxreportcalculationmethod == 1)
-															{	
-																aHTML.push('<tr><td style="padding-top:5px; padding-bottom:12px; font-size:0.75em;" class="ns1blankspaceSub">' +
-																				'Use the "+" button to create payments and receipts within this space.<br /><br />If you have already created invoices, expenses, payments or receipts, then click Reconcile.</td></tr>');
-															}
+																aHTML.push('<tr><td id="ns1blankspaceBankAccountImportMappingsApplyStatus" style="padding-top:5px; padding-bottom:12px; font-size:0.75em;" class="ns1blankspaceSub">' +
+																			'Confirm uploaded bank transactions and apply any configured mappings.</td></tr>');
+															}	
 															else
-															{
-																aHTML.push('<tr><td style="padding-top:5px; padding-bottom:12px; font-size:0.75em;" class="ns1blankspaceSub">' +
-																				'You can now reconcile these bank transactions by clicking Reconcile.</td></tr>');
-															}	
-
-															//aHTML.push('<tr><td><span id="ns1blankspaceBankAccountImportNew" class="ns1blankspaceAction">' +
-															//				'New Import</span></td></tr>');
-
+															{	
+																if (ns1blankspace.financial.data.settings.taxreportcalculationmethod == 1)
+																{	
+																	aHTML.push('<tr><td style="padding-top:5px; padding-bottom:12px; font-size:0.75em;" class="ns1blankspaceSub">' +
+																					'Use the "+" button to create payments and receipts within this space.<br /><br />If you have already created invoices, expenses, payments or receipts, then click Reconcile.</td></tr>');
+																}
+																else
+																{
+																	aHTML.push('<tr><td style="padding-top:5px; padding-bottom:12px; font-size:0.75em;" class="ns1blankspaceSub">' +
+																					'You can now reconcile these bank transactions by clicking Reconcile.</td></tr>');
+																}	
+															}
 														}
 
+														if (oResponse.data.rows.length != 0)
+														{
+															aHTML.push('<tr><td class="ns1blankspaceText" style="padding-top:16px;">' +
+																		'<input id="ns1blankspaceImportItemsSearchText" class="ns1blankspaceText" data-1blankspace="ignore" style="width:85px;">' +
+																		'</td></tr>');
+
+															aHTML.push('<tr><td style="padding-top:0px;">' +
+																		'<span style="width:60px;" id="ns1blankspaceImportItemsSearch" class="ns1blankspaceAction">Search</span>' +
+																		'</td></tr>');
+														}
+															
 														aHTML.push('</table>');					
 														
 														$('#ns1blankspaceImportItemsColumn2').html(aHTML.join(''));
+
+														$('#ns1blankspaceImportItemsSearch').button(
+														{
+															label: 'Search'
+														})
+														.click(function() 
+														{
+															oParam = ns1blankspace.util.setParam(oParam, 'searchText', $('#ns1blankspaceImportItemsSearchText').val());
+															ns1blankspace.financial.bankAccount.import.items.show(oParam);
+														})
+														.css('width', '65px');
+
+														$('#ns1blankspaceImportItemsSearchText').keyup(function(e)
+														{
+															if (e.which === 13)
+													    	{
+													    		oParam = ns1blankspace.util.setParam(oParam, 'searchText', $('#ns1blankspaceImportItemsSearchText').val())
+													    		ns1blankspace.financial.bankAccount.import.items.show(oParam);
+													    	}
+													    });	
+
+														$('#ns1blankspaceImportItemsSearchText').val(ns1blankspace.financial.bankAccount.import.items.searchText)
 
 														$('#ns1blankspaceBankAccountImportNew').button(
 														{
