@@ -3825,33 +3825,30 @@ ns1blankspace.financial.payroll.totals =
 {
 	show: 		function (oParam, oResponse)
 				{
-					var sStartDate;
-					var sEndDate;
+					var sStartDate = ns1blankspace.util.getParam(oParam, 'startDate', {"default":ns1blankspace.financial.data.defaults.startdate}).value;
+					var sEndDate = ns1blankspace.util.getParam(oParam, 'endDate', {"default":ns1blankspace.financial.data.defaults.enddate}).value;
 
-					if (oParam != undefined)
-					{
-						if (oParam.startDate != undefined) {sStartDate = oParam.startDate}
-						if (oParam.endDate != undefined) {sEndDate = oParam.endDate}
-					}
-					else
-					{
+					if (oParam == undefined)
+					{	
 						oParam = {}
 					}	
 
 					if (sStartDate === undefined)
 					{
 						sStartDate = Date.today().moveToMonth(6, -1).moveToFirstDayOfMonth().toString("dd MMM yyyy");
-						oParam.startDate = sStartDate;
 					}
+
+					oParam.startDate = sStartDate;
 
 					if (sEndDate === undefined)
 					{
 						sEndDate = Date.today().toString("dd MMM yyyy");
-						oParam.endDate = sEndDate;
 					}
+
+					oParam.endDate = sEndDate;
 					
 					ns1blankspace.financial.payroll.data.startDate = sStartDate;
-						ns1blankspace.financial.payroll.data.endDate = sEndDate;
+					ns1blankspace.financial.payroll.data.endDate = sEndDate;
 
 					ns1blankspace.financial.payroll.data.context = 'totals';
 
