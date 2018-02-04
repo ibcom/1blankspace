@@ -60,6 +60,8 @@ ns1blankspace.option.yodlee =
 	proxyURL: 'https://yodlee.lab.ibcom.biz'
 }
 
+ns1blankspace.option.dateFormats = ['DD MMM YYYY', 'D MMM YYYY', 'D/MM/YYYY', 'DD/MM/YYYY'];
+
 ns1blankspace.formFactor.size.value = ns1blankspace.formFactor.size.options.medium;
 
 ns1blankspace.data.object = {person: 32, business: 12, opportunity: 35};
@@ -185,7 +187,7 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.financial.bankAccount',
-		source: '/site/312/1blankspace.financial.bankaccount-2.2.0.js'
+		source: '/site/312/1blankspace.financial.bankaccount-2.2.1.js'
 	},
 	{
 		nameSpace: '1blankspace.financial.invoice',
@@ -285,7 +287,7 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.setup.websiteForm',
-		source: '/jscripts/1blankspace.setup.websiteForm-2.0.0.js'
+		source: '/site/312/1blankspace.setup.website.form-2.0.1.js'
 	},
 	{
 		nameSpace: '1blankspace.structure',

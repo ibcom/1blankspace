@@ -375,7 +375,7 @@ ns1blankspace.financial.expense =
 														oSearch.addFilter('expense.amount', 'APPROX_EQUAL_TO', sSearchText);
 													}
 
-													var oSearchDate = moment(sSearchText, 'DD MMM YYYY HH:mm:ss')
+													var oSearchDate = moment(sSearchText, 'DD MMM YYYY')
 		  											if (oSearchDate.isValid())
 													{
 														oSearch.addOperator('or');
