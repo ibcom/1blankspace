@@ -48,7 +48,7 @@ ns1blankspace.option = $.extend(true, ns1blankspace.option,
 	passwordSuffix: undefined,
 	financialShowProjects: true,
 	pdfStyles: '<link rel=stylesheet href="/site/312/1blankspace-2.0.3.css">',
-	messagingCheckURL: 'https://api.mydigitalstructure.com',
+	_messagingCheckURL: 'https://api.mydigitalstructure.com',
 	financialOverride: true,
 	showProductCodes: true
 });
@@ -60,7 +60,7 @@ ns1blankspace.option.yodlee =
 	proxyURL: 'https://yodlee.lab.ibcom.biz'
 }
 
-ns1blankspace.option.dateFormats = ['DD MMM YYYY', 'D MMM YYYY', 'D/MM/YYYY', 'DD/MM/YYYY'];
+ns1blankspace.option.dateFormats = ['DD MMM YYYY', 'D MMM YYYY', 'D/MM/YYYY', 'DD/MM/YYYY', 'DD MMM YYYY HH:mm:ss'];
 
 ns1blankspace.formFactor.size.value = ns1blankspace.formFactor.size.options.medium;
 
@@ -143,7 +143,7 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.action',
-		source: '/jscripts/1blankspace.action-2.0.4.js'
+		source: '/site/312/1blankspace.action-2.0.5.js'
 	},
 	{
 		nameSpace: '1blankspace.messaging.conversation',
@@ -151,7 +151,7 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.messaging.imap',
-		source: '/jscripts/1blankspace.messaging.imap-2.1.0.js'
+		source: '/site/312/1blankspace.messaging.imap-2.1.2.js'
 	},
 	{
 		nameSpace: '1blankspace.document',
@@ -183,11 +183,11 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.financial',
-		source: '/site/312/1blankspace.financial-2.2.4.js'
+		source: '/site/312/1blankspace.financial-2.2.5.js'
 	},
 	{
 		nameSpace: '1blankspace.financial.bankAccount',
-		source: '/site/312/1blankspace.financial.bankaccount-2.2.1.js'
+		source: '/site/312/1blankspace.financial.bankaccount-2.2.2.js'
 	},
 	{
 		nameSpace: '1blankspace.financial.invoice',
