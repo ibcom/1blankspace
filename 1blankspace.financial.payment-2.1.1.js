@@ -1091,7 +1091,7 @@ ns1blankspace.financial.payment =
 										aHTML.push('<table class="ns1blankspaceContainer">');
 										aHTML.push('<tr class="ns1blankspaceContainer">' +
 														'<td id="ns1blankspaceExpenseColumn1" class="ns1blankspaceColumn1Flexible"></td>' +
-														'<td id="ns1blankspaceExpenseColumn2" class="ns1blankspaceColumn2" style="width:400px;"></td>' +
+														'<td id="ns1blankspaceExpenseColumn2" class="ns1blankspaceColumn2" style="width:250px;"></td>' +
 														'</tr>');
 										aHTML.push('</table>');					
 														
@@ -1130,7 +1130,7 @@ ns1blankspace.financial.payment =
 										
 										var oSearch = new AdvancedSearch();
 										oSearch.method = 'FINANCIAL_PAYMENT_EXPENSE_SEARCH';
-										oSearch.addField('expense,expensetext,appliesdate,amount,tax,paymentlineitem,paymentexpense.expense.accrueddate');
+										oSearch.addField('expense,expensetext,appliesdate,amount,tax,paymentlineitem,paymentexpense.expense.accrueddate,paymentexpense.expense.description');
 										oSearch.addFilter('payment', 'EQUAL_TO', iObjectContext);
 										oSearch.sort('appliesdate', 'asc');
 										oSearch.rows = 100;
@@ -1153,6 +1153,7 @@ ns1blankspace.financial.payment =
 											aHTML.push('<table class="ns1blankspace">');
 											aHTML.push('<td class="ns1blankspaceHeaderCaption">Reference</td>');
 											aHTML.push('<td class="ns1blankspaceHeaderCaption">Date</td>');
+											aHTML.push('<td class="ns1blankspaceHeaderCaption">Description</td>');
 											aHTML.push('<td class="ns1blankspaceHeaderCaption" style="text-align:right;">Amount</td>');
 											aHTML.push('<td class="ns1blankspaceHeaderCaption" style="text-align:right;">Tax</td>');
 											aHTML.push('<td class="ns1blankspaceHeaderCaption">&nbsp;</td>');
@@ -1200,6 +1201,9 @@ ns1blankspace.financial.payment =
 																								
 									aHTML.push('<td id="ns1blankspacepayment_date-' + oRow.id + '" class="ns1blankspaceRow">' +
 													ns1blankspace.util.fd(oRow['paymentexpense.expense.accrueddate']) + '</td>');
+
+									aHTML.push('<td id="ns1blankspacepayment_description-' + oRow.id + '" class="ns1blankspaceRow" style="text-align:right;">' +
+													oRow['paymentexpense.expense.description'] + '</td>');
 
 									aHTML.push('<td id="ns1blankspacepayment_amount-' + oRow.id + '" class="ns1blankspaceRow" style="text-align:right;">' +
 													oRow.amount + '</td>');

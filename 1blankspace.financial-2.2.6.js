@@ -5463,7 +5463,18 @@ ns1blankspace.financial.item =
 			function (oParam, oResponse)
 			{
 				var sNamespace = ns1blankspace.util.getParam(oParam, 'namespace').value;
-				ns1blankspace.financial[sNamespace].refresh();
+
+				$.ajax(
+				{
+					type: 'POST',
+					url: ns1blankspace.util.endpointURI('FINANCIAL_ITEM_COMPLETE'),
+					data: {object: ns1blankspace.object, objectcontext: ns1blankspace.objectContext},
+					dataType: 'json',
+					success: function(data)
+					{
+						ns1blankspace.financial[sNamespace].refresh()
+					}
+				});
 			},
 
 	edit:	function (oParam, oResponse)
