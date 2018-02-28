@@ -404,7 +404,7 @@ ns1blankspace.financial.bankAccount =
 
 					$('#ns1blankspaceControlMapping').click(function(event)
 					{
-						ns1blankspace.show({selector: '#ns1blankspaceMainMapping'});
+						ns1blankspace.show({selector: '#ns1blankspaceMainMapping', refresh: true});
 						ns1blankspace.financial.bankAccount.mapping.show();
 					});
 					
@@ -621,22 +621,52 @@ ns1blankspace.financial.bankAccount =
 										var aHTML = [];
 										
 										aHTML.push('<table class="ns1blankspaceColumn2">');
-										
-										
-										aHTML.push('<tr><td class="ns1blankspaceAction">' +
-														'<span id="ns1blankspaceMappingAdd">Add</span>' +
+
+										aHTML.push('<tr><td style="padding-top:2px;">' +
+														'<input id="ns1blankspaceMappingSearchText" class="ns1blankspaceText" data-1blankspace="ignore" style="width:130px;">' +
+														'</td></tr>');
+
+										aHTML.push('<tr><td style="padding-top:0px;">' +
+														'<span style="width:75px;" id="ns1blankspaceMappingSearch" class="ns1blankspaceAction">Search</span>' +
+														'</td></tr>');
+												
+										aHTML.push('<tr><td>' +
+														'<span style="width:75px;" id="ns1blankspaceMappingAdd" class="ns1blankspaceAction">Add</span>' +
 														'</td></tr>');
 							
 										aHTML.push('</table>');					
 										
 										$('#ns1blankspaceMappingColumn2').html(aHTML.join(''));
-									
+
+										$('#ns1blankspaceMappingSearch').button(
+										{
+											label: 'Search'
+										})
+										.click(function() 
+										{
+											oParam = ns1blankspace.util.setParam(oParam, 'searchText', $('#ns1blankspaceMappingSearchText').val());
+											ns1blankspace.financial.bankAccount.mapping.show(oParam);
+										});
+
+										$('#ns1blankspaceMappingSearchText').keyup(function(e)
+										{
+											if (e.which === 13)
+									    	{
+									    		oParam = ns1blankspace.util.setParam(oParam, 'searchText', $('#ns1blankspaceMappingSearchText').val())
+									    		ns1blankspace.financial.bankAccount.mapping.show(oParam);
+									    	}
+									    });	
+
+										$('#ns1blankspaceMappingSearchText').val(ns1blankspace.financial.bankAccount.mapping.searchText)
+
 										$('#ns1blankspaceMappingAdd').button(
 										{
 											label: "Add"
 										})
-										.click(function() {
-											 ns1blankspace.financial.bankAccount.mapping.edit(oParam);
+										.click(function()
+										{
+											delete oParam.step;
+											ns1blankspace.financial.bankAccount.mapping.edit(oParam);
 										});																		
 									}
 
@@ -2108,16 +2138,13 @@ ns1blankspace.financial.bankAccount =
 															}
 														}
 
-														//if (oResponse.data.rows.length != 0)
-														//{
-															aHTML.push('<tr><td style="padding-top:2px;">' +
+														aHTML.push('<tr><td style="padding-top:2px;">' +
 																		'<input id="ns1blankspaceImportItemsSearchText" class="ns1blankspaceText" data-1blankspace="ignore" style="width:98px;">' +
 																		'</td></tr>');
 
-															aHTML.push('<tr><td style="padding-top:0px;">' +
+														aHTML.push('<tr><td style="padding-top:0px;">' +
 																		'<span style="width:98px;" id="ns1blankspaceImportItemsSearch" class="ns1blankspaceAction">Search</span>' +
 																		'</td></tr>');
-														//}
 															
 														aHTML.push('</table>');					
 														
