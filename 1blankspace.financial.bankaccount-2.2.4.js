@@ -590,6 +590,8 @@ ns1blankspace.financial.bankAccount =
 								var iObjectContext = ns1blankspace.objectContext;
 								var sNamespace;
 								var bRefresh = false;
+
+								ns1blankspace.financial.bankAccount.mapping.searchText = ns1blankspace.util.getParam(oParam, 'searchText', {"default": ''}).value;
 								
 								if (oParam != undefined)
 								{
@@ -630,7 +632,7 @@ ns1blankspace.financial.bankAccount =
 														'<span style="width:75px;" id="ns1blankspaceMappingSearch" class="ns1blankspaceAction">Search</span>' +
 														'</td></tr>');
 												
-										aHTML.push('<tr><td>' +
+										aHTML.push('<tr><td style="padding-top:6px;">' +
 														'<span style="width:75px;" id="ns1blankspaceMappingAdd" class="ns1blankspaceAction">Add</span>' +
 														'</td></tr>');
 							
@@ -677,6 +679,20 @@ ns1blankspace.financial.bankAccount =
 														'maptocontactbusiness,maptocontactbusinesstext,maptocontactperson,maptocontactpersontext,' +
 														'matchtype,matchtypetext,project,projecttext,status,statustext,' +
 														'taxtype,taxtypeexpensetext,taxtyperevenuetext,type,typetext');
+
+									if (ns1blankspace.financial.bankAccount.import.items.searchText != '')
+									{
+										oSearch.addBracket('(')
+
+										oSearch.addFilter('mapfromdescription', 'TEXT_IS_LIKE', ns1blankspace.financial.bankAccount.mapping.searchText);
+										oSearch.addOperator('or');
+										oSearch.addFilter('maptocontactbusinesstext', 'TEXT_IS_LIKE', ns1blankspace.financial.bankAccount.mapping.searchText);
+										oSearch.addOperator('or');
+										oSearch.addFilter('maptocontactpersontext', 'TEXT_IS_LIKE', ns1blankspace.financial.bankAccount.mapping.searchText);
+
+										oSearch.addBracket(')');
+									}
+
 									oSearch.sort('description', 'asc');
 									oSearch.rows = 1000;
 									oSearch.getResults(function(data) {ns1blankspace.financial.bankAccount.mapping.show(oParam, data)});
@@ -687,13 +703,22 @@ ns1blankspace.financial.bankAccount =
 									
 									if (oResponse.data.rows.length == 0)
 									{
-										aHTML.push('<table><tr><td class="ns1blankspaceNothing">' +
+										if (ns1blankspace.financial.bankAccount.import.items.searchText != '')
+										{
+											aHTML.push('<table><tr><td class="ns1blankspaceNothing">' +
+													'There are no mappings that match this search.' +
+													'</td></tr></table>');
+										}
+										else
+										{
+											aHTML.push('<table><tr><td class="ns1blankspaceNothing">' +
 													'You can set up mappings to make it easier to create receipts' +
 													' and payments within this space.' +
 													'<br /><br />' +
 													'ie. if the bank transaction description contains <i>fees</i>, ' +
 													'then set the financial account as <i>Bank Charges</i>.' +
 													'</td></tr></table>');
+										}	
 
 										$('#ns1blankspaceMappingColumn1').html(aHTML.join(''));
 									}
@@ -923,6 +948,11 @@ ns1blankspace.financial.bankAccount =
 									aHTML.push('</table>');		
 									
 									$('#ns1blankspaceMappingEditColumn1').html(aHTML.join(''));
+
+									$('[name="radioType"]').click(function ()
+									{
+										$('#ns1blankspaceItemAddSearchResults').html('');
+									});
 				
 									ns1blankspace.financial.util.tax.codes(
 									{
@@ -948,7 +978,7 @@ ns1blankspace.financial.bankAccount =
 									{
 										oParam = ns1blankspace.util.setParam(oParam, 'step', 3);
 										if (ns1blankspace.timer.delayCurrent != 0) {clearTimeout(ns1blankspace.timer.delayCurrent)};
-								        ns1blankspace.timer.delayCurrent = setTimeout('ns1blankspace.financial.bankAccount.mapping.edit(' + JSON.stringify(oParam) + ')', ns1blankspace.option.typingWait);
+										ns1blankspace.timer.delayCurrent = setTimeout('ns1blankspace.financial.bankAccount.mapping.edit(' + JSON.stringify(oParam) + ')', ns1blankspace.option.typingWait);
 									});
 					
 									$('#ns1blankspaceItemAmount').focus();
@@ -1139,7 +1169,7 @@ ns1blankspace.financial.bankAccount =
 											
 											$('.ns1blankspaceRowSelect').click(function()
 											{
-												$('#ns1blankspaceItemAccount').val($(this).html())
+												$('#ns1blankspaceItemAccount').val($(this).html().formatXHTML())
 												$('#ns1blankspaceItemAccount').attr('data-id',(this.id).split('-')[1]);
 												$('#ns1blankspaceItemAddSearchResults').html('');
 											});
@@ -2122,23 +2152,29 @@ ns1blankspace.financial.bankAccount =
 															{	
 																ns1blankspace.financial.bankAccount.import.items.match.data.transactions = oResponse.data.rows;
 
-																aHTML.push('<tr><td ><span id="ns1blankspaceBankAccountImportCreateItems" class="ns1blankspaceAction">' +
+																aHTML.push('<tr><td><span id="ns1blankspaceBankAccountImportMappingsReApply" class="ns1blankspaceAction">' +
+																			'Apply mappings</span></td></tr>');
+
+																aHTML.push('<tr><td style="padding-top:8px;"><span id="ns1blankspaceBankAccountImportCreateItems" class="ns1blankspaceAction">' +
 																			'Create payments & receipts</span></td></tr>');
 
-																if (ns1blankspace.financial.data.settings.accountingmethod == 1)
-																{	
-																	aHTML.push('<tr><td style="padding-top:8px; padding-bottom:12px; font-size:0.75em;" class="ns1blankspaceSub">' +
-																			'Use the "+" button to create payments and receipts within this space.<br /><br />If you have already created invoices, expenses, payments or receipts, then click Reconcile.</td></tr>');
-																}
-																else
-																{
-																	aHTML.push('<tr><td style="padding-top:8px; padding-bottom:16px; font-size:0.75em;" class="ns1blankspaceSub">' +
-																			'Or you can reconcile these bank transactions against by clicking Reconcile.</td></tr>');
-																}	
+																//if (ns1blankspace.financial.data.settings.accountingmethod == 1)
+																//{	
+																	//aHTML.push('<tr><td style="padding-top:8px; padding-bottom:12px; font-size:0.75em;" class="ns1blankspaceSub">' +
+																	//		'Use the "+" button to create payments and receipts within this space.<br /><br />If you have already created invoices, expenses, payments or receipts, then click Reconcile.</td></tr>');
+																//}
+																//else
+																//{
+																	//aHTML.push('<tr><td style="padding-top:8px; padding-bottom:16px; font-size:0.75em;" class="ns1blankspaceSub">' +
+																	//		'Or you can reconcile these bank transactions against by clicking Reconcile.</td></tr>');
+																//}
+
+																aHTML.push('<tr><td style="padding-top:8px; padding-bottom:16px; font-size:0.75em;" class="ns1blankspaceSub">' +
+																					'Payments and receipts will be created and matched to any transactions with contact and financial account information.</td></tr>');
 															}
 														}
 
-														aHTML.push('<tr><td style="padding-top:2px;">' +
+														aHTML.push('<tr><td style="padding-top:8px;">' +
 																		'<input id="ns1blankspaceImportItemsSearchText" class="ns1blankspaceText" data-1blankspace="ignore" style="width:98px;">' +
 																		'</td></tr>');
 
@@ -2184,6 +2220,16 @@ ns1blankspace.financial.bankAccount =
 														$('#ns1blankspaceBankAccountImportMappingsApply').button(
 														{
 															label: 'Confirm & apply mappings',
+														})
+														.click(function()
+														{	
+															ns1blankspace.financial.bankAccount.mapping.apply.init(oParam)
+														})
+														.css('width', '100px');
+
+														$('#ns1blankspaceBankAccountImportMappingsReApply').button(
+														{
+															label: 'Apply mappings',
 														})
 														.click(function()
 														{	
@@ -2332,7 +2378,7 @@ ns1blankspace.financial.bankAccount =
 														$('#ns1blankspaceFinancialBankImportItems .ns1blankspaceRowMatch:not(.ui-button)').button(
 														{
 															text: false,
-														 	icons: {primary: "ui-icon-pencil"}
+														 	icons: {primary: "ui-icon-arrowthickstop-1-s"}
 														})
 														.click(function()
 														{
@@ -2794,9 +2840,20 @@ ns1blankspace.financial.bankAccount =
 																		else
 																		{
 																			ns1blankspace.financial.bankAccount.import.items.match.data.matched[sID].sort(ns1blankspace.util.sortBy('dateSort'));
-
+																		
+																			aHTML.push('<div style="margin-top:6px; margin-left:5px; margin-right:3px; margin-bottom:5px;" id="ns1blankspaceFinancialImportItemMode-' + sID + '">');											
+																			aHTML.push('<input style="width: 100%;" type="radio" id="ns1blankspaceFinancialImportItemMode-1-' + sID + '" name="radioMode" checked="checked" />' +
+																							'<label for="ns1blankspaceFinancialImportItemMode-1-' + sID + '" style="font-size:0.75em;">' +
+																							'Match To</label>');
+																			aHTML.push('<input style="width: 100%;" type="radio" id="ns1blankspaceFinancialImportItemMode-2-' + sID + '" name="radioMode" />' +
+																							'<label for="ns1blankspaceFinancialImportItemMode-2-' + sID + '" style="font-size:0.75em;">' +
+																							'Uploaded Payment Receipts</label>');
+																			aHTML.push('<input style="width: 100%;" type="radio" id="ns1blankspaceFinancialImportItemMode-3-' + sID + '" name="radioMode" />' +
+																							'<label for="ns1blankspaceFinancialImportItemMode-3-' + sID + '" style="font-size:0.75em;">' +
+																							'Check Emails</label>');
+																			aHTML.push('</div>');
+																		
 																			aHTML.push('<table>' +
-																				'<tr><td class="ns1blankspaceSummaryCaption" colspan=4>Match to ...</td></tr>' +
 																					'<tr><td>' +
 																					'<table cellspacing=0 cellpadding=0>');
 
@@ -2839,6 +2896,8 @@ ns1blankspace.financial.bankAccount =
 																		aHTML.push('</table>');
 
 																		$('#ns1blankspaceFinancialImportItem_container_match_search-' + sID).html(aHTML.join(''));
+
+																		$('#ns1blankspaceFinancialImportItemMode-' + sID).buttonset();
 
 																		$('#ns1blankspaceFinancialImportItem_container_match_search-' + sID + ' .ns1blankspaceMatchItemsMatch').button(
 																		{
