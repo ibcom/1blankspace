@@ -539,7 +539,7 @@ ns1blankspace.messaging.imap =
 							
 							aHTML.push('<tr><td id="ns1blankspaceMessaging-' + this.id + '" ' +
 											'class="ns1blankspaceControl" style="padding-top:8px;"' +
-											' title="' + this.email + '"><div style="float:left; position:relative; top:3px;" class="ns1blankspaceInboxMarker"></div><div>' +
+											' title="' + this.server + '" data-server="' + this.server + '"><div style="float:left; position:relative; top:3px;" class="ns1blankspaceInboxMarker"></div><div>' +
 											sDescription +
 											'</div><div class="ns1blankspaceSubNote">@' + aDescription[1] + '</div>' + 
 											'</td></tr>');
@@ -573,6 +573,7 @@ ns1blankspace.messaging.imap =
 					aHTML.push('</table>');
 					
 					aHTML.push('<div id="ns1blankspaceMessagingMessageControlContainer"></div>');
+					aHTML.push('<div id="ns1blankspaceMessagingMessageControlServer" style="margin-top:16px;"></div>');
 				}
 				else
 				{
@@ -583,6 +584,7 @@ ns1blankspace.messaging.imap =
 			
 				$('td.ns1blankspaceControl').click(function(event)
 				{
+					$('#ns1blankspaceMessagingMessageControlServer').html('');
 					var sID = this.id.split('-').pop();
 
 					if (sID == 'Sent')
@@ -610,6 +612,17 @@ ns1blankspace.messaging.imap =
 						ns1blankspace.show({selector: '#ns1blankspaceMainInbox'});
 						$('.ns1blankspaceInboxMarker').removeClass('ui-icon ui-icon-mail-closed');
 						$(this).children('div.ns1blankspaceInboxMarker').addClass('ui-icon ui-icon-mail-closed');
+
+						var sServerURL = $(this).attr('data-server');
+						var sMailURL;
+						if (_.includes(sServerURL, 'gmail')) {sMailURL = 'gmail.com'}
+						if (_.includes(sServerURL, 'outlook')) {sMailURL = 'outlook.com'}
+
+						if (sMailURL != undefined)
+						{
+							$('#ns1blankspaceMessagingMessageControlServer').html(
+								'<a href="https://' + sMailURL + '" target="_blank"><div class="ns1blankspaceSubNote">' + sMailURL + '</div></a>');
+						}
 
 						ns1blankspace.app.context({inContext: false, action: true, actionOptions: true});
 
