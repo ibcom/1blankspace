@@ -1929,7 +1929,7 @@ ns1blankspace.logon =
 					
 					aHTML.push('<tr><td style="width:235px; padding-right:25px;">');
 
-					aHTML.push('<table id="ns1blankspaceLogon" class="ns1blankspaceLogonContainer">');
+					aHTML.push('<form><table id="ns1blankspaceLogon" class="ns1blankspaceLogonContainer">');
 
 					aHTML.push('<tr>' +
 									'<td class="ns1blankspaceLogonCaption">' +
@@ -1940,7 +1940,7 @@ ns1blankspace.logon =
 									'remember <input style="margin:0px; padding:0px; border: 0px; margin-top:3px;" type="checkbox" id="ns1blankspaceLogonRemember"/></td></tr>');
 
 					aHTML.push('<tr><td colspan=2 style="padding-bottom: 10px;">' +
-									'<input id="ns1blankspaceLogonLogonName" class="ns1blankspaceLogon">' +
+									'<input id="ns1blankspaceLogonLogonName" class="ns1blankspaceLogon" autocomplete="username">' +
 									'</td></tr>');
 									
 					aHTML.push('<tr>' +
@@ -1953,7 +1953,7 @@ ns1blankspace.logon =
 									'</td></tr>');
 
 					aHTML.push('<tr><td class="ns1blankspaceLogonText" colspan=2 style="padding-bottom: 15px;">' +
-									'<input id="ns1blankspaceLogonPassword" class="ns1blankspaceLogon" type="password">' +
+									'<input id="ns1blankspaceLogonPassword" class="ns1blankspaceLogon" type="password" autocomplete="current-password">' +
 									'</td></tr>');
 
 					aHTML.push('<tr class="ns1blankspacePasswordCodeContainer" style="display:none;">' +
@@ -1965,7 +1965,7 @@ ns1blankspace.logon =
 									'</td></tr>');
 
 					aHTML.push('<tr class="ns1blankspacePasswordCodeContainer" style="display:none;"><td class="ns1blankspaceLogonText" colspan=2 style="padding-bottom: 15px;">' +
-									'<input id="ns1blankspaceLogonPasswordCode" class="ns1blankspaceLogon" type="password">' +
+									'<input id="ns1blankspaceLogonPasswordCode" class="ns1blankspaceLogon" type="password" autocomplete="current-password">' +
 									'</td></tr>');
 
 					aHTML.push('<tr>' +
@@ -2011,7 +2011,7 @@ ns1blankspace.logon =
 						}	
 					}
 
-					aHTML.push('</table>');					
+					aHTML.push('</table></form>');					
 					
 					if (ns1blankspace.xhtml.logonNotes)
 					{	

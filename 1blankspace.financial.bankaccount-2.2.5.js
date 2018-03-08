@@ -1593,7 +1593,7 @@ ns1blankspace.financial.bankAccount =
 													'<tr class="ns1blankspaceContainer">' +
 													'<td id="ns1blankspaceBankAccountImportColumn1" style="width: 110px;padding-right:0px;font-size:0.875em;" class="ns1blankspaceColumn1"><table class="ns1blankspace">' +
 														'<tr><td id="ns1blankspaceBankAccountImport-unconfirmed" class="ns1blankspaceRow ns1blankspaceRowSelect ns1blankspaceBankAccountImportRowSelect" style="padding-left:6px; padding-top:0px; padding-bottom:10px;">' +
-															'New transactions (Inbox)</td></tr>' +
+															'New unconfirmed transactions</td></tr>' +
 														'<tr><td id="ns1blankspaceBankAccountImport-confirmed" class="ns1blankspaceRow ns1blankspaceRowSelect ns1blankspaceBankAccountImportRowSelect" style="padding-left:6px; padding-top:10px; padding-bottom:10px;">' +
 															'Confirmed transactions ready for matching</td></tr>' +
 														'<tr><td id="ns1blankspaceBankAccountImport-all" class="ns1blankspaceRow ns1blankspaceRowSelect ns1blankspaceBankAccountImportRowSelect" style="padding-left:6px; padding-top:10px; padding-bottom:10px;">' +
@@ -2948,34 +2948,6 @@ ns1blankspace.financial.bankAccount =
 													init: function (oParam)
 													{
 														//not used - go straight to search.init
-
-														var sXHTMLElementID = ns1blankspace.util.getParam(oParam, 'xhtmlElementID').value;
-														var sKey = ns1blankspace.util.getParam(oParam, 'xhtmlElementID', {index: 1}).value;
-														var iType = ns1blankspace.util.getData(oParam, 'data-type').value;
-
-														if ($('#ns1blankspaceFinancialImportItem_container_match-' + sKey).length != 0)
-														{
-															$('#ns1blankspaceFinancialImportItem_container_match-' + sKey).remove();
-															$('#ns1blankspaceFinancialImportItem_container-' + sKey + ' td').css('border-bottom-width', '1px');
-														}
-														else
-														{
-															$('#ns1blankspaceFinancialImportItem_container-' + sKey + ' td').css('border-bottom-width', '0px');
-
-															var aHTML = [];
-										
-															aHTML.push('<table class="ns1blankspaceContainer">' +
-																			'<tr class="ns1blankspaceContainer">' +
-																			'<td id="ns1blankspaceImportMatchColumn1" class="ns1blankspaceColumn1Flexible"></td>' +
-																			'<td id="ns1blankspaceImportMatchColumn2" class="ns1blankspaceColumn2" style="width:120px;"></td>' +
-																			'</tr></table>');
-
-															$('#ns1blankspaceFinancialImportItem_container-' + sKey).after('<tr id="ns1blankspaceFinancialImportItem_container_match-' + sKey + '">' +
-																		'<td colspan=5>' +
-																			'<div id="ns1blankspaceFinancialImportItem_container_match_search-' + sKey + '" style="background-color: #F5F5F5; padding:5px; margin-bottom:15px;">' + aHTML.join('') + '</div></td></tr>');
-
-															ns1blankspace.financial.bankAccount.import.items.match.search.init(oParam);														
-														}	
 													},
 
 													initData: function(oParam, oResponse)
@@ -3278,7 +3250,7 @@ ns1blankspace.financial.bankAccount =
 																oSearch.method = 'CORE_ATTACHMENT_SEARCH';
 																oSearch.addField('type,filename,title,description,download,modifieddate,attachment,bucket,createddate,createdusertext,object,objectcontext');
 																oSearch.addFilter('title', 'EQUAL_TO', '_upload.expense.image');
-																//oSearch.addFilter('modifieddate', 'EQUAL_TO', oTransaction.posteddate);
+																oSearch.addFilter('modifieddate', 'EQUAL_TO', oTransaction.posteddate);
 																oSearch.rows = 1000;
 																oSearch.getResults(function(data) {ns1blankspace.financial.bankAccount.import.items.match.search.checkForAttachments(oParam, data)});
 															}
@@ -3291,25 +3263,47 @@ ns1blankspace.financial.bankAccount =
 																if (ns1blankspace.financial.bankAccount.import.items.match.data.images.length == 0)
 																{
 																	aHTML.push('<table style="margin-top:8px;"><tr class="ns1blankspace">' +
-																						'<td class="ns1blankspaceNothing">There are no images.</td>' +
+																						'<td class="ns1blankspaceNothing">There are no upload images that match the date of the transaction.</td>' +
 																						'</tr></table>');
 
 																	$('#ns1blankspaceFinancialImportItem_container_match_search_container-' + sID).html(aHTML.join(''));
 																}
 																else
 																{
-																	aHTML.push('<table cellspacing=2 cellpadding=6>');
+																	aHTML.push('<table cellspacing=0 cellpadding=0 class="ns1blankspace">' +
+																						'<tr><td width="50px;">');
+
+																	aHTML.push('<table cellspacing=2 cellpadding=6 class="ns1blankspace">');
 
 																	$.each(ns1blankspace.financial.bankAccount.import.items.match.data.images, function(i, oImage)
 																	{				
-																		aHTML.push('<tr><td style="background-color:#FFFFFF;" id="ns1blankspaceMatchItemsImages_filename-' + oTransaction.id + '" class="imageitem">' +
-																								oImage.filename + '</td>');
+																		aHTML.push('<tr><td style="background-color:#FFFFFF;" id="ns1blankspaceMatchItemsImages_filename-' + oTransaction.id + '" class="imageitem ns1blankspaceRow ns1blankspaceRowSelect"' +
+																				' data-id="' + oImage.id + '">' +
+																				oImage.filename + '</td>');
 																										
 																	});
 
 																	aHTML.push('</table>');
 
+																	aHTML.push('</td><td id="ns1blankspaceFinancialImportItem_image_container-' + sID + '"></tr></table>');
+
 																	$('#ns1blankspaceFinancialImportItem_container_match_search_container-' + sID).html(aHTML.join(''));
+
+																	$('#ns1blankspaceFinancialImportItem_container_match_search_container-' + sID + ' td.imageitem').click(function ()
+																	{
+																		var sURL = '/rpc/core/?method=CORE_IMAGE_SHOW&id=' + $(this).attr('data-id');
+
+																		ns1blankspace.visualise.util.imageToCanvas(
+																		{
+																			imageSource: sURL,
+																			xhtmlElementCanvasContainerID: 'ns1blankspaceFinancialImportItem_image_container-' + sID,
+																			autoRotation: 90,
+																			autoScale: true,
+																			scaleFactor: 0.95
+																		});
+																	})	
+
+																	$('#ns1blankspaceFinancialImportItem_container_match_search_container-' + sID + ' td.imageitem').first().click()
 																}	
 															}
 														},

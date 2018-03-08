@@ -94,7 +94,7 @@ ns1blankspace.financial.payment =
 						{
 							aHTML.push('<tr class="ns1blankspaceControl">' +
 									'<td style="padding-top:15px;" id="ns1blankspaceControlPaymentImages" class="ns1blankspaceControl">' +
-											'Payment<br />receipts<br /><span class="ns1blankspaceSub" style="font-size:0.625em;">photos</span></td>' +
+											'Payment<br />images<br /><span class="ns1blankspaceSub" style="font-size:0.625em;">receipt photos</span></td>' +
 									'</tr>');
 						}
 
@@ -2161,7 +2161,7 @@ ns1blankspace.financial.payment.images =
 						ns1blankspace.visualise.util.imageToCanvas(
 						{
 							imageSource: sURL,
-							xhtmlElementCanvasID: 'ns1blankspacePaymentImageDetailsColumn1_canvas',
+							xhtmlElementCanvasContainerID: 'ns1blankspacePaymentImageDetailsColumn1',
 							autoRotation: 90,
 							autoScale: true
 						});
