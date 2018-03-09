@@ -3120,17 +3120,18 @@ ns1blankspace.financial.bankAccount =
 																if (iType == 2)
 																{
 																	oSearch.method = 'FINANCIAL_PAYMENT_SEARCH';
-																	oSearch.addField('reference,description,amount,paiddate,reconciliation,contactbusinesspaidtotext,contactpersonpaidtotext');
+																	oSearch.addField('reference,description,amount,paiddate,reconciliation,contactbusinesspaidtotext,contactpersonpaidtotext,contactbusinesspaidto,contactpersonpaidto');
 
 																}	
 																else
 																{
 																	oSearch.method = 'FINANCIAL_RECEIPT_SEARCH';
-																	oSearch.addField('reference,description,amount,receiveddate,reconciliation,contactbusinessreceivedfromtext,contactpersonreceivedfromtext');
+																	oSearch.addField('reference,description,amount,receiveddate,reconciliation,contactbusinessreceivedfromtext,contactpersonreceivedfromtext,contactbusinessreceivedfrom,contactpersonreceivedfrom');
 																}
 															
 																oSearch.addFilter('sourcebanktransaction', 'IS_NULL');
 																oSearch.addFilter('reconciliation', 'IS_NULL');
+																oSearch.addFilter('amount', 'NOT_EQUAL_TO', 0);
 
 																if (bThisBankAccountOnly)
 																{
@@ -3278,31 +3279,15 @@ ns1blankspace.financial.bankAccount =
 
 																	if (k['generaljournalitem.generaljournal.description'] !== undefined) {k.description = k['generaljournalitem.generaljournal.description']}
 
-																	var sDescription = k.description;
-
-																	if (iType === 2)
+																	if (iType == 2)
 																	{
-																		if (k.contactbusinesspaidtotext !== '')
-																		{
-																			sDescription += '<br />' + this.contactbusinesspaidtotext
-																		}
-
-																		if (this.contactpersonpaidtotext !== '')
-																		{
-																			sDescription += '<br />' + this.contactpersonpaidtotext
-																		}
+																		k.contactbusiness = k.contactbusinesspaidto;
+																		k.contactperson = k.contactpersonpaidto;
 																	}
 																	else
 																	{
-																		if (this.contactbusinessreceivedfromtext !== '')
-																		{
-																			sDescription += '<br />' + this.contactbusinessreceivedfromtext
-																		}
-
-																		if (this.contactpersonreceivedfromtext !== '')
-																		{
-																			sDescription += '<br />' + this.contactpersonreceivedfromtext
-																		}
+																		k.contactbusiness = k.contactbusinessreceivedfrom;
+																		k.contactperson = k.contactpersonreceivedfrom;
 																	}
 
 																	k.dateSort = Date.parse(k.date);
@@ -3509,7 +3494,7 @@ ns1blankspace.financial.bankAccount =
 																		function (oItem)
 																		{
 																			var bMatch = 
-																					numeral(oItem.searchAmount).value() <= numeral(oTransaction.amount).value() &&
+																					numeral(oItem.searchAmount).value() <= Math.abs(numeral(oTransaction.amount).value()) &&
 																					(oItem.contactbusiness == oTransaction.contactbusiness ||
 																						oItem.contactperson == oTransaction.contactperson)
 																						
@@ -3545,24 +3530,6 @@ ns1blankspace.financial.bankAccount =
 																	sSearchText = oTransaction.posteddate + ' ' + oTransaction.amount + ' ' + oTransaction.description;
 																	ns1blankspace.financial.bankAccount.import.items.match.data.matched[sID] = fuse.search(sSearchText)
 																} 
-																else
-																{
-																	ns1blankspace.financial.bankAccount.import.items.match.data.matched[sID] = 
-																		_.filter(ns1blankspace.financial.bankAccount.import.items.match.data.unmatched[sClass],
-																		function (a)
-																		{
-																			var bMatch = (
-																						((cSearchAmount !== ''?a.searchAmount == cSearchAmount:false) ||
-																						(sSearchReference !== ''?_.includes(a.reference, sSearchReference):false) ||
-																						(sSearchReference !== ''?_.includes(a.description, sSearchReference):false) ||
-																						(dSearchDate !== ''?a.date == dSearchDate:false))
-																						&& (a.searchAmount <= cSearchAmount));
-
-																			return bMatch
-																		});
-																}		  
-																	
-																ns1blankspace.financial.bankAccount.import.items.match.data.matched[sID].sort(ns1blankspace.util.sortBy('dateSort'));
 
 																if (ns1blankspace.financial.bankAccount.import.items.match.data.matched[sID].length == 0)
 																{
@@ -3574,7 +3541,7 @@ ns1blankspace.financial.bankAccount =
 																	}
 																	else
 																	{
-																		sHTML = sHTML + ' When you click <i>Create Payments & Receipts</i> a matching ' + (iType==2?'payment':'receipt') + ' will be created. ';
+																		sHTML = sHTML + ' You can click <i>Create</i> to manually enter a ' + (iType==2?'payment':'receipt') + '. ';
 																	}
 
 																	aHTML.push('<table style="margin-top:8px;"><tr class="ns1blankspace">' +
@@ -3585,6 +3552,8 @@ ns1blankspace.financial.bankAccount =
 																}
 																else
 																{
+																	ns1blankspace.financial.bankAccount.import.items.match.data.matched[sID].sort(ns1blankspace.util.sortBy('dateSort'));
+
 																	var aHTML = [];
 
 																	aHTML.push('<table cellspacing=2 cellpadding=6>');
@@ -3768,7 +3737,7 @@ ns1blankspace.financial.bankAccount =
 																		object: oTransaction.object,
 																		bankAccount: ns1blankspace.objectContext,
 																		showStatus: false,
-																		postSave: ns1blankspace.financial.bankAccount.import.items.match.create.process,
+																		postSave: ns1blankspace.financial.bankAccount.import.items.match.create.finalise,
 																		bankTransactionID: oTransaction.id,
 																		bankTransactionStatus: 2
 																	})
@@ -3780,7 +3749,7 @@ ns1blankspace.financial.bankAccount =
 
 														process: function (oParam)
 														{
-															//update the item
+															//don't need as happens in save - update the item
 
 															var iObject = ns1blankspace.util.getParam(oParam, 'object').value;
 															var iObjectContext = ns1blankspace.util.getParam(oParam, 'objectContext').value;
@@ -3840,7 +3809,7 @@ ns1blankspace.financial.bankAccount =
 																id: sID,
 																status: 2,
 																object: oParam.object,
-																objectcontext: oParam.id
+																objectcontext: oParam.objectContext
 															}
 
 															$.ajax(
@@ -3850,7 +3819,7 @@ ns1blankspace.financial.bankAccount =
 																data: oData,
 																dataType: 'json',
 																global: false,
-																success: 	function(data)
+																success: function(data)
 																{
 																	$('#ns1blankspaceFinancialImportItem_container-' + sID).hide();
 																	$('#ns1blankspaceFinancialImportItem_options_edit_container-' + sID).hide();
@@ -3948,6 +3917,7 @@ ns1blankspace.financial.bankAccount =
 																					}
 																					else
 																					{	
+																						oParam.objectContext = iJournalID;
 																						ns1blankspace.financial.bankAccount.import.items.match.create.transfer.finalise(oParam)
 																					}	
 																				}
@@ -3984,7 +3954,7 @@ ns1blankspace.financial.bankAccount =
 															var sID = ns1blankspace.util.getParam(oParam, 'xhtmlElementID', {index: 1}).value;
 															var sObject = ns1blankspace.util.getParam(oParam, 'xhtmlElementID', {index: 2}).value;
 															var iType = ns1blankspace.util.getParam(oParam, 'type', {"default": 1}).value;
-															var sLabel = (iType==2?'to ' + ns1blankspace.objectContextData.title + ' from':'from ' + ns1blankspace.objectContextData.title + ' to');
+															var sLabel = (iType==2?'to <i>' + ns1blankspace.objectContextData.title + '</i> from':'from <i>' + ns1blankspace.objectContextData.title + '</i> to');
 	
 															var aHTML = [];
 
@@ -3995,8 +3965,8 @@ ns1blankspace.financial.bankAccount =
 
 															if (sObject == 'journal')
 															{
-																aHTML.push('<div class="ns1blankspaceSummaryCaption" style="margin-top:6px; margin-bottom:4px;">Transfer ' + sLabel + '</div>');
-																aHTML.push('<div class="ns1blankspaceSub" style="margin-bottom:4px;">');
+																aHTML.push('<div style="margin:6px;"><div>Transfer ' + sLabel + '</div>');
+																aHTML.push('<div class="ns1blankspaceSub" style="margin:6px;">');
 
 																var iDefaultBankAccountFrom;
 																
@@ -4011,15 +3981,15 @@ ns1blankspace.financial.bankAccount =
 								
 																aHTML.push('</div>');
 
-																aHTML.push('<div class="ns1blankspaceAction" id="ns1blankspaceBankAccountTransferSave">Save</div>');
+																aHTML.push('<div class="ns1blankspaceAction" id="ns1blankspaceBankAccountTransferSave">Save</div></div>');
 
-																$('#ns1blankspaceMatchItems_options_create_container-' + sID).html(aHTML.join(''));
+																$('#ns1blankspaceFinancialImportItem_container_match_search_container-' + sID).html(aHTML.join(''));
 
 																$('[name="radioBankAccount"]:first').attr('checked', true);
 
 																$('#ns1blankspaceBankAccountTransferSave').button(
 																{
-																	label: "Create"
+																	label: "Save"
 																})
 																.click(function() 
 																{
@@ -4033,7 +4003,19 @@ ns1blankspace.financial.bankAccount =
 															}
 															else
 															{
-																aHTML.push('<table>');
+																aHTML.push('<table style="margin-top:8px;"><tr class="ns1blankspace">' +
+																					'<td class="ns1blankspaceNothing">You need to update the transaction information by clicking <i style="color:#c31d1d;">Not set</i> above.' +
+																					' Once updated click Create again.</td>' +
+																					'</tr></table>');
+
+																$('#ns1blankspaceFinancialImportItem_container_match_search_container-' + sID).html(aHTML.join(''));
+															}
+
+															/*else if (false)
+															{
+																aHTML.push('<div style="margin:6px;">');
+
+																aHTML.push('<table style="width:75%;">');
 
 																aHTML.push('<tr class="ns1blankspaceCaption">' +
 																			'<td class="ns1blankspaceCaption">' +
@@ -4074,22 +4056,22 @@ ns1blankspace.financial.bankAccount =
 																		ns1blankspace.xhtml.loadingSmall +
 																		'</td></tr>');	
 
-																aHTML.push('<tr><td class="ns1blankspaceCaption">' +
-																		ns1blankspace.option.taxVATCaption + ' Amount' +
-																		'</td></tr>' +
-																		'<tr><td class="ns1blankspaceText">' +
-																		'<input id="ns1blankspaceItemTax_' + sID + '" class="ns1blankspaceText">' +
-																		'</td></tr>');
-
 																aHTML.push('</table>');
 
-																aHTML.push('<div class="ns1blankspaceAction" id="ns1blankspaceBankAccountCreateSave">Create</div>');
+																aHTML.push('<div style="margin:4px;" class="ns1blankspaceAction" id="ns1blankspaceBankAccountCreateSave">Save</div></div>');
 
-																$('#ns1blankspaceMatchItems_options_create_container-' + sID).html(aHTML.join(''));
+																$('#ns1blankspaceFinancialImportItem_container_match_search_container-' + sID).html(aHTML.join(''));
+
+																ns1blankspace.financial.util.tax.codes(
+																{
+																	xhtmlElementID: 'ns1blankspaceItemFinancialTaxCode_' + sID,
+																	xhtmlElementName: 'radioTaxCode' + sID,
+																	type: oTransaction.type
+																});
 
 																$('#ns1blankspaceBankAccountCreateSave').button(
 																{
-																	label: "Create"
+																	label: "Save"
 																})
 																.click(function() 
 																{
@@ -4098,6 +4080,11 @@ ns1blankspace.financial.bankAccount =
 																	//get from inout
 
 																	//check if enough information
+
+																	//create.process(oParam)
+
+
+
 
 																	oParam =
 																	{
@@ -4117,8 +4104,9 @@ ns1blankspace.financial.bankAccount =
 
 																	ns1blankspace.financial.save.send(oParam);
 																});
-															}
+															}*/
 														}
+
 													},
 
 												},					
