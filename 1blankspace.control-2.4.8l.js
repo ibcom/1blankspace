@@ -267,7 +267,7 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.setup.space',
-		source: '/jscripts/1blankspace.setup.space-2.0.2.js'
+		source: '/site/312/1blankspace.setup.space-2.0.2.js'
 	},
 	{
 		nameSpace: '1blankspace.setup.structure',

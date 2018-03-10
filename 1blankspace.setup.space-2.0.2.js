@@ -6,7 +6,7 @@
  
 ns1blankspace.setup.space = 
 {
-	init: 		function (oParam)
+	init: 	function (oParam)
 				{
 					ns1blankspace.app.reset();
 
@@ -1373,14 +1373,15 @@ ns1blankspace.setup.space =
 								}
 				},
 
-	storage:  	{
+	storage:  	
+				{
 					show:		function (oParam, oResponse)
 								{	
 									if (oResponse == undefined)
 									{	
 										var oSearch = new AdvancedSearch();
 										oSearch.method = 'SETUP_AWS_ACCOUNT_SEARCH';
-										oSearch.addField('accessid,modifieddate');
+										oSearch.addField('accessid,modifieddate,notes');
 										oSearch.rows = 100;
 										oSearch.sort('accessid', 'asc');
 										oSearch.getResults(function(data)
@@ -1421,7 +1422,7 @@ ns1blankspace.setup.space =
 
 										aHTML.push('<tr><td style="padding-top:16px;" class="ns1blankspaceSubNote">' +
 													'The AWS user associated with the <i>Access ID</i> will need a security policy allowing access to the S3 bucket,' +
-													' <a href="http://mydigitalstructure.com/gettingstarted_export_aws_s3" target="_blank">more..</a>' + 
+													' <a href="http://docs.mydigitalstructure.com/gettingstarted_export_aws_s3" target="_blank">more..</a>' + 
 													'</td></tr>');
 
 										aHTML.push('</table>');					
@@ -1553,6 +1554,15 @@ ns1blankspace.setup.space =
 														'<td class="ns1blankspaceText">' +
 														'<input id="ns1blankspaceSetupSpaceStorageBucketTitle" class="ns1blankspaceText">' +
 														'</td></tr>');
+
+										aHTML.push('<tr class="ns1blankspaceCaption">' +
+														'<td class="ns1blankspaceCaption">' +
+														'Notes' +
+														'</td></tr>' +
+														'<tr class="ns1blankspaceTextMulti">' +
+														'<td class="ns1blankspaceTextMulti">' +
+														'<textarea rows="4" cols="35" style="width:100%; height:140px;" id="ns1blankspaceSetupSpaceStorageNotes" class="ns1blankspaceTextMulti"></textarea>' +
+														'</td></tr>');
 														
 										aHTML.push('</table>');					
 										
@@ -1585,7 +1595,8 @@ ns1blankspace.setup.space =
 											var oData =
 											{
 												accessid: $('#ns1blankspaceSetupSpaceStorageAccessID').val(),
-												id: sID
+												id: sID,
+												notes: $('#ns1blankspaceSetupSpaceStorageNotes').val()
 											}
 
 											if ($('#ns1blankspaceSetupSpaceStorageAccessKey').val() != '')
@@ -1613,7 +1624,7 @@ ns1blankspace.setup.space =
 															{
 																id: $('#ns1blankspaceSetupSpaceStorageBucketTitle').attr('data-id'),
 																account: sAccount,
-																title: $('#ns1blankspaceSetupSpaceStorageBucketTitle').val()
+																title: $('#ns1blankspaceSetupSpaceStorageBucketTitle').val()		
 															}
 
 															$.ajax(
@@ -1680,7 +1691,8 @@ ns1blankspace.setup.space =
 										if (oResponse.data.rows.length != 0)
 										{
 											var oObjectContext = oResponse.data.rows[0];
-											$('#ns1blankspaceSetupSpaceStorageAccessID').val(oObjectContext.accessid)
+											$('#ns1blankspaceSetupSpaceStorageAccessID').val(oObjectContext.accessid);
+											$('#ns1blankspaceSetupSpaceStorageNotes').val(oObjectContext.notes);
 
 											var oSearch = new AdvancedSearch();
 											oSearch.method = 'SETUP_AWS_S3_BUCKET_SEARCH';
