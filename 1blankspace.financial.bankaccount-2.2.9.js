@@ -3094,8 +3094,7 @@ ns1blankspace.financial.bankAccount =
 														if (iStep == 0)
 														{
 															if (ns1blankspace.financial.bankAccount.import.items.match.data.unmatched[sClass] == undefined)
-															{
-																ns1blankspace.status.working('Getting ' + sType + '...');
+															{	
 																oParam = ns1blankspace.util.setParam(oParam, 'step', iStep + 1);
 																ns1blankspace.financial.bankAccount.import.items.match.initData(oParam);
 															}
@@ -3108,6 +3107,7 @@ ns1blankspace.financial.bankAccount =
 														if (iStep == 1)  //GET UNMATCHED PAYMENTS OR RECEIPTS
 														{
 															var sType = (iType == 2?'payments':'receipts');
+															ns1blankspace.status.working('Getting ' + sType + '...');
 
 															if (oResponse == undefined)
 															{
@@ -3168,7 +3168,8 @@ ns1blankspace.financial.bankAccount =
 														if (iStep == 2)  //GET OUTSTANDING EXPENSES / INVOICES
 														{
 															var sType = (iType == 2?'expenses':'invoices')
-
+															ns1blankspace.status.working('Getting ' + sType + '...');
+															
 															if (oResponse == undefined)
 															{
 																var oSearch = new AdvancedSearch();
@@ -3664,20 +3665,20 @@ ns1blankspace.financial.bankAccount =
 																	oParam.objectContext = oItem.id
 																	oParam.bankTransactionID = sTransactionID;
 
+																	if (oParam.object == 2)
+																	{
+																		sObject = 'payment';
+																		oParam.object = 3;
+																	}
+
+																	if (oParam.object == 5)
+																	{
+																		sObject = 'receipt';
+																		oParam.object = 6;
+																	}
+
 																	if (oParam.object == 2 || oParam.object == 5)
 																	{
-																		if (oParam.object == 2)
-																		{
-																			sObject = 'payment';
-																			oParam.object = 3;
-																		}
-
-																		if (oParam.object == 5)
-																		{
-																			sObject = 'receipt';
-																			oParam.object = 6;
-																		}
-
 																		var oData =
 																		{
 																			id: oParam.objectContext,
@@ -3735,7 +3736,46 @@ ns1blankspace.financial.bankAccount =
 																	}
 																	else
 																	{
-																		ns1blankspace.financial.bankAccount.import.items.match.create.finalise(oParam);
+																		var sObject;
+
+																		if (oParam.object == 3)
+																		{
+																			sObject = 'payment';
+																		}
+
+																		if (oParam.object == 6)
+																		{
+																			sObject = 'receipt';
+																		}
+
+																		var oData =
+																		{
+																			id: oParam.objectContext,
+																			sourcebanktransaction: oParam.bankTransactionID
+																		}
+
+																		$.ajax(
+																		{
+																			type: 'POST',
+																			url: ns1blankspace.util.endpointURI('FINANCIAL_' + sObject + '_MANAGE'),
+																			data: oData,
+																			dataType: 'json',
+																			global: false,
+																			success: function(oResponse)
+																			{
+																				if (oResponse.status == 'ER')
+																				{
+																					ns1blankspace.status.message('Error')
+																				}
+																				else
+																				{
+																					oParam.xhtmlElementID = '-' + oParam.bankTransactionID;
+																					ns1blankspace.financial.bankAccount.import.items.match.create.finalise(oParam)
+																				}	
+																			}
+																		});
+
+																		//ns1blankspace.financial.bankAccount.import.items.match.create.finalise(oParam);
 																	}	
 																})
 																.css('width', '15px')
