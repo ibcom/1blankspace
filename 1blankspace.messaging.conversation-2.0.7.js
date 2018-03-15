@@ -1318,8 +1318,9 @@ ns1blankspace.messaging.conversation =
 			aHTML.push(oDate.toString("dd MMM yyyy @ h:mm tt")  + '</div>');
 
 			aHTML.push('<div id="ns1blankspaceMessagingConversationPosts_message-' + oRow.id + '" style="display:none; margin-top:3px;" class="ns1blankspaceRow ns1blankspaceSubNote">' +
-									ns1blankspace.util.cleanURL({text: oRow.message}) + '</div>');
+								oRow.message + '</div>');
 
+//ns1blankspace.util.cleanURL({text: (oRow.message).formatXHTML()})
 
 			aHTML.push('</td><td style="width:100px; text-align:right; vertical-align:bottom; padding-bottom:4px;" class="ns1blankspaceRow">' +
 							'<div id="ns1blankspaceMessagingConversationPosts_comment_container-' + oRow.id + '">' +
@@ -1528,7 +1529,9 @@ ns1blankspace.messaging.conversation =
 				{
 					if (!bExists)
 					{	
-						var sMessage = $('#ns1blankspaceMessagingConversationPosts_message-' + sKey).html();
+						
+						var sMessage = '<iframe class="_ns1blankspaceMessageContainer" id="ns1blankspaceCommentsColumn1-' + sKey + '_message"' +
+									' frameborder="0" border="0" scrolling="auto" sandbox="allow-same-origin"></iframe>';
 
 						var sHTML = '<table class="ns1blankspaceContainer">' +
 									'<tr class="ns1blankspaceContainer">' +
@@ -1541,6 +1544,20 @@ ns1blankspace.messaging.conversation =
 						$('#ns1blankspaceMessagingConversationPosts_container-' + sKey).after('<tr id="ns1blankspaceMessagingConversationPostComments_container-' + sKey + '"' +
 									' data-source="' + sSource + '">' +
 									'<td colspan=2><div style="background-color: #F3F3F3; padding:5px; margin-bottom:12px;">' + sHTML + '</div></td></tr>');
+
+							while ($('#ns1blankspaceCommentsColumn1-' + sKey + '_message').length == 0) {}
+
+							$('#ns1blankspaceCommentsColumn1-' + sKey + '_message')
+							.contents().find("body")
+							.css('font-size', '0.75em')
+							.html(ns1blankspace.util.cleanURL({text: ($('#ns1blankspaceMessagingConversationPosts_message-' + sKey).html()).formatXHTML()}));
+
+							$('#ns1blankspaceCommentsColumn1-' + sKey + '_message').height($('#ns1blankspaceCommentsColumn1-' + sKey + '_message', top.document).contents().find('html').height() * 1.2);
+							$('#ns1blankspaceCommentsColumn1-' + sKey + '_message').width($('#ns1blankspaceCommentsColumn1-' + sKey + '_message', top.document).contents().find('html').width() * 1.2);
+
+							$('#ns1blankspaceCommentsColumn1-' + sKey + '_message')
+							.contents().find("head")
+							.append($(ns1blankspace.option.pdfStyles));
 					}
 
 					ns1blankspace.util.onComplete(oParam);
