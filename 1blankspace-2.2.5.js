@@ -114,6 +114,7 @@ ns1blankspace.user = {};
 ns1blankspace.data = {search: []};
 ns1blankspace.debug = {};
 ns1blankspace.authenticationLevel = 1;
+ns1blankspace.session = {};
 
 ns1blankspace.selector = 'body';
 
@@ -121,7 +122,7 @@ ns1blankspace.scripts =
 [
 	{
 		nameSpace: '1blankspace.advancedsearch',
-		source: '/jscripts/1blankspace.advancedsearch-2.0.3.js'
+		source: '/jscripts/1blankspace.advancedsearch-2.0.4.js'
 	}
 ]
 
@@ -212,6 +213,7 @@ ns1blankspace.app =
 											'<div id="ns1blankspaceFooter"></div>' +
 											'<div id="ns1blankspaceMultiUseContainer"></div>' +
 											'<div id="ns1blankspaceMultiUseDialog"></div>' +
+											'<div id="ns1blankspaceToolTip" style="display:none;"></div>' +
 											'</div>');
 					}		
 
@@ -295,7 +297,7 @@ ns1blankspace.app =
 						ns1blankspace.user.contactPerson = -1;
 						ns1blankspace.user.contactBusiness = -1;
 						ns1blankspace.user.contactBusinessText = '';
-						ns1blankspace.user.systemAdmin = false;
+						ns1blankspace.user.spaceAdmin = false;
 						ns1blankspace.setupShow = false;
 						ns1blankspace.user.theme = 'Standard';
 
@@ -338,6 +340,16 @@ ns1blankspace.app =
 						ns1blankspace.history.lastDestinationInstruction = '';
 						ns1blankspace.history.list = [];
 
+						if (ns1blankspace.option.defaultRowsSmall == undefined)
+						{
+							ns1blankspace.option.defaultRowsSmall = 10
+						}
+
+						if (ns1blankspace.option.defaultRows == undefined)
+						{
+							ns1blankspace.option.defaultRows = 20
+						}
+
 						ns1blankspace.user.networkGroups = '';
 						ns1blankspace.setupShow = false;
 
@@ -360,46 +372,47 @@ ns1blankspace.app =
 
 						   options.error = function(_jqXHR, _textStatus, _errorThrown)
 						   {
-						   		if (originalOptions.retryLimit == undefined)
-						   		{
-						   			originalOptions.retryLimit = (ns1blankspace.option.retryLimit?ns1blankspace.option.retryLimit:3);
-						   		}
+								if (originalOptions.retryLimit == undefined)
+								{
+									originalOptions.retryLimit = (ns1blankspace.option.retryLimit?ns1blankspace.option.retryLimit:3);
+								}
 
-						   		if (originalOptions.retryCount == undefined) {originalOptions.retryCount = 0}
+								if (originalOptions.retryCount == undefined) {originalOptions.retryCount = 0}
 
-						   		if (originalOptions.retryCount == originalOptions.retryLimit || String(_jqXHR.status).substr(0,1) !== '5')
-						  		{
+								if (originalOptions.retryCount == originalOptions.retryLimit || String(_jqXHR.status).substr(0,1) !== '5')
+								{
 									if (originalOptions._error) {originalOptions._error(_jqXHR, _textStatus, _errorThrown)}
 									return;
-						   		};
+								};
 
-						   		if (originalOptions.retryCount == 0)
-						   		{	
-						   			var oErrors = ns1blankspace.util.local.cache.search({key: '1blankspace-debug.json', persist: true});
-						  			if (oErrors == undefined) {oErrors = []}
-						  			oErrors.unshift(
-						  			{
-						  				time: Date(),
-						  				uri: originalOptions.url,
-						  				instance: _jqXHR.getResponseHeader('X-HTTP-myds-instance'),
-						  				fault: _jqXHR.getResponseHeader('X-HTTP-myds-service-fault'),
-						  				statusCode: _jqXHR.status,
-						  				status: _errorThrown
-						  			});
+								if (originalOptions.retryCount == 0)
+								{	
+									var oErrors = ns1blankspace.util.local.cache.search({key: '1blankspace-debug.json', persist: true});
+									if (oErrors == undefined) {oErrors = []}
+									oErrors.unshift(
+									{
+										time: Date(),
+										uri: originalOptions.url,
+										instance: _jqXHR.getResponseHeader('X-HTTP-myds-instance'),
+										fault: _jqXHR.getResponseHeader('X-HTTP-myds-service-fault'),
+										statusCode: _jqXHR.status,
+										status: _errorThrown
+									});
+
 									ns1blankspace.util.local.cache.save({key: '1blankspace-debug.json', persist: true, data: oErrors});
 								}	
 
-						   		originalOptions.retryCount = originalOptions.retryCount + 1;
+								originalOptions.retryCount = originalOptions.retryCount + 1;
 
-						   		$.ajax(originalOptions);
-						   	}
+								$.ajax(originalOptions);
+							}
 
-						   	options.success = function(data, _textStatus, _jqXHR)
-						   	{
-						   		ns1blankspace.ajaxSettings = undefined;
+					   	options.success = function(data, _textStatus, _jqXHR)
+					   	{
+					   		ns1blankspace.ajaxSettings = undefined;
 
-						   		if (originalOptions.global != false)
-						   		{	
+					   		if (originalOptions.global != false)
+					   		{	
 									if (originalOptions.dataType == 'json' || originalOptions.dataType == '')
 									{	
 										if (data.status == 'ER')
@@ -444,10 +457,15 @@ ns1blankspace.app =
 											}	
 										}
 									}
+								}
+
+								if (originalOptions._managed && originalOptions._rf.toLowerCase() == 'csv')
+								{
+									data = ns1blankspace.util.convert.csvToJSON({response: data})
 								}	
-						   		
-						   		if (originalOptions._success !== undefined) {originalOptions._success(data)};
-						   	}	
+							   		
+								if (originalOptions._success !== undefined) {originalOptions._success(data)};
+						   }	
 						});
 
 						$(document).ajaxError(function(oEvent, oXMLHTTPRequest, oAjaxOptions, oError) 
@@ -603,7 +621,8 @@ ns1blankspace.app =
 								}
 							})
 							.click(function() {
-								ns1blankspace.contact.email.search(ns1blankspace.xhtml.divID, {
+								// 2.1.9 Was calling contact.email.search which doesn't exist??
+								ns1blankspace.search.email.show(ns1blankspace.xhtml.divID, {
 										source: 4, 
 										emailOnly: true,
 										contactBusiness: $('#' + ns1blankspace.xhtml.divID).attr('data-contactbusiness'),
@@ -647,7 +666,10 @@ ns1blankspace.app =
 
 						$('input.ns1blankspaceText').live('keyup', function() 
 						{
-							ns1blankspace.inputDetected = true;
+							if ($(this).attr('data-1blankspace') != 'ignore')
+							{
+								ns1blankspace.inputDetected = true;
+							}	
 						});
 							
 						$('input.ns1blankspaceText').live('blur', function() 
@@ -664,6 +686,10 @@ ns1blankspace.app =
 						$('input.ns1blankspaceDate').live('blur', function() 
 						{
 							$(this).removeClass('ns1blankspaceHighlight');
+							if ($(this).attr('data-1blankspace') != 'ignore')
+							{
+								ns1blankspace.inputDetected = true;
+							}
 						});
 
 						$('.ns1blankspaceTextMulti').live('focus', function()
@@ -679,9 +705,31 @@ ns1blankspace.app =
 
 						$('.ns1blankspaceTextMulti').live('keyup', function() 
 						{
-							ns1blankspace.inputDetected = true;
+							if ($(this).attr('data-1blankspace') != 'ignore')
+							{
+								ns1blankspace.inputDetected = true;
+							}
 						});
 
+						$('.ns1blankspaceViewLink').live('click', function()
+						{
+							if ($(this).attr('data-id') != undefined && $(this).attr('data-object') != undefined)
+							{
+								if (ns1blankspace[$(this).attr('data-object')] != undefined)
+								{
+									ns1blankspace[$(this).attr('data-object')].init({id: $(this).attr('data-id')});
+								}	
+							}	
+						});
+
+						$('.ns1blankspaceRadio').live('click', function()
+						{
+							if ($(this).attr('data-1blankspace') != 'ignore')
+							{
+								ns1blankspace.inputDetected = true;
+							}
+						});
+						
 						if (window.location.hash === '#PASSWORDEXPIRED')
 						{
 							ns1blankspace.logon.changePassword.show();
@@ -693,7 +741,7 @@ ns1blankspace.app =
 					}	
 				},
 							
-	start: 		function (oParam)
+	start: 	function (oParam)
 				{
 					if (oParam == undefined) {oParam = {}}
 
@@ -716,6 +764,9 @@ ns1blankspace.app =
 							ns1blankspace.status.message('');
 							$('#ns1blankspaceMultiUseDialog').hide();
 
+							ns1blankspace.data.beta = (data.instance.toLowerCase().indexOf('dbg') != -1
+																	|| data.instance.toLowerCase().indexOf('lab') != -1)
+
 							if (data.status === 'ER')
 							{
 								if (data.error.errornotes == 'No rights (No Access to method)')
@@ -723,7 +774,27 @@ ns1blankspace.app =
 									oParam.message = 'You do not have any access rights to this space.';		
 								}
 
+								ns1blankspace.saml = undefined;
+
+								if (data.SAMLIdentityProviderId != undefined)
+								{
+									ns1blankspace.saml =
+									{
+										entityID: data.SAMLIdentityProviderId,
+										name: data.SAMLIdentityProviderName,
+										url: data.SAMLIdentityProviderURL
+									}
+								
+									if (window.location.hash.toLowerCase().indexOf('logonerror') != -1)
+									{
+										oParam.message = 'There was an error logging on (' + decodeURIComponent(window.location.hash.split('=')[1]).replace(/\+/g, ' ') + ')'
+										window.location.hash = '';
+									}
+								}
+								
 								ns1blankspace.logonKey = data.logonkey;
+								ns1blankspace.session.logonkey = ns1blankspace.logonKey;
+								ns1blankspace.util.local.cache.save({key: '_lk', data: ns1blankspace.logonKey, persist: true})
 								ns1blankspace.logon.show(oParam);
 							}
 							else
@@ -732,7 +803,32 @@ ns1blankspace.app =
 								if (ns1blankspace.control.extend !== undefined) {ns1blankspace.control.extend()}
 								if (ns1blankspace.control.doLast !== undefined) {ns1blankspace.control.doLast()}
 								oParam = ns1blankspace.util.setParam(oParam, 'user', data);
-								ns1blankspace.app.show(oParam);
+
+								if (ns1blankspace.session.logonkey == undefined)
+								{
+									ns1blankspace.session.logonkey = ns1blankspace.util.local.cache.search({key: '_lk', persist: true});
+								}
+
+								if (ns1blankspace.session.sid == undefined)
+								{
+									$.ajax(
+									{
+										type: 'GET',
+										url: ns1blankspace.util.endpointURI('CORE_GET_SID'),
+										dataType: 'json',
+										cache: false,
+										global: false,
+										success: function(data) 
+										{
+											ns1blankspace.session.sid = data.sid;
+											ns1blankspace.app.show(oParam)
+										}
+									});
+								}
+								else
+								{
+									ns1blankspace.app.show(oParam)
+								}
 							}	
 						}
 					});
@@ -868,11 +964,12 @@ ns1blankspace.app =
 							ns1blankspace.user.contactBusinessText = oResponse.contactbusinesstext;
 							ns1blankspace.user.commonName = oResponse.firstname + ' ' + oResponse.surname;
 							ns1blankspace.user.email = oResponse.email;
-							ns1blankspace.user.systemAdmin = (oResponse.systemadmin == "true");
+							ns1blankspace.user.spaceAdmin = (oResponse.unrestrictedaccess == 'Y');
+							ns1blankspace.user.super = (oResponse.superuser == 'Y');
 							
-							if (!ns1blankspace.user.systemAdmin)
+							if (!ns1blankspace.user.spaceAdmin)
 							{
-								ns1blankspace.user.systemAdmin = (oResponse.unrestrictedaccess == 'Y');
+								ns1blankspace.user.spaceAdmin = (oResponse.unrestrictedaccess == 'Y');
 							}
 							
 							ns1blankspace.user.roles = oResponse.roles.rows;
@@ -888,7 +985,7 @@ ns1blankspace.app =
 							
 							ns1blankspace.unloadWarning = true;
 
-							ns1blankspace.setupShow = ns1blankspace.user.systemAdmin;
+							ns1blankspace.setupShow = ns1blankspace.user.unrestricted;
 
 							ns1blankspace.control.init(oParam);
 						}
@@ -909,7 +1006,7 @@ ns1blankspace.app =
 					}
 					
 					$('#ns1blankspaceSpaceText').html(sSpaceText + ((sSpaceTextExtra && sSpaceTextExtra.length > 0) 
-								? '<span id="ns1blankspacespacetextextra" data-extratext="' + sSpaceTextExtra + '">..</span>' : ''));
+								? '<span id="ns1blankspaceSpaceTextExtra" data-extratext="' + sSpaceTextExtra + '">..</span>' : ''));
 
 					$('#ns1blankspaceLogonName').html(ns1blankspace.user.logonName);
 					$('#ns1blankspaceLogoff').html(',&nbsp;log&nbsp;off');
@@ -1017,7 +1114,10 @@ ns1blankspace.app =
 								}})
 						.click(function(event)
 						{
-							ns1blankspace.home.init();
+							if (ns1blankspace.util.checkIfInput())
+							{
+								ns1blankspace.home.init();
+							}	
 						})
 								
 						.next()
@@ -1194,7 +1294,10 @@ ns1blankspace.app =
 						.css('font-size', '0.75em')			
 						.click(function() 
 						{
-							ns1blankspace.setup["switch"]();
+							if (ns1blankspace.util.checkIfInput())
+							{
+								ns1blankspace.setup["switch"]();
+							}	
 						});	
 					
 					$('#ns1blankspaceViewControlHelp')
@@ -1205,7 +1308,10 @@ ns1blankspace.app =
 								}})
 						.click(function() 
 						{
-							ns1blankspace.supportIssue.init();
+							if (ns1blankspace.util.checkIfInput())
+							{
+								ns1blankspace.supportIssue.init();
+							}	
 						});		
 					
 					$('#ns1blankspaceLogonOptions').button(
@@ -1261,7 +1367,9 @@ ns1blankspace.app =
 						});
 					}	
 
-					$('#ns1blankspaceLogonName').click(function(event)
+					$('#ns1blankspaceLogonName')
+					.off('click')
+					.on('click', function(event)
 					{
 						ns1blankspace.control.user.show(this);
 					});
@@ -1330,7 +1438,7 @@ ns1blankspace.app =
 					}	
 				},		
 
-	reset:		function ()
+	reset:	function ()
 				{	
 					$(ns1blankspace.xhtml.container).html('');			
 					$(ns1blankspace.xhtml.container).hide();
@@ -1352,7 +1460,7 @@ ns1blankspace.app =
 					$('#ns1blankspaceViewControlAction').button({label: "Save"});
 					if (ns1blankspace.timer.messaging != 0) {clearInterval(ns1blankspace.timer.messaging)};
 					ns1blankspace.util.app.option({titleSuffix: ''});
-					ns1blankspace.inputDetected = false;
+//					ns1blankspace.inputDetected = false;
 					ns1blankspace.xhtml.action = '';
 					ns1blankspace.object = undefined;
 					ns1blankspace.objectParentName = undefined;
@@ -1364,43 +1472,46 @@ ns1blankspace.app =
 					ns1blankspace.viewOptionsBind = undefined;
 				},
 
-	clean:		function()
+	clean:	function()
 				{	
 					$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions);
 					$(ns1blankspace.xhtml.dropDownContainer).hide(ns1blankspace.option.hideSpeedOptions);
 				},			
 
-	refresh: 	function (oParam)
+	refresh: function (oParam)
 				{
-					var sParentNamespace = ns1blankspace.objectParentName;
-					var sNamespace = ns1blankspace.objectName;
-					var oRoot = ns1blankspace.util.getParam(oParam, 'rootnamespace', {"default": ns1blankspace}).value
-							
-					if (oParam != undefined)
+					if (ns1blankspace.util.checkIfInput())
 					{
-						if (oParam.namespace != undefined) {sNamespace = oParam.namespace}
-						if (oParam.parentNamespace != undefined) {sParentNamespace = oParam.parentNamespace}
-					}	
+						var sParentNamespace = ns1blankspace.objectParentName;
+						var sNamespace = ns1blankspace.objectName;
+						var oRoot = ns1blankspace.util.getParam(oParam, 'rootnamespace', {"default": ns1blankspace}).value
+								
+						if (oParam != undefined)
+						{
+							if (oParam.namespace != undefined) {sNamespace = oParam.namespace}
+							if (oParam.parentNamespace != undefined) {sParentNamespace = oParam.parentNamespace}
+						}	
 
-					if (sNamespace)
-					{
-						if (sParentNamespace)
+						if (sNamespace)
 						{
-							var oNS = oRoot[sParentNamespace][sNamespace];
-						}
-						else
-						{
-							var oNS = oRoot[sNamespace];
-						}
+							if (sParentNamespace)
+							{
+								var oNS = oRoot[sParentNamespace][sNamespace];
+							}
+							else
+							{
+								var oNS = oRoot[sNamespace];
+							}
 
-						if (oNS.init)
-						{
-							oNS.init();
-						}
-						else
-						{
-							ns1blankspace.home.show();
-						}
+							if (oNS.init)
+							{
+								oNS.init();
+							}
+							else
+							{
+								ns1blankspace.home.show();
+							}
+						}	
 					}	
 				},		
 
@@ -1448,9 +1559,12 @@ ns1blankspace.app =
 
 							$('#ns1blankspaceViewControlRefresh').unbind('click').click(function(oParam)
 							{
-								oNS.init({showHome: true});	
-							})
-							
+								if (ns1blankspace.util.checkIfInput())
+								{
+									oNS.init({showHome: true});
+								}		
+							});
+
 							$('#ns1blankspaceViewControlViewContainer').button(
 							{
 								label: ns1blankspace.viewName
@@ -1489,7 +1603,10 @@ ns1blankspace.app =
 							{
 								if ($(this).attr("disabled") != 'disabled')
 								{	
-									oNS.init({"new": true});
+									if (ns1blankspace.util.checkIfInput())
+									{
+										oNS.init({"new": true});
+									}	
 								}	
 							});
 							
@@ -1576,6 +1693,7 @@ ns1blankspace.app =
 
 	context: 	function (oParam)
 				{
+					oParam = oParam || {};
 					var bNew = ns1blankspace.util.getParam(oParam, 'new', {"default": false}).value;
 					var bAction = ns1blankspace.util.getParam(oParam, 'action', {"default": false}).value;
 					var bActionOptions = ns1blankspace.util.getParam(oParam, 'actionOptions', {"default": false}).value;
@@ -1583,7 +1701,7 @@ ns1blankspace.app =
 					if (bContext == undefined) {bContext = ns1blankspace.util.getParam(oParam, 'inContext', {"default": true}).value};
 					var bAll = ns1blankspace.util.getParam(oParam, 'all', {"default": true}).value;
 
-					var bSpecific = (bNew || bAction || bActionOptions);
+					var bSpecific = (oParam['new'] != undefined || oParam.action != undefined || oParam.actionOptions != undefined);
 
 					if (bAll || bNew) {$('#ns1blankspaceViewControlNew').button({disabled: !bContext && (!bSpecific || bNew)})};
 					if (bAll || bAction) {$('#ns1blankspaceViewControlAction').button({disabled: !bContext && (!bSpecific || bAction)})};
@@ -1745,11 +1863,18 @@ ns1blankspace.app =
 
 												$('#ns1blankspaceControlActionOptionsRemove').html(ns1blankspace.xhtml.loadingSmall);
 
+												var oData = {remove: 1, id: ns1blankspace.objectContext}
+
+												if (ns1blankspace.option.financialOverride)
+												{
+													oData.override = 'Y'
+												}	
+
 												$.ajax(
 												{
 													type: 'POST',
 													url: ns1blankspace.util.endpointURI(sMethod),
-													data: 'remove=1&id=' + ns1blankspace.objectContext,
+													data: oData,
 													dataType: 'json',
 													success: function(data){ns1blankspace.app.options.remove(oParam, data)}
 												});
@@ -1804,7 +1929,7 @@ ns1blankspace.logon =
 					
 					aHTML.push('<tr><td style="width:235px; padding-right:25px;">');
 
-					aHTML.push('<table id="ns1blankspaceLogon" class="ns1blankspaceLogonContainer">');
+					aHTML.push('<form><table id="ns1blankspaceLogon" class="ns1blankspaceLogonContainer">');
 
 					aHTML.push('<tr>' +
 									'<td class="ns1blankspaceLogonCaption">' +
@@ -1815,7 +1940,7 @@ ns1blankspace.logon =
 									'remember <input style="margin:0px; padding:0px; border: 0px; margin-top:3px;" type="checkbox" id="ns1blankspaceLogonRemember"/></td></tr>');
 
 					aHTML.push('<tr><td colspan=2 style="padding-bottom: 10px;">' +
-									'<input id="ns1blankspaceLogonLogonName" class="ns1blankspaceLogon">' +
+									'<input id="ns1blankspaceLogonLogonName" class="ns1blankspaceLogon" autocomplete="username">' +
 									'</td></tr>');
 									
 					aHTML.push('<tr>' +
@@ -1828,7 +1953,7 @@ ns1blankspace.logon =
 									'</td></tr>');
 
 					aHTML.push('<tr><td class="ns1blankspaceLogonText" colspan=2 style="padding-bottom: 15px;">' +
-									'<input id="ns1blankspaceLogonPassword" class="ns1blankspaceLogon" type="password">' +
+									'<input id="ns1blankspaceLogonPassword" class="ns1blankspaceLogon" type="password" autocomplete="current-password">' +
 									'</td></tr>');
 
 					aHTML.push('<tr class="ns1blankspacePasswordCodeContainer" style="display:none;">' +
@@ -1840,22 +1965,53 @@ ns1blankspace.logon =
 									'</td></tr>');
 
 					aHTML.push('<tr class="ns1blankspacePasswordCodeContainer" style="display:none;"><td class="ns1blankspaceLogonText" colspan=2 style="padding-bottom: 15px;">' +
-									'<input id="ns1blankspaceLogonPasswordCode" class="ns1blankspaceLogon" type="password">' +
+									'<input id="ns1blankspaceLogonPasswordCode" class="ns1blankspaceLogon" type="password" autocomplete="current-password">' +
 									'</td></tr>');
 
 					aHTML.push('<tr>' +
 								'<td class="ns1blankspaceLogon" style="width:110px">' +
 								'<span id="ns1blankspaceLogonSend">Log on</span>' +
 								'</td>');
-				
+
 					aHTML.push('<td id="ns1blankspaceLogonStatus" style="vertical-align:middle;">' +
 								'&nbsp;' +
 								'</td></tr>');
 
-					aHTML.push('<tr><td id="ns1blankspaceLogonMessage" class="ns1blankspaceSub" colspan=2 style="padding-top: 15px;">' +
-									sMessage + '</td></tr>');	
+					aHTML.push('<tr><td id="ns1blankspaceLogonMessage" class="ns1blankspaceSub" colspan=2 style="padding-top:15px; padding-bottom:15px;">' +
+									sMessage + '</td></tr>');
 
-					aHTML.push('</table>');					
+					var bSAML = (ns1blankspace.option.trustedLogon != undefined)
+					if (!bSAML) {bSAML = (ns1blankspace.saml != undefined)}
+
+					if (bSAML)
+					{
+						if (ns1blankspace.util.saml != undefined)
+						{
+							var sTrustedURI = ns1blankspace.util.saml.identityProviderURI();
+
+							var sName = 'Indentity Provider';
+
+							if (ns1blankspace.option.trustedLogon != undefined)
+							{
+								sName = ns1blankspace.option.trustedLogon.name;
+							}
+
+							if (ns1blankspace.saml != undefined)
+							{
+								sName = ns1blankspace.saml.name;
+							}
+
+							if (sTrustedURI != undefined)
+							{
+								aHTML.push('<tr>' +
+									'<td class="ns1blankspaceLogon" style="padding-top:10px; color: #999999; font-size: 0.875em; border-top-style:solid; border-width:1px; border-color:#B8B8B8;" colspan=2 >' +
+									'<a id="ns1blankspaceLogonTrusted" href="' + sTrustedURI + '">Logon using ' + sName + '...</a>' +
+									'</td></tr>');
+							}	
+						}	
+					}
+
+					aHTML.push('</table></form>');					
 					
 					if (ns1blankspace.xhtml.logonNotes)
 					{	
@@ -2085,6 +2241,10 @@ ns1blankspace.logon =
 					}
 					else 
 					{
+						ns1blankspace.logonKey = oResponse.logonkey;
+						ns1blankspace.session.logonkey;
+						ns1blankspace.util.local.cache.save({key: '_lk', data: ns1blankspace.logonKey, persist: true})
+
 						$('#ns1blankspaceLogonStatus').html('Logon successful, starting app...');
 						
 						if ($('#ns1blankspaceLogonRemember').attr('checked'))
@@ -2233,7 +2393,10 @@ ns1blankspace.logon.changePassword =
 							url: ns1blankspace.util.endpointURI('SITE_USER_PASSWORD_MANAGE'),
 							data: oData,
 							dataType: 'json',
-							success: this.process
+							success: function(oResponse)
+							{
+								ns1blankspace.logon.changePassword.process(oResponse);
+							}
 						});
 					}	
 				},
@@ -2242,9 +2405,13 @@ ns1blankspace.logon.changePassword =
 				{	
 					if (oResponse.status === 'ER') 
 					{
-						if (oResponse.error.errornotes === 'PASSWORD_LESS_THAN_6_CHAR') 
+						if (oResponse.error.errornotes.toUpperCase() === 'PASSWORD_LESS_THAN_6_CHAR') 
 						{
 							$('#ns1blankspaceLogonChangePasswordStatus').html('New password needs to be at least 6 characters.');
+						}
+						else if (oResponse.error.errornotes.toUpperCase().indexOf('PASSWORD NOT STRONG ENOUGH') > -1)
+						{
+							$('#ns1blankspaceLogonChangePasswordStatus').html('Password is not strong enough.' + ns1blankspace.option.passwordErrorMessage);
 						}
 						else
 						{
@@ -2305,7 +2472,7 @@ ns1blankspace.logon.getPassword =
 											offsetTop: -15
 										});	
 					
-					$('#ns1blankspaceGetPasswordLogon').focus();
+					$('#ns1blankspaceGetPasswordLogonName').focus();
 					
 					$('#ns1blankspaceGetPassword').button(
 					{
@@ -2900,7 +3067,7 @@ ns1blankspace.container =
 					var bDropdown = ns1blankspace.util.getParam(oParam, 'dropdown', {"default": false}).value;
 					if (bDropdown) {sContainerID = ns1blankspace.xhtml.dropDownContainer}
 					
-					if (oXHTMLElement === undefined && sXHTMLElementID != undefined)
+					if (oXHTMLElement === undefined && sXHTMLElementID != undefined && $('#' + sXHTMLElementID.replace('#', '')).is('*'))
 					{
 						oXHTMLElement = $('#' + sXHTMLElementID)
 					}
@@ -3008,13 +3175,16 @@ ns1blankspace.container =
 					var sHTML = ns1blankspace.util.getParam(oParam, 'html', {'default': ''}).value;
 					var sTitle = ns1blankspace.util.getParam(oParam, 'title', {'default': ''}).value;
 					var aButtons = ns1blankspace.util.getParam(oParam, 'buttons', 
-											{'default': [{text: "OK", icons: {primary: 'ui-icon-check'}, click: function() {$(this).dialog('close')}}]}).value;
+											{'default': 
+												[{text: "OK", icons: {primary: 'ui-icon-check'}, 
+												click: function() {$(this).dialog('destroy')}}]
+											}).value;
 					
 
-					$('#ns1blankspaceMultiUseDialog').html(sHTML);
-					$('#ns1blankspaceMultiUseDialog').css('font-size', '0.75em');	
-
-					$('#ns1blankspaceMultiUseDialog').dialog(
+					$('#ns1blankspaceMultiUseDialog')
+						.html('<span style="font-size: 0.75em">' + sHTML + '</span>')
+						.css('position', 'static')
+						.dialog(
 						{
 							resizable: false,
 							modal: true,
@@ -3081,7 +3251,7 @@ ns1blankspace.search =
 
 										$.each(aColumns, function(i) 
 										{
-											if (this != 'space' && this != 'comma' && this != 'pipe' && this != 'column')
+											if (this != 'space' && this != 'comma' && this != 'pipe' && this != 'column' && this != 'hyphen')
 											{	
 												if (i != 0)
 												{
@@ -3158,7 +3328,7 @@ ns1blankspace.search =
 								}
 				},
 
-	show: 		function (oParam, oResponse)
+	show: 	function (oParam, oResponse)
 				{
 					var sXHTMLElementID;
 					var sXHTMLInputElementID;
@@ -3173,7 +3343,7 @@ ns1blankspace.search =
 					var iColumn = 0;
 					var sMethodFilter;
 					var bMultiSelect;
-					var fOnComplete;
+					var fOnComplete = ns1blankspace.util.getParam(oParam, 'onComplete').value;
 						
 					if (oParam != undefined)
 					{
@@ -3263,7 +3433,6 @@ ns1blankspace.search =
 						if (bCache && oResponse === undefined)
 						{
 							oResponse = ns1blankspace.search.cache.search({method: sMethod, searchText: sSearchText, columns: sColumns, fixedFilter: sMethodFilter});
-							//oResponse = ns1blankspace.search.cache.search({method: sMethod, searchText: sSearchText, columns: sColumns});
 
 							if (oResponse !== undefined)
 							{
@@ -3315,7 +3484,7 @@ ns1blankspace.search =
 										});
 
 										oSearch.addBracket(")"); 
-									}	
+									}
 									
 									if (sMethodFilter != '')
 									{
@@ -3457,6 +3626,9 @@ ns1blankspace.search =
 							}
 							else
 							{
+								var data1blankspace = $('#' + sXHTMLInputElementID).attr('data-1blankspace');
+								if (data1blankspace == undefined) {data1blankspace = ''}
+
 								aHTML.push('<table class="ns1blankspaceSearchMedium" style="width:' +
 												$('#' + sXHTMLInputElementID).width() + 'px;">');
 							
@@ -3472,14 +3644,14 @@ ns1blankspace.search =
 									if (sColumns.length == 0)
 									{
 										aHTML.push('<td class="ns1blankspaceSearch" id="' + sXHTMLInputElementID +
-															'-' + v.id + '">' + v.title + '</td>');
+															'-' + v.id + '" data-1blankspace="' + data1blankspace + '">' + v.title + '</td>');
 									}
 									else
 									{
 										var bNewTD = true;
 
 										aHTML.push('<td class="ns1blankspaceSearch" id="' + sXHTMLInputElementID +
-																	'-' + v.id + '">');
+																	'-' + v.id + '" data-1blankspace="' + data1blankspace + '">');
 
 										$.each(aColumns, function(j, k) 
 										{
@@ -3508,7 +3680,7 @@ ns1blankspace.search =
 													if (bNewTD)
 													{
 														aHTML.push('</td><td class="ns1blankspaceSearch" id="' + sXHTMLInputElementID +
-																	'-' + v.id + '">');
+																	'-' + v.id + '" data-1blankspace="' + data1blankspace + '">');
 													}				
 																
 													aHTML.push(v[k]);
@@ -3533,6 +3705,10 @@ ns1blankspace.search =
 							
 								$('td.ns1blankspaceSearch').click(function(event)
 								{
+									if ($(this).attr('data-1blankspace') != 'ignore')
+									{
+										ns1blankspace.inputDetected = true;
+									}	
 									$(ns1blankspace.xhtml.container).hide(200);
 									$.extend(true, oParam, {xhtmlElementID: event.target.id})
 									if (bMultiSelect)
@@ -3544,6 +3720,15 @@ ns1blankspace.search =
 										ns1blankspace.search.show(oParam);
 									}
 								});
+
+								if (oResponse.data.rows.length > 1)
+								{
+									$(ns1blankspace.xhtml.container).show(ns1blankspace.option.showSpeedOptions);
+								}
+								else
+								{	// if only one result row, auto-populate the source field
+									$('td.ns1blankspaceSearch').first().click();
+								}
 							}	
 						}
 					}		
@@ -3696,7 +3881,13 @@ ns1blankspace.search =
 										})
 										.click(function()
 										{
-											$('#ns1blankspaceViewControlSearch').keyup();
+											var oNS = ns1blankspace.rootnamespace;
+											if (oNS) 
+											{
+												if (ns1blankspace.objectParentName) {oNS = oNS[ns1blankspace.objectParentName]}
+												if (oNS) {oNS = oNS[ns1blankspace.objectName]}
+												oNS['search']['send']("ns1blankspaceViewControlSearch", {minimumLength: 0});
+											}										
 										})
 										.css('width', '18px')
 										.css('height', '20px')
@@ -3944,7 +4135,7 @@ ns1blankspace.util =
 
 					if (oParam === undefined) {oParam = {}}
 
-					if (oParam.hasOwnProperty(sParam))
+					if (oParam.hasOwnProperty(sParam) && oParam[sParam] != undefined)
 					{
 						if (!bOnlyIfMissing) {oParam[sParam] = sValue};
 					}
@@ -3983,7 +4174,7 @@ ns1blankspace.util =
 
 					if (oParam !== undefined) 
 					{ 
-						if (oParam.hasOwnProperty(sParam))
+						if (oParam.hasOwnProperty(sParam) && oParam[sParam] != undefined)
 						{
 							oReturn.value = oParam[sParam];
 							oReturn.exists = true;
@@ -4011,8 +4202,8 @@ ns1blankspace.util =
 							}
 
 							if (bRemove) {delete oParam[sParam]};
-							if (bSet) {oParam[sParam] = oReturn.value}
 						}
+						if (bSet) {oParam[sParam] = oReturn.value}
 					}	
 
 					return oReturn;
@@ -4079,7 +4270,7 @@ ns1blankspace.util =
 
 					if (oParam !== undefined) 
 					{ 
-						if (oParam.hasOwnProperty(sParam))
+						if (oParam.hasOwnProperty(sParam) && oParam[sParam] != undefined)
 						{
 							oReturn.value = oParam[sParam];
 							oReturn.exists = true;
@@ -4170,6 +4361,7 @@ ns1blankspace.util =
 	formatDate:	function (sDate, oOption)
 				{
 					var sFormat = ns1blankspace.util.getParam(oOption, 'format', {"default": "D MMM YYYY"}).value;
+					var bFromNow = ns1blankspace.util.getParam(oOption, 'fromNow', {"default": false}).value;
 					var sReturn = sDate;
 
 					if (sReturn != '')
@@ -4177,14 +4369,20 @@ ns1blankspace.util =
 						var oDate = moment(sDate, 'DD MMM YYYY HH:mm:ss')
 						if (oDate.isValid())
 						{
-							sReturn = oDate.format(sFormat)
+							if (bFromNow)
+							{
+								sReturn = oDate.fromNow()
+							}
+							else
+							{
+								sReturn = oDate.format(sFormat);
+							}	
 						}
-					}
-					
+					}					
 					return sReturn
 				},
 
-	fd:		function (sValue) {return this.formatDate(sValue)},
+	fd:		function (sValue, oOption) {return this.formatDate(sValue, oOption)},
 
 	formatSave:	function (sValue)
 				{
@@ -4198,9 +4396,9 @@ ns1blankspace.util =
 
 	fz: 		function (sValue)
 				{
-					if (sValue === undefined || sValue === 'undefined') { sValue = 0; }
+					if (sValue == undefined || sValue == 'undefined') { sValue = 0; }
 					
-					if (parseInt((sValue).parseCurrency()) === 0)
+					if (parseFloat((sValue).parseCurrency()) == 0)
 					{
 						return '-';
 					}
@@ -4214,7 +4412,7 @@ ns1blankspace.util =
 
 	getMethods:		function ()
 				{
-					if (ns1blankspace.ondemand === undefined)
+					if (ns1blankspace.ondemand == undefined)
 					{
 						$.ajax(
 						{
@@ -4707,6 +4905,8 @@ ns1blankspace.util =
 
 					if (sValue !== undefined && sValue !== null)
 					{
+						if (!_.isString(sValue)) {sValue = sValue.toString()}
+
 						if (sDateFormat !== undefined)
 						{
 							if (!ns1blankspace.util.isDate(sValue)) {sValue = Date.parse(sValue)}
@@ -5103,7 +5303,24 @@ ns1blankspace.util =
 					var sTitle = ns1blankspace.util.getParam(oParam, 'title').value;
 					var aRole = $.grep(ns1blankspace.user.roles, function (role) {return role.title==sTitle})
 					return (aRole.length!=0)
-				}													
+				},
+
+	checkIfInput: function (oParam)
+				{
+					var bContinue = true;
+
+					if (ns1blankspace.inputDetected)
+					{
+						 bContinue = confirm("You have edited this page.  Do you want to continue moving to the new page?")
+					}	
+							
+					if (bContinue)
+					{	
+						ns1blankspace.inputDetected = false;
+					}
+					
+					return bContinue	
+				}														
 }
 
 ns1blankspace.debug = 
@@ -5318,7 +5535,7 @@ ns1blankspace.search.email =
 {
 	show: 		function (sXHTMLElementID, oParam)
 				{
-							var iSource = ns1blankspace.data.searchSource.text;
+					var iSource = ns1blankspace.data.searchSource.text;
 					var iMinimumLength = 1;
 					var sMethod;
 					var sSearchText;
@@ -5404,18 +5621,23 @@ ns1blankspace.search.email =
 							}
 
 							var oSearch = new AdvancedSearch();
-							oSearch.rows = 15;
+							oSearch.rows = 10;
 							oSearch.method = 'CONTACT_PERSON_SEARCH';
 							oSearch.addField( 'firstname,surname,contactbusinesstext,contactbusiness,email');
+
 							oSearch.addBracket('(');
-							oSearch.addFilter('firstname', 'TEXT_IS_LIKE', (sSearchText != sFirstName) ? sFirstName : sSearchText);
+							oSearch.addFilter('contactbusinesstext', 'TEXT_IS_LIKE', sSearchText);
 							oSearch.addOperator('or');
+							oSearch.addFilter('firstname', 'TEXT_IS_LIKE', (sSearchText != sFirstName) ? sFirstName : sSearchText);
+							oSearch.addOperator((sFirstName != sSurname ? 'and' : 'or'));
 							oSearch.addFilter('surname', 'TEXT_IS_LIKE', (sSearchText != sSurname) ? sSurname : sSearchText);
+							
 							if (bEmailOnly)
 							{
 								oSearch.addOperator('or');
 								oSearch.addFilter('email', 'TEXT_IS_LIKE', sSearchText);
 							}
+
 							oSearch.addBracket(')');
 							
 							if (sParentElementID != undefined)
@@ -5435,7 +5657,7 @@ ns1blankspace.search.email =
 							
 							if (bEmailOnly)
 							{
-								oSearch.addFilter('email', 'IS_NOT_NULL', sParentSearchText);
+								oSearch.addFilter('email', 'TEXT_IS_NOT_EMPTY');
 							}	
 													
 							oSearch.getResults(function (data) {ns1blankspace.search.email.process(data, sElementID, oParam)}) 								
@@ -5443,12 +5665,12 @@ ns1blankspace.search.email =
 					};
 				},
 
-	process: 	function (oResponse, sElementID, oParam)
+	process: function (oResponse, sElementID, oParam)
 				{
 					var iColumn = 0;
 					var aHTML = [];
 					var h = -1;
-					var	iMaximumColumns = 1;
+					var iMaximumColumns = 1;
 					var sData;
 					
 					if (oResponse.data.rows.length === 0)
@@ -5461,7 +5683,7 @@ ns1blankspace.search.email =
 							
 						$.each(oResponse.data.rows, function()
 						{								
-							aHTML.push(ns1blankspace.search.email.row(oParam, this));
+							aHTML.push(ns1blankspace.search.email.row(this, oParam));
 						});
 				    	
 						aHTML.push('</table>');
@@ -5488,16 +5710,19 @@ ns1blankspace.search.email =
 							columns: 'firstname-surname-email-contactbusinesstext',
 							idColumns: 'firstname-surname-contactbusiness-contactbusinesstext-email',
 							more: oResponse.moreid, 
+							rows: oResponse.rows,
 							functionSearch: ns1blankspace.search.email.show,
 							xhtmlElementID: sElementID,
 							type: 'JSON',
 							functionRow: ns1blankspace.search.email.row
 						}));
-					}				
+					}
 				},
 
-	row: 		function (oParam, oRow)
+	row: 		function (oRow, oParam)
 				{
+					var bCompact = ns1blankspace.util.getParam(oParam, 'compact', {"default": true}).value
+
 					var sData = ' data-firstname="' + oRow.firstname + '"' +
 									' data-surname="' + oRow.surname + '"' +
 									' data-contactbusiness="' + oRow.contactbusiness + '"' +
@@ -5508,22 +5733,33 @@ ns1blankspace.search.email =
 
 					aHTML.push('<tr class="ns1blankspaceSearch"' + sData + '>');
 					
-					aHTML.push('<td class="ns1blankspaceSearch" id="-' + oRow.id +
-											'">' + oRow.firstname +
-											'</td>');
-											
-					aHTML.push('<td class="ns1blankspaceSearch" id="-' + oRow.id +
-											'">' + oRow.surname +
-											'</td>');
-																	
-					aHTML.push('<td class="ns1blankspaceSearch" id="-' + oRow.id +
-											'">' + oRow.email +
-											'</td>');
-											
-					aHTML.push('<td class="ns1blankspaceSearch" id="-' + oRow.id +
-											'">' + oRow.contactbusinesstext +
-											'</td>');
-											
+					if (bCompact)
+					{
+						aHTML.push('<td class="ns1blankspaceSearch" id="-' + oRow.id + '">' + 
+										'<div>' + oRow.email + '</div>' +
+										'<div class="ns1blankspaceSub">' + oRow.firstname + ' ' + oRow.surname + '</div>' +
+										'<div class="ns1blankspaceSub">' + oRow.contactbusinesstext + '</div>' +
+												'</td>');
+					}
+					else
+					{
+						aHTML.push('<td class="ns1blankspaceSearch" id="-' + oRow.id +
+												'">' + oRow.firstname +
+												'</td>');
+												
+						aHTML.push('<td class="ns1blankspaceSearch" id="-' + oRow.id +
+												'">' + oRow.surname +
+												'</td>');
+																		
+						aHTML.push('<td class="ns1blankspaceSearch" id="-' + oRow.id +
+												'">' + oRow.email +
+												'</td>');
+												
+						aHTML.push('<td class="ns1blankspaceSearch" id="-' + oRow.id +
+												'">' + oRow.contactbusinesstext +
+												'</td>');
+					}	
+												
 					aHTML.push('</tr>');
 
 					return aHTML.join('');
@@ -5532,7 +5768,7 @@ ns1blankspace.search.email =
 
 ns1blankspace.render =
 {
-	init: 		function (oParam)
+	init: 	function (oParam)
 				{
 					var aHTML = [];
 					
@@ -5626,11 +5862,10 @@ ns1blankspace.render =
 
 	showMore:	function (oParam, oResponse)
 				{
-					
 					var sXHTMLElementID = '';
-					var iMore = -1;
-					var iStartRow = 10;
-					var iRows = 10;
+					var iMore = ns1blankspace.util.getParam(oParam, 'more', {'default': -1, set: true}).value;;
+					var iRows = ns1blankspace.util.getParam(oParam, 'rows', {'default': $('#ns1blankspaceSearch-0 .ns1blankspaceSearchMedium tr').length, set: true}).value;
+					var iStartRow = ns1blankspace.util.getParam(oParam, 'startRow', {'default': iRows, set: true}).value;
 					var iColumn = 0;
 					var iMaximumColumns = 1;
 					var sColumns = "title";
@@ -5643,12 +5878,11 @@ ns1blankspace.render =
 					var sIDSeperator = '-';
 					var sWidth = 250;
 					var fFunctionRow = ns1blankspace.render.row;
+
+
 					
 					if (oParam != undefined)
 					{
-						if (oParam.more != undefined) {iMore = oParam.more}
-						if (oParam.startRow != undefined) {iStartRow = oParam.startRow}
-						if (oParam.rows != undefined) {iRows = oParam.rows}
 						if (oParam.xhtmlElementId != undefined) {sXHTMLElementID = oParam.xhtmlElementId}
 						if (oParam.columns != undefined) {sColumns = oParam.columns}
 						if (oParam.idColumns != undefined) {sIDColumns = oParam.idColumns}
@@ -5713,7 +5947,7 @@ ns1blankspace.render =
 												
 								$.each(oResponse.data.rows, function()
 								{		
-									aHTML.push(fFunctionRow(oParam, this));
+									aHTML.push(fFunctionRow(this, oParam));
 								});
 							
 								aHTML.push('</table>');
@@ -5745,16 +5979,17 @@ ns1blankspace.render =
 					}
 				},
 
-	row:		function (oParam, oRow)
+	row:		function (oRow, oParam)
 				{
 					var aHTML = [];
-					var sClass;
+					var sClass = 'ns1blankspaceSearch';
 
 					var sXHTMLElementID = ns1blankspace.util.getParam(oParam, 'xhtmlElementID').value;
 					var sIDColumns = ns1blankspace.util.getParam(oParam, 'idColumns', {"default": ''}).value;
 					var sColumns = ns1blankspace.util.getParam(oParam, 'columns', {"default": 'title'}).value;
 					var fFunctionClass = ns1blankspace.util.getParam(oParam, 'functionClass').value;
-					var sIdAdditional = ns1blankspace.util.getParam(oParam, 'idAdditional').value;
+					var sIdAdditional = ns1blankspace.util.getParam(oParam, 'idAdditional', {"default": 'title'}).value;
+					var bAddColumns = false;
 
 					aHTML.push('<tr class="ns1blankspaceSearch">');
 					
@@ -5767,19 +6002,22 @@ ns1blankspace.render =
 						sIDData += '-' + oRow[aIDColumns[i]];
 					}
 					
+					if (sColumns.indexOf('-space-') == -1 && sColumns.indexOf('-comma-') == -1 && sColumns.indexOf('-pipe-') == -1 &&
+						sColumns.indexOf('-hyphen-') == -1 && sColumns.indexOf('-column-') == -1)
+					{
+						sColumns = sColumns.split('-').join('-column-');
+					}
 					var aColumns = sColumns.split("-");
 					
+					if (fFunctionClass != undefined)
+					{
+						sClass = sClass + fFunctionClass(oRow);
+					}	
+					aHTML.push('<td class="' + sClass + '" id="' +
+										sXHTMLElementID + '-' + oRow.id + sIDData + sIdAdditional + '">');
+
 					for (var i = 0; i < aColumns.length; i++)
 					{
-						sClass = 'ns1blankspaceSearch';
-
-						if (fFunctionClass != undefined)
-						{
-							sClass = sClass + fFunctionClass(oRow);
-						}	
-					
-						aHTML.push('<td class="' + sClass + '" id="' +
-											sXHTMLElementID + '-' + oRow.id + sIDData + sIdAdditional + '">');
 											
 						switch (aColumns[i])
 						{
@@ -5794,13 +6032,17 @@ ns1blankspace.render =
 							break;
 						case 'hyphen':
 							aHTML.push('-');
-							break;		
+							break;
+						case 'column':
+							aHTML.push('</td><td class=' + sClass + '" id="' +
+											sXHTMLElementID + '-' + oRow.id + sIDData + sIdAdditional + '">');
+							break;
 						default:
 							aHTML.push(oRow[aColumns[i]]);
 						}
 						
-						aHTML.push('</td>');
 					}
+					aHTML.push('</td>');
 										
 					aHTML.push('</tr>');
 
@@ -6015,7 +6257,8 @@ ns1blankspace.render.page =
 											primary: "ui-icon-play"
 										}
 									})
-									.click(function() {
+									.click(function()
+									{
 										eval(sFunctionOpen);
 									})
 									.css('width', '15px')
@@ -6033,7 +6276,7 @@ ns1blankspace.render.page =
 									ns1blankspace.render.page.showPage(this.id, sXHTMLContext);
 								});
 							
-								$('.ns1blankspaceRenderHeaderPage').removeClass('ns1blankspaceRenderHeaderPageSelected');
+								$('#ns1blankspaceRenderHeaderPage_' + sXHTMLContext + ' .ns1blankspaceRenderHeaderPage').removeClass('ns1blankspaceRenderHeaderPageSelected');
 								$('#ns1blankspaceRenderHeaderPage_' + sXHTMLContext + '-' + (iStartRow)).addClass('ns1blankspaceRenderHeaderPageSelected');
 
 								if (bMoreRows)
@@ -6073,11 +6316,11 @@ ns1blankspace.render.page =
 				{
 					var aElement = sXHTMLElementID.split('-');
 					
-					$('.ns1blankspaceRenderHeaderPage').removeClass('ns1blankspaceRenderHeaderPageSelected');
+					$('#ns1blankspaceRenderHeaderPage_' + sXHTMLContext + ' .ns1blankspaceRenderHeaderPage').removeClass('ns1blankspaceRenderHeaderPageSelected');
 					$('#' + sXHTMLElementID).addClass('ns1blankspaceRenderHeaderPageSelected');
 
 					$('.ns1blankspaceRenderPage_' + sXHTMLContext).hide();
-					$('#ns1blankspaceRenderPage_' + sXHTMLContext + '-' + aElement[1]).show();
+					$('#ns1blankspaceRenderPage_' + sXHTMLContext + '-' + aElement.pop()).show();
 				}
 }
 
@@ -6220,7 +6463,14 @@ ns1blankspace.pdf =
 						}
 						else
 						{
-							oParam.attachmentLink = oResponse.attachmentlink;
+							if (oParam.attachmentLink == undefined)
+							{
+								oParam.attachmentLink = oResponse.attachmentlink;
+							}
+							else
+							{
+								oParam.attachmentLink = oParam.attachmentLink + ',' + oResponse.attachmentlink;
+							}
 							oParam.attachment = oResponse.attachment;
 							delete oParam.onComplete;
 							fOnComplete(oParam);
@@ -6357,11 +6607,18 @@ ns1blankspace.remove =
 						{	
 							if (oResponse === undefined)
 							{	
+								var oData = {remove: 1, id: sID}
+
+								if (ns1blankspace.option.financialOverride)
+								{
+									oData.override = 'Y'
+								}
+
 								$.ajax(
 								{
 									type: 'POST',
 									url: ns1blankspace.util.endpointURI(sMethod),
-									data: 'remove=1&id=' + sID,
+									data: oData,
 									dataType: 'json',
 									success: function(data){ns1blankspace.remove(oParam, data)}
 								});
@@ -6561,7 +6818,7 @@ ns1blankspace.extend =
 								sAlias = k.alias;
 								if (sAlias == undefined) {sAlias = 'se' + k.reference}
 
-								if (k.datatype == 2 || k.datatype == 7)
+								if (k.datatype == 2 || k.datatype == 6)
 								{	
 									aElements.push(sAlias + 'text');
 								}	
@@ -6711,8 +6968,8 @@ ns1blankspace.extend =
 
 									if (this.datatype == 2)
 									{	
-										$('#ns1blankspaceStructure_' + this.id).val(ns1blankspace.objectContextData[sAlias + 'text']);
-										$('#ns1blankspaceStructure_' + this.id).attr('data-id', ns1blankspace.objectContextData[sAlias]);
+										$('#ns1blankspaceStructure_' + this.id).val(ns1blankspace.objectContextData[sAlias + 'text'].formatXHTML());
+										$('#ns1blankspaceStructure_' + this.id).attr('data-id', ns1blankspace.objectContextData[sAlias].formatXHTML());
 									}
 									else
 									{
