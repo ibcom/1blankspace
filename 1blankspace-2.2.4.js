@@ -1006,7 +1006,7 @@ ns1blankspace.app =
 					}
 					
 					$('#ns1blankspaceSpaceText').html(sSpaceText + ((sSpaceTextExtra && sSpaceTextExtra.length > 0) 
-								? '<span id="ns1blankspacespacetextextra" data-extratext="' + sSpaceTextExtra + '">..</span>' : ''));
+								? '<span id="ns1blankspaceSpaceTextExtra" data-extratext="' + sSpaceTextExtra + '">..</span>' : ''));
 
 					$('#ns1blankspaceLogonName').html(ns1blankspace.user.logonName);
 					$('#ns1blankspaceLogoff').html(',&nbsp;log&nbsp;off');
@@ -3881,7 +3881,13 @@ ns1blankspace.search =
 										})
 										.click(function()
 										{
-											$('#ns1blankspaceViewControlSearch').keyup();
+											var oNS = ns1blankspace.rootnamespace;
+											if (oNS) 
+											{
+												if (ns1blankspace.objectParentName) {oNS = oNS[ns1blankspace.objectParentName]}
+												if (oNS) {oNS = oNS[ns1blankspace.objectName]}
+												oNS['search']['send']("ns1blankspaceViewControlSearch", {minimumLength: 0});
+											}										
 										})
 										.css('width', '18px')
 										.css('height', '20px')
@@ -5674,7 +5680,7 @@ ns1blankspace.search.email =
 							
 						$.each(oResponse.data.rows, function()
 						{								
-							aHTML.push(ns1blankspace.search.email.row(oParam, this));
+							aHTML.push(ns1blankspace.search.email.row(this, oParam));
 						});
 				    	
 						aHTML.push('</table>');
@@ -5701,6 +5707,7 @@ ns1blankspace.search.email =
 							columns: 'firstname-surname-email-contactbusinesstext',
 							idColumns: 'firstname-surname-contactbusiness-contactbusinesstext-email',
 							more: oResponse.moreid, 
+							rows: oResponse.rows,
 							functionSearch: ns1blankspace.search.email.show,
 							xhtmlElementID: sElementID,
 							type: 'JSON',
@@ -5709,7 +5716,7 @@ ns1blankspace.search.email =
 					}
 				},
 
-	row: 		function (oParam, oRow)
+	row: 		function (oRow, oParam)
 				{
 					var sData = ' data-firstname="' + oRow.firstname + '"' +
 									' data-surname="' + oRow.surname + '"' +
@@ -5840,9 +5847,9 @@ ns1blankspace.render =
 	showMore:	function (oParam, oResponse)
 				{
 					var sXHTMLElementID = '';
-					var iMore = -1;
-					var iStartRow = ns1blankspace.option.defaultRowsSmall;
-					var iRows = $('#ns1blankspaceSearch-0 .ns1blankspaceSearchMedium').children().children().length;
+					var iMore = ns1blankspace.util.getParam(oParam, 'more', {'default': -1, set: true}).value;;
+					var iRows = ns1blankspace.util.getParam(oParam, 'rows', {'default': $('#ns1blankspaceSearch-0 .ns1blankspaceSearchMedium tr').length, set: true}).value;
+					var iStartRow = ns1blankspace.util.getParam(oParam, 'startRow', {'default': iRows, set: true}).value;
 					var iColumn = 0;
 					var iMaximumColumns = 1;
 					var sColumns = "title";
@@ -5860,9 +5867,6 @@ ns1blankspace.render =
 					
 					if (oParam != undefined)
 					{
-						if (oParam.more != undefined) {iMore = oParam.more}
-						if (oParam.startRow != undefined) {iStartRow = oParam.startRow}
-						if (oParam.rows != undefined) {iRows = oParam.rows}
 						if (oParam.xhtmlElementId != undefined) {sXHTMLElementID = oParam.xhtmlElementId}
 						if (oParam.columns != undefined) {sColumns = oParam.columns}
 						if (oParam.idColumns != undefined) {sIDColumns = oParam.idColumns}

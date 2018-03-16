@@ -1845,19 +1845,19 @@ ns1blankspace.messaging.conversation =
 
 		save:
 		{
-			init: function ()
+			init: function (oParam)
 			{
 				if ($('#oFile0').val() == '')
 				{
-					ns1blankspace.messaging.conversation.posts.save.send()
+					ns1blankspace.messaging.conversation.posts.save.send(oParam)
 				}
 				else
 				{
-					ns1blankspace.attachments.upload.submit(
+					ns1blankspace.attachments.upload.submit($.extend(oParam,
 					{
 						submit: true,
 						functionPostUpdate: ns1blankspace.messaging.conversation.posts.save.attach
-					});
+					}));
 				}					
 			},
 
