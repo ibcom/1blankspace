@@ -541,7 +541,7 @@ ns1blankspace.messaging.imap =
 											'class="ns1blankspaceControl" style="padding-top:8px;"' +
 											' title="' + this.server + '" data-server="' + this.server + '"><div style="float:left; position:relative; top:3px;" class="ns1blankspaceInboxMarker"></div><div>' +
 											sDescription +
-											'</div><div style="font-size:0.5em;" class="ns1blankspaceSubNote">@' + aDescription[1] + '</div>' + 
+											'</div><div style="font-size:0.625em;" class="ns1blankspaceSubNote">@' + aDescription[1] + '</div>' + 
 											'</td></tr>');
 								
 							if (ns1blankspace.option.messagingEmailShowCount)
