@@ -127,7 +127,7 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.format',
-		source: '/jscripts/1blankspace.format-2.1.1.js'
+		source: '/site/312/1blankspace.format-2.1.2.js'
 	},
 	{
 		nameSpace: '1blankspace.contactPerson',
@@ -151,7 +151,7 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.messaging.imap',
-		source: '/site/312/1blankspace.messaging.imap-2.1.5.js'
+		source: '/site/312/1blankspace.messaging.imap-2.1.6.js'
 	},
 	{
 		nameSpace: '1blankspace.document',
@@ -183,7 +183,7 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.financial',
-		source: '/site/312/1blankspace.financial-2.2.9.js'
+		source: '/site/312/1blankspace.financial-2.3.0.js'
 	},
 	{
 		nameSpace: '1blankspace.financial.bankAccount',
@@ -251,7 +251,7 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.setup.messaging',
-		source: '/jscripts/1blankspace.setup.messaging-2.0.4.js'
+		source: '/site/312/1blankspace.setup.messaging-2.0.5.js'
 	},
 	{
 		nameSpace: '1blankspace.setup.networkGroup',

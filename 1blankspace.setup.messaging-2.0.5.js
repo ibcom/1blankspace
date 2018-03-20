@@ -37,16 +37,13 @@ ns1blankspace.setup.messaging =
 						$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions);
 
 						var aHTML = [];
-									
-						aHTML.push('<table class="ns1blankspaceMain">');
-						aHTML.push('<tr class="ns1blankspaceMain">' +
-										'<td id="ns1blankspaceMostLikely" class="ins1blankspaceMain">' +
-										ns1blankspace.xhtml.loading +
-										'</td>' +
-										'</tr>');
-						aHTML.push('</table>');					
+
+						aHTML.push('<div id="ns1blankspaceMainSummary" class="ns1blankspaceControlMain">' + ns1blankspace.xhtml.loading + '</div>');
+						aHTML.push('<div id="ns1blankspaceMainTemplate_messaging" class="ns1blankspaceControlMain"></div>');				
 						
 						$('#ns1blankspaceMain').html(aHTML.join(''));
+
+						ns1blankspace.show({selector: '#ns1blankspaceMainSummary'});
 
 						var aHTML = [];
 									
@@ -54,16 +51,29 @@ ns1blankspace.setup.messaging =
 
 						aHTML.push('<tr><td><div id="ns1blankspaceViewMessagingEmailLarge" class="ns1blankspaceViewImageLarge"></div></td></tr>');
 								
-						aHTML.push('</table>');		
-						
-						$('#ns1blankspaceControl').html(aHTML.join(''));	
+						aHTML.push('</table>');
+
+						aHTML.push('<table class="ns1blankspaceControl">');
+
+						aHTML.push('<tr><td id="ns1blankspaceControlMessagingTemplate" class="ns1blankspaceControl">' +
+									'Templates</td></tr>');
+
+						aHTML.push('</table>');
+
+						$('#ns1blankspaceControl').html(aHTML.join(''));
+
+						$('#ns1blankspaceControlMessagingTemplate').click(function(event)
+						{
+							ns1blankspace.show({selector: '#ns1blankspaceMainTemplate_messaging', context: {inContext: false}});
+							ns1blankspace.setup.messaging.template.init({template: 'messaging', object: 260, refresh: true, variants: true});
+						});
 
 						var oSearch = new AdvancedSearch();
 						oSearch.method = 'SETUP_MESSAGING_ACCOUNT_SEARCH';
 						oSearch.addField('email,usertext,verification,accountname,smtpaccountname');
 						oSearch.addFilter('type', 'EQUAL_TO', 5);
 						oSearch.rows = 50;
-						oSearch.sort('email', 'asc');
+						oSearch.sort('modifieddate', 'desc');
 						oSearch.getResults(function (data) {ns1blankspace.setup.messaging.home(oParam, data)});
 					}
 					else
@@ -79,24 +89,24 @@ ns1blankspace.setup.messaging =
 						else
 						{
 							aHTML.push('<table>');
-							aHTML.push('<tr><td class="ns1blankspaceCaption">MOST LIKELY</td><td class="ns1blankspaceCaption">User</td><td class="ns1blankspaceCaption">Sending Status</td></tr>');
+							aHTML.push('<tr><td class="ns1blankspaceHeaderCaption">Recent</td><td class="ns1blankspaceHeaderCaption">User</td><td class="ns1blankspaceHeaderCaption">Sending Status</td></tr>');
 
 							$.each(oResponse.data.rows, function()
 							{
 								aHTML.push('<tr class="ns1blankspaceRow">');
 								
 								aHTML.push('<td id="ns1blankspaceMostLikely_title-' + this.id + 
-														'" class="ns1blankspaceMostLikely" style="width:250px; padding-right:15px;">' +
+														'" class="ns1blankspaceMostLikely ns1blankspaceRow" style="width:250px; padding-right:15px;">' +
 														(this.email?this.email:(this.accountname?this.accountname:this.smtpaccountname)) +
 														'</td>');
 
 								aHTML.push('<td id="ns1blankspaceMostLikely_usertext-' + this.id + 
-														'" class="ns1blankspaceSubNote" style="width:150px;">' +
+														'" class="ns1blankspaceRow" style="width:150px;">' +
 														this.usertext +
 														'</td>');
 
 								aHTML.push('<td id="ns1blankspaceMostLikely_usertext-' + this.id + 
-														'" class="ns1blankspaceSubNote">' +
+														'" class="ns1blankspaceRow">' +
 														ns1blankspace.setup.messaging.data.verificationText[this.verification] +
 														'</td>');
 								
@@ -106,8 +116,8 @@ ns1blankspace.setup.messaging =
 							aHTML.push('</table>');			
 						}
 						
-						$('#ns1blankspaceMostLikely').html(aHTML.join(''));
-					
+						$('#ns1blankspaceMainSummary').html(aHTML.join(''));
+						
 						$('td.ns1blankspaceMostLikely').click(function(event)
 						{
 							ns1blankspace.setup.messaging.search.send(event.target.id, {source: 1});
@@ -1084,6 +1094,308 @@ ns1blankspace.setup.messaging =
 													}		
 												}
 								}
+				},
+
+				template:
+				{
+					init: 	function (oParam)
+								{
+									var bNew = ns1blankspace.util.getParam(oParam, 'new', {"default": false}).value;
+
+									if (bNew)
+									{
+										delete oParam.document;
+										delete oParam.new;
+										oParam = ns1blankspace.util.setParam(oParam, 'onComplete', ns1blankspace.setup.messaging.template.show);
+										ns1blankspace.format.templates.new(oParam);
+									}
+									else
+									{	
+										oParam = ns1blankspace.util.setParam(oParam, 'template', 'invoice', {onlyIfMissing: true});
+										oParam = ns1blankspace.util.setParam(oParam, 'object', 5, {onlyIfMissing: true});
+										oParam = ns1blankspace.util.setParam(oParam, 'onComplete', ns1blankspace.format.templates.init);
+										oParam = ns1blankspace.util.setParam(oParam, 'onCompleteWhenCan', ns1blankspace.setup.messaging.template.show);
+
+										ns1blankspace.format.templates.convert(oParam);
+									}	
+								},
+
+					show: 	function (oParam)
+								{
+									var sTemplate = ns1blankspace.util.getParam(oParam, 'template', {"default": 'invoice'}).value;
+									var iObject = ns1blankspace.util.getParam(oParam, 'object', {"default": 5}).value;
+									var iDocument = ns1blankspace.util.getParam(oParam, 'document').value;
+									var bVariants = ns1blankspace.util.getParam(oParam, 'variants', {"default": false}).value;
+									var bRefresh = ns1blankspace.util.getParam(oParam, 'refresh', {"default": false}).value;
+
+									var aHTML = [];
+									
+									if ($('#ns1blankspaceMainTemplate_' + sTemplate).attr('data-loading') == '1' || bRefresh)
+									{
+										$('#ns1blankspaceMainTemplate_' + sTemplate).attr('data-loading', '');
+												
+										ns1blankspace.counter.editor = ns1blankspace.counter.editor + 1;		
+												
+										aHTML.push('<table class="ns1blankspaceContainer">' +
+														'<tr class="ns1blankspaceContainer">' +
+														'<td id="ns1blankspaceTemplateColumn1_' + sTemplate + '" class="ns1blankspaceColumn1Flexible"></td>' +
+														'<td id="ns1blankspaceTemplateColumn2_' + sTemplate + '" class="ns1blankspaceColumn2Action" style="width:100px; padding-left:12px;"></td>' +
+														'</tr>' + 
+														'</table>');
+													
+										$('#ns1blankspaceMainTemplate_' + sTemplate).html(aHTML.join(''));
+										
+										var aHTML = [];
+
+										aHTML.push('<table id="ns1blankspaceTemplate_variants_' + sTemplate + '">');											
+
+										aHTML.push('<tr><td>' +
+														'<div id="ns1blankspaceTemplate_variants_container">' +
+														'<span id="ns1blankspaceTemplate_variants_save_' + sTemplate + '" class="ns1blankspaceAction"></span>' +
+														(bVariants?'<span id="ns1blankspaceTemplate_variants_remove_' + sTemplate + '" class="ns1blankspaceAction">&nbsp;</span>':'') +
+														(bVariants?'<span id="ns1blankspaceTemplate_variants_add_' + sTemplate + '" class="ns1blankspaceAction">&nbsp;</span>':'') +
+														'</div>' +
+														'</td></tr>');
+
+										if (bVariants)
+										{	
+											$.each(ns1blankspace.format.templates.data[iObject], function(t, template)
+											{
+												if ((iDocument == undefined) && (t==0))
+												{
+													iDocument = template.id;
+													oParam = ns1blankspace.util.setParam(oParam, 'document', iDocument)
+												}
+
+												aHTML.push('<tr><td style="font-size:0.75em;" ');
+
+												aHTML.push('id="ns1blankspaceTemplate_variants-' + template.id + '"' +
+														  		' class="ns1blankspaceRow ns1blankspaceRowSelect' + (template.id==iDocument?' ns1blankspaceHighlight':'') + '" ' +
+														   		' data-caption="' + (template.title) + '" style="cursor: pointer;">' + template.title);
+
+												aHTML.push('</td></tr>');		   		
+											});
+										}
+										else
+										{
+											iDocument = ns1blankspace.format.templates.data[iObject][0].id;
+											oParam = ns1blankspace.util.setParam(oParam, 'document', iDocument)
+										}
+									
+										aHTML.push('</table>');
+
+										var aHTMLTags = [];
+
+										$.each(ns1blankspace.format.tags, function()
+										{
+											if (this.object == iObject && this.type == 1)
+											{
+												aHTMLTags.push('<tr><td class="ns1blankspaceRow ns1blankspaceRowSelect" style="font-size:0.75em;">');
+
+												aHTMLTags.push('<span id="spanInterfaceFormatTag_' + (this.caption).replace(/ /g,'-') + '"' +
+														  		' class="interfaceFormatTags" ' +
+														   		' data-caption="[[' + (this.caption) + ']]" style="cursor: pointer;">' + this.caption + '</span>');
+
+												aHTMLTags.push('</td></tr>');		   		
+											}				
+										});
+
+										$.each(ns1blankspace.format.tags, function()
+										{
+											if (this.object == iObject && this.type == 2)
+											{
+												aHTMLTags.push('<tr><td class="ns1blankspaceRow ns1blankspaceRowSelect" style="font-size:0.75em;">');
+
+												aHTMLTags.push('<span id="spanInterfaceFormatTag_' + (this.caption).replace(/ /g,'-') + '"' +
+														  		 ' class="interfaceFormatTags" ' +
+														   		' data-caption="[[' + (this.caption) + ']]" style="cursor: pointer;">' + this.caption + '</span>');
+
+												aHTMLTags.push('</td></tr>');		   		
+											}				
+										});
+
+										if (aHTMLTags.length > 0)
+										{
+											aHTML.push('<table style="margin-top:10px;">');
+															
+											aHTML.push('<tr><td class="ns1blankspaceCaption" style="font-size:0.825em;">TAGS</td</tr>');
+
+											aHTML.push(aHTMLTags.join(''));
+															
+											aHTML.push('</table>');	
+										}		
+
+										$('#ns1blankspaceTemplateColumn2_' + sTemplate).html(aHTML.join(''));
+
+										$('#ns1blankspaceTemplate_variants_save_' + sTemplate)
+										.button(
+										{
+											label: "Save"
+										})
+										.click(function()
+										{
+											ns1blankspace.setup.messaging.template.save(oParam);
+										})
+										.css('width', (bVariants?'48px':'54px'))
+										.css('height', '28px')
+										.next()
+											.button(
+											{
+												text: false,
+												icons:
+												{
+													primary: "ui-icon-close"
+												}
+											})
+											.click(function()
+											{
+												if (confirm('Click OK to delete this template, else click Cancel.'))
+												{
+													ns1blankspace.setup.messaging.template.remove(oParam);
+												}	
+											})
+											.css('font-size', '0.725em')
+											.css('width', '14px')
+											.css('height', '28px')
+											.css('margin-left', '2px')	
+										.next()
+											.button(
+											{
+												text: false,
+												icons:
+												{
+													primary: "ui-icon-plus"
+												}
+											})
+											.click(function()
+											{
+												if (confirm('Click OK to add a new template, else click Cancel.'))
+												{
+													oParam = ns1blankspace.util.setParam(oParam, 'new', true);
+													ns1blankspace.setup.messaging.template.init(oParam);
+												}	
+											})
+											.css('font-size', '0.725em')
+											.css('width', '14px')
+											.css('height', '28px')
+											.css('margin-left', '2px')
+											.parent()
+												.buttonset();	
+
+										$('#ns1blankspaceTemplate_variants_' + sTemplate + ' .ns1blankspaceRowSelect').click(function ()
+										{
+											oParam = ns1blankspace.util.setParam(oParam, 'document', this.id.split('-')[1]);
+											ns1blankspace.setup.messaging.template.init(oParam);
+										});
+
+										var aHTML = [];
+										
+										aHTML.push('<table id="ns1blankspaceColumn1" class="ns1blankspaceTemplateText_' + sTemplate + '" data-editorcount="' + ns1blankspace.counter.editor + '"">');
+
+										if (bVariants)
+										{
+											aHTML.push('<tr class="ns1blankspace">' +
+															'<td class="ns1blankspaceText">' +
+															'<input id="ns1blankspaceTemplateTitle_' + sTemplate + ns1blankspace.counter.editor + '" class="ns1blankspaceText">' +
+															'</td></tr>');
+										}	
+												
+										aHTML.push('<tr><td>' +
+														'<textarea rows="30" cols="50" id="ns1blankspaceTemplateText_' + sTemplate +
+															ns1blankspace.counter.editor + '" data-editorcount="' + ns1blankspace.counter.editor +
+															'" class="ns1blankspaceTextMulti"></textarea>' +
+														'</td></tr>');
+														
+										aHTML.push('</table>');					
+										
+										$('#ns1blankspaceTemplateColumn1_' + sTemplate).html(aHTML.join(''));
+
+										var oTemplate = ns1blankspace.format.templates.get(oParam);
+										
+										$('#ns1blankspaceTemplateText_' + sTemplate + ns1blankspace.counter.editor).val(oTemplate.xhtml);
+										$('#ns1blankspaceTemplateTitle_' + sTemplate + ns1blankspace.counter.editor).val(oTemplate.title);
+
+										ns1blankspace.format.editor.init(
+										{
+											height: '500px',
+											selector: '#ns1blankspaceTemplateText_' + sTemplate + ns1blankspace.counter.editor
+										});
+
+										$('.interfaceFormatTags')
+										.hover( function()
+										{	
+											oMCEBookmark = tinyMCE.get('ns1blankspaceTemplateText_' + sTemplate + ns1blankspace.counter.editor).selection.getBookmark({type: 1, normalized: true});
+										})
+										.click( function()
+										{
+											ns1blankspace.format.editor.addTag(
+											{
+												xhtmlElementID: this.id,
+												editorID: 'ns1blankspaceTemplateText_' + sTemplate + ns1blankspace.counter.editor, 
+												mceBookmark: oMCEBookmark
+											});
+										});
+									}
+								},	
+
+					save:		function (oParam)
+								{
+									var sTemplate = ns1blankspace.util.getParam(oParam, 'template', {"default": 'invoice'}).value;
+									var sCounter = $('table.ns1blankspaceTemplateText_' + sTemplate).attr('data-editorcount');
+									var iDocument = ns1blankspace.util.getParam(oParam, 'document').value;
+									var sTitle = ns1blankspace.util.getParam(oParam, 'title', {"default": sTemplate.toUpperCase() + ' TEMPLATE'}).value 
+
+									ns1blankspace.status.working();
+
+									if ($('#ns1blankspaceTemplateTitle_' + sTemplate + sCounter).length > 0)
+									{
+										sTitle = $('#ns1blankspaceTemplateTitle_' + sTemplate + sCounter).val();
+									}	
+
+									var oData = {id: iDocument};
+									oData.content = tinyMCE.get('ns1blankspaceTemplateText_' + sTemplate + sCounter).getContent();
+									oData.type = 10;
+									oData.title = sTitle;
+
+									$.ajax(
+									{
+										type: 'POST',
+										url: ns1blankspace.util.endpointURI('DOCUMENT_MANAGE'),
+										data: oData,
+										dataType: 'json',
+										success: function(data)
+										{
+											var sCounter = $('table.ns1blankspaceTemplateText_' + sTemplate).attr('data-editorcount');
+											$('#ns1blankspaceTemplate_variants-' + iDocument).text(sTitle);
+											ns1blankspace.status.message('Saved');
+											ns1blankspace.inputDetected = false;
+											ns1blankspace.format.templates.data = []
+										}
+									});
+								},
+
+					remove:	function (oParam)
+								{
+									var iDocument = ns1blankspace.util.getParam(oParam, 'document').value;
+									
+									ns1blankspace.status.working();
+
+									var oData = {id: iDocument, remove: 1};
+									
+									$.ajax(
+									{
+										type: 'POST',
+										url: ns1blankspace.util.endpointURI('DOCUMENT_MANAGE'),
+										data: oData,
+										dataType: 'json',
+										success: function(data)
+										{
+											ns1blankspace.status.message('Removed');
+											delete oParam.document;
+											ns1blankspace.setup.messaging.template.init(oParam);
+										}
+									});
+								}				
 				}											
 }								
 

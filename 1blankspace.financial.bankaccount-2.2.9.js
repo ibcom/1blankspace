@@ -2368,14 +2368,18 @@ ns1blankspace.financial.bankAccount =
 																		'<div id="ns1blankspaceFinancialImportItem_edit-contactPerson-' + oRow.id + '_search"><div class="ns1blankspaceSubNote">Start typing or press Enter to see all.</div></div>' +
 																		'</td></tr>');
 
-
 															sValue = (oRow.financialaccounttext!=''?oRow.financialaccounttext:'<i style="color:#c31d1d;">Not set</i>')
 															aHTML.push('<tr><td id="ns1blankspaceFinancialImportItem-financialAccount-' + oRow.id + '" class="ns1blankspaceFinancialImportItemEdit" style="cursor:pointer;">' +
-																		'<span class="ns1blankspaceSub">Financial account</span>' +
-																		'<br /><span id="ns1blankspaceFinancialImportItem-financialAccount-' + oRow.id + '_value">' + sValue + '</span></td></tr>');
+																			'<div style="float:left;" class="ns1blankspaceSub">Account&nbsp;</div>' +
+																			'<div style="clear:both;" id="ns1blankspaceFinancialImportItem-financialAccount-' + oRow.id + '_value">' + sValue + '</div></td></tr>');
 
 															aHTML.push('<tr><td id="ns1blankspaceFinancialImportItem_edit_container-financialAccount-' + oRow.id + '" style="display:none; font-size:1em;">' +
-																		'<input id="ns1blankspaceFinancialImportItem_edit-financialAccount-' + oRow.id + '" class="ns1blankspaceText ns1blankspaceWatermark" value="search">' +
+																			'<div style="float:left;"><input id="ns1blankspaceFinancialImportItem_edit-financialAccount-' + oRow.id + '" class="ns1blankspaceText ns1blankspaceWatermark" value="search"></div>' +
+																			'<div style="float:right; margin-top:11px; display:none;" id="ns1blankspaceItemShowAll-' + oRow.id + '_container">' +
+																				'<span style="font-weight:normal; font-size:0.625em; text-align:right; margin-right:4px;">All</span>' +
+																				'<input type="checkbox" id="ns1blankspaceItemShowAll-' + oRow.id + '" style="margin:0px; padding:0px; border: 0px; margin-top:2px;">' +
+																			'</div>'	+
+																		
 																		'<div id="ns1blankspaceFinancialImportItem_edit-financialAccount-' + oRow.id + '_search"><div class="ns1blankspaceSubNote">Start typing or press Enter to see all.</div></div>' +
 																		'</td></tr>');
 
