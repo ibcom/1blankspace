@@ -5405,6 +5405,7 @@ ns1blankspace.financial.item =
 								' data-taxtype="' + oRow.taxtype + '"' +
 								' data-financialaccount="' + oRow.financialaccount + '"' +
 								' data-financialaccounttext="' + oRow.financialaccounttext + '"' +
+								' data-capital="' + oRow.capital + '"' +
 								' data-description="' + oRow.description + '"' +
 								'></span>');
 				}
@@ -5663,7 +5664,7 @@ ns1blankspace.financial.item =
 							$('#ns1blankspaceItemAccount').attr('data-id', ns1blankspace.util.getData(oParam, 'data-financialaccount').value);
 							$('#ns1blankspaceItemProject').val(ns1blankspace.util.getData(oParam, 'data-projecttext').value);
 							$('#ns1blankspaceItemProject').attr('data-id', ns1blankspace.util.getData(oParam, 'data-project').value);
-							$('[name="radioPublic"][value="' + ns1blankspace.objectContextData.capital + '"]').attr('checked', true);
+							$('[name="radioCapital"][value="' + ns1blankspace.util.getData(oParam, 'data-capital').value + '"]').attr('checked', true);
 						}
 						else
 						{
@@ -5852,6 +5853,7 @@ ns1blankspace.financial.item =
 				oData.tax = cTax;
 				oData.taxtype = $('input[name="radioTaxCode"]:checked').val();
 				oData.description = $('#ns1blankspaceItemDescription').val();
+				oData.capital = $('input[name="radioCapital"]:checked').val()
 					
 				if (ns1blankspace.option.financialShowProjects)
 				{
