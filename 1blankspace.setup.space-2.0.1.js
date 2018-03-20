@@ -687,7 +687,7 @@ ns1blankspace.setup.space =
 
 													if (iStep == 2)
 													{
-														var aMethods = $.grep(ns1blankspace.setup.space.initialise.data.template.roles, function (a) { return a.title == sRoleTitle})[0].methods;
+														var aMethods = $.grep(ns1blankspace.setup.space.initialise.data.template.roles, function (a) {return a.title == sRoleTitle})[0].methods;
 														var aMethodTitles = [];
 
 														$(aMethods).each(function() 
