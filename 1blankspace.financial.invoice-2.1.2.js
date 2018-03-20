@@ -240,7 +240,7 @@ ns1blankspace.financial.invoice =
 														'invoice.contactbusinesssentto.mailingsuburb,invoice.contactbusinesssentto.mailingstate,invoice.contactbusinesssentto.mailingcountry,' +
 														'invoice.contactbusinesssentto.streetaddress1,invoice.contactbusinesssentto.streetaddress2,invoice.contactbusinesssentto.streetpostcode,' +
 														'invoice.contactbusinesssentto.streetsuburb,invoice.contactbusinesssentto.streetstate,invoice.contactbusinesssentto.streetcountry,' +
-														'invoice.contactbusinesssentto.reference');
+														'invoice.contactbusinesssentto.reference,invoice.contactpersonsentto.reference');
 
 										oSearch.addField(ns1blankspace.option.auditFields);
 										

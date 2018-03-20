@@ -650,7 +650,7 @@ ns1blankspace.format.render = function (oParam)
 					$(e).html(fFunction(oObjectData));
 				}
 
-				else if (oObjectData[sSource])
+				else if (oObjectData[sSource] != undefined)
 				{	
 					$(e).html(oObjectData[sSource]);
 				}
