@@ -1802,7 +1802,7 @@ ns1blankspace.financial.creditors =
 
 						$('#ns1blankspaceCreditorsColumn2').html(aHTML.join(''));
 
-						$('input.ns1blankspaceDate').datepicker({dateFormat: ns1blankspace.option.dateFormat});
+						ns1blankspace.util.initDatePicker({select: 'input.ns1blankspaceDate'});
 
 						$('#ns1blankspaceCreditorsEndDate').change(function()
 						{
@@ -2244,7 +2244,7 @@ ns1blankspace.financial.profitLoss =
 						
 						$('#ns1blankspacePLColumn1').html(aHTML.join(''));
 
-						$('input.ns1blankspaceDate').datepicker({dateFormat: ns1blankspace.option.dateFormat});
+						ns1blankspace.util.initDatePicker({select: 'input.ns1blankspaceDate'});
 
 						$('#ns1blankspacePLRefresh').button(
 						{
@@ -2830,7 +2830,7 @@ ns1blankspace.financial.balanceSheet =
 						
 						$('#ns1blankspaceBSColumn1').html(aHTML.join(''));
 
-						$('input.ns1blankspaceDate').datepicker({dateFormat: ns1blankspace.option.dateFormat});
+						ns1blankspace.util.initDatePicker({select: 'input.ns1blankspaceDate'});
 
 						$('#ns1blankspaceBSRefresh').button(
 						{
@@ -3266,7 +3266,7 @@ ns1blankspace.financial.accounts =
 
 						$('#ns1blankspaceAccountColumn1').html(aHTML.join(''));
 
-						$('input.ns1blankspaceDate').datepicker({dateFormat: ns1blankspace.option.dateFormat});
+						ns1blankspace.util.initDatePicker({select: 'input.ns1blankspaceDate'});
 						$('#ns1blankspaceAccountStartDate').val(sStartDate);
 						$('#ns1blankspaceAccountEndDate').val(sEndDate);
 					
@@ -6738,7 +6738,7 @@ ns1blankspace.financial.taxSummary =
 						
 						$('#ns1blankspaceTaxColumn1').html(aHTML.join(''));
 
-						$('input.ns1blankspaceDate').datepicker({dateFormat: ns1blankspace.option.dateFormat});
+						ns1blankspace.util.initDatePicker({select: 'input.ns1blankspaceDate'});
 
 						$('#ns1blankspaceTaxRefresh').button(
 						{

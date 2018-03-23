@@ -33,7 +33,7 @@ ns1blankspace.option = $.extend(true, ns1blankspace.option,
 	taxOffice: 'ATO',
 	bulkInvoicing: true,
 	postInit: undefined,
-	initialiseSpaceTemplate: '/jscripts/1blankspace.setup.space-2.0.0.json',
+	initialiseSpaceTemplate: '/site/312/1blankspace.setup.space-2.0.1.json',
 	searchWatermark: 'search',
 	showLogonOptions: false,
 	showLogonOptionsOnHover: false,
@@ -50,7 +50,12 @@ ns1blankspace.option = $.extend(true, ns1blankspace.option,
 	pdfStyles: '<link rel=stylesheet href="/site/312/1blankspace-2.0.3.css">',
 	_messagingCheckURL: 'https://api.mydigitalstructure.com',
 	financialOverride: true,
-	showProductCodes: true
+	showProductCodes: true,
+	defaultDatePickerOptions:
+	{
+		changeMonth: true,
+		changeYear: true
+	}   
 });
 
 ns1blankspace.option.passwordExpiry.site = 312;
@@ -183,7 +188,7 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.financial',
-		source: '/site/312/1blankspace.financial-2.3.1.js'
+		source: '/site/312/1blankspace.financial-2.3.2.js'
 	},
 	{
 		nameSpace: '1blankspace.financial.bankAccount',
