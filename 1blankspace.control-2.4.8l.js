@@ -132,7 +132,7 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.format',
-		source: '/site/312/1blankspace.format-2.1.3.js'
+		source: '/site/312/1blankspace.format-2.1.4.js'
 	},
 	{
 		nameSpace: '1blankspace.contactPerson',
@@ -196,7 +196,7 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.financial.invoice',
-		source: '/site/312/1blankspace.financial.invoice-2.1.2.js'
+		source: '/site/312/1blankspace.financial.invoice-2.1.3.js'
 	},
 	{
 		nameSpace: '1blankspace.financial.expense',
