@@ -225,7 +225,7 @@ ns1blankspace.contactBusiness =
 								{
 									var iColumn = 0;
 									var aHTML = [];
-									var	iMaximumColumns = 1;
+									var iMaximumColumns = 1;
 									
 									if (oResponse.data.rows.length == 0)
 									{

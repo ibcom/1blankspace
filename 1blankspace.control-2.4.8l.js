@@ -192,7 +192,7 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.financial.bankAccount',
-		source: '/site/312/1blankspace.financial.bankaccount-2.2.9.js'
+		source: '/site/312/1blankspace.financial.bankaccount-2.3.0.js'
 	},
 	{
 		nameSpace: '1blankspace.financial.invoice',
@@ -232,7 +232,7 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.financial.compliance',
-		source: '/site/312/1blankspace.financial.compliance-2.0.5.js'
+		source: '/site/312/1blankspace.financial.compliance-2.0.6.js'
 	},
 	{
 		nameSpace: '1blankspace.report',
@@ -2832,6 +2832,7 @@ ns1blankspace.actions =
 		var sContactBusinessText;
 		var sContactPersonText;
 		var oContext = {inContext: false};
+		var bShowOpen = ns1blankspace.util.getParam(oParam, 'showOpen', {"default": true}).value;
 		
 		if (oParam != undefined)
 		{
@@ -3008,6 +3009,31 @@ ns1blankspace.actions =
 		{
 			ns1blankspace.action.init({id: (this.id).split('-')[1]})
 		});
+
+		$('.ns1blankspaceRowOpen:visible')
+		.button(
+		{
+			text: false,
+			label: 'Open in new tab',
+			icons:
+			{
+				primary: "ui-icon-newwin"
+			}
+		})
+		.click(function(event)
+		{
+			this.id = this.id.split('-').pop();
+			if ($.type(ns1blankspace.report.config.windowOpen) === 'function')
+			{
+				ns1blankspace.report.config.windowOpen();
+			}
+			else if ($.type(ns1blankspace.report.config.windowOpen) === 'string' && ns1blankspace.report.config.windowOpen.substr(0,3) === '/#/')
+			{
+				window.open(document.location.origin + ns1blankspace.report.config.windowOpen + this.id);
+			}
+		})
+		.css('width', '15px')
+		.css('height', '20px')
 	},	
 
 	row: 		function (oRow, oParam)
@@ -3036,6 +3062,13 @@ ns1blankspace.actions =
 		aHTML.push('<td style="width:30px;text-align:right;" class="ns1blankspaceRow">' + 			
 						'<span id="ns1blankspaceAction_options_remove-' + oRow.id + '" class="ns1blankspaceRowRemove"></span>' +
 						'</td>');
+
+		if (bShowOpen)
+		{
+			aHTML.push('<td style="width:30px;text-align:right;" class="ns1blankspaceRow">' + 			
+						'<span id="ns1blankspaceAction_options_remove-' + oRow.id + '" class="ns1blankspaceRowOpen"></span>' +
+						'</td>');
+		}	
 
 		aHTML.push('</tr>');
 

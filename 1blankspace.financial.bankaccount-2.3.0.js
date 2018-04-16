@@ -2377,11 +2377,9 @@ ns1blankspace.financial.bankAccount =
 																			'<div><div style="float:left; width:80%;">' +
 																				'<input id="ns1blankspaceFinancialImportItem_edit-financialAccount-' + oRow.id + '" class="ns1blankspaceText ns1blankspaceWatermark" value="search">' + 
 																				'</div>' +
-																			'<div style="float:left; margin-left:10px; margin-top:2px;" id="ns1blankspaceItemShowAll-' + oRow.id + '_container">' +
-																				
+																			'<div style="float:left; margin-left:10px; margin-top:2px;" id="ns1blankspaceItemShowAll-' + oRow.id + '_container">' +		
 																				'<input type="checkbox" id="ns1blankspaceItemShowAll-' + oRow.id + '" style="margin:0px; padding:0px; border: 0px; margin-top:0px;">' +
 																				'<span style="font-weight:normal; font-size:0.625em; margin-left:2px;">All</span>' +
-
 																			'</div></div>'	+
 																		
 																		'<div id="ns1blankspaceFinancialImportItem_edit-financialAccount-' + oRow.id + '_search" style="clear:both;"><div class="ns1blankspaceSubNote">Start typing or press Enter to see all.</div></div>' +
@@ -2676,11 +2674,20 @@ ns1blankspace.financial.bankAccount =
 													{
 														var iFinancialAccountType = (oTransaction.type==1?2:1);
 
+														
+
 														if (sSearch == '')
 														{
 															var oData = $.grep(ns1blankspace.financial.data.accounts, function (oAccount)
 															{ 
-																return (oAccount.type == iFinancialAccountType && oAccount.postable == 'Y')
+																if ($('#ns1blankspaceItemShowAll-' + sID).prop('checked') == true)
+																{
+																	return (oAccount.postable == 'Y')
+																}
+																else
+																{
+																	return (oAccount.type == iFinancialAccountType && oAccount.postable == 'Y')
+																}
 															});
 														}
 														else
@@ -2688,7 +2695,14 @@ ns1blankspace.financial.bankAccount =
 															sSearch = sSearch.toLowerCase();
 															var oData = $.grep(ns1blankspace.financial.data.accounts, function (oAccount)
 															{
-																return (oAccount.type == iFinancialAccountType && (oAccount.title).toLowerCase().indexOf(sSearch) != -1 && oAccount.postable == 'Y')
+																if ($('#ns1blankspaceItemShowAll-' + sID).prop('checked') == true)
+																{
+																	return ((oAccount.title).toLowerCase().indexOf(sSearch) != -1 && oAccount.postable == 'Y')
+																}
+																else
+																{
+																	return (oAccount.type == iFinancialAccountType && (oAccount.title).toLowerCase().indexOf(sSearch) != -1 && oAccount.postable == 'Y')
+																}
 															});
 														}
 
