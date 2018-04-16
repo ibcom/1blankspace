@@ -377,6 +377,10 @@ ns1blankspace.scripts.concat(
 	{
 		nameSpace: '1blankspace.util.financial.bankaccount',
 		source: '/site/312/1blankspace.util.financial.bankaccount-2.0.3.js'
+	},
+	{
+		nameSpace: '1blankspace.util.messaging',
+		source: '/site/312/1blankspace.util.messaging-2.0.0.js'
 	}
 ])
 

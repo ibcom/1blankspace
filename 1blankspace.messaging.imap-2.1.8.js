@@ -1042,7 +1042,7 @@ ns1blankspace.messaging.imap =
 			return aHTML.join('');
 		},
 
-		bind:		function (oParam)
+		bind: function (oParam)
 		{
 			var sXHTMLContainerID = ns1blankspace.util.getParam(oParam, 'xhtmlContainerID', {"default": 'ns1blankspaceRenderPage_IMAPInbox-0'}).value;
 
@@ -1164,6 +1164,7 @@ ns1blankspace.messaging.imap =
 			})
 			.click(function()
 			{
+				$('#' + this.id).parent().find('td').removeClass('ns1blankspaceNotSeen');
 				this.id = this.id.split('-').pop();
 				window.open(document.location.origin + '/#/messaging.imap/' + this.id);
 			})
@@ -1171,7 +1172,7 @@ ns1blankspace.messaging.imap =
 			.css('height', '20px');
 		},
 
-		remove: 	function (sXHTMLElementID, oParam)
+		remove: function (sXHTMLElementID, oParam)
 		{
 			var aSearch = sXHTMLElementID.split('-');
 			var sElementID = aSearch[0];
