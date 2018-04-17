@@ -2698,7 +2698,7 @@ ns1blankspace.messaging.imap =
 							
 							sAttachments += '<a href="' + sLink + '" target="_blank">' + aAttachment[0] + '</a>, ';
 
-							if ((aAttachment[0]).indexOf('.ics') != -1)
+							if ((aAttachment[0]).indexOf('.ics') != -1 || (aAttachment[0]).indexOf('.dat') != -1)
 							{
 								aICSAttachmentID.push(aAttachment[1])
 							}
