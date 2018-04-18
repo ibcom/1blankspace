@@ -357,11 +357,13 @@ ns1blankspace.financial.bankAccount =
 						aHTML.push('<table class="ns1blankspaceControl">');
 
 						aHTML.push('<tr class="ns1blankspaceControl">' +
-										'<td id="ns1blankspaceControlReconcile" class="ns1blankspaceControl">Reconcile</td>' +
+										'<td id="ns1blankspaceControlReconcile" style="padding-bottom:6px;" class="ns1blankspaceControl">Reconcile' +
+										'<br /><div class="ns1blankspaceSubNote">with statements from<br /><span class="ns1blankspaceFinanialBankAccountBank">bank</span></div></td>' +
 										'</tr>');
 
 						aHTML.push('<tr class="ns1blankspaceControl">' +
-										'<td id="ns1blankspaceControlReconciliations" class="ns1blankspaceControl">Completed</td>' +
+										'<td id="ns1blankspaceControlReconciliations" class="ns1blankspaceControl">Completed' +
+										'<br /><div class="ns1blankspaceSubNote">reconciliations</div></td>' +
 										'</tr>');
 
 						aHTML.push('</table>');	
@@ -449,6 +451,7 @@ ns1blankspace.financial.bankAccount =
 					var sBank = ns1blankspace.objectContextData.bank;
 					if (sBank == '') {sBank = 'bank'}
 					$('#ns1blankspaceFinanialBankAccountBank').html(sBank);
+					$('.ns1blankspaceFinanialBankAccountBank').html(sBank);
 					
 					var aHTML = [];
 					var h = -1;
