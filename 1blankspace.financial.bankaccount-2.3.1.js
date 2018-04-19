@@ -4867,7 +4867,7 @@ ns1blankspace.financial.bankAccount =
 													{
 														var oSearch = new AdvancedSearch();
 														oSearch.method = 'FINANCIAL_RECONCILIATION_SEARCH';
-														oSearch.addField('statementbalance,statementdate,statustext,status,previousbalance');
+														oSearch.addField('statementbalance,statementdate,statustext,status,previousbalance,statementbalancecredits,statementbalancedebits');
 														oSearch.addFilter('bankaccount', 'EQUAL_TO', ns1blankspace.objectContext);
 														oSearch.addFilter('status', 'EQUAL_TO', 1)
 														oSearch.sort('statementdate', 'desc');
@@ -4933,13 +4933,33 @@ ns1blankspace.financial.bankAccount =
 															'$' + (oResponse.PreviousBalance).parseCurrency().formatMoney(2, ".", ",")  + '</div>')
 
 										var cReceipts = (oResponse.Receipts).parseCurrency() + (oResponse.DebitGeneralJournals).parseCurrency();
+										var sCSSColor = '';
+										var sTitle = 'Receipts, journal credits';
 
-										aHTML.push('<div style="margin-right:3px; margin-bottom:7px; font-size:0.875em;" class="ns1blankspaceSub" title="Receipts, credits">' +
+										var cStatementCredits = (oResponse.StatementBalanceCredits).parseCurrency().formatMoney(2, ".", ",");
+
+										if (cReceipts != cStatementCredits && cReceipts != 0)
+										{
+											sCSSColor = ' color:red;'
+											sTitle = '$' + (cReceipts - cStatementCredits).formatMoney(2, ".", ",")
+										}
+
+										aHTML.push('<div style="margin-right:3px; margin-bottom:7px; font-size:0.875em;' + sCSSColor + '" class="ns1blankspaceSub" title="' + sTitle + '">' +
 															'+ $' + (cReceipts).formatMoney(2, ".", ",")  + '</div>');
 
 										var cPayments = (oResponse.Payments).parseCurrency() + (oResponse.CreditGeneralJournals).parseCurrency();
+										var sCSSColor = '';
+										var sTitle = 'Payments, journal debits';
 
-										aHTML.push('<div style="margin-right:3px; margin-bottom:7px; font-size:0.875em;" class="ns1blankspaceSub" title="Payments, debits">' +
+										var cStatementDebits = (oResponse.StatementBalanceDebits).parseCurrency().formatMoney(2, ".", ",");
+
+										if (cPayments != cStatementDebits && cPayments != 0)
+										{
+											sCSSColor = ' color:red;'
+											sTitle = '$' + (cPayments - cStatementDebits).formatMoney(2, ".", ",")
+										}
+
+										aHTML.push('<div style="margin-right:3px; margin-bottom:7px; font-size:0.875em;' + sCSSColor + '" class="ns1blankspaceSub" title="' + sTitle + '">' +
 															'- $' + (cPayments).formatMoney(2, ".", ",")  + '</div>');
 
 										aHTML.push('<div style="font-style:italic; margin-right:3px; margin-bottom:7px; font-size:0.875em;" class="ns1blankspaceSub">' +
@@ -5251,6 +5271,8 @@ ns1blankspace.financial.bankAccount =
 											if ($('#ns1blankspaceReconcileEditPreviousStatementBalance').val() != '') {sData += '&previousbalance=' + ns1blankspace.util.fs($('#ns1blankspaceReconcileEditPreviousStatementBalance').val())}
 											sData += '&notes=' + ns1blankspace.util.fs($('#ns1blankspaceReconcileEditStatementNotes').val());
 											sData += '&status=' + ns1blankspace.util.fs($('input[name="radioStatus"]:checked').val());
+											sData += '&statementbalancecredits=' + ns1blankspace.util.fs($('#ns1blankspaceReconcileEditStatementCredits').val());
+											sData += '&statementbalancedebits=' + ns1blankspace.util.fs($('#ns1blankspaceReconcileEditStatementDebits').val());
 											
 											$.ajax(
 											{
@@ -5280,7 +5302,7 @@ ns1blankspace.financial.bankAccount =
 										{
 											var oSearch = new AdvancedSearch();
 											oSearch.method = 'FINANCIAL_RECONCILIATION_SEARCH';
-											oSearch.addField('statementbalance,statementdate,statustext,status,previousbalance,notes');
+											oSearch.addField('statementbalance,statementdate,statustext,status,previousbalance,notes,statementbalancecredits,statementbalancedebits');
 											oSearch.addFilter('id', 'EQUAL_TO', sID);
 											oSearch.getResults(function(data) {ns1blankspace.financial.bankAccount.reconcile.edit(oParam, data)});
 										}
@@ -5306,6 +5328,8 @@ ns1blankspace.financial.bankAccount =
 											$('#ns1blankspaceReconcileEditStatementBalance').val(oObjectContext.statementbalance);
 											$('#ns1blankspaceReconcileEditPreviousStatementBalance').val(oObjectContext.previousbalance);
 											$('#ns1blankspaceReconcileEditStatementNotes').val(oObjectContext.notes);
+											$('#ns1blankspaceReconcileEditStatementCredits').val(oObjectContext.statementbalancecredits);
+											$('#ns1blankspaceReconcileEditStatementDebits').val(oObjectContext.statementbalancedebits);
 											$('[name="radioStatus"][value="' + oObjectContext.status + '"]').attr('checked', true);
 										}
 									}

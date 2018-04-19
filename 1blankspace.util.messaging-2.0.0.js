@@ -112,6 +112,7 @@ ns1blankspace.util.messaging =
 	icsToJSON: function (oParam, oResponse)
 	{
 		var iAttachment = ns1blankspace.util.getParam(oParam, 'attachment').value;
+		var iMessageCacheID = ns1blankspace.util.getParam(oParam, 'messageCacheID', {"default": ns1blankspace.objectContext}).value;
 
 		if (oResponse == undefined)
 		{
@@ -134,16 +135,26 @@ ns1blankspace.util.messaging =
 				$.ajax(
 				{
 					type: 'POST',
-					url: ns1blankspace.util.endpointURI('MESSAGING_EMAIL_CACHE_ATTACHMENT_DOWNLOAD'),
-					data: 'id=' + iAttachment,
+					url: ns1blankspace.util.endpointURI('MESSAGING_EMAIL_CACHE_GET_DETAILS'),
+					data: 'cacheattachments=Y&id=' + iMessageCacheID,
 					dataType: 'json',
 					global: false,
 					success: function(oResponse)
 					{
-						ns1blankspace.util.messaging.icsToJSON(oParam);
-					},
-					error: function(oResponse)
-					{
+						var aAttachments = oResponse.attachmentlist.split('#');
+						$.each(aAttachments, function (a, attachment)
+						{
+							var aAttachment = attachment.split('|');
+							$('#ns1blankspaceMessagingEmailAttachments [data-index="' + aAttachment[2] + '"]')
+								.attr('href', '/rpc/messaging/?method=MESSAGING_EMAIL_CACHE_ATTACHMENT_DOWNLOAD&id=' + aAttachment[1]);
+
+							if ((aAttachment[0]).indexOf('.ics') != -1 || (aAttachment[0]).indexOf('.dat') != -1)
+							{
+								iAttachment = aAttachment[1];
+							}
+						})
+
+						oParam = ns1blankspace.util.setParam(oParam, 'attachment', iAttachment)
 						ns1blankspace.util.messaging.icsToJSON(oParam);
 					}
 				});

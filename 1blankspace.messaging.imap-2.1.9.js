@@ -2696,7 +2696,7 @@ ns1blankspace.messaging.imap =
 							//sLink += '&account=' + ns1blankspace.util.fs(ns1blankspace.messaging.imap.account);
 							//sLink += '&messageid=' + ns1blankspace.util.fs(ns1blankspace.objectContextData.messageid);
 							
-							sAttachments += '<a href="' + sLink + '" target="_blank">' + aAttachment[0] + '</a>, ';
+							sAttachments += '<a href="' + sLink + '" data-index="' + aAttachment[2] + '" data-filename="' + aAttachment[0] + '" target="_blank">' + aAttachment[0] + '</a>; ';
 
 							if ((aAttachment[0]).indexOf('.ics') != -1 || (aAttachment[0]).indexOf('.dat') != -1)
 							{
