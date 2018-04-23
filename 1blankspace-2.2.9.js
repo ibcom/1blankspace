@@ -5641,16 +5641,16 @@ ns1blankspace.search.email =
 							oSearch.addBracket('(');
 							oSearch.addFilter('contactbusinesstext', 'TEXT_IS_LIKE', sSearchText);
 							oSearch.addOperator('or');
+							oSearch.addBracket('(');
 							oSearch.addFilter('firstname', 'TEXT_IS_LIKE', (sSearchText != sFirstName) ? sFirstName : sSearchText);
 							oSearch.addOperator((sFirstName != sSurname ? 'and' : 'or'));
 							oSearch.addFilter('surname', 'TEXT_IS_LIKE', (sSearchText != sSurname) ? sSurname : sSearchText);
-							
+							oSearch.addBracket(')');
 							if (bEmailOnly)
 							{
 								oSearch.addOperator('or');
 								oSearch.addFilter('email', 'TEXT_IS_LIKE', sSearchText);
 							}
-
 							oSearch.addBracket(')');
 							
 							if (sParentElementID != undefined)
@@ -6986,7 +6986,7 @@ ns1blankspace.extend =
 									}
 									else
 									{
-										$('#ns1blankspaceStructure_' + this.id).val(ns1blankspace.objectContextData[sAlias]);
+										$('#ns1blankspaceStructure_' + this.id).val(ns1blankspace.objectContextData[sAlias].formatXHTML());
 									}	
 								});	
 							}	
