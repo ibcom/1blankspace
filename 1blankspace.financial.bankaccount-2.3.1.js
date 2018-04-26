@@ -2321,7 +2321,7 @@ ns1blankspace.financial.bankAccount =
 																				'</td></tr>');
 
 															aHTML.push('<tr><td id="ns1blankspaceFinancialImportItem_Type-' + oRow.id + '">' +
-																				'<div>' + oRow.categorytext + '</div><div class="ns1blankspaceSubNote">' + (oRow.categorytext=='Credit'?'(Receipt)':'(Payment)') + '</div></td></tr>');						 					
+																				'<div>' + oRow.categorytext + '</div><div class="ns1blankspaceSubNote">' + (oRow.categorytext=='Credit'?'(Incoming)':'(Outgoing)') + '</div></td></tr>');						 					
 																		
 															aHTML.push('<tr><td class="ns1blankspaceViewLink ns1blankspaceFinancialImportItemStatus" id="ns1blankspaceFinancialImportItem_status-' + oRow.id + '">');
 
