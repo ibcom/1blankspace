@@ -2180,7 +2180,10 @@ ns1blankspace.financial.bankAccount =
 																aHTML.push('<tr><td><span id="ns1blankspaceBankAccountImportMappingsReApply" class="ns1blankspaceAction">' +
 																			'Apply mappings</span></td></tr>');
 
-																aHTML.push('<tr><td style="padding-top:8px;"><span id="ns1blankspaceBankAccountImportCreateItems" class="ns1blankspaceAction">' +
+																aHTML.push('<tr><td style="padding-top:16px; font-size:0.75em;" class="ns1blankspaceSub">' +
+																					'If you don\'t plan to reconcile against a bank statement then you can create payments and receipts for any transactions with contact and financial account information, else click Reconcile in the side menu.</td></tr>');
+
+																aHTML.push('<tr><td style="padding-top:8px; padding-bottom:16px;"><span id="ns1blankspaceBankAccountImportCreateItems" class="ns1blankspaceAction">' +
 																			'Create payments & receipts</span></td></tr>');
 
 																//if (ns1blankspace.financial.data.settings.accountingmethod == 1)
@@ -2193,9 +2196,6 @@ ns1blankspace.financial.bankAccount =
 																	//aHTML.push('<tr><td style="padding-top:8px; padding-bottom:16px; font-size:0.75em;" class="ns1blankspaceSub">' +
 																	//		'Or you can reconcile these bank transactions against by clicking Reconcile.</td></tr>');
 																//}
-
-																aHTML.push('<tr><td style="padding-top:8px; padding-bottom:16px; font-size:0.75em;" class="ns1blankspaceSub">' +
-																					'Payments and receipts will be created and matched to any transactions with contact and financial account information.</td></tr>');
 															}
 														}
 
@@ -2328,7 +2328,8 @@ ns1blankspace.financial.bankAccount =
 															var sStatusText = oRow.statustext;
 															if (oRow.status==1) {sStatusText = 'Unconfirmed'};
 															if (oRow.status==3) {sStatusText = 'Confirmed (Unmatched)'};
-															if (oRow.status==4) {sStatusText = 'Transferred to financials (Matched)'};
+															if (oRow.status==2) {sStatusText = 'Matched & Reconciled'};
+															if (oRow.status==4) {sStatusText = 'Matched'};
 															if (oRow.status==7) {sStatusText = 'Part transferred to financials'};
 
 															aHTML.push(sStatusText);
@@ -2676,8 +2677,6 @@ ns1blankspace.financial.bankAccount =
 													if (_.isObject(oTransaction))
 													{
 														var iFinancialAccountType = (oTransaction.type==1?2:1);
-
-														
 
 														if (sSearch == '')
 														{
@@ -3034,7 +3033,8 @@ ns1blankspace.financial.bankAccount =
 
 														aHTML.push('<div id="ns1blankspaceImportEditStatus-1" class="ns1blankspaceImportEditStatus ns1blankspaceAction">Unconfirmed</div>');
 														aHTML.push('<div id="ns1blankspaceImportEditStatus-3" class="ns1blankspaceImportEditStatus ns1blankspaceAction">Confirmed (Unmatched)</div>');
-														aHTML.push('<div id="ns1blankspaceImportEditStatus-2" class="ns1blankspaceImportEditStatus ns1blankspaceAction">Matched</div>');
+														aHTML.push('<div id="ns1blankspaceImportEditStatus-2" class="ns1blankspaceImportEditStatus ns1blankspaceAction">Matched & Reconciled</div>');
+														aHTML.push('<div id="ns1blankspaceImportEditStatus-4" class="ns1blankspaceImportEditStatus ns1blankspaceAction">Matched</div>');
 
 														$(ns1blankspace.xhtml.container).html(aHTML.join(''));
 														$(ns1blankspace.xhtml.container).show();
@@ -4044,10 +4044,11 @@ ns1blankspace.financial.bankAccount =
 
 															var sID = ns1blankspace.util.getParam(oParam, 'xhtmlElementID', {index: 1}).value;
 
+															//status: 2 - change to 4
 															var oData =
 															{
 																id: sID,
-																status: 2,
+																status: 4,
 																object: oParam.object,
 																objectcontext: oParam.objectContext
 															}
@@ -4936,9 +4937,9 @@ ns1blankspace.financial.bankAccount =
 										var sCSSColor = '';
 										var sTitle = 'Receipts, journal credits';
 
-										var cStatementCredits = (oResponse.StatementBalanceCredits).parseCurrency().formatMoney(2, ".", ",");
+										var cStatementCredits = (oResponse.StatementBalanceCredits).parseCurrency();
 
-										if (cReceipts != cStatementCredits && cReceipts != 0)
+										if (cReceipts.toFixed(2) != cStatementCredits && !(cReceipts == 0 || cStatementCredits == 0))
 										{
 											sCSSColor = ' color:red;'
 											sTitle = '$' + (cReceipts - cStatementCredits).formatMoney(2, ".", ",")
@@ -4951,9 +4952,9 @@ ns1blankspace.financial.bankAccount =
 										var sCSSColor = '';
 										var sTitle = 'Payments, journal debits';
 
-										var cStatementDebits = (oResponse.StatementBalanceDebits).parseCurrency().formatMoney(2, ".", ",");
+										var cStatementDebits = (oResponse.StatementBalanceDebits).parseCurrency();
 
-										if (cPayments != cStatementDebits && cPayments != 0)
+										if (cPayments.toFixed(2) != cStatementDebits && !(cPayments == 0 || cStatementDebits == 0))
 										{
 											sCSSColor = ' color:red;'
 											sTitle = '$' + (cPayments - cStatementDebits).formatMoney(2, ".", ",")
@@ -4997,10 +4998,10 @@ ns1blankspace.financial.bankAccount =
 										aHTML.push('<div style="text-align:right; margin-left:5px; margin-right:3px; margin-bottom:16px;" id="ns1blankspaceBankAccountColumnItemType">');
 										
 										aHTML.push('<input style="width: 100%;"  type="radio" id="ns1blankspaceBankAccountColumnItemType-2-' + iReconciliation + '" name="radioType" checked="checked" /><label for="ns1blankspaceBankAccountColumnItemType-2-' + iReconciliation + '" style="width: 90px; margin-bottom:1px;">' +
-														'Receipts<br /><span style="font-weight:200">(Credits)</span></label>');
+														'Incoming<br /><span style="font-weight:200">(Credits)</span></label>');
 
 										aHTML.push('<input style="width: 100%;" type="radio" id="ns1blankspaceBankAccountColumnItemType-1-' + iReconciliation + '" name="radioType" /><label for="ns1blankspaceBankAccountColumnItemType-1-' + iReconciliation + '" style="width:90px;">' +
-														'Payments<br /><span style="font-weight:200">(Debits)</span></label>');
+														'Outgoing<br /><span style="font-weight:200">(Debits)</span></label>');
 										
 										aHTML.push('</div>');
 
@@ -5183,6 +5184,24 @@ ns1blankspace.financial.bankAccount =
 													
 										aHTML.push('<tr class="ns1blankspaceCaption">' +
 														'<td class="ns1blankspaceCaption">' +
+														'Total Credits<br /><span class="ns1blankspaceSubNote">(optional)</span>' +
+														'</td></tr>' +
+														'<tr class="ns1blankspace">' +
+														'<td class="ns1blankspaceText">' +
+														'<input id="ns1blankspaceReconcileEditStatementCredits" class="ns1blankspaceText">' +
+														'</td></tr>');
+
+										aHTML.push('<tr class="ns1blankspaceCaption">' +
+														'<td class="ns1blankspaceCaption">' +
+														'Total Debits<br /><span class="ns1blankspaceSubNote">(optional)</span>' +
+														'</td></tr>' +
+														'<tr class="ns1blankspace">' +
+														'<td class="ns1blankspaceText">' +
+														'<input id="ns1blankspaceReconcileEditStatementDebits" class="ns1blankspaceText">' +
+														'</td></tr>');
+																									
+										aHTML.push('<tr class="ns1blankspaceCaption">' +
+														'<td class="ns1blankspaceCaption">' +
 														'Closing Balance' +
 														'</td></tr>' +
 														'<tr class="ns1blankspace">' +
@@ -5201,7 +5220,7 @@ ns1blankspace.financial.bankAccount =
 
 										aHTML.push('<tr class="ns1blankspaceCaption">' +
 														'<td class="ns1blankspaceCaption">' +
-														'Reference<br /><span class="ns1blankspaceSubNote">(ie Statement Number)</span<' +
+														'Reference<br /><span class="ns1blankspaceSubNote">(ie Statement Number)</span>' +
 														'</td></tr>' +
 														'<tr class="ns1blankspace">' +
 														'<td class="ns1blankspaceText">' +
@@ -5218,24 +5237,7 @@ ns1blankspace.financial.bankAccount =
 														'<br /><input type="radio" id="radioStatus2" name="radioStatus" value="2"/>Locked <span class="ns1blankspaceSub">(Completed)</span>' +
 														'</td></tr>');
 
-										aHTML.push('<tr class="ns1blankspaceCaption">' +
-														'<td class="ns1blankspaceCaption">' +
-														'Total Credits' +
-														'</td></tr>' +
-														'<tr class="ns1blankspace">' +
-														'<td class="ns1blankspaceText">' +
-														'<input id="ns1blankspaceReconcileEditStatementCredits" class="ns1blankspaceText">' +
-														'</td></tr>');
-
-										aHTML.push('<tr class="ns1blankspaceCaption">' +
-														'<td class="ns1blankspaceCaption">' +
-														'Total Debits' +
-														'</td></tr>' +
-														'<tr class="ns1blankspace">' +
-														'<td class="ns1blankspaceText">' +
-														'<input id="ns1blankspaceReconcileEditStatementDebits" class="ns1blankspaceText">' +
-														'</td></tr>');
-																															
+																		
 										aHTML.push('</table>');					
 										
 										$('#ns1blankspaceBankAccountColumnReconcileEdit1').html(aHTML.join(''));
@@ -5271,8 +5273,16 @@ ns1blankspace.financial.bankAccount =
 											if ($('#ns1blankspaceReconcileEditPreviousStatementBalance').val() != '') {sData += '&previousbalance=' + ns1blankspace.util.fs($('#ns1blankspaceReconcileEditPreviousStatementBalance').val())}
 											sData += '&notes=' + ns1blankspace.util.fs($('#ns1blankspaceReconcileEditStatementNotes').val());
 											sData += '&status=' + ns1blankspace.util.fs($('input[name="radioStatus"]:checked').val());
-											sData += '&statementbalancecredits=' + ns1blankspace.util.fs($('#ns1blankspaceReconcileEditStatementCredits').val());
-											sData += '&statementbalancedebits=' + ns1blankspace.util.fs($('#ns1blankspaceReconcileEditStatementDebits').val());
+
+											if ($('#ns1blankspaceReconcileEditStatementCredits').val() != '')
+											{
+												sData += '&statementbalancecredits=' + ns1blankspace.util.fs($('#ns1blankspaceReconcileEditStatementCredits').val());
+											}	
+
+											if ($('#ns1blankspaceReconcileEditStatementDebits').val() != '')
+											{
+												sData += '&statementbalancedebits=' + ns1blankspace.util.fs($('#ns1blankspaceReconcileEditStatementDebits').val());
+											}	
 											
 											$.ajax(
 											{
@@ -5383,7 +5393,8 @@ ns1blankspace.financial.bankAccount =
 														oSearch.addField('description,amount,posteddate,taxtype,financialaccount,financialaccounttext,' +
 																			'contactbusiness,contactbusinesstext,contactperson,contactpersontext');
 														oSearch.addFilter('bankaccount', 'EQUAL_TO', ns1blankspace.objectContext);
-														oSearch.addFilter('status', 'EQUAL_TO', 3);
+														//include 4
+														oSearch.addFilter('status', 'IN_LIST', '3,4');
 														oSearch.addFilter('category', 'EQUAL_TO', (iType==1?2:1));
 														oSearch.addFilter('posteddate', 'LESS_THAN_OR_EQUAL_TO', dReconciliationEndDate);
 														oSearch.sort('posteddate', 'asc');
@@ -5402,7 +5413,9 @@ ns1blankspace.financial.bankAccount =
 														
 														$('#ns1blankspaceBankAccountReconcileColumnItem').html(aHTML.join(''));
 														
-														$('#ns1blankspaceBankAccountReconcileColumnItemEdit').html('<span class="ns1blankspaceAction" id="ns1blankspaceShowAll"></span>');
+														$('#ns1blankspaceBankAccountReconcileColumnItemEdit').html('<span class="ns1blankspaceAction" id="ns1blankspaceShowAll"></span>' +
+															'<div class="ns1blankspaceSub" style="padding-left:6px; padding-top:16px; width:50%;">Before reconciling it is recommended that you check for any existing ' +
+																(iType==1?'<a href="/#/financial.payment" target="_blank">unallocated payments</a>':'<a href="/#/financial.receipt" target="_blank">unallocated receipts</a>') + '.</div>');
 
 														$('#ns1blankspaceShowAll').button({
 															label: 'Show All Unreconciled ' + (iType==1?'Payments':'Receipts') + ' & Journals',
@@ -5497,6 +5510,7 @@ ns1blankspace.financial.bankAccount =
 																		$.each(['INV', 'inv'], function (r, replace)
 																		{
 																			description = description.replace(replace, '');
+																			description = description.replace('XX', '');
 																		});
 																		if (!isNaN(description) && description != '') {sSearchReference = description}
 																	});
