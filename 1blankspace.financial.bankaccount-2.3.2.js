@@ -4642,6 +4642,7 @@ ns1blankspace.financial.bankAccount =
 					show: 		function (oParam, oResponse)
 								{
 									var iMode = 1;
+									var dBeforeDate = ns1blankspace.util.getParam(oParam, 'beforeDate', {"default": ''}).value;
 									
 									if (oParam === undefined) {oParam = {}}
 
@@ -4656,20 +4657,24 @@ ns1blankspace.financial.bankAccount =
 										oSearch.method = 'FINANCIAL_RECONCILIATION_SEARCH';
 										oSearch.addField('statementbalance,statementdate,statustext,status,previousbalance,notes');
 										oSearch.addFilter('bankaccount', 'EQUAL_TO', ns1blankspace.objectContext);
-										oSearch.addFilter('status', 'EQUAL_TO', iMode)
+										oSearch.addFilter('status', 'EQUAL_TO', iMode);
+
+										if (dBeforeDate != '')
+										{
+											oSearch.addFilter('statementdate', 'LESS_THAN_OR_EQUAL_TO', dBeforeDate);
+										}
+
 										oSearch.sort('statementdate', 'desc');
-										oSearch.rows = 100;
+										oSearch.rows = 20;
 										oSearch.getResults(function(data) {ns1blankspace.financial.bankAccount.reconcile.show(oParam, data)});
 									}
 									else
 									{
 										var aHTML = [];
 
-										aHTML.push('<table class="ns1blankspace">' +
-														'<tr class="ns1blankspaceRow">');
+										aHTML.push('<table class="ns1blankspace">');
 
-
-										aHTML.push('<td id="ns1blankspaceBankAccountColumnReconcile1" style="width: 100px;padding-right:5px;font-size:0.875em;" class="ns1blankspaceColumn1">' +
+										aHTML.push('<tr class="ns1blankspaceRow"><td id="ns1blankspaceBankAccountColumnReconcile1" style="width: 100px;padding-right:5px;font-size:0.875em;" class="ns1blankspaceColumn1">' +
 														ns1blankspace.xhtml.loading +
 														'</td><td id="ns1blankspaceBankAccountColumnReconcile2" class="ns1blankspaceMainColumn2">' +
 														'</td></tr></table>');				
@@ -4710,7 +4715,7 @@ ns1blankspace.financial.bankAccount =
 										else
 										{
 											aHTML.push('<table class="ns1blankspaceColumn2">' +
-														'<tr><td class="ns1blankspaceNothing">The last 100 completed reconciliations are shown.</td></tr></table>')
+														'<tr><td class="ns1blankspaceNothing">The last 20 completed reconciliations are shown.</td></tr></table>')
 										}	
 
 										$('#ns1blankspaceBankAccountColumnReconcile2').html(aHTML.join(''));
@@ -4738,18 +4743,25 @@ ns1blankspace.financial.bankAccount =
 											})
 											.css("width", "60px;");
 
-										}
-											
-										//if (oResponse.data.rows.length == 0)
-										//{
-											//aHTML.push('</table>');
-											
-											//$('#ns1blankspaceBankAccountColumnReconcile1').html(aHTML.join(''));
-										//}
-										
+										}					
 										else
 										{		
 											aHTML.push('<table id="ns1blankspaceBankAccountReco" class="ns1blankspace">');
+
+											if (iMode == 2)
+											{
+												aHTML.push('<tr><td class="ns1blankspaceDate" style="padding-bottom:4px;">');
+
+												if (dBeforeDate != '')
+												{
+													aHTML.push('<input id="ns1blankspaceReconcilationeBeforeDate" class="ns1blankspaceDate" style="padding-left:3px; width:113px; font-size:0.725em;" value="' + dBeforeDate + '">')
+												}
+												else
+												{
+													aHTML.push('<input id="ns1blankspaceReconcilationeBeforeDate" class="ns1blankspaceDate ns1blankspaceWatermark" style="padding-left:3px; width:113px; font-size:0.725em;" value="Show if before">');
+												}	
+												aHTML.push('</td></tr>');
+											}
 											
 											var oRows = oResponse.data.rows;
 											
@@ -4761,6 +4773,14 @@ ns1blankspace.financial.bankAccount =
 											aHTML.push('</table>');
 											
 											$('#ns1blankspaceBankAccountColumnReconcile1').html(aHTML.join(''));
+
+											ns1blankspace.util.initDatePicker({select: '#ns1blankspaceReconcilationeBeforeDate'});
+
+											$('#ns1blankspaceReconcilationeBeforeDate').change(function()
+											{
+												oParam = ns1blankspace.util.setParam(oParam, 'beforeDate', $('#ns1blankspaceReconcilationeBeforeDate').val());
+												ns1blankspace.financial.bankAccount.reconcile.show(oParam)
+											});
 										
 											$('#ns1blankspaceBankAccountReco .ns1blankspaceFinancialBankAccountReconcileContainer')
 											.click(function()
