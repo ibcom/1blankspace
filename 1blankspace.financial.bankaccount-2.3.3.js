@@ -7074,14 +7074,21 @@ ns1blankspace.financial.bankAccount =
 																		'</td></tr>');
 																						
 														aHTML.push('<tr><td class="ns1blankspaceAction">' +
-																		'<span style="width:75px;" id="ns1blankspaceItemsLockedSearch">Search</span>' +
+																		'<span style="width:95px;" id="ns1blankspaceItemsLockedSearch">Search</span>' +
 																		'</td></tr>');
 
 														aHTML.push('<tr><td class="ns1blankspaceAction">' +
-																		'<span style="width:75px;" id="ns1blankspaceItemsLockedClearSearch">Clear</span>' +
+																		'<span style="width:95px;" id="ns1blankspaceItemsLockedClearSearch">Clear</span>' +
 																		'</td></tr>');
 
-														aHTML.push('</table>');					
+														aHTML.push('</table>');	
+
+														aHTML.push('<table style="width:100%;">' +
+																			'<tr><td style="padding-top:14px;" class="ns1blankspaceAction"><div style="width:95px;" id="ns1blankspaceFinancialBankAccountHealthCheck">' +
+																			'Check GL transactions</div></td></tr>' +
+																			'<tr><td class="ns1blankspaceSub" id="ns1blankspaceFinancialBankAccountHealthCheckContainer" style="padding-top:6px;">' +
+																			'</td></tr>' +
+																			'</table>');
 														
 														$('#ns1blankspaceReconcileItemLocked2').html(aHTML.join(''));
 													
@@ -7090,6 +7097,22 @@ ns1blankspace.financial.bankAccount =
 														$('#ns1blankspaceItemsLockedSearchDate').val(dSearchDate);
 														$('#ns1blankspaceItemsLockedSearchAmount').val(cSearchAmount);
 														$('#ns1blankspaceItemsLockedSearchReference').val(sSearchReference);
+																
+														$('#ns1blankspaceFinancialBankAccountHealthCheck').button(
+														{
+															label: 'Check GL transactions',
+															icons:
+															{
+																primary: "ui-icon-clipboard"
+															}
+														}).click(function ()
+														{
+															ns1blankspace.financial.bankAccount.healthCheck.init(
+															{
+																reconciliation: iReconciliation,
+																xhtmlElementID: 'ns1blankspaceFinancialBankAccountHealthCheckContainer'
+															})
+														});
 																
 														$('#ns1blankspaceItemsLockedSearch').button(
 														{
@@ -7107,7 +7130,7 @@ ns1blankspace.financial.bankAccount =
 															ns1blankspace.financial.bankAccount.reconcile.items.locked(oParam);
 														})
 
-														$('#ns1blankspaceItemsLockedClearSearch').button( {
+														$('#ns1blankspaceItemsLockedClearSearch').button({
 															label: 'Clear',
 															icons:
 															{
@@ -7463,7 +7486,7 @@ ns1blankspace.financial.bankAccount =
 															.css('height', '20px');
 														}
 
-														$('td.ns1blankspaceViewLink').click(function()
+														$('#ns1blankspaceReconcileItemsLocked td.ns1blankspaceViewLink').click(function()
 														{
 															ns1blankspace.financial[namespace[iNamespace]].init({id: (this.id).split('-')[1]})
 														});
@@ -7921,3 +7944,266 @@ ns1blankspace.financial.bankAccount =
 								}
 				}									
 }								
+
+ns1blankspace.financial.bankAccount.healthCheck = 
+{
+	data: {},
+
+	init: function (oParam, oResponse)
+	{
+		var iReconciliation = ns1blankspace.util.getParam(oParam, 'reconciliation').value;
+
+		ns1blankspace.status.message('Health check starting...');
+		var sXHTMLElementID = ns1blankspace.util.getParam(oParam, 'xhtmlElementID').value;
+
+		if (sXHTMLElementID != undefined)
+		{
+ 			$('#' + sXHTMLElementID).html(ns1blankspace.xhtml.loadingSmall);
+		}
+
+		if (oResponse == undefined)
+		{
+			var oSearch = new AdvancedSearch();
+			oSearch.method = 'FINANCIAL_RECONCILIATION_SEARCH';
+			oSearch.addField('statementbalance,statementdate,statustext,status,previousbalance,notes,reference');
+			oSearch.addFilter('id', 'EQUAL_TO', iReconciliation);
+			oSearch.getResults(function(data) {ns1blankspace.financial.bankAccount.healthCheck.init(oParam, data)});
+		}
+		else
+		{
+			ns1blankspace.financial.bankAccount.healthCheck.data.reconciliation = oResponse.data.rows[0];
+
+			ns1blankspace.financial.bankAccount.healthCheck.data.endDate = ns1blankspace.financial.bankAccount.healthCheck.data.reconciliation.statementdate;
+			ns1blankspace.financial.bankAccount.healthCheck.data._endDate = moment(ns1blankspace.financial.bankAccount.healthCheck.data.endDate, ns1blankspace.option.dateFormats);
+
+			ns1blankspace.financial.bankAccount.healthCheck.receipts(oParam);
+		}
+	},
+
+	receipts: function (oParam, oResponse)
+	{
+		var iReconciliation = ns1blankspace.util.getParam(oParam, 'reconciliation').value;
+
+		ns1blankspace.status.message('Health check, receipts...');
+
+		if (oResponse == undefined)
+		{
+			var oSearch = new AdvancedSearch();
+			oSearch.method = 'FINANCIAL_RECEIPT_SEARCH';
+			oSearch.addField('receiveddate,amount');
+			oSearch.addFilter('reconciliation', 'EQUAL_TO', iReconciliation);
+			oSearch.rows = 1000;
+			oSearch.sort('receiveddate', 'asc');
+			oSearch.getResults(function(data) {ns1blankspace.financial.bankAccount.healthCheck.receipts(oParam, data)});
+		}
+		else
+		{
+			ns1blankspace.financial.bankAccount.healthCheck.data.receipts = oResponse.data.rows;
+			if (ns1blankspace.financial.bankAccount.healthCheck.data.receipts.length != 0)
+			{
+				ns1blankspace.financial.bankAccount.healthCheck.data.startDate = ns1blankspace.financial.bankAccount.healthCheck.data.receipts[0].receiveddate;
+				ns1blankspace.financial.bankAccount.healthCheck.data._startDate = moment(ns1blankspace.financial.bankAccount.healthCheck.data.startDate, ns1blankspace.option.dateFormats);
+			}
+
+			ns1blankspace.financial.bankAccount.healthCheck.payments(oParam);
+		}
+	},
+
+	payments: function (oParam, oResponse)
+	{
+		var iReconciliation = ns1blankspace.util.getParam(oParam, 'reconciliation').value;
+
+		ns1blankspace.status.message('Health check, payments...');
+
+		if (oResponse == undefined)
+		{
+			var oSearch = new AdvancedSearch();
+			oSearch.method = 'FINANCIAL_PAYMENT_SEARCH';
+			oSearch.addField('paiddate,amount');
+			oSearch.addFilter('reconciliation', 'EQUAL_TO', iReconciliation);
+			oSearch.rows = 1000;
+			oSearch.sort('paiddate', 'asc');
+			oSearch.getResults(function(data) {ns1blankspace.financial.bankAccount.healthCheck.payments(oParam, data)});
+		}
+		else
+		{
+			ns1blankspace.financial.bankAccount.healthCheck.data.payments = oResponse.data.rows;
+			if (ns1blankspace.financial.bankAccount.healthCheck.data.payments.length != 0)
+			{
+				ns1blankspace.financial.bankAccount.healthCheck.data.startDate = ns1blankspace.financial.bankAccount.healthCheck.data.receipts[0].receiveddate;
+				ns1blankspace.financial.bankAccount.healthCheck.data._startDate = moment(ns1blankspace.financial.bankAccount.healthCheck.data.startDate, ns1blankspace.option.dateFormats);
+				
+				if (moment(ns1blankspace.financial.bankAccount.healthCheck.data.payments[0].paiddate, ns1blankspace.option.dateFormats)
+				  .isBefore(ns1blankspace.financial.bankAccount.healthCheck.data._startDate))
+				{
+					ns1blankspace.financial.bankAccount.healthCheck.data.startDate = ns1blankspace.financial.bankAccount.healthCheck.data.payments[0].paiddate;
+					ns1blankspace.financial.bankAccount.healthCheck.data._startDate = moment(ns1blankspace.financial.bankAccount.healthCheck.data.startDate, ns1blankspace.option.dateFormats);
+				}
+			}
+
+			ns1blankspace.financial.bankAccount.healthCheck.journals(oParam);
+		}
+	},
+
+	journals: function (oParam, oResponse)
+	{
+		var iReconciliation = ns1blankspace.util.getParam(oParam, 'reconciliation').value;
+
+		ns1blankspace.status.message('Health check, journals...');
+
+		if (oResponse == undefined)
+		{
+			var oSearch = new AdvancedSearch();
+			oSearch.method = 'FINANCIAL_GENERAL_JOURNAL_ITEM_SEARCH';
+			oSearch.addField('generaljournalitem.generaljournal.journaldate,generaljournalitem.generaljournal.id,creditamount,debitamount');
+			oSearch.addFilter('reconciliation', 'EQUAL_TO', iReconciliation);
+			oSearch.rows = 1000;
+			oSearch.sort('generaljournalitem.generaljournal.journaldate', 'asc');
+			oSearch.getResults(function(data) {ns1blankspace.financial.bankAccount.healthCheck.journals(oParam, data)});
+		}
+		else
+		{
+			ns1blankspace.financial.bankAccount.healthCheck.data.journals = oResponse.data.rows;
+			if (ns1blankspace.financial.bankAccount.healthCheck.data.journals.length != 0)
+			{
+				ns1blankspace.financial.bankAccount.healthCheck.data.startDate = ns1blankspace.financial.bankAccount.healthCheck.data.journals[0]['generaljournalitem.generaljournal.journaldate'];
+				ns1blankspace.financial.bankAccount.healthCheck.data._startDate = moment(ns1blankspace.financial.bankAccount.healthCheck.data.startDate, ns1blankspace.option.dateFormats);
+				
+				if (moment(ns1blankspace.financial.bankAccount.healthCheck.data.journals[0].paiddate, ns1blankspace.option.dateFormats)
+				  .isBefore(ns1blankspace.financial.bankAccount.healthCheck.data._startDate))
+				{
+					ns1blankspace.financial.bankAccount.healthCheck.data.startDate = ns1blankspace.financial.bankAccount.healthCheck.data.journals[0]['generaljournalitem.generaljournal.journaldate'];
+					ns1blankspace.financial.bankAccount.healthCheck.data._startDate = moment(ns1blankspace.financial.bankAccount.healthCheck.data.startDate, ns1blankspace.option.dateFormats);
+				}
+			}
+
+			ns1blankspace.financial.bankAccount.healthCheck.financialTransactions(oParam);
+		}
+	},
+
+	financialTransactions: function (oParam, oResponse)
+	{
+		ns1blankspace.status.message('Health check, GL...');
+
+		if (oResponse == undefined)
+		{
+			var oSearch = new AdvancedSearch();
+			oSearch.method = 'FINANCIAL_TRANSACTION_SEARCH';
+			oSearch.addField('amount,area,areatext,date,description,financialaccount,financialaccounttext,id,lineitem,lineitemtext,object,objectcontext,objecttext,project,projecttext,reference');
+			//oSearch.addSummaryField('sum(amount) sumamount, count(id) count');
+			oSearch.sort('date', 'asc');
+			oSearch.addFilter('financialaccount', 'EQUAL_TO', ns1blankspace.objectContextData.financialaccount);
+			oSearch.addFilter('date', 'GREATER_THAN_OR_EQUAL_TO', ns1blankspace.financial.bankAccount.healthCheck.data.startDate);
+			oSearch.addFilter('date', 'LESS_THAN_OR_EQUAL_TO', ns1blankspace.financial.bankAccount.healthCheck.data.endDate);
+			oSearch.rows = 1000;
+			oSearch.getResults(function(data) {ns1blankspace.financial.bankAccount.healthCheck.financialTransactions(oParam, data)});	
+		}
+		else
+		{
+			ns1blankspace.financial.bankAccount.healthCheck.data.financialTransactions = oResponse.data.rows;
+			ns1blankspace.financial.bankAccount.healthCheck.financialTransactionsBalance(oParam);
+		}				
+	},
+
+	financialTransactionsBalance: function (oParam, oResponse)
+	{
+		ns1blankspace.status.message('Health check, GL Balance...');
+
+		if (oResponse == undefined)
+		{
+			var oSearch = new AdvancedSearch();
+			oSearch.method = 'FINANCIAL_TRANSACTION_SEARCH';
+			oSearch.addField('sum(amount) sumamount, count(id) count');
+				oSearch.addFilter('financialaccount', 'EQUAL_TO', ns1blankspace.objectContextData.financialaccount);
+			oSearch.addFilter('date', 'LESS_THAN_OR_EQUAL_TO', ns1blankspace.financial.bankAccount.healthCheck.data.endDate);
+			oSearch.getResults(function(data) {ns1blankspace.financial.bankAccount.healthCheck.financialTransactionsBalance(oParam, data)});	
+		}
+		else
+		{
+			ns1blankspace.financial.bankAccount.healthCheck.data.financialTransactionsBalance = oResponse.data.rows[0];
+			ns1blankspace.financial.bankAccount.healthCheck.finalise(oParam);
+		}				
+	},
+
+	finalise: function (oParam, oResponse)
+	{
+		ns1blankspace.status.message('Health check, finalise...');
+
+		$.each(ns1blankspace.financial.bankAccount.healthCheck.data.financialTransactions, function (ft, financialTransaction)
+		{
+			if (financialTransaction.object == 6)
+			{
+				financialTransaction.items = $.grep(ns1blankspace.financial.bankAccount.healthCheck.data.receipts, function (receipt) {return financialTransaction.objectcontext == receipt.id});
+			}
+
+			if (financialTransaction.object == 3)
+			{
+				financialTransaction.items = $.grep(ns1blankspace.financial.bankAccount.healthCheck.data.payments, function (payment) {return financialTransaction.objectcontext == payment.id});
+			}
+
+			if (financialTransaction.object == 122)
+			{
+				financialTransaction.items = $.grep(ns1blankspace.financial.bankAccount.healthCheck.data.journals, function (journal) {return financialTransaction.objectcontext == journal['generaljournalitem.generaljournal.id']});
+			}
+		});
+
+		console.log(ns1blankspace.financial.bankAccount.healthCheck.data);
+		ns1blankspace.financial.bankAccount.healthCheck.data.unhealthy = $.grep(ns1blankspace.financial.bankAccount.healthCheck.data.financialTransactions,
+								function (financialTransaction) {return financialTransaction.items.length == 0});
+		console.log(ns1blankspace.financial.bankAccount.healthCheck.data.unhealthy)
+
+		ns1blankspace.status.message('Health check complete');
+		ns1blankspace.financial.bankAccount.healthCheck.show(oParam);
+	},
+
+	show: function (oParam)
+	{
+		var sXHTMLElementID = ns1blankspace.util.getParam(oParam, 'xhtmlElementID').value;
+
+		if (sXHTMLElementID != undefined)
+		{
+			var aHTML = [];
+
+			aHTML.push('<div style="font-weight:600; padding-top:6px; padding-bottom:6px;">GL balance is ' + ns1blankspace.financial.bankAccount.healthCheck.data.financialTransactionsBalance.sumamount + '.</div>');
+
+			if (numeral(ns1blankspace.financial.bankAccount.healthCheck.data.financialTransactionsBalance.sumamount).value()
+						!= numeral(ns1blankspace.financial.bankAccount.healthCheck.data.reconciliation.statementbalance).value())
+			{
+				aHTML.push('<div style="padding-top:6px; padding-bottom:2px;">The GL balance doesn\'t match the reconciliation balance of ' + ns1blankspace.financial.bankAccount.healthCheck.data.reconciliation.statementbalance +
+						'.</div><div style="padding-top:2px; padding-bottom:6px;">It is out by ' + numeral(numeral(ns1blankspace.financial.bankAccount.healthCheck.data.financialTransactionsBalance.sumamount).value()
+								- numeral(ns1blankspace.financial.bankAccount.healthCheck.data.reconciliation.statementbalance).value()).format('0,0.00') + '.</div>');
+			}
+			else
+			{
+				aHTML.push('<div style="padding-top:6px; padding-bottom:2px;">The GL balance matches the reconciliation balance.</div>');
+			}
+
+			if (ns1blankspace.financial.bankAccount.healthCheck.data.unhealthy.length == 0)
+			{
+				aHTML.push('No unrelated transactions in the GL.');
+			}
+			else
+			{
+				aHTML.push('<div>' + ns1blankspace.util.toWords({upper: true, number: ns1blankspace.financial.bankAccount.healthCheck.data.unhealthy.length}) +
+									' GL transaction(s) found, with no related items in this reconciliation.</div>');
+
+				$.each(ns1blankspace.financial.bankAccount.healthCheck.data.unhealthy, function (ft, financialTransaction)
+				{
+					var sObjectLink = 'financial.payment';
+					if (financialTransaction.object == 6) {sObjectLink = 'financial.receipt'}
+					if (financialTransaction.object == 122) {sObjectLink = 'financial.journal'}
+
+					aHTML.push('<div style="padding-top:4px;">' +
+						'<a target="_blank" href="/#/' + sObjectLink + '/' + financialTransaction.objectcontext + '">' + financialTransaction.reference + '</a></div>');
+				});
+			}
+
+			$('#' + sXHTMLElementID).html(aHTML.join(''))	
+		}
+	}											
+}
+
+
+
+
+
