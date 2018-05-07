@@ -196,7 +196,7 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.financial.bankAccount',
-		source: '/site/312/1blankspace.financial.bankaccount-2.3.3.js'
+		source: '/site/312/1blankspace.financial.bankaccount-2.3.4.js'
 	},
 	{
 		nameSpace: '1blankspace.financial.invoice',
@@ -220,7 +220,7 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.financial.journal',
-		source: '/site/312/1blankspace.financial.journal-2.0.5.js'
+		source: '/site/312/1blankspace.financial.journal-2.0.6.js'
 	},
 	{
 		nameSpace: '1blankspace.financial.tax',
@@ -284,7 +284,7 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.setup.user',
-		source: '/jscripts/1blankspace.setup.user-2.0.6.js'
+		source: '/site/312/1blankspace.setup.user-2.0.7.js'
 	},
 	{
 		nameSpace: '1blankspace.setup.userRole',

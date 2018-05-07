@@ -7951,6 +7951,8 @@ ns1blankspace.financial.bankAccount.healthCheck =
 
 	init: function (oParam, oResponse)
 	{
+		ns1blankspace.financial.bankAccount.healthCheck.data = {};
+
 		var iReconciliation = ns1blankspace.util.getParam(oParam, 'reconciliation').value;
 
 		ns1blankspace.status.message('Health check starting...');
@@ -7966,15 +7968,25 @@ ns1blankspace.financial.bankAccount.healthCheck =
 			var oSearch = new AdvancedSearch();
 			oSearch.method = 'FINANCIAL_RECONCILIATION_SEARCH';
 			oSearch.addField('statementbalance,statementdate,statustext,status,previousbalance,notes,reference');
-			oSearch.addFilter('id', 'EQUAL_TO', iReconciliation);
+			oSearch.addFilter('id', 'LESS_THAN_OR_EQUAL_TO', iReconciliation);
+			oSearch.sort('statementdate', 'desc');
+			oSearch.rows = 2;
 			oSearch.getResults(function(data) {ns1blankspace.financial.bankAccount.healthCheck.init(oParam, data)});
 		}
 		else
 		{
 			ns1blankspace.financial.bankAccount.healthCheck.data.reconciliation = oResponse.data.rows[0];
+			ns1blankspace.financial.bankAccount.healthCheck.data.previousReconciliation = oResponse.data.rows[1];
 
 			ns1blankspace.financial.bankAccount.healthCheck.data.endDate = ns1blankspace.financial.bankAccount.healthCheck.data.reconciliation.statementdate;
 			ns1blankspace.financial.bankAccount.healthCheck.data._endDate = moment(ns1blankspace.financial.bankAccount.healthCheck.data.endDate, ns1blankspace.option.dateFormats);
+
+			if (ns1blankspace.financial.bankAccount.healthCheck.data.previousReconciliation != undefined)
+			{
+				ns1blankspace.financial.bankAccount.healthCheck.data._startDate =
+					moment(ns1blankspace.financial.bankAccount.healthCheck.data.previousReconciliation.statementdate, ns1blankspace.option.dateFormats).add(1, 'days');
+				ns1blankspace.financial.bankAccount.healthCheck.data.startDate = ns1blankspace.financial.bankAccount.healthCheck.data._startDate.format('DD MMM YYYY');
+			}	
 
 			ns1blankspace.financial.bankAccount.healthCheck.receipts(oParam);
 		}
@@ -7992,7 +8004,7 @@ ns1blankspace.financial.bankAccount.healthCheck =
 			oSearch.method = 'FINANCIAL_RECEIPT_SEARCH';
 			oSearch.addField('receiveddate,amount');
 			oSearch.addFilter('reconciliation', 'EQUAL_TO', iReconciliation);
-			oSearch.rows = 1000;
+			oSearch.rows = 10000;
 			oSearch.sort('receiveddate', 'asc');
 			oSearch.getResults(function(data) {ns1blankspace.financial.bankAccount.healthCheck.receipts(oParam, data)});
 		}
@@ -8001,8 +8013,11 @@ ns1blankspace.financial.bankAccount.healthCheck =
 			ns1blankspace.financial.bankAccount.healthCheck.data.receipts = oResponse.data.rows;
 			if (ns1blankspace.financial.bankAccount.healthCheck.data.receipts.length != 0)
 			{
-				ns1blankspace.financial.bankAccount.healthCheck.data.startDate = ns1blankspace.financial.bankAccount.healthCheck.data.receipts[0].receiveddate;
-				ns1blankspace.financial.bankAccount.healthCheck.data._startDate = moment(ns1blankspace.financial.bankAccount.healthCheck.data.startDate, ns1blankspace.option.dateFormats);
+				if (ns1blankspace.financial.bankAccount.healthCheck.data.previousReconciliation == undefined)
+				{
+					ns1blankspace.financial.bankAccount.healthCheck.data.startDate = ns1blankspace.financial.bankAccount.healthCheck.data.receipts[0].receiveddate;
+					ns1blankspace.financial.bankAccount.healthCheck.data._startDate = moment(ns1blankspace.financial.bankAccount.healthCheck.data.startDate, ns1blankspace.option.dateFormats);
+				}	
 			}
 
 			ns1blankspace.financial.bankAccount.healthCheck.payments(oParam);
@@ -8021,7 +8036,7 @@ ns1blankspace.financial.bankAccount.healthCheck =
 			oSearch.method = 'FINANCIAL_PAYMENT_SEARCH';
 			oSearch.addField('paiddate,amount');
 			oSearch.addFilter('reconciliation', 'EQUAL_TO', iReconciliation);
-			oSearch.rows = 1000;
+			oSearch.rows = 10000;
 			oSearch.sort('paiddate', 'asc');
 			oSearch.getResults(function(data) {ns1blankspace.financial.bankAccount.healthCheck.payments(oParam, data)});
 		}
@@ -8029,15 +8044,17 @@ ns1blankspace.financial.bankAccount.healthCheck =
 		{
 			ns1blankspace.financial.bankAccount.healthCheck.data.payments = oResponse.data.rows;
 			if (ns1blankspace.financial.bankAccount.healthCheck.data.payments.length != 0)
-			{
-				ns1blankspace.financial.bankAccount.healthCheck.data.startDate = ns1blankspace.financial.bankAccount.healthCheck.data.receipts[0].receiveddate;
-				ns1blankspace.financial.bankAccount.healthCheck.data._startDate = moment(ns1blankspace.financial.bankAccount.healthCheck.data.startDate, ns1blankspace.option.dateFormats);
-				
-				if (moment(ns1blankspace.financial.bankAccount.healthCheck.data.payments[0].paiddate, ns1blankspace.option.dateFormats)
-				  .isBefore(ns1blankspace.financial.bankAccount.healthCheck.data._startDate))
+			{				
+				if (ns1blankspace.financial.bankAccount.healthCheck.data.previousReconciliation == undefined)
 				{
-					ns1blankspace.financial.bankAccount.healthCheck.data.startDate = ns1blankspace.financial.bankAccount.healthCheck.data.payments[0].paiddate;
-					ns1blankspace.financial.bankAccount.healthCheck.data._startDate = moment(ns1blankspace.financial.bankAccount.healthCheck.data.startDate, ns1blankspace.option.dateFormats);
+					if (moment(ns1blankspace.financial.bankAccount.healthCheck.data.payments[0].paiddate, ns1blankspace.option.dateFormats)
+					  .isBefore(ns1blankspace.financial.bankAccount.healthCheck.data._startDate))
+					{
+						ns1blankspace.financial.bankAccount.healthCheck.data.startDate = ns1blankspace.financial.bankAccount.healthCheck.data.payments[0].paiddate;
+						ns1blankspace.financial.bankAccount.healthCheck.data._startDate =
+								moment(ns1blankspace.financial.bankAccount.healthCheck.data.startDate, ns1blankspace.option.dateFormats);
+						
+					}
 				}
 			}
 
@@ -8057,7 +8074,7 @@ ns1blankspace.financial.bankAccount.healthCheck =
 			oSearch.method = 'FINANCIAL_GENERAL_JOURNAL_ITEM_SEARCH';
 			oSearch.addField('generaljournalitem.generaljournal.journaldate,generaljournalitem.generaljournal.id,creditamount,debitamount');
 			oSearch.addFilter('reconciliation', 'EQUAL_TO', iReconciliation);
-			oSearch.rows = 1000;
+			oSearch.rows = 10000;
 			oSearch.sort('generaljournalitem.generaljournal.journaldate', 'asc');
 			oSearch.getResults(function(data) {ns1blankspace.financial.bankAccount.healthCheck.journals(oParam, data)});
 		}
@@ -8065,16 +8082,16 @@ ns1blankspace.financial.bankAccount.healthCheck =
 		{
 			ns1blankspace.financial.bankAccount.healthCheck.data.journals = oResponse.data.rows;
 			if (ns1blankspace.financial.bankAccount.healthCheck.data.journals.length != 0)
-			{
-				ns1blankspace.financial.bankAccount.healthCheck.data.startDate = ns1blankspace.financial.bankAccount.healthCheck.data.journals[0]['generaljournalitem.generaljournal.journaldate'];
-				ns1blankspace.financial.bankAccount.healthCheck.data._startDate = moment(ns1blankspace.financial.bankAccount.healthCheck.data.startDate, ns1blankspace.option.dateFormats);
-				
-				if (moment(ns1blankspace.financial.bankAccount.healthCheck.data.journals[0].paiddate, ns1blankspace.option.dateFormats)
-				  .isBefore(ns1blankspace.financial.bankAccount.healthCheck.data._startDate))
-				{
-					ns1blankspace.financial.bankAccount.healthCheck.data.startDate = ns1blankspace.financial.bankAccount.healthCheck.data.journals[0]['generaljournalitem.generaljournal.journaldate'];
-					ns1blankspace.financial.bankAccount.healthCheck.data._startDate = moment(ns1blankspace.financial.bankAccount.healthCheck.data.startDate, ns1blankspace.option.dateFormats);
-				}
+			{	
+				if (ns1blankspace.financial.bankAccount.healthCheck.data.previousReconciliation == undefined)
+				{		
+					if (moment(ns1blankspace.financial.bankAccount.healthCheck.data.journals[0]['generaljournalitem.generaljournal.journaldate'], ns1blankspace.option.dateFormats)
+					  .isBefore(ns1blankspace.financial.bankAccount.healthCheck.data._startDate))
+					{
+						ns1blankspace.financial.bankAccount.healthCheck.data.startDate = ns1blankspace.financial.bankAccount.healthCheck.data.journals[0]['generaljournalitem.generaljournal.journaldate'];
+						ns1blankspace.financial.bankAccount.healthCheck.data._startDate = moment(ns1blankspace.financial.bankAccount.healthCheck.data.startDate, ns1blankspace.option.dateFormats);
+					}
+				}	
 			}
 
 			ns1blankspace.financial.bankAccount.healthCheck.financialTransactions(oParam);
@@ -8095,7 +8112,7 @@ ns1blankspace.financial.bankAccount.healthCheck =
 			oSearch.addFilter('financialaccount', 'EQUAL_TO', ns1blankspace.objectContextData.financialaccount);
 			oSearch.addFilter('date', 'GREATER_THAN_OR_EQUAL_TO', ns1blankspace.financial.bankAccount.healthCheck.data.startDate);
 			oSearch.addFilter('date', 'LESS_THAN_OR_EQUAL_TO', ns1blankspace.financial.bankAccount.healthCheck.data.endDate);
-			oSearch.rows = 1000;
+			oSearch.rows = 10000;
 			oSearch.getResults(function(data) {ns1blankspace.financial.bankAccount.healthCheck.financialTransactions(oParam, data)});	
 		}
 		else
@@ -8130,13 +8147,44 @@ ns1blankspace.financial.bankAccount.healthCheck =
 		init: function (oParam, oResponse)
 		{
 			ns1blankspace.status.message('Health check, line items...');
-			ns1blankspace.financial.bankAccount.healthCheck.data.lineitems = [];
+			ns1blankspace.financial.bankAccount.healthCheck.data.lineitems =
+					_.clone(ns1blankspace.financial.bankAccount.healthCheck.data.journals);
 			ns1blankspace.financial.bankAccount.healthCheck.lineitems.receipts(oParam);
 		},
 
 		receipts: function (oParam, oResponse)
 		{
 			var aIDs = $.map(ns1blankspace.financial.bankAccount.healthCheck.data.receipts, function (receipt) {return receipt.id});
+
+			if (aIDs.length == 0)
+			{
+				ns1blankspace.financial.bankAccount.healthCheck.lineitems.payments(oParam);
+			}
+			else
+			{
+				if (oResponse == undefined)
+				{
+					var oSearch = new AdvancedSearch();
+					oSearch.method = 'FINANCIAL_ITEM_SEARCH';
+					oSearch.addField('amount,object,objectcontext');
+					oSearch.addFilter('object', 'EQUAL_TO', 6);
+					oSearch.addFilter('objectcontext', 'IN_LIST', aIDs.join(','));
+					oSearch.rows = 10000;
+					oSearch.getResults(function(data) {ns1blankspace.financial.bankAccount.healthCheck.lineitems.receipts(oParam, data)});
+				}
+				else
+				{
+					ns1blankspace.financial.bankAccount.healthCheck.data.lineitems = 
+						ns1blankspace.financial.bankAccount.healthCheck.data.lineitems.concat(oResponse.data.rows);
+						
+					ns1blankspace.financial.bankAccount.healthCheck.lineitems.payments(oParam);
+				}
+			}	
+		},
+
+		payments: function (oParam, oResponse)
+		{
+			var aIDs = $.map(ns1blankspace.financial.bankAccount.healthCheck.data.payments, function (payment) {return payment.id});
 
 			if (aIDs.length == 0)
 			{
@@ -8149,10 +8197,10 @@ ns1blankspace.financial.bankAccount.healthCheck =
 					var oSearch = new AdvancedSearch();
 					oSearch.method = 'FINANCIAL_ITEM_SEARCH';
 					oSearch.addField('amount,object,objectcontext');
-					oSearch.addFilter('object', 'EQUAL_TO', 6);
+					oSearch.addFilter('object', 'EQUAL_TO', 3);
 					oSearch.addFilter('objectcontext', 'IN_LIST', aIDs.join(','));
-					oSearch.getResults(function(data) {ns1blankspace.financial.bankAccount.healthCheck.lineitems.receipts(oParam, data)});
 					oSearch.rows = 10000;
+					oSearch.getResults(function(data) {ns1blankspace.financial.bankAccount.healthCheck.lineitems.payments(oParam, data)});	
 				}
 				else
 				{
@@ -8162,7 +8210,7 @@ ns1blankspace.financial.bankAccount.healthCheck =
 					ns1blankspace.financial.bankAccount.healthCheck.finalise(oParam);
 				}
 			}	
-		}	
+		}
 	},
 
 	finalise: function (oParam, oResponse)
@@ -8185,11 +8233,35 @@ ns1blankspace.financial.bankAccount.healthCheck =
 			{
 				financialTransaction.items = $.grep(ns1blankspace.financial.bankAccount.healthCheck.data.journals, function (journal) {return financialTransaction.objectcontext == journal['generaljournalitem.generaljournal.id']});
 			}
+
+			financialTransaction.lineitems = $.grep(ns1blankspace.financial.bankAccount.healthCheck.data.lineitems, function (lineitem) {return financialTransaction.lineitem == lineitem.id});
 		});
 
 		console.log(ns1blankspace.financial.bankAccount.healthCheck.data);
-		ns1blankspace.financial.bankAccount.healthCheck.data.unhealthy = $.grep(ns1blankspace.financial.bankAccount.healthCheck.data.financialTransactions,
-								function (financialTransaction) {return financialTransaction.items.length == 0});
+		ns1blankspace.financial.bankAccount.healthCheck.data.unhealthy = 
+		{
+			items: $.grep(ns1blankspace.financial.bankAccount.healthCheck.data.financialTransactions,
+								function (financialTransaction) {return financialTransaction.items.length == 0}),
+
+			lineitems: $.grep(ns1blankspace.financial.bankAccount.healthCheck.data.financialTransactions,
+								function (financialTransaction) {return financialTransaction.lineitems.length == 0})
+		}	
+
+		ns1blankspace.financial.bankAccount.healthCheck.data.unhealthy.summary =
+				_.toArray(_.groupBy(ns1blankspace.financial.bankAccount.healthCheck.data.unhealthy.lineitems, 'reference'));
+
+		ns1blankspace.financial.bankAccount.healthCheck.data.summary =
+		{		
+			financialTransactions: _.groupBy(ns1blankspace.financial.bankAccount.healthCheck.data.financialTransactions, 'reference')
+		}
+
+		$.each(ns1blankspace.financial.bankAccount.healthCheck.data.summary, function (ft, key)
+		{	
+			console.log(ft);
+			console.log(key);	
+			// ft.totalamount =  _.groupBy(ns1blankspace.financial.bankAccount.healthCheck.data.financialTransactions, 'reference')
+		});
+
 		console.log(ns1blankspace.financial.bankAccount.healthCheck.data.unhealthy)
 
 		ns1blankspace.status.message('Health check complete');
@@ -8218,17 +8290,19 @@ ns1blankspace.financial.bankAccount.healthCheck =
 				aHTML.push('<div style="padding-top:6px; padding-bottom:2px;">The GL balance matches the reconciliation balance.</div>');
 			}
 
-			if (ns1blankspace.financial.bankAccount.healthCheck.data.unhealthy.length == 0)
+			if (ns1blankspace.financial.bankAccount.healthCheck.data.unhealthy.summary.length == 0)
 			{
 				aHTML.push('No unrelated transactions in the GL.');
 			}
 			else
 			{
-				aHTML.push('<div>' + ns1blankspace.util.toWords({upper: true, number: ns1blankspace.financial.bankAccount.healthCheck.data.unhealthy.length}) +
-									' GL transaction(s) found, with no related items in this reconciliation.</div>');
+				aHTML.push('<div><strong>' + ns1blankspace.util.toWords({upper: true, number: ns1blankspace.financial.bankAccount.healthCheck.data.unhealthy.summary.length}) +
+									'</strong> GL transaction(s) found, with no related items in this reconciliation.</div>');
 
-				$.each(ns1blankspace.financial.bankAccount.healthCheck.data.unhealthy, function (ft, financialTransaction)
+				$.each(ns1blankspace.financial.bankAccount.healthCheck.data.unhealthy.summary, function (ft, financialTransactionSummary)
 				{
+					var financialTransaction = _.first(financialTransactionSummary);
+
 					var sObjectLink = 'financial.payment';
 					if (financialTransaction.object == 6) {sObjectLink = 'financial.receipt'}
 					if (financialTransaction.object == 122) {sObjectLink = 'financial.journal'}

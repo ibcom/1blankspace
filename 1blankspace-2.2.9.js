@@ -33,18 +33,18 @@ String.prototype.formatXHTML = function(bDirection)
 	var sValue = this;
 	
 	var aFind = [
-		String.fromCharCode(8220), //“
-		String.fromCharCode(8221), //”
-		String.fromCharCode(8216), //‘
-		String.fromCharCode(8217), //‘
-		String.fromCharCode(8211), //–
-		String.fromCharCode(8212), //—
-		String.fromCharCode(189), //½
-		String.fromCharCode(188), //¼
-		String.fromCharCode(190), //¾
-		String.fromCharCode(169), //©
-		String.fromCharCode(174), //®
-		String.fromCharCode(8230) //…
+		String.fromCharCode(8220), //â€œ
+		String.fromCharCode(8221), //â€
+		String.fromCharCode(8216), //â€˜
+		String.fromCharCode(8217), //â€˜
+		String.fromCharCode(8211), //â€“
+		String.fromCharCode(8212), //â€”
+		String.fromCharCode(189), //Â½
+		String.fromCharCode(188), //Â¼
+		String.fromCharCode(190), //Â¾
+		String.fromCharCode(169), //Â©
+		String.fromCharCode(174), //Â®
+		String.fromCharCode(8230) //â€¦
 	];	
 
 	var aReplace = [
@@ -122,7 +122,7 @@ ns1blankspace.scripts =
 [
 	{
 		nameSpace: '1blankspace.advancedsearch',
-		source: '/site/312/1blankspace.advancedsearch-2.0.5.js'
+		source: '/jscripts/1blankspace.advancedsearch-2.0.4.js'
 	}
 ]
 
@@ -5641,16 +5641,16 @@ ns1blankspace.search.email =
 							oSearch.addBracket('(');
 							oSearch.addFilter('contactbusinesstext', 'TEXT_IS_LIKE', sSearchText);
 							oSearch.addOperator('or');
-							oSearch.addBracket('(');
 							oSearch.addFilter('firstname', 'TEXT_IS_LIKE', (sSearchText != sFirstName) ? sFirstName : sSearchText);
 							oSearch.addOperator((sFirstName != sSurname ? 'and' : 'or'));
 							oSearch.addFilter('surname', 'TEXT_IS_LIKE', (sSearchText != sSurname) ? sSurname : sSearchText);
-							oSearch.addBracket(')');
+							
 							if (bEmailOnly)
 							{
 								oSearch.addOperator('or');
 								oSearch.addFilter('email', 'TEXT_IS_LIKE', sSearchText);
 							}
+
 							oSearch.addBracket(')');
 							
 							if (sParentElementID != undefined)
@@ -6986,7 +6986,7 @@ ns1blankspace.extend =
 									}
 									else
 									{
-										$('#ns1blankspaceStructure_' + this.id).val(ns1blankspace.objectContextData[sAlias].formatXHTML());
+										$('#ns1blankspaceStructure_' + this.id).val(ns1blankspace.objectContextData[sAlias]);
 									}	
 								});	
 							}	

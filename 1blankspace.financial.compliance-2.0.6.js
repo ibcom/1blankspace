@@ -321,6 +321,7 @@ ns1blankspace.financial.compliance =
 		});
 
 		ns1blankspace.financial.compliance.initData.balanceSheet(oParam);
+		//ns1blankspace.financial.compliance.initData.bankAccounts(oParam);
 	},
 
 	initData:
@@ -445,20 +446,20 @@ ns1blankspace.financial.compliance =
 			{
 				ns1blankspace.status.working('Getting Bank Transactions');
 
-					var oSearch = new AdvancedSearch();
-					oSearch.method = 'FINANCIAL_BANK_ACCOUNT_TRANSACTION_SEARCH';
-					oSearch.addField('bankaccount,type,sum(amount) totalamount');
-					oSearch.addFilter('status', 'NOT_EQUAL_TO', 1);
-					oSearch.addFilter('bankaccount', 'IS_NOT_NULL');
-					if (sStartDate != '') {oSearch.addFilter('posteddate', 'GREATER_THAN_OR_EQUAL_TO', sStartDate)};
-					if (sEndDate != '') {oSearch.addFilter('posteddate', 'LESS_THAN_OR_EQUAL_TO', sEndDate)};
-					oSearch.rows = 100;
-					oSearch.getResults(function(oResponse)
-					{
-						ns1blankspace.financial.compliance.data.bankAccounts.summary = oResponse;
-						oParam.step = 3;
-						ns1blankspace.financial.compliance.initData.bankAccounts(oParam);
-					})
+				var oSearch = new AdvancedSearch();
+				oSearch.method = 'FINANCIAL_BANK_ACCOUNT_TRANSACTION_SEARCH';
+				oSearch.addField('bankaccount,type,sum(amount) totalamount');
+				oSearch.addFilter('status', 'EQUAL_TO', 2);
+				oSearch.addFilter('bankaccount', 'IS_NOT_NULL');
+				if (sStartDate != '') {oSearch.addFilter('posteddate', 'GREATER_THAN_OR_EQUAL_TO', sStartDate)};
+				if (sEndDate != '') {oSearch.addFilter('posteddate', 'LESS_THAN_OR_EQUAL_TO', sEndDate)};
+				oSearch.rows = 100;
+				oSearch.getResults(function(oResponse)
+				{
+					ns1blankspace.financial.compliance.data.bankAccounts.summary = oResponse;
+					oParam.step = 3;
+					ns1blankspace.financial.compliance.initData.bankAccounts(oParam);
+				});
 			}
 
 
