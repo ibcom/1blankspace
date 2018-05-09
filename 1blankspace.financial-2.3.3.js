@@ -98,6 +98,10 @@ ns1blankspace.financial.initData = function (oParam, oResponse)
 								{
 									id: 69,
 									name: 'Credit'
+								},
+								{
+									id: 122,
+									name: 'Journal'
 								}
 							]
 						}

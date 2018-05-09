@@ -16,6 +16,7 @@ ns1blankspace.financial.compliance =
 		var sStartDate = ns1blankspace.util.getParam(oParam, 'startDate').value;
 		var sEndDate = ns1blankspace.util.getParam(oParam, 'endDate').value;
 		var bNoZero = ns1blankspace.util.getParam(oParam, 'noZero', {"default": false}).value;
+		var bRefresh = ns1blankspace.util.getParam(oParam, 'refresh', {"default": false}).value;
 
 		if (oParam == undefined)
 		{
@@ -138,7 +139,8 @@ ns1blankspace.financial.compliance =
 			ns1blankspace.financial.compliance.init(
 			{
 				startDate: $('#ns1blankspaceComplianceStartDate').val(),
-				endDate: $('#ns1blankspaceComplianceEndDate').val()
+				endDate: $('#ns1blankspaceComplianceEndDate').val(),
+				refresh: true
 			});
 		});
 
@@ -146,182 +148,191 @@ ns1blankspace.financial.compliance =
 		
 		//Bank accounts
 
-		aHTML.push('<div id="ns1blankspaceFinancialCompliancePDF">');
-
-		aHTML.push('<div style="background-color:#f5f5f5; margin-bottom:16px; padding:12px;">');
-
-			aHTML.push('<div style="color:#666666; font-weight:100; margin-bottom:2px; font-size:1.5em;">BANK ACCOUNTS</div>');
-			aHTML.push('<div style="color:#666666; font-weight:100; margin-left:1px; margin-bottom:6px; font-size:0.75em;">Do the financal accounts (general ledger) totals match the totals at bank?</div>');
-	
-			aHTML.push('<div style="font-size: 0.875em;">');
-
-			aHTML.push('<table>');
-
-			aHTML.push('<tr><td class="ns1blankspaceHeaderCaption" style="vertical-align:bottom;">Name</td>' +
-							'<td class="ns1blankspaceHeaderCaption" style="width:80px; text-align:right; vertical-align:bottom;">' + sStartDate + '</td>' +
-							'<td class="ns1blankspaceHeaderCaption" style="width:80px; text-align:right; vertical-align:bottom;">' + sEndDate + '</td>' +
-							'<td class="ns1blankspaceHeaderCaption" style="width:80px; text-align:right; vertical-align:bottom;">Change</td>' +
-							'<td class="ns1blankspaceHeaderCaption" style="text-align:center; vertical-align:bottom;">Reconciled</td>' +
-							'<td class="ns1blankspaceHeaderCaption" style="text-align:right; vertical-align:bottom;">Transactions</td>')
-
-			ns1blankspace.financial.data.bankaccounts.sort(ns1blankspace.util.sortBy('title'));
-
-			$.each(ns1blankspace.financial.data.bankaccounts, function(b, bankAccount)
-			{
-				bankAccount.financialaccounttext = $.grep(ns1blankspace.financial.data.accounts, function (a) {return a.id == bankAccount.financialaccount})[0].title;
-			});
-
-			$.each($.grep(_.uniqBy(ns1blankspace.financial.data.bankaccounts, 'financialaccount'), function (b) {return b.status == 1}), function(b, bankAccount)
-			{					
-				aHTML.push('<tr><td class="ns1blankspaceRow" style="vertical-align:middle;" id="ns1blankspaceComplianceBankAccount-' +
-										bankAccount.id + '"><div>' + bankAccount.title + '</div>' +
-											'<div class="ns1blankspaceSubNote" id="ns1blankspaceComplianceBankAccount-' + bankAccount.id + '_financialaccount">' +
-											bankAccount.financialaccounttext + '</div>' +
-										'</td>' +
-										'<td class="ns1blankspaceRow" id="ns1blankspaceComplianceBankAccount-' +
-										bankAccount.id + '_start" style="width:80px; text-align:right; vertical-align:middle;">-</td>' +
-										'<td class="ns1blankspaceRow" id="ns1blankspaceComplianceBankAccount-' +
-										bankAccount.id + '_end" style="width:80px; text-align:right; vertical-align:middle;">-</td>' +
-										'<td class="ns1blankspaceRow" id="ns1blankspaceComplianceBankAccount-' +
-										bankAccount.id + '_difference" style="width:80px; text-align:right; color:#666666; vertical-align:middle;">-</td>' +
-										'<td class="ns1blankspaceRow ns1blankspaceSubNote" id="ns1blankspaceComplianceBankAccount-' +
-										bankAccount.id + '_lastreconciled" style="text-align:center;">' + (bankAccount.lastreconcileddate==''?'':bankAccount.lastreconcileddate) + '</td>' +
-										'<td class="ns1blankspaceRow ns1blankspaceSubNote" style="width:110px; text-align:right;" id="ns1blankspaceComplianceBankAccount-' + bankAccount.id + '_transactions"></td>' +
-										'</tr>');		
-			});
-		
-			aHTML.push('</table>');
-			aHTML.push('</div>');
-		aHTML.push('</div>');
-
-		//Debtors
-
-		aHTML.push('<div style="background-color:#f5f5f5; margin-bottom:16px; padding:12px;">');
-			aHTML.push('<div style="color:#666666; font-weight:100; margin-bottom:2px; font-size:1.5em;">DEBTORS</div>');
-			aHTML.push('<div style="color:#666666; font-weight:100; margin-left:1px; margin-bottom:6px; font-size:0.75em;">Who owes you?</div>');
-			aHTML.push('<div id="ns1blankspaceComplianceDebtorsShow" style="font-size: 0.875em;">' +
-								ns1blankspace.xhtml.loadingSmall +
-								'</div>');
-		aHTML.push('</div>');
-
-		//Creditors	
-
-		aHTML.push('<div style="background-color:#f5f5f5; margin-bottom:16px; padding:12px;">');
-			aHTML.push('<div style="color:#666666; font-weight:100; margin-bottom:2px; font-size:1.5em;">CREDITORS</div>');
-			aHTML.push('<div style="color:#666666; font-weight:100; margin-left:1px; margin-bottom:6px; font-size:0.75em;">Who do you owe?</div>');
-			aHTML.push('<div id="ns1blankspaceComplianceCreditorsShow" style="font-size: 0.875em;">' +
-								ns1blankspace.xhtml.loadingSmall +
-								'</div>');
-		aHTML.push('</div>');
-
-		//Profit / Loss
-
-		aHTML.push('<div style="background-color:#f5f5f5; margin-bottom:16px; padding:12px;">');
-			aHTML.push('<div style="color:#666666; font-weight:100; margin-bottom:2px; font-size:1.5em;">PROFIT & LOSS</div>');
-			aHTML.push('<div style="color:#666666; font-weight:100; margin-left:1px; margin-bottom:6px; font-size:0.75em;">What went on? (financial activity)</div>');
-			aHTML.push('<div id="ns1blankspaceComplianceProfitLossShow" style="font-size: 0.875em;">' +
-								ns1blankspace.xhtml.loadingSmall +
-								'</div>');
-		aHTML.push('</div>');
-
-		//Balance Sheet
-
-		aHTML.push('<div style="background-color:#f5f5f5; margin-bottom:16px; padding:12px;">');
-			aHTML.push('<div style="color:#666666; font-weight:100; margin-bottom:2px; font-size:1.5em;">BALANCE SHEET</div>');
-			aHTML.push('<div style="color:#666666; font-weight:100; margin-left:1px; margin-bottom:6px; font-size:0.75em;">What is the financial state?</div>');
-			aHTML.push('<div id="ns1blankspaceComplianceBalanceSheetShow" style="font-size: 0.875em;">' +
-								ns1blankspace.xhtml.loadingSmall +
-								'</div>');
-		aHTML.push('</div>');
-	
-		//Tax	
-
-		aHTML.push('<div style="background-color:#f5f5f5; margin-bottom:16px; padding:12px;">');
-			aHTML.push('<div style="color:#666666; font-weight:100; margin-bottom:2px; font-size:1.5em;">TAX</div>');
-			aHTML.push('<div style="color:#666666; font-weight:100; margin-left:1px; margin-bottom:6px; font-size:0.75em;">Has the correct amount of tax been paid as per <a href="https://www.business.gov.au/info/run/tax" target="_blank">the law</a>?</div>');
-
-			aHTML.push('<div id="ns1blankspaceComplianceTaxShow" style="font-size: 0.875em;">' +
-								ns1blankspace.xhtml.loadingSmall +
-								'</div>');
-
-		aHTML.push('</div>');	
-
-
-		//Payroll & Super
-
-		aHTML.push('<div style="background-color:#f5f5f5; margin-bottom:16px; padding:12px;">');
-			aHTML.push('<div style="color:#666666; font-weight:100; margin-bottom:2px; font-size:1.5em;">SUPERANNUATION</div>');
-			aHTML.push('<div style="color:#666666; font-weight:100; margin-left:1px; margin-bottom:6px; font-size:0.75em;">Has the correct amount of superannuation been paid as per <a href="https://www.ato.gov.au/business/super-for-employers/" target="_blank">the law</a>?</div>');
-			aHTML.push('<div id="ns1blankspaceComplianceSuperannuationShow" style="font-size: 0.875em;">' +
-								ns1blankspace.xhtml.loadingSmall +
-								'</div>');
-		aHTML.push('</div>');
-
-		aHTML.push('</div>');
-
-		//NOT PDF
-
-		//Search
-
-		aHTML.push('<div style="background-color:#f5f5f5; margin-bottom:16px; padding:12px;">');
-			aHTML.push('<div style="color:#666666; font-weight:100; margin-bottom:6px; font-size:1.5em;">SEARCH FOR</div>');
-			//aHTML.push('<div style="color:#666666; font-weight:100; margin-left:1px; margin-bottom:6px; font-size:0.75em;">Search for financial transactions and export.</div>');
-		
-			aHTML.push('<div style="margin-left:0px; margin-right:0px; margin-bottom:8px;" id="ns1blankspaceComplianceSearchObjects">' +										
-							'<input style="width: 100%;" type="radio" id="ns1blankspaceComplianceSearchObject-transactions" name="radioObject" checked="checked" />' +
-							'<label for="ns1blankspaceComplianceSearchObject-transactions" style="margin-bottom:1px;">' +
-											'GL</label>' +
-
-							'<input style="width: 100%;" type="radio" id="ns1blankspaceComplianceSearchObject-receipts" name="radioObject"/>' +
-							'<label for="ns1blankspaceComplianceSearchObject-receipts" style="margin-bottom:1px;">' +
-											'Receipts</label>' +
-
-							'<input style="width: 100%;" type="radio" id="ns1blankspaceComplianceSearchObject-payments" name="radioObject"/>' +
-							'<label for="ns1blankspaceComplianceSearchObject-payments" style="margin-bottom:1px;">' +
-											'Payments</label>' +
-
-							'<input style="width: 100%;" type="radio" id="ns1blankspaceComplianceSearchObject-invoices" name="radioObject"/>' +
-							'<label for="ns1blankspaceComplianceSearchObject-invoices" style="margin-bottom:1px;">' +
-											'Invoices</label>' +			
-
-							'<input style="width: 100%;" type="radio" id="ns1blankspaceComplianceSearchObject-expenses" name="radioObject"/>' +
-							'<label for="ns1blankspaceComplianceSearchObject-expenses" style="margin-bottom:1px;">' +
-											'Expenses</label>' +
-							
-							'<input style="width: 100%;" type="radio" id="ns1blankspaceComplianceSearchObject-credits" name="radioObject"/>' +
-							'<label for="ns1blankspaceComplianceSearchObject-credits" style="margin-bottom:1px;">' +
-											'Credits</label>' +
-
-							'<input style="width: 100%;" type="radio" id="ns1blankspaceComplianceSearchObject-journals" name="radioObject"/>' +
-							'<label for="ns1blankspaceComplianceSearchObject-journals" style="margin-bottom:1px;">' +
-											'Journals</label>' +
-
-							'<input style="width: 100%;" type="radio" id="ns1blankspaceComplianceSearchObject-bank_transactions" name="radioObject"/>' +
-							'<label for="ns1blankspaceComplianceSearchObject-bank_transactions" style="margin-bottom:1px;">' +
-											'Bank Transactions</label>' +
-
-							'</div>')
-
-			aHTML.push('<div id="ns1blankspaceComplianceSearchContainer">' + ns1blankspace.xhtml.loadingSmall + ' </div>');
-
-		aHTML.push('</div>');	
-
-		$('#ns1blankspaceComplianceColumn2').html(aHTML.join(''));
-
-		$('#ns1blankspaceComplianceSearchObjects').buttonset().css('font-size', '0.625em');
-		
-		$('#ns1blankspaceComplianceSearchObjects :radio').click(function()
+		if (!bRefresh)
 		{
-			var sObject = (this.id).split('-')[1];
+			aHTML.push('<div class="ns1blankspaceSubNote">' +
+							'Please select the dates and then click Refresh.</div>');
 
-			ns1blankspace.financial.compliance[sObject].show(
+			$('#ns1blankspaceComplianceColumn2').html(aHTML.join(''));
+		}
+		else
+		{
+			aHTML.push('<div id="ns1blankspaceFinancialCompliancePDF">');
+
+			aHTML.push('<div style="background-color:#f5f5f5; margin-bottom:16px; padding:12px;">');
+
+				aHTML.push('<div style="color:#666666; font-weight:100; margin-bottom:2px; font-size:1.5em;">BANK ACCOUNTS</div>');
+				aHTML.push('<div style="color:#666666; font-weight:100; margin-left:1px; margin-bottom:6px; font-size:0.75em;">Do the financal accounts (general ledger) totals match the totals at bank?</div>');
+		
+				aHTML.push('<div style="font-size: 0.875em;">');
+
+				aHTML.push('<table>');
+
+				aHTML.push('<tr><td class="ns1blankspaceHeaderCaption" style="vertical-align:bottom;">Name</td>' +
+								'<td class="ns1blankspaceHeaderCaption" style="width:80px; text-align:right; vertical-align:bottom;">' + sStartDate + '</td>' +
+								'<td class="ns1blankspaceHeaderCaption" style="width:80px; text-align:right; vertical-align:bottom;">' + sEndDate + '</td>' +
+								'<td class="ns1blankspaceHeaderCaption" style="width:80px; text-align:right; vertical-align:bottom;">Change</td>' +
+								'<td class="ns1blankspaceHeaderCaption" style="text-align:center; vertical-align:bottom;">Reconciled</td>' +
+								'<td class="ns1blankspaceHeaderCaption" style="text-align:right; vertical-align:bottom;">Transactions</td>')
+
+				ns1blankspace.financial.data.bankaccounts.sort(ns1blankspace.util.sortBy('title'));
+
+				$.each(ns1blankspace.financial.data.bankaccounts, function(b, bankAccount)
+				{
+					bankAccount.financialaccounttext = $.grep(ns1blankspace.financial.data.accounts, function (a) {return a.id == bankAccount.financialaccount})[0].title;
+				});
+
+				$.each($.grep(_.uniqBy(ns1blankspace.financial.data.bankaccounts, 'financialaccount'), function (b) {return b.status == 1}), function(b, bankAccount)
+				{					
+					aHTML.push('<tr><td class="ns1blankspaceRow" style="vertical-align:middle;" id="ns1blankspaceComplianceBankAccount-' +
+											bankAccount.id + '"><div>' + bankAccount.title + '</div>' +
+												'<div class="ns1blankspaceSubNote" id="ns1blankspaceComplianceBankAccount-' + bankAccount.id + '_financialaccount">' +
+												bankAccount.financialaccounttext + '</div>' +
+											'</td>' +
+											'<td class="ns1blankspaceRow" id="ns1blankspaceComplianceBankAccount-' +
+											bankAccount.id + '_start" style="width:80px; text-align:right; vertical-align:middle;">-</td>' +
+											'<td class="ns1blankspaceRow" id="ns1blankspaceComplianceBankAccount-' +
+											bankAccount.id + '_end" style="width:80px; text-align:right; vertical-align:middle;">-</td>' +
+											'<td class="ns1blankspaceRow" id="ns1blankspaceComplianceBankAccount-' +
+											bankAccount.id + '_difference" style="width:80px; text-align:right; color:#666666; vertical-align:middle;">-</td>' +
+											'<td class="ns1blankspaceRow ns1blankspaceSubNote" id="ns1blankspaceComplianceBankAccount-' +
+											bankAccount.id + '_lastreconciled" style="text-align:center;">' + (bankAccount.lastreconcileddate==''?'':bankAccount.lastreconcileddate) + '</td>' +
+											'<td class="ns1blankspaceRow ns1blankspaceSubNote" style="width:110px; text-align:right;" id="ns1blankspaceComplianceBankAccount-' + bankAccount.id + '_transactions"></td>' +
+											'</tr>');		
+				});
+			
+				aHTML.push('</table>');
+				aHTML.push('</div>');
+			aHTML.push('</div>');
+
+			//Debtors
+
+			aHTML.push('<div style="background-color:#f5f5f5; margin-bottom:16px; padding:12px;">');
+				aHTML.push('<div style="color:#666666; font-weight:100; margin-bottom:2px; font-size:1.5em;">DEBTORS</div>');
+				aHTML.push('<div style="color:#666666; font-weight:100; margin-left:1px; margin-bottom:6px; font-size:0.75em;">Who owes you?</div>');
+				aHTML.push('<div id="ns1blankspaceComplianceDebtorsShow" style="font-size: 0.875em;">' +
+									ns1blankspace.xhtml.loadingSmall +
+									'</div>');
+			aHTML.push('</div>');
+
+			//Creditors	
+
+			aHTML.push('<div style="background-color:#f5f5f5; margin-bottom:16px; padding:12px;">');
+				aHTML.push('<div style="color:#666666; font-weight:100; margin-bottom:2px; font-size:1.5em;">CREDITORS</div>');
+				aHTML.push('<div style="color:#666666; font-weight:100; margin-left:1px; margin-bottom:6px; font-size:0.75em;">Who do you owe?</div>');
+				aHTML.push('<div id="ns1blankspaceComplianceCreditorsShow" style="font-size: 0.875em;">' +
+									ns1blankspace.xhtml.loadingSmall +
+									'</div>');
+			aHTML.push('</div>');
+
+			//Profit / Loss
+
+			aHTML.push('<div style="background-color:#f5f5f5; margin-bottom:16px; padding:12px;">');
+				aHTML.push('<div style="color:#666666; font-weight:100; margin-bottom:2px; font-size:1.5em;">PROFIT & LOSS</div>');
+				aHTML.push('<div style="color:#666666; font-weight:100; margin-left:1px; margin-bottom:6px; font-size:0.75em;">What went on? (financial activity)</div>');
+				aHTML.push('<div id="ns1blankspaceComplianceProfitLossShow" style="font-size: 0.875em;">' +
+									ns1blankspace.xhtml.loadingSmall +
+									'</div>');
+			aHTML.push('</div>');
+
+			//Balance Sheet
+
+			aHTML.push('<div style="background-color:#f5f5f5; margin-bottom:16px; padding:12px;">');
+				aHTML.push('<div style="color:#666666; font-weight:100; margin-bottom:2px; font-size:1.5em;">BALANCE SHEET</div>');
+				aHTML.push('<div style="color:#666666; font-weight:100; margin-left:1px; margin-bottom:6px; font-size:0.75em;">What is the financial state?</div>');
+				aHTML.push('<div id="ns1blankspaceComplianceBalanceSheetShow" style="font-size: 0.875em;">' +
+									ns1blankspace.xhtml.loadingSmall +
+									'</div>');
+			aHTML.push('</div>');
+		
+			//Tax	
+
+			aHTML.push('<div style="background-color:#f5f5f5; margin-bottom:16px; padding:12px;">');
+				aHTML.push('<div style="color:#666666; font-weight:100; margin-bottom:2px; font-size:1.5em;">TAX</div>');
+				aHTML.push('<div style="color:#666666; font-weight:100; margin-left:1px; margin-bottom:6px; font-size:0.75em;">Has the correct amount of tax been paid as per <a href="https://www.business.gov.au/info/run/tax" target="_blank">the law</a>?</div>');
+
+				aHTML.push('<div id="ns1blankspaceComplianceTaxShow" style="font-size: 0.875em;">' +
+									ns1blankspace.xhtml.loadingSmall +
+									'</div>');
+
+			aHTML.push('</div>');	
+
+
+			//Payroll & Super
+
+			aHTML.push('<div style="background-color:#f5f5f5; margin-bottom:16px; padding:12px;">');
+				aHTML.push('<div style="color:#666666; font-weight:100; margin-bottom:2px; font-size:1.5em;">SUPERANNUATION</div>');
+				aHTML.push('<div style="color:#666666; font-weight:100; margin-left:1px; margin-bottom:6px; font-size:0.75em;">Has the correct amount of superannuation been paid as per <a href="https://www.ato.gov.au/business/super-for-employers/" target="_blank">the law</a>?</div>');
+				aHTML.push('<div id="ns1blankspaceComplianceSuperannuationShow" style="font-size: 0.875em;">' +
+									ns1blankspace.xhtml.loadingSmall +
+									'</div>');
+			aHTML.push('</div>');
+
+			aHTML.push('</div>');
+
+			//NOT PDF
+
+			//Search
+
+			aHTML.push('<div style="background-color:#f5f5f5; margin-bottom:16px; padding:12px;">');
+				aHTML.push('<div style="color:#666666; font-weight:100; margin-bottom:6px; font-size:1.5em;">SEARCH FOR</div>');
+				//aHTML.push('<div style="color:#666666; font-weight:100; margin-left:1px; margin-bottom:6px; font-size:0.75em;">Search for financial transactions and export.</div>');
+			
+				aHTML.push('<div style="margin-left:0px; margin-right:0px; margin-bottom:8px;" id="ns1blankspaceComplianceSearchObjects">' +										
+								'<input style="width: 100%;" type="radio" id="ns1blankspaceComplianceSearchObject-transactions" name="radioObject" checked="checked" />' +
+								'<label for="ns1blankspaceComplianceSearchObject-transactions" style="margin-bottom:1px;">' +
+												'GL</label>' +
+
+								'<input style="width: 100%;" type="radio" id="ns1blankspaceComplianceSearchObject-receipts" name="radioObject"/>' +
+								'<label for="ns1blankspaceComplianceSearchObject-receipts" style="margin-bottom:1px;">' +
+												'Receipts</label>' +
+
+								'<input style="width: 100%;" type="radio" id="ns1blankspaceComplianceSearchObject-payments" name="radioObject"/>' +
+								'<label for="ns1blankspaceComplianceSearchObject-payments" style="margin-bottom:1px;">' +
+												'Payments</label>' +
+
+								'<input style="width: 100%;" type="radio" id="ns1blankspaceComplianceSearchObject-invoices" name="radioObject"/>' +
+								'<label for="ns1blankspaceComplianceSearchObject-invoices" style="margin-bottom:1px;">' +
+												'Invoices</label>' +			
+
+								'<input style="width: 100%;" type="radio" id="ns1blankspaceComplianceSearchObject-expenses" name="radioObject"/>' +
+								'<label for="ns1blankspaceComplianceSearchObject-expenses" style="margin-bottom:1px;">' +
+												'Expenses</label>' +
+								
+								'<input style="width: 100%;" type="radio" id="ns1blankspaceComplianceSearchObject-credits" name="radioObject"/>' +
+								'<label for="ns1blankspaceComplianceSearchObject-credits" style="margin-bottom:1px;">' +
+												'Credits</label>' +
+
+								'<input style="width: 100%;" type="radio" id="ns1blankspaceComplianceSearchObject-journals" name="radioObject"/>' +
+								'<label for="ns1blankspaceComplianceSearchObject-journals" style="margin-bottom:1px;">' +
+												'Journals</label>' +
+
+								'<input style="width: 100%;" type="radio" id="ns1blankspaceComplianceSearchObject-bank_transactions" name="radioObject"/>' +
+								'<label for="ns1blankspaceComplianceSearchObject-bank_transactions" style="margin-bottom:1px;">' +
+												'Bank Transactions</label>' +
+
+								'</div>')
+
+				aHTML.push('<div id="ns1blankspaceComplianceSearchContainer">' + ns1blankspace.xhtml.loadingSmall + ' </div>');
+
+			aHTML.push('</div>');	
+
+			$('#ns1blankspaceComplianceColumn2').html(aHTML.join(''));
+
+			$('#ns1blankspaceComplianceSearchObjects').buttonset().css('font-size', '0.625em');
+			
+			$('#ns1blankspaceComplianceSearchObjects :radio').click(function()
 			{
-				xhtmlElementID: 'ns1blankspaceComplianceSearchContainer'
-			});
-		});
+				var sObject = (this.id).split('-')[1];
 
-		ns1blankspace.financial.compliance.initData.balanceSheet(oParam);
-		//ns1blankspace.financial.compliance.initData.bankAccounts(oParam);
+				ns1blankspace.financial.compliance[sObject].show(
+				{
+					xhtmlElementID: 'ns1blankspaceComplianceSearchContainer'
+				});
+			});
+
+			ns1blankspace.financial.compliance.initData.balanceSheet(oParam);
+		}
 	},
 
 	initData:
@@ -342,7 +353,7 @@ ns1blankspace.financial.compliance =
 
 				if (sStartDate != undefined)
 				{
-					oData.endDate0 = sStartDate;
+					oData.endDate0 = moment(sStartDate, ns1blankspace.option.dateFormats).add(-1, 'days').format('DD MMM YYYY');
 				}
 					
 				if (sEndDate != undefined)
@@ -768,13 +779,13 @@ ns1blankspace.financial.compliance =
 					}
 				});
 
-				var oSearch = new AdvancedSearch();
+				/*var oSearch = new AdvancedSearch();
 				oSearch.method = 'FINANCIAL_DEBTOR_SEARCH';
 				oSearch.rows = 100;
 
 				if (sEndDate != '') {oSearch.addFilter('enddate', 'LESS_THAN_OR_EQUAL_TO', sEndDate)};
 
-				oSearch.getResults(function(data) {ns1blankspace.financial.compliance.initData.debtors(oParam, data)});
+				oSearch.getResults(function(data) {ns1blankspace.financial.compliance.initData.debtors(oParam, data)});*/
 			}
 			else
 			{	
@@ -1431,7 +1442,7 @@ ns1blankspace.financial.compliance.debtors =
 			aHTML.push('<tr><td class="ns1blankspaceRow ns1blankspaceSub">Accounts Receivable</td>' +
 								'<td class="ns1blankspaceRow ns1blankspaceSub" style="text-align:right;">' + numeral(ns1blankspace.financial.compliance.data.debtors.end.data.totals.total).format('0,0.00') + '</td></tr>');
 	
-			if (numeral(oDebtorsBS.amount1).value() != numeral(ns1blankspace.financial.compliance.data.debtors.end.data.totals).value())
+			if (numeral(oDebtorsBS.amount1).value() != numeral(ns1blankspace.financial.compliance.data.debtors.end.data.totals.total).value())
 			{
 				aHTML.push('<tr><td class="ns1blankspaceRow ns1blankspaceSub" style="color:red;">Out of balance</td>' +
 								'<td class="ns1blankspaceRow ns1blankspaceSub" style="text-align:right; color:red;">' +

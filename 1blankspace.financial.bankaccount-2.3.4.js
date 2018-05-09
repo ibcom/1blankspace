@@ -8237,7 +8237,7 @@ ns1blankspace.financial.bankAccount.healthCheck =
 			financialTransaction.lineitems = $.grep(ns1blankspace.financial.bankAccount.healthCheck.data.lineitems, function (lineitem) {return financialTransaction.lineitem == lineitem.id});
 		});
 
-		console.log(ns1blankspace.financial.bankAccount.healthCheck.data);
+		
 		ns1blankspace.financial.bankAccount.healthCheck.data.unhealthy = 
 		{
 			items: $.grep(ns1blankspace.financial.bankAccount.healthCheck.data.financialTransactions,
@@ -8255,13 +8255,44 @@ ns1blankspace.financial.bankAccount.healthCheck =
 			financialTransactions: _.groupBy(ns1blankspace.financial.bankAccount.healthCheck.data.financialTransactions, 'reference')
 		}
 
-		$.each(ns1blankspace.financial.bankAccount.healthCheck.data.summary, function (ft, key)
+		ns1blankspace.financial.bankAccount.healthCheck.data.summary.totals = [];
+
+		$.each(ns1blankspace.financial.bankAccount.healthCheck.data.summary.financialTransactions, function (reference, financialTransactions)
 		{	
-			console.log(ft);
-			console.log(key);	
-			// ft.totalamount =  _.groupBy(ns1blankspace.financial.bankAccount.healthCheck.data.financialTransactions, 'reference')
+			ns1blankspace.financial.bankAccount.healthCheck.data.summary.totals.push(
+			{
+				reference: reference,
+				object: _.first(financialTransactions).object,
+				objectcontext: _.first(financialTransactions).objectcontext,
+				amount: _.sumBy(financialTransactions, function (ft) {return numeral(ft.amount).value()})
+			});
 		});
 
+		$.each(ns1blankspace.financial.bankAccount.healthCheck.data.summary.totals, function (t, total)
+		{
+			if (total.object == 6)
+			{
+				total.item = _.find(ns1blankspace.financial.bankAccount.healthCheck.data.receipts, function (receipt) {return total.objectcontext == receipt.id});
+			}
+
+			if (total.object == 3)
+			{
+				total.item = _.find(ns1blankspace.financial.bankAccount.healthCheck.data.payments, function (payment) {return total.objectcontext == payment.id});
+			}
+
+			if (total.object == 122)
+			{
+				total.item = _.find(ns1blankspace.financial.bankAccount.healthCheck.data.journals, function (journal) {return total.objectcontext == journal['generaljournalitem.generaljournal.id']});
+				total.item.amount = (numeral(total.item.debitamount).value()!=0?total.item.debitamount:total.item.creditamount);
+			}
+
+			total.balanced = (Math.abs(numeral(total.amount).value()) == Math.abs(numeral(total.item.amount).value()));
+		});
+
+		ns1blankspace.financial.bankAccount.healthCheck.data.unhealthy.financialTransactions = 
+			_.find(ns1blankspace.financial.bankAccount.healthCheck.data.summary.totals, function (t) {return !t.balanced})
+
+		console.log(ns1blankspace.financial.bankAccount.healthCheck.data);
 		console.log(ns1blankspace.financial.bankAccount.healthCheck.data.unhealthy)
 
 		ns1blankspace.status.message('Health check complete');
