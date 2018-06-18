@@ -95,7 +95,8 @@ ns1blankspace.xhtml.templates.source =
 	payslip: '/jscripts/1blankspace.setup.financial.payslip-1.0.0.html',
 	invoiceschedule: '/jscripts/1blankspace.setup.financial.invoiceschedule-1.0.0.html',
 	payment: '/jscripts/1blankspace.setup.financial.payment-1.0.0.html',
-	action: '/jscripts/1blankspace.setup.action-1.0.0.html'
+	action: '/jscripts/1blankspace.setup.action-1.0.0.html',
+	collect: '/jscripts/1blankspace.setup.collect-1.0.0.html'
 }	
 
 ns1blankspace.xhtml.logonNotes =

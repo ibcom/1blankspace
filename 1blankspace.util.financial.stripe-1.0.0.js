@@ -40,29 +40,81 @@ ns1blankspace.util.financial.stripe =
 
     init: function (oParam)
     {    
-        Stripe.setPublishableKey('lksdajSDFmn2345nv');
-        //dynamically render form if required
-        //https://bootsnipp.com/snippets/featured/responsive-stripe-payment-form
-
-        //hook into form submit
-
-        $("#payment-form").submit(function(event) {
-            $('#submitBtn').attr('disabled', 'disabled');
-            return false;
-        }); // form submission
+        ns1blankspace.util.financial.stripe.getAccountAPIKey(oParam);
     },
 
     getAccountAPIKey: function (oParam, oResponse)
     {
         if (oReponse == undefined)
         {
-            //SITE_COLLECT_PAYMENT
+            $.ajax(
+            {
+                type: 'POST',
+                url: ns1blankspace.util.endpointURI('SITE_COLLECT_PAYMENT'),
+                data: 'getapikey=1',
+                dataType: 'json',
+                success: function (data)
+                {
+                    ns1blankspace.util.financial.stripe.getAccountAPIKey(oParam, data);
+                }
+            }); 
         }
         else
         {
-
+            if (oResponse.status == 'OK')
+            {
+                ns1blankspace.util.financial.stripe.data.publicKey = oReponse.apikey;
+                Stripe.setPublishableKey(ns1blankspace.util.financial.stripe.data.publicKey);
+                ns1blankspace.util.financial.stripe.render(oParam)
+            }
+            else
+            {
+                ns1blankspace.status.error('Error')
+            }
         }    
     },
+
+    render: function (oParam)
+    { 
+        var bRender = ns1blankspace.util.getParam(oParam, 'render', {"default": true}).value;
+        var sXHTMLContainerElementID = ns1blankspace.util.getParam(oParam, 'xhtmlContainerElementID').value;
+
+        if (bRender)
+        {
+            //https://bootsnipp.com/snippets/featured/responsive-stripe-payment-form
+
+            $.ajax(
+            {
+                type: 'GET',
+                url: ns1blankspace.xhtml.templates.source['collect'],
+                dataType: 'text',
+                global: false,
+                success: function(data)
+                {
+                    ns1blankspace.util.financial.stripe.data.xhtml = data;
+                    $('#' + sXHTMLContainerElementID).html(data);
+                    ns1blankspace.util.financial.stripe.bind(oParam);
+                },
+                error: function(data)
+                {
+                    ns1blankspace.status.error('No payment collection template');
+                }
+            }); 
+        }
+        else
+        {
+            ns1blankspace.util.financial.stripe.bind(oParam);
+        }    
+    },
+
+    bind: function (oParam)
+    {
+        $("#payment-form").submit(function(event)
+        {
+            $('#submitBtn').attr('disabled', 'disabled');
+            return false;
+        });
+    }
 
     validate: function (oParam)
     {
@@ -145,15 +197,51 @@ ns1blankspace.util.financial.stripe =
 }
 
 /*
-    //GET .net library -- https://stripe.com/docs/api/dotnet#intro
-    //mydigitalstructure code - SITE_COLLECT_PAYMENT
-    &token=[form data]
-    &invoiceGUID=
-    &amount
-    &account
-    &currency=
-    &source=
 
+Stripe.com is the easier version of PayPal.
+
+Currently there we have;
+
+1. SITE_COLLECT_PAYMENT - which is integrated with processing an order.
+2. SITE_PAYPAL_PDT_METHOD - which is integrated with PayPal,  It is most similar to what we need to do with Stripe.
+
+So propose doing a copy of SITE_PAYPAL_PDT_METHOD and calling it SITE_COLLECT_PAYMENT_STRIPE.
+
+Most of the work is done in view-controller, including the sourcing of a Stripe-token, but still need to do a final call to Stripe in context of a Stripe account with secret password help in financial funds manage the account.
+
+See; http://docs.mydigitalstructure.com/community_stripe
+
+1. SETUP_FINANCIAL_FUNDS_TRANSFER_ACCOUNT_MANAGE
+
+Add Provider = "Stripe"
+
+2. SITE_COLLECT_PAYMENT_STRIPE
+
+## View-controller call to: 
+
+/rpc/site/?method=SITE_COLLECT_PAYMENT_STRIPE
+&account= [from SETUP_FINANCIAL_FUNDS_TRANSFER_ACCOUNT_MANAGE - used to get apipassword]
+&token= [token from Stripe]
+&invoiceGUID= [from myds, optional]
+&amount=
+&currency= [AUD default]
+&description=
+
+## Then method does https call to Stripe and returns to view-controller what stripe returns.
+
+https://api.stripe.com/v1/charges
+
+SetHeader("Authorization: Bearer", [apipassword from SETUP_FINANCIAL_FUNDS_TRANSFER_ACCOUNT_MANAGE account]"
+
+data:
+&source= [token passed]
+&amount= [as passed]
+&currency= [as passed or AUD as default]
+&description= [as passed]
+
+--- If the call to SITE_COLLECT_PAYMENT_STRIPE has getapikey=1 and account Provider = Stripe then just return the account apikey - it is needed by view-controller to get the token client side.
+
+--- Also if invoiceGUID is set and in the same space as the funds transfer account, and Stripe return is successful then need to do an "AUTO_PAYMENT" for the amount of the payment.
 */
 
 
