@@ -65,6 +65,12 @@ ns1blankspace.option.yodlee =
 	proxyURL: 'https://yodlee.lab.ibcom.biz'
 }
 
+ns1blankspace.option.stripe =
+{
+	url: 'https://app-next.lab.ibcom.biz/paynow',
+	text: 'Pay Now Using Credit Card'
+}
+
 ns1blankspace.option.dateFormats = ['DD MMM YYYY', 'D MMM YYYY', 'D/MM/YYYY', 'DD/MM/YYYY', 'DD MMM YYYY HH:mm:ss'];
 
 ns1blankspace.formFactor.size.value = ns1blankspace.formFactor.size.options.medium;
@@ -96,7 +102,7 @@ ns1blankspace.xhtml.templates.source =
 	invoiceschedule: '/jscripts/1blankspace.setup.financial.invoiceschedule-1.0.0.html',
 	payment: '/jscripts/1blankspace.setup.financial.payment-1.0.0.html',
 	action: '/jscripts/1blankspace.setup.action-1.0.0.html',
-	collect: '/site/312/1blankspace.setup.collect-1.0.0.html'
+	collect: '/jscripts/1blankspace.setup.collect-1.0.0.html'
 }	
 
 ns1blankspace.xhtml.logonNotes =
@@ -201,7 +207,7 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.financial.invoice',
-		source: '/site/312/1blankspace.financial.invoice-2.1.3.js'
+		source: '/site/312/1blankspace.financial.invoice-2.1.4.js'
 	},
 	{
 		nameSpace: '1blankspace.financial.expense',
@@ -388,9 +394,9 @@ ns1blankspace.scripts.concat(
 		source: '/site/312/1blankspace.util.messaging-2.0.0.js'
 	},
 	{
-		nameSpace: '1blankspace.util.financial.stripe',
-		source: '/site/312/1blankspace.util.financial.stripe-1.0.0.js'
-	}
+		nameSpace: '1blankspace.util.financial.collect',
+		source: '/site/312/1blankspace.util.financial.collect-1.0.0.js'
+	},
 ])
 
 ns1blankspace.themes = 
@@ -1322,9 +1328,10 @@ ns1blankspace.control =
 								'<div class="ns1blankspaceSub"><i>Explore...</i></div>' +
 								'<div class="ns1blankspaceViewControl" style="cursor:pointer;"><span id="ns1blankspaceViewControl_report" class="ns1blankspaceViewControl">' +
 								' Customised reporting with exporting, updating, emailing & SMS sending</span></div>' +
-								'<div class="ns1blankspaceViewControl" style="cursor:pointer;"><span id="ns1blankspaceViewControl_contactsearch" class="ns1blankspaceViewControl">' +
-								' Search Contacts</span></div>' +
 								'</td>');
+
+					//'<div class="ns1blankspaceViewControl" style="cursor:pointer;"><span id="ns1blankspaceViewControl_contactsearch" class="ns1blankspaceViewControl">' +
+					//			' Search Contacts</span></div>' +
 
 					aHTML.push('</tr>');
 				}	
@@ -2923,8 +2930,24 @@ ns1blankspace.actions =
 			if (iObject != undefined && iObject != '') {oSearch.addFilter('object', 'EQUAL_TO', iObject)};
 			if (iObjectContext != undefined && iObjectContext != '') {oSearch.addFilter('objectcontext', 'EQUAL_TO', iObjectContext)};
 			
-			if (iContactBusiness) {oSearch.addFilter('contactbusiness', 'EQUAL_TO', iContactBusiness)};
-			if (iContactPerson) {oSearch.addFilter('contactperson', 'EQUAL_TO', iContactPerson)};
+			oSearch.addBracket('(');
+
+			if (iContactBusiness != undefined && iContactBusiness != '')
+			{
+				oSearch.addFilter('contactbusiness', 'EQUAL_TO', iContactBusiness)
+			};
+
+			if (iContactPerson != undefined && iContactPerson != '')
+			{
+				if (iContactBusiness != undefined && iContactBusiness != '')
+				{
+					oSearch.addOperator('or');
+				}
+
+				oSearch.addFilter('contactperson', 'EQUAL_TO', iContactPerson)
+			};
+
+			oSearch.addBracket(')');
 
 			oSearch.sort('modifieddate', 'desc')
 
