@@ -396,7 +396,7 @@ ns1blankspace.scripts.concat(
 	{
 		nameSpace: '1blankspace.util.financial.collect',
 		source: '/site/312/1blankspace.util.financial.collect-1.0.0.js'
-	},
+	}
 ])
 
 ns1blankspace.themes = 
@@ -1329,7 +1329,11 @@ ns1blankspace.control =
 								'<div class="ns1blankspaceViewControl" style="cursor:pointer;"><span id="ns1blankspaceViewControl_report" class="ns1blankspaceViewControl">' +
 								' Customised reporting with exporting, updating, emailing & SMS sending</span></div>' +
 								'</td>');
+<<<<<<< HEAD
 
+=======
+					
+>>>>>>> origin/master
 					//'<div class="ns1blankspaceViewControl" style="cursor:pointer;"><span id="ns1blankspaceViewControl_contactsearch" class="ns1blankspaceViewControl">' +
 					//			' Search Contacts</span></div>' +
 
