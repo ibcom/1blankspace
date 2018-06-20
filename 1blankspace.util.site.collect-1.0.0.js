@@ -96,7 +96,7 @@ ns1blankspace.util.site.collect =
                     $.ajax(
                     {
                         type: 'POST',
-                        url: '/rpc/site/?method=SITE_COLLECT_PAYMENT',
+                        url: '/rpc/site/?method=SITE_COLLECT_PAYMENT_STRIPE',
                         data: 'getapikey=1',
                         dataType: 'json',
                         success: function (data)
@@ -134,8 +134,6 @@ ns1blankspace.util.site.collect =
                     success: function(data)
                     {
                         ns1blankspace.util.site.collect.data.xhtml = data;
-                        //ns1blankspace.util.site.collect.data.xhtmlContainer.hide();
-                        //ns1blankspace.util.site.collect.data.xhtmlContainer.html(data);
                         ns1blankspace.util.site.collect.stripe.bind(oParam);
                     },
                     error: function(data)
@@ -158,93 +156,130 @@ ns1blankspace.util.site.collect =
             ns1blankspace.util.site.collect.data.xhtmlContainer.html(ns1blankspace.util.site.collect.data.xhtml)
             ns1blankspace.util.site.collect.data.xhtmlContainer.show();
 
-            $("#payment-form").submit(function(event)
+            $("#site-collect-container").submit(function(event)
             {
-                $('#submitBtn').attr('disabled', 'disabled');
+                $('#site-collect-process').attr('disabled', 'disabled');
                 return false;
+            });
+
+            $('#site-collect-process').click(function(event)
+            {
+                ns1blankspace.util.site.collect.stripe.process();
             });
         },
 
-        validate: function (oParam)
+        process: function (oParam)
         {
-            var error = false;
+            if (oParam = undefined) {oParam = {}}
+            oParam.error = false;
+            oParam.errorMessages = [];
      
-            // Get the values:
-            var ccNum = $('.card-number').val(),
-                cvcNum = $('.card-cvc').val(),
-                expMonth = $('.card-expiry-month').val(),
-                expYear = $('.card-expiry-year').val();
+            oParam.number = $('.card-number').val();
+            oParam.cvc = $('.card-cvc').val();
+            oParam.exp_month = $('.card-expiry-month').val();
+            oParam.exp_year = $('.card-expiry-year').val();
              
-            // Validate the number:
-            if (!Stripe.card.validateCardNumber(ccNum))
+            if (!Stripe.card.validateCardNumber(oParam.ccNum))
             {
-                error = true;
-                reportError('The credit card number appears to be invalid.');
+                oParam.error = = true;
+                oParam.errorMessages.push('The credit card number appears to be invalid.');
             }
              
-            // Validate the CVC:
             if (!Stripe.card.validateCVC(cvcNum)) {
-                error = true;
-                reportError('The CVC number appears to be invalid.');
+                oParam.error = true;
+                oParam.errorMessages.push('The CVC number appears to be invalid.');
             }
              
-            // Validate the expiration:
             if (!Stripe.card.validateExpiry(expMonth, expYear)) {
-                error = true;
-                reportError('The expiration date appears to be invalid.');
+                oParam.error = true;
+                oParam.errorMessages.push('The expiration date appears to be invalid.');
             }
 
-            if (!error)
+            if (!oParam.error)
             {
-                ns1blankspace.util.site.stripe.getToken()
+                ns1blankspace.util.site.collect.stripe.getToken()
+            }
+            else
+            {
+                //oParam.errorMessages
             }
         },  
 
         getToken: function (oParam)
         {
-            // Get the Stripe token:
-            Stripe.card.createToken({
-                number: ccNum,
-                cvc: cvcNum,
-                exp_month: expMonth,
-                exp_year: expYear
-            }, ns1blankspace.util.site.stripe.processToken);
+            Stripe.card.createToken(
+            {
+                number: oParam.number,
+                cvc: oParam.cvc,
+                exp_month: oParam.exp_month,
+                exp_year: oParam.exp_year
+            },
+            ns1blankspace.util.site.collect.stripe.processToken);
         },
 
         processToken: function (oStatus, oResponse)
         {
-            if (response.error)
+            if (oResponse.error)
             {
-                reportError(response.error.message);
+                ns1blankspace.util.site.collect.error(oResponse.error.message);
             }
             else
             {
-                // Get a reference to the form:
-                var f = $("#payment-form");
-                 
-                // Get the token from the response:
-                var token = response.id;
-                 
-                // Add the token to the form:
-                f.append('<input type="hidden" name="stripeToken" value="' + token + '" />');
-                 
-                // Submit the form:
-                f.get(0).submit();
+                var sToken = oResponse.id;
+
+               /* var oForm = $("#site-collect-container");
+               
+                oForm.append('<input type="hidden" name="stripeToken" value="' + sToken + '" />');
+                oForm.get(0).submit();*/
 
                 //use ajax form submit
+
+                $.ajax(
+                {
+                    type: 'POST',
+                    url: '/rpc/site/?method=SITE_COLLECT_PAYMENT_STRIPE',
+                    data: 'token=' + sToken,
+                    dataType: 'json',
+                    success: function (data)
+                    {
+                        ns1blankspace.util.site.collect.stripe.processComplete(data);
+                    }
+                });
             }
         },
 
-        error: function (oParam)
+        processComplete: function (oResponse)
         {
-            $('#payment-errors').text(msg).addClass('error');
-     
-            // Re-enable the submit button:
-            $('#submitBtn').prop('disabled', false);
-         
+            //if oResponse.status == 'OK'
+        }
+
+        error: function (sMessage)
+        {
+            $('#site-collect-status').text(sMessage).addClass('alert-danger');
+            $('#site-collect-process').prop('disabled', false);
             return false;
         }
-    }    
+    },
+
+    cardJS:
+    {
+        init: function ()
+        {
+            if (CardJs != undefined)
+            {
+                $("#card-number").change(function()
+                {
+                    $("#card-type").val(CardJs.cardTypeFromNumber($(this).val()));
+
+                    var cleanCardNumber = CardJs.numbersOnlyString($(this).val());
+                    $(this).val(CardJs.applyFormatMask(cleanCardNumber, 'XXXX XXXX XXXX XXXX'));
+
+                    $("#mask-1").val(CardJs.applyFormatMask(cleanCardNumber, 'XX-XX-XX-XX-XX-XX-XX-XX'));
+                    $("#mask-2").val(CardJs.applyFormatMask(cleanCardNumber, '+0 XXXX-XXXXXX @XXXXXX'));
+                });
+            }    
+        }
+    }   
 }
 
 /*
