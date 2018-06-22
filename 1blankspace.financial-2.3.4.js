@@ -5496,7 +5496,7 @@ ns1blankspace.financial.item =
 				var sNamespace = ns1blankspace.util.getParam(oParam, 'namespace').value;
 				var iID = ns1blankspace.util.getParam(oParam, 'xhtmlElementID', {index: 1}).value;
 				var bShowAccount = ns1blankspace.util.getParam(oParam, 'showAccount',
-					{"default": (ns1blankspace.financial.data.settings.taxreportcalculationmethod == 1 || ns1blankspace.option.financialsStrict == false)}).value;
+					{"default": (ns1blankspace.financial.data.settings.taxreportcalculationmethod == 1 || ns1blankspace.option.financialsStrict != true)}).value;
 				
 				if (sNamespace === 'expense' || sNamespace === 'payment') {iType = 2}
 

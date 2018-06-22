@@ -796,7 +796,7 @@ ns1blankspace.financial.payment =
 
 						if (ns1blankspace.objectContext == -1)
 						{
-							if (ns1blankspace.financial.data.settings.taxreportcalculationmethod == 1 || ns1blankspace.option.financialsStrict == false)
+							if (ns1blankspace.financial.data.settings.taxreportcalculationmethod == 1 || ns1blankspace.option.financialsStrict != true)
 							{	
 								aHTML.push('<tr class="ns1blankspaceCaption">' +
 											'<td class="ns1blankspaceCaption">' +
