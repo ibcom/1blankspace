@@ -11,7 +11,7 @@
  * Example /paynow;
 
     <script src="/jscripts/jquery-1.8.3.min.js"></script>
-    <script src="https://js.stripe.com/v2/"></script>
+    <script src="https://js.stripe.com/v3/"></script>
     <script src="/site/312/1blankspace.util.site.collect-1.0.0.js"></script>
     <p>Pay Now</p>
     <div id="ns1blankspaceUtilFinancialStripeContainer"></div>
@@ -49,7 +49,7 @@ $(document).ready(function()
 
 ns1blankspace.util.site.collect =
 {
-    data: {_publicKey: '1234'},
+    data: {_publicKey: '1234', option: {}},
 
     init: function (oParam)
     {    
@@ -62,11 +62,17 @@ ns1blankspace.util.site.collect =
             ns1blankspace.util.site.collect.data.xhtmlContainer = 
                 $('#ns1blankspaceUtilFinancialStripeContainer');
 
-            ns1blankspace.util.site.collect.data.stripe =
+            ns1blankspace.util.site.collect.data.option.stripe =
                 (ns1blankspace.util.site.collect.data.xhtmlContainer != undefined)
 
-            if (ns1blankspace.util.site.collect.data.stripe)
+            if (ns1blankspace.util.site.collect.data.option.stripe && window.Stripe == undefined)
             {
+                ns1blankspace.util.site.collect.data.option.stripe = false
+            }
+
+            if (ns1blankspace.util.site.collect.data.option.stripe)
+            {
+                ns1blankspace.util.site.collect.data.option.elements = (ns1blankspace.util.site.collect.data.xhtmlContainer.attr('data-ui') == 'elements')
                 ns1blankspace.util.site.collect.stripe.init(oParam);
             }    
         }    
@@ -79,6 +85,8 @@ ns1blankspace.util.site.collect =
 
     stripe:
     {
+        data: {},
+
         init: function (oParam, oResponse)
         {
             if (oResponse == undefined)
@@ -111,8 +119,16 @@ ns1blankspace.util.site.collect =
                 if (oResponse.status == 'OK')
                 {
                     ns1blankspace.util.site.collect.data.publicKey = oResponse.apikey;
-                    Stripe.setPublishableKey(ns1blankspace.util.site.collect.data.publicKey);
-                    ns1blankspace.util.site.collect.stripe.render(oParam)
+                    ns1blankspace.util.site.collect.data.stripe = Stripe(ns1blankspace.util.site.collect.data.publicKey);
+                    
+                    if (ns1blankspace.util.site.collect.data.option.elements)
+                    {
+                        ns1blankspace.util.site.collect.stripe.elements.init(oParam);
+                    }
+                    else
+                    {
+                        ns1blankspace.util.site.collect.stripe.render(oParam)
+                    }
                 }
                 else
                 {
@@ -128,7 +144,7 @@ ns1blankspace.util.site.collect =
                 $.ajax(
                 {
                     type: 'GET',
-                    url: window.location.protocol + '//' + window.location.host + '/site/' + mydigitalstructureSiteId + '/1blankspace.site.collect-1.0.0.html',
+                    url: window.location.protocol + '//' + window.location.host + '/site/' + mydigitalstructureSiteId + '/1blankspace.util.site.collect-1.0.0.html',
                     dataType: 'text',
                     global: false,
                     success: function(data)
@@ -158,7 +174,6 @@ ns1blankspace.util.site.collect =
 
             $("#site-collect-container").submit(function(event)
             {
-                $('#site-collect-process').attr('disabled', 'disabled');
                 return false;
             });
 
@@ -170,29 +185,54 @@ ns1blankspace.util.site.collect =
 
         process: function (oParam)
         {
-            if (oParam = undefined) {oParam = {}}
+            //OLD - Use Elements
+            if (oParam == undefined) {oParam = {}}
             oParam.error = false;
             oParam.errorMessages = [];
      
             oParam.number = $('.card-number').val();
+            if (oParam.number == undefined) {oParam.number = $('.number').val()}
+
             oParam.cvc = $('.card-cvc').val();
+            if (oParam.cvc == undefined) {oParam.cvc = $('.cvc').val()}
+            
             oParam.exp_month = $('.card-expiry-month').val();
+            if (oParam.exp_month == undefined) {oParam.exp_month = $('.expiry-month').val()}
+            
             oParam.exp_year = $('.card-expiry-year').val();
-             
-            if (!Stripe.card.validateCardNumber(oParam.ccNum))
+            if (oParam.exp_year == undefined) {oParam.exp_year = $('.expiry-year').val()}
+
+            if ((oParam.exp_year == undefined || oParam.exp_year == '')
+                    && (oParam.exp_month == undefined || oParam.exp_month == ''))
             {
-                oParam.error = = true;
-                oParam.errorMessages.push('The credit card number appears to be invalid.');
+                oParam.expiry = $('.expiry').val();
+                if (oParam.expiry != undefined)
+                {
+                    var aExpiry = oParam.expiry.split('/');
+                    if (aExpiry.length > 0)
+                    {
+                        oParam.exp_month = aExpiry[0];
+                        oParam.exp_year = aExpiry[1];
+                    }    
+                }
+            }
+            
+            if (!Stripe.card.validateCardNumber(oParam.number))
+            {
+                oParam.error = true;
+                oParam.errorMessages.push('<div>The credit card number appears to be invalid.</div>');
             }
              
-            if (!Stripe.card.validateCVC(cvcNum)) {
+            if (!Stripe.card.validateCVC(oParam.cvc))
+            {
                 oParam.error = true;
-                oParam.errorMessages.push('The CVC number appears to be invalid.');
+                oParam.errorMessages.push('<div>The CVC number appears to be invalid.</div>');
             }
              
-            if (!Stripe.card.validateExpiry(expMonth, expYear)) {
+            if (!Stripe.card.validateExpiry(oParam.exp_month, oParam.exp_year))
+            {
                 oParam.error = true;
-                oParam.errorMessages.push('The expiration date appears to be invalid.');
+                oParam.errorMessages.push('<div>The expiration date appears to be invalid.</div>');
             }
 
             if (!oParam.error)
@@ -201,85 +241,138 @@ ns1blankspace.util.site.collect =
             }
             else
             {
-                //oParam.errorMessages
+                ns1blankspace.util.site.collect.stripe.error(oParam.errorMessages.join(''));
             }
         },  
 
         getToken: function (oParam)
         {
-            Stripe.card.createToken(
+            ns1blankspace.util.site.collect.data.stripe.createToken(ns1blankspace.util.site.collect.data.card)
+            .then(function(result)
+            {
+                if (result.error)
+                {
+                    ns1blankspace.util.site.collect.stripe.error(result.error.message);
+                }
+                else
+                {
+                    ns1blankspace.util.site.collect.stripe.processToken(result.token);
+                }
+            });
+
+            /*v2
+            ns1blankspace.util.site.collect.data.stripe.createToken(
             {
                 number: oParam.number,
                 cvc: oParam.cvc,
                 exp_month: oParam.exp_month,
                 exp_year: oParam.exp_year
             },
-            ns1blankspace.util.site.collect.stripe.processToken);
+            ns1blankspace.util.site.collect.stripe.processToken);*/
         },
 
-        processToken: function (oStatus, oResponse)
+        processToken: function (sToken)
         {
-            if (oResponse.error)
+            $.ajax(
             {
-                ns1blankspace.util.site.collect.error(oResponse.error.message);
-            }
-            else
-            {
-                var sToken = oResponse.id;
-
-               /* var oForm = $("#site-collect-container");
-               
-                oForm.append('<input type="hidden" name="stripeToken" value="' + sToken + '" />');
-                oForm.get(0).submit();*/
-
-                //use ajax form submit
-
-                $.ajax(
+                type: 'POST',
+                url: '/rpc/site/?method=SITE_COLLECT_PAYMENT_STRIPE',
+                data: 'token=' + sToken,
+                dataType: 'json',
+                success: function (data)
                 {
-                    type: 'POST',
-                    url: '/rpc/site/?method=SITE_COLLECT_PAYMENT_STRIPE',
-                    data: 'token=' + sToken,
-                    dataType: 'json',
-                    success: function (data)
-                    {
-                        ns1blankspace.util.site.collect.stripe.processComplete(data);
-                    }
-                });
-            }
+                    ns1blankspace.util.site.collect.stripe.processComplete(data);
+                }
+            });
         },
 
         processComplete: function (oResponse)
         {
             //if oResponse.status == 'OK'
-        }
+        },
 
         error: function (sMessage)
         {
-            $('#site-collect-status').text(sMessage).addClass('alert-danger');
-            $('#site-collect-process').prop('disabled', false);
+            $('#site-collect-status').html(sMessage).addClass('alert-danger');
+            //$('#site-collect-process').prop('disabled', false);
             return false;
-        }
-    },
+        },
 
-    cardJS:
-    {
-        init: function ()
+        elements:
         {
-            if (CardJs != undefined)
-            {
-                $("#card-number").change(function()
+            init: function ()
+            {        
+                ns1blankspace.util.site.collect.data.elements = ns1blankspace.util.site.collect.data.stripe.elements();
+
+                ns1blankspace.util.site.collect.data.style =
                 {
-                    $("#card-type").val(CardJs.cardTypeFromNumber($(this).val()));
+                    base:
+                    {
+                        color: '#32325d',
+                        lineHeight: '18px',
+                        fontFamily: '"Helvetica Neue", Helvetica, sans-serif',
+                        fontSmoothing: 'antialiased',
+                        fontSize: '16px',
+                        '::placeholder':
+                        {
+                          color: '#aab7c4'
+                        }
+                    },
+                    invalid:
+                    {
+                        color: '#fa755a',
+                        iconColor: '#fa755a'
+                    }
+                }
 
-                    var cleanCardNumber = CardJs.numbersOnlyString($(this).val());
-                    $(this).val(CardJs.applyFormatMask(cleanCardNumber, 'XXXX XXXX XXXX XXXX'));
+                ns1blankspace.util.site.collect.data.card = ns1blankspace.util.site.collect.data.elements
+                    .create('card', {style: ns1blankspace.util.site.collect.data.style});
 
-                    $("#mask-1").val(CardJs.applyFormatMask(cleanCardNumber, 'XX-XX-XX-XX-XX-XX-XX-XX'));
-                    $("#mask-2").val(CardJs.applyFormatMask(cleanCardNumber, '+0 XXXX-XXXXXX @XXXXXX'));
+                ns1blankspace.util.site.collect.data.card.mount('#card-container');
+
+                ns1blankspace.util.site.collect.data.card.addEventListener('change', function(event)
+                {
+                    var displayError = document.getElementById('card-errors');
+                    
+                    if (event.error)
+                    {
+                        ns1blankspace.util.site.collect.data.error = true;
+                        displayError.textContent = event.error.message;
+                    }
+                    else
+                    {
+                        ns1blankspace.util.site.collect.data.error = false;
+                        displayError.textContent = '';
+                    }
                 });
-            }    
-        }
-    }   
+
+                // Handle form submission.
+                var form = document.getElementById('site-collect-container');
+
+                form.addEventListener('submit', function(event)
+                {
+                    event.preventDefault();
+
+                    ns1blankspace.util.site.collect.stripe.getToken()
+
+                   /* stripe.createToken(card).then(function(result)
+                    {
+                        if (result.error)
+                        {
+                             // Inform the user if there was an error.
+                            var errorElement = document.getElementById('card-errors');
+                            errorElement.textContent = result.error.message;
+                        }
+                        else
+                        {
+                            // Send the token to your server.
+                            stripeTokenHandler(result.token);
+                        }
+                    });*/
+                });
+            }
+        }  
+    }
 }
 
 /*

@@ -199,7 +199,7 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.financial',
-		source: '/site/312/1blankspace.financial-2.3.3.js'
+		source: '/site/312/1blankspace.financial-2.3.4.js'
 	},
 	{
 		nameSpace: '1blankspace.financial.bankAccount',
@@ -219,7 +219,7 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.financial.payment',
-		source: '/site/312/1blankspace.financial.payment-2.1.1.js'
+		source: '/site/312/1blankspace.financial.payment-2.1.2.js'
 	},
 	{
 		nameSpace: '1blankspace.financial.credit',
@@ -1329,11 +1329,7 @@ ns1blankspace.control =
 								'<div class="ns1blankspaceViewControl" style="cursor:pointer;"><span id="ns1blankspaceViewControl_report" class="ns1blankspaceViewControl">' +
 								' Customised reporting with exporting, updating, emailing & SMS sending</span></div>' +
 								'</td>');
-<<<<<<< HEAD
 
-=======
-					
->>>>>>> origin/master
 					//'<div class="ns1blankspaceViewControl" style="cursor:pointer;"><span id="ns1blankspaceViewControl_contactsearch" class="ns1blankspaceViewControl">' +
 					//			' Search Contacts</span></div>' +
 
