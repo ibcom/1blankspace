@@ -43,13 +43,14 @@ $(document).ready(function()
         oContext[context.split('=')[0]] = context.split('=')[1]
     })
 
+    ns1blankspace.util.site.collect.data.context = oContext;
     ns1blankspace.util.site.collect.init(oContext)
 });
 
 
 ns1blankspace.util.site.collect =
 {
-    data: {_publicKey: '1234', option: {}},
+    data: {_publicKey: 'pk_test_ZCsqtZ8k3XCjHx9qjJwfyWS4', option: {}},
 
     init: function (oParam)
     {    
@@ -61,6 +62,9 @@ ns1blankspace.util.site.collect =
         {
             ns1blankspace.util.site.collect.data.xhtmlContainer = 
                 $('#ns1blankspaceUtilFinancialStripeContainer');
+
+            ns1blankspace.util.site.collect.data.xhtmlContainerSuccess = 
+                $('#ns1blankspaceUtilFinancialStripeContainer-Success');
 
             ns1blankspace.util.site.collect.data.option.stripe =
                 (ns1blankspace.util.site.collect.data.xhtmlContainer != undefined)
@@ -121,14 +125,7 @@ ns1blankspace.util.site.collect =
                     ns1blankspace.util.site.collect.data.publicKey = oResponse.apikey;
                     ns1blankspace.util.site.collect.data.stripe = Stripe(ns1blankspace.util.site.collect.data.publicKey);
                     
-                    if (ns1blankspace.util.site.collect.data.option.elements)
-                    {
-                        ns1blankspace.util.site.collect.stripe.elements.init(oParam);
-                    }
-                    else
-                    {
-                        ns1blankspace.util.site.collect.stripe.render(oParam)
-                    }
+                    ns1blankspace.util.site.collect.stripe.render(oParam)
                 }
                 else
                 {
@@ -149,8 +146,11 @@ ns1blankspace.util.site.collect =
                     global: false,
                     success: function(data)
                     {
-                        ns1blankspace.util.site.collect.data.xhtml = data;
-                        ns1blankspace.util.site.collect.stripe.bind(oParam);
+                        if (data != '')
+                        {
+                            ns1blankspace.util.site.collect.data.xhtmlContainer.html(data);
+                            ns1blankspace.util.site.collect.stripe.render(oParam);
+                        } 
                     },
                     error: function(data)
                     {
@@ -159,33 +159,85 @@ ns1blankspace.util.site.collect =
                 });
             }
             else
-            {
+            {                
+                ns1blankspace.util.site.collect.data.xhtmlContainerSuccess.hide();
+
                 ns1blankspace.util.site.collect.data.xhtml = ns1blankspace.util.site.collect.data.xhtmlContainer.html();
-                ns1blankspace.util.site.collect.stripe.bind(oParam);
+
+                ns1blankspace.util.site.collect.data.xhtml =
+                    ns1blankspace.util.site.collect.data.xhtml.replace(/\[\[Amount\]\]/g, oParam.amount);
+
+                ns1blankspace.util.site.collect.data.xhtmlContainer.html(ns1blankspace.util.site.collect.data.xhtml);
+
+                if (ns1blankspace.util.site.collect.data.option.elements)
+                {
+                    ns1blankspace.util.site.collect.stripe.elements.init(oParam);
+                }
+                else
+                {
+                    ns1blankspace.util.site.collect.stripe.bind(oParam);
+                }    
             }    
         },
 
         bind: function (oParam)
         {
-            ns1blankspace.util.site.collect.data.xhtml =
-                ns1blankspace.util.site.collect.data.xhtml.replace(/\[\[Amount\]\]/g, oParam.amount);
-            ns1blankspace.util.site.collect.data.xhtmlContainer.html(ns1blankspace.util.site.collect.data.xhtml)
-            ns1blankspace.util.site.collect.data.xhtmlContainer.show();
-
-            $("#site-collect-container").submit(function(event)
+            $("#payment-form").submit(function(event)
             {
-                return false;
+                event.preventDefault();
+
+                if ($('#site-collect-process').length == 0)
+                {
+                    ns1blankspace.util.site.collect.stripe.getToken()
+                }   
+            });
+
+             $("#site-collect-container").submit(function(event)
+            {
+                event.preventDefault();
+
+                if ($('#site-collect-process').length == 0)
+                {
+                    ns1blankspace.util.site.collect.stripe.getToken();
+                }
             });
 
             $('#site-collect-process').click(function(event)
             {
-                ns1blankspace.util.site.collect.stripe.process();
+                if (ns1blankspace.util.site.collect.data.option.elements)
+                {
+                    ns1blankspace.util.site.collect.stripe.getToken();
+                }
+                else
+                {
+                    ns1blankspace.util.site.collect.stripe.process();
+                }    
             });
+
+            if (ns1blankspace.util.site.collect.data.option.elements)
+            {
+                ns1blankspace.util.site.collect.data.card.addEventListener('change', function(event)
+                {
+                    if (event.error)
+                    {
+                        ns1blankspace.util.site.collect.data.error = true;
+                        $('#card-errors').addClass('alert alert-danger');
+                        $('#card-errors').html(event.error.message);
+                    }
+                    else
+                    {
+                        ns1blankspace.util.site.collect.data.error = false;
+                        $('#card-errors').removeClass('alert alert-danger');
+                        $('#card-errors').html('');
+                    }
+                });
+            }    
         },
 
         process: function (oParam)
         {
-            //OLD - Use Elements
+            //If not using Stripe Elements
+
             if (oParam == undefined) {oParam = {}}
             oParam.error = false;
             oParam.errorMessages = [];
@@ -247,6 +299,8 @@ ns1blankspace.util.site.collect =
 
         getToken: function (oParam)
         {
+            $('#site-collect-process').prop('disabled', true);
+
             ns1blankspace.util.site.collect.data.stripe.createToken(ns1blankspace.util.site.collect.data.card)
             .then(function(result)
             {
@@ -259,48 +313,53 @@ ns1blankspace.util.site.collect =
                     ns1blankspace.util.site.collect.stripe.processToken(result.token);
                 }
             });
-
-            /*v2
-            ns1blankspace.util.site.collect.data.stripe.createToken(
-            {
-                number: oParam.number,
-                cvc: oParam.cvc,
-                exp_month: oParam.exp_month,
-                exp_year: oParam.exp_year
-            },
-            ns1blankspace.util.site.collect.stripe.processToken);*/
         },
 
-        processToken: function (sToken)
+        processToken: function (oToken)
         {
-            $.ajax(
+            if (oToken != undefined)
             {
-                type: 'POST',
-                url: '/rpc/site/?method=SITE_COLLECT_PAYMENT_STRIPE',
-                data: 'token=' + sToken,
-                dataType: 'json',
-                success: function (data)
+                $.ajax(
                 {
-                    ns1blankspace.util.site.collect.stripe.processComplete(data);
-                }
-            });
+                    type: 'POST',
+                    url: '/rpc/site/?method=SITE_COLLECT_PAYMENT_STRIPE',
+                    data: 'token=' + oToken.id,
+                    dataType: 'json',
+                    success: function (data)
+                    {
+                        ns1blankspace.util.site.collect.stripe.processComplete(data);
+                    }
+                });
+            }
+            else
+            {
+                ns1blankspace.util.site.collect.stripe.error('Bad token')
+            }    
         },
 
         processComplete: function (oResponse)
         {
-            //if oResponse.status == 'OK'
+            if (oResponse.status == 'OK')
+            {
+                ns1blankspace.util.site.collect.data.xhtmlContainer.hide();
+                ns1blankspace.util.site.collect.data.xhtmlContainerSuccess.show();
+            }
+            else
+            {
+                ns1blankspace.util.site.collect.data.xhtmlContainer.html('<h3>There is something wrong with the set up of this page!')
+            }
         },
 
         error: function (sMessage)
         {
-            $('#site-collect-status').html(sMessage).addClass('alert-danger');
-            //$('#site-collect-process').prop('disabled', false);
+            $('#card-errors').html(sMessage).addClass('alert alert-danger');
+            $('#site-collect-process').prop('disabled', false);
             return false;
         },
 
         elements:
         {
-            init: function ()
+            init: function (oParam)
             {        
                 ns1blankspace.util.site.collect.data.elements = ns1blankspace.util.site.collect.data.stripe.elements();
 
@@ -328,48 +387,9 @@ ns1blankspace.util.site.collect =
                 ns1blankspace.util.site.collect.data.card = ns1blankspace.util.site.collect.data.elements
                     .create('card', {style: ns1blankspace.util.site.collect.data.style});
 
-                ns1blankspace.util.site.collect.data.card.mount('#card-container');
+                ns1blankspace.util.site.collect.data.card.mount('#card-element');
 
-                ns1blankspace.util.site.collect.data.card.addEventListener('change', function(event)
-                {
-                    var displayError = document.getElementById('card-errors');
-                    
-                    if (event.error)
-                    {
-                        ns1blankspace.util.site.collect.data.error = true;
-                        displayError.textContent = event.error.message;
-                    }
-                    else
-                    {
-                        ns1blankspace.util.site.collect.data.error = false;
-                        displayError.textContent = '';
-                    }
-                });
-
-                // Handle form submission.
-                var form = document.getElementById('site-collect-container');
-
-                form.addEventListener('submit', function(event)
-                {
-                    event.preventDefault();
-
-                    ns1blankspace.util.site.collect.stripe.getToken()
-
-                   /* stripe.createToken(card).then(function(result)
-                    {
-                        if (result.error)
-                        {
-                             // Inform the user if there was an error.
-                            var errorElement = document.getElementById('card-errors');
-                            errorElement.textContent = result.error.message;
-                        }
-                        else
-                        {
-                            // Send the token to your server.
-                            stripeTokenHandler(result.token);
-                        }
-                    });*/
-                });
+                ns1blankspace.util.site.collect.stripe.bind(oParam);
             }
         }  
     }

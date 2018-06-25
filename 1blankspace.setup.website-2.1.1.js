@@ -1256,7 +1256,8 @@ ns1blankspace.setup.website =
 																
 									aHTML.push('<td id="ns1blankspaceWebsitePages_title-' + oRow.id + '" class="ns1blankspaceRow ns1blankspaceRowSelect">' +
 															'<div>' + oRow.documenttitle + '</div>' +
-															'<div class="ns1blankspaceSubNote" style="padding-bottom:6px;">' + oRow.documenturl + '</div>' +
+															'<div style="padding-bottom:6px;">' + 
+																'<a href="' + oRow.documenturl + '" target="_blank"><span class="ns1blankspaceSubNote">' + oRow.documenturl + '</span></a></div>' +
 															'</td>');
 																													
 									if (oRow.locationtext == 'Header' || oRow.locationtext == 'Home')

@@ -1,22 +1,33 @@
 <link href="/site/312/1blankspace.util.site.collect-1.0.0.css" rel="stylesheet" type="text/css" />
 <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
 
-<div id="ns1blankspaceUtilFinancialStripeContainer" data-ui="elements">
-<form action="" method="post" id="site-collect-container">
-  <div class="form-row">
-    <label for="card-element">
-      Credit or debit card
-    </label>
-    <div id="card-container"></div>
-    <div id="card-errors" role="alert"></div>
+<div class="container">
+  <div class="row">
+    <div class="col-sm-3"></div>
+    <div class="col-sm-6 text-center">
+      <div id="ns1blankspaceUtilFinancialStripeContainer" data-ui="elements">
+        <form action="/rpc/site/?method=SITE_COLLECT_PAYMENT_STRIPE" method="post" id="site-collect-container">
+          <div class="form-row">
+            <label for="card-element">
+              <h2>Pay invoice</h2>
+              <h4 class="text-muted">with credit or debit card</h4>
+            </label>
+            <div id="card-element"></div>
+            <div id="card-errors" role="alert" class="alert" style="margin-top:10px;"></div>
+          </div>
+        </form>
+        <button class="btn btn-default btn-lg" id="site-collect-process">Pay $[[Amount]]</button>
+      </div>
+      <div id="ns1blankspaceUtilFinancialStripeContainer-Success" class="hidden">
+        <h2>Payment processed.</h2>
+      </div>
+    </div>
+    <div class="col-sm-3"></div>
   </div>
-<button id="site-collect-process">Submit Payment</button>
-</form>
-
 </div>
 
+<script src="https://js.stripe.com/v3/"></script>
 <script src="/site/312/jquery-1.10.2.min.js"></script>
 <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
-<script src="https://js.stripe.com/v3/"></script>
-<script src="/site/312/1blankspace.util.site.collect-1.0.0.js"></script>
+<script src="/site/312/1blankspace.util.site.collect-1.0.1.js"></script>
 
