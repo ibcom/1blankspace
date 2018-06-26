@@ -1064,6 +1064,8 @@ ns1blankspace.setup.website =
 										sSearchText = ns1blankspace.setup.website.pages.data.searchText;
 									}	
 
+									if (sSearchText == '') {sSearchText = undefined}
+
 									if (oResponse == undefined)
 									{
 										var oSearch = new AdvancedSearch();
@@ -1162,7 +1164,7 @@ ns1blankspace.setup.website =
 										})
 										.click(function() 
 										{
-											ns1blankspace.setup.website.pages.show({searchText: undefined});
+											ns1blankspace.setup.website.pages.show({searchText: ''});
 										})
 										.css('width', '65px');
 
