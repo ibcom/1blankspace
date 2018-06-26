@@ -319,11 +319,23 @@ ns1blankspace.util.site.collect =
         {
             if (oToken != undefined)
             {
+                var sCurrency = ns1blankspace.util.site.collect.data.context.currency;
+                if (sCurrency == undefined) {sCurrency = 'AUD'}
+
+                var oData =
+                {
+                    token: oToken.id,
+                    currency: sCurrency,
+                    amount: ns1blankspace.util.site.collect.data.context.amount,
+                    invoiceGUID: ns1blankspace.util.site.collect.data.context.invoiceGUID,
+                    description: ns1blankspace.util.site.collect.data.context.description
+                }
+
                 $.ajax(
                 {
                     type: 'POST',
                     url: '/rpc/site/?method=SITE_COLLECT_PAYMENT_STRIPE',
-                    data: 'token=' + oToken.id,
+                    data: oData,
                     dataType: 'json',
                     success: function (data)
                     {

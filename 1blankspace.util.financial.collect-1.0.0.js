@@ -23,6 +23,7 @@ ns1blankspace.util.financial.paynow = function (oObjectData)
         sHRef = ns1blankspace.option.stripe.url + '/#';
         sHRef = sHRef + 'invoiceGUID=' + oObjectData['guid'];
         sHRef = sHRef + '|amount=' + oObjectData['amount'];
+        sHRef = sHRef + '|description=' + oObjectData['reference'];
 
         var sText = ns1blankspace.option.stripe.text;
         if (sText == undefined) {sText = 'Pay Now'}
