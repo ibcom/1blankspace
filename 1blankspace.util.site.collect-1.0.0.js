@@ -108,8 +108,8 @@ ns1blankspace.util.site.collect =
                     $.ajax(
                     {
                         type: 'POST',
-                        url: '/rpc/site/?method=SITE_COLLECT_PAYMENT_STRIPE',
-                        data: 'getapikey=1',
+                        url: '/rpc/site/?method=SITE_FUNDS_TRANSFER_ACCOUNT_SEARCH&advanced=1',
+                        data: 'criteria={"fields":[{"name":"apikey"}]}',
                         dataType: 'json',
                         success: function (data)
                         {
@@ -440,7 +440,7 @@ data:
 &currency= [as passed or AUD as default]
 &description= [as passed]
 
---- If the call to SITE_COLLECT_PAYMENT_STRIPE has getapikey=1 and account Provider = Stripe then just return the account apikey - it is needed by view-controller to get the token client side.
+--- If the call to SITE_FUNDS_TRANSFER_ACCOUNT_SEARCH and account Provider = Stripe then just return the account apikey - it is needed by view-controller to get the token client side.
 
 --- Also if invoiceGUID is set and in the same space as the funds transfer account, and Stripe return is successful then need to do an "AUTO_PAYMENT" for the amount of the payment.
 */
