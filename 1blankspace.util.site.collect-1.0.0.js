@@ -50,7 +50,7 @@ $(document).ready(function()
 
 ns1blankspace.util.site.collect =
 {
-    data: {_publicKey: 'pk_test_ZCsqtZ8k3XCjHx9qjJwfyWS4', option: {autoReceipt: true}},
+    data: {_publicKey: undefined, option: {autoReceipt: true}},
 
     init: function (oParam)
     {    
@@ -76,6 +76,10 @@ ns1blankspace.util.site.collect =
 
             if (ns1blankspace.util.site.collect.data.option.stripe)
             {
+                if (window.stripePublicKey != undefined)
+                {
+                    ns1blankspace.util.site.collect.data._publicKey = window.stripePublicKey;
+                }
                 ns1blankspace.util.site.collect.data.option.elements = (ns1blankspace.util.site.collect.data.xhtmlContainer.attr('data-ui') == 'elements')
                 ns1blankspace.util.site.collect.stripe.init(oParam);
             }    
