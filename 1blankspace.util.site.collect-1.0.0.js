@@ -80,6 +80,12 @@ ns1blankspace.util.site.collect =
                 {
                     ns1blankspace.util.site.collect.data._publicKey = window.stripePublicKey;
                 }
+
+                if (window.siteAccount != undefined)
+                {
+                    ns1blankspace.util.site.collect.data._siteAccount = window.siteAccount;
+                }
+
                 ns1blankspace.util.site.collect.data.option.elements = (ns1blankspace.util.site.collect.data.xhtmlContainer.attr('data-ui') == 'elements')
                 ns1blankspace.util.site.collect.stripe.init(oParam);
             }    
@@ -103,7 +109,7 @@ ns1blankspace.util.site.collect =
                 {
                     ns1blankspace.util.site.collect.stripe.init(oParam,
                     {
-                        apikey: ns1blankspace.util.site.collect.data._publicKey,
+                        data: {rows: [{apikey: ns1blankspace.util.site.collect.data._publicKey}]},
                         status: 'OK'
                     }); 
                 }
@@ -113,7 +119,7 @@ ns1blankspace.util.site.collect =
                     {
                         type: 'POST',
                         url: '/rpc/site/?method=SITE_FUNDS_TRANSFER_ACCOUNT_SEARCH&advanced=1',
-                        data: 'criteria={"fields":[{"name":"apikey"}]}',
+                        data: 'criteria={"fields":[{"name":"apikey"}],"filters":[{"name":"id","comparison":"EQUAL_TO","value1":"' + ns1blankspace.util.site.collect.data._siteAccount + '"}]}',
                         dataType: 'json',
                         success: function (data)
                         {
@@ -126,14 +132,21 @@ ns1blankspace.util.site.collect =
             {
                 if (oResponse.status == 'OK')
                 {
-                    ns1blankspace.util.site.collect.data.publicKey = oResponse.apikey;
-                    ns1blankspace.util.site.collect.data.stripe = Stripe(ns1blankspace.util.site.collect.data.publicKey);
-                    
-                    ns1blankspace.util.site.collect.stripe.render(oParam)
+                    if (oResponse.data.rows.length > 0)
+                    {
+                        ns1blankspace.util.site.collect.data.publicKey = oResponse.data.rows[0].apikey;
+                        ns1blankspace.util.site.collect.data.stripe = Stripe(ns1blankspace.util.site.collect.data.publicKey);
+                        ns1blankspace.util.site.collect.stripe.render(oParam);
+                    }
+                    else
+                    {
+                        ns1blankspace.util.site.collect.error('Error: No public key set up.')
+                    }
+                   
                 }
                 else
                 {
-                    ns1blankspace.util.site.collect.error('Error')
+                    ns1blankspace.util.site.collect.error('Error in getting key public key.')
                 }
             }    
         },
@@ -333,7 +346,7 @@ ns1blankspace.util.site.collect =
                     amount: ns1blankspace.util.site.collect.data.context.amount,
                     invoiceGUID: ns1blankspace.util.site.collect.data.context.invoiceGUID,
                     description: ns1blankspace.util.site.collect.data.context.description,
-                    account: siteAccount,
+                    account: ns1blankspace.util.site.collect.data._siteAccount,
                     site: window.mydigitalstructureSiteId
                 }
 
