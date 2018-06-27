@@ -964,19 +964,19 @@ ns1blankspace.setup.financial =
 						
 						aHTML.push('<table class="ns1blankspaceColumn2">');
 									
-						aHTML.push('<tr class="ns1blankspaceCaption">' +
+						aHTML.push('<tr class="ns1blankspaceCaption" data-provider="10">' +
 										'<td class="ns1blankspaceCaption">' +
 										'Title' +
 										'</td></tr>' +
-										'<tr class="ns1blankspace">' +
+										'<tr class="ns1blankspace" data-provider="10e">' +
 										'<td class="ns1blankspaceText">' +
 										'<input id="ns1blankspacePaymentAccountTitle" class="ns1blankspaceText">' +
 										'</td></tr>');	
 
-						aHTML.push('<tr><td class="ns1blankspaceCaption">' +
+						aHTML.push('<tr data-provider="10"><td class="ns1blankspaceCaption">' +
 										'Type' +
 										'</td></tr>' +
-										'<tr class="ns1blankspace">' +
+										'<tr class="ns1blankspace" data-provider="10">' +
 										'<td class="ns1blankspaceRadio">' +
 										'<input type="radio" id="radioPaymentAccountProvider10" name="radioPaymentAccountProvider" value="10"/>Stripe' +
 										'<br /><input type="radio" id="radioPaymentAccountProvider1" name="radioPaymentAccountProvider" value="1"/>eWay' +
@@ -986,10 +986,10 @@ ns1blankspace.setup.financial =
 										'<br /><input type="radio" id="radioPaymentAccountProvider5" name="radioPaymentAccountProvider" value="5"/>EziDebit' +
 										'</td></tr>');
 
-						aHTML.push('<tr><td class="ns1blankspaceCaption">' +
+						aHTML.push('<tr data-provider="10"><td class="ns1blankspaceCaption">' +
 										'Status' +
 										'</td></tr>' +
-										'<tr class="ns1blankspace">' +
+										'<tr class="ns1blankspace" data-provider="10">' +
 										'<td class="ns1blankspaceRadio">' +
 										'<input type="radio" id="radioPaymentAccountStatus1" name="radioPaymentAccountStatus" value="1"/>Testing' +
 										'<br /><input type="radio" id="radioPaymentAccountStatus1" name="radioPaymentAccountStatus" value="2"/>Active' +
@@ -1005,10 +1005,10 @@ ns1blankspace.setup.financial =
 										'<br /><input type="radio" id="radioPaymentAccountMakePaymentN" name="radioPaymentAccountMakePayment" value="N"/>No' +
 										'</td></tr>');
 
-						aHTML.push('<tr><td class="ns1blankspaceCaption">' +
+						aHTML.push('<tr data-provider="10"><td class="ns1blankspaceCaption">' +
 										'Use to collect payments' +
 										'</td></tr>' +
-										'<tr class="ns1blankspace">' +
+										'<tr class="ns1blankspace" data-provider="10">' +
 										'<td class="ns1blankspaceRadio">' +
 										'<input type="radio" id="radioPaymentAccountTakePaymentY" name="radioPaymentAccountTakePayment" value="Y"/>Yes' +
 										'<br /><input type="radio" id="radioPaymentAccountTakePaymentN" name="radioPaymentAccountTakePayment" value="N"/>No' +
@@ -1056,20 +1056,20 @@ ns1blankspace.setup.financial =
 										'<input id="ns1blankspacePaymentAccountAPILogon" class="ns1blankspaceText">' +
 										'</td></tr>');
 
-						aHTML.push('<tr class="ns1blankspaceCaption">' +
+						aHTML.push('<tr class="ns1blankspaceCaption" data-provider="10">' +
 										'<td class="ns1blankspaceCaption">' +
-										'API Password' +
+										'API Password / Secret Key' +
 										'</td></tr>' +
-										'<tr class="ns1blankspace">' +
+										'<tr class="ns1blankspace" data-provider="10">' +
 										'<td class="ns1blankspaceText">' +
 										'<input type="password" id="ns1blankspacePaymentAccountAPIPassword" class="ns1blankspaceText">' +
 										'</td></tr>');
 
-						aHTML.push('<tr class="ns1blankspaceCaption">' +
+						aHTML.push('<tr class="ns1blankspaceCaption" data-provider="10">' +
 										'<td class="ns1blankspaceCaption">' +
-										'API Key' +
+										'API Key / Public Key' +
 										'</td></tr>' +
-										'<tr class="ns1blankspace">' +
+										'<tr class="ns1blankspace" data-provider="10">' +
 										'<td class="ns1blankspaceText">' +
 										'<input id="ns1blankspacePaymentAccountAPIKey" class="ns1blankspaceText">' +
 										'</td></tr>');
@@ -1093,6 +1093,19 @@ ns1blankspace.setup.financial =
 						aHTML.push('</table>');		
 												
 						$('#ns1blankspacePaymentAccountEditColumn2').html(aHTML.join(''));
+
+						$('[name="radioPaymentAccountProvider"]').click(function()
+						{
+							if ($('input[name="radioPaymentAccountProvider"]:checked').val() == 10)
+							{
+								$('#ns1blankspacePaymentAccountEditColumn1 tr').hide();
+								$('#ns1blankspacePaymentAccountEditColumn1 tr[data-provider*="10"]').show()
+							}
+							else
+							{
+								$('#ns1blankspacePaymentAccountEditColumn1 tr').show()
+							}
+						});
 						
 						$('#ns1blankspacePaymentAccountEditSave').button(
 						{
@@ -1146,7 +1159,7 @@ ns1blankspace.setup.financial =
 						if (sID != undefined)
 						{
 							ns1blankspace.status.working();
-							
+
 							var oSearch = new AdvancedSearch();
 							oSearch.method = 'SETUP_FINANCIAL_FUNDS_TRANSFER_ACCOUNT_SEARCH';
 							oSearch.addField('title,provider,providertext,status,statustext,takepayment,makepayment,urlcancel,urlsuccess,provideraccountkey,' +
@@ -1181,6 +1194,16 @@ ns1blankspace.setup.financial =
 						$('#ns1blankspacePaymentAccountAPILogon').val(oObjectContext.apilogon);
 						$('#ns1blankspacePaymentAccountAPIPassword').val(oObjectContext.apipassword);
 						$('#ns1blankspacePaymentAccountAPIKey').val(oObjectContext.apikey);
+
+						if (oObjectContext.provider == 10)
+						{
+							$('#ns1blankspacePaymentAccountEditColumn1 tr').hide();
+							$('#ns1blankspacePaymentAccountEditColumn1 tr[data-provider*="10"]').show()
+						}
+						else
+						{
+							$('#ns1blankspacePaymentAccountEditColumn1 tr').show()
+						}
 
 						ns1blankspace.status.message('');
 					}

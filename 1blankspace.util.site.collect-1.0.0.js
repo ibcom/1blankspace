@@ -50,7 +50,7 @@ $(document).ready(function()
 
 ns1blankspace.util.site.collect =
 {
-    data: {_publicKey: 'pk_test_ZCsqtZ8k3XCjHx9qjJwfyWS4', option: {}},
+    data: {_publicKey: 'pk_test_ZCsqtZ8k3XCjHx9qjJwfyWS4', option: {autoReceipt: true}},
 
     init: function (oParam)
     {    
@@ -359,13 +359,65 @@ ns1blankspace.util.site.collect =
         {
             if (oResponse.status == 'OK')
             {
-                ns1blankspace.util.site.collect.data.xhtmlContainer.hide();
-                ns1blankspace.util.site.collect.data.xhtmlContainerSuccess.show();
+                if (oResponse.stripe_status == 'succeeded')
+                {
+                    if (ns1blankspace.util.site.collect.data.option.autoReceipt)
+                    {   
+                        ns1blankspace.util.site.collect.stripe.autoReceipt({chargeToken: oResponse.stripe_id})
+                    }
+                    else
+                    {
+                        ns1blankspace.util.site.collect.data.xhtmlContainer.hide();
+                        ns1blankspace.util.site.collect.data.xhtmlContainerSuccess.show();
+                    }
+                }
+                else
+                {
+                    ns1blankspace.util.site.collect.stripe.error(oResponse.stripe_outcome_sellermessage)
+                }
             }
             else
             {
                 ns1blankspace.util.site.collect.data.xhtmlContainer.html('<h3>There is something wrong with the set up of this page!')
             }
+        },
+
+        autoReceipt: function (oParam, oResponse)
+        {
+            if (oResponse == undefined)
+            {
+                var oData =
+                {
+                    amount: ns1blankspace.util.site.collect.data.context.amount,
+                    guid: ns1blankspace.util.site.collect.data.context.invoiceGUID,
+                    description: oParam.chargeToken,
+                    site: window.mydigitalstructureSiteId
+                }
+
+                $.ajax(
+                {
+                    type: 'POST',
+                    url: '/rpc/site/?method=SITE_AUTO_RECEIPT',
+                    data: oData,
+                    dataType: 'json',
+                    success: function (data)
+                    {
+                        ns1blankspace.util.site.collect.stripe.autoReceipt(oParam, data);
+                    }
+                });
+            }
+            else
+            {
+                if (oResponse.status == 'ER')
+                {
+                    ns1blankspace.util.site.collect.stripe.error(oResponse.error.errornotes)
+                }
+                else
+                {
+                    ns1blankspace.util.site.collect.data.xhtmlContainer.hide();
+                    ns1blankspace.util.site.collect.data.xhtmlContainerSuccess.show();
+                }
+            }    
         },
 
         error: function (sMessage)
@@ -412,58 +464,6 @@ ns1blankspace.util.site.collect =
         }  
     }
 }
-
-/*
-
-Notes for SITE_COLLECT_PAYMENT_STRIPE....
-
-Stripe.com is the easier version of PayPal.
-
-Currently there we have;
-
-1. SITE_COLLECT_PAYMENT - which is integrated with processing an order.
-2. SITE_PAYPAL_PDT_METHOD - which is integrated with PayPal,  It is most similar to what we need to do with Stripe.
-
-So propose doing a copy of SITE_PAYPAL_PDT_METHOD and calling it SITE_COLLECT_PAYMENT_STRIPE.
-
-Most of the work is done in view-controller, including the sourcing of a Stripe-token, but still need to do a final call to Stripe in context of a Stripe account with secret password help in financial funds manage the account.
-
-See; http://docs.mydigitalstructure.com/community_stripe
-
-1. SETUP_FINANCIAL_FUNDS_TRANSFER_ACCOUNT_MANAGE
-
-Add Provider = "Stripe"
-
-2. SITE_COLLECT_PAYMENT_STRIPE
-
-## View-controller call to: 
-
-/rpc/site/?method=SITE_COLLECT_PAYMENT_STRIPE
-&account= [from SETUP_FINANCIAL_FUNDS_TRANSFER_ACCOUNT_MANAGE - used to get apipassword]
-&token= [token from Stripe]
-&invoiceGUID= [from myds, optional]
-&amount=
-&currency= [AUD default]
-&description=
-
-## Then method does https call to Stripe and returns to view-controller what stripe returns.
-
-https://api.stripe.com/v1/charges
-
-SetHeader("Authorization: Bearer", [apipassword from SETUP_FINANCIAL_FUNDS_TRANSFER_ACCOUNT_MANAGE account]"
-
-data:
-&source= [token passed]
-&amount= [as passed]
-&currency= [as passed or AUD as default]
-&description= [as passed]
-
---- If the call to SITE_FUNDS_TRANSFER_ACCOUNT_SEARCH and account Provider = Stripe then just return the account apikey - it is needed by view-controller to get the token client side.
-
---- Also if invoiceGUID is set and in the same space as the funds transfer account, and Stripe return is successful then need to do an "AUTO_PAYMENT" for the amount of the payment.
-*/
-
-
 
 
 
