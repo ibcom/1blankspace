@@ -29,9 +29,9 @@ $(document).ready(function()
     var aContext = [];
     var oContext = {};
 
-    if (mydigitalstructureContextId != undefined && mydigitalstructureContextId != '')
+    if (window.mydigitalstructureContextId != undefined && window.mydigitalstructureContextId != '')
     {
-        aContext = mydigitalstructureContextId.split('|'); 
+        aContext = window.mydigitalstructureContextId.split('|'); 
     }
     else if (window.location.hash != '')
     {
@@ -328,7 +328,9 @@ ns1blankspace.util.site.collect =
                     currency: sCurrency,
                     amount: ns1blankspace.util.site.collect.data.context.amount,
                     invoiceGUID: ns1blankspace.util.site.collect.data.context.invoiceGUID,
-                    description: ns1blankspace.util.site.collect.data.context.description
+                    description: ns1blankspace.util.site.collect.data.context.description,
+                    account: siteAccount,
+                    site: window.mydigitalstructureSiteId
                 }
 
                 $.ajax(
@@ -340,6 +342,10 @@ ns1blankspace.util.site.collect =
                     success: function (data)
                     {
                         ns1blankspace.util.site.collect.stripe.processComplete(data);
+                    },
+                    error: function (data)
+                    {
+                        ns1blankspace.util.site.collect.stripe.error(data.responseJSON.error.errornotes)
                     }
                 });
             }

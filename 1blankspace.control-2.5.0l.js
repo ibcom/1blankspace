@@ -68,7 +68,7 @@ ns1blankspace.option.yodlee =
 ns1blankspace.option.stripe =
 {
 	url: 'https://app-next.lab.ibcom.biz/paynow',
-	text: 'Pay Now Using Credit Card'
+	text: 'Pay Now Using Credit Card',
 }
 
 ns1blankspace.option.dateFormats = ['DD MMM YYYY', 'D MMM YYYY', 'D/MM/YYYY', 'DD/MM/YYYY', 'DD MMM YYYY HH:mm:ss'];
@@ -143,7 +143,7 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.format',
-		source: '/site/312/1blankspace.format-2.1.5.js'
+		source: '/site/312/1blankspace.format-2.1.6.js'
 	},
 	{
 		nameSpace: '1blankspace.contactPerson',
