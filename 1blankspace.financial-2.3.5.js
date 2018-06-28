@@ -1633,11 +1633,12 @@ ns1blankspace.financial.debtors =
 										$(oResponse.data.rows).each(function(i, v)
 										{
 											iContactPerson = this.billtoperson;
-											if (iContactPerson == '') {iContactPerson == this.primarycontactperson}
+											if (iContactPerson == '') {iContactPerson = this.primarycontactperson}
+											if (iContactPerson == '') {iContactPerson = this.email}
 
 											if (iContactPerson != '')
 											{
-												var oStatement = $.grep(ns1blankspace.financial.invoicing.data.statements, function (a) {return a.id == v.id;})[0];
+												var oStatement = $.grep(ns1blankspace.financial.debtors.data.statements, function (a) {return a.id == v.id;})[0];
 
 												if (oStatement)
 												{
@@ -1677,17 +1678,17 @@ ns1blankspace.financial.debtors =
 
 										if (oStatement)
 										{
-											if (oStatement.xhtml == undefined && false)  //TODO
+											if (oStatement.xhtml == undefined)
 											{	
-												var sTemplate = '<table><tr><td>[[Name]]</tr></td>';
+												var oTemplate = ns1blankspace.format.templates.get({object: 175});
 
 												sHTML = ns1blankspace.format.render(
 												{
-													object: 5,
-													objectContext: oInvoice.id,
-													xhtmlTemplate: sTemplate,
-													objectData: oInvoice,
-													objectOtherData: oInvoice.items
+													object: 175,
+													objectContext: -1,
+													xhtmlTemplate: oTemplate.xhtml,
+													objectData: oStatement,
+													objectOtherData: oStatement.invoices
 												});
 
 												oStatement.xhtml = sHTML;
@@ -1701,7 +1702,7 @@ ns1blankspace.financial.debtors =
 											{
 												var oData = 
 												{
-													subject: 'Statement',
+													subject: ns1blankspace.user.spaceText + ' Statement',
 													message: oStatement.xhtml,
 													to: oStatement.contactperson,
 													object: (oStatement.debtortype=='P'?32:12),
@@ -1721,13 +1722,19 @@ ns1blankspace.financial.debtors =
 														{
 															$('#ns1blankspaceDebtors_selectContainer-' + oStatement.key).html('Emailed');
 															oParam.dataIndex = iDataIndex + 1;
-															oParam.step = 2;  // NEXT INVOICE
-															ns1blankspace.financial.debtors.email(oParam);
+															ns1blankspace.financial.debtors.email.send(oParam);
 														}
 														else
 														{
-															$('#ns1blankspaceDebtors_selectContainer-' + oStatement.key).html('Error');
-															$('#ns1blankspaceDebtors_selectContainer-' + oStatement.key).attr('title', data.error.errornotes);
+															if (data.error.errornotes.indexOf('no email address') != -1)
+															{
+																$('#ns1blankspaceDebtors_selectContainer-' + oStatement.key).html('No email');
+															}
+															else
+															{
+																$('#ns1blankspaceDebtors_selectContainer-' + oStatement.key).html('Error');
+																$('#ns1blankspaceDebtors_selectContainer-' + oStatement.key).attr('title', data.error.errornotes);
+															}	
 														}
 													}
 												});

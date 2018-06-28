@@ -98,7 +98,7 @@ ns1blankspace.xhtml.templates.source =
 	invoice: '/jscripts/1blankspace.setup.financial.invoice-1.0.0.html',
 	statement: '/jscripts/1blankspace.setup.financial.statement-1.0.0.html',
 	payroll: '/jscripts/1blankspace.setup.financial.payroll-1.0.1.html',
-	payslip: '/jscripts/1blankspace.setup.financial.payslip-1.0.0.html',
+	payslip: '/site/312/1blankspace.setup.financial.payslip-1.0.0.html',
 	invoiceschedule: '/jscripts/1blankspace.setup.financial.invoiceschedule-1.0.0.html',
 	payment: '/jscripts/1blankspace.setup.financial.payment-1.0.0.html',
 	action: '/jscripts/1blankspace.setup.action-1.0.0.html',
@@ -151,7 +151,7 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.contactBusiness',
-		source: '/jscripts/1blankspace.contactbusiness-2.0.6.js'
+		source: '/site/312/1blankspace.contactbusiness-2.0.7.js'
 	},
 	{
 		nameSpace: '1blankspace.opportunity',
@@ -199,7 +199,7 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.financial',
-		source: '/site/312/1blankspace.financial-2.3.4.js'
+		source: '/site/312/1blankspace.financial-2.3.5.js'
 	},
 	{
 		nameSpace: '1blankspace.financial.bankAccount',
@@ -299,7 +299,7 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.setup.website',
-		source: '/site/312/1blankspace.setup.website-2.1.1.js'
+		source: '/site/312/1blankspace.setup.website-2.1.2.js'
 	},
 	{
 		nameSpace: '1blankspace.setup.websiteForm',
