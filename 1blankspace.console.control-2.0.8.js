@@ -1,7 +1,5 @@
 /*!
-
-!! Now .console.control.
-
+!!! Now 
  * ibCom Pty Ltd ATF ibCom Unit Trust & contributors
  * Licensed as Attribution-ShareAlike 4.0 International
  * http://creativecommons.org/licenses/by-sa/4.0/
@@ -16,7 +14,7 @@ ns1blankspace.scripts =
 [
 	{
 		nameSpace: '1blankspace.advancedsearch',
-		source: '/jscripts/1blankspace.advancedsearch-2.0.3.js'
+		source: '/site/1433/1blankspace.advancedsearch-2.0.5.js'
 	},
 	{
 		nameSpace: '1blankspace.home',
@@ -32,11 +30,11 @@ ns1blankspace.scripts =
 	},
 	{
 		nameSpace: '1blankspace.admin.space',
-		source: '/jscripts/1blankspace.developer.space-2.0.1.js'
+		source: '/site/1433/1blankspace.admin.space-2.0.4.js'
 	},
 	{
 		nameSpace: '1blankspace.news',
-		source: '/jscripts/1blankspace.news-2.0.2.js'
+		source: '/jscripts/1blankspace.news-2.0.3.js'
 	},
 	{
 		nameSpace: '1blankspace.setup',
@@ -48,7 +46,7 @@ ns1blankspace.scripts =
 	},
 	{
 		nameSpace: '1blankspace.setup.messaging',
-		source: '/jscripts/1blankspace.setup.messaging-2.0.1.js'
+		source: '/site/1433/1blankspace.setup.messaging-2.0.5.js'
 	},
 	{
 		nameSpace: '1blankspace.setup.networkGroup',
@@ -60,31 +58,31 @@ ns1blankspace.scripts =
 	},
 	{
 		nameSpace: '1blankspace.setup.structure',
-		source: '/jscripts/1blankspace.setup.structure-2.0.3.js'
+		source: '/jscripts/1blankspace.setup.structure-2.0.4.js'
 	},
 	{
 		nameSpace: '1blankspace.setup.user',
-		source: '/jscripts/1blankspace.setup.user-2.0.2.js'
+		source: '/site/1433/1blankspace.setup.user-2.0.7.js'
 	},
 	{
 		nameSpace: '1blankspace.setup.userRole',
-		source: '/jscripts/1blankspace.setup.userRole-2.0.1.js'
+		source: '/site/1433/1blankspace.setup.userRole-2.0.2.js'
 	},
 	{
 		nameSpace: '1blankspace.setup.website',
-		source: '/jscripts/1blankspace.setup.website-2.0.5.js'
+		source: '/site/1433/1blankspace.setup.website-2.1.2.js'
 	},
 	{
 		nameSpace: '1blankspace.setup.websiteForm',
-		source: '/jscripts/1blankspace.setup.websiteForm-2.0.0.js'
+		source: '/site/1433/1blankspace.setup.website.form-2.0.1.js'
 	},
 	{
 		nameSpace: '1blankspace.supportIssue',
-		source: '/jscripts/1blankspace.supportissue-2.0.0.js'
+		source: '/site/1433/1blankspace.supportissue-2.0.8.js'
 	},
 	{
 		nameSpace: '1blankspace.setup.file',
-		source: '/jscripts/1blankspace.setup.file-2.0.2.js'
+		source: '/site/1433/1blankspace.setup.file-2.0.5.js'
 	},
 	{
 		nameSpace: '1blankspace.util.local',
@@ -96,12 +94,24 @@ ns1blankspace.scripts =
 	},
 	{
 		nameSpace: '1blankspace.connect',
-		source: '/jscripts/1blankspace.connect-2.0.1.js'
+		source: '/jscripts/1blankspace.connect-2.0.2.js'
 	},
 	{
 		nameSpace: '1blankspace.util.whenDone',
 		source: '/jscripts/1blankspace.util.whendone-2.0.0.js'
-	}
+	},
+	{
+		nameSpace: '1blankspace.admin.monitoring',
+		source: '/site/1433/1blankspace.admin.monitoring-2.0.1.js'
+	},
+	{
+		nameSpace: '1blankspace.util.convert',
+		source: '/jscripts/1blankspace.util.convert-2.0.0.js'
+	},
+	{
+		nameSpace: '1blankspace.util.saml',
+		source: '/site/1433/1blankspace.util.saml-2.0.2.js'
+	},
 ]
 
 ns1blankspace.xhtml.logonNotes =
@@ -320,7 +330,7 @@ ns1blankspace.control.setView =
 
 	setup:			function ()
 					{
-						ns1blankspace.developer.space.init();
+						ns1blankspace.admin.space.init();
 					},
 }
 

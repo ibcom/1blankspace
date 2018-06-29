@@ -378,7 +378,7 @@ ns1blankspace.scripts.concat(
 		source: '/jscripts/1blankspace.util.convert-2.0.0.js'
 	},
 	{
-		nameSpace: '1blankspace.util.convert',
+		nameSpace: '1blankspace.util.saml',
 		source: '/jscripts/1blankspace.util.saml-2.0.2.js'
 	},
 	{
