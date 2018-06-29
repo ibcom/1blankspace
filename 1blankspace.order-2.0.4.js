@@ -30,7 +30,7 @@ ns1blankspace.order =
 
 	home:		
 	{
-		show:		function (oResponse)
+		show:	function (oResponse)
 		{	
 			$('#ns1blankspaceMain').html(ns1blankspace.xhtml.loading);
 			$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions);
