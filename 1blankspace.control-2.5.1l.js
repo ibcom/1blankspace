@@ -2389,6 +2389,7 @@ ns1blankspace.attachments =
 			.click(function() 
 			{
 				oParam = ns1blankspace.util.setParam(oParam, 'searchText', $('#ns1blankspaceAttachmentsSearchText').val());
+				delete oParam.xhtmlElementID;
 				ns1blankspace.attachments.show(oParam);
 			})
 			.css('width', '80px');
@@ -2400,6 +2401,7 @@ ns1blankspace.attachments =
 			.click(function() 
 			{
 				oParam = ns1blankspace.util.setParam(oParam, 'searchText', undefined);
+				delete oParam.xhtmlElementID;
 				ns1blankspace.attachments.show(oParam);
 			})
 			.css('width', '80px');
@@ -2408,7 +2410,8 @@ ns1blankspace.attachments =
 			{
 				if (e.which === 13)
 		    	{
-		    		oParam = ns1blankspace.util.setParam(oParam, 'searchText', $('#ns1blankspaceAttachmentsSearchText').val())
+		    		oParam = ns1blankspace.util.setParam(oParam, 'searchText', $('#ns1blankspaceAttachmentsSearchText').val());
+		    		delete oParam.xhtmlElementID;
 		    		ns1blankspace.attachments.show(oParam);
 		    	}
 			});				
@@ -2431,8 +2434,14 @@ ns1blankspace.attachments =
 			}
 
 			if (sSearchText != undefined)
-			{				
+			{	
+				oSearch.addBracket('(');			
 				oSearch.addFilter('filename', 'TEXT_IS_LIKE', sSearchText);
+				oSearch.addOperator('or');
+				oSearch.addFilter('title', 'TEXT_IS_LIKE', sSearchText);
+				oSearch.addOperator('or');
+				oSearch.addFilter('url', 'TEXT_IS_LIKE', sSearchText);
+				oSearch.addBracket(')');
 			}
 
 			oSearch.sort(sSortBy, sSortDirection);
@@ -3048,24 +3057,30 @@ ns1blankspace.actions =
 			if (iObject != undefined && iObject != '') {oSearch.addFilter('object', 'EQUAL_TO', iObject)};
 			if (iObjectContext != undefined && iObjectContext != '') {oSearch.addFilter('objectcontext', 'EQUAL_TO', iObjectContext)};
 			
-			oSearch.addBracket('(');
+			var bContactBusiness = (iContactBusiness != undefined && iContactBusiness != '');
+			var bContactPerson = (iContactPerson != undefined && iContactPerson != '');
 
-			if (iContactBusiness != undefined && iContactBusiness != '')
+			if (bContactBusiness || bContactPerson)
 			{
-				oSearch.addFilter('contactbusiness', 'EQUAL_TO', iContactBusiness)
-			};
+				oSearch.addBracket('(');
 
-			if (iContactPerson != undefined && iContactPerson != '')
-			{
-				if (iContactBusiness != undefined && iContactBusiness != '')
+				if (bContactBusiness)
 				{
-					oSearch.addOperator('or');
-				}
+					oSearch.addFilter('contactbusiness', 'EQUAL_TO', iContactBusiness)
+				};
 
-				oSearch.addFilter('contactperson', 'EQUAL_TO', iContactPerson)
-			};
+				if (bContactPerson)
+				{
+					if (bContactBusiness)
+					{
+						oSearch.addOperator('or');
+					}
 
-			oSearch.addBracket(')');
+					oSearch.addFilter('contactperson', 'EQUAL_TO', iContactPerson)
+				};
+
+				oSearch.addBracket(')');
+			}	
 
 			oSearch.sort('modifieddate', 'desc')
 
