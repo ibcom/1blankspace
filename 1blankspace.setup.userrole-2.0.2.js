@@ -553,7 +553,7 @@ ns1blankspace.setup.userRole =
 														*/				
 
 														$vq.add('<tr><td style="padding-top:12px;" class="ns1blankspaceSubNote">' +
-																		'<a href="http://mydigitalstructure.com/gettingstarted_responsive_controls" target="_blank">More on data access control.</a>' +
+																		'<a href="http://docs.mydigitalstructure.com/gettingstarted_responsive_controls" target="_blank">More on data access control.</a>' +
 																		'</td></tr>');
 																		
 														$vq.add('</table>');					

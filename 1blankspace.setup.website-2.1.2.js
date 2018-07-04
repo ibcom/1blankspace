@@ -203,10 +203,10 @@ ns1blankspace.setup.website =
 							{	
 								aHTML.push('<tr class="ns1blankspaceRow">');
 								
-								aHTML.push('<td class="ns1blankspaceMostLikely ns1blankspaceRow" style="border-color:#F5F5F5; padding:6px;"><div id="ns1blankspaceSetupWebsiteMostLikely_title-' + row.id + 
-												'" >' +
+								aHTML.push('<td class="ns1blankspaceMostLikely ns1blankspaceRow" style="border-color:#F5F5F5; padding:6px;">' +
+												'<div id="ns1blankspaceSetupWebsiteMostLikely_title-' + row.id + '">' +
 												row.title + '</div>' +
-												(row.notes!=''?'<div class="ns1blankspaceSubNote">' + row.notes + '</div>':'') +
+												(row.notes!=''?'<div id="ns1blankspaceSetupWebsiteMostLikely_title_notes-' + row.id + '" class="ns1blankspaceSubNote">' + row.notes + '</div>':'') +
 												'</td>');
 
 								aHTML.push('<td id="ns1blankspaceSetupWebsiteMostLikely_title-' + row.id + 
@@ -1816,6 +1816,16 @@ ns1blankspace.setup.website =
 											var aHTML = [];
 												
 											aHTML.push('<table class="ns1blankspaceColumn2">');
+
+											if (ns1blankspace.session.instance != undefined)
+											{
+												if (ns1blankspace.session.instance.indexOf('lab') != -1)
+												{
+													aHTML.push('<tr><td class="ns1blankspaceSubNote" style="padding-bottom:12px;">' +
+															 		'<strong>You are in lab.</strong><br />So don\'t forget to use the lab.ibcom.biz URL!' +
+																	'</td></tr>');
+												}
+											}	
 											
 											aHTML.push('<tr><td class="ns1blankspaceAction">' +
 														'<span id="ns1blankspaceWebsiteURLAdd">Add</span>' +
