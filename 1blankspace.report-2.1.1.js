@@ -326,6 +326,7 @@ ns1blankspace.report =
 				id: 50,
 				name: "Person Groups",
 				group: 1,
+				object: 247,
 				objectName: "persongroup",
 				method: "CONTACT_PERSON_GROUP_SEARCH",
 				returnParameters: 'persongroup,persongroup.contactperson,persongroup.contactperson.contactbusiness',
@@ -3001,6 +3002,8 @@ ns1blankspace.report =
 				});
 				$('#ns1blankspaceReportResults').html(ns1blankspace.xhtml.loading);
 			
+				bContainsContactPerson = (ns1blankspace.report.config.object == 32)
+				
 				// Construct the search from the columns and filters selected by the user
 				var oSearch = new AdvancedSearch();
 			
@@ -3008,7 +3011,7 @@ ns1blankspace.report =
 				if (oSearchParameters && oSearchParameters.fields)
 				{
 					oOutputParameters = oSearchParameters.fields;
-					bContainsContactPerson = ($.grep(oSearchParameters.fields, function(x) {return $.inArray('contactperson', x.name.split('.')) > -1}).length > 0);
+					//bContainsContactPerson = ($.grep(oSearchParameters.fields, function(x) {return $.inArray('contactperson', x.name.split('.')) > -1}).length > 0);
 				}
 				
 				// Add in each of the columns chosen by the user
@@ -3021,10 +3024,10 @@ ns1blankspace.report =
 						oOutputParameters.push($.grep(ns1blankspace.report.config.allParameters, function(x) {return sName === x.name && x.source != 1}).shift());
 					}
 
-					if (bContainsContactPerson == false)
-					{
-						bContainsContactPerson = ($.inArray('contactperson', sName.split('.')) > -1)
-					}	
+					//if (bContainsContactPerson == false)
+					//{
+					//	bContainsContactPerson = ($.inArray('contactperson', sName.split('.')) > -1)
+					//}	
 				});	
 				
 				// If we don't have the id column in our list of fields, add it now
@@ -4893,7 +4896,8 @@ ns1blankspace.report =
 						schedulemaximumcount: 1, 
 						responseactionfrom: ns1blankspace.user.email, 
 						templatetext: sText, 
-						caption: sTags
+						caption: sTags,
+						saveaction: 'Y'
 					}		 
 
 					$.ajax(
@@ -4993,7 +4997,8 @@ ns1blankspace.report =
 					scheduletype: 9,
 					schedulemaximumcount: 1,
 					responseactionfrom: '',
-					templatetext: sText
+					templatetext: sText,
+					saveaction: 'Y'
 				}	
 
 				$.ajax(
