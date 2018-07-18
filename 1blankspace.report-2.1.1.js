@@ -2136,11 +2136,11 @@ ns1blankspace.report =
 							}
 						}
 
-						$("#ns1blankspaceReportResults").html('No results.');
-						$("#ns1blankspaceReportExport").html('No data to export.');
-						$("#ns1blankspaceReportUpdate").html('No data to update.');
-						$("#ns1blankspaceReportSend").html('<div class="ns1blankspaceNothing">No results to email.</div>');
-						$("#ns1blankspaceReportSMS").html('Nothing to SMS.');
+						$("#ns1blankspaceReportResults").html('<div style="margin:10px;" class="ns1blankspaceNothing">No results.</div>');
+						$("#ns1blankspaceReportExport").html('<div style="margin:10px;" class="ns1blankspaceNothing">No data to export.</div>');
+						$("#ns1blankspaceReportUpdate").html('<div style="margin:10px;" class="ns1blankspaceNothing">No data to update.</div>');
+						$("#ns1blankspaceReportSend").html('<div style="margin:10px;" class="ns1blankspaceNothing">No results to email.</div>');
+						$("#ns1blankspaceReportSMS").html('<div style="margin:10px;" class="ns1blankspaceNothing">Nothing to SMS.</div>');
 						$("#radioReport-Search").removeAttr('checked');
 						$("#radioReport-Results").attr('checked', 'checked');
 						$("#ns1blankspaceReportHeaderOptions").buttonset('refresh');
@@ -2399,15 +2399,15 @@ ns1blankspace.report =
 			aHTML.push('<div id="ns1blankspaceReportHeader">' + ns1blankspace.xhtml.loading + '</div>');
 			aHTML.push('<div id="ns1blankspaceReportSearch"></div>');
 			aHTML.push('<div style="display:none;" id="ns1blankspaceReportResults" class="ns1blankspaceReportContainer">' +
-							'<div class="ns1blankspaceSub ns1blankspaceReportOutput">Nothing to show</div></div>');
+							'<div style="margin:10px;"class="ns1blankspaceSub ns1blankspaceReportOutput">Nothing to show.</div></div>');
 			aHTML.push('<div style="display:none;" id="ns1blankspaceReportExport" class="ns1blankspaceReportContainer">' +
-							'<div class="ns1blankspaceSub ns1blankspaceReportOutput">Nothing to export</div></div>');
+							'<div style="margin:10px;" class="ns1blankspaceSub ns1blankspaceReportOutput">Nothing to export.</div></div>');
 			aHTML.push('<div style="display:none;" id="ns1blankspaceReportUpdate" class="ns1blankspaceReportContainer">' +
-							'<div class="ns1blankspaceSub ns1blankspaceReportOutput">Nothing to update</div></div>');
+							'<div style="margin:10px;" class="ns1blankspaceSub ns1blankspaceReportOutput">Nothing to update.</div></div>');
 			aHTML.push('<div style="display:none;" id="ns1blankspaceReportSend" class="ns1blankspaceReportContainer">' +
-							'<div class="ns1blankspaceSub ns1blankspaceReportOutput">Nothing to email</div></div>');
+							'<div style="margin:10px;" class="ns1blankspaceSub ns1blankspaceReportOutput">Nothing to email.</div></div>');
 			aHTML.push('<div style="display:none;" id="ns1blankspaceReportSMS" class="ns1blankspaceReportContainer">' +
-							'<div class="ns1blankspaceSub ns1blankspaceReportOutput">Nothing to SMS</div></div>');
+							'<div style="margin:10px;" class="ns1blankspaceSub ns1blankspaceReportOutput">Nothing to SMS.</div></div>');
 			$('#ns1blankspaceReport').html(aHTML.join(''));	
 		},
 
@@ -3020,8 +3020,11 @@ ns1blankspace.report =
 						// Get all the details of this column from allParameters - but only look for the ones that aren't fixedParameters (source = 1)
 						oOutputParameters.push($.grep(ns1blankspace.report.config.allParameters, function(x) {return sName === x.name && x.source != 1}).shift());
 					}
-					bContainsContactPerson = (!bContainsContactPerson && $.inArray('contactperson', sName.split('.')) > -1)
 
+					if (bContainsContactPerson == false)
+					{
+						bContainsContactPerson = ($.inArray('contactperson', sName.split('.')) > -1)
+					}	
 				});	
 				
 				// If we don't have the id column in our list of fields, add it now
@@ -3593,7 +3596,9 @@ ns1blankspace.report =
 		$.each(aColumns, function()
 		{
 			while (sText.indexOf("[[" + this.caption + "]]") >= 0)
-			{	sText = sText.replace("[[" + this.caption + "]]", "[[" + this.name + "]]")	}
+			{
+				sText = sText.replace("[[" + this.caption + "]]", "[[" + this.name + "]]")
+			}
 		});
 		
 		return sText;
@@ -3755,7 +3760,7 @@ ns1blankspace.report =
 		// Set up UI v2.0.307 Now shows the user how many rows there are prior to starting
 		if (oParam.exportStep == 0)
 		{
-			aHTML = '<table id="1blankspaceReportProgressList" class="ns1blankspace">' +
+			aHTML = '<table style="margin:10px;" id="1blankspaceReportProgressList" class="ns1blankspace">' +
 						'<tr><td colspan="3"></td></tr>' +
 						'<tr id="ns1blankspaceReportExportCountRow"><td id="ns1blankspaceReportExportCount" class="ns1blankspaceSub">' +
 								iCount + ' rows will be exported.' +
@@ -4312,7 +4317,7 @@ ns1blankspace.report =
 
 					aHTML = [];
 					aHTML.push('<table style="font-size:0.875em;"><tr>');
-					aHTML.push('<td style="color:#B8B8B8; padding:4px; background-color:#F8F8F8; text-align:right;">' +
+					aHTML.push('<td style="color:#B8B8B8; padding:4px; x-background-color:#F8F8F8; text-align:right;">' +
 								'<span id="ns1blankspaceReportUpdateProcess"></span></td></tr>');
 					aHTML.push('<tr><td id="ns1blankspaceReportUpdateProgress">&nbsp;</td></tr>');
 					aHTML.push('</table>');
@@ -4321,7 +4326,7 @@ ns1blankspace.report =
 
 					$('#ns1blankspaceReportUpdateProcess').button(
 					{
-						label: 'Save'
+						label: 'Update'
 					})
 					.click(function()
 					{ 
@@ -4380,42 +4385,35 @@ ns1blankspace.report =
 				{
 					if (confirm("You are about to update " + sTotal + ' records. Are you sure you want to continue?'))
 					{ 
-						if (oResponse == undefined)
+						if (ns1blankspace.report.data.count != ns1blankspace.report.data.resultRows.length)
 						{
-							if (ns1blankspace.report.data.count != ns1blankspace.report.data.resultRows.length)
+							var sData = 'id=' + ns1blankspace.report.data.moreID +
+										'&startrow=0' +
+										'&rows=' + ns1blankspace.report.data.count;
+
+							ns1blankspace.status.working('Getting data');
+
+							$.ajax(
 							{
-								var sData = 'id=' + ns1blankspace.report.data.moreID +
-											'&startrow=' + iStartRow +
-											'&rows=' + iRows;
-
-								ns1blankspace.status.working('Getting data');
-
-								$.ajax(
+								type: 'POST',
+								url: '/rpc/core/?method=CORE_SEARCH_MORE',
+								data: sData,
+								dataType: 'json',
+								success: function(oResponse)
 								{
-									type: 'POST',
-									url: '/rpc/core/?method=CORE_SEARCH_MORE',
-									data: sData,
-									rows: iRows
-								});	
-							}
-							else
-							{
-								oParam.step = 1;
-								ns1blankspace.report.update.send(oParam);
-							}
+									ns1blankspace.status.clear();
+									ns1blankspace.report.data.resultRows = oResponse.data.rows;
+									oParam.step = 1;
+									ns1blankspace.report.update.send(oParam);
+								}
+							});	
 						}
 						else
 						{
-							$.each(oResponse.data.rows, function()
-							{
-								ns1blankspace.report.data.rows.push(this);
-							});
-
 							oParam.step = 1;
 							ns1blankspace.report.update.send(oParam);
 						}
 					}
-					
 				}
 
 				if (iStep == 1)
@@ -4445,7 +4443,8 @@ ns1blankspace.report =
 					});
 					
 					ns1blankspace.util.setParam(oParam, 'updateColumns', aUpdateColumns);
-					oParam.step = undefined;
+					delete oParam.step;
+					delete oParam.processIndex;
 					ns1blankspace.report.update.process(oParam)
 				}
 			}
@@ -4469,11 +4468,13 @@ ns1blankspace.report =
 
 			if (aUpdateColumns.length > 0)
 			{
-				if (iProcessIndex < ns1blankspace.report.data.rows.length)
-				{
-					oRow = ns1blankspace.report.data.rows[oProcessIndex];
+				if (iProcessIndex < ns1blankspace.report.data.resultRows.length)
+				{	
+					ns1blankspace.status.working();
 
-					oData.id =  oRow.id;
+					oRow = ns1blankspace.report.data.resultRows[iProcessIndex];
+
+					oData.id = oRow.id;
 
 					$.each(aUpdateColumns, function()
 					{
@@ -4486,7 +4487,7 @@ ns1blankspace.report =
 						url: ns1blankspace.util.endpointURI(ns1blankspace.report.config.method.replace('_SEARCH', '_MANAGE')),
 						data: oData,
 						dataType: 'json',
-						success: function(oResponse, oParam)
+						success: function(oResponse)
 						{
 							if (oResponse.status == 'OK')
 							{								
@@ -4517,7 +4518,7 @@ ns1blankspace.report =
 	{
 		show: function (oParam)
 		{
-			var oResponse;
+			var oResponse = ns1blankspace.report.data.resultRows;
 			var bContainsContactPerson = ns1blankspace.report.data.containsContactPerson;
 			var aColumns = [];
 
@@ -4533,6 +4534,7 @@ ns1blankspace.report =
 				{	
 					// Show editor and template fields, buttons for preview & Sending
 					ns1blankspace.format.editor.init();
+
 					for (edID in tinyMCE.editors) 
 								tinyMCE.editors[edID].destroy(true);
 							
@@ -4551,17 +4553,19 @@ ns1blankspace.report =
 				
 					aHTML.push('<table style="font-size:0.875em;">');
 
-					aHTML.push('<tr><td style="color:#B8B8B8; padding:4px; background-color:#F8F8F8; text-align:right;">' +
+					aHTML.push('<tr>' +
+									'<td style="color:#B8B8B8; padding:6px; background-color:#F8F8F8;"class="ns1blankspaceSub">Send an email to contacts in results</td>' +
+									'<td style="width:200px; color:#B8B8B8; padding:4px; background-color:#F8F8F8; text-align:right;">' +
 									'<span id="ns1blankspaceReportSendPreview" class="ns1blankspaceAction">Preview</span>' +
 									' <span id="ns1blankspaceReportSendEmail" class="ns1blankspaceAction">Email</span>' +
 									'</td></tr>');
 
-					aHTML.push('<tr><td id="ns1blankspaceReportSendColumn1Row1" style="padding-left:3px; padding-right:11px;">' +
+					aHTML.push('<tr><td colspan=2 id="ns1blankspaceReportSendColumn1Row1" style="padding-left:3px; padding-right:11px;">' +
 								'<input id="ns1blankspaceReportSendSubject" class="ns1blankspaceText">');
 
 					aHTML.push('</td></tr>');
 
-					aHTML.push('<tr><td id="ns1blankspaceReportSendColumn1Row2">');
+					aHTML.push('<tr><td colspan=2 id="ns1blankspaceReportSendColumn1Row2">');
 						aHTML.push('<table class="ns1blankspace">');
 						aHTML.push('<tr><td>' +
 									'<textarea rows="30" cols="50" id="ns1blankspaceReportSendText' +
@@ -4571,6 +4575,8 @@ ns1blankspace.report =
 					aHTML.push('</td></tr>');
 
 					$('#ns1blankspaceReportSendColumn1').html(aHTML.join(''));
+
+					tinyMCE.EditorManager.execCommand('mceAddEditor', false, 'ns1blankspaceReportSendText' + ns1blankspace.counter.editor);
 							
 					aHTML = [];
 
@@ -4578,7 +4584,7 @@ ns1blankspace.report =
 					aHTML.push('<tr><td class="ns1blankspaceCaption" style="font-size:0.75em;">' +
 								'Tags..</td></tr>');
 
-					$.each(aColumns, function()
+					$.each(ns1blankspace.report.data.outputParameters, function()
 					{
 						aHTML.push('<tr><td class="ns1blankspaceRow ns1blankspaceRowSelect" style="font-size:0.75em;">');
 
@@ -4601,7 +4607,7 @@ ns1blankspace.report =
 					{
 						var sText = ns1blankspace.report.mergeFields(
 						{
-							columns: aColumns, 
+							columns: ns1blankspace.report.data.outputParameters, 
 							replace: tinyMCE.get(('ns1blankspaceReportSendText' + ns1blankspace.counter.editor)).getContent()
 						});
 						
@@ -4609,9 +4615,9 @@ ns1blankspace.report =
 						{
 							preview: true,
 							subject: $('#ns1blankspaceReportSendSubject').val(),
-							row: oResponse.data.rows[0],
-							moreID: oResponse.moreid, 
-							parameters: oParameter,
+							row: ns1blankspace.report.data.resultRows[0],
+							moreID: ns1blankspace.report.data.moreID, 
+							parameters: ns1blankspace.report.data.outputParameters,
 							object: ns1blankspace.report.config.object,
 							text: sText
 						}
@@ -4628,14 +4634,14 @@ ns1blankspace.report =
 					{
 						var sText = ns1blankspace.report.mergeFields(
 						{
-							columns: aColumns, 
+							columns: ns1blankspace.report.data.outputParameters, 
 							replace: tinyMCE.get(('ns1blankspaceReportSendText' + ns1blankspace.counter.editor)).getContent()
 						});
 
 						ns1blankspace.report.email.send(
 						{
-							moreID: oResponse.moreid,
-							parameters: oParameter,
+							moreID: ns1blankspace.report.data.moreID,
+							parameters: ns1blankspace.report.data.outputParameters,
 							text: sText,
 							subject: $('#ns1blankspaceReportSendSubject').val()
 						});
@@ -4664,7 +4670,7 @@ ns1blankspace.report =
 
 					if (oResponse)
 					{
-						sText = 'To send bulk emails to people, you must include at least one field from the contact person.';
+						sText = 'To send bulk emails, you must include at least one field from the contact person.';
 					}
 					else
 					{
@@ -4673,7 +4679,7 @@ ns1blankspace.report =
 
 					aHTML = [];
 					aHTML.push('<table style="margin:10px; width:350px;"><tr>');
-					aHTML.push('<td id="ns1blankspaceReportSend" class="ns1blankspaceSub">' + sText + '</td>' +
+					aHTML.push('<td class="ns1blankspaceSub">' + sText + '</td>' +
 							   	'</tr></table>');
 					
 					$('#ns1blankspaceReportSend').html(aHTML.join(''));
@@ -4726,30 +4732,36 @@ ns1blankspace.report =
 			}
 			else
 			{
+				var aTags = [];
+
 				$.each(oParameters, function()
 				{
-					sTags = this + "|"  + sTags;
+					aTags.push(this.name);
 				});
 
-				if (sTags.length > 0)
+				if (aTags.length > 0)
 				{
-					sTags = sTags.substr(0, sTags.length - 1); 
+					sTags = aTags.join('|')
 				}
 			}
 			
-			sParam = "&more=" + iMoreID + 
-					 "&object=" + ns1blankspace.report.config.object + "&objectcontext=" + oRow.id +
-					 "&templatetext=" + ns1blankspace.util.fs(sText) + 
-					 "&tags=" + ns1blankspace.util.fs(sTags);
+			var oData =
+			{
+				more: iMoreID,
+				object: ns1blankspace.report.config.object,
+				objectcontext: oRow.id,
+				templatetext: sText,
+				tags: sTags,
+				rf: 'text'
+			}	
 
 			$.ajax(
 			{
 				type: 'POST',
 				cache: false,
 				url: ns1blankspace.util.endpointURI("CORE_MORE_APPLY_TEMPLATE"),
-				data: "rf=text" + sParam,
-				dataType: 'text',
-				async: false,
+				data: oData,
+				dataType: 'JSON',
 				success: function(data)
 				{
 					if (data.substr(0,12) == "OK|RETURNED|")
@@ -4790,56 +4802,66 @@ ns1blankspace.report =
 			
 			if (bPreview)
 			{
-				// We're sending the preview to the current user
+				//Sending the preview to the current user
+
+				var aTags = [];
+
 				$.each(oParameters, function()
 				{
-					sTags = this + "|"  + sTags;
+					aTags.push(this.name);
 				});
 
-				if (sTags.length > 0)
-				{	
-					sTags = sTags.substr(0, sTags.length - 1); 	
+				if (aTags.length > 0)
+				{
+					sTags = aTags.reverse().join('|')
 				}
 			
-				sParam = "&more=" + ns1blankspace.util.fs(iMoreID) + 
-						 	"&object=" + ns1blankspace.report.config.object + "&objectcontext=" + oRow.id +
-							"&templatetext=" + ns1blankspace.util.fs(sText) + 
-					 		"&tags=" + ns1blankspace.util.fs(sTags);
+				var oData =
+				{
+					more: iMoreID,
+					object: ns1blankspace.report.config.object,
+					objectcontext: oRow.id,
+					templatetext: sText,
+					tags: sTags
+				}	
 
 				$.ajax(
 				{
 					type: 'POST',
 					url: ns1blankspace.util.endpointURI("CORE_MORE_APPLY_TEMPLATE"),
-					data: "rf=text" + sParam,
-					dataType: 'TEXT',
+					data: oData,
+					dataType: 'JSON',
 					success: function(data)
 					{
-						if (data.substr(0,2) === "OK") {	
-							
-							aData = data.split('|');
-							sText = aData[2];
-							sParam = "subject=" + ns1blankspace.util.fs(sSubject) +
-									"&message=" + ns1blankspace.util.fs(sText) + 
-									"&to=" + ns1blankspace.user.email;
+						if (data.status == "OK")
+						{	
+							sText = data.text;
 
-									//ns1blankspace.util.endpointURI("MESSAGING_EMAIL_SEND")
+							var oDataSend =
+							{
+								subject: sSubject,
+								message: sText,
+								to: ns1blankspace.user.email
+							}		
+
 							$.ajax(
 							{
 								type: 'POST',
-								url: '/ondemand/messaging/?method=MESSAGING_EMAIL_SEND',
-								data: sParam,
+								url: ns1blankspace.util.endpointURI("MESSAGING_EMAIL_SEND"),
+								data: oDataSend,
 								dataType: 'JSON',
-								success: function(oResponse) {
-									if (oResponse.status === 'OK') {
+								success: function(oResponse)
+								{
+									if (oResponse.status == 'OK')
+									{
 										ns1blankspace.status.message('Email sent to ' + ns1blankspace.user.email);
 									}
-									else {
+									else
+									{
 										ns1blankspace.status.message('An error has occurred');
 									}
 								}
 							});
-							//ns1blankspace.status.message(data.substring(12));	
-							// ToDo: Add preview page
 						}
 					}
 				});
@@ -4847,36 +4869,49 @@ ns1blankspace.report =
 			else
 			{
 				// Time to send the email to all of the report results
-				if (confirm("Are you sure you want to send an email to all of the Contacts in the report results?"))
+				if (confirm("Are you sure you want to send an email to all of the contacts in the search results?"))
 				{
-					sTags = oParameters.join('|');
+					var aTags = [];
+
+					$.each(oParameters, function()
+					{
+						aTags.push(this.name);
+					});
+
+					if (aTags.length > 0)
+					{
+						sTags = aTags.reverse().join('|')
+					}
 					
-					sParam = "&more=" + iMoreID + 
-							 "&title=" + ns1blankspace.util.fs(sSubject) +
-							 "&status=1" + 
-							 "&type=2" +
-							 '&scheduletype=9' +
-							 "&schedulemaximumcount=1" + 
-							 "&responseactionfrom=" + ns1blankspace.util.fs(ns1blankspace.user.email) + 
-							 "&templatetext=" + ns1blankspace.util.fs(sText) + 
-							 "&caption=" + ns1blankspace.util.fs(sTags);
+					var oData =
+					{
+						more: ns1blankspace.report.data.moreID, 
+						title: sSubject,
+						status: 1, 
+						type: 2,
+						scheduletype: 9,
+						schedulemaximumcount: 1, 
+						responseactionfrom: ns1blankspace.user.email, 
+						templatetext: sText, 
+						caption: sTags
+					}		 
 
 					$.ajax(
 					{
 						type: 'POST',
-						cache: false,
 						url: ns1blankspace.util.endpointURI("SETUP_AUTOMATION_MANAGE"),
-						data: "rf=text" + sParam,
-						dataType: 'text',
-						async: false,
+						data: oData,
+						dataType: 'JSON',
 						success: function(data)
 						{
-							ns1blankspace.status.message("Email(s) sent");
+							ns1blankspace.status.message("Email(s) scheduled to be sent");
 						}
 					});
 				}
 				else
-				{	return false;	}
+				{
+					return false;
+				}
 			}
 		}
 	},
@@ -4894,9 +4929,9 @@ ns1blankspace.report =
 
 			if (!bContainsContactPerson)
 			{	
-				aHTML.push('<table class="ns1blankspaceContainer">' +
-							'<tr><td style="color:#B8B8B8; padding:4px; background-color:#F8F8F8; font-size:0.875em; vertical-align:middle;">' +
-							'Your results don\'t contain any contact data.</td>' +
+				aHTML.push('<table style="margin:10px; width:350px;">' +
+							'<tr><td class="ns1blankspaceSub">' +
+							'To send bulk SMSs, you must include at least one field from the contact person.</td>' +
 					   		'</tr></table>');
 			
 				$('#ns1blankspaceReportSMS').html(aHTML.join(''));
@@ -4964,7 +4999,6 @@ ns1blankspace.report =
 				$.ajax(
 				{
 					type: 'POST',
-					cache: false,
 					url: ns1blankspace.util.endpointURI("SETUP_AUTOMATION_MANAGE"),
 					data: oData,
 					dataType: 'json',

@@ -1024,7 +1024,7 @@ ns1blankspace.setup.file =
 													}	
 												},						
 
-									process: 	function (oParam)
+									process: function (oParam)
 												{
 													var iObject;
 													var oData;
@@ -1523,6 +1523,7 @@ ns1blankspace.setup.file =
 										saveAs(oFile);
 										$('#' + sXHTMLElementID).html('');
 										$('#ns1blankspaceReportExportCount').html('Export complete.')
+										ns1blankspace.status.message('File created');
 									}
 									else
 									{
