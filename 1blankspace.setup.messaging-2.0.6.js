@@ -268,7 +268,7 @@ ns1blankspace.setup.messaging =
 				{
 					var aHTML = [];
 
-					aHTML.push('<div id="ns1blankspaceControlContext" class="ns1blankspaceControlContext" style="overflow-x: auto;"></div>');
+					aHTML.push('<div id="ns1blankspaceControlContext" class="ns1blankspaceControlContext" style="overflow-wrap:break-word;"></div>');
 					
 					aHTML.push('<table class="ns1blankspaceControl">');
 					
