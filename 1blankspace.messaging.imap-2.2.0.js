@@ -3556,7 +3556,7 @@ ns1blankspace.messaging.imap =
 							var sEmails = oMessageEmails.val();
 							var sValues = oMessageEmails.attr('data-values');
 
-							var sGroupEmails = aContactEmails.join('; ');
+							var sGroupEmails = aContactEmails.join(';');
 							if (sEmails == '')
 							{
 								oMessageEmails.val(sGroupEmails);
@@ -3565,7 +3565,7 @@ ns1blankspace.messaging.imap =
 							else
 							{
 								oMessageEmails.val(sEmails + '; ' + sGroupEmails);
-								oMessageEmails.attr('data-values', sEmails + '; ' + sGroupEmails);
+								oMessageEmails.attr('data-values', sEmails + ';' + sGroupEmails);
 							}	
 						}
 					}
