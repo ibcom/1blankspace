@@ -284,7 +284,7 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.setup.space',
-		source: '/site/312/1blankspace.setup.space-2.0.2.js'
+		source: '/site/312/1blankspace.setup.space-2.0.3.js'
 	},
 	{
 		nameSpace: '1blankspace.setup.structure',
@@ -300,7 +300,7 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.setup.website',
-		source: '/site/312/1blankspace.setup.website-2.1.2.js'
+		source: '/site/312/1blankspace.setup.website-2.1.3.js'
 	},
 	{
 		nameSpace: '1blankspace.setup.websiteForm',
@@ -320,7 +320,7 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.setup.file',
-		source: '/site/312/1blankspace.setup.file-2.0.6.js'
+		source: '/site/312/1blankspace.setup.file-2.0.7.js'
 	},
 	{
 		nameSpace: '1blankspace.developer.space',
@@ -397,6 +397,10 @@ ns1blankspace.scripts.concat(
 	{
 		nameSpace: '1blankspace.util.financial.collect',
 		source: '/site/312/1blankspace.util.financial.collect-1.0.0.js'
+	},
+	{
+		nameSpace: '1blankspace.util.attachment',
+		source: '/site/312/1blankspace.util.attachment-2.0.0.js'
 	}
 ])
 
