@@ -1577,6 +1577,7 @@ ns1blankspace.setup.file =
 									var bOpen = ns1blankspace.util.getParam(oParam, 'open', {"default": false}).value;
 									var sXHTMLElementID = ns1blankspace.util.getParam(oParam, 'xhtmlElementID').value;
 									var sText = ns1blankspace.util.getParam(oParam, 'text', {"default": 'Download'}).value;
+									var bRemote = ns1blankspace.util.getParam(oParam, 'remote', {"default": false}).value;
 
 									var oData =
 									{
@@ -1584,7 +1585,7 @@ ns1blankspace.setup.file =
 										filename: sFileName
 									}
 
-									if (window.saveAs)
+									if (window.saveAs && !bRemote)
 									{
 										var oFile = new File([sData], sFileName, {type: "text/plain;charset=utf-8"});
 										saveAs(oFile);

@@ -144,7 +144,7 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.format',
-		source: '/site/312/1blankspace.format-2.1.6.js'
+		source: '/site/312/1blankspace.format-2.1.7.js'
 	},
 	{
 		nameSpace: '1blankspace.contactPerson',
@@ -236,7 +236,7 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.financial.payroll',
-		source: '/jscripts/1blankspace.financial.payroll-2.1.9.js'
+		source: '/site/312/1blankspace.financial.payroll-2.2.0.js'
 	},
 	{
 		nameSpace: '1blankspace.financial.budget',
@@ -260,7 +260,7 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.setup.financial',
-		source: '/site/312/1blankspace.setup.financial-2.1.5.js'
+		source: '/site/312/1blankspace.setup.financial-2.1.7.js'
 	},
 	{
 		nameSpace: '1blankspace.setup.action',
@@ -284,7 +284,7 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.setup.space',
-		source: '/site/312/1blankspace.setup.space-2.0.3.js'
+		source: '/site/312/1blankspace.setup.space-2.0.5.js'
 	},
 	{
 		nameSpace: '1blankspace.setup.structure',
@@ -360,7 +360,7 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.admin.space',
-		source: '/site/312/1blankspace.admin.space-2.0.4.js'
+		source: '/site/312/1blankspace.admin.space-2.0.5.js'
 	},
 	{
 		nameSpace: '1blankspace.admin.monitoring',
@@ -400,7 +400,7 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.util.attachment',
-		source: '/site/312/1blankspace.util.attachment-2.0.0.js'
+		source: '/site/312/1blankspace.util.attachment-2.0.1.js'
 	}
 ])
 
