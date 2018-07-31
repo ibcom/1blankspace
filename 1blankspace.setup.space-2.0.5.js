@@ -1799,41 +1799,48 @@ ns1blankspace.setup.space =
 									}
 									else
 									{
-										var iCount = oResponse.summary.count;
-										if (oResponse.data.rows != undefined)
+										if (oResponse.instance == 'DBG' || oResponse.instance == 'lab-001')
 										{
-											iCount = oResponse.data.rows.length
-										}
-
-										$('#ns1blankspaceSetupSpaceStorageBucketAttachmentCopyContainer').html(
-											'<div class="ns1blankspaceSubNote" style="margin-bottom:6px;">' +
-											iCount + ' attachment(s) will be copied to this AWS Bucket.' +
-											'</div>' +
-											'<div id="ns1blankspaceSetupSpaceStorageBucketAttachmentCopyContinue" class="ns1blankspaceAction"></div>');
-
-										$('#ns1blankspaceSetupSpaceStorageBucketAttachmentCopyContinue').button(
-										{
-											label: 'Continue',
-										})
-										.click(function()
-										{
-											$('#ns1blankspaceSetupSpaceStorageBucketAttachmentCopyContainer').html(
-												'<div class="ns1blankspaceSubNote" id="ns1blankspaceSetupSpaceStorageBucketAttachmentCopyStatus">Copying...</div>');
-
-											var oCopyParam =
-											{
-												awsS3BucketID: iAWSS3BucketId,
-												xhtmlElementID: 'ns1blankspaceSetupSpaceStorageBucketAttachmentCopyStatus'
-											}
-
+											var iCount = oResponse.summary.count;
 											if (oResponse.data.rows != undefined)
 											{
-												oCopyParam.attachmentLinkID = oResponse.data.rows[0].id
+												iCount = oResponse.data.rows.length
 											}
 
-											oCopyParam.onProcessingComplete = ns1blankspace.setup.space.storage.index.init;
-											ns1blankspace.util.attachment.s3.copy(oCopyParam);
-										});
+											$('#ns1blankspaceSetupSpaceStorageBucketAttachmentCopyContainer').html(
+												'<div class="ns1blankspaceSubNote" style="margin-bottom:6px;">' +
+												iCount + ' attachment(s) will be copied to this AWS Bucket.' +
+												'</div>' +
+												'<div id="ns1blankspaceSetupSpaceStorageBucketAttachmentCopyContinue" class="ns1blankspaceAction"></div>');
+
+											$('#ns1blankspaceSetupSpaceStorageBucketAttachmentCopyContinue').button(
+											{
+												label: 'Continue',
+											})
+											.click(function()
+											{
+												$('#ns1blankspaceSetupSpaceStorageBucketAttachmentCopyContainer').html(
+													'<div class="ns1blankspaceSubNote" id="ns1blankspaceSetupSpaceStorageBucketAttachmentCopyStatus">Copying...</div>');
+
+												var oCopyParam =
+												{
+													awsS3BucketID: iAWSS3BucketId,
+													xhtmlElementID: 'ns1blankspaceSetupSpaceStorageBucketAttachmentCopyStatus'
+												}
+
+												if (oResponse.data.rows != undefined)
+												{
+													oCopyParam.attachmentLinkID = oResponse.data.rows[0].id
+												}
+
+												oCopyParam.onProcessingComplete = ns1blankspace.setup.space.storage.index.init;
+												ns1blankspace.util.attachment.s3.copy(oCopyParam);
+											});
+										}
+										else
+										{
+											alert('This can not be run in production.')
+										}
 									}
 								},
 
