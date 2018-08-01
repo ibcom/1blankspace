@@ -12,8 +12,14 @@
 if (ns1blankspace === undefined) {var ns1blankspace = {}}
 if (ns1blankspace.util === undefined) {ns1blankspace.util = {}}
 if (ns1blankspace.util.financial === undefined) {ns1blankspace.util.financial = {}}
+if (ns1blankspace.util.financial.collect === undefined) {ns1blankspace.util.financial.collect = {}}
 
 ns1blankspace.util.financial.paynow = function (oObjectData)
+{
+    return ns1blankspace.util.financial.collect.paynow(oObjectData);
+}
+
+ns1blankspace.util.financial.collect.paynow = function (oObjectData)
 {
     var sHTML = '';
     var sHRef = '';
@@ -22,7 +28,7 @@ ns1blankspace.util.financial.paynow = function (oObjectData)
     {
         sHRef = ns1blankspace.option.stripe.url + '/#';
         sHRef = sHRef + 'invoiceGUID=' + oObjectData['guid'];
-        sHRef = sHRef + '|amount=' + oObjectData['amount'];
+        sHRef = sHRef + '|amount=' + numeral(oObjectData['amount']).value();
         sHRef = sHRef + '|description=' + oObjectData['reference'];
 
         var sText = ns1blankspace.option.stripe.text;

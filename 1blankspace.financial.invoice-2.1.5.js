@@ -21,6 +21,7 @@ ns1blankspace.financial.invoice =
 							sReturn = sReturn.replace('[[reference:numeric]]', numeral(oData.reference).value());
 							sReturn = sReturn.replace('[[sentdate:MMM YYYY]]', moment(oData.sentdate, 'DD MMM YYYY').format('MMM YYYY'));
 							sReturn = sReturn.replace('[[sentdate:uppercase:MMM YYYY]]', moment(oData.sentdate, 'DD MMM YYYY').format('MMM YYYY').toUpperCase());
+							sReturn = sReturn.replace('[[sentdate:previous:uppercase:MMM YYYY]]', moment(oData.sentdate, 'DD MMM YYYY').add(-1, 'M').format('MMM YYYY').toUpperCase());							
 							sReturn = sReturn.replace('[[amount]]', oData.amount);
 							sReturn = sReturn.replace('[[sentbycontactbusiness]]', ns1blankspace.user.contactBusinessText);
 						}

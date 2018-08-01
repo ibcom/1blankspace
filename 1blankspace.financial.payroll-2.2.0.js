@@ -3671,9 +3671,9 @@ ns1blankspace.financial.payroll =
 												type: 'json',
 												headerRow: false
 											});
-
-											ns1blankspace.financial.payroll.journals.show()
 										}
+
+										ns1blankspace.financial.payroll.journals.show()
 									}	
 								},
 
