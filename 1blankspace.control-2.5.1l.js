@@ -284,7 +284,7 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.setup.space',
-		source: '/site/312/1blankspace.setup.space-2.0.5.js'
+		source: '/site/312/1blankspace.setup.space-2.0.6.js'
 	},
 	{
 		nameSpace: '1blankspace.setup.structure',
@@ -360,7 +360,7 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.admin.space',
-		source: '/site/312/1blankspace.admin.space-2.0.5.js'
+		source: '/site/312/1blankspace.admin.space-2.0.6.js'
 	},
 	{
 		nameSpace: '1blankspace.admin.monitoring',
@@ -400,7 +400,7 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.util.attachment',
-		source: '/site/312/1blankspace.util.attachment-2.0.1.js'
+		source: '/site/312/1blankspace.util.attachment-2.0.2.js'
 	}
 ])
 

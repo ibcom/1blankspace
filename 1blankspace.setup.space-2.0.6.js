@@ -1623,7 +1623,14 @@ ns1blankspace.setup.space =
 										})
 										.click(function()
 										{
-											ns1blankspace.setup.space.storage.copy(oParam)
+											if (_.isFunction(ns1blankspace.setup.space.storage.prepareCopy))
+											{
+												ns1blankspace.setup.space.storage.prepareCopy(oParam)
+											}
+											else
+											{
+												ns1blankspace.setup.space.storage.copy(oParam)
+											}
 										})
 										.css('width', '140px');
 
@@ -1693,7 +1700,8 @@ ns1blankspace.setup.space =
 															{
 																id: $('#ns1blankspaceSetupSpaceStorageBucketTitle').attr('data-id'),
 																account: sAccount,
-																title: $('#ns1blankspaceSetupSpaceStorageBucketTitle').val()		
+																title: $('#ns1blankspaceSetupSpaceStorageBucketTitle').val(),
+																notes: $('#ns1blankspaceSetupSpaceStorageNotes').val()	
 															}
 
 															$.ajax(
@@ -1746,7 +1754,7 @@ ns1blankspace.setup.space =
 										{
 											var oSearch = new AdvancedSearch();
 											oSearch.method = 'SETUP_AWS_ACCOUNT_SEARCH';
-											oSearch.addField('accessid,modifieddate');
+											oSearch.addField('accessid,modifieddate,notes');
 											oSearch.addFilter('id', 'EQUAL_TO', sID)
 											oSearch.rf = 'json';
 											oSearch.getResults(function(data)
@@ -1779,21 +1787,75 @@ ns1blankspace.setup.space =
 									}		
 								},
 
+					_example_1_prepareCopy: function (oParam, oResponse)
+								{
+									//Example only - this should be webapp specific control file as "ns1blankspace.setup.space.storage.prepareCopy" function.
+
+									if (oResponse == undefined)
+									{
+										var oSearch = new AdvancedSearch();
+										oSearch.method = 'ACTION_SEARCH';		
+										oSearch.addField('id');
+										
+										oSearch.addFilter('actiontype', 'EQUAL_TO', 1445);
+	
+										oSearch.rows = 500;				
+										oSearch.getResults(function(data) {ns1blankspace.setup.space.storage.prepareCopy(oParam, data)});
+									}
+									else
+									{
+										var aIDs = $.map(oResponse.data.rows, function (row) {return row.id})
+										var aFilters = [];
+										
+										if (aIDs.length != 0)
+										{
+											aFilters.push('object-equal_to-17');
+											aFilters.push('objectcontext-in_list-' + aIDs.join(','));
+
+											oParam.filters = aFilters.join('|');
+											ns1blankspace.setup.space.storage.copy(oParam)
+										}
+										else
+										{
+											ns1blankspace.status.error('Nothing to copy')
+										}
+									}
+								},
+
+					_example_2_prepareCopy: function (oParam, oResponse)
+								{
+									var aFilters = [];
+										
+									aFilters.push('object-IN_LIST-107');
+									
+									oParam.filters = aFilters.join('|');
+									ns1blankspace.setup.space.storage.copy(oParam)
+								},			
+
 					copy: 	function (oParam, oResponse)
 								{
 									var iAWSS3BucketId = $('#ns1blankspaceSetupSpaceStorageBucketTitle').attr('data-id');
-									var bTest = ns1blankspace.util.getParam(oParam, 'test', {"default": true}).value;
+									var bTest = ns1blankspace.util.getParam(oParam, 'test', {"default": false}).value;
+									var sFilters = ns1blankspace.util.getParam(oParam, 'filters').value;
+									var bRefresh = ns1blankspace.util.getParam(oParam, 'refresh', {"default": false}).value;
 
 									if (oResponse == undefined)
 									{
 										$('.ns1blankspaceAttachmentIndex').hide();
 
-										var oAWSS3BucketID = $.grep(ns1blankspace.util.attachment.s3.data.buckets, function (bucket) {return bucket.id == iAWSS3BucketID})[0];
-										var sNotes = oAWSS3BucketID.notes;
+										var aFilters = ns1blankspace.util.getParam(oParam, 'filters', {"default": []}).value;
+
+										var sNotes = $('#ns1blankspaceSetupSpaceStorageNotes').val();
+										
 										if (sNotes.indexOf('filter:') != -1)
 										{
-											var sFilters = sNotes.replace('filter:', '')
-											var aFilters = sFilters.split('|');
+											sFilters = sNotes.replace('filter:', '')
+											aFilters = sFilters.split('|');
+										}
+
+										if (sFilters != undefined)
+										{
+											aFilters = sFilters.split('|');
 										}
 
 										var oSearch = new AdvancedSearch();
@@ -1801,18 +1863,32 @@ ns1blankspace.setup.space =
 										oSearch.addField('id');
 										oSearch.addSummaryField('count(id) count')
 										
-										oSearch.addFilter('bucketfilename', 'IS_NULL');
+										if (!bRefresh)
+										{
+											oSearch.addFilter('bucketfilename', 'IS_NULL');
+										}	
 
 										if (aFilters.length != 0)
 										{
 											$.each(aFilters, function (f, filter)
 											{
 												var aFilter = filter.split('-');
-												oSearch.addFilter(aFilter[0], aFilter[1], aFilter[2])
+												if (aFilter[0] == '(' || aFilter[0] == ')')
+												{
+													oSearch.addBracket(aFilter[0])
+												}
+												else if (aFilter[0] == 'or' || aFilter[0] == 'and')
+												{
+													oSearch.addOperator(aFilter[0])
+												}
+												else
+												{
+													oSearch.addFilter(aFilter[0], aFilter[1], aFilter[2]);
+												}	
 											})
 										}
 
-										oSearch.rows = (bTest?1:0);				
+										oSearch.rows = (bTest?1:99999);				
 										oSearch.getResults(function(data) {ns1blankspace.setup.space.storage.copy(oParam, data)});
 									}
 									else
@@ -1843,10 +1919,11 @@ ns1blankspace.setup.space =
 												var oCopyParam =
 												{
 													awsS3BucketID: iAWSS3BucketId,
-													xhtmlElementID: 'ns1blankspaceSetupSpaceStorageBucketAttachmentCopyStatus'
+													xhtmlElementID: 'ns1blankspaceSetupSpaceStorageBucketAttachmentCopyStatus',
+													filters: oParam.filters
 												}
 
-												if (oResponse.data.rows != undefined)
+												if (bTest)
 												{
 													oCopyParam.attachmentLinkID = oResponse.data.rows[0].id
 												}
