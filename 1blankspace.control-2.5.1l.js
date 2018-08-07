@@ -401,6 +401,10 @@ ns1blankspace.scripts.concat(
 	{
 		nameSpace: '1blankspace.util.attachment',
 		source: '/site/312/1blankspace.util.attachment-2.0.2.js'
+	},
+	{
+		nameSpace: '1blankspace.util.contacts',
+		source: '/site/312/1blankspace.util.contact-2.0.0.js'
 	}
 ])
 
