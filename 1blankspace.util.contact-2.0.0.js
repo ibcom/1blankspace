@@ -9,8 +9,6 @@
 if (ns1blankspace === undefined) {var ns1blankspace = {}}
 if (ns1blankspace.util === undefined) {ns1blankspace.util = {}}
 
-//1000395153,1000395154
-
 ns1blankspace.util.contact =
 {
 	bulk:
