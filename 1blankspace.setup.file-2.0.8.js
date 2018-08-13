@@ -1585,7 +1585,7 @@ ns1blankspace.setup.file =
 										filename: sFileName
 									}
 
-									if (window.saveAs && !bRemote)
+									if (window.saveAs != undefined && !bRemote)
 									{
 										var oFile = new File([sData], sFileName, {type: "text/plain;charset=utf-8"});
 										saveAs(oFile);
