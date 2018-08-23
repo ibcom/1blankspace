@@ -636,6 +636,11 @@ ns1blankspace.setup.file =
 													if (oParam == undefined)
 													{
 														oParam = {};
+													}
+
+
+													if (oParam.object == undefined)
+													{
 														oParam.object = ns1blankspace.setup.file["import"].data.object;
 													}
 
