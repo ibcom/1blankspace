@@ -4878,7 +4878,8 @@ ns1blankspace.financial.bankAccount =
 										
 									aHTML.push('<div class="ns1blankspaceControlContext_reco_summary"' +
 													' style="text-align:right;"' +
-													' id="ns1blankspaceControlContext_reco_summary-' + oRow.id + '"></div>');
+													' id="ns1blankspaceControlContext_reco_summary-' + oRow.id + '"' +
+													' data-statementdate="' + oRow.statementbalance + '"></div>');
 												
 									aHTML.push('</td></tr>');
 									
@@ -7084,7 +7085,9 @@ ns1blankspace.financial.bankAccount =
 														aHTML.push('</table>');	
 
 														aHTML.push('<table style="width:100%;">' +
-																			'<tr><td style="padding-top:14px;" class="ns1blankspaceAction"><div style="width:95px;" id="ns1blankspaceFinancialBankAccountHealthCheck">' +
+																			'<tr><td style="padding-top:14px;" class="ns1blankspaceAction">' +
+																			'<div style="width:95px;" id="ns1blankspaceFinancialBankAccountHealthCheck"' +
+																			' data-date="' + oParam.reconciliationEndDate + '">' +
 																			'Check GL</div></td></tr>' +
 																			'<tr><td class="ns1blankspaceSub" id="ns1blankspaceFinancialBankAccountHealthCheckContainer" style="padding-top:6px;">' +
 																			'</td></tr>' +
@@ -7110,6 +7113,7 @@ ns1blankspace.financial.bankAccount =
 															ns1blankspace.financial.bankAccount.healthCheck.init(
 															{
 																reconciliation: iReconciliation,
+																reconciliationStatementDate: $(this).attr('data-date'),
 																xhtmlElementID: 'ns1blankspaceFinancialBankAccountHealthCheckContainer'
 															})
 														});
@@ -7954,6 +7958,7 @@ ns1blankspace.financial.bankAccount.healthCheck =
 		ns1blankspace.financial.bankAccount.healthCheck.data = {};
 
 		var iReconciliation = ns1blankspace.util.getParam(oParam, 'reconciliation').value;
+		var sReconciliationStatementDate = ns1blankspace.util.getParam(oParam, 'reconciliationStatementDate').value; 
 
 		ns1blankspace.status.message('Health check starting...');
 		var sXHTMLElementID = ns1blankspace.util.getParam(oParam, 'xhtmlElementID').value;
@@ -7968,7 +7973,9 @@ ns1blankspace.financial.bankAccount.healthCheck =
 			var oSearch = new AdvancedSearch();
 			oSearch.method = 'FINANCIAL_RECONCILIATION_SEARCH';
 			oSearch.addField('statementbalance,statementdate,statustext,status,previousbalance,notes,reference');
-			oSearch.addFilter('id', 'LESS_THAN_OR_EQUAL_TO', iReconciliation);
+			//oSearch.addFilter('id', 'LESS_THAN_OR_EQUAL_TO', iReconciliation);
+			oSearch.addFilter('statementdate', 'LESS_THAN_OR_EQUAL_TO', sReconciliationStatementDate);
+			oSearch.addFilter('bankaccount', 'EQUAL_TO', ns1blankspace.objectContext);
 			oSearch.sort('statementdate', 'desc');
 			oSearch.rows = 2;
 			oSearch.getResults(function(data) {ns1blankspace.financial.bankAccount.healthCheck.init(oParam, data)});
@@ -8107,6 +8114,7 @@ ns1blankspace.financial.bankAccount.healthCheck =
 			var oSearch = new AdvancedSearch();
 			oSearch.method = 'FINANCIAL_TRANSACTION_SEARCH';
 			oSearch.addField('amount,area,areatext,date,description,financialaccount,financialaccounttext,id,lineitem,lineitemtext,object,objectcontext,objecttext,project,projecttext,reference');
+			//oSearch.addSummaryField('sum(amount) sumamount, count(id) count');
 			oSearch.sort('date', 'asc');
 			oSearch.addFilter('financialaccount', 'EQUAL_TO', ns1blankspace.objectContextData.financialaccount);
 			oSearch.addFilter('date', 'GREATER_THAN_OR_EQUAL_TO', ns1blankspace.financial.bankAccount.healthCheck.data.startDate);
@@ -8117,6 +8125,16 @@ ns1blankspace.financial.bankAccount.healthCheck =
 		else
 		{
 			ns1blankspace.financial.bankAccount.healthCheck.data.financialTransactions = oResponse.data.rows;
+			ns1blankspace.financial.bankAccount.healthCheck.data.financialTransactionsByObject =
+					_.groupBy(ns1blankspace.financial.bankAccount.healthCheck.data.financialTransactions, 'object');
+
+			ns1blankspace.financial.bankAccount.healthCheck.data.financialTransactionsByObjectTotal = 
+			_.map(ns1blankspace.financial.bankAccount.healthCheck.data.financialTransactionsByObject,
+					function (financialTransactions, key)
+					{
+						return _.sumBy(financialTransactions, function (ft) {return numeral(ft.amount).value()})
+					})
+
 			ns1blankspace.financial.bankAccount.healthCheck.financialTransactionsBalance(oParam);
 		}				
 	},
@@ -8285,7 +8303,14 @@ ns1blankspace.financial.bankAccount.healthCheck =
 				total.item.amount = (numeral(total.item.debitamount).value()!=0?total.item.debitamount:total.item.creditamount);
 			}
 
-			total.balanced = (Math.abs(numeral(total.amount).value()) == Math.abs(numeral(total.item.amount).value()));
+			if (total.item == undefined)
+			{
+				total.balanced = false
+			}
+			else
+			{
+				total.balanced = (Math.abs(numeral(total.amount).value()) == Math.abs(numeral(total.item.amount).value()));
+			}	
 		});
 
 		ns1blankspace.financial.bankAccount.healthCheck.data.unhealthy.financialTransactions = 

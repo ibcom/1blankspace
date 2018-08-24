@@ -620,7 +620,7 @@ ns1blankspace.setup.file =
 															ns1blankspace.objectContext = oResponse.id;
 															$('#objectcontext').val(oResponse.id);	
 															//ns1blankspace.attachments.upload.process({functionPostUpdate: ns1blankspace.setup.file["import"].upload.show});
-															ns1blankspace.attachments.upload.submit({functionPostUpdate: ns1blankspace.setup.file["import"].upload.show});
+															ns1blankspace.attachments.upload.submit({submit: true, functionPostUpdate: ns1blankspace.setup.file["import"].upload.show});
 														}	
 													}	
 												},

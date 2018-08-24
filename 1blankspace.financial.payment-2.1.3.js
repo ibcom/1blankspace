@@ -996,10 +996,7 @@ ns1blankspace.financial.payment =
 										}
 										else
 										{
-											if (!oParam.new)
-											{	
-												ns1blankspace.financial.payment.save.refesh(oParam)
-											}	
+											ns1blankspace.financial.payment.save.refresh(oParam)
 										}
 									}
 									else
@@ -1024,15 +1021,6 @@ ns1blankspace.financial.payment =
 										dataType: 'json',
 										success: function(oResponse)
 										{
-											if (ns1blankspace.util.getParam(oParam, 'new').value)
-											{
-												ns1blankspace.inputDetected = false;
-												ns1blankspace.financial.payment.search.send('-' + ns1blankspace.objectContext, {source: 1});
-											}
-											else
-											{	
-												ns1blankspace.financial.payment.refresh();
-											}	
 										}
 									});
 								},			
