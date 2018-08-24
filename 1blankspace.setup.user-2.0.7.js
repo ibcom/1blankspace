@@ -44,7 +44,7 @@ ns1blankspace.setup.user =
 									'Internal</td></tr>');			
 								
 						aHTML.push('<tr><td id="ns1blankspaceControlExternal" class="ns1blankspaceControl" style="padding-top:10px;">' +
-									'Switch in<br />access</td></tr>');	
+									'Switch in<br />access</td></tr>');
 
 						aHTML.push('</table>');		
 						
@@ -150,7 +150,7 @@ ns1blankspace.setup.user =
 										var oSearch = new AdvancedSearch();
 										oSearch.method = 'SETUP_USER_SEARCH';
 										oSearch.addField('username,contactpersontext,contactperson,lastlogon,disabled,disabledreason,unrestrictedaccess,authenticationlevel,' +
-															'authenticationdelivery,timezoneoffset,passwordexpiry,contactbusinesstext,contactbusiness');
+															'authenticationdelivery,timezoneoffset,passwordexpiry,contactbusinesstext,contactbusiness,guid');
 										oSearch.addFilter('id', 'EQUAL_TO', ns1blankspace.objectContext);
 										oSearch.getResults(function(data) {ns1blankspace.setup.user.show(data)});
 									}
