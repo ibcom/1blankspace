@@ -8421,7 +8421,7 @@ ns1blankspace.financial.bankAccount.healthCheck =
 			}*/
 
 			var cFinancialTransactionsCredits = numeral(_.find(ns1blankspace.financial.bankAccount.healthCheck.data.financialTransactionsByTypeTotal, function (ft) {return ft.type == 'credits'}).amount).value();
-			var cReconciliationCredits = ns1blankspace.financial.bankAccount.reconcile.data.locked.credits;
+			var cReconciliationCredits = (ns1blankspace.financial.bankAccount.reconcile.data.locked.credits).toFixed(2);
 
 			if (cFinancialTransactionsCredits != cReconciliationCredits)
 			{
@@ -8430,7 +8430,7 @@ ns1blankspace.financial.bankAccount.healthCheck =
 			}
 
 			var cFinancialTransactionsDebits = Math.abs(numeral(_.find(ns1blankspace.financial.bankAccount.healthCheck.data.financialTransactionsByTypeTotal, function (ft) {return ft.type == 'debits'}).amount).value());
-			var cReconciliationDebits = ns1blankspace.financial.bankAccount.reconcile.data.locked.debits;
+			var cReconciliationDebits = (ns1blankspace.financial.bankAccount.reconcile.data.locked.debits).toFixed(2);
 
 			if (cFinancialTransactionsDebits != cReconciliationDebits)
 			{
