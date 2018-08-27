@@ -2225,7 +2225,14 @@ ns1blankspace.logon =
 					}
 					else if (iAuthenticationLevel == 3)
 					{
-						oData.passwordhash = ns1blankspace.util.hash({value: sLogonName + sPassword + ns1blankspace.logonKey + $('#ns1blankspaceLogonPasswordCode').val()})
+						var sPasswordCode = $('#ns1blankspaceLogonPasswordCode').val();
+
+						if (ns1blankspace.authenticationLevel == '3')
+						{
+							sPasswordCode = $('#ns1blankspaceLogonPasswordTOTPCode').val()
+						}
+						
+						oData.passwordhash = ns1blankspace.util.hash({value: sLogonName + sPassword + ns1blankspace.logonKey + sPasswordCode})
 					}
 					
 					$('#ns1blankspaceLogonStatus').html(ns1blankspace.xhtml.loading);

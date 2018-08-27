@@ -56,7 +56,8 @@ ns1blankspace.option = $.extend(true, ns1blankspace.option,
 		changeMonth: true,
 		changeYear: true
 	},
-	attachmentsAsURLs: true 
+	attachmentsAsURLs: true,
+	logonTOTP: true
 });
 
 ns1blankspace.option.passwordExpiry.site = 312;
@@ -292,7 +293,7 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.setup.user',
-		source: '/site/312/1blankspace.setup.user-2.0.7.js'
+		source: '/site/312/1blankspace.setup.user-2.0.8.js'
 	},
 	{
 		nameSpace: '1blankspace.setup.userRole',
