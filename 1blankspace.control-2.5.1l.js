@@ -57,7 +57,11 @@ ns1blankspace.option = $.extend(true, ns1blankspace.option,
 		changeYear: true
 	},
 	attachmentsAsURLs: true,
-	logonTOTP: true
+	logonTOTP: true,
+	employeeInsuranceURL: 
+	{
+		australia: 'https://www.safeworkaustralia.gov.au/workers-compensation/comparing-australias-workers-compensation-schemes'
+	}
 });
 
 ns1blankspace.option.passwordExpiry.site = 312;
@@ -237,7 +241,7 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.financial.payroll',
-		source: '/site/312/1blankspace.financial.payroll-2.2.0.js'
+		source: '/site/312/1blankspace.financial.payroll-2.2.2.js'
 	},
 	{
 		nameSpace: '1blankspace.financial.budget',
@@ -2068,7 +2072,7 @@ ns1blankspace.control =
 					{	
 						var oSearch = new AdvancedSearch();
 						oSearch.method = 'CORE_SPACE_SEARCH';
-						oSearch.addField('space,spacetext,unrestrictedaccess');
+						oSearch.addField('space,spacetext,unrestrictedaccess,guid');
 						oSearch.sort('spacetext', 'asc');
 						oSearch.rows = 15;
 						oSearch.getResults(function(data) {ns1blankspace.control.spaces.show(oElement, data)});
