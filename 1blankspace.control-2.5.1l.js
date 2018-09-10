@@ -173,7 +173,7 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.messaging.imap',
-		source: '/site/312/1blankspace.messaging.imap-2.2.0.js'
+		source: '/site/312/1blankspace.messaging.imap-2.2.1.js'
 	},
 	{
 		nameSpace: '1blankspace.document',
@@ -209,7 +209,7 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.financial.bankAccount',
-		source: '/site/312/1blankspace.financial.bankaccount-2.3.6.js'
+		source: '/site/312/1blankspace.financial.bankaccount-2.3.7.js'
 	},
 	{
 		nameSpace: '1blankspace.financial.invoice',

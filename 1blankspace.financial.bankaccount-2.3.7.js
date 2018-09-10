@@ -1306,12 +1306,11 @@ ns1blankspace.financial.bankAccount =
 												}	
 											},
 
-								match: 	function (oItem, oMapping)
+								match: 	function (oItem, oMapping, bReset)
 											{
 												var bMatch = false;
-												var bRefresh = ns1blankspace.util.getParam(oParam, 'refresh', {"default": false}).value;
-
-												if ((bRefresh || (oItem.status == 1 || oItem.status == 3)) && (oItem.category == oMapping.mapfrom))
+								
+												if ((bReset || (oItem.status == 1 || oItem.status == 3)) && (oItem.category == oMapping.mapfrom))
 												{	
 													if (oMapping.descriptionmatchtype == 1)
 													{	
@@ -1334,6 +1333,7 @@ ns1blankspace.financial.bankAccount =
 												var iType = ns1blankspace.util.getParam(oParam, 'type', {"default": 1}).value;
 												var sID = ns1blankspace.util.getParam(oParam, 'xhtmlElementID', {index: 1, "default": ''}).value;
 												var iIndex = ns1blankspace.util.getParam(oParam, 'index', {"default": 0}).value;
+												var bReset = ns1blankspace.util.getParam(oParam, 'reset', {"default": false}).value;
 
 												if (iStep == 0)
 												{
@@ -1349,13 +1349,17 @@ ns1blankspace.financial.bankAccount =
 														var aMatch = 
 														$.grep(ns1blankspace.financial.bankAccount.reconcile.items.data.mappings, function (a)
 														{
-															return ns1blankspace.financial.bankAccount.mapping.apply.match(v, a);
+															return ns1blankspace.financial.bankAccount.mapping.apply.match(v, a, bReset);
 														});  
 														
 														if (aMatch.length > 0)
 														{
 															oMatch = aMatch[0];
 															v.mapping = oMatch;
+														}
+														else
+														{
+															v.mapping = undefined;
 														}
 													});
 
@@ -1389,6 +1393,12 @@ ns1blankspace.financial.bankAccount =
 															if (oItem.mapping.taxtype != '') {oData.taxtype = oItem.mapping.taxtype}
 															if (oItem.mapping.maptocontactbusiness != '' && oItem.mapping.maptocontactbusiness != 0) {oData.contactbusiness = oItem.mapping.maptocontactbusiness}
 															if (oItem.mapping.maptocontactperson != '' && oItem.mapping.maptocontactperson != 0) {oData.contactperson = oItem.mapping.maptocontactperson}	
+														}
+														else if (bReset)
+														{
+															oData.financialaccount = '';
+															oData.contactbusiness = '';
+															oData.contactperson = '';	
 														}		
 
 														$.ajax(
@@ -2181,7 +2191,12 @@ ns1blankspace.financial.bankAccount =
 																aHTML.push('<tr><td><span id="ns1blankspaceBankAccountImportMappingsReApply" class="ns1blankspaceAction">' +
 																			'Apply mappings</span></td></tr>');
 
-																aHTML.push('<tr><td style="padding-top:16px; font-size:0.75em;" class="ns1blankspaceSub">' +
+																aHTML.push('<tr><td style="padding-top:8px;">' +		
+																				'<input type="checkbox" id="ns1blankspaceBankAccountImportMappingsReApply_reset" style="margin:0px; padding:0px; border: 0px; margin-top:1px;">' +
+																				'<span style="font-weight:100; font-size:0.75em; margin-left:2px;" class="ns1blankspaceSub">Reset transactions</span>' +
+																				'</td></tr>');
+
+																aHTML.push('<tr><td style="padding-top:20px; font-size:0.75em;" class="ns1blankspaceSub">' +
 																					'If you don\'t plan to reconcile against a bank statement then you can create payments and receipts for any transactions with contact and financial account information, else click Reconcile in the side menu.</td></tr>');
 
 																aHTML.push('<tr><td style="padding-top:8px; padding-bottom:16px;"><span id="ns1blankspaceBankAccountImportCreateItems" class="ns1blankspaceAction">' +
@@ -2274,6 +2289,8 @@ ns1blankspace.financial.bankAccount =
 														})
 														.click(function()
 														{	
+															var oParam = {}
+															oParam.reset = ($('#ns1blankspaceBankAccountImportMappingsReApply_reset').prop('checked') == true)
 															ns1blankspace.financial.bankAccount.mapping.apply.init(oParam)
 														})
 														.css('width', '100px');
