@@ -4941,6 +4941,7 @@ ns1blankspace.financial.bankAccount =
 									var iStatus = 2;
 									var iMode = 1;
 									var bReset = true;
+									var iType = ns1blankspace.util.getParam(oParam, 'type', {"default": 2}).value;
 									
 									if (oParam != undefined)
 									{
@@ -5054,10 +5055,12 @@ ns1blankspace.financial.bankAccount =
 
 										aHTML.push('<div style="text-align:right; margin-left:5px; margin-right:3px; margin-bottom:16px;" id="ns1blankspaceBankAccountColumnItemType">');
 										
-										aHTML.push('<input style="width: 100%;"  type="radio" id="ns1blankspaceBankAccountColumnItemType-2-' + iReconciliation + '" name="radioType" checked="checked" /><label for="ns1blankspaceBankAccountColumnItemType-2-' + iReconciliation + '" style="width: 90px; margin-bottom:1px;">' +
+										aHTML.push('<input style="width: 100%;"  type="radio" id="ns1blankspaceBankAccountColumnItemType-2-' + iReconciliation + '" name="radioType"' +
+														(iType==2?' checked="checked"':'') + '/><label for="ns1blankspaceBankAccountColumnItemType-2-' + iReconciliation + '" style="width: 90px; margin-bottom:1px;">' +
 														'Incoming<br /><span style="font-weight:200">(Credits)</span></label>');
 
-										aHTML.push('<input style="width: 100%;" type="radio" id="ns1blankspaceBankAccountColumnItemType-1-' + iReconciliation + '" name="radioType" /><label for="ns1blankspaceBankAccountColumnItemType-1-' + iReconciliation + '" style="width:90px;">' +
+										aHTML.push('<input style="width: 100%;" type="radio" id="ns1blankspaceBankAccountColumnItemType-1-' + iReconciliation + '" name="radioType"' +
+														(iType==1?' checked="checked"':'') + ' /><label for="ns1blankspaceBankAccountColumnItemType-1-' + iReconciliation + '" style="width:90px;">' +
 														'Outgoing<br /><span style="font-weight:200">(Debits)</span></label>');
 										
 										aHTML.push('</div>');
@@ -5073,6 +5076,8 @@ ns1blankspace.financial.bankAccount =
 										}	
 
 										$('#ns1blankspaceControlContext_reco_summary-' + iReconciliation).html(aHTML.join(''));
+
+										ns1blankspace.financial.bankAccount.reconcile.unlock.init({reconciliation: iReconciliation});
 
 										$('#ns1blankspaceBankAccountColumnItemType').buttonset().css('font-size', '0.75em');
 										
@@ -5402,7 +5407,88 @@ ns1blankspace.financial.bankAccount =
 									}
 								},
 
-						items: 	{	
+						unlock:
+								{
+									init: function (oParam, oResponse)
+									{
+										//For now, can only unlock if no current reconciliation - ie only one at a time.
+
+										var iReconciliation = ns1blankspace.util.getParam(oParam, 'reconciliation').value;
+
+										if (oResponse == undefined)
+										{
+											var oSearch = new AdvancedSearch();
+											oSearch.method = 'FINANCIAL_RECONCILIATION_SEARCH';
+											oSearch.addField('id');
+											oSearch.addFilter('bankaccount', 'EQUAL_TO', ns1blankspace.objectContext);
+											oSearch.addBracket('(');
+											oSearch.addFilter('status', 'EQUAL_TO', 1);
+											oSearch.addOperator('or');
+											oSearch.addBracket('(');
+											oSearch.addFilter('status', 'EQUAL_TO', 2);
+											oSearch.addFilter('id', 'GREATER_THAN', iReconciliation);
+											oSearch.addBracket(')');
+											oSearch.addBracket(')');
+											oSearch.rows = 1;
+											oSearch.getResults(function(data) {ns1blankspace.financial.bankAccount.reconcile.unlock.init(oParam, data)});
+										}
+										else
+										{
+											if (oResponse.data.rows.length == 0)
+											{
+												ns1blankspace.financial.bankAccount.reconcile.unlock.show(oParam)
+											}
+										}
+									},
+
+									show: function (oParam, oResponse)
+									{
+										var iReconciliation = ns1blankspace.util.getParam(oParam, 'reconciliation').value;
+
+										$('#ns1blankspaceBankAccountColumnItemType').before(
+											'<div style="width:20px; margin-left:5px; margin-right:2px; margin-bottom:10px; float:right;" ' +
+												'class="ns1blankspaceBankAccountRecoLock" id="ns1blankspaceBankAccountRecoUnlock-' + iReconciliation + '">' +
+												'Unlock</div>');
+
+										$('#ns1blankspaceBankAccountRecoUnlock-' + iReconciliation).button(
+										{
+											text: false,
+											icons:
+											{
+												primary: "ui-icon-unlocked"
+											}
+										})
+										.click(function()
+										{
+											ns1blankspace.status.working();
+												
+											var aID = (this.id).split('-');
+												
+											var oData = 
+											{	
+												id: aID[1],
+												status: 1
+											}	
+											
+											$.ajax(
+											{
+												type: 'POST',
+												url: ns1blankspace.util.endpointURI('FINANCIAL_RECONCILIATION_MANAGE'),
+												data: oData,
+												dataType: 'json',
+												success: function()
+												{
+													ns1blankspace.financial.bankAccount.init({id: ns1blankspace.objectContext});
+													ns1blankspace.status.message('Reconciliation unlocked.');
+												}
+											});
+										})
+										.css('font-size', '0.75em');
+									}
+								},		
+
+						items: 	
+								{	
 									data: 	{unreconciled: {}},
 
 									show:		function (oParam, oResponse)
@@ -6846,15 +6932,11 @@ ns1blankspace.financial.bankAccount =
 																oParam = ns1blankspace.util.setParam(oParam, 'object', iObject);
 																oParam = ns1blankspace.util.setParam(oParam, 'bankAccount', ns1blankspace.objectContext);
 																oParam = ns1blankspace.util.setParam(oParam, 'taxType', $('input[name="radioItemTaxCode"]:checked').val());
-															
-																if ($('#ns1blankspaceReconcileItemsEditRemember:checked').length == 0)
+																oParam = ns1blankspace.util.setParam(oParam, 'postSave', ns1blankspace.financial.bankAccount.reconcile.items.edit);
+
+																if ($('#ns1blankspaceReconcileItemsEditRemember:checked').length != 0)
 																{
-																	oParam = ns1blankspace.util.setParam(oParam, 'postSave', ns1blankspace.financial.bankAccount.reconcile.items.edit);
-																}
-																else
-																{
-																	oParam = ns1blankspace.util.setParam(oParam, 'onComplete', ns1blankspace.financial.bankAccount.reconcile.items.edit);
-																	oParam = ns1blankspace.util.setParam(oParam, 'postSave', ns1blankspace.financial.bankAccount.reconcile.items.remember);
+																	ns1blankspace.financial.bankAccount.reconcile.items.remember(oParam);
 																}
 
 																$('#ns1blankspaceBankAccountReconcileColumnItemEdit').html('');
@@ -6984,7 +7066,9 @@ ns1blankspace.financial.bankAccount =
 														descriptionmatchtype: 1,
 														mapfromdescription: ns1blankspace.util.getParam(oParam, 'description').value,
 														maptofinancialaccount: ns1blankspace.util.getParam(oParam, 'account').value,
-														taxtype: ns1blankspace.util.getParam(oParam, 'taxType').value
+														taxtype: ns1blankspace.util.getParam(oParam, 'taxType').value,
+														maptocontactperson: ns1blankspace.util.getParam(oParam, 'contactPerson').value,
+														maptocontactbusiness: ns1blankspace.util.getParam(oParam, 'contactBusiness').value,
 													}
 														
 													$.ajax(
@@ -6995,7 +7079,7 @@ ns1blankspace.financial.bankAccount =
 														dataType: 'json',
 														success: function(oResponse)
 														{
-															ns1blankspace.status.message('Saved');
+															ns1blankspace.status.message('Mapping saved');
 															ns1blankspace.util.onComplete(oParam);
 														}
 													});

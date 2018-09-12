@@ -209,7 +209,7 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.financial.bankAccount',
-		source: '/site/312/1blankspace.financial.bankaccount-2.3.7.js'
+		source: '/site/312/1blankspace.financial.bankaccount-2.3.9.js'
 	},
 	{
 		nameSpace: '1blankspace.financial.invoice',
@@ -241,7 +241,7 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.financial.payroll',
-		source: '/site/312/1blankspace.financial.payroll-2.2.2.js'
+		source: '/site/312/1blankspace.financial.payroll-2.2.3.js'
 	},
 	{
 		nameSpace: '1blankspace.financial.budget',

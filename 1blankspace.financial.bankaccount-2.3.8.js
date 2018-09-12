@@ -5074,6 +5074,8 @@ ns1blankspace.financial.bankAccount =
 
 										$('#ns1blankspaceControlContext_reco_summary-' + iReconciliation).html(aHTML.join(''));
 
+										ns1blankspace.financial.bankAccount.reconcile.unlock.init({reconciliation: iReconciliation});
+
 										$('#ns1blankspaceBankAccountColumnItemType').buttonset().css('font-size', '0.75em');
 										
 										$('#ns1blankspaceBankAccountColumnItemType :radio').click(function()
@@ -5402,7 +5404,88 @@ ns1blankspace.financial.bankAccount =
 									}
 								},
 
-						items: 	{	
+						unlock:
+								{
+									init: function (oParam, oResponse)
+									{
+										//For now, can only unlock if no current reconciliation - ie only one at a time.
+
+										var iReconciliation = ns1blankspace.util.getParam(oParam, 'reconciliation').value;
+
+										if (oResponse == undefined)
+										{
+											var oSearch = new AdvancedSearch();
+											oSearch.method = 'FINANCIAL_RECONCILIATION_SEARCH';
+											oSearch.addField('id');
+											oSearch.addFilter('bankaccount', 'EQUAL_TO', ns1blankspace.objectContext);
+											oSearch.addBracket('(');
+											oSearch.addFilter('status', 'EQUAL_TO', 1);
+											oSearch.addOperator('or');
+											oSearch.addBracket('(');
+											oSearch.addFilter('status', 'EQUAL_TO', 2);
+											oSearch.addFilter('id', 'GREATER_THAN', iReconciliation);
+											oSearch.addBracket(')');
+											oSearch.addBracket(')');
+											oSearch.rows = 1;
+											oSearch.getResults(function(data) {ns1blankspace.financial.bankAccount.reconcile.unlock.init(oParam, data)});
+										}
+										else
+										{
+											if (oResponse.data.rows.length == 0)
+											{
+												ns1blankspace.financial.bankAccount.reconcile.unlock.show(oParam)
+											}
+										}
+									},
+
+									show: function (oParam, oResponse)
+									{
+										var iReconciliation = ns1blankspace.util.getParam(oParam, 'reconciliation').value;
+
+										$('#ns1blankspaceBankAccountColumnItemType').before(
+											'<div style="width:20px; margin-left:5px; margin-right:2px; margin-bottom:10px; float:right;" ' +
+												'class="ns1blankspaceBankAccountRecoLock" id="ns1blankspaceBankAccountRecoUnlock-' + iReconciliation + '">' +
+												'Unlock</div>');
+
+										$('#ns1blankspaceBankAccountRecoUnlock-' + iReconciliation).button(
+										{
+											text: false,
+											icons:
+											{
+												primary: "ui-icon-unlocked"
+											}
+										})
+										.click(function()
+										{
+											ns1blankspace.status.working();
+												
+											var aID = (this.id).split('-');
+												
+											var oData = 
+											{	
+												id: aID[1],
+												status: 1
+											}	
+											
+											$.ajax(
+											{
+												type: 'POST',
+												url: ns1blankspace.util.endpointURI('FINANCIAL_RECONCILIATION_MANAGE'),
+												data: oData,
+												dataType: 'json',
+												success: function()
+												{
+													ns1blankspace.financial.bankAccount.init({id: ns1blankspace.objectContext});
+													ns1blankspace.status.message('Reconciliation unlocked.');
+												}
+											});
+										})
+										.css('font-size', '0.75em');
+									}
+								},		
+
+						items: 	
+								{	
 									data: 	{unreconciled: {}},
 
 									show:		function (oParam, oResponse)
