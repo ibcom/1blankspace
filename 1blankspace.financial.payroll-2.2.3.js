@@ -6574,7 +6574,7 @@ ns1blankspace.financial.payroll.dashboard =
 
 							var oSearch = new AdvancedSearch();
 							oSearch.method = 'FINANCIAL_ITEM_SEARCH';
-							oSearch.addField('sum(amount) totalamount');
+							oSearch.addField('sum(amount) totalamount,sum(tax) totaltax');
 							oSearch.addFilter('financialaccount', 'IN_LIST', ns1blankspace.financial.payroll.dashboard.data.contractorAccounts.join(','));
 							oSearch.addFilter('object', 'EQUAL_TO', 2)
 
@@ -6594,6 +6594,7 @@ ns1blankspace.financial.payroll.dashboard =
 						else
 						{
 							ns1blankspace.financial.payroll.dashboard.data.contractorExpenses = numeral(oResponse.data.rows[0].totalamount).value();
+							ns1blankspace.financial.payroll.dashboard.data.contractorExpensesTax = numeral(oResponse.data.rows[0].totaltax).value();
 							ns1blankspace.financial.payroll.dashboard.contractor.payments(oParam);
 						}
 					},
@@ -6609,7 +6610,7 @@ ns1blankspace.financial.payroll.dashboard =
 
 							var oSearch = new AdvancedSearch();
 							oSearch.method = 'FINANCIAL_ITEM_SEARCH';
-							oSearch.addField('sum(amount) totalamount');
+							oSearch.addField('sum(amount) totalamount,sum(tax) totaltax');
 							oSearch.addFilter('financialaccount', 'IN_LIST', ns1blankspace.financial.payroll.dashboard.data.contractorAccounts.join(','));
 							oSearch.addFilter('object', 'EQUAL_TO', 3)
 
@@ -6630,6 +6631,9 @@ ns1blankspace.financial.payroll.dashboard =
 						{
 							ns1blankspace.financial.payroll.dashboard.data.contractorExpenses = 
 								ns1blankspace.financial.payroll.dashboard.data.contractorExpenses + numeral(oResponse.data.rows[0].totalamount).value();
+
+							ns1blankspace.financial.payroll.dashboard.data.contractorExpensesTax = 
+								ns1blankspace.financial.payroll.dashboard.data.contractorExpensesTax + numeral(oResponse.data.rows[0].totaltax).value();
 							
 							ns1blankspace.financial.payroll.dashboard.employees(oParam);
 						}
@@ -6646,7 +6650,6 @@ ns1blankspace.financial.payroll.dashboard =
 
 					if (oResponse == undefined)
 					{
-					
 						ns1blankspace.status.working('Payroll');
 
 						var oSearch = new AdvancedSearch();
@@ -6723,9 +6726,9 @@ ns1blankspace.financial.payroll.dashboard =
 
 						var aHTML = [];
 
-						if (ns1blankspace.financial.payroll.dashboard.data.employees.length < 200)
+						if (ns1blankspace.financial.payroll.dashboard.data.employees.length < 20)
 						{
-							aHTML.push('<table id="ns1blankspacePayrollDashboardEmployees" class="ns1blankspace" style="margin-top:10px;">' +
+							aHTML.push('<table id="ns1blankspacePayrollDashboardEmployees" class="ns1blankspace" style="margin-top:16px;">' +
 												'<tr class="ns1blankspaceCaption">' +
 												'<td class="ns1blankspaceHeaderCaption" style="width:10px;"><span class="ns1blankspacePayrollDashboardEmployeesSelectAll"></span></td>' +
 												'<td class="ns1blankspaceHeaderCaption">Employees</td>');
