@@ -1249,7 +1249,7 @@ ns1blankspace.financial.bankAccount =
 																		'contactbusiness,contactbusinesstext,contactperson,contactpersontext,description,' +
 																		'object,objectcontext,' +
 																		'externalid,financialaccount,financialaccounttext,posteddate,project,projecttext,' +
-																		'source,sourcetext,status,statustext,tax,taxtype,taxtypeexpensetext,taxtyperevenuetext,type,typetext');
+																		'source,sourcetext,status,statustext,tax,taxtype,taxtypeexpensetext,taxtyperevenuetext,type,typetext,createddate');
 													oSearch.sort('posteddate', 'asc');
 													oSearch.addFilter('bankaccount', 'EQUAL_TO', ns1blankspace.objectContext);
 													if (iFileSource != undefined) {oSearch.addFilter('source', 'EQUAL_TO', iFileSource);}
@@ -1447,7 +1447,7 @@ ns1blankspace.financial.bankAccount =
 																		'contactbusiness,contactbusinesstext,contactperson,contactpersontext,description,' +
 																		'object,objectcontext,' +
 																		'externalid,financialaccount,financialaccounttext,posteddate,project,projecttext,' +
-																		'source,sourcetext,status,statustext,tax,taxtype,taxtypeexpensetext,taxtyperevenuetext,type,typetext');
+																		'source,sourcetext,status,statustext,tax,taxtype,taxtypeexpensetext,taxtyperevenuetext,type,typetext,createddate');
 													oSearch.sort('posteddate', 'asc');
 													oSearch.addFilter('bankaccount', 'EQUAL_TO', ns1blankspace.objectContext);
 													if (iFileSource != undefined) {oSearch.addFilter('source', 'EQUAL_TO', iFileSource);}
@@ -2060,7 +2060,7 @@ ns1blankspace.financial.bankAccount =
 														oSearch.addField('amount,area,areatext,bankaccount,bankaccounttext,capital,category,categorytext,' +
 																			'contactbusiness,contactbusinesstext,contactperson,contactpersontext,description,' +
 																			'externalid,financialaccount,financialaccounttext,posteddate,project,projecttext,' +
-																			'source,sourcetext,status,statustext,tax,taxtype,taxtypeexpensetext,taxtyperevenuetext,type,typetext');
+																			'source,sourcetext,status,statustext,tax,taxtype,taxtypeexpensetext,taxtyperevenuetext,type,typetext,createddate');
 														oSearch.sort('posteddate', 'desc');
 														oSearch.addFilter('bankaccount', 'EQUAL_TO', ns1blankspace.objectContext);
 														if (iFileSource != undefined) {oSearch.addFilter('source', 'EQUAL_TO', iFileSource);}
@@ -5534,7 +5534,7 @@ ns1blankspace.financial.bankAccount =
 														
 														oSearch.method = 'FINANCIAL_BANK_ACCOUNT_TRANSACTION_SEARCH';
 														oSearch.addField('description,amount,posteddate,taxtype,financialaccount,financialaccounttext,' +
-																			'contactbusiness,contactbusinesstext,contactperson,contactpersontext');
+																			'contactbusiness,contactbusinesstext,contactperson,contactpersontext,createddate');
 														oSearch.addFilter('bankaccount', 'EQUAL_TO', ns1blankspace.objectContext);
 														//include 4
 														oSearch.addFilter('status', 'IN_LIST', '3,4');

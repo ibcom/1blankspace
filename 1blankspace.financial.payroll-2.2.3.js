@@ -3,7 +3,6 @@
  * Licensed as Attribution-ShareAlike 4.0 International
  * http://creativecommons.org/licenses/by-sa/4.0/
  *
- * 30SEP2015: Open line types
  */
 
 ns1blankspace.financial.payroll = 
@@ -129,7 +128,8 @@ ns1blankspace.financial.payroll =
 										aHTML.push('<table class="ns1blankspaceControl">');
 
 										aHTML.push('<tr class="ns1blankspaceControl">' +
-													'<td id="ns1blankspaceControl_dashboard" class="ns1blankspaceControl" style="padding-top:6px;">Summary</td>' +
+													'<td id="ns1blankspaceControl_dashboard" class="ns1blankspaceControl" style="padding-top:0px;">Summary' +
+													'<br /><div class="ns1blankspaceSubNote">dashboard</div></td>' +
 													'</tr>');
 																						
 										aHTML.push('</table>');
@@ -4358,60 +4358,65 @@ ns1blankspace.financial.payroll.totals =
 									var sKey = oRow.id;									
 									var aHTML = [];
 
-									aHTML.push('<tr class="ns1blankspaceRow" id="ns1blankspacePayrollTotals_container-' + sKey + '">' +
-																	'<td class="ns1blankspaceRow ns1blankspaceSub" id="ns1blankspacePayrollTotals_selectContainer-' + sKey + '">' +
-																	'<input type="checkbox" checked="checked" id="ns1blankspacePayrollTotals_select-' + sKey + '" /></td>');
+									var oPayRecord = $.grep(ns1blankspace.financial.payroll.data.payrecords.data.rows,
+															function (payrecord) {return payrecord['payrecord.employee.contactperson'] == oRow['employee.contactperson']})[0];
 
-									aHTML.push('<td id="ns1blankspacePayrollTotals_employee" class="ns1blankspaceRow ns1blankspaceRowSelect">' +
+									if (oPayRecord==undefined && oRow["employee.statustext"] == 'Inactive')
+									{}
+									else
+									{		
+										aHTML.push('<tr class="ns1blankspaceRow" id="ns1blankspacePayrollTotals_container-' + sKey + '">' +
+																		'<td class="ns1blankspaceRow ns1blankspaceSub" id="ns1blankspacePayrollTotals_selectContainer-' + sKey + '">' +
+																		'<input type="checkbox" checked="checked" id="ns1blankspacePayrollTotals_select-' + sKey + '" /></td>');
+
+										aHTML.push('<td id="ns1blankspacePayrollTotals_employee" class="ns1blankspaceRow ns1blankspaceRowSelect">' +
 													(oRow["employee.contactperson.firstname"] != ''?'<div>' + oRow["employee.contactperson.firstname"] + '</div>':'') +
 													'<div>' + oRow["employee.contactperson.surname"] + '</div>' +
 													'<div class="ns1blankspaceSub">' + oRow["employee.employeenumber"] + '</div>' + 
 													'</td>');
 
-									var oPayRecord = $.grep(ns1blankspace.financial.payroll.data.payrecords.data.rows,
-															function (payrecord) {return payrecord['payrecord.employee.contactperson'] == oRow['employee.contactperson']})[0];
-
-									if (bShowAsList)
-									{
-										 aHTML.push('<td class="ns1blankspaceRow ns1blankspaceSubNote" style="text-align:right; font-size:0.75em;">' +
-										 					(oPayRecord==undefined?'-':oPayRecord["grosssalary"]) + '</td>' +
-										 			'<td class="ns1blankspaceRow ns1blankspaceSubNote" style="text-align:right; font-size:0.75em;">' +
-										 					(oPayRecord==undefined?'-':oPayRecord["taxbeforerebate"]) + '</td>' +
-										 			'<td class="ns1blankspaceRow ns1blankspaceSubNote" style="text-align:right; font-size:0.75em;">' +
-										 					(oPayRecord==undefined?'-':oPayRecord["netsalary"]) + '</td>' +
-										 			'<td class="ns1blankspaceRow ns1blankspaceSubNote" style="text-align:right; font-size:0.75em;">' +
-										 					(oPayRecord==undefined?'-':oPayRecord["superannuation"]) + '</td>' +
-										 			'<td class="ns1blankspaceRow ns1blankspaceSubNote" style="text-align:right; font-size:0.75em;">' +
-										 					(oPayRecord==undefined?'-': oPayRecord["deductions"]) + '</td>');				
-									}
-									else
-									{
-										aHTML.push('<td id="ns1blankspacePayrollTotals_pay" class="ns1blankspaceRow ns1blankspaceSubNote" style="padding-bottom:6px;">')
-
-										if (oPayRecord == undefined)
-										{
-											aHTML.push('<div class="ns1blankspaceSubNote">-<div>');
+										if (bShowAsList)
+										{	
+											aHTML.push('<td class="ns1blankspaceRow ns1blankspaceSubNote" style="text-align:right; font-size:0.75em;">' +
+											 					(oPayRecord==undefined?'-':oPayRecord["grosssalary"]) + '</td>' +
+											 			'<td class="ns1blankspaceRow ns1blankspaceSubNote" style="text-align:right; font-size:0.75em;">' +
+											 					(oPayRecord==undefined?'-':oPayRecord["taxbeforerebate"]) + '</td>' +
+											 			'<td class="ns1blankspaceRow ns1blankspaceSubNote" style="text-align:right; font-size:0.75em;">' +
+											 					(oPayRecord==undefined?'-':oPayRecord["netsalary"]) + '</td>' +
+											 			'<td class="ns1blankspaceRow ns1blankspaceSubNote" style="text-align:right; font-size:0.75em;">' +
+											 					(oPayRecord==undefined?'-':oPayRecord["superannuation"]) + '</td>' +
+											 			'<td class="ns1blankspaceRow ns1blankspaceSubNote" style="text-align:right; font-size:0.75em;">' +
+											 					(oPayRecord==undefined?'-': oPayRecord["deductions"]) + '</td>');				
 										}
 										else
 										{
-											aHTML.push('<table>' +
-														 '<tr><td class="ns1blankspaceRow">Gross</td><td class="ns1blankspaceRow"style="text-align:right;">$' + oPayRecord["grosssalary"] + '</td></tr>' +
-														 '<tr><td class="ns1blankspaceRow">Tax</td><td class="ns1blankspaceRow" style="text-align:right;">$' + oPayRecord["taxbeforerebate"] + '</td></tr>' +
-														 '<tr><td class="ns1blankspaceRow">Net</td><td class="ns1blankspaceRow" style="text-align:right;">$' + oPayRecord["netsalary"] + '</td></tr>' +
-														 '<tr><td class="ns1blankspaceRow">Superannuation</td><td class="ns1blankspaceRow" style="text-align:right;">$' + oPayRecord["superannuation"] + '</td></tr>' +
-														 '<tr><td class="ns1blankspaceRow" style="border-width:0px;">Deductions</td><td class="ns1blankspaceRow" style="border-width:0px; text-align:right;">$' + oPayRecord["deductions"] + '</td></tr>' +
-														 '</table>');
-										}
+											aHTML.push('<td id="ns1blankspacePayrollTotals_pay" class="ns1blankspaceRow ns1blankspaceSubNote" style="padding-bottom:6px;">')
 
-										aHTML.push('</td>');
-									}	
-								
-									aHTML.push('<td style="width:20px;text-align:right;" class="ns1blankspaceRow">' +
-													'<span style="margin-right:5px;" id="ns1blankspacePayrollTotals_option_preview-' + sKey + '"' +
-																	' class="ns1blankspaceRowPreview"></span>' +
-													'</td></tr>');
+											if (oPayRecord == undefined)
+											{
+												aHTML.push('<div class="ns1blankspaceSubNote">-<div>');
+											}
+											else
+											{
+												aHTML.push('<table>' +
+															 '<tr><td class="ns1blankspaceRow">Gross</td><td class="ns1blankspaceRow"style="text-align:right;">$' + oPayRecord["grosssalary"] + '</td></tr>' +
+															 '<tr><td class="ns1blankspaceRow">Tax</td><td class="ns1blankspaceRow" style="text-align:right;">$' + oPayRecord["taxbeforerebate"] + '</td></tr>' +
+															 '<tr><td class="ns1blankspaceRow">Net</td><td class="ns1blankspaceRow" style="text-align:right;">$' + oPayRecord["netsalary"] + '</td></tr>' +
+															 '<tr><td class="ns1blankspaceRow">Superannuation</td><td class="ns1blankspaceRow" style="text-align:right;">$' + oPayRecord["superannuation"] + '</td></tr>' +
+															 '<tr><td class="ns1blankspaceRow" style="border-width:0px;">Deductions</td><td class="ns1blankspaceRow" style="border-width:0px; text-align:right;">$' + oPayRecord["deductions"] + '</td></tr>' +
+															 '</table>');
+											}
+
+											aHTML.push('</td>');
+										}	
 									
-									return aHTML.join('');
+										aHTML.push('<td style="width:20px;text-align:right;" class="ns1blankspaceRow">' +
+														'<span style="margin-right:5px;" id="ns1blankspacePayrollTotals_option_preview-' + sKey + '"' +
+																		' class="ns1blankspaceRowPreview"></span>' +
+														'</td></tr>');
+										
+										return aHTML.join('');
+									}
 								},
 
 					bind: 		function ()
@@ -5206,7 +5211,7 @@ ns1blankspace.financial.payroll.pays.totals =
 									return aHTML.join('');
 								},
 
-					bind: 		function ()
+					bind: 	function ()
 								{
 									$('.ns1blankspacePayrollPayTotalsSelectAll').button(
 									{
@@ -6391,13 +6396,106 @@ ns1blankspace.financial.payroll.dashboard =
 {
 	data: 	{},
 
-	init: 	function (oParam, oResponse)
-				{
-					//Get financial accounts for consultants
-				},
+	init: 	function (oParam)
+				{	
+					var aHTML = [];
 
-	show: 	function (oParam, oResponse)
-				{
+					aHTML.push('<table class="ns1blankspaceMain" style="width:100%;">' +
+							'<tr>' +
+							'<td id="ns1blankspacePayrollDashboardColumn1" class="ns1blankspaceColumn1Divider" style="width:100px; font-size: 0.875em; padding-right:10px;"></td>' +
+							'<td id="ns1blankspacePayrollDashboardColumn2" class="ns1blankspaceColumn1Divider" style="font-size: 0.925em; padding-left:10px;">' + ns1blankspace.xhtml.loading + '</td>' +
+							'<td id="ns1blankspacePayrollDashboardColumn3" class="ns1blankspaceColumn1Divider" style="font-size: 0.925em; padding-left:10px;">' + ns1blankspace.xhtml.loading + '</td>' +
+							'<td id="ns1blankspacePayrollDashboardColumn4" style="font-size: 0.925em; padding-left:10px; width:100px;"></td>' +
+							'</tr>' +
+							'</table>');	
+
+					$('#ns1blankspaceMainDashboard').html(aHTML.join(''));	
+
+					var aHTML = [];
+					
+					aHTML.push('<table class="ns1blankspace" style="width:100%;">');
+					
+					aHTML.push('<tr>' +
+									'<tr><td class="ns1blankspaceDate">' +
+									'<input id="ns1blankspacePayrollDashboardStartDate" class="ns1blankspaceDate">' +
+									'</td></tr>');
+						
+					aHTML.push('<tr>' +
+									'<td class="ns1blankspaceCaption" style="padding-top:0px;">' +
+									'To' +
+									'</td></tr>' +
+									'<tr><td class="ns1blankspaceDate">' +
+									'<input id="ns1blankspacePayrollDashboardEndDate" class="ns1blankspaceDate">' +
+									'</td></tr>');
+													
+					aHTML.push('<tr><td style="padding-top:5px;">' +
+									'<span class="ns1blankspaceAction" style="width:95px;" id="ns1blankspacePayrollDashboardRefresh">Refresh</span>' +
+									'</td></tr>');
+
+					aHTML.push('<tr><td style="padding-top:26px;" id="ns1blankspacePayrollDashboardNotes">' +
+									'</td></tr>');
+
+					aHTML.push('</table>');					
+					
+					$('#ns1blankspacePayrollDashboardColumn1').html(aHTML.join(''));
+
+					$('input.ns1blankspaceDate').datepicker({dateFormat: ns1blankspace.option.dateFormat});
+
+					$('#ns1blankspacePayrollDashboardRefresh').button(
+					{
+						label: 'Refresh',
+						icons:
+						{
+							primary: "ui-icon-arrowrefresh-1-e"
+						}
+					})
+					.click(function()
+					{
+						ns1blankspace.financial.payroll.dashboard.refresh(
+						{
+							startDate: $('#ns1blankspacePayrollDashboardStartDate').val(),
+							endDate: $('#ns1blankspacePayrollDashboardEndDate').val()
+						})
+					});
+
+					var sContractorAccountText = ns1blankspace.option.payrollContractorAccountText;
+					if (sContractorAccountText == undefined) {sContractorAccountText = 'contract'}
+
+					var aHTML = [];
+						
+					ns1blankspace.financial.payroll.dashboard.data._contractorAccounts = $.grep(ns1blankspace.financial.data.accounts, function (account)
+					{
+						return (account.title.toLowerCase().indexOf(sContractorAccountText) != -1 && account.type == 1)
+					});
+
+					aHTML.push('<table class="ns1blankspace" style="width:100%;">');
+					
+					aHTML.push('<tr>' +
+									'<tr><td class="ns1blankspaceSubNote">' +
+									'Contacting amounts are based on expenses or payments with items linked to "' +
+									$.map(ns1blankspace.financial.payroll.dashboard.data._contractorAccounts, function (account)
+									{
+										return account.title
+									}).join(', ') + '", ' +
+									' as they contain the text "' + sContractorAccountText + '".' +
+									'</td></tr>');
+			
+					aHTML.push('</table>');					
+					
+					$('#ns1blankspacePayrollDashboardColumn4').html(aHTML.join(''));
+
+					ns1blankspace.financial.payroll.dashboard.data.contractorAccounts =
+							$.map(ns1blankspace.financial.payroll.dashboard.data._contractorAccounts, function (account)
+							{
+								return account.id
+							});
+
+					oParam = ns1blankspace.util.setParam(oParam, 'refresh', false);
+					ns1blankspace.financial.payroll.dashboard.refresh(oParam);
+				},			
+
+	refresh: function (oParam, oResponse)
+				{	
 					var sStartDate = ns1blankspace.util.getParam(oParam, 'startDate', {"default":ns1blankspace.financial.data.defaults.startdate}).value;
 					var sEndDate = ns1blankspace.util.getParam(oParam, 'endDate', {"default":ns1blankspace.financial.data.defaults.enddate}).value;
 
@@ -6423,138 +6521,137 @@ ns1blankspace.financial.payroll.dashboard =
 					ns1blankspace.financial.payroll.data.startDate = sStartDate;
 					ns1blankspace.financial.payroll.data.endDate = sEndDate;
 
+					if (ns1blankspace.financial.payroll.dashboard.data.contractorAccounts.length == 0)
+					{
+						ns1blankspace.financial.payroll.dashboard.employees(oParam)
+					}
+					else
+					{
+						ns1blankspace.financial.payroll.dashboard.contractor.expenses(oParam);
+					}
+				},
+
+	employees: function (oParam, oResponse)
+				{
+					var sStartDate = ns1blankspace.util.getParam(oParam, 'startDate', {"default":ns1blankspace.financial.data.defaults.startdate}).value;
+
+					if (oResponse == undefined)
+					{
+						var oSearch = new AdvancedSearch();
+						oSearch.method = 'FINANCIAL_PAYROLL_EMPLOYEE_SEARCH';
+						oSearch.addField('employee.contactpersontext,employee.employmentenddate,employee.statustext,employee.contactperson.firstname,employee.contactperson.surname');
+
+						if (sStartDate != undefined)
+						{
+							oSearch.addBracket('(');
+							oSearch.addFilter('employee.employmentenddate', 'IS_NULL');
+							oSearch.addOperator('or');
+							oSearch.addFilter('employee.employmentenddate', 'GREATER_THAN_OR_EQUAL_TO', sStartDate)
+							oSearch.addBracket(')');
+						}
+
+						oSearch.rows = 999;
+						oSearch.sort('employee.contactperson.firstname', 'asc');
+						oSearch.getResults(function(data) {ns1blankspace.financial.payroll.dashboard.employees(oParam, data)});
+					}
+					else
+					{
+						ns1blankspace.financial.payroll.dashboard.data.employees = oResponse.data.rows;
+						ns1blankspace.financial.payroll.dashboard.show(oParam)
+					}	
+				},		
+
+	contractor:
+				{
+					expenses: function (oParam, oResponse)
+					{
+						var sStartDate = ns1blankspace.util.getParam(oParam, 'startDate', {"default":ns1blankspace.financial.data.defaults.startdate}).value;
+						var sEndDate = ns1blankspace.util.getParam(oParam, 'endDate', {"default":ns1blankspace.financial.data.defaults.enddate}).value;
+
+						if (oResponse == undefined)
+						{
+							ns1blankspace.status.working('Contractor Expenses');
+
+							var oSearch = new AdvancedSearch();
+							oSearch.method = 'FINANCIAL_ITEM_SEARCH';
+							oSearch.addField('sum(amount) totalamount');
+							oSearch.addFilter('financialaccount', 'IN_LIST', ns1blankspace.financial.payroll.dashboard.data.contractorAccounts.join(','));
+							oSearch.addFilter('object', 'EQUAL_TO', 2)
+
+							if (sStartDate != undefined)
+							{
+								oSearch.addFilter('lineitem.expense.accrueddate', 'GREATER_THAN_OR_EQUAL_TO', sStartDate)
+							}
+								
+							if (sEndDate != undefined)
+							{
+								oSearch.addFilter('lineitem.expense.accrueddate', 'LESS_THAN_OR_EQUAL_TO', sEndDate)
+							}
+
+							oSearch.rows = 99;
+							oSearch.getResults(function(data) {ns1blankspace.financial.payroll.dashboard.contractor.expenses(oParam, data)});	
+						}
+						else
+						{
+							ns1blankspace.financial.payroll.dashboard.data.contractorExpenses = numeral(oResponse.data.rows[0].totalamount).value();
+							ns1blankspace.financial.payroll.dashboard.contractor.payments(oParam);
+						}
+					},
+
+					payments: function (oParam, oResponse)
+					{
+						var sStartDate = ns1blankspace.util.getParam(oParam, 'startDate', {"default":ns1blankspace.financial.data.defaults.startdate}).value;
+						var sEndDate = ns1blankspace.util.getParam(oParam, 'endDate', {"default":ns1blankspace.financial.data.defaults.enddate}).value;
+
+						if (oResponse == undefined)
+						{
+							ns1blankspace.status.working('Contractor Expenses');
+
+							var oSearch = new AdvancedSearch();
+							oSearch.method = 'FINANCIAL_ITEM_SEARCH';
+							oSearch.addField('sum(amount) totalamount');
+							oSearch.addFilter('financialaccount', 'IN_LIST', ns1blankspace.financial.payroll.dashboard.data.contractorAccounts.join(','));
+							oSearch.addFilter('object', 'EQUAL_TO', 3)
+
+							if (sStartDate != undefined)
+							{
+								oSearch.addFilter('lineitem.payment.paiddate', 'GREATER_THAN_OR_EQUAL_TO', sStartDate)
+							}
+								
+							if (sEndDate != undefined)
+							{
+								oSearch.addFilter('lineitem.payment.paiddate', 'LESS_THAN_OR_EQUAL_TO', sEndDate)
+							}
+
+							oSearch.rows = 99;
+							oSearch.getResults(function(data) {ns1blankspace.financial.payroll.dashboard.contractor.payments(oParam, data)});	
+						}
+						else
+						{
+							ns1blankspace.financial.payroll.dashboard.data.contractorExpenses = 
+								ns1blankspace.financial.payroll.dashboard.data.contractorExpenses + numeral(oResponse.data.rows[0].totalamount).value();
+							
+							ns1blankspace.financial.payroll.dashboard.employees(oParam);
+						}
+					}
+				},		
+
+	show: 	function (oParam, oResponse)
+				{
+					var sStartDate = ns1blankspace.util.getParam(oParam, 'startDate', {"default": ns1blankspace.financial.data.defaults.startdate}).value;
+					var sEndDate = ns1blankspace.util.getParam(oParam, 'endDate', {"default": ns1blankspace.financial.data.defaults.enddate}).value;
+					var bRefresh = ns1blankspace.util.getParam(oParam, 'refresh', {"default": true}).value;
+
 					ns1blankspace.financial.payroll.data.context = 'totals';
 
 					if (oResponse == undefined)
 					{
-						var aHTML = [];
+					
+						ns1blankspace.status.working('Payroll');
 
-						aHTML.push('<table class="ns1blankspaceMain" style="width:100%;">' +
-								'<tr>' +
-								'<td id="ns1blankspacePayrollInsuranceColumn1" class="ns1blankspaceColumn1Divider" style="width:100px; font-size: 0.875em; padding-right:10px;"></td>' +
-								'<td id="ns1blankspacePayrollInsuranceColumn2" class="ns1blankspaceColumn1Divider" style="font-size: 0.925em; padding-left:10px;">' + ns1blankspace.xhtml.loading + '</td>' +
-								'<td id="ns1blankspacePayrollInsuranceColumn3" class="ns1blankspaceColumn1Divider" style="font-size: 0.925em; padding-left:10px;">' + ns1blankspace.xhtml.loading + '</td>' +
-								'<td id="ns1blankspacePayrollInsuranceColumn4" style="font-size: 0.925em; padding-left:10px; width:100px;"></td>' +
-								'</tr>' +
-								'</table>');	
-
-						$('#ns1blankspaceMainInsurance').html(aHTML.join(''));	
-
-						var aHTML = [];
-						
-						aHTML.push('<table class="ns1blankspace" style="width:100%;">');
-						
-						aHTML.push('<tr>' +
-										'<tr><td class="ns1blankspaceDate">' +
-										'<input id="ns1blankspacePayrollInsuranceStartDate" class="ns1blankspaceDate">' +
-										'</td></tr>');
-							
-						aHTML.push('<tr>' +
-										'<td class="ns1blankspaceCaption" style="padding-top:0px;">' +
-										'To' +
-										'</td></tr>' +
-										'<tr><td class="ns1blankspaceDate">' +
-										'<input id="ns1blankspacePayrollInsuranceEndDate" class="ns1blankspaceDate">' +
-										'</td></tr>');
-														
-						aHTML.push('<tr><td style="padding-top:5px;">' +
-										'<span class="ns1blankspaceAction" style="width:95px;" id="ns1blankspacePayrollInsuranceRefresh">Refresh</span>' +
-										'</td></tr>');
-
-						aHTML.push('<tr><td style="padding-top:26px;" id="ns1blankspacePayrollInsuranceNotes">' +
-										'</td></tr>');
-
-						aHTML.push('</table>');					
-						
-						$('#ns1blankspacePayrollInsuranceColumn1').html(aHTML.join(''));
-
-						$('input.ns1blankspaceDate').datepicker({dateFormat: ns1blankspace.option.dateFormat});
-
-						$('#ns1blankspacePayrollInsuranceRefresh').button(
-						{
-							label: 'Refresh',
-							icons:
-							{
-								primary: "ui-icon-arrowrefresh-1-e"
-							}
-						})
-						.click(function()
-						{
-							ns1blankspace.financial.payroll.insurance.init(
-							{
-								startDate: $('#ns1blankspacePayrollInsuranceStartDate').val(),
-								endDate: $('#ns1blankspacePayrollInsuranceEndDate').val()
-							})
-						});
-
-						var aHTML = [];
-
-						aHTML.push('<table class="ns1blankspace" style="width:100%;">')
-						
-						if (ns1blankspace.financial.payroll.insurance.data.contactBusiness.tradename != '')
-						{
-							aHTML.push('<tr><td style="text-align:left;" class="ns1blankspaceCaption">Trade Name</td></tr>' +
-								'<tr><td style="text-align:left;" data-id="' + ns1blankspace.financial.payroll.insurance.data.contactBusiness.id + '" data-object="contactBusiness" class="ns1blankspaceViewLink">' +
-								ns1blankspace.financial.payroll.insurance.data.contactBusiness.tradename +
-								'</td></tr>');
-						}
-
-						if (ns1blankspace.financial.payroll.insurance.data.contactBusiness.legalname != '')
-						{
-							aHTML.push('<tr><td style="text-align:left;  padding-top:10px;" class="ns1blankspaceCaption">Legal Name</td></tr>' +
-								'<tr><td style="text-align:left;">' +
-								ns1blankspace.financial.payroll.insurance.data.contactBusiness.legalname + 
-								'</td></tr>');
-						}
-
-						if (ns1blankspace.financial.payroll.insurance.data.contactBusiness.abn != '')
-						{
-							aHTML.push('<tr><td style="text-align:left; padding-top:10px;" class="ns1blankspaceCaption">ABN</td></tr>' +
-								'<tr><td style="text-align:left;">' +
-								ns1blankspace.financial.payroll.insurance.data.contactBusiness.abn +
-								'</td></tr>');
-						}
-
-						aHTML.push('</table>');
-
-						$('#ns1blankspacePayrollInsuranceColumn2').html(aHTML.join(''));
-
-						var aHTML = [];
-
-						aHTML.push('<table class="ns1blankspace" style="width:100%;">')
-
-						if (ns1blankspace.option.employeeInsuranceURL != undefined && ns1blankspace.financial.payroll.insurance.data.contactBusiness.streetcountry.toLowerCase() != '')
-						{
-							if (ns1blankspace.option.employeeInsuranceURL[ns1blankspace.financial.payroll.insurance.data.contactBusiness.streetcountry.toLowerCase()] != undefined)
-							{	
-								aHTML.push('<tr><td style="text-align:left;">' +
-									'<a href="' + ns1blankspace.option.employeeInsuranceURL[ns1blankspace.financial.payroll.insurance.data.contactBusiness.streetcountry.toLowerCase()] + '" target="_blank">' +
-									'<span style="font-size:0.825em;">Find out more about employee insurance obligations...</span></a>' +
-									'</td></tr>');
-							}
-						}
-
-						if (ns1blankspace.financial.payroll.data.urls.insurance.length != 0)
-						{
-							aHTML.push('<tr><td style="text-align:left; padding-top:16px;">' +
-								'<div class="ns1blankspaceSubNote">Manage your insurance using...</div>' +
-								_.join(_.map(ns1blankspace.financial.payroll.data.urls.insurance, function (provider)
-								{
-									return '<div><a style="font-size:0.875em;" href="' + (provider.url.indexOf('http')==-1?'http://':'') + provider.url + '" target="_blank" title="' + provider.urllogon + '">' +
-										 provider.title + '</a></div>'
-								}), '')
-							);
-
-							aHTML.push('</td></tr>');
-						}
-
-						aHTML.push('</table>');
-
-						$('#ns1blankspacePayrollInsuranceColumn4').html(aHTML.join(''));
-						
 						var oSearch = new AdvancedSearch();
 						oSearch.method = 'FINANCIAL_PAYROLL_PAY_RECORD_SEARCH';
-						oSearch.addField('payrecord.employee.contactperson,payrecord.employee.contactpersontext,payrecord.employee.employeenumber,' +
+						oSearch.addField('payrecord.employee.contactperson,payrecord.employee.contactpersontext,payrecord.employee.employeenumber,payrecord.employee.id,' +
 											'sum(grosssalary) grosssalary,sum(netsalary) netsalary,sum(deductions) deductions,sum(superannuation) superannuation,sum(taxbeforerebate) taxbeforerebate');
 						oSearch.addSummaryField('sum(grosssalary) grosssalary');
 						oSearch.addSummaryField('sum(superannuation) superannuation');
@@ -6562,26 +6659,39 @@ ns1blankspace.financial.payroll.dashboard =
 						if (sStartDate != undefined)
 						{
 							oSearch.addFilter('payrecord.payperiod.paydate', 'GREATER_THAN_OR_EQUAL_TO', sStartDate)
-							$('#ns1blankspacePayrollInsuranceStartDate').val(sStartDate);
+							$('#ns1blankspacePayrollDashboardStartDate').val(sStartDate);
 						}
 							
 						if (sEndDate != undefined)
 						{
 							oSearch.addFilter('payrecord.payperiod.paydate', 'LESS_THAN_OR_EQUAL_TO', sEndDate)
-							$('#ns1blankspacePayrollInsuranceEndDate').val(sEndDate);
+							$('#ns1blankspacePayrollDashboardEndDate').val(sEndDate);
+						}
+
+						if ($('#ns1blankspacePayrollDashboardEmployees').length != 0)
+						{
+							ns1blankspace.financial.payroll.dashboard.data.employeeIDs = $.map($('#ns1blankspacePayrollDashboardEmployees input:checked'), function (input) {return input.id.split('-')[1]});
+							
+							if (ns1blankspace.financial.payroll.dashboard.data.employeeIDs.length > 0)
+							{
+								oSearch.addFilter('payrecord.employee.id', 'IN_LIST', ns1blankspace.financial.payroll.dashboard.data.employeeIDs.join(','));
+							}
 						}
 
 						oSearch.sort('payrecord.employee.contactperson', 'asc');
 						oSearch.rows = 200;
-						oSearch.getResults(function(data) {ns1blankspace.financial.payroll.insurance.show(oParam, data)});	
+						oSearch.getResults(function(data) {ns1blankspace.financial.payroll.dashboard.show(oParam, data)});	
 					}
 					else
 					{
-						ns1blankspace.financial.payroll.insurance.data.payrecords = oResponse;
+						ns1blankspace.status.clear();
+
+						ns1blankspace.financial.payroll.dashboard.data.payrecords = oResponse;
 
 						var aHTML = [];
 
 						aHTML.push('<table class="ns1blankspace" style="width:100%;">' +
+							'<tr><td class="ns1blankspaceHeaderCaption">PAYROLL</td></tr>' +
 							'<tr><td style="text-align:left;" class="ns1blankspaceCaption">Gross Salary</td></tr>' +
 							'<tr><td style="text-align:left;">$' +
 							(oResponse.summary.grosssalary).parseCurrency().formatMoney(2, '.', ',') + 
@@ -6590,13 +6700,82 @@ ns1blankspace.financial.payroll.dashboard =
 							'<tr><td style="text-align:left;">$' +
 							(oResponse.summary.superannuation).parseCurrency().formatMoney(2, '.', ',') + 
 							'</td></tr>' +
-							'<tr><td style="text-align:left; padding-top:10px;" class="ns1blankspaceCaption">Total Payroll</td></tr>' +
+							'<tr><td style="text-align:left; padding-top:10px;" class="ns1blankspaceCaption">Total Amount</td></tr>' +
 							'<tr><td style="text-align:left;">$' +
 							numeral(numeral(oResponse.summary.grosssalary).value() + numeral(oResponse.summary.superannuation).value()).format('(0,0.00)') + 
 							'</td></tr>' +
+							'<tr><td id="ns1blankspacePayrollDashboardPayroll"><td></tr>' +
 							'</table>');
 
-						$('#ns1blankspacePayrollInsuranceColumn3').html(aHTML.join(''));
+						$('#ns1blankspacePayrollDashboardColumn2').html(aHTML.join(''));
+
+						var aHTML = [];
+
+						aHTML.push('<table class="ns1blankspace" style="width:100%;">' +
+							'<tr><td class="ns1blankspaceHeaderCaption">CONTRACTING</td></tr>' +
+							'<tr><td style="text-align:left;" class="ns1blankspaceCaption">Total Amount</td></tr>' +
+							'<tr><td style="text-align:left;">$' +
+							numeral(ns1blankspace.financial.payroll.dashboard.data.contractorExpenses).format('(0,0.00)') + 
+							'</td></tr>' +		
+							'</table>');
+
+						$('#ns1blankspacePayrollDashboardColumn3').html(aHTML.join(''));
+
+						var aHTML = [];
+
+						if (ns1blankspace.financial.payroll.dashboard.data.employees.length < 200)
+						{
+							aHTML.push('<table id="ns1blankspacePayrollDashboardEmployees" class="ns1blankspace" style="margin-top:10px;">' +
+												'<tr class="ns1blankspaceCaption">' +
+												'<td class="ns1blankspaceHeaderCaption" style="width:10px;"><span class="ns1blankspacePayrollDashboardEmployeesSelectAll"></span></td>' +
+												'<td class="ns1blankspaceHeaderCaption">Employees</td>');
+
+							$.each(ns1blankspace.financial.payroll.dashboard.data.employees, function (e, employee)
+							{
+								aHTML.push('<tr class="ns1blankspaceRow" id="ns1blankspaceDashboardEmployees_container-' + employee.id + '">' +
+													'<td class="ns1blankspaceRow ns1blankspaceSub" id="ns1blankspaceDashboardEmployees_selectContainer-' + employee.id + '">' +
+													'<input type="checkbox" id="ns1blankspaceDashboardEmployees_select-' + employee.id + '" /></td>');
+
+								aHTML.push('<td id="ns1blankspaceDashboardEmployees_employee" class="ns1blankspaceRow ns1blankspaceRowSelect">' +
+													(employee["employee.contactperson.firstname"] != ''?'<div>' + employee["employee.contactperson.firstname"] + '</div>':'') +
+													'<div>' + employee["employee.contactperson.surname"] + '</div>' +
+													'</td></tr>');
+							});
+
+							aHTML.push('</table>');
+
+							$('#ns1blankspacePayrollDashboardPayroll').html(aHTML.join(''));
+
+							if (ns1blankspace.financial.payroll.dashboard.data.employeeIDs == undefined)
+							{
+								$('#ns1blankspacePayrollDashboardEmployees input').prop('checked', true);
+							}
+							else if (ns1blankspace.financial.payroll.dashboard.data.employeeIDs.length == 0)
+							{
+								$('#ns1blankspacePayrollDashboardEmployees input').prop('checked', true);
+							}
+							else
+							{
+								$.each(ns1blankspace.financial.payroll.dashboard.data.employeeIDs, function (i, sID)
+								{
+									$('#ns1blankspaceDashboardEmployees_select-' + sID).prop('checked', true);
+								});	
+							}
+
+							$('.ns1blankspacePayrollDashboardEmployeesSelectAll').button(
+							{
+								text: false,
+								icons:
+								{
+									primary: "ui-icon-check"
+								}
+							})
+							.click(function()
+							{	
+								$('#ns1blankspacePayrollDashboardEmployees input').each(function () {$(this).prop('checked', !($(this).prop('checked')))});
+							})
+							.css('width', '14px');	
+						}	
 					}	
 				}
 }
