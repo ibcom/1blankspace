@@ -6695,18 +6695,22 @@ ns1blankspace.financial.payroll.dashboard =
 
 						aHTML.push('<table class="ns1blankspace" style="width:100%;">' +
 							'<tr><td class="ns1blankspaceHeaderCaption">PAYROLL</td></tr>' +
-							'<tr><td style="text-align:left;" class="ns1blankspaceCaption">Gross Salary</td></tr>' +
+							
+							'<tr><td style="text-align:left;" class="ns1blankspaceCaption">Total Amount</td></tr>' +
 							'<tr><td style="text-align:left;">$' +
-							(oResponse.summary.grosssalary).parseCurrency().formatMoney(2, '.', ',') + 
-							'</td></tr>' +		
+							numeral(numeral(oResponse.summary.grosssalary).value() + numeral(oResponse.summary.superannuation).value()).format('(0,0.00)') + 
+							'</td></tr>' +
+
 							'<tr><td style="text-align:left; padding-top:10px;" class="ns1blankspaceCaption">Superannuation</td></tr>' +
 							'<tr><td style="text-align:left;">$' +
 							(oResponse.summary.superannuation).parseCurrency().formatMoney(2, '.', ',') + 
 							'</td></tr>' +
-							'<tr><td style="text-align:left; padding-top:10px;" class="ns1blankspaceCaption">Total Amount</td></tr>' +
+
+							'<tr><td style="text-align:left; padding-top:10px;" class="ns1blankspaceCaption">Gross Salary</td></tr>' +
 							'<tr><td style="text-align:left;">$' +
-							numeral(numeral(oResponse.summary.grosssalary).value() + numeral(oResponse.summary.superannuation).value()).format('(0,0.00)') + 
-							'</td></tr>' +
+							(oResponse.summary.grosssalary).parseCurrency().formatMoney(2, '.', ',') + 
+							'</td></tr>' +		
+
 							'<tr><td id="ns1blankspacePayrollDashboardPayroll"><td></tr>' +
 							'</table>');
 
@@ -6714,12 +6718,32 @@ ns1blankspace.financial.payroll.dashboard =
 
 						var aHTML = [];
 
+						var cSuperannuationPercentage = ns1blankspace.option.PayrollSuperannuationPercentage;
+						if (cSuperannuationPercentage == undefined) {cSuperannuationPercentage = 9.5}
+
+						var cTotalExGST = numeral(ns1blankspace.financial.payroll.dashboard.data.contractorExpenses).value() -
+									numeral(ns1blankspace.financial.payroll.dashboard.data.contractorExpensesTax).value()
+
 						aHTML.push('<table class="ns1blankspace" style="width:100%;">' +
 							'<tr><td class="ns1blankspaceHeaderCaption">CONTRACTING</td></tr>' +
-							'<tr><td style="text-align:left;" class="ns1blankspaceCaption">Total Amount</td></tr>' +
+							'<tr><td style="text-align:left;" class="ns1blankspaceCaption">Total including ' + ns1blankspace.option.taxVATCaption + '</td></tr>' +
 							'<tr><td style="text-align:left;">$' +
 							numeral(ns1blankspace.financial.payroll.dashboard.data.contractorExpenses).format('(0,0.00)') + 
-							'</td></tr>' +		
+							'</td></tr>' +	
+
+							'<tr><td style="text-align:left; padding-top:10px;" class="ns1blankspaceCaption">Total ' + ns1blankspace.option.taxVATCaption + '</td></tr>' +
+							'<tr><td style="text-align:left;">$' +
+							numeral(ns1blankspace.financial.payroll.dashboard.data.contractorExpensesTax).format('(0,0.00)') + 
+							'</td></tr>' +
+
+							'<tr><td style="text-align:left; padding-top:10px;" class="ns1blankspaceCaption">Total excluding ' + ns1blankspace.option.taxVATCaption + 
+											'<br />& nominal ' + cSuperannuationPercentage + '% for superannuation</td></tr>' +
+							'<tr><td style="text-align:left;">$' +
+							numeral(numeral(cTotalExGST).value() - (numeral(cTotalExGST).value() * numeral(cSuperannuationPercentage/100).value())).format('(0,0.00)') + 
+							'</td></tr>' +
+
+							
+
 							'</table>');
 
 						$('#ns1blankspacePayrollDashboardColumn3').html(aHTML.join(''));
