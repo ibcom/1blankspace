@@ -5766,6 +5766,7 @@ ns1blankspace.financial.payroll.superannuation =
 						oSearch.addFilter('contactbusinesspaidto', 'IN_LIST', aContactBusiness.join(','));
 
 						var sSearchText = ns1blankspace.financial.payroll.superannuation.data.searchText;
+						var sSearchDate = ns1blankspace.financial.payroll.superannuation.data.searchDate;
 
 						if (sSearchText != undefined)
 						{
@@ -5776,6 +5777,11 @@ ns1blankspace.financial.payroll.superannuation =
 							oSearch.addOperator('or');
 							oSearch.addFilter('description', 'TEXT_IS_LIKE', sSearchText);
 							oSearch.addBracket(')');
+						}
+
+						if (sSearchDate != undefined)
+						{
+							oSearch.addFilter('accrueddate', 'LESS_THAN_OR_EQUAL_TO', sSearchDate);
 						}
 
 						oSearch.rows = 10000;
@@ -5811,6 +5817,8 @@ ns1blankspace.financial.payroll.superannuation =
 					var iSearchBankAccount = ns1blankspace.util.getParam(oParam, 'searchBankAccount', {"default": -1}).value;
 					var oSearchText = ns1blankspace.util.getParam(oParam, 'searchText');
 					var sSearchText;
+					var oSearchDate = ns1blankspace.util.getParam(oParam, 'searchDate');
+					var sSearchDate;
 
 					if (oSearchText.exists)
 					{
@@ -5820,6 +5828,16 @@ ns1blankspace.financial.payroll.superannuation =
 					else
 					{	
 						sSearchText = ns1blankspace.financial.payroll.superannuation.data.searchText;
+					}
+
+					if (oSearchDate.exists)
+					{
+						sSearchDate = oSearchDate.value;
+						ns1blankspace.financial.payroll.superannuation.data.searchDate = sSearchDate;
+					}
+					else
+					{	
+						sSearchDate = ns1blankspace.financial.payroll.superannuation.data.searchDate;
 					}	
 
 					if (oResponse == undefined)
@@ -5865,7 +5883,14 @@ ns1blankspace.financial.payroll.superannuation =
 							oSearch.addFilter('bankaccount', 'EQUAL_TO', iSearchBankAccount);
 						}
 
-						oSearch.addSummaryField('sum(amount) totalamount')
+						if (sSearchDate != undefined)
+						{
+							oSearch.addFilter('accrueddate', 'LESS_THAN_OR_EQUAL_TO', sSearchDate);
+						}
+
+						oSearch.addSummaryField('sum(amount) totalamount');
+						oSearch.addSummaryField('min(accrueddate) startdate');
+						oSearch.addSummaryField('max(accrueddate) enddate');
 
 						oSearch.rows = 100;
 						oSearch.sort('accrueddate', 'asc');
@@ -5892,13 +5917,14 @@ ns1blankspace.financial.payroll.superannuation =
 
 							aHTML.push('<table id="ns1blankspacePayrollSuperannuationExpense" class="ns1blankspace" style="font-size:0.875em;">' +
 										'<tr class="ns1blankspaceHeaderCaption">' +
-										'<td class="ns1blankspaceHeaderCaption" style="width:10px;"><span class="ns1blankspacePayrollSuperannuationExpenseSelectAll"></span></td>' +
 										'<td class="ns1blankspaceHeaderCaption" style="width:100px;">Contact</td>' +
 										'<td class="ns1blankspaceHeaderCaption">Description</td>' +
 										'<td class="ns1blankspaceHeaderCaption" style="width:50px; text-align:right;">Amount</td>' +
 										'<td class="ns1blankspaceHeaderCaption" style="width:70px; text-align:right;">Due Date</td>' +
 										'<td class="ns1blankspaceHeaderCaption" style="width:25px; text-align:right;">&nbsp;</td>' +
 										'</tr>');
+
+							//'<td class="ns1blankspaceHeaderCaption" style="width:10px;"><span class="ns1blankspacePayrollSuperannuationExpenseSelectAll"></span></td>' +
 
 							$(oResponse.data.rows).each(function() 
 							{
@@ -5926,9 +5952,21 @@ ns1blankspace.financial.payroll.superannuation =
 
 						aHTML.push('<table class="ns1blankspaceColumn2">');
 
-						aHTML.push('<tr><td class="ns1blankspaceText" style="padding-top:14px;">' +
-												'<input id="ns1blankspacePayrollSuperannuationExpenseSearchText" class="ns1blankspaceText" style="width:130px;">' +
-												'</td></tr>');
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
+											'<td class="ns1blankspaceSubNote" style="padding-top:6px;">' +
+											'Description contains' +
+											'</td></tr>' +
+											'<tr><td class="ns1blankspaceText" style="padding-top:0px;">' +
+											'<input id="ns1blankspacePayrollSuperannuationExpenseSearchText" class="ns1blankspaceText" style="width:130px;">' +
+											'</td></tr>');
+
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
+											'<td class="ns1blankspaceSubNote">' +
+											'Due date on or before' +
+											'</td></tr>' +
+											'<tr><td class="ns1blankspaceDate" style="padding-top:0px;">' +
+											'<input id="ns1blankspacePayrollSuperannuationExpenseSearchDate" class="ns1blankspaceDate" style="width:130px;">' +
+											'</td></tr>');
 																			
 						aHTML.push('<tr><td style="padding-top:0px;">' +
 										'<span id="ns1blankspacePayrollSuperannuationExpenseSearch" class="ns1blankspaceAction">Search</span>' +
@@ -5942,9 +5980,21 @@ ns1blankspace.financial.payroll.superannuation =
 						}
 
 						aHTML.push('<tr><td style="padding-top:15px; padding-bottom:0px; font-size:0.75em;" class="ns1blankspaceSub">' +
-										'Selected expenses total</td></tr>');
+										'Expenses total</td></tr>');
 
-						aHTML.push('<tr><td id="ns1blankspacePayrollSuperannuationExpenseTotal" style="padding-top:0px; font-size:1.2em; padding-bottom:16px;" class="ns1blankspaceSub">' +
+						aHTML.push('<tr><td id="ns1blankspacePayrollSuperannuationExpenseTotal" style="padding-top:0px; font-size:1.2em; padding-bottom:0px;" class="ns1blankspaceSub">' +
+										'</td></tr>');
+
+						aHTML.push('<tr><td style="padding-top:6px; padding-bottom:0px; font-size:0.75em;" class="ns1blankspaceSub">' +
+										'Start date</td></tr>');
+
+						aHTML.push('<tr><td id="ns1blankspacePayrollSuperannuationExpenseStartDate" style="padding-top:0px; font-size:1.2em; padding-bottom:0px;" class="ns1blankspaceSub">' +
+										'</td></tr>');
+
+						aHTML.push('<tr><td style="padding-top:6px; padding-bottom:0px; font-size:0.75em;" class="ns1blankspaceSub">' +
+										'End date</td></tr>');
+
+						aHTML.push('<tr><td id="ns1blankspacePayrollSuperannuationExpenseEndDate" style="padding-top:0px; font-size:1.2em; padding-bottom:16px;" class="ns1blankspaceSub">' +
 										'</td></tr>');
 
 						aHTML.push('<tr><td id="ns1blankspacePayrollSuperannuationExpenseURLs" style="padding-top:0px; font-size:1em; padding-bottom:16px;" class="ns1blankspaceSub">' +
@@ -5964,6 +6014,8 @@ ns1blankspace.financial.payroll.superannuation =
 							$('#ns1blankspacePayrollSuperannuationExpenseColumn2 table').before(aHTML.join(''));
 						}
 
+						$('#ns1blankspacePayrollSuperannuationExpenseSearchDate').datepicker({dateFormat: 'dd M yy'});
+
 						$('#ns1blankspacePayrollSuperannuationExpenseSearch').button(
 						{
 							label: 'Search'
@@ -5971,6 +6023,7 @@ ns1blankspace.financial.payroll.superannuation =
 						.click(function() 
 						{
 							oParam = ns1blankspace.util.setParam(oParam, 'searchText', $('#ns1blankspacePayrollSuperannuationExpenseSearchText').val());
+							oParam = ns1blankspace.util.setParam(oParam, 'searchDate', $('#ns1blankspacePayrollSuperannuationExpenseSearchDate').val());
 							ns1blankspace.financial.payroll.superannuation.expenses(oParam);
 						})
 						.css('width', '65px');
@@ -5982,6 +6035,7 @@ ns1blankspace.financial.payroll.superannuation =
 						.click(function() 
 						{
 							oParam = ns1blankspace.util.setParam(oParam, 'searchText', undefined);
+							oParam = ns1blankspace.util.setParam(oParam, 'searchDate', $('#ns1blankspacePayrollSuperannuationExpenseSearchDate').val());
 							ns1blankspace.financial.payroll.superannuation.expenses(oParam);
 						})
 						.css('width', '57px');
@@ -5990,18 +6044,16 @@ ns1blankspace.financial.payroll.superannuation =
 						{
 							if (e.which === 13)
 					    	{
-					    		oParam = ns1blankspace.util.setParam(oParam, 'searchText', $('#ns1blankspacePayrollSuperannuationExpenseSearchText').val())
+					    		oParam = ns1blankspace.util.setParam(oParam, 'searchText', $('#ns1blankspacePayrollSuperannuationExpenseSearchText').val());
+					    		oParam = ns1blankspace.util.setParam(oParam, 'searchDate', $('#ns1blankspacePayrollSuperannuationExpenseSearchDate').val());
 					    		ns1blankspace.financial.payroll.superannuation.expenses(oParam);
 					    	}
 						});				
 
 						$('#ns1blankspacePayrollSuperannuationExpenseSearchText').val(sSearchText);
+						$('#ns1blankspacePayrollSuperannuationExpenseSearchDate').val(sSearchDate);
 
-						if (ns1blankspace.financial.payroll.data.urls.superannuation.length == 0)
-						{
-
-						}
-						else
+						if (ns1blankspace.financial.payroll.data.urls.superannuation.length != 0)
 						{
 							$('#ns1blankspacePayrollSuperannuationExpenseURLs').html(
 								'<div style="font-size:0.75em;">Make a payment using...</div>' +
@@ -6014,16 +6066,26 @@ ns1blankspace.financial.payroll.superannuation =
 						}
 
 						ns1blankspace.financial.payroll.superannuation.summary();
-
-						ns1blankspace.financial.payroll.superannuation.refresh();		
+						ns1blankspace.financial.payroll.superannuation.refresh(
+						{
+							total: oResponse.summary.totalamount,
+							startdate: oResponse.summary.startdate,
+							enddate: oResponse.summary.enddate
+						});
 					}
 				},
 
-	refresh: function ()
+	refresh: function (oParam)
 				{
-					var cTotal = _.sum(_.map($('#ns1blankspacePayrollSuperannuationExpenseColumn1 input:checked'), function (input) {return _.toNumber($(input).attr('data-outstandingamount'))}));
-					var sTotal = ns1blankspace.option.currencySymbol + _.toNumber(cTotal).formatMoney(2, '.', ',');
-					$('#ns1blankspacePayrollSuperannuationExpenseTotal').html(sTotal)
+					var cTotal = ns1blankspace.util.getParam(oParam, 'total').value;
+					var sStartDate = ns1blankspace.util.getParam(oParam, 'startdate').value;
+					var sEndDate = ns1blankspace.util.getParam(oParam, 'enddate').value;
+
+					var sTotal = ns1blankspace.option.currencySymbol + numeral(cTotal).format('(0,0.00)');
+					$('#ns1blankspacePayrollSuperannuationExpenseTotal').html(sTotal);
+
+					$('#ns1blankspacePayrollSuperannuationExpenseStartDate').html(moment(sStartDate, ns1blankspace.option.dateFormats).format('D MMM YYYY'));
+					$('#ns1blankspacePayrollSuperannuationExpenseEndDate').html(moment(sEndDate, ns1blankspace.option.dateFormats).format('D MMM YYYY'));
 				},						
 
 	row: 		function (oRow)	
@@ -6037,11 +6099,13 @@ ns1blankspace.financial.payroll.superannuation =
 
 					ns1blankspace.financial.payroll.superannuation.data.expenses.push(oRow);
 
-					aHTML.push('<tr class="ns1blankspaceRow">' +
-									'<td class="ns1blankspaceRow ns1blankspaceSub" id="ns1blankspacePayrollSuperannuationExpense_selectContainer-' + oRow["id"] + '">' +
+					aHTML.push('<tr class="ns1blankspaceRow">');
+
+					/*				'<td class="ns1blankspaceRow ns1blankspaceSub" id="ns1blankspacePayrollSuperannuationExpense_selectContainer-' + oRow["id"] + '">' +
 									'<input type="checkbox" checked="checked" id="ns1blankspacePayrollSuperannuationExpense_select-' + oRow["id"] + '"' + 
 									' title="' + oRow["reference"] + '"' +
 									' data-outstandingamount="' + oRow["outstandingamount"].replace(',', '') + '" /></td>');
+					*/
 
 					aHTML.push('<td id="ns1blankspacePayrollSuperannuationExpense_contact-' + oRow["id"] + '" class="ns1blankspaceRow">' +
 										sContact + '</td>');
@@ -6102,9 +6166,10 @@ ns1blankspace.financial.payroll.superannuation =
 					$('#ns1blankspacePayrollSuperannuationExpense input:checked').click(function()
 					{	
 						ns1blankspace.financial.payroll.superannuation.refresh();
+						ns1blankspace.financial.payroll.superannuation.summary();
 					})
 
-					ns1blankspace.financial.payroll.superannuation.refresh();			
+					//ns1blankspace.financial.payroll.superannuation.refresh();			
 				},
 
 	urls:		function (oParam, oResponse)
