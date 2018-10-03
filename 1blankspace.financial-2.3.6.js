@@ -6601,7 +6601,7 @@ ns1blankspace.financial.util =
 									
 									if (oResponse.data.rows.length == 0)
 									{
-										aHTML.push('<table><tr><td class="ns1blankspaceNothing">No credit (notes).</td></tr></table>');
+										aHTML.push('<table><tr><td class="ns1blankspaceNothing">No credits.</td></tr></table>');
 
 										$('#ns1blankspaceCreditColumn1').html(aHTML.join(''));
 									}

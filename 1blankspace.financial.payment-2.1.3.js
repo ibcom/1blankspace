@@ -1226,7 +1226,7 @@ ns1blankspace.financial.payment =
 									aHTML.push('<td id="ns1blankspacepayment_date-' + oRow.id + '" class="ns1blankspaceRow">' +
 													ns1blankspace.util.fd(oRow['paymentexpense.expense.accrueddate']) + '</td>');
 
-									aHTML.push('<td id="ns1blankspacepayment_description-' + oRow.id + '" class="ns1blankspaceRow" style="text-align:right;">' +
+									aHTML.push('<td id="ns1blankspacepayment_description-' + oRow.id + '" class="ns1blankspaceRow">' +
 													oRow['paymentexpense.expense.description'] + '</td>');
 
 									aHTML.push('<td id="ns1blankspacepayment_amount-' + oRow.id + '" class="ns1blankspaceRow" style="text-align:right;">' +

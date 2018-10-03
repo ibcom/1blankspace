@@ -1785,7 +1785,15 @@ ns1blankspace.financial.invoice =
 										aHTML.push('<tr class="ns1blankspaceContainer">' +
 														'<td id="ns1blankspaceReceiptColumn1" class="ns1blankspaceColumn1Flexible">' +
 														ns1blankspace.xhtml.loading + '</td>' +
-														'<td id="ns1blankspaceReceiptColumn2" class="ns1blankspaceColumn2" style="width: 350px;"></td>' +
+														'<td id="ns1blankspaceReceiptColumn2" style="width: 400px;">' +
+															'<table class="ns1blankspaceColumn2">' +
+															'<tr><td id="ns1blankspaceReceiptColumn2Summary" colspan="2"></td></tr>' +
+															'<tr><td class="ns1blankspaceHeaderCaption" style="padding-top:12px; padding-left:4px;">Create new...</td>' +
+															'<td class="ns1blankspaceColumn2 ns1blankspaceHeaderCaption" style="padding-left:14px; padding-top:12px; width:160px;">or select existing...</td></tr>' +
+															'<tr><td class="ns1blankspaceColumn2" id="ns1blankspaceReceiptColumn2Add"></td>' +
+															'<td class="ns1blankspaceColumn2" id="ns1blankspaceReceiptColumn2Allocate" style="font-size:0.875em;"></td></tr>' +
+															'</table>' +
+														'</td>' +
 														'</tr>');
 										
 										aHTML.push('</table>');					
@@ -1794,7 +1802,6 @@ ns1blankspace.financial.invoice =
 									
 										if (oActions.add)
 										{
-
 											var aHTML = [];
 											
 											aHTML.push('<table class="ns1blankspaceColumn2">');
@@ -1802,11 +1809,9 @@ ns1blankspace.financial.invoice =
 											aHTML.push('<tr><td>' +
 															'<span id="ns1blankspaceReceiptAdd" class="ns1blankspaceAction">Add</span>' +
 															'</td></tr>');
-											
+
 											aHTML.push('</table>');					
-											
-											$('#ns1blankspaceReceiptColumn2').html(aHTML.join(''));
-									
+																				
 											$('#ns1blankspaceReceiptAdd').button(
 											{
 												label: "Add"
@@ -1842,7 +1847,6 @@ ns1blankspace.financial.invoice =
 										}
 										else
 										{
-											//var oReceipts = ns1blankspace.util.unique({key: 'receiptinvoice.receipt.reference', data: oResponse.data.rows});
 											var oReceipts = oResponse.data.rows;
 									
 											aHTML.push('<table class="ns1blankspace" id="ns1blankspaceFinancialInvoiceReceipts">');
@@ -1956,9 +1960,123 @@ ns1blankspace.financial.invoice =
 									else
 									{
 										ns1blankspace.financial.invoice.receipt.show();
-												ns1blankspace.financial.invoice.refresh();
+										ns1blankspace.financial.invoice.refresh();
 									}	
-								},	
+								},
+
+					allocate:
+					 			{
+					 				data: {},
+
+					 				init: function (oParam, oResponse)
+					 				{
+					 					if (oResponse == undefined)
+					 					{
+					 						var oSearch = new AdvancedSearch();
+											oSearch.method = 'FINANCIAL_ITEM_SEARCH';
+											oSearch.addField('amount,object,financialaccount,description,' +
+																	'lineitem.receipt.reference,lineitem.receipt.id,lineitem.receipt.contactbusinessreceivedfromtext,' +
+																	'lineitem.receipt.contactpersonreceivedfromtext,' +
+																	'lineitem.receipt.reference,lineitem.receipt.receiveddate,lineitem.receipt.amount');
+											oSearch.addFilter('financialaccount', 'EQUAL_TO', ns1blankspace.financial.data.settings.financialaccountunallocated.incoming);
+											oSearch.addFilter('lineitem.receipt.reference', 'TEXT_IS_NOT_EMPTY');
+											oSearch.addFilter('amount', 'NOT_EQUAL_TO', 0);
+
+											if (ns1blankspace.objectContextData.contactbusinesssentto != '')
+											{
+												oSearch.addFilter('lineitem.receipt.contactbusinessreceivedfrom', 'EQUAL_TO', ns1blankspace.objectContextData.contactbusinesssentto);
+											}
+												
+											if (ns1blankspace.objectContextData.contactpersonsentto != '')
+											{
+												oSearch.addFilter('lineitem.receipt.contactpersonsenreceivedfrom', 'EQUAL_TO', ns1blankspace.objectContextData.contactpersonsentto);
+											}
+
+											oSearch.getResults(function(data)
+											{
+												ns1blankspace.financial.invoice.receipt.allocate.init(oParam, data)
+											});
+										}
+										else
+										{
+											ns1blankspace.financial.invoice.receipt.allocate.data.receipts = oResponse.data.rows;
+
+											if (oResponse.data.rows.length > 0)
+											{
+												var oReceipts = _.groupBy(oResponse.data.rows, 'lineitem.receipt.id');
+
+												var aHTML = [];
+
+												aHTML.push('<table class="ns1blankspaceColumn2" style="margin-left:0px; margin-right:0px;">');
+												
+												$.each(oReceipts, function(i, aReceipts)
+												{
+													aHTML.push('<tr class="ns1blankspaceRow">');
+													aHTML.push('<td style="width:30%;" class="ns1blankspaceRow ns1blankspaceRowShaded">')
+
+														aHTML.push('<table class="ns1blankspace">');
+
+														aHTML.push('<tr><td id="ns1blankspaceInvoice_reference-' + aReceipts[0].id + '">' +
+																	aReceipts[0]['lineitem.receipt.reference'] + '</td></tr>');
+																								
+														aHTML.push('<tr><td id="ns1blankspaceInvoice_date-' + aReceipts[0].id + '" class="ns1blankspaceSubNote">' +
+																	ns1blankspace.util.fd(aReceipts[0]['lineitem.receipt.receiveddate']) + '</td></tr>');
+
+														aHTML.push('<tr><td id="ns1blankspaceInvoice_amount-' + aReceipts[0].id + '" class="ns1blankspaceSubNote">$' +
+																	aReceipts[0]['lineitem.receipt.amount'] + '</td></tr>');
+
+														aHTML.push('</table>');
+
+													aHTML.push('</td><td class="ns1blankspaceRow" style="padding-left:8px;">');
+
+														aHTML.push('<table class="ns1blankspace">');
+							
+														$.each(aReceipts, function(j, oReceipt)
+														{
+															aHTML.push('<tr>');
+
+															aHTML.push('<td id="ns1blankspaceInvoice_item_amount-' + oReceipt['id'] + '" class="ns1blankspace" style="text-align:right;">' +
+																	oReceipt['amount'] + '</td>');
+
+															aHTML.push('<td style="width:20px;text-align:right;" class="ns1blankspace">' +
+																			'<span id="ns1blankspaceInvoice_options_apply-' + oReceipt['id'] + '" class="ns1blankspaceReceiptApply"></span>' +
+																			'</td></tr>');
+														});
+															
+														aHTML.push('</table>');
+
+													aHTML.push('</td></tr>');	
+												});
+												
+												aHTML.push('</table>');
+											
+												$('#ns1blankspaceReceiptColumn2Allocate').html(aHTML.join(''));
+
+												$('#ns1blankspaceReceiptColumn2Allocate span.ns1blankspaceReceiptApply').button(
+												{
+													text: false,
+													icons:
+													{
+														primary: "ui-icon-check"
+													}
+												})
+												.click(function()
+												{
+													ns1blankspace.financial.invoice.receipt.allocate.apply({xhtmlElementID: this.id});
+												})
+												.css('width', '15px')
+												.css('height', '17px');
+												}	
+										}
+					 				},
+
+					 				apply:	function (oParam, oResponse)
+					 				{
+					 					var iReceiptID = ns1blankspace.util.getParam(oParam, 'xhtmlElementID', {index: 1}).value;
+
+					 				}
+
+					 			},
 
 					edit:		function (oParam, oResponse)
 								{
@@ -1977,7 +2095,7 @@ ns1blankspace.financial.invoice =
 									
 									if (iStep == 1)
 									{	
-										$('#ns1blankspaceReceiptColumn2').html(ns1blankspace.xhtml.loadingSmall)
+										$('#ns1blankspaceReceiptColumn2Summary').html(ns1blankspace.xhtml.loadingSmall)
 										
 										var oSearch = new AdvancedSearch();
 										oSearch.method = 'FINANCIAL_RECEIPT_INVOICE_SEARCH';
@@ -1995,7 +2113,7 @@ ns1blankspace.financial.invoice =
 										
 										var aHTML = [];
 										
-										aHTML.push('<table class="ns1blankspaceColumn2">');
+										aHTML.push('<table class="_ns1blankspaceColumn2">');
 										
 										aHTML.push('<tr><td class="ns1blankspaceSub"' +
 														' data-receiptedamount="' + cReceiptedAmount + '">' +
@@ -2006,6 +2124,14 @@ ns1blankspace.financial.invoice =
 														'<td id="ns1blankspaceReceiptEditAmount" class="ns1blankspaceSub">' +
 														'$' + (parseFloat((ns1blankspace.objectContextData.amount).replace(",","")) - cReceiptedAmount).formatMoney(2, ".", ",") + ' remaining.' +
 														'</td></tr>');
+
+										aHTML.push('</table>')
+
+										$('#ns1blankspaceReceiptColumn2Summary').html(aHTML.join(''));
+
+										var aHTML = [];
+
+										aHTML.push('<table class="_ns1blankspaceColumn2">');
 																						
 										aHTML.push('<tr class="ns1blankspace">' +
 														'<td class="ns1blankspaceCaption" style="padding-top: 10px;">' +
@@ -2047,10 +2173,19 @@ ns1blankspace.financial.invoice =
 														'<td class="ns1blankspace" id="ns1blankspaceReceiptAddContainer">' +
 														'<span id="ns1blankspaceReceiptAdd" class="ns1blankspaceAction">Receipt</span>' +
 														'</td></tr>');
+
+										//aHTML.push('<tr class="ns1blankspace">' +
+										//				'<td class="ns1blankspace">' +
+										//				'<span id="ns1blankspaceReceiptAllocate" class="ns1blankspaceAction">Receipt</span>' +
+										//				'</td></tr>');
+
+										aHTML.push('<tr class="ns1blankspace">' +
+														'<td class="ns1blankspace" id="ns1blankspaceReceiptAllocateContainer">' +
+														'</td></tr>');
 										
 										aHTML.push('</table>');
 													
-										$('#ns1blankspaceReceiptColumn2').html(aHTML.join(''));
+										$('#ns1blankspaceReceiptColumn2Add').html(aHTML.join(''));
 
 										$('[name="radioBankAccount"][value="' + iDefaultBankAccount + '"]').attr('checked', true);
 									
@@ -2066,7 +2201,8 @@ ns1blankspace.financial.invoice =
 										{
 											label: "Add Receipt"
 										})
-										.click(function() {
+										.click(function()
+										{
 											ns1blankspace.financial.invoice.receipt.edit($.extend(true, oParam,
 													{	
 														step: 4,
@@ -2075,6 +2211,23 @@ ns1blankspace.financial.invoice =
 														date: $('#ns1blankspaceReceiptDate').val()
 													}));
 										});
+
+										$('#ns1blankspaceReceiptAllocate').button(
+										{
+											label: "Select Receipt"
+										})
+										.click(function()
+										{
+											ns1blankspace.financial.invoice.receipt.allocate.init($.extend(true, oParam,
+											{	
+												receiptedAmount: cReceiptedAmount
+											}));
+										});
+
+										ns1blankspace.financial.invoice.receipt.allocate.init($.extend(true, oParam,
+										{	
+											receiptedAmount: cReceiptedAmount
+										}));
 									}
 									
 									if (iStep == 3)

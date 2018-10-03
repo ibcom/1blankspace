@@ -1054,7 +1054,7 @@ ns1blankspace.financial.receipt =
 											})
 											.click(function()
 											{
-												 ns1blankspace.financial.receipt.invoice.edit(oParam);
+												ns1blankspace.financial.receipt.invoice.edit(oParam);
 											})
 										}
 
@@ -1127,13 +1127,15 @@ ns1blankspace.financial.receipt =
 											
 											if (oOptions.remove) 
 											{
-												$('.ns1blankspaceInvoiceRemove').button( {
+												$('.ns1blankspaceInvoiceRemove').button(
+												{
 													text: false,
 													icons: {
 														primary: "ui-icon-close"
 													}
 												})
-												.click(function() {
+												.click(function()
+												{
 													ns1blankspace.financial.receipt.invoice.remove({xhtmlElementID: this.id});
 												})
 												.css('width', '15px')
@@ -1212,10 +1214,10 @@ ns1blankspace.financial.receipt =
 													aHTML.push('<tr><td id="ns1blankspaceInvoice_reference-' + aInvoices[0].id + '">' +
 																aInvoices[0].reference + '</td></tr>');
 																							
-													aHTML.push('<tr><td id="ns1blankspaceInvoice_date-' + this.id + '" class="ns1blankspaceSubNote">' +
+													aHTML.push('<tr><td id="ns1blankspaceInvoice_date-' + aInvoices[0].id + '" class="ns1blankspaceSubNote">' +
 																aInvoices[0].sentdate + '</td></tr>');
 
-													aHTML.push('<tr><td id="ns1blankspaceInvoice_amount-' + this.id + '" class="ns1blankspaceSubNote">' +
+													aHTML.push('<tr><td id="ns1blankspaceInvoice_amount-' + aInvoices[0].id + '" class="ns1blankspaceSubNote">' +
 																aInvoices[0].amount + '</td></tr>');
 
 													aHTML.push('</table>');

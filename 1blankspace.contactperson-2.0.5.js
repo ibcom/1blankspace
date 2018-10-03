@@ -266,7 +266,7 @@ ns1blankspace.contactPerson =
 										
 										ns1blankspace.render.bind(
 										{
-											columns: 'firstname-surname-email',
+											columns: 'firstname-surname-email-contactbusinesstext',
 											more: oResponse.moreid,
 											width: 520,
 											startRow: parseInt(oResponse.startrow) + parseInt(oResponse.rows),
@@ -296,6 +296,11 @@ ns1blankspace.contactPerson =
 									aHTML.push('<td class="ns1blankspaceSearch ns1blankspaceSearchSub" id="' +
 													'searchContact-' + oRow.id + '">' +
 													oRow.email +
+													'</td>');
+
+									aHTML.push('<td class="ns1blankspaceSearch ns1blankspaceSearchSub" id="' +
+													'searchContact-' + oRow.id + '">' +
+													oRow.contactbusinesstext +
 													'</td>');
 
 									aHTML.push('</tr>');
