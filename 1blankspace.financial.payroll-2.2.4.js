@@ -6672,8 +6672,8 @@ ns1blankspace.financial.payroll.dashboard =
 							});
 
 							ns1blankspace.financial.payroll.dashboard.data.contractors = oResponse.data.rows;
-							ns1blankspace.financial.payroll.dashboard.data.contractorExpenses = numeral(_.sumBy(oResponse.data.rows, function (row) {return row.totalamount})).value();
-							ns1blankspace.financial.payroll.dashboard.data.contractorExpensesTax = numeral(_.sumBy(oResponse.data.rows, function (row) {return row.totaltax})).value();
+							ns1blankspace.financial.payroll.dashboard.data.contractorExpenses = numeral(_.sumBy(oResponse.data.rows, function (row) {return numeral(row.totalamount).value()})).value();
+							ns1blankspace.financial.payroll.dashboard.data.contractorExpensesTax = numeral(_.sumBy(oResponse.data.rows, function (row) {return numeral(row.totaltax).value()})).value();
 							ns1blankspace.financial.payroll.dashboard.contractor.payments(oParam);
 						}
 					},
@@ -6714,10 +6714,10 @@ ns1blankspace.financial.payroll.dashboard =
 						else
 						{
 							ns1blankspace.financial.payroll.dashboard.data.contractorExpenses = 
-								ns1blankspace.financial.payroll.dashboard.data.contractorExpenses + numeral(_.sumBy(oResponse.data.rows, function (row) {return row.totalamount})).value();
+								ns1blankspace.financial.payroll.dashboard.data.contractorExpenses + numeral(_.sumBy(oResponse.data.rows, function (row) {return numeral(row.totalamount).value()})).value();
 
 							ns1blankspace.financial.payroll.dashboard.data.contractorExpensesTax = 
-								ns1blankspace.financial.payroll.dashboard.data.contractorExpensesTax + numeral(_.sumBy(oResponse.data.rows, function (row) {return row.totaltax})).value();
+								ns1blankspace.financial.payroll.dashboard.data.contractorExpensesTax + numeral(_.sumBy(oResponse.data.rows, function (row) {return numeral(row.totaltax).value()})).value();
 
 							$.each(oResponse.data.rows, function (r, row)
 							{
