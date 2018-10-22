@@ -610,7 +610,7 @@ ns1blankspace.setup.user =
 						if (ns1blankspace.option.logonTOTP)
 						{
 							aHTML.push('<br /><input type="radio" id="radioAuthenticationDelivery3" name="radioAuthenticationDelivery" value="3"/>TOTP Client' +
-										' <a href="/gettingstarted_authentication_totp" target="_blank"><span class="ns1blankspaceSub">*</span></a>');
+										' <a href="/gettingstarted_authentication_totp" target="_blank"><span class="ns1blankspaceSub">...</span></a>');
 						}	
 						
 						aHTML.push('</td></tr>');

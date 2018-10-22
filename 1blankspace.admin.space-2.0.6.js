@@ -246,6 +246,13 @@ ns1blankspace.admin.space =
 											oSearch.addFilter('spacetext', 'TEXT_IS_LIKE', sSearchText);
 											oSearch.addOperator('or');
 											oSearch.addFilter('initiallogon', 'TEXT_IS_LIKE', sSearchText);
+
+											if (!_.isNull(numeral(sSearchText).value()))
+											{
+												oSearch.addOperator('or');
+												oSearch.addFilter('space', 'EQUAL_TO', sSearchText);
+											}
+
 											oSearch.addBracket(')');
 											oSearch.addCustomOption('allregistrationspaces', (ns1blankspace.admin.space.data.superUser?'Y':'N'));
 											oSearch.getResults(function(data) {ns1blankspace.admin.space.search.process(oParam, data)})	

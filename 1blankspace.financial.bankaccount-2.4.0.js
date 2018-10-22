@@ -1651,7 +1651,7 @@ ns1blankspace.financial.bankAccount =
 
 										var oSearch = new AdvancedSearch();
 										oSearch.method = 'FINANCIAL_BANK_ACCOUNT_TRANSACTION_SOURCE_SEARCH';
-										oSearch.addField('startdate,enddate,processeddate,reference');
+										oSearch.addField('startdate,enddate,processeddate,reference,createdusertext,createddate');
 										oSearch.addFilter('bankaccount', 'EQUAL_TO', ns1blankspace.objectContext);
 										oSearch.sort('processeddate', 'desc');
 										oSearch.rows = 15;
