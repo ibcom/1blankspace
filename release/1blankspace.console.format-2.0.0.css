@@ -1,0 +1,19 @@
+a:link, a:visited, a:active
+{
+	color: #cc3366;
+}
+
+a:hover
+{
+	color: #006EBA;
+}
+
+td.ns1blankspaceHighlight
+{
+	color: #cc3366;
+}
+
+td.ns1blankspaceRowSelect, td.ns1blankspaceMostLikely
+{
+	color: #cc3366;
+}
