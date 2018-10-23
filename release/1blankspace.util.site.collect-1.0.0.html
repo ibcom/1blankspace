@@ -1,0 +1,38 @@
+<link href="/site/312/1blankspace.util.site.collect-1.0.0.css" rel="stylesheet" type="text/css" />
+<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+
+<div class="container">
+  <div class="row">
+    <div class="col-sm-3"></div>
+    <div class="col-sm-6 text-center">
+      <div id="ns1blankspaceUtilFinancialStripeContainer" data-ui="elements">
+        <form action="/rpc/site/?method=SITE_COLLECT_PAYMENT_STRIPE" method="post" id="site-collect-container">
+          <div class="form-row">
+            <label for="card-element">
+              <h2>Pay invoice</h2>
+              <h4 class="text-muted">with credit or debit card</h4>
+            </label>
+            <div id="card-element"></div>
+            <div id="card-errors" role="alert" class="" style="margin-top:10px;"></div>
+          </div>
+        </form>
+        <button class="btn btn-default btn-lg" id="site-collect-process">Pay $[[Amount]]</button>
+      </div>
+      <div id="ns1blankspaceUtilFinancialStripeContainer-Success" style="display:none;">
+        <h2>Payment processed.</h2>
+        <h4 class="text-muted">Thank you!</h4>
+      </div>
+    </div>
+    <div class="col-sm-3"></div>
+  </div>
+  <div class="row">
+    <div class="col-sm-12 m-t text-muted text-center" style="margin-top:20px;">Test card: 4000000360000006 - 12/20 - 123</div>
+    <div class="col-sm-12 m-t text-muted text-center" style="margin-top:20px;">Test card with error returned: 4000000000000002 - 12/20 - 123</div>
+  </div>
+</div>
+
+<script src="https://js.stripe.com/v3/"></script>
+<script src="/site/312/jquery-1.10.2.min.js"></script>
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+<script src="/site/312/1blankspace.util.site.collect-1.0.0.js"></script>
+<script>var siteAccount = 68; var stripePublicKey = 'pk_test_ZCsqtZ8k3XCjHx9qjJwfyWS4';</script>

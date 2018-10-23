@@ -1,0 +1,32 @@
+[
+	{
+		"title": "Test 1",
+		"onError": "",
+		"flightPlan": 
+		[
+			{
+				"title": "Log on",
+				"method": "ns1blankspace.logon",
+				"param":{
+							"logonName": "test@test'",
+							"logonPassword": "test"
+						},
+				"capture": "xhtml"
+			},
+			{
+				"title": "New Contact",
+				"invoke": "function ()
+				{
+					ns1blankspace.contactPerson.init({new: true});
+					$('#ns1blankspaceDetailsFirstName').val('John');
+					$('#ns1blankspaceDetailsSurname').val('Smith');
+					ns1blankspace.contactPerson.save();
+				}",	
+				"capture": "http",
+				"expect": "{status: 'OK'}",
+				"onError": ""
+			}
+		]
+	}
+
+]
