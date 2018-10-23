@@ -1,0 +1,88 @@
+{
+	"templates":
+	[
+		{
+			"name": "default",
+			"environment": "web-browser", 
+			"data":
+			{
+				"title": "Blank",
+				"status": "2",
+				"layout": "3",
+				"showfooterlinks": "N",
+				"hidestandardlinks": "Y",
+				"ondemandstatus": "4",
+				"documenttype": "&lt;!DOCTYPE html&gt;",
+				"bodytag": "&lt;body&gt;",
+				"cssattachment": ""
+			}	
+		},
+		{
+			"name": "1blankspace_app",
+			"environment": "web-browser",
+			"description": "Example all-of-enterprise app.",
+			"helpURI": "http://1blankspace.com",
+			"data":
+			{
+				"title": "1blankspace App",
+				"headerscript": "&lt;link type=\"text/css\" href=\"/jscripts/jqueryui/metro/css/jquery-ui-1.8.16.orange.css\" rel=\"stylesheet\"/&gt;\r\n&lt;link rel=stylesheet href='/jscripts/fullcalendar-1.5.4/fullcalendar.css'&gt;\r\n&lt;link rel=stylesheet href='/jscripts/1blankspace-2.0.0.css'&gt;\r\n\r\n&lt;script src=\"/jscripts/jquery-1.8.3.min.js\"&gt;&lt;/script&gt;\r\n&lt;script src=\"/jscripts/jquery-ui-1.9.2/jquery-ui-1.9.2.min.js\"&gt;&lt;/script&gt;\r\n&lt;script src=\"/jscripts/jquery-ui-timepicker-addon.js\"&gt;&lt;/script&gt;\r\n\r\n&lt;script src=\"/jscripts/jquery.cookie.js\"&gt;&lt;/script&gt;\r\n&lt;script src=\"/jscripts/tiny_mce-3.5.8/tiny_mce.js\"&gt;&lt;/script&gt;\r\n&lt;script src=\"/jscripts/fullcalendar-1.5.4/fullcalendar.min.js\"&gt;&lt;/script&gt;\r\n&lt;script src=\"/jscripts/date-2.0.0.js\"&gt;&lt;/script&gt;\r\n&lt;script src=\"/jscripts/toword.js\"&gt;&lt;/script&gt;\r\n&lt;script src=\"/jscripts/md5-min.js\"&gt;&lt;/script&gt;\r\n&lt;script src=\"/jscripts/cryptojs-3.1.2/pbkdf2.js\"&gt;&lt;/script&gt;\r\n&lt;script src=\"/jscripts/cryptojs-3.1.2/aes.js\"&gt;&lt;/script&gt;\r\n\r\n&lt;script src=\"/jscripts/1blankspace-2.0.1.js\"&gt;&lt;/script&gt;\r\n&lt;script src=\"/jscripts/1blankspace.control-2.0.1.js\"&gt;&lt;/script&gt;",
+				"columns": "*,900,*"
+			}	
+		},
+		{
+			"name": "bootstrap",
+			"environment": "web-browser",
+			"description": "Bootstrap is the most popular HTML, CSS, and JS framework for developing responsive, mobile first projects on the web.",
+			"helpURI": "http://getbootstrap.com/",
+			"data":
+			{
+				"title": "Bootstrap",
+				"headerscript": "&lt;link rel=\"stylesheet\" type=\"text/css\" href=\"//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css\"&gt;\r\n&lt;script src=\"//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js\" type=\"text/javascript\"&gt;&lt;/script&gt;\r\n&lt;script src=\"//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js\" type=\"text/javascript\"&gt;&lt;/script&gt;\r\n&lt;script src=\"/jscripts/md5-min.js\"&gt;&lt;/script&gt;\r\n&lt;script src=\"/jscripts/mydigitalstructure-2.0.0.js\"&gt;&lt;/script&gt;"
+			}
+		},
+		{
+			"name": "jquery",
+			"environment": "web-browser",
+			"description": "The Write Less, Do More, JavaScript Library",
+			"helpURI": "http://jquery.com",
+			"data":
+			{
+				"title": "jQuery",
+				"headerscript": "&lt;script src=\"//code.jquery.com/jquery-1.11.0.min.js\"&gt;&lt;/script&gt;\r\n&lt;script src=\"//code.jquery.com/jquery-migrate-1.2.1.min.js\"&gt;&lt;/script&gt;"
+			}
+		},
+		{
+			"name": "jquery",
+			"environment": "web-browser",
+			"description": "jQuery UI is a curated set of user interface interactions, effects, widgets, and themes built on top of the jQuery JavaScript Library",
+			"helpURI": "http://jqueryui.com",
+			"data":
+			{
+				"title": "jQuery",
+				"headerscript": "&lt;link rel=stylesheet href=\"//code.jquery.com/ui/1.11.2/themes/smoothness/jquery-ui.css\"&gt;\r\n&lt;script src=\"//code.jquery.com/jquery-1.11.0.min.js\"&gt;&lt;/script&gt;\r\n&lt;script src=\"//code.jquery.com/jquery-migrate-1.2.1.min.js\"&gt;&lt;/script&gt;\r\n&lt;script src=\"//code.jquery.com/ui/1.11.2/jquery-ui.min.js\"&gt;&lt;/script&gt;\r\n\r\n\r\n\r\n"
+			}
+		},
+		{
+			"name": "skeleton",
+			"environment": "web-browser",
+			"description": "A dead simple, responsive boilerplate.",
+			"helpURI": "http://getskeleton.com/",
+			"data":
+			{
+				"title": "Skeleton",
+				"headerscript": "&lt;link rel=\"stylesheet\" href=\"https://cdnjs.cloudflare.com/ajax/libs/skeleton/1.2/base.min,css\"&gt;"
+			}
+		},
+		{
+			"name": "skel_baseline",
+			"environment": "web-browser",
+			"description": "",
+			"helpURI": "http://getskel.com/downloads/skel-baseline/",
+			"data":
+			{
+				"title": "skel-baseline",
+				"headerscript": "&lt;script src=\"/jscripts/skel-baseline/jquery.min.js\"&gt;&lt;/script&gt;\r\n&lt;script src=\"/jscripts/skel-baseline/skel.min.js\"&gt;&lt;/script&gt;\r\n&lt;script src=\"/jscripts/skel-baseline/skel-layers.min.js\"&gt;&lt;/script&gt;\r\n&lt;script src=\"/jscripts/skel-baseline/init.js\"&gt;&lt;/script&gt;\r\n&lt;noscript&gt;\r\n&lt;link rel=\"stylesheet\" href=\"/jscripts/skel-baseline/css/skel.css\"/&gt;\r\n&lt;link rel=\"stylesheet\" href=\"/jscripts/skel-baseline/css/style.css\"/&gt;\r\n&lt;link rel=\"stylesheet\" href=\"/jscripts/skel-baseline/css/style-xlarge.css\"/&gt;\r\n&lt;/noscript&gt;\r\n"
+			}
+		}
+	]
+}
