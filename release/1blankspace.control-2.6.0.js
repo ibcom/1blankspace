@@ -147,7 +147,7 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.format',
-		source: '/jscripts/1blankspace.format-2.1.7.js'
+		source: '/jscripts/1blankspace.format-2.1.8.js'
 	},
 	{
 		nameSpace: '1blankspace.contactPerson',
