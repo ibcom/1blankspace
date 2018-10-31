@@ -237,7 +237,7 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.financial.tax',
-		source: '/jscripts/1blankspace.financial.tax-2.0.4.js'
+		source: '/jscripts/1blankspace.financial.tax-2.0.5.js'
 	},
 	{
 		nameSpace: '1blankspace.financial.payroll',

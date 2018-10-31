@@ -211,11 +211,11 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.financial.invoice',
-		source: '/jscripts/1blankspace.financial.invoice-2.1.8.js'
+		source: '/site/1433/1blankspace.financial.invoice-2.1.9.js'
 	},
 	{
 		nameSpace: '1blankspace.financial.expense',
-		source: '/jscripts/1blankspace.financial.expense-2.1.3.js'
+		source: '/site/1433/1blankspace.financial.expense-2.1.4.js'
 	},
 	{
 		nameSpace: '1blankspace.financial.receipt',

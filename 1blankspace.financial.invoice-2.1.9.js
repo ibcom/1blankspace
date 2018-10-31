@@ -1703,7 +1703,7 @@ ns1blankspace.financial.invoice =
 										}
 										else
 										{
-											ns1blankspace.status.error('Could not save the invoice!');
+											ns1blankspace.status.error(_.upperFirst(oResponse.error.errornotes));
 										}
 									}	
 								},
@@ -1786,7 +1786,7 @@ ns1blankspace.financial.invoice =
 															'<table class="ns1blankspaceColumn2">' +
 															'<tr><td id="ns1blankspaceReceiptColumn2Summary" colspan="2"></td></tr>' +
 															'<tr><td class="ns1blankspaceHeaderCaption" style="padding-top:12px; padding-left:4px;">Create new receipt..</td>' +
-															'<td class="ns1blankspaceColumn2 ns1blankspaceHeaderCaption" style="padding-left:14px; padding-top:12px; width:160px;">or select existing..</td></tr>' +
+															'<td class="ns1blankspaceColumn2 ns1blankspaceHeaderCaption" id="ns1blankspaceReceiptColumn2Select" style="padding-left:14px; padding-top:12px; width:160px;">or select existing..</td></tr>' +
 															'<tr><td class="ns1blankspaceColumn2" id="ns1blankspaceReceiptColumn2Add"></td>' +
 															'<td class="ns1blankspaceColumn2" id="ns1blankspaceReceiptColumn2Allocate" style="font-size:0.875em;"></td></tr>' +
 															'</table>' +
@@ -1797,7 +1797,7 @@ ns1blankspace.financial.invoice =
 										
 										$('#ns1blankspaceMainReceipt').html(aHTML.join(''));	
 									
-										if (oActions.add)
+										if (false && oActions.add)
 										{
 											var aHTML = [];
 											
@@ -1817,9 +1817,9 @@ ns1blankspace.financial.invoice =
 											{
 												 ns1blankspace.financial.invoice.receipt.edit(oParam);
 											});
+										}
 
-											ns1blankspace.financial.invoice.receipt.edit(oParam);
-										}		
+										ns1blankspace.financial.invoice.receipt.edit(oParam);	
 
 										var oSearch = new AdvancedSearch();
 										oSearch.method = 'FINANCIAL_RECEIPT_INVOICE_SEARCH';
@@ -1925,7 +1925,6 @@ ns1blankspace.financial.invoice =
 								{
 									var sXHTMLElementID = ns1blankspace.util.getParam(oParam, 'xhtmlElementID').value;
 									var sData = 'remove=1&id=' + ns1blankspace.util.getParam(oParam, 'xhtmlElementID', {index: 1}).value;
-											
 									var iItemID = ns1blankspace.util.getParam(oParam, 'xhtmlElementID', {index: 2}).value;
 	
 									if (iItemID != undefined)
@@ -1998,7 +1997,11 @@ ns1blankspace.financial.invoice =
 										{
 											ns1blankspace.financial.invoice.receipt.allocate.data.receiptItems = oResponse.data.rows;
 
-											if (oResponse.data.rows.length > 0)
+											if (oResponse.data.rows.length == 0)
+											{
+												$('#ns1blankspaceReceiptColumn2Select').html('&nbsp;');
+											}
+											else
 											{
 												var oReceipts = _.groupBy(oResponse.data.rows, 'lineitem.receipt.id');
 
@@ -2013,7 +2016,7 @@ ns1blankspace.financial.invoice =
 
 														aHTML.push('<table class="ns1blankspace">');
 
-														aHTML.push('<tr><td id="ns1blankspaceInvoice_reference-' + aReceipts[0].id + '">' +
+														aHTML.push('<tr><td id="ns1blankspaceInvoice_reference-' + aReceipts[0].id + '" style="font-size: 0.875em;">' +
 																	aReceipts[0]['lineitem.receipt.reference'] + '</td></tr>');
 																								
 														aHTML.push('<tr><td id="ns1blankspaceInvoice_date-' + aReceipts[0].id + '" class="ns1blankspaceSubNote">' +
@@ -2032,7 +2035,7 @@ ns1blankspace.financial.invoice =
 														{
 															aHTML.push('<tr>');
 
-															aHTML.push('<td id="ns1blankspaceInvoice_item_amount-' + oReceipt['id'] + '" class="ns1blankspace" style="text-align:right;">' +
+															aHTML.push('<td id="ns1blankspaceInvoice_item_amount-' + oReceipt['id'] + '" class="ns1blankspace" style="text-align:right; font-size: 0.875em;">' +
 																	oReceipt['amount'] + '</td>');
 
 															aHTML.push('<td style="width:20px;text-align:right;" class="ns1blankspace">' +
@@ -2113,8 +2116,14 @@ ns1blankspace.financial.invoice =
 													ns1blankspace.financial.invoice.receipt.allocate.data.receiptItem =
 														ns1blankspace.financial.invoice.receipt.allocate.data.receiptItem[0];
 
-													ns1blankspace.financial.invoice.receipt.allocate.data.receiptItemAmountToApply = 
+													ns1blankspace.financial.invoice.receipt.allocate.data.receiptItemAmount = 
 														numeral(ns1blankspace.financial.invoice.receipt.allocate.data.receiptItem.amount).value();
+
+													ns1blankspace.financial.invoice.receipt.allocate.data.receiptItemAmountUnallocated =
+														ns1blankspace.financial.invoice.receipt.allocate.data.receiptItemAmount;
+
+													ns1blankspace.financial.invoice.receipt.allocate.data.receiptItemAmountToApply =
+														ns1blankspace.financial.invoice.receipt.allocate.data.receiptItemAmount;
 
 													if (ns1blankspace.financial.invoice.receipt.allocate.data.receiptItemAmountToApply >
 															ns1blankspace.financial.invoice.receipt.allocate.data.invoiceOutstandingAmount)
@@ -2146,39 +2155,43 @@ ns1blankspace.financial.invoice =
 												if (ns1blankspace.financial.invoice.receipt.allocate.data.invoiceItemOutstandingAmount > 0)
 												{
 													ns1blankspace.financial.invoice.receipt.allocate.data.applyAmount = 
-														ns1blankspace.financial.invoice.receipt.allocate.data.invoiceItemOutstandingAmount;
+														ns1blankspace.financial.invoice.receipt.allocate.data.receiptItemAmountToApply;
 
-													if (ns1blankspace.financial.invoice.receipt.allocate.data.applyAmount >
-															ns1blankspace.financial.invoice.receipt.allocate.data.receiptItemAmountToApply)
+													if (ns1blankspace.financial.invoice.receipt.allocate.data.receiptItemAmountToApply >
+															ns1blankspace.financial.invoice.receipt.allocate.data.invoiceItemOutstandingAmount)
 													{
 														ns1blankspace.financial.invoice.receipt.allocate.data.receiptItemAmountToApply =
-															ns1blankspace.financial.invoice.receipt.allocate.data.applyAmount
+															ns1blankspace.financial.invoice.receipt.allocate.data.invoiceItemOutstandingAmount
 													}
 
 													ns1blankspace.financial.invoice.receipt.allocate.data.receiptItemAmountToApply =
-														ns1blankspace.financial.invoice.receipt.allocate.data.invoiceItemOutstandingAmount -
+														ns1blankspace.financial.invoice.receipt.allocate.data.receiptItemAmountToApply -
 														ns1blankspace.financial.invoice.receipt.allocate.data.applyAmount;
 
+													ns1blankspace.financial.invoice.receipt.allocate.data.receiptItemAmountUnallocated =
+														ns1blankspace.financial.invoice.receipt.allocate.data.receiptItemAmountUnallocated -
+														ns1blankspace.financial.invoice.receipt.allocate.data.applyAmount;
+													
 													var oData =
 													{
 														id: iReceiptItemID
 													}
 
-													if ((ns1blankspace.financial.invoice.receipt.allocate.data.receiptItemAmountToApply -
-															ns1blankspace.financial.invoice.receipt.allocate.data.applyAmount) == 0)
+													if (ns1blankspace.financial.invoice.receipt.allocate.data.receiptItemAmountUnallocated == 0)
 													{
 														oData.remove = 1
 													}
 													else
 													{
-														oData.amount = ns1blankspace.financial.invoice.receipt.allocate.data.receiptItemAmountToApply -
-																				ns1blankspace.financial.invoice.receipt.allocate.data.applyAmount;
+														oData.amount = (ns1blankspace.financial.invoice.receipt.allocate.data.receiptItemAmountUnallocated);
 													}
 
 													if (ns1blankspace.option.financialOverride)
 													{
 														oData.override = 'Y'
 													}
+
+													var iReceiptID = ns1blankspace.financial.invoice.receipt.allocate.data.receiptItem['lineitem.receipt.id'];
 
 													$.ajax(
 													{
@@ -2190,10 +2203,10 @@ ns1blankspace.financial.invoice =
 														{
 															var oData =
 															{
-																financialaccount: ns1blankspace.financial.data.settings.financialaccountcreditor,
+																financialaccount: ns1blankspace.financial.data.settings.financialaccountdebtor,
 																amount: ns1blankspace.financial.invoice.receipt.allocate.data.applyAmount,
 																object: 6,
-																objectcontext: iReceiptItemID
+																objectcontext: iReceiptID
 															}
 
 															if (ns1blankspace.option.financialOverride)
@@ -2209,12 +2222,12 @@ ns1blankspace.financial.invoice =
 																dataType: 'json',
 																success: function(data)
 																{
-																	var iReceiptItemCreditorID = data.id;
+																	var iReceiptItemDebtorID = data.id;
 
 																	var oData =
 																	{
 																		invoicelineitem: ns1blankspace.financial.invoice.receipt.allocate.data.invoiceItem.id,
-																		receiptlineitem: iReceiptItemCreditorID,
+																		receiptlineitem: iReceiptItemDebtorID,
 																		amount: ns1blankspace.financial.invoice.receipt.allocate.data.applyAmount
 																	}
 
@@ -2231,7 +2244,7 @@ ns1blankspace.financial.invoice =
 																		dataType: 'json',
 																		success: function(data)
 																		{
-																			ns1blankspace.util.setParam(oParam, 'index', iIndex + 1);
+																			ns1blankspace.util.setParam(oParam, 'index', iIndexInvoiceOutstandingItem + 1);
 																			ns1blankspace.financial.invoice.receipt.allocate.apply.process(oParam);
 																		}
 																	});		
@@ -2245,6 +2258,7 @@ ns1blankspace.financial.invoice =
 											{
 												ns1blankspace.status.message('Allocated');
 												ns1blankspace.financial.invoice.receipt.show();
+												ns1blankspace.financial.invoice.refresh();
 											}
 						 				}
 						 			}
@@ -2310,7 +2324,7 @@ ns1blankspace.financial.invoice =
 														'Bank Account' +
 														'</td></tr>' +
 														'<tr class="ns1blankspaceRadio">' +
-														'<td id="ns1blankspaceReceiptEditBankAccount" class="ns1blankspaceRadio">');
+														'<td id="ns1blankspaceReceiptEditBankAccount" class="ns1blankspaceRadio" style="font-size:0.75em;">');
 									
 										var iDefaultBankAccount;
 										

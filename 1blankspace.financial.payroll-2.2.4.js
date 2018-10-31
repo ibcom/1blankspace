@@ -6830,11 +6830,13 @@ ns1blankspace.financial.payroll.dashboard =
 							numeral(ns1blankspace.financial.payroll.dashboard.data.contractorExpensesTax).format('(0,0.00)') + 
 							'</td></tr>' +
 
-							'<tr><td style="text-align:left; padding-top:10px;" class="ns1blankspaceCaption">Total excluding ' + ns1blankspace.option.taxVATCaption +
-							'<br /><span class="ns1blankspaceSubNote">minus addition of nominal ' + cSuperannuationPercentage + '% for superannuation<br />for comparison to payroll.</span></td></tr>' +
-											
+							'<tr><td style="text-align:left; padding-top:10px;" class="ns1blankspaceCaption">Total excluding ' + ns1blankspace.option.taxVATCaption + '</td></tr>' +
+
+							//'<br /><span class="ns1blankspaceSubNote">minus addition of nominal ' + cSuperannuationPercentage + '% for superannuation<br />for comparison to payroll.</span></td></tr>' +
+							//numeral(numeral(cTotalExGST).value() - (numeral(cTotalExGST).value() * numeral(cSuperannuationPercentage/100).value())).format('(0,0.00)') + 
+
 							'<tr><td style="text-align:left;">$' +
-							numeral(numeral(cTotalExGST).value() - (numeral(cTotalExGST).value() * numeral(cSuperannuationPercentage/100).value())).format('(0,0.00)') + 
+							numeral(numeral(cTotalExGST).value()).format('(0,0.00)') + 
 							'</td></tr>' +
 
 							'<tr><td id="ns1blankspacePayrollDashboardContractors"><td></tr>' +
