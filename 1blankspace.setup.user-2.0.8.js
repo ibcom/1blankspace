@@ -610,10 +610,25 @@ ns1blankspace.setup.user =
 						if (ns1blankspace.option.logonTOTP)
 						{
 							aHTML.push('<br /><input type="radio" id="radioAuthenticationDelivery3" name="radioAuthenticationDelivery" value="3"/>TOTP Client' +
-										' <a href="/gettingstarted_authentication_totp" target="_blank"><span class="ns1blankspaceSub">...</span></a>');
+										' <a href="https://docs.mydigitalstructure.com/gettingstarted_authentication_totp" target="_blank"><span class="ns1blankspaceSub">...</span></a>');
 						}	
 						
 						aHTML.push('</td></tr>');
+
+						if (ns1blankspace.option.logonAccessToken)
+						{
+							aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
+										'Logon using an Access Token' +
+										'</td></tr>' +
+										'<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceRadio">' +
+										'<input type="radio" id="radioAuthenticationAccessToken1" name="radioAuthenticationAccessToken" value="1"/>Disabled' +
+										'<br /><input type="radio" id="radioAuthenticationAccessToken2" name="radioAuthenticationAccessToken" value="2"/>Can be used as 2nd factor token' +
+										'<br /><input type="radio" id="radioAuthenticationAccessToken3" name="radioAuthenticationAccessToken" value="3"/>Can be used to authenticate' +
+										' <a href="https://docs.mydigitalstructure.com/gettingstarted_authentication" target="_blank"><span class="ns1blankspaceSub">...</span></a>' +
+										'</td></tr>');
+						}
 
 						aHTML.push('</table>');					
 						

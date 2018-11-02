@@ -60,9 +60,7 @@ ns1blankspace.option = $.extend(true, ns1blankspace.option,
 	employeeInsuranceURL: 
 	{
 		australia: 'https://www.safeworkaustralia.gov.au/workers-compensation/comparing-australias-workers-compensation-schemes'
-	},
-	logonTOTP: true,
-	logonAccessToken: true
+	}
 });
 
 ns1blankspace.option.yodlee =
@@ -213,11 +211,11 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.financial.invoice',
-		source: '/site/312/1blankspace.financial.invoice-2.1.9.js'
+		source: '/site/1433/1blankspace.financial.invoice-2.1.9.js'
 	},
 	{
 		nameSpace: '1blankspace.financial.expense',
-		source: '/site/312/1blankspace.financial.expense-2.1.4.js'
+		source: '/site/1433/1blankspace.financial.expense-2.1.4.js'
 	},
 	{
 		nameSpace: '1blankspace.financial.receipt',
@@ -237,11 +235,11 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.financial.tax',
-		source: '/site/312/1blankspace.financial.tax-2.0.5.js'
+		source: '/site/1433/1blankspace.financial.tax-2.0.5.js'
 	},
 	{
 		nameSpace: '1blankspace.financial.payroll',
-		source: '/jscripts/1blankspace.financial.payroll-2.2.4.js'
+		source: '/site/1433/1blankspace.financial.payroll-2.2.4.js'
 	},
 	{
 		nameSpace: '1blankspace.financial.budget',
@@ -265,7 +263,7 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.setup.financial',
-		source: '/site/312/1blankspace.setup.financial-2.1.8.js'
+		source: '/site/1433/1blankspace.setup.financial-2.1.8.js'
 	},
 	{
 		nameSpace: '1blankspace.setup.action',
@@ -297,7 +295,7 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.setup.user',
-		source: '/site/312/1blankspace.setup.user-2.0.8.js'
+		source: '/jscripts/1blankspace.setup.user-2.0.8.js'
 	},
 	{
 		nameSpace: '1blankspace.setup.userRole',
@@ -369,7 +367,7 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.admin.monitoring',
-		source: '/site/312/1blankspace.admin.monitoring-2.0.2.js'
+		source: '/site/1433/1blankspace.admin.monitoring-2.0.2.js'
 	},
 	{
 		nameSpace: '1blankspace.developer.membership',
@@ -1906,7 +1904,7 @@ ns1blankspace.control =
 			}
 		},		
 
-		key:		function (oParam, oResponse)
+		key: function (oParam, oResponse)
 		{
 			var aHTML = [];
 			var h = -1;
@@ -1957,8 +1955,7 @@ ns1blankspace.control =
 				if (oResponse.access_token == undefined)
 				{
 					aHTML.push('<tr><td>' +
-									'<br />No key has been set up.  Click <b>New Token</b> to create a token, which you can use to link to your information.<br /><br /></td></tr>');
-					
+									'<br />No key has been set up.  Click <b>New Token</b> to create a token, which you can use to link to your information.<br /><br /></td></tr>');	
 				}
 				else
 				{
@@ -2046,7 +2043,7 @@ ns1blankspace.control =
 				.css('width', '150px');
 			}		
 		},
-	
+
 		device:
 		{
 			trust: function (oParam, oResponse)
@@ -2057,7 +2054,7 @@ ns1blankspace.control =
 				{
 					ns1blankspace.util.local.cache.save(
 					{
-						key: '_at',
+						key: 'accessToken',
 						persist: true,
 						data: sAccessToken
 					})
@@ -2066,20 +2063,14 @@ ns1blankspace.control =
 
 			logon: function ()
 			{
-				var sAccessToken = ns1blankspace.util.local.cache.save(
-				{
-					key: '_at',
-					persist: true
-				})
-
-				$.ajax({url: '/rpc/core/?method=CORE_SID_SEARCH', data: {access_token: sAccessToken}, type: 'POST'})
+				//$.ajax({url: '/rpc/core/?method=CORE_SID_SEARCH, data: {access_token: '123'}, type: 'POST'})
 			}
 		}
 	},
-
+					
 	spaces:			
 	{					
-		show:		function (oElement, oResponse)
+		show:	function (oElement, oResponse)
 		{
 			var aHTML = [];
 

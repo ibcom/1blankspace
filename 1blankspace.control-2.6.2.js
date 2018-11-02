@@ -367,7 +367,7 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.admin.monitoring',
-		source: '/jscripts/1blankspace.admin.monitoring-2.0.0.js'
+		source: '/jscripts/1blankspace.admin.monitoring-2.0.1.js'
 	},
 	{
 		nameSpace: '1blankspace.developer.membership',
