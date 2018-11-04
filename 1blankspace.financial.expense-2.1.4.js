@@ -1974,9 +1974,58 @@ ns1blankspace.financial.expense.outstanding =
 
 						$('#ns1blankspaceFinancialOutstandingSearchText').val(sSearchText);
 
-						ns1blankspace.financial.expense.outstanding.refresh();		
+						ns1blankspace.financial.expense.outstanding.refresh();
+						ns1blankspace.financial.expense.outstanding.banks();
 					}
-				},	
+				},
+
+	banks:	function (oParam, oResponse)
+				{
+					if (oResponse == undefined)
+					{
+						var bankAccounts = _.filter(ns1blankspace.financial.data.bankaccounts, function (bankAccount)
+						{
+							return (bankAccount.bank != '')
+						});
+
+						bankAccounts = _.map(bankAccounts, function (bankAccount)
+						{
+							return bankAccount.bank
+						});
+
+						if (bankAccounts.length != 0)
+						{
+							var oSearch = new AdvancedSearch();
+							oSearch.method = 'CORE_URL_SEARCH';		
+							oSearch.addField('title,url');
+							oSearch.addFilter('title', 'IN_LIST', bankAccounts.join(','));
+							oSearch.addFilter('url', 'TEXT_IS_NOT_EMPTY');
+							oSearch.sort('private', 'desc');
+							oSearch.getResults(function(data) {ns1blankspace.financial.expense.outstanding.banks(oParam, data)});
+						}	
+					}
+					else
+					{
+						var aHTML = [];
+
+						if (oResponse.data.rows.length != 0)
+						{
+							aHTML.push('<table class="ns1blankspaceColumn2" style="margin-top:0px; width:90%;">');
+
+							aHTML.push('<tr><td class="ns1blankspaceHeaderCaption" style="padding-top:10px;"></td></tr>')
+										
+							$.each(oResponse.data.rows, function (r, oRow)
+							{
+								aHTML.push('<tr><td style="font-size:0.825em;padding-top:6px;"><a href="' + (oRow.url.indexOf('http')==-1?'http://':'') + oRow.url + '" target="_blank">' +
+										 oRow.title + '</a></td></tr>');
+							});
+
+							aHTML.push('</table>')
+
+							$('#ns1blankspaceExpenseOutstandingColumn2 table').last().after(aHTML.join(''));
+						}
+					}
+				},			
 
 	row: 		function (oRow)	
 				{
