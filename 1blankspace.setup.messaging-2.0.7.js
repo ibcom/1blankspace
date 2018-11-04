@@ -726,8 +726,9 @@ ns1blankspace.setup.messaging =
 
 						aHTML.push('<tr class="ns1blankspaceCaption">' +
 										'<td class="ns1blankspaceCaption">' +
-										'<div>Importing</div>' +
-										'<div class="ns1blankspaceSubNote" style="width:70%;">How much information should be imported when checking for new emails?</div>' +
+										'<div>New Emails</div>' +
+										'<div class="ns1blankspaceSubNote" style="width:70%;">How much information should be imported when doing the check for new emails?' +
+										' If you select Minimum then the remaining email content and attachments will be imported when your first open it.</div>' +
 										'</td></tr>' +
 										'<tr class="ns1blankspace">' +
 										'<td class="ns1blankspaceRadio">' +
@@ -756,6 +757,7 @@ ns1blankspace.setup.messaging =
 						if (ns1blankspace.objectContextData != undefined)
 						{
 							if (ns1blankspace.objectContextData.smtpencrypted == '') {ns1blankspace.objectContextData.smtpencrypted = 'Y'}
+							if (ns1blankspace.objectContextData.sitefrom == '') {ns1blankspace.objectContextData.sitefrom = 'N'}
 
 							$('#ns1blankspaceDetailsUser').val(ns1blankspace.objectContextData.usertext);
 							$('#ns1blankspaceDetailsUser').attr('data-id', ns1blankspace.objectContextData.user);

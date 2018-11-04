@@ -3528,6 +3528,12 @@ ns1blankspace.messaging.imap =
 						oSearch.method = 'CONTACT_PERSON_GROUP_SEARCH';
 						oSearch.addField('contactperson,contactpersontext,group,grouptext,persongroup.contactperson.email');
 						oSearch.addFilter('group', 'EQUAL_TO', sID);
+
+						if (ns1blankspace.messaging.imap.data.fromEmail != '')
+						{
+							oSearch.addFilter('persongroup.contactperson.email', 'NOT_EQUAL_TO', ns1blankspace.messaging.imap.data.fromEmail);
+						}
+						
 						oSearch.rows = 999;
 						oSearch.sort('grouptext', 'asc');
 						oSearch.getResults(function(data)

@@ -126,7 +126,7 @@ ns1blankspace.xhtml.logonNotes =
 	'<br /><a href="https://console.mydigitalstructure.com" target="_blank"><strong>Modify this app or create your own app using the simple jQuery IDE.</strong></a>';
 
 ns1blankspace.xhtml.header =
-	'<div id="ns1blankspaceLogo" style="width:250px; float:left; "><img src="/jscripts/images/1blankspace.aoe-2.0.0.png"></div>' +
+	'<div id="ns1blankspaceLogo" style="float:left; "><img style="height:46px;" src="/site/1433/images/1blankspace.aoe-2.0.1.png"></div>' +
 	'<div style="float:right; margin-right:3px;">' +
 	'<div id="ns1blankspaceSpaceText" style="width:450px; margin-top:-3px; margin-bottom:0px;"></div>' +
 	'<div id="ns1blankspaceLogonName" style="width:' + (ns1blankspace.option.showLogoff?'410':'450') + 'px; margin-top:-2px; overflow:auto; height:20px; float:left;"></div>' +
@@ -171,7 +171,7 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.messaging.imap',
-		source: '/jscripts/1blankspace.messaging.imap-2.2.1.js'
+		source: '/site/1433/1blankspace.messaging.imap-2.2.2.js'
 	},
 	{
 		nameSpace: '1blankspace.document',
@@ -416,7 +416,7 @@ ns1blankspace.themes =
 	{
 		title: 				'Standard',
 		cssURI: 			'', 
-		xhtmlHeaderLogo: 	'<img src="/jscripts/images/1blankspace.aoe-2.0.0.png">',
+		xhtmlHeaderLogo: 	'<img style="height:46px;" src="/site/1433/1blankspace.aoe-2.0.1.png">',
 		"default": 			true
 	},
 	{
