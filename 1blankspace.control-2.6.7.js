@@ -299,7 +299,7 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.setup.userRole',
-		source: '/jscripts/1blankspace.setup.userRole-2.0.2.js'
+		source: '/site/312/1blankspace.setup.userRole-2.0.3.js'
 	},
 	{
 		nameSpace: '1blankspace.setup.website',

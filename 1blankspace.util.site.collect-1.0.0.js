@@ -3,8 +3,6 @@
  * Licensed as Attribution-ShareAlike 4.0 International
  * http://creativecommons.org/licenses/by-sa/4.0/
  *
- * v
- *
  * http://www.larryullman.com/2012/12/05/writing-the-javascript-code-for-handling-stripe-payments/
  * https://bootsnipp.com/snippets/featured/responsive-stripe-payment-form
  *

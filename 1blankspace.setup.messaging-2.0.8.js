@@ -60,7 +60,15 @@ ns1blankspace.setup.messaging =
 
 						aHTML.push('</table>');
 
+						aHTML.push('<table class="ns1blankspaceControl">');
+
+						aHTML.push('<tr><td id="ns1blankspaceControlMessagingService" class="ns1blankspaceControl"></td></tr>');
+
+						aHTML.push('</table>');
+
 						$('#ns1blankspaceControl').html(aHTML.join(''));
+
+						ns1blankspace.setup.messaging.service.init({xhtmlElementID: 'ns1blankspaceControlMessagingService'})
 
 						$('#ns1blankspaceControlMessagingTemplate').click(function(event)
 						{
@@ -899,7 +907,7 @@ ns1blankspace.setup.messaging =
 								}
 				},
 
-	sharing: 	{
+	sharing: {
 					show:		function (oParam, oResponse)
 								{
 									var iObjectContext = ns1blankspace.objectContext;
@@ -1416,5 +1424,228 @@ ns1blankspace.setup.messaging =
 									});
 								}				
 				}											
-}								
+}
+
+ns1blankspace.setup.messaging.service =
+{
+	data:
+	{
+		userID: 37059,
+		userLogon: 'messaging-service@mydigitalstructure',
+      role:
+      {
+          title: 'mydigitalstructure Messaging Email Check',
+          notes: 'Allows the automated mydigitalstructure Messaging service to check for new emails.',
+          methods:
+          [
+              {
+                  title: 'MESSAGING_EMAIL_CACHE_CHECK',
+                  accessmethod: '568',
+                  canadd: 'N',
+                  canremove: 'N',
+                  canupdate: 'N',
+                  canuse: 'Y'
+              },
+              {
+                  title: 'SETUP_MESSAGING_ACCOUNT_SEARCH',
+                  accessmethod: '404',
+                  canadd: 'N',
+                  canremove: 'N',
+                  canupdate: 'N',
+                  canuse: 'Y'
+              }
+          ]
+      }   
+	},
+
+	init:  function (oParam, oResponse)
+	{
+		if (oResponse == undefined)
+		{
+			var oSearch = new AdvancedSearch();
+			oSearch.method = 'SETUP_EXTERNAL_USER_ACCESS_SEARCH';     
+			oSearch.addField('createddate,etag,user');
+			oSearch.addFilter('userlogon', 'EQUAL_TO', ns1blankspace.setup.messaging.service.data.userLogon);
+			oSearch.getResults(function(data) {ns1blankspace.setup.messaging.service.init(oParam, data)});
+		}
+		else
+		{
+			var sXHTMLElementID = ns1blankspace.util.getParam(oParam, 'xhtmlElementID', {"default": 'ns1blankspaceControlMessagingService'}).value;
+         var aHTML = [];
+
+         aHTML.push('<table class="ns1blankspace">');
+
+         if (oResponse.data.rows.length == 0)
+         {
+				aHTML.push('<tr><td class="ns1blankspaceSub" style="font-size:0.825em; padding-right:0px;">' +
+						'<span id="ns1blankspaceSetupMessagingServiceEnable">Enable automated<br />email importing</span></td></tr>');
+         }
+         else
+         {
+				aHTML.push('<tr><td class="ns1blankspaceSub" style="font-size:0.825em; padding-right:0px;">' +
+						'<span id="ns1blankspaceSetupMessagingServiceDisable" data-id="' + oResponse.data.rows[0].id + '">Disable automated<br />email importing</span></td></tr>');
+         }
+
+          aHTML.push('</table>');
+
+			$('#' + sXHTMLElementID).html(aHTML.join(''));
+
+         $('#ns1blankspaceSetupMessagingServiceEnable')
+         .click(function()
+         {
+            ns1blankspace.setup.messaging.service.enable();
+         });
+
+         $('#ns1blankspaceSetupMessagingServiceDisable')
+         .click(function()
+         {
+           var sID = $(this).attr('data-id');
+           ns1blankspace.setup.messaging.service.disable({id: sID});
+         });
+		}
+	},
+
+	disable: function (oParam, oResponse)
+	{	
+      var sID = ns1blankspace.util.getParam(oParam, 'id').value;
+
+      ns1blankspace.status.working();
+
+      var oData =
+      {
+          remove: 1,
+          id: sID
+      }
+      
+      $.ajax(
+      {
+			type: 'POST',
+			url: ns1blankspace.util.endpointURI('SETUP_EXTERNAL_USER_ACCESS_MANAGE'),
+			data: oData,
+			dataType: 'json',
+			success: function()
+			{
+				ns1blankspace.setup.messaging.service.init();
+				ns1blankspace.status.message('Disabled');
+			}
+		});
+  	},
+
+	enable: function (oParam, oResponse)
+	{
+	   var oData =
+	   {
+	       user: ns1blankspace.setup.messaging.service.data.userID,
+	       type: 5,
+	       unrestrictedaccess: 'N',
+	       targetuser: ns1blankspace.user.id
+	   }
+
+	   $.ajax(
+	   {
+			type: 'POST',
+			url: ns1blankspace.util.endpointURI('SETUP_EXTERNAL_USER_ACCESS_MANAGE'),
+			data: oData,
+			dataType: 'json',
+			success: function(response)
+			{
+				ns1blankspace.setup.messaging.service.data.accessID = response.id;
+				ns1blankspace.setup.messaging.service.access.role()
+			}
+	   });
+	},
+
+	access:
+	{
+	   role: function (oParam, oResponse)
+	   {
+	   	if (oResponse == undefined)
+	   	{
+   			var oSearch = new AdvancedSearch();
+				oSearch.method = 'SETUP_ROLE_SEARCH';     
+				oSearch.addField('id');
+				oSearch.addFilter('title', 'EQUAL_TO', ns1blankspace.setup.messaging.service.data.role.title);
+				oSearch.getResults(function(data) {ns1blankspace.setup.messaging.service.access.role(oParam, data)});
+	   	}
+	   	else
+	   	{
+	   		if (oResponse.data.rows.length != 0)
+	   		{
+	   			ns1blankspace.setup.messaging.service.data.role.id = oResponse.data.rows[0].id;
+					ns1blankspace.setup.messaging.service.access.methods();
+	   		}
+	   		else
+	   		{
+					var oData =
+					{
+						title: ns1blankspace.setup.messaging.service.data.role.title
+					}
+
+					$.ajax(
+					{
+						type: 'POST',
+						url: ns1blankspace.util.endpointURI('SETUP_ROLE_MANAGE'),
+						data: oData,
+						dataType: 'json',
+						success: function(oResponse)
+						{
+							ns1blankspace.setup.messaging.service.data.role.id = oResponse.id;
+							ns1blankspace.setup.messaging.service.access.methods();
+						}
+					});
+				}	
+			}	
+	   },
+
+	   methods: function (oParam)
+	   {
+			var iMethodIndex = ns1blankspace.util.getParam(oParam, 'methodIndex', {"default": 0}).value;
+
+			if (iMethodIndex < _.size(ns1blankspace.setup.messaging.service.data.role.methods))
+			{
+				var oData = ns1blankspace.setup.messaging.service.data.role.methods[iMethodIndex];
+				oData.role = ns1blankspace.setup.messaging.service.data.role.id;
+
+				$.ajax(
+				{
+					type: 'POST',
+					url: ns1blankspace.util.endpointURI('SETUP_ROLE_METHOD_ACCESS_MANAGE'),
+					data: oData,
+					dataType: 'json',
+					success: function(response)
+					{
+						iMethodIndex++;
+						ns1blankspace.setup.messaging.service.access.methods({methodIndex: iMethodIndex});
+					}
+				});
+			}
+			else
+			{
+				ns1blankspace.setup.messaging.service.access.finalise()
+			}
+	   },
+
+      finalise: function ()
+      {  
+			var oData =
+			{
+				user: ns1blankspace.setup.messaging.service.data.userID,
+				role: ns1blankspace.setup.messaging.service.data.role.id
+			}
+
+			$.ajax(
+			{
+				type: 'POST',
+				url: ns1blankspace.util.endpointURI('SETUP_USER_ROLE_MANAGE'),
+				data: oData,
+				dataType: 'json',
+				success: function(response)
+				{
+					ns1blankspace.setup.messaging.service.init();
+					ns1blankspace.status.message('Enabled');
+				}
+			});
+      }
+  	}
+}							
 

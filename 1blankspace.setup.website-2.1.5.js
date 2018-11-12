@@ -1046,7 +1046,7 @@ ns1blankspace.setup.website =
 						{				
 							aHTML.push('<tr><td class="ns1blankspaceRadio">' +
 											'<input type="checkbox" id="ns1blankspaceWebsiteAdvancedCanCreateSpace" />' +
-											'Allow new spaces to be created using this site</td>');
+											'Allow new spaces to be created using this site</td></tr>');
 						}	
 																		
 						aHTML.push('</table>');					

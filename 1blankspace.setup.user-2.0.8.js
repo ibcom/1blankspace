@@ -702,7 +702,7 @@ ns1blankspace.setup.user =
 						else
 						{
 							$('[name="radioDisabled"][value="N"]').attr('checked', true);
-							$('[name="radioAuthenticationLevel"][value="1"]').attr('checked', true);
+							$('[name="radioAuthenticationLevel"][value="2"]').attr('checked', true);
 							$('[name="radioAuthenticationDelivery"][value="1"]').attr('checked', true);
 						}
 					}	
