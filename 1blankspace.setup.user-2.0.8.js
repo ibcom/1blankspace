@@ -150,7 +150,7 @@ ns1blankspace.setup.user =
 										var oSearch = new AdvancedSearch();
 										oSearch.method = 'SETUP_USER_SEARCH';
 										oSearch.addField('username,contactpersontext,contactperson,lastlogon,disabled,disabledreason,unrestrictedaccess,authenticationlevel,' +
-															'authenticationdelivery,timezoneoffset,passwordexpiry,contactbusinesstext,contactbusiness,guid');
+															'authenticationdelivery,timezoneoffset,passwordexpiry,contactbusinesstext,contactbusiness,guid,sessiontimeout');
 										oSearch.addFilter('id', 'EQUAL_TO', ns1blankspace.objectContext);
 										oSearch.getResults(function(data) {ns1blankspace.setup.user.show(data)});
 									}
@@ -874,7 +874,7 @@ ns1blankspace.setup.user =
 										oParam = {userType: 1}
 									}
 										
-									if ($(ns1blankspace.xhtml.container).attr('data-initiator') == 'ns1blankspaceUserAccessRolesAdd')
+									if ($(ns1blankspace.xhtml.container).attr('data-initiator') == 'ns1blankspaceSetupUserExternalEditRole')
 									{
 										$(ns1blankspace.xhtml.container).slideUp(500);
 										$(ns1blankspace.xhtml.container).attr('data-initiator', '');
@@ -895,8 +895,8 @@ ns1blankspace.setup.user =
 										}
 										else
 										{
-											ns1blankspace.container.position({xhtmlElementID: 'ns1blankspaceUserAccessRolesAdd', leftOffset: -252, topOffset: -42});
-								
+											ns1blankspace.container.position({xhtmlElementID: 'ns1blankspaceSetupUserExternalEditRole', leftOffset: -252, topOffset: -42});
+	
 											var aHTML = [];
 											
 											if (oResponse.data.rows.length == 0)
@@ -974,6 +974,7 @@ ns1blankspace.setup.user =
 												else
 												{	
 													ns1blankspace.setup.user.external.show({step:3, user: iUser});
+													ns1blankspace.container.hide({force: true});
 												}	
 											}
 										});
@@ -1595,7 +1596,7 @@ ns1blankspace.setup.user =
 											})
 											.click(function() 
 											{
-												ns1blankspace.container.position({xhtmlElementID: 'ns1blankspaceSetupUserExternalEditRole', leftOffset: -252, topOffset: -42});
+												//ns1blankspace.container.position({xhtmlElementID: 'ns1blankspaceSetupUserExternalEditRole', leftOffset: -252, topOffset: -42});
 												oParam.user = $('#ns1blankspaceUserExternal_title-' + aXHTMLElementID[1]).attr("data-user");
 												oParam.userType = 2;
 												ns1blankspace.setup.user.access.add(oParam);

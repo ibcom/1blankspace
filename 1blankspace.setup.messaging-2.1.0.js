@@ -60,13 +60,20 @@ ns1blankspace.setup.messaging =
 
 						aHTML.push('</table>');
 
-						aHTML.push('<table class="ns1blankspaceControl">');
-
-						aHTML.push('<tr><td id="ns1blankspaceControlMessagingService" class="ns1blankspaceControl"></td></tr>');
-
-						aHTML.push('</table>');
-
 						$('#ns1blankspaceControl').html(aHTML.join(''));
+
+						var aHTML = [];
+
+						aHTML.push('<table class="ns1blankspaceMain">' +
+										'<tr class="ns1blankspaceRow">' +
+										'<td id="ns1blankspaceSummaryColumn1" class="ns1blankspaceColumn1Flexible"></td>' +
+										'<td id="ns1blankspaceSummaryColumn1" class="ns1blankspaceColumn2" style="width:140px;">' +
+										'<table class="ns1blankspaceColumn2"><tr><td id="ns1blankspaceControlMessagingService"></td></tr></table>' +
+										'</td>' +
+										'</tr>' +
+										'</table>');				
+		
+						$('#ns1blankspaceMainSummary').html(aHTML.join(''));	
 
 						ns1blankspace.setup.messaging.service.init({xhtmlElementID: 'ns1blankspaceControlMessagingService'})
 
@@ -124,7 +131,7 @@ ns1blankspace.setup.messaging =
 							aHTML.push('</table>');			
 						}
 						
-						$('#ns1blankspaceMainSummary').html(aHTML.join(''));
+						$('#ns1blankspaceSummaryColumn1').html(aHTML.join(''));
 						
 						$('td.ns1blankspaceMostLikely').click(function(event)
 						{
@@ -1473,30 +1480,26 @@ ns1blankspace.setup.messaging.service =
 			var sXHTMLElementID = ns1blankspace.util.getParam(oParam, 'xhtmlElementID', {"default": 'ns1blankspaceControlMessagingService'}).value;
          var aHTML = [];
 
-         aHTML.push('<table class="ns1blankspace">');
-
          if (oResponse.data.rows.length == 0)
          {
-				aHTML.push('<tr><td class="ns1blankspaceSub" style="font-size:0.825em; padding-right:0px;">' +
-						'<span id="ns1blankspaceSetupMessagingServiceEnable">Enable automated<br />email importing</span></td></tr>');
+				aHTML.push('<span id="ns1blankspaceSetupMessagingServiceEnable" style="font-size:0.625em;">Enable automated<br />email importing</span>');
          }
          else
          {
-				aHTML.push('<tr><td class="ns1blankspaceSub" style="font-size:0.825em; padding-right:0px;">' +
-						'<span id="ns1blankspaceSetupMessagingServiceDisable" data-id="' + oResponse.data.rows[0].id + '">Disable automated<br />email importing</span></td></tr>');
+				aHTML.push('<span id="ns1blankspaceSetupMessagingServiceDisable" style="font-size:0.625em;" data-id="' + oResponse.data.rows[0].id + '">Disable automated<br />email importing</span>');
          }
-
-          aHTML.push('</table>');
 
 			$('#' + sXHTMLElementID).html(aHTML.join(''));
 
          $('#ns1blankspaceSetupMessagingServiceEnable')
+         .button()
          .click(function()
          {
             ns1blankspace.setup.messaging.service.enable();
          });
 
          $('#ns1blankspaceSetupMessagingServiceDisable')
+         .button()
          .click(function()
          {
            var sID = $(this).attr('data-id');

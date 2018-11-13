@@ -578,9 +578,9 @@ ns1blankspace.setup.space =
 				},
 
 	initialise: {
-					data: 		{},
+					data: 	{},
 
-					init: 		function (oParam)
+					init: 	function (oParam)
 								{
 									if (ns1blankspace.setup.space.initialise.data.template == undefined && ns1blankspace.option.initialiseSpaceTemplate)
 									{
@@ -614,6 +614,8 @@ ns1blankspace.setup.space =
 								{
 									var aHTML = [];
 									var oTemplate = ns1blankspace.setup.space.initialise.data.template;
+									var iType = ns1blankspace.util.getParam(oParam, 'type', {"default": -1}).value;
+									var sXHTMLElementID = ns1blankspace.util.getParam(oParam, 'xhtmlElementID', {"default": 'ns1blankspaceMainInitialise'}).value;
 
 									if (oTemplate.memberships.length == 0 && oTemplate.roles.length == 0)
 									{
@@ -628,27 +630,27 @@ ns1blankspace.setup.space =
 														'<td id="ns1blankspaceInitialiseColumn2"></td>' +
 														'</tr></table>');				
 										
-										$('#ns1blankspaceMainInitialise').html(aHTML.join(''));
+										$('#' + sXHTMLElementID).html(aHTML.join(''));
 
 										var aHTML = [];
 
 										aHTML.push('<div id="ns1blankspaceInitaliseOption" style="width:110px; margin-bottom:10px;">');
 
-										if (oTemplate.memberships.length != 0)
+										if (oTemplate.memberships.length != 0 && (iType == 1 || iType == -1))
 										{	
 											aHTML.push('<input type="radio" id="ns1blankspaceInitaliseOption-memberships" name="radioObject" />' +
 														'<label for="ns1blankspaceInitaliseOption-memberships" style="width: 110px; margin-bottom:3px;">' +
 														'Memberships</label>');
 										}		
 										
-										if (oTemplate.roles.length != 0)
+										if (oTemplate.roles.length != 0 && (iType == 2 || iType == -1))
 										{
 											aHTML.push('<input type="radio" id="ns1blankspaceInitaliseOption-roles" name="radioObject" />' +
 														'<label for="ns1blankspaceInitaliseOption-roles" style="width: 110px; margin-bottom:3px;">' +
 														'Roles</label>');
 										}	
 
-										if (oTemplate["import"].length != 0)
+										if (oTemplate["import"].length != 0 && (iType == 3 || iType == -1))
 										{
 											aHTML.push('<input type="radio" id="ns1blankspaceInitaliseOption-import" name="radioObject" />' +
 														'<label for="ns1blankspaceInitaliseOption-import" style="width: 110px; margin-bottom:3px;">' +
@@ -785,7 +787,7 @@ ns1blankspace.setup.space =
 														{
 															ns1blankspace.setup.space.initialise.roles.add({xhtmlElementID: this.id})
 														})
-														.css('font-size', '0.75em')
+														.css('font-size', '0.625em')
 														.css('height', '20px');
 													}
 												},

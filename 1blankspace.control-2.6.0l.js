@@ -33,7 +33,7 @@ ns1blankspace.option = $.extend(true, ns1blankspace.option,
 	taxOffice: 'ATO',
 	bulkInvoicing: true,
 	postInit: undefined,
-	initialiseSpaceTemplate: '/jscripts/1blankspace.setup.space-2.0.1.json',
+	initialiseSpaceTemplate: '/site/312/1blankspace.setup.space-2.0.1.json',
 	searchWatermark: 'search',
 	showLogonOptions: false,
 	showLogonOptionsOnHover: false,
@@ -177,7 +177,7 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.document',
-		source: '/jscripts/1blankspace.document-2.0.2.js'
+		source: '/site/312/1blankspace.document-2.0.2.js'
 	},
 	{
 		nameSpace: '1blankspace.news',
@@ -273,7 +273,7 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.setup.messaging',
-		source: '/site/312/1blankspace.setup.messaging-2.0.9.js'
+		source: '/site/312/1blankspace.setup.messaging-2.1.0.js'
 	},
 	{
 		nameSpace: '1blankspace.setup.networkGroup',
@@ -289,7 +289,7 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.setup.space',
-		source: '/jscripts/1blankspace.setup.space-2.0.6.js'
+		source: '/site/312/1blankspace.setup.space-2.0.7.js'
 	},
 	{
 		nameSpace: '1blankspace.setup.structure',
@@ -301,7 +301,7 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.setup.userRole',
-		source: '/site/312/1blankspace.setup.userRole-2.0.3.js'
+		source: '/site/312/1blankspace.setup.userRole-2.0.4.js'
 	},
 	{
 		nameSpace: '1blankspace.setup.website',
