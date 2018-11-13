@@ -2408,7 +2408,8 @@ ns1blankspace.attachments =
 						$('#ns1blankspaceAttachmentsAddContainer .ns1blankspaceRowSelect').click(function ()
 						{
 							var sSourceType = this.id.split('-')[1];
-							ns1blankspace.attachments.add[sSourceType](oParam);
+							oParam = ns1blankspace.util.setParam(oParam, 'sourceType', sSourceType)
+							ns1blankspace.attachments.add.init(oParam);
 							ns1blankspace.container.hide(
 							{
 								xhtmlElementID: 'ns1blankspaceAttachmentsAdd',
@@ -2625,6 +2626,30 @@ ns1blankspace.attachments =
 
 	add:
 	{
+		init:  function (oParam, oResponse)
+		{
+			$.ajax(
+			{
+				type: 'GET',
+				url: ns1blankspace.util.endpointURI('CORE_GET_USER_DETAILS'),
+				dataType: 'json',
+				cache: false,
+				global: false,
+				success: function(data) 
+				{
+					if (data.status == 'ER')
+					{
+						ns1blankspace.logOff()
+					}
+					else
+					{
+						var sSourceType = ns1blankspace.util.getParam(oParam, 'sourceType').value;
+						ns1blankspace.attachments.add[sSourceType](oParam);	
+					}
+				}
+			});
+		},
+
 		file:  function (oParam, oResponse)
 		{
 			var bShowUpload = ns1blankspace.util.getParam(oParam, 'showUpload', {"default": true}).value;

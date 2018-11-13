@@ -176,254 +176,296 @@ ns1blankspace.util.financial.bankAccounts =
 
       enable: function (oParam, oResponse)
       {
-         $('#ns1blankspaceSummaryColumn2AccountLinking').html('<div class="ns1blankspaceSub">Enabling the Yodlee service...</div>');
+			if (ns1blankspace.option.yodlee != undefined)
+			{
+				if (ns1blankspace.option.yodlee.user != undefined)
+				{
+					ns1blankspace.util.financial.bankAccounts.link.data.userID = ns1blankspace.option.yodlee.user
+				}    
+			}
 
-         if (ns1blankspace.option.yodlee != undefined)
-         {
-          if (ns1blankspace.option.yodlee.user != undefined)
-            {
-            ns1blankspace.util.financial.bankAccounts.link.data.userID = ns1blankspace.option.yodlee.user
-            }    
-         }
+			if (ns1blankspace.util.financial.bankAccounts.link.data.userID != undefined)
+			{
+	      	if (oResponse == undefined)
+				{
+					var oSearch = new AdvancedSearch();
+					oSearch.method = 'SETUP_EXTERNAL_USER_ACCESS_SEARCH';     
+					oSearch.addField('createddate,etag,user');
+					oSearch.addFilter('userlogon', 'EQUAL_TO', ns1blankspace.setup.messaging.service.data.userLogon);
+					oSearch.getResults(function(data) {ns1blankspace.setup.messaging.service.init(oParam, data)});
+				}
+				else
+				{
+					$('#ns1blankspaceSummaryColumn2AccountLinking').html('<div class="ns1blankspaceSub">Enabling the Yodlee service...</div>');
 
-         var oData =
-         {
-         user: ns1blankspace.util.financial.bankAccounts.link.data.userID,
-         type: 5,
-         unrestrictedaccess: 'N',
-         targetuser: ns1blankspace.user.id
-         }
+					if (oReponse.data.rows.length == 0)
+					{
+			         var oData =
+			         {
+			         	user: ns1blankspace.util.financial.bankAccounts.link.data.userID,
+				         type: 5,
+				         unrestrictedaccess: 'N',
+				         targetuser: ns1blankspace.user.id
+			         }
 
-         $.ajax(
-         {
-            type: 'POST',
-            url: ns1blankspace.util.endpointURI('SETUP_EXTERNAL_USER_ACCESS_MANAGE'),
-            data: oData,
-            dataType: 'json',
-            success: function(response)
-            {
-               ns1blankspace.util.financial.bankAccounts.link.data.accessID = response.id;
-               ns1blankspace.util.financial.bankAccounts.link.access.role()
-            }
-         });
+			         $.ajax(
+			         {
+							type: 'POST',
+							url: ns1blankspace.util.endpointURI('SETUP_EXTERNAL_USER_ACCESS_MANAGE'),
+							data: oData,
+							dataType: 'json',
+							success: function(response)
+							{
+								ns1blankspace.util.financial.bankAccounts.link.data.accessID = response.id;
+								ns1blankspace.util.financial.bankAccounts.link.access.role()
+							}
+			         });
+			      }
+			      else
+			      {
+			      	ns1blankspace.util.financial.bankAccounts.link.data.accessID = response.data.rows[0].id;
+						ns1blankspace.util.financial.bankAccounts.link.access.role()
+			      }
+			      
+				}
+			}	
       },
 
       access:
       {
-      role: function ()
-      {
-         var oData =
-         {
-            title: ns1blankspace.util.financial.bankAccounts.link.data.role.title
-         }
+	      role: function (oParam, oRespose)
+	      {
+	      	if (oResponse == undefined)
+		   	{
+	   			var oSearch = new AdvancedSearch();
+					oSearch.method = 'SETUP_ROLE_SEARCH';     
+					oSearch.addField('id');
+					oSearch.addFilter('title', 'EQUAL_TO', ns1blankspace.setup.messaging.service.data.role.title);
+					oSearch.getResults(function(data) {ns1blankspace.setup.messaging.service.access.role(oParam, data)});
+		   	}
+		   	else
+		   	{
+		   		if (oResponse.data.rows.length != 0)
+		   		{
+		   			ns1blankspace.util.financial.bankAccounts.link.data.role.id = oResponse.data.rows[0].id;
+						ns1blankspace.util.financial.bankAccounts.link.access.methods();
+		   		}
+		   		else
+		   		{
+			         var oData =
+			         {
+			            title: ns1blankspace.util.financial.bankAccounts.link.data.role.title
+			         }
 
-         $.ajax(
-         {
-            type: 'POST',
-            url: ns1blankspace.util.endpointURI('SETUP_ROLE_MANAGE'),
-            data: oData,
-            dataType: 'json',
-            success: function(response)
-            {
-               ns1blankspace.util.financial.bankAccounts.link.data.role.id = response.id;
-               ns1blankspace.util.financial.bankAccounts.link.access.methods();
-            }
-         });
-      },
+			         $.ajax(
+			         {
+			            type: 'POST',
+			            url: ns1blankspace.util.endpointURI('SETUP_ROLE_MANAGE'),
+			            data: oData,
+			            dataType: 'json',
+			            success: function(response)
+			            {
+			               ns1blankspace.util.financial.bankAccounts.link.data.role.id = response.id;
+			               ns1blankspace.util.financial.bankAccounts.link.access.methods();
+			            }
+			         });
+			      }   
+		      } 
+	      },
 
-      methods: function (oParam)
-      {
-         var iMethodIndex = ns1blankspace.util.getParam(oParam, 'methodIndex', {"default": 0}).value;
+	      methods: function (oParam)
+	      {
+	         var iMethodIndex = ns1blankspace.util.getParam(oParam, 'methodIndex', {"default": 0}).value;
 
-         if (iMethodIndex < _.size(ns1blankspace.util.financial.bankAccounts.link.data.role.methods))
-         {
-            var oData = ns1blankspace.util.financial.bankAccounts.link.data.role.methods[iMethodIndex];
-            oData.role = ns1blankspace.util.financial.bankAccounts.link.data.role.id;
+	         if (iMethodIndex < _.size(ns1blankspace.util.financial.bankAccounts.link.data.role.methods))
+	         {
+	            var oData = ns1blankspace.util.financial.bankAccounts.link.data.role.methods[iMethodIndex];
+	            oData.role = ns1blankspace.util.financial.bankAccounts.link.data.role.id;
 
-            $.ajax(
-            {
-               type: 'POST',
-               url: ns1blankspace.util.endpointURI('SETUP_ROLE_METHOD_ACCESS_MANAGE'),
-               data: oData,
-               dataType: 'json',
-               success: function(response)
-               {
-                  iMethodIndex++;
-                  ns1blankspace.util.financial.bankAccounts.link.access.methods({methodIndex: iMethodIndex});
-               }
-            });
-         }
-         else
-         {
-            ns1blankspace.util.financial.bankAccounts.link.access.finalise()
-         }
-      },
+	            $.ajax(
+	            {
+	               type: 'POST',
+	               url: ns1blankspace.util.endpointURI('SETUP_ROLE_METHOD_ACCESS_MANAGE'),
+	               data: oData,
+	               dataType: 'json',
+	               success: function(response)
+	               {
+	                  iMethodIndex++;
+	                  ns1blankspace.util.financial.bankAccounts.link.access.methods({methodIndex: iMethodIndex});
+	               }
+	            });
+	         }
+	         else
+	         {
+	            ns1blankspace.util.financial.bankAccounts.link.access.finalise()
+	         }
+	      },
 
-      finalise: function ()
-      {
-         if (ns1blankspace.option.yodlee != undefined)
-         {
-            if (ns1blankspace.option.yodlee.user != undefined)
-            {
-               ns1blankspace.util.financial.bankAccounts.link.data.userID = ns1blankspace.option.yodlee.user
-            }    
-         }
+	      finalise: function ()
+	      {
+	         if (ns1blankspace.option.yodlee != undefined)
+	         {
+	            if (ns1blankspace.option.yodlee.user != undefined)
+	            {
+	               ns1blankspace.util.financial.bankAccounts.link.data.userID = ns1blankspace.option.yodlee.user
+	            }    
+	         }
 
-         var oData =
-         {
-            user: ns1blankspace.util.financial.bankAccounts.link.data.userID,
-            role: ns1blankspace.util.financial.bankAccounts.link.data.role.id
-         }
+	         var oData =
+	         {
+	            user: ns1blankspace.util.financial.bankAccounts.link.data.userID,
+	            role: ns1blankspace.util.financial.bankAccounts.link.data.role.id
+	         }
 
-         $.ajax(
-         {
-            type: 'POST',
-            url: ns1blankspace.util.endpointURI('SETUP_USER_ROLE_MANAGE'),
-            data: oData,
-            dataType: 'json',
-            success: function(response)
-            {
-               ns1blankspace.util.financial.bankAccounts.link.register.init();
-               ns1blankspace.status.message('Enabled');
-            }
-         });
-      }
-   },
+	         $.ajax(
+	         {
+	            type: 'POST',
+	            url: ns1blankspace.util.endpointURI('SETUP_USER_ROLE_MANAGE'),
+	            data: oData,
+	            dataType: 'json',
+	            success: function(response)
+	            {
+	               ns1blankspace.util.financial.bankAccounts.link.register.init();
+	               ns1blankspace.status.message('Enabled');
+	            }
+	         });
+	      }
+   	},
 
-   register:
-   {
-      init: function (oParam, oResponse)
-      {
-          if (oResponse == undefined)
-          {
-              var oSearch = new AdvancedSearch();
-              oSearch.method = 'SETUP_EXTERNAL_USER_ACCESS_SEARCH';     
-              oSearch.addField('createddate,etag');
-              oSearch.addFilter('userlogon', 'EQUAL_TO', 'Yodlee');
-              oSearch.getResults(function(data) {ns1blankspace.util.financial.bankAccounts.link.register.init(oParam, data)});
-          }
-          else
-          {
-              if (oResponse.data.rows.length != 0)
-              {
-                  var sYodleeProxyURL = 'https://yodlee.mydigitalstructure.com';
-                  if (ns1blankspace.option.yodlee != undefined)
-                  {
-                      if (ns1blankspace.option.yodlee.proxyURL != undefined)
-                      {
-                          sYodleeProxyURL = ns1blankspace.option.yodlee.proxyURL
-                      }    
-                  }
+	   register:
+	   {
+	      init: function (oParam, oResponse)
+	      {
+	          if (oResponse == undefined)
+	          {
+	              var oSearch = new AdvancedSearch();
+	              oSearch.method = 'SETUP_EXTERNAL_USER_ACCESS_SEARCH';     
+	              oSearch.addField('createddate,etag');
+	              oSearch.addFilter('userlogon', 'EQUAL_TO', 'Yodlee');
+	              oSearch.getResults(function(data) {ns1blankspace.util.financial.bankAccounts.link.register.init(oParam, data)});
+	          }
+	          else
+	          {
+	              if (oResponse.data.rows.length != 0)
+	              {
+	                  var sYodleeProxyURL = 'https://yodlee.mydigitalstructure.com';
+	                  if (ns1blankspace.option.yodlee != undefined)
+	                  {
+	                      if (ns1blankspace.option.yodlee.proxyURL != undefined)
+	                      {
+	                          sYodleeProxyURL = ns1blankspace.option.yodlee.proxyURL
+	                      }    
+	                  }
 
-                  $.ajax(
-                  {
-                      type: 'GET',
-                      url: sYodleeProxyURL + '/_register/' + oResponse.data.rows[0].etag,
-                      dataType: 'json',
-                      global: false,
-                      success: function()
-                      {
-                          ns1blankspace.util.financial.bankAccounts.link.init();
-                      },
-                      error: function ()
-                      {
-                          $.ajax(
-                          {
-                              type: 'GET',
-                              url: sYodleeProxyURL + '/_register/' + oResponse.data.rows[0].etag,
-                              dataType: 'json',
-                              global: false,
-                              success: function()
-                              {
-                                  ns1blankspace.util.financial.bankAccounts.link.init();
-                              }
-                          });
-                      }
-                  });
-              }    
-          }
-      }
-   },
+	                  $.ajax(
+	                  {
+	                      type: 'GET',
+	                      url: sYodleeProxyURL + '/_register/' + oResponse.data.rows[0].etag,
+	                      dataType: 'json',
+	                      global: false,
+	                      success: function()
+	                      {
+	                          ns1blankspace.util.financial.bankAccounts.link.init();
+	                      },
+	                      error: function ()
+	                      {
+	                          $.ajax(
+	                          {
+	                              type: 'GET',
+	                              url: sYodleeProxyURL + '/_register/' + oResponse.data.rows[0].etag,
+	                              dataType: 'json',
+	                              global: false,
+	                              success: function()
+	                              {
+	                                  ns1blankspace.util.financial.bankAccounts.link.init();
+	                              }
+	                          });
+	                      }
+	                  });
+	              }    
+	          }
+	      }
+	   },
 
-   accounts:
-   {
-      init: function (oParam, oResponse)
-      {
-          if (oResponse == undefined)
-          {
-              var oSearch = new AdvancedSearch();
-              oSearch.method = 'SETUP_EXTERNAL_USER_ACCESS_SEARCH';     
-              oSearch.addField('createddate,etag');
-              oSearch.addFilter('userlogon', 'EQUAL_TO', 'Yodlee');
-              oSearch.getResults(function(data) {ns1blankspace.util.financial.bankAccounts.link.accounts.init(oParam, data)});
-          }
-          else
-          {
-              if (oResponse.data.rows.length != 0)
-              {
-                  var sYodleeProxyURL = 'https://yodlee.mydigitalstructure.com';
-                  if (ns1blankspace.option.yodlee != undefined)
-                  {
-                      if (ns1blankspace.option.yodlee.proxyURL != undefined)
-                      {
-                          sYodleeProxyURL = ns1blankspace.option.yodlee.proxyURL
-                      }    
-                  }
+	   accounts:
+	   {
+	      init: function (oParam, oResponse)
+	      {
+	          if (oResponse == undefined)
+	          {
+	              var oSearch = new AdvancedSearch();
+	              oSearch.method = 'SETUP_EXTERNAL_USER_ACCESS_SEARCH';     
+	              oSearch.addField('createddate,etag');
+	              oSearch.addFilter('userlogon', 'EQUAL_TO', 'Yodlee');
+	              oSearch.getResults(function(data) {ns1blankspace.util.financial.bankAccounts.link.accounts.init(oParam, data)});
+	          }
+	          else
+	          {
+	              if (oResponse.data.rows.length != 0)
+	              {
+	                  var sYodleeProxyURL = 'https://yodlee.mydigitalstructure.com';
+	                  if (ns1blankspace.option.yodlee != undefined)
+	                  {
+	                      if (ns1blankspace.option.yodlee.proxyURL != undefined)
+	                      {
+	                          sYodleeProxyURL = ns1blankspace.option.yodlee.proxyURL
+	                      }    
+	                  }
 
-                  $.ajax(
-                  {
-                      type: 'GET',
-                      url: sYodleeProxyURL + '/_accesstokens/' + oResponse.data.rows[0].etag,
-                      dataType: 'json',
-                      global: false,
-                      success: function(data)
-                      {
-                          ns1blankspace.util.financial.bankAccounts.link.accounts.show(
-                          {
-                              userSession: data.userSession,
-                              token: data.token
-                          });
-                      }
-                  });
-               }    
-            }
-         },
+	                  $.ajax(
+	                  {
+	                      type: 'GET',
+	                      url: sYodleeProxyURL + '/_accesstokens/' + oResponse.data.rows[0].etag,
+	                      dataType: 'json',
+	                      global: false,
+	                      success: function(data)
+	                      {
+	                          ns1blankspace.util.financial.bankAccounts.link.accounts.show(
+	                          {
+	                              userSession: data.userSession,
+	                              token: data.token
+	                          });
+	                      }
+	                  });
+	               }    
+	            }
+	         },
 
-         show: function (oParam)
-         {
-             var sXHMTLElementID = ns1blankspace.util.getParam(oParam, 'xhtmlElementID', {"default": 'ns1blankspaceSetupFinancialsBankingLinkingAccountsContainer'}).value;
+	         show: function (oParam)
+	         {
+	             var sXHMTLElementID = ns1blankspace.util.getParam(oParam, 'xhtmlElementID', {"default": 'ns1blankspaceSetupFinancialsBankingLinkingAccountsContainer'}).value;
 
-             var bUseFrame = ns1blankspace.util.getParam(oParam, 'xhtmlElementID', {"default": false}).value;
+	             var bUseFrame = ns1blankspace.util.getParam(oParam, 'xhtmlElementID', {"default": false}).value;
 
-             ns1blankspace.status.working('Initialising...');
+	             ns1blankspace.status.working('Initialising...');
 
-             var aHTML = [];
+	             var aHTML = [];
 
-             aHTML.push('<form action="https://quickstartaunode.yodlee.com.au/authenticate/quickstartau3/?channelAppName=quickstartau" method="post"' +
-                             ' name="ns1blankspaceLinkApp" id="ns1blankspaceLinkApp" target="ns1blankspaceBankAccountLinkingContainer" style="display: none">' +
-                             ' <input type="text" name="app" id="finappId" value="10003600" />' +
-                             ' <input type="text" name="redirectReq" value="true" />' +
-                             ' <input type="text" name="rsession" id="rsession" value="' + oParam.userSession + '" />' +
-                             ' <input type="text" name="token" value="' + oParam.token + '" id="token" />' +
-                             ' <input type="text" name="extraParams" id="extraParams" value=""/>' +
-                         '</form>');
+	             aHTML.push('<form action="https://quickstartaunode.yodlee.com.au/authenticate/quickstartau3/?channelAppName=quickstartau" method="post"' +
+	                             ' name="ns1blankspaceLinkApp" id="ns1blankspaceLinkApp" target="ns1blankspaceBankAccountLinkingContainer" style="display: none">' +
+	                             ' <input type="text" name="app" id="finappId" value="10003600" />' +
+	                             ' <input type="text" name="redirectReq" value="true" />' +
+	                             ' <input type="text" name="rsession" id="rsession" value="' + oParam.userSession + '" />' +
+	                             ' <input type="text" name="token" value="' + oParam.token + '" id="token" />' +
+	                             ' <input type="text" name="extraParams" id="extraParams" value=""/>' +
+	                         '</form>');
 
-             if (bUseFrame)
-             {
-                 aHTML.push('<div style="width:100%">' +
-                             '<iframe name="ns1blankspaceBankAccountLinkingContainer" ' +
-                             'id="ns1blankspaceBankAccountLinkingContainer" frameborder="0" border="0" scrolling="auto"' +
-                             ' style="min-height:800px; width:90%;"></iframe></div>');
-             }
+	             if (bUseFrame)
+	             {
+	                 aHTML.push('<div style="width:100%">' +
+	                             '<iframe name="ns1blankspaceBankAccountLinkingContainer" ' +
+	                             'id="ns1blankspaceBankAccountLinkingContainer" frameborder="0" border="0" scrolling="auto"' +
+	                             ' style="min-height:800px; width:90%;"></iframe></div>');
+	             }
 
-             $('#' + sXHMTLElementID).html(aHTML.join(''));
-         
-             document.getElementById('ns1blankspaceLinkApp').submit();
+	             $('#' + sXHMTLElementID).html(aHTML.join(''));
+	         
+	             document.getElementById('ns1blankspaceLinkApp').submit();
 
-            ns1blankspace.status.clear();
-         }
-      }    
-   },   
+	            ns1blankspace.status.clear();
+	         }
+	      }    
+   	},   
 
    test:   function ()
    {
