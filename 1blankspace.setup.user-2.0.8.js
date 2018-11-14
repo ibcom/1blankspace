@@ -873,8 +873,11 @@ ns1blankspace.setup.user =
 									{
 										oParam = {userType: 1}
 									}
+
+									var sXHTMLElementID = 'ns1blankspaceUserAccessRolesAdd';
+									if (iUserType == 2) {sXHTMLElementID = 'ns1blankspaceSetupUserExternalEditRole'}
 										
-									if ($(ns1blankspace.xhtml.container).attr('data-initiator') == 'ns1blankspaceSetupUserExternalEditRole')
+									if ($(ns1blankspace.xhtml.container).attr('data-initiator') == sXHTMLElementID)
 									{
 										$(ns1blankspace.xhtml.container).slideUp(500);
 										$(ns1blankspace.xhtml.container).attr('data-initiator', '');
@@ -895,14 +898,16 @@ ns1blankspace.setup.user =
 										}
 										else
 										{
-											ns1blankspace.container.position({xhtmlElementID: 'ns1blankspaceSetupUserExternalEditRole', leftOffset: -252, topOffset: -42});
+											ns1blankspace.container.position({xhtmlElementID: sXHTMLElementID, leftOffset: -252, topOffset: -42});
 	
 											var aHTML = [];
 											
 											if (oResponse.data.rows.length == 0)
 											{
-												aHTML.push('<table><tr><td class="ns1blankspaceNothing">' +
-																'No roles.</td></tr></table>');
+												aHTML.push('<table class="ns1blankspaceSearchMedium" style="font-size:0.875em;"><tr><td class="ns1blankspaceNothing">' +
+																'No roles.</td></tr>' +
+																'<tr><td class="ns1blankspaceNothing">' +
+																'To add a user role select User Roles from the main menu.</td></tr></table>');
 
 												$(ns1blankspace.xhtml.container).html(aHTML.join(''));
 												$(ns1blankspace.xhtml.container).show(ns1blankspace.option.showSpeedOptions);

@@ -149,7 +149,7 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.format',
-		source: '/jscripts/1blankspace.format-2.1.8.js'
+		source: '/site/312/1blankspace.format-2.1.8.js'
 	},
 	{
 		nameSpace: '1blankspace.contactPerson',
@@ -205,7 +205,7 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.financial',
-		source: '/jscripts/1blankspace.financial-2.3.6.js'
+		source: '/site/312/1blankspace.financial-2.3.6.js'
 	},
 	{
 		nameSpace: '1blankspace.financial.bankAccount',
@@ -257,7 +257,7 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.setup',
-		source: '/jscripts/1blankspace.setup-2.0.1.js'
+		source: '/site/312/1blankspace.setup-2.0.1.js'
 	},
 	{
 		nameSpace: '1blankspace.setup.automation',
@@ -341,7 +341,7 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.connect',
-		source: '/jscripts/1blankspace.connect-2.0.2.js'
+		source: '/site/312/1blankspace.connect-2.0.3.js'
 	},
 	{
 		nameSpace: '1blankspace.util.whenDone',
@@ -1262,12 +1262,12 @@ ns1blankspace.control =
 
 	setView:	
 	{
-		"default": 		function ()
+		"default": function ()
 		{
 			ns1blankspace.home.show();
 		},
 
-		setup:			function ()
+		setup: function ()
 		{
 			if (ns1blankspace.util.toFunction('ns1blankspace.setup.website.init') !== undefined)
 			{	

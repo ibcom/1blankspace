@@ -1270,7 +1270,8 @@ ns1blankspace.setup.messaging =
 										{
 											ns1blankspace.setup.messaging.template.save(oParam);
 										})
-										.css('width', (bVariants?'48px':'54px'))
+										.css('width', '38px')
+										.css('padding-left', '4px')
 										.css('height', '28px')
 										.next()
 											.button(
@@ -1314,7 +1315,9 @@ ns1blankspace.setup.messaging =
 											.css('height', '28px')
 											.css('margin-left', '2px')
 											.parent()
-												.buttonset();	
+												.buttonset();
+
+										$('#ns1blankspaceTemplate_variants_save_' + sTemplate).find('span').css('padding-left', '4px')		
 
 										$('#ns1blankspaceTemplate_variants_' + sTemplate + ' .ns1blankspaceRowSelect').click(function ()
 										{

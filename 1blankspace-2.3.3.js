@@ -823,6 +823,9 @@ ns1blankspace.app =
 										success: function(data) 
 										{
 											ns1blankspace.session.sid = data.sid;
+											ns1blankspace.session.instance = data.instance;
+											ns1blankspace.session.preGenerallyAvailableInstance = (ns1blankspace.session.instance.toUpperCase().indexOf('DBG') != -1 || ns1blankspace.session.instance.toUpperCase().indexOf('LAB') != -1)
+
 											ns1blankspace.app.show(oParam)
 										}
 									});
@@ -2280,7 +2283,9 @@ ns1blankspace.logon =
 					{
 						ns1blankspace.logonKey = oResponse.logonkey;
 						ns1blankspace.session.logonkey;
-						ns1blankspace.util.local.cache.save({key: '_lk', data: ns1blankspace.logonKey, persist: true})
+						ns1blankspace.util.local.cache.save({key: '_lk', data: ns1blankspace.logonKey, persist: true});
+
+						ns1blankspace.session.preGenerallyAvailableInstance = (ns1blankspace.session.instance.toUpperCase().indexOf('DBG') != -1 || ns1blankspace.session.instance.toUpperCase().indexOf('LAB') != -1)
 
 						$('#ns1blankspaceLogonStatus').html('Logon successful, starting app...');
 						

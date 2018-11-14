@@ -929,7 +929,7 @@ ns1blankspace.financial.bankAccount =
 													'<div style="float:left;" class="ns1blankspaceCaption">Account&nbsp;</div>' +
 													'<div style="float:right; margin-top:11px;">' +
 														'<span style="font-weight:normal; font-size:0.625em; text-align:right; margin-right:4px;">All</span>' +
-														'<input type="checkbox" id="ns1blankspaceItemShowAll" style="margin:0px; padding:0px; border: 0px; margin-top:2px;">' +
+														'<input type="checkbox" id="ns1blankspaceItemShowAll" data-1blankspace="ignore" style="margin:0px; padding:0px; border: 0px; margin-top:2px;">' +
 													'</div>'	+
 													'</td></tr>' +
 													'<tr class="ns1blankspace">' +
@@ -2202,7 +2202,7 @@ ns1blankspace.financial.bankAccount =
 																			'Apply mappings</span></td></tr>');
 
 																aHTML.push('<tr><td style="padding-top:8px;">' +		
-																				'<input type="checkbox" id="ns1blankspaceBankAccountImportMappingsReApply_reset" style="margin:0px; padding:0px; border: 0px; margin-top:1px;">' +
+																				'<input type="checkbox" id="ns1blankspaceBankAccountImportMappingsReApply_reset" data-1blankspace="ignore" style="margin:0px; padding:0px; border: 0px; margin-top:1px;">' +
 																				'<span style="font-weight:100; font-size:0.625em; margin-left:2px;" class="ns1blankspaceSub">Reset transactions</span>' +
 																				'</td></tr>');
 

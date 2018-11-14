@@ -969,14 +969,14 @@ ns1blankspace.financial.debtors =
 						aHTML.push('<table class="ns1blankspaceColumn2">');
 							
 						aHTML.push('<tr><td><div id="ns1blankspaceDebtorsType">');											
-						aHTML.push('<input style="width: 100%;" type="radio" id="ns1blankspaceDebtorsType-1" name="radioType" checked="checked" /><label for="ns1blankspaceDebtorsType-1" style="margin-bottom:2px; font-size:0.875em; width:115px;">' +
+						aHTML.push('<input style="width: 100%;" type="radio" id="ns1blankspaceDebtorsType-1" data-1blankspace="ignore" name="radioType" checked="checked" /><label for="ns1blankspaceDebtorsType-1" style="margin-bottom:2px; font-size:0.875em; width:115px;">' +
 										'Last Receipt</label>');
-						aHTML.push('<input style="width: 100%;" type="radio" id="ns1blankspaceDebtorsType-4" name="radioType" /><label for="ns1blankspaceDebtorsType-4" style="font-size:0.875em; width:115px;">' +
+						aHTML.push('<input style="width: 100%;" type="radio" id="ns1blankspaceDebtorsType-4" data-1blankspace="ignore" name="radioType" /><label for="ns1blankspaceDebtorsType-4" style="font-size:0.875em; width:115px;">' +
 										'30, 60, 90</label>');
 						aHTML.push('</div></td></tr>');
 
 						aHTML.push('<tr><td class="ns1blankspaceDate" style="padding-bottom:4px;">' +
-										'<input id="ns1blankspaceDebtorsEndDate" class="ns1blankspaceDate ns1blankspaceWatermark" style="padding-left:3px; width:113px; font-size:0.725em;" value="As at">' +
+										'<input id="ns1blankspaceDebtorsEndDate" data-1blankspace="ignore" class="ns1blankspaceDate ns1blankspaceWatermark" style="padding-left:3px; width:113px; font-size:0.725em;" value="As at">' +
 										'</td></tr>');
 
 						aHTML.push('<tr><td style="padding-top:2px; padding-bottom:0px; font-size:0.75em;" class="ns1blankspaceSub">' +
@@ -1247,7 +1247,7 @@ ns1blankspace.financial.debtors =
 
 					aHTML.push('<tr class="ns1blankspaceRow" id="ns1blankspaceDebtors_container-' + sKey + '">' +
 													'<td class="ns1blankspaceRow ns1blankspaceSub" id="ns1blankspaceDebtors_selectContainer-' + sKey + '">' +
-													'<input type="checkbox" checked="checked" id="ns1blankspaceUnsent_select-' + sKey + '" /></td>');
+													'<input type="checkbox" data-1blankspace="ignore" checked="checked" id="ns1blankspaceUnsent_select-' + sKey + '" /></td>');
 
 					aHTML.push('<td id="ns1blankspaceDebtors_contact-' + sKey + '" class="ns1blankspaceRow ns1blankspaceRowSelect">' +
 									oRow.debtorname + '</td>' +
@@ -1802,7 +1802,7 @@ ns1blankspace.financial.creditors =
 						aHTML.push('<table class="ns1blankspaceColumn2">');
 							
 						aHTML.push('<tr><td class="ns1blankspaceDate" style="padding-bottom:8px;">' +
-										'<input id="ns1blankspaceCreditorsEndDate" class="ns1blankspaceDate ns1blankspaceWatermark" style="padding-left:3px; width:113px; font-size:0.725em;" value="As at">' +
+										'<input id="ns1blankspaceCreditorsEndDate" data-1blankspace="ignore" class="ns1blankspaceDate ns1blankspaceWatermark" style="padding-left:3px; width:113px; font-size:0.725em;" value="As at">' +
 										'</td></tr>');
 								
 						aHTML.push('<tr><td style="padding-top:2px;"><span class="ns1blankspaceAction" id="ns1blankspaceCreditorsCreatePDF"  style="width:95px;">' +
@@ -2227,7 +2227,7 @@ ns1blankspace.financial.profitLoss =
 						
 						aHTML.push('<tr>' +
 										'<tr><td class="ns1blankspaceDate">' +
-										'<input id="ns1blankspacePLStartDate" class="ns1blankspaceDate">' +
+										'<input id="ns1blankspacePLStartDate" data-1blankspace="ignore" class="ns1blankspaceDate">' +
 										'</td></tr>');
 							
 						aHTML.push('<tr>' +
@@ -2235,7 +2235,7 @@ ns1blankspace.financial.profitLoss =
 										'To' +
 										'</td></tr>' +
 										'<tr><td class="ns1blankspaceDate">' +
-										'<input id="ns1blankspacePLEndDate" class="ns1blankspaceDate">' +
+										'<input id="ns1blankspacePLEndDate" data-1blankspace="ignore" class="ns1blankspaceDate">' +
 										'</td></tr>');
 														
 						aHTML.push('<tr><td style="padding-top:5px;">' +
@@ -2629,7 +2629,7 @@ ns1blankspace.financial.profitLoss =
 											aHTML.push('<tr><td id="ns1blankspaceFinancialPLProjectSearchResults-all" class="ns1blankspaceRowSelect" style="padding-left:5px;padding-right:10px;">Show profit & loss for all projects</td></tr>' +
 												'<tr><td class="ns1blankspaceSubNote" style="padding-left:5px;padding-right:10px;">Or search for a project ...</td></tr>' +
 												'<tr><td class="ns1blankspaceNothing" style="padding-left:5px;padding-right:10px;">' +
-												'<input id="ns1blankspaceFinancialPLProjectSearch" class="ns1blankspaceMainText" style="font-size:1.1em; width:100%; height:23px;"></td></tr>');
+												'<input id="ns1blankspaceFinancialPLProjectSearch" data-1blankspace="ignore" class="ns1blankspaceMainText" style="font-size:1.1em; width:100%; height:23px;"></td></tr>');
 
 											aHTML.push('<tr><td id="ns1blankspaceFinancialPLProjectSearchResults"></td></tr>');
 										}	
@@ -2820,7 +2820,7 @@ ns1blankspace.financial.balanceSheet =
 						
 						aHTML.push('<tr>' +
 										'<tr><td class="ns1blankspaceDate">' +
-										'<input id="ns1blankspaceBSStartDate" class="ns1blankspaceDate">' +
+										'<input id="ns1blankspaceBSStartDate" data-1blankspace="ignore" class="ns1blankspaceDate">' +
 										'</td></tr>');
 							
 						aHTML.push('<tr>' +
@@ -2828,7 +2828,7 @@ ns1blankspace.financial.balanceSheet =
 										'To' +
 										'</td></tr>' +
 										'<tr><td class="ns1blankspaceDate">' +
-										'<input id="ns1blankspaceBSEndDate" class="ns1blankspaceDate">' +
+										'<input id="ns1blankspaceBSEndDate" data-1blankspace="ignore" class="ns1blankspaceDate">' +
 										'</td></tr>');
 														
 						aHTML.push('<tr><td style="padding-top:5px;">' +
@@ -3247,12 +3247,12 @@ ns1blankspace.financial.accounts =
 						var aHTML = [];
 
 						aHTML.push('<div id="ns1blankspaceAccountColumnCategory" style="width:100px; margin-top:3px; text-align:right;">');
-						aHTML.push('<input type="radio" id="ns1blankspaceAccountColumnCategory-0" name="radioCategory" /><label for="ns1blankspaceAccountColumnCategory-0" style="width: 100px; margin-bottom:1px;">All</label>');
-						aHTML.push('<input type="radio" id="ns1blankspaceAccountColumnCategory-2" name="radioCategory" /><label for="ns1blankspaceAccountColumnCategory-2" style="width: 100px; margin-bottom:1px;">Revenue<br><span style="font-weight:200">(Incoming)</span></label>');
-						aHTML.push('<input type="radio" id="ns1blankspaceAccountColumnCategory-1" name="radioCategory" /><label for="ns1blankspaceAccountColumnCategory-1" style="width: 100px; margin-bottom:1px;">Expenses<br><span style="font-weight:200">(Outgoing)</span></label>');
-						aHTML.push('<input type="radio" id="ns1blankspaceAccountColumnCategory-3" name="radioCategory" /><label for="ns1blankspaceAccountColumnCategory-3" style="width: 100px; margin-bottom:1px;">Assets</label>');
-						aHTML.push('<input type="radio" id="ns1blankspaceAccountColumnCategory-4" name="radioCategory" /><label for="ns1blankspaceAccountColumnCategory-4" style="width: 100px; margin-bottom:1px;">Liability</label>');
-						aHTML.push('<input type="radio" id="ns1blankspaceAccountColumnCategory-5" name="radioCategory" /><label for="ns1blankspaceAccountColumnCategory-5" style="width: 100px; margin-bottom:1px;">Equity</label>');
+						aHTML.push('<input type="radio" id="ns1blankspaceAccountColumnCategory-0" name="radioCategory" data-1blankspace="ignore" /><label for="ns1blankspaceAccountColumnCategory-0" style="width: 100px; margin-bottom:1px;">All</label>');
+						aHTML.push('<input type="radio" id="ns1blankspaceAccountColumnCategory-2" name="radioCategory" data-1blankspace="ignore" /><label for="ns1blankspaceAccountColumnCategory-2" style="width: 100px; margin-bottom:1px;">Revenue<br><span style="font-weight:200">(Incoming)</span></label>');
+						aHTML.push('<input type="radio" id="ns1blankspaceAccountColumnCategory-1" name="radioCategory" data-1blankspace="ignore" /><label for="ns1blankspaceAccountColumnCategory-1" style="width: 100px; margin-bottom:1px;">Expenses<br><span style="font-weight:200">(Outgoing)</span></label>');
+						aHTML.push('<input type="radio" id="ns1blankspaceAccountColumnCategory-3" name="radioCategory" data-1blankspace="ignore" /><label for="ns1blankspaceAccountColumnCategory-3" style="width: 100px; margin-bottom:1px;">Assets</label>');
+						aHTML.push('<input type="radio" id="ns1blankspaceAccountColumnCategory-4" name="radioCategory" data-1blankspace="ignore" /><label for="ns1blankspaceAccountColumnCategory-4" style="width: 100px; margin-bottom:1px;">Liability</label>');
+						aHTML.push('<input type="radio" id="ns1blankspaceAccountColumnCategory-5" name="radioCategory" data-1blankspace="ignore" /><label for="ns1blankspaceAccountColumnCategory-5" style="width: 100px; margin-bottom:1px;">Equity</label>');
 						aHTML.push('</div>');
 						
 						aHTML.push('<table style="margin-top:12px;">');
@@ -3263,7 +3263,7 @@ ns1blankspace.financial.accounts =
 										'</td></tr>' +
 										'<tr>' +
 										'<tr><td class="ns1blankspaceDate">' +
-										'<input id="ns1blankspaceAccountStartDate" class="ns1blankspaceDate">' +
+										'<input id="ns1blankspaceAccountStartDate" data-1blankspace="ignore" class="ns1blankspaceDate">' +
 										'</td></tr>');
 							
 						aHTML.push('<tr>' +
@@ -3271,7 +3271,7 @@ ns1blankspace.financial.accounts =
 										'To' +
 										'</td></tr>' +
 										'<tr><td class="ns1blankspaceDate">' +
-										'<input id="ns1blankspaceAccountEndDate" class="ns1blankspaceDate">' +
+										'<input id="ns1blankspaceAccountEndDate" data-1blankspace="ignore" class="ns1blankspaceDate">' +
 										'</td></tr>');
 
 						aHTML.push('<tr><td style="padding-top:5px;">' +
@@ -3594,10 +3594,10 @@ ns1blankspace.financial.unallocated =
 						var aHTML = [];
 
 						aHTML.push('<div id="ns1blankspaceUnallocatedColumnType" style="width:85px; margin-top:3px; text-align:right;">');
-						if (bShowAccrued) {aHTML.push('<input type="radio" id="ns1blankspaceUnallocatedColumnType-3" name="radioType" /><label for="ns1blankspaceUnallocatedColumnType-3" style="width: 85px; margin-bottom:2px;">Expenses</label>');}
-						aHTML.push('<input type="radio" id="ns1blankspaceUnallocatedColumnType-4" name="radioType" /><label for="ns1blankspaceUnallocatedColumnType-4" style="width: 85px; margin-bottom:2px;">Payments</label>');
-						if (bShowAccrued) {aHTML.push('<input type="radio" id="ns1blankspaceUnallocatedColumnType-1" name="radioType" /><label for="ns1blankspaceUnallocatedColumnType-1" style="width: 85px; margin-bottom:2px;">Invoices</label>');}
-						aHTML.push('<input type="radio" id="ns1blankspaceUnallocatedColumnType-2" name="radioType" /><label for="ns1blankspaceUnallocatedColumnType-2" style="width: 85px; margin-bottom:2px;">Receipts</label>');
+						if (bShowAccrued) {aHTML.push('<input type="radio" id="ns1blankspaceUnallocatedColumnType-3" name="radioType" data-1blankspace="ignore" /><label for="ns1blankspaceUnallocatedColumnType-3" style="width: 85px; margin-bottom:2px;">Expenses</label>');}
+						aHTML.push('<input type="radio" id="ns1blankspaceUnallocatedColumnType-4" name="radioType" data-1blankspace="ignore" /><label for="ns1blankspaceUnallocatedColumnType-4" style="width: 85px; margin-bottom:2px;">Payments</label>');
+						if (bShowAccrued) {aHTML.push('<input type="radio" id="ns1blankspaceUnallocatedColumnType-1" name="radioType" data-1blankspace="ignore" /><label for="ns1blankspaceUnallocatedColumnType-1" style="width: 85px; margin-bottom:2px;">Invoices</label>');}
+						aHTML.push('<input type="radio" id="ns1blankspaceUnallocatedColumnType-2" name="radioType" data-1blankspace="ignore" /><label for="ns1blankspaceUnallocatedColumnType-2" style="width: 85px; margin-bottom:2px;">Receipts</label>');
 						aHTML.push('</div>');
 
 						$('#ns1blankspaceUnallocatedColumn1').html(aHTML.join(''));
@@ -3931,11 +3931,11 @@ ns1blankspace.financial.unallocated =
 
 							if (sSearchText != '')
 							{
-								$vq.add('<tr><td><input id="ns1blankspaceFinancialAllocateItem" class="ns1blankspaceText" value="' + sSearchText + '" style="width:97%;"></input></td></tr>', {queue: 'allocate'});
+								$vq.add('<tr><td><input id="ns1blankspaceFinancialAllocateItem" data-1blankspace="ignore" class="ns1blankspaceText" value="' + sSearchText + '" style="width:97%;"></input></td></tr>', {queue: 'allocate'});
 							}
 							else if (oResponse.morerows=='true')
 							{
-								$vq.add('<tr><td><input id="ns1blankspaceFinancialAllocateItem" class="ns1blankspaceWatermark ns1blankspaceText" value="search" style="width:97%;"></input></td></tr>', {queue: 'allocate'});
+								$vq.add('<tr><td><input id="ns1blankspaceFinancialAllocateItem" data-1blankspace="ignore" class="ns1blankspaceWatermark ns1blankspaceText" value="search" style="width:97%;"></input></td></tr>', {queue: 'allocate'});
 								$vq.add('<tr><td class="ns1blankspaceSubNote">If not listed below, then you can search for it.</td></tr>', {queue: 'allocate'});
 							}	
 
@@ -4176,9 +4176,9 @@ ns1blankspace.financial.invoicing =
 						var aHTML = [];
 
 						aHTML.push('<div id="ns1blankspaceInvoicingOption" style="width:85px; margin-top:3px; text-align:right;">');
-						aHTML.push('<input type="radio" id="ns1blankspaceInvoicingOption-2" name="radioType" /><label for="ns1blankspaceInvoicingOption-2" style="width: 85px; margin-bottom:1px;">' +
+						aHTML.push('<input type="radio" id="ns1blankspaceInvoicingOption-2" name="radioType" data-1blankspace="ignore" /><label for="ns1blankspaceInvoicingOption-2" style="width: 85px; margin-bottom:1px;">' +
 											'Create</label>');
-						aHTML.push('<input type="radio" id="ns1blankspaceInvoicingOption-1" name="radioType" /><label for="ns1blankspaceInvoicingOption-1" style="width: 85px; margin-bottom:1px;">' +
+						aHTML.push('<input type="radio" id="ns1blankspaceInvoicingOption-1" name="radioType" data-1blankspace="ignore" /><label for="ns1blankspaceInvoicingOption-1" style="width: 85px; margin-bottom:1px;">' +
 											'Send</label>');
 						aHTML.push('</div>');
 
@@ -4365,7 +4365,7 @@ ns1blankspace.financial.invoicing =
 
 									aHTML.push('<tr class="ns1blankspaceRow" id="ns1blankspaceUnsent_container-' + oRow["id"] + '">' +
 													'<td class="ns1blankspaceRow ns1blankspaceSub" id="ns1blankspaceUnsent_selectContainer-' + oRow["id"] + '">' +
-													'<input type="checkbox" checked="checked" id="ns1blankspaceUnsent_select-' + oRow["id"] + '"' + 
+													'<input type="checkbox" checked="checked" data-1blankspace="ignore" id="ns1blankspaceUnsent_select-' + oRow["id"] + '"' + 
 													' title="' + oRow["reference"] + '" /></td>');
 
 									aHTML.push('<td id="ns1blankspaceUnsent_contact-' + oRow["id"] + '" class="ns1blankspaceRow">' +
@@ -4854,7 +4854,7 @@ ns1blankspace.financial.invoicing =
 									
 									aHTML.push('<tr class="ns1blankspaceRow">' +
 													'<td class="ns1blankspaceRow ns1blankspaceSub" id="ns1blankspaceCreate_selectContainer-' + oRow["id"] + '">' +
-													'<input type="checkbox" checked="checked" id="ns1blankspaceCreate_select-' + oRow["id"] + '"'+ 
+													'<input type="checkbox" checked="checked" data-1blankspace="ignore" id="ns1blankspaceCreate_select-' + oRow["id"] + '"'+ 
 													' title="' + oRow["reference"] + '" /></td>');
 
 									var sFrequency = 'Monthly';
@@ -6733,7 +6733,7 @@ ns1blankspace.financial.taxSummary =
 						
 						aHTML.push('<tr>' +
 										'<tr><td class="ns1blankspaceDate">' +
-										'<input id="ns1blankspaceTaxStartDate" class="ns1blankspaceDate">' +
+										'<input id="ns1blankspaceTaxStartDate" data-1blankspace="ignore" class="ns1blankspaceDate">' +
 										'</td></tr>');
 							
 						aHTML.push('<tr>' +
@@ -6741,7 +6741,7 @@ ns1blankspace.financial.taxSummary =
 										'To' +
 										'</td></tr>' +
 										'<tr><td class="ns1blankspaceDate">' +
-										'<input id="ns1blankspaceTaxEndDate" class="ns1blankspaceDate">' +
+										'<input id="ns1blankspaceTaxEndDate" data-1blankspace="ignore" class="ns1blankspaceDate">' +
 										'</td></tr>');
 														
 						aHTML.push('<tr><td style="padding-top:5px;">' +

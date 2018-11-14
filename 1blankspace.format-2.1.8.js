@@ -1762,7 +1762,8 @@ ns1blankspace.format.templates.edit =
 						{
 							ns1blankspace.format.templates.edit.save(oParam);
 						})
-						.css('width', (bVariants?'48px':'54px'))
+						.css('width', (bVariants?'38px':'54px'))
+						.css('padding-left', (bVariants?'4px':'12px'))
 						.css('height', '28px')
 						.next()
 							.button(
@@ -1807,6 +1808,8 @@ ns1blankspace.format.templates.edit =
 							.css('margin-left', '2px')
 							.parent()
 								.buttonset();	
+
+						$('#ns1blankspaceTemplate_variants_save_' + sTemplate).find('span').css('padding-left', '4px');		
 
 						$('#ns1blankspaceTemplate_variants_' + sTemplate + ' .ns1blankspaceRowSelect').click(function ()
 						{

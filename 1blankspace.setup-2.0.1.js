@@ -17,6 +17,8 @@ $.extend(true, ns1blankspace.setup,
 						if (oParam.viewName != undefined) {ns1blankspace.setup.name = oParam.viewName}	
 						if (oParam.search != undefined) {ns1blankspace.setup.searchParam = oParam.search}
 						if (oParam.save != undefined) {ns1blankspace.setup.saveParam = oParam.save}
+
+						ns1blankspace.setup.searchParam = oParam.search
 					}
 					else
 					{

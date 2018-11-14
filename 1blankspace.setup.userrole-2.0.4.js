@@ -726,7 +726,16 @@ ns1blankspace.setup.userRole =
 
 														var oSearch = new AdvancedSearch();
 														oSearch.method = 'SETUP_ROLE_METHOD_ACCESS_SEARCH';
-														oSearch.addField('access,accesstext,accessmethod,accessmethodtext,canadd,canremove,canupdate,canuse,guidmandatory');
+
+														if (ns1blankspace.session.preGenerallyAvailableInstance)
+														{
+															oSearch.addField('access,accesstext,accessmethod,accessmethodtext,canadd,canremove,canupdate,canuse,guidmandatory');
+														}
+														else
+														{
+															oSearch.addField('access,accesstext,accessmethod,accessmethodtext,canadd,canremove,canupdate,canuse');
+														}
+														
 														oSearch.addFilter('role', 'EQUAL_TO', ns1blankspace.objectContext);
 														oSearch.rows = ns1blankspace.option.defaultRows;
 														oSearch.sort('accessmethodtext', 'asc');
@@ -750,7 +759,7 @@ ns1blankspace.setup.userRole =
 															
 															aHTML.push('<tr class="ns1blankspaceCaption">');
 															aHTML.push('<td class="ns1blankspaceHeaderCaption">Title</td>');
-															aHTML.push('<td class="ns1blankspaceHeaderCaption" style="text-align:center;">Search</td>');
+															aHTML.push('<td class="ns1blankspaceHeaderCaption" style="text-align:center;">Access/Search</td>');
 															aHTML.push('<td class="ns1blankspaceHeaderCaption" style="text-align:center;">(GUID)</td>');
 															aHTML.push('<td class="ns1blankspaceHeaderCaption" style="text-align:center;">Add</td>');
 															aHTML.push('<td class="ns1blankspaceHeaderCaption" style="text-align:center;">Update</td>');
@@ -994,7 +1003,15 @@ ns1blankspace.setup.userRole =
 
 														var oSearch = new AdvancedSearch();
 														oSearch.method = 'SETUP_ROLE_METHOD_ACCESS_SEARCH';
-														oSearch.addField('canadd,canremove,canupdate,canuse,guidmandatory');
+														if (ns1blankspace.session.preGenerallyAvailableInstance)
+														{
+															oSearch.addField('canadd,canremove,canupdate,canuse,guidmandatory');
+														}
+														else
+														{
+															oSearch.addField('canadd,canremove,canupdate,canuse');
+														}
+
 														oSearch.addFilter('role', 'EQUAL_TO', ns1blankspace.objectContext);
 														oSearch.addFilter('accessmethod', 'EQUAL_TO', aXHTMLElementID[1]);
 
@@ -1042,7 +1059,7 @@ ns1blankspace.setup.userRole =
 														{
 															bCan = true;			
 															aHTML.push('<tr><td class="ns1blankspaceCaption">' +
-																			'Search?' +
+																			'Access/Search?' +
 																			'</td></tr>' +
 																			'<tr class="ns1blankspace">' +
 																			'<td class="ns1blankspaceRadio">' +
@@ -1058,11 +1075,17 @@ ns1blankspace.setup.userRole =
 																			'<input type="radio" id="radioNeedGUIDY" name="radioNeedGUID" value="Y"/>Yes' +
 																			'<br /><input type="radio" id="radioNeedGUIDN" name="radioNeedGUID" value="N"/>No' +
 																			'</td></tr>');
+
+															aHTML.push('<tr><td class="ns1blankspaceSubNote">' +
+																			'Every object instance (ie an invoice) has a unique global ID (GUID). ' +
+																			'If you want to allow only access to object instances where the GUID is known then select Yes. ' +
+																			'eg you want to share an invoice with a user, but only if they know the GUID.' +
+																			'</td></tr>');
 														}
 
 														if (aXHTMLElementID[2] == 'Y')
 														{		
-															bCan = true;	
+															bCan = true;
 															aHTML.push('<tr><td class="ns1blankspaceCaption">' +
 																			'Add?' +
 																			'</td></tr>' +

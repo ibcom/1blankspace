@@ -817,7 +817,7 @@ ns1blankspace.connect =
 						
 						var aHTML = [];
 						
-						aHTML.push('<table class="ns1blankspace">');
+						aHTML.push('<form autocomplete="off"><table class="ns1blankspace">');
 
 						aHTML.push('<tr class="ns1blankspaceCaption">' +
 										'<td class="ns1blankspaceCaption">' +
@@ -825,7 +825,7 @@ ns1blankspace.connect =
 										'</td></tr>' +
 										'<tr class="ns1blankspace">' +
 										'<td class="ns1blankspaceText">' +
-										'<input id="ns1blankspaceLogonUsername" class="ns1blankspaceText">' +
+										'<input id="ns1blankspaceLogonUsername" class="ns1blankspaceText" autocomplete="nope">' +
 										'</td></tr>');
 
 						aHTML.push('<tr class="ns1blankspaceCaption">' +
@@ -834,11 +834,11 @@ ns1blankspace.connect =
 										'</td></tr>' +
 										'<tr class="ns1blankspace">' +
 										'<td class="ns1blankspaceText">' +
-										'<input type="password" id="ns1blankspaceLogonPassword" class="ns1blankspaceText">' +
+										'<input type="password" id="ns1blankspaceLogonPassword" class="ns1blankspaceText" autocomplete="new-password">' +
 										'</td></tr>');	
 
 					
-						aHTML.push('</table>');					
+						aHTML.push('</table></form>');					
 
 						$('#ns1blankspaceLogonColumn1').html(aHTML.join(''));
 

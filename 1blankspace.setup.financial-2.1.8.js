@@ -2140,7 +2140,7 @@ ns1blankspace.setup.financial =
 											ns1blankspace.setup.financial.template.save(oParam);
 										})
 										.css('width', (bVariants?'38px':'54px'))
-										.css('padding-left', (bVariants?'4px':'54px'))
+										.css('padding-left', (bVariants?'4px':'12px'))
 										.css('height', '28px')
 										.next()
 											.button(
