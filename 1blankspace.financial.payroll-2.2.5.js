@@ -3815,7 +3815,7 @@ ns1blankspace.financial.payroll =
 															oRow.description + '</td>');
 															
 									aHTML.push('<td id="ns1blankspaceFinancialPayrollJournal_amount-' + oRow.id + '" class="ns1blankspaceRow" style="text-align:right;">' +
-															oRow.totalamount + '</td>');						
+															numeral(oRow.totalamount).format('(0,0.00)') + '</td>');						
 																																													
 									aHTML.push('<td style="width:30px;text-align:right;" class="ns1blankspaceRow">' +
 													'<span id="ns1blankspaceFinancialPayrollJournal_view-' + oRow.id +

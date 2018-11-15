@@ -436,8 +436,8 @@ ns1blankspace.contactPerson =
 											xhtmlElementID: 'ns1blankspaceMainActions',
 											contactPerson: ns1blankspace.objectContext, 
 											contactPersonText: ns1blankspace.data.contactPersonText,
-											contactBusiness: ns1blankspace.data.contactBusiness, 
-											contactBusinessText: ns1blankspace.data.contactBusinessText,
+											_contactBusiness: ns1blankspace.data.contactBusiness, 
+											_contactBusinessText: ns1blankspace.data.contactBusinessText,
 											object: '',
 											objectContext: ''
 											});
