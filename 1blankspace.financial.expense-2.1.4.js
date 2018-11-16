@@ -1902,7 +1902,7 @@ ns1blankspace.financial.expense.outstanding =
 										});
 
 						aHTML.push('<tr><td class="ns1blankspaceText" style="padding-top:14px;">' +
-												'<input id="ns1blankspaceFinancialOutstandingSearchText" class="ns1blankspaceText" style="width:130px;">' +
+												'<input id="ns1blankspaceFinancialOutstandingSearchText" data-1blankspace="ignore" class="ns1blankspaceText" style="width:130px;">' +
 												'</td></tr>');
 																			
 						aHTML.push('<tr><td style="padding-top:0px;">' +

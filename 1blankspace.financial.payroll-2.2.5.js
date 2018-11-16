@@ -3900,7 +3900,7 @@ ns1blankspace.financial.payroll.totals =
 						
 						aHTML.push('<tr>' +
 										'<tr><td class="ns1blankspaceDate">' +
-										'<input id="ns1blankspacePayrollStartDate" class="ns1blankspaceDate">' +
+										'<input id="ns1blankspacePayrollStartDate" data-1blankspace="ignore" class="ns1blankspaceDate">' +
 										'</td></tr>');
 							
 						aHTML.push('<tr>' +
@@ -3908,7 +3908,7 @@ ns1blankspace.financial.payroll.totals =
 										'To' +
 										'</td></tr>' +
 										'<tr><td class="ns1blankspaceDate">' +
-										'<input id="ns1blankspacePayrollEndDate" class="ns1blankspaceDate">' +
+										'<input id="ns1blankspacePayrollEndDate" data-1blankspace="ignore" class="ns1blankspaceDate">' +
 										'</td></tr>');
 														
 						aHTML.push('<tr><td style="padding-top:5px;">' +
@@ -5957,7 +5957,7 @@ ns1blankspace.financial.payroll.superannuation =
 											'Description contains' +
 											'</td></tr>' +
 											'<tr><td class="ns1blankspaceText" style="padding-top:0px;">' +
-											'<input id="ns1blankspacePayrollSuperannuationExpenseSearchText" class="ns1blankspaceText" style="width:130px;">' +
+											'<input id="ns1blankspacePayrollSuperannuationExpenseSearchText" data-1blankspace="ignore" class="ns1blankspaceText" style="width:130px;">' +
 											'</td></tr>');
 
 						aHTML.push('<tr class="ns1blankspaceCaption">' +
@@ -5965,7 +5965,7 @@ ns1blankspace.financial.payroll.superannuation =
 											'Due date on or before' +
 											'</td></tr>' +
 											'<tr><td class="ns1blankspaceDate" style="padding-top:0px;">' +
-											'<input id="ns1blankspacePayrollSuperannuationExpenseSearchDate" class="ns1blankspaceDate" style="width:130px;">' +
+											'<input id="ns1blankspacePayrollSuperannuationExpenseSearchDate" data-1blankspace="ignore" class="ns1blankspaceDate" style="width:130px;">' +
 											'</td></tr>');
 																			
 						aHTML.push('<tr><td style="padding-top:0px;">' +
@@ -6355,7 +6355,7 @@ ns1blankspace.financial.payroll.insurance =
 						
 						aHTML.push('<tr>' +
 										'<tr><td class="ns1blankspaceDate">' +
-										'<input id="ns1blankspacePayrollInsuranceStartDate" class="ns1blankspaceDate">' +
+										'<input id="ns1blankspacePayrollInsuranceStartDate" data-1blankspace="ignore" class="ns1blankspaceDate">' +
 										'</td></tr>');
 							
 						aHTML.push('<tr>' +
@@ -6363,7 +6363,7 @@ ns1blankspace.financial.payroll.insurance =
 										'To' +
 										'</td></tr>' +
 										'<tr><td class="ns1blankspaceDate">' +
-										'<input id="ns1blankspacePayrollInsuranceEndDate" class="ns1blankspaceDate">' +
+										'<input id="ns1blankspacePayrollInsuranceEndDate" data-1blankspace="ignore" class="ns1blankspaceDate">' +
 										'</td></tr>');
 														
 						aHTML.push('<tr><td style="padding-top:5px;">' +
@@ -6535,7 +6535,7 @@ ns1blankspace.financial.payroll.dashboard =
 					
 					aHTML.push('<tr>' +
 									'<tr><td class="ns1blankspaceDate">' +
-									'<input id="ns1blankspacePayrollDashboardStartDate" class="ns1blankspaceDate">' +
+									'<input id="ns1blankspacePayrollDashboardStartDate" data-1blankspace="ignore" class="ns1blankspaceDate">' +
 									'</td></tr>');
 						
 					aHTML.push('<tr>' +
@@ -6543,7 +6543,7 @@ ns1blankspace.financial.payroll.dashboard =
 									'To' +
 									'</td></tr>' +
 									'<tr><td class="ns1blankspaceDate">' +
-									'<input id="ns1blankspacePayrollDashboardEndDate" class="ns1blankspaceDate">' +
+									'<input id="ns1blankspacePayrollDashboardEndDate" data-1blankspace="ignore" class="ns1blankspaceDate">' +
 									'</td></tr>');
 													
 					aHTML.push('<tr><td style="padding-top:5px;">' +

@@ -925,16 +925,6 @@ ns1blankspace.setup.networkGroup =
 									{
 										if (oResponse == undefined)
 										{
-											ns1blankspace.container.position(
-											{
-												xhtmlElementID: sXHTMLElementAddID,
-												topOffset: -19,
-												leftOffset: -252
-											});
-
-											$(ns1blankspace.xhtml.container).html(ns1blankspace.xhtml.loadingSmall);
-											$(ns1blankspace.xhtml.container).show(ns1blankspace.option.showSpeedOptions);
-
 											var oSearch = new AdvancedSearch();
 											oSearch.method = 'SETUP_NETWORK_GROUP_SEARCH';
 											oSearch.addField('title');
@@ -944,7 +934,15 @@ ns1blankspace.setup.networkGroup =
 										}
 										else
 										{
-											$(ns1blankspace.xhtml.container).attr('data-initiator', sXHTMLElementAddID)
+											ns1blankspace.container.position(
+											{
+												xhtmlElementID: sXHTMLElementAddID,
+												topOffset: -19,
+												leftOffset: -252
+											});
+
+											//$(ns1blankspace.xhtml.container).html(ns1blankspace.xhtml.loadingSmall);
+											//$(ns1blankspace.xhtml.container).show(ns1blankspace.option.showSpeedOptions);
 											
 											var aHTMLTR = [];
 												
