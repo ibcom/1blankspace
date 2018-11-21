@@ -12,7 +12,7 @@ ns1blankspace.admin.monitoring =
 
 	init: 	function (oParam)
 				{
-					var bShowHome = true
+					var bShowHome = true;
 					
 					if (oParam != undefined)
 					{
@@ -164,6 +164,63 @@ ns1blankspace.admin.monitoring =
 					aHTML.push('</table>');
 
 					$('#ns1blankspaceSummaryColumn1').html(aHTML.join(''));
+
+					var aHTML = [];
+
+					aHTML.push('<table class="ns1blankspaceColumn2">');
+
+					if (ns1blankspace.option.superUser)
+					{		
+						//aHTML.push('<tr><td><span id="ns1blankspaceSuperUserDebugKey" class="ns1blankspaceAction">' +
+						//					'</span></td></tr>');
+
+						aHTML.push('<tr><td><span id="ns1blankspaceSuperUserDebugToggle" class="ns1blankspaceAction">' +
+											'</span></td></tr>');
+
+						aHTML.push('<tr><td id="ns1blankspaceSuperUserDebugKeyContainer" style="padding-top:6px;" class="ns1blankspaceSubNote"></td></tr>');
+
+						//aHTML.push('<tr><td id="ns1blankspaceSuperUserDebugKeyContainer" class="ns1blankspaceSub"></td></tr>');
+					}
+
+					aHTML.push('</table>')
+
+					$('#ns1blankspaceSummaryColumn2').html(aHTML.join(''));
+
+					$('#ns1blankspaceSuperUserDebugKey').button(
+					{
+						text: true,
+						label: 'Get Debug Key',
+					})
+					.click(function()
+					{
+						ns1blankspace.admin.monitoring.debug.key(
+						{
+							xhtmlElementID: 'ns1blankspaceSuperUserDebugKeyContainer'
+						});
+					})
+					.css('width', '100px');
+
+					$('#ns1blankspaceSuperUserDebugToggle').button(
+					{
+						text: true,
+						label: 'Enable Debug',
+					})
+					.click(function()
+					{
+						if (ns1blankspace.admin.monitoring.debug.data.enabled)
+						{
+							ns1blankspace.admin.monitoring.debug.toggle();
+						}
+						else
+						{
+							ns1blankspace.admin.monitoring.debug.key(
+							{
+								xhtmlElementID: 'ns1blankspaceSuperUserDebugKeyContainer',
+								onComplete: ns1blankspace.admin.monitoring.debug.toggle
+							});
+						}	
+					})
+					.css('width', '100px');
 
 					ns1blankspace.admin.monitoring.serviceFaults.count();
 					//ns1blankspace.admin.monitoring.requests.count();
@@ -1118,6 +1175,11 @@ ns1blankspace.admin.monitoring.debug =
 		enabled: false
 	},
 
+	show: function()
+	{
+
+	},
+
 	toggle: function (oParam, oResponse)
 	{
 		var sKey = ns1blankspace.util.getParam(oParam, 'key').value;
@@ -1126,6 +1188,10 @@ ns1blankspace.admin.monitoring.debug =
 		if (sKey != undefined)
 		{
 			oData.debugkey = sKey
+		}
+		else
+		{
+			oData.debugkey = ns1blankspace.admin.monitoring.debug.data.key
 		}
 
 		if (oResponse == undefined)
@@ -1148,8 +1214,14 @@ ns1blankspace.admin.monitoring.debug =
 		{
 			if (oResponse.status == 'OK')
 			{
-				ns1blankspace.status.message('Debug ' + (oResponse.debugenabled=='Y'?'Enabled':'Disabled'));
-				ns1blankspace.admin.monitoring.debug.data.enabled = (oResponse.debugenabled=='Y')
+				ns1blankspace.status.message('Debug ' + (oResponse.debugenabled == 'Y'?'Enabled':'Disabled'));
+				ns1blankspace.admin.monitoring.debug.data.enabled = (oResponse.debugenabled == 'Y');
+
+				$('#ns1blankspaceSuperUserDebugToggle').button(
+				{
+					text: true,
+					label: (oResponse.debugenabled == 'Y'?'Disable':'Enable') + ' Debug',
+				});
 			}
 			else
 			{
@@ -1162,13 +1234,6 @@ ns1blankspace.admin.monitoring.debug =
 	{
 		var sXHTMLElementID = ns1blankspace.util.getParam(oParam, 'xhtmlElementID').value;
 
-		var oData = {}
-
-		if (sKey != undefined)
-		{
-			oData.debugkey = sKey
-		}
-
 		if (oResponse == undefined)
 		{
 			ns1blankspace.status.working();
@@ -1178,7 +1243,6 @@ ns1blankspace.admin.monitoring.debug =
 				type: 'POST',
 				url: ns1blankspace.util.endpointURI('CORE_DEBUG_GET_KEY'),
 				dataType: 'json',
-				data: oData,
 				success: function(data)
 				{
 					ns1blankspace.admin.monitoring.debug.key(oParam, data);
@@ -1197,6 +1261,13 @@ ns1blankspace.admin.monitoring.debug =
 				}
 
 				ns1blankspace.admin.monitoring.debug.data.key = oResponse.debugkey;
+
+				if (sXHTMLElementID != undefined)
+				{
+					$('#' + sXHTMLElementID).html(ns1blankspace.admin.monitoring.debug.data.key)
+				}
+
+				ns1blankspace.util.onComplete(oParam);
 			}
 			else
 			{
