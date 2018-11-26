@@ -1645,10 +1645,10 @@ ns1blankspace.structureData =
 									.css('height', '17px');
 								},
 
-					edit: 		function (oParam)
+					edit: 	function (oParam)
 								{
 									var sXHTMLElementID = ns1blankspace.util.getParam(oParam, 'xhtmlElementID').value;
-									var sID = ns1blankspace.util.getParam(oParam, 'xhtmlElementID', {index: 1}).value;
+									var sID = ns1blankspace.util.getParam(oParam, 'xhtmlElementID', {index: 1, "default": ''}).value;
 
 									$vq.init('<table class="ns1blankspaceColumn2">');
 											

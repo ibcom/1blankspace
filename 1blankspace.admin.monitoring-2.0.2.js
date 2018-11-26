@@ -171,13 +171,13 @@ ns1blankspace.admin.monitoring =
 
 					if (ns1blankspace.option.superUser)
 					{		
-						//aHTML.push('<tr><td><span id="ns1blankspaceSuperUserDebugKey" class="ns1blankspaceAction">' +
-						//					'</span></td></tr>');
+						aHTML.push('<tr><td><span id="ns1blankspaceSuperUserDebugKey" class="ns1blankspaceAction">' +
+											'</span></td></tr>');
+
+						aHTML.push('<tr><td id="ns1blankspaceSuperUserDebugKeyContainer" style="padding-bottom:6px;" class="ns1blankspaceSubNote"></td></tr>');
 
 						aHTML.push('<tr><td><span id="ns1blankspaceSuperUserDebugToggle" class="ns1blankspaceAction">' +
 											'</span></td></tr>');
-
-						aHTML.push('<tr><td id="ns1blankspaceSuperUserDebugKeyContainer" style="padding-top:6px;" class="ns1blankspaceSubNote"></td></tr>');
 
 						//aHTML.push('<tr><td id="ns1blankspaceSuperUserDebugKeyContainer" class="ns1blankspaceSub"></td></tr>');
 					}
