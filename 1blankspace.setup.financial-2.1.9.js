@@ -1598,6 +1598,16 @@ ns1blankspace.setup.financial =
 																ns1blankspace.xhtml.loadingSmall +
 																'</td></tr>');
 											}
+
+											aHTML.push('<tr class="ns1blankspaceCaption">' +
+																'<td class="ns1blankspaceCaption">' +
+																'"Other" Expense' +
+																'</td></tr>' +
+																'<tr class="ns1blankspace">' +
+																'<td class="ns1blankspaceRadio">' +
+																'<input type="radio" id="radioOtherExpense2" name="radioOtherExpense" value="2"/>Yes' +
+																'<br /><input type="radio" id="OtherExpense1" name="radioOtherExpense" value="1"/>No' +
+																'</td></tr>');
 										}	
 
 										aHTML.push('</table>');					
@@ -1640,11 +1650,16 @@ ns1blankspace.setup.financial =
 											sData += '&title=' + ns1blankspace.util.fs($('#ns1blankspaceFinancialAccountTitle').val());
 											sData += '&parentaccount=' + ns1blankspace.util.fs($('#ns1blankspaceFinancialAccountParentAccount').attr("data-id"));
 											sData += '&postable=' + ns1blankspace.util.fs($('input[name="radioPostable"]:checked').val());
-
+											
 											if ($('input[name="radioCOS"]').length != 0)
 											{
 												sData += '&expensecostofsale=' + ns1blankspace.util.fs($('input[name="radioCOS"]:checked').val());
-											}	
+											}
+
+											if ($('input[name="radioOtherExpense"]').length != 0)
+											{
+												sData += '&class=' + ns1blankspace.util.fs($('input[name="radioOtherExpense"]:checked').val());
+											}		
 
 											if ($('input[name="radioTaxCode"]:checked').length != 0)
 											{	
@@ -1658,7 +1673,8 @@ ns1blankspace.setup.financial =
 												"title": $('#ns1blankspaceFinancialAccountTitle').val(),
 												"parentaccount": $('#ns1blankspaceFinancialAccountParentAccount').attr("data-id"),
 												"postable": $('input[name="radioPostable"]:checked').val(),
-												"taxtype": $('input[name="radioTaxCode"]:checked').val()
+												"taxtype": $('input[name="radioTaxCode"]:checked').val(),
+												"class": $('input[name="radioOtherExpense"]:checked').val()
 											}
 														
 											$.ajax(
@@ -1785,6 +1801,7 @@ ns1blankspace.setup.financial =
 											$('#ns1blankspaceFinancialAccountParentAccount').attr('data-id', oObjectContext.parentaccount);
 											$('[name="radioPostable"][value="' + oObjectContext.postable + '"]').attr('checked', true);
 											$('[name="radioCOS"][value="' + oObjectContext.expensecostofsale + '"]').attr('checked', true);
+											$('[name="radioOtherExpense"][value="' + oObjectContext.class + '"]').attr('checked', true);
 
 											var iTaxType = (iType==1?2:1)
 

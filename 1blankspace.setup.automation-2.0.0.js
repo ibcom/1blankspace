@@ -631,6 +631,8 @@ ns1blankspace.setup.automation =
 										'<td class="ns1blankspaceRadio">' +
 										'<input type="radio" id="radioResponseAction1" name="radioResponseAction" value="1"/>' +
 												'Email to network group' +
+										'<br /><input type="radio" id="radioResponseAction2" name="radioResponseAction" value="2"/>' +
+												'Email to contact person group' +		
 										'<br /><input type="radio" id="radioResponseAction3" name="radioResponseAction" value="3"/>' +
 												'Send to URL' +
 										'</td></tr>');
