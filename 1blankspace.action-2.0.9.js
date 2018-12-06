@@ -77,7 +77,8 @@ ns1blankspace.action =
 		aHTML.push('<table>');
 		aHTML.push('<tr class="ns1blankspaceControl">' +
 						'<td id="ns1blankspaceControlToDo" class="ns1blankspaceControl">To Do</td>' +
-						'</tr>');	
+						'</tr>');
+		
 		aHTML.push('</table>');	
 
 		$('#ns1blankspaceControl').html(aHTML.join(''));	
@@ -531,7 +532,7 @@ ns1blankspace.action =
 			if (ns1blankspace.objectContextData.actiontypetext != '')
 			{
 				aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Type</td></tr>' +
-							'<tr><td id="ns1blankspaceSummaryDate" class="ns1blankspaceSummary">' +
+							'<tr><td id="ns1blankspaceSummaryType" class="ns1blankspaceSummary">' +
 							ns1blankspace.objectContextData.actiontypetext +
 							'</td></tr>');
 			}		
@@ -539,10 +540,18 @@ ns1blankspace.action =
 			if (ns1blankspace.objectContextData.statustext != '')
 			{
 				aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Status</td></tr>' +
-							'<tr><td id="ns1blankspaceSummaryDate" class="ns1blankspaceSummary">' +
+							'<tr><td id="ns1blankspaceSummaryStatus" class="ns1blankspaceSummary">' +
 							ns1blankspace.objectContextData.statustext +
 							'</td></tr>');
-			}	
+			}
+
+			if (ns1blankspace.objectContextData.prioritytext != '')
+			{
+				aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Priority</td></tr>' +
+							'<tr><td id="ns1blankspaceSummaryPriority" class="ns1blankspaceSummary">' +
+							ns1blankspace.objectContextData.prioritytext +
+							'</td></tr>');
+			}		
 
 			aHTML.push('</table>');		
 
@@ -692,6 +701,19 @@ ns1blankspace.action =
 
 			aHTML.push('<tr class="ns1blankspaceCaption">' +
 							'<td class="ns1blankspaceCaption">' +
+							'Priority' +
+							'</td></tr>' +
+							'<tr class="ns1blankspace">' +
+							'<td class="ns1blankspaceRadio">' +
+							'<input type="radio" id="radioPriority" name="radioPriority" value=""/><i>Not Set</i>' +
+								'<br /><input type="radio" id="radioBillingPriority1" name="radioPriority" value="1"/>Low' +
+								'<br /><input type="radio" id="radioPriority2" name="radioPriority" value="2"/>Medium' +
+								'<br /><input type="radio" id="radioPriority3" name="radioPriority" value="3"/>High' +		
+								'<br /><input type="radio" id="radioPriority4" name="radioPriority" value="4"/>Critical' +
+							'</td></tr>');
+
+			aHTML.push('<tr class="ns1blankspaceCaption">' +
+							'<td class="ns1blankspaceCaption">' +
 							'Billing' +
 							'</td></tr>' +
 							'<tr class="ns1blankspace">' +
@@ -707,14 +729,11 @@ ns1blankspace.action =
 				
 			$('#ns1blankspaceDetailsColumn2').html(aHTML.join(''));
 
-			// v2.0.1 added .formatXHTML() when displaying text values
 			if (ns1blankspace.objectContextData != undefined)
 			{
-				// v2.0.2 Added formatXHTML()
 				$('#ns1blankspaceDetailsSubject').val(ns1blankspace.objectContextData.subject.formatXHTML());
 				
 				var sDate = moment(ns1blankspace.objectContextData.duedatetime, ns1blankspace.option.dateFormats).format('DD MMM YYYY h:mm a');
-				//sDate = $.fullCalendar.formatDate(sDate, 'dd MMM yyyy h:mm TT')
 				$('#ns1blankspaceDetailsDate').val(sDate);
 				
 				$('#ns1blankspaceDetailsType').attr("data-id", ns1blankspace.objectContextData.actiontype);
@@ -731,6 +750,7 @@ ns1blankspace.action =
 
 				$('[name="radioStatus"][value="' + ns1blankspace.objectContextData.status + '"]').attr('checked', true);
 				$('[name="radioBillingStatus"][value="' + ns1blankspace.objectContextData.billingstatus + '"]').attr('checked', true);
+				$('[name="radioPriority"][value="' + ns1blankspace.objectContextData.priority + '"]').attr('checked', true);
 				
 				$('#ns1blankspaceDetailsBusiness').attr("data-id", ns1blankspace.objectContextData.contactbusiness);
 				$('#ns1blankspaceDetailsBusiness').val(ns1blankspace.objectContextData.contactbusinesstext.formatXHTML());
@@ -780,9 +800,6 @@ ns1blankspace.action =
 				{
 					var oRow = oResponse.data.rows[0];
 					$('#ns1blankspaceDetailsActionBy')
-						/*.val(ns1blankspace.objectContextData.actionbytext.formatXHTML() + 
-									ns1blankspace.objectContextData['action.actionby.contactperson.firstname'].formatXHTML() + 
-									' ' + ns1blankspace.objectContextData['action.actionby.contactperson.surname'].formatXHTML()) */
 						.attr('data-contactperson', oRow['user.contactperson'])
 						.attr('data-contactpersontext', oRow['user.contactperson.firstname'].formatXHTML() + 
 									' ' + oRow['user.contactperson.surname'].formatXHTML())
@@ -1507,7 +1524,7 @@ ns1blankspace.action =
 					sData += '&objectcontext=' + ns1blankspace.util.fs(oParam.objectContext);
 					sData += '&subject=' + ns1blankspace.util.fs(oParam.subject);
 					sData += '&description=' + ns1blankspace.util.fs(oParam.description);
-					sData += '&priority=' + ns1blankspace.util.fs(oParam.description);
+					sData += '&priority=' + ns1blankspace.util.fs(oParam.priority);
 					sData += '&status=' + ns1blankspace.util.fs(oParam.status);
 					sData += '&type=' + ns1blankspace.util.fs(iType);
 					sData += '&date=' + ns1blankspace.util.fs(oParam.date);
@@ -1532,7 +1549,6 @@ ns1blankspace.action =
 					if ($('#ns1blankspaceMainDetails').html() != '')
 					{
 						sData += '&subject=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsSubject').val());
-						sData += '&priority=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsPriority').attr('data-id'));				
 						sData += '&type=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsType').attr('data-id'));
 						sData += '&date=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsDate').val());
 						sData += '&contactbusiness=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsBusiness').attr("data-id"));
@@ -1540,6 +1556,7 @@ ns1blankspace.action =
 						sData += '&actionby=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsActionBy').attr("data-id"));
 						sData += '&status=' + ns1blankspace.util.fs($('input[name="radioStatus"]:checked').val());
 						sData += '&billingstatus=' + ns1blankspace.util.fs($('input[name="radioBillingStatus"]:checked').val());
+						sData += '&priority=' + ns1blankspace.util.fs($('input[name="radioPriority"]:checked').val());	
 						sData += '&totaltimemin=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsDurationMinutes').val());
 
 						if ($('input[name="radioStatus"]:checked').val() == 1)
@@ -2422,23 +2439,28 @@ ns1blankspace.action =
 						}
 					}
 
-					aHTML.push('<td id="tdAction_date-' + this.id + '" class="ns1blankspaceRow ns1blankspaceRow">' +
+					aHTML.push('<td id="ns1blankspaceAction_date-' + this.id + '" class="ns1blankspaceRow ns1blankspaceRow">' +
 										sDate + '</td>');
 						
 					aHTML.push('<td id="ns1blankspaceAction_contact-' + this.contactperson + '" class="ns1blankspaceRow ns1blankspaceRowSelectContact">' +
 									this.contactpersontext + '</td>');
-					
-					//aHTML.push('<td id="ns1blankspaceAction_description-' + this.id + '" class="ns1blankspaceRow">' +
-					//				this.description + '</td>');
-					
-					aHTML.push('<td id="tdAction_options-' + this.id + '" class="ns1blankspaceRows" >' + 
-							'<span id="ns1blankspaceActionComplete_' + this.id + '" class="ns1blankspaceAction ns1blankspaceActionComplete">Complete</span>' + 
-							'<span id="ns1blankspaceActionPriority_' + this.id + '"' +
-								' class="ns1blankspaceAction ns1blankspaceActionPriority"' +
-								' data-priority="' + this.priority + '">Priority</span>' +
-						'</td>');
-					
-					aHTML.push('</tr>');
+										
+					aHTML.push('<td id="ns1blankspaceAction_options-' + this.id + '" class="ns1blankspaceRow" >');
+					aHTML.push('<div id="ns1blankspaceActionComplete_' + this.id + '" class="ns1blankspaceAction ns1blankspaceActionComplete">Complete</div>')
+					aHTML.push('<div id="ns1blankspaceActionPriorityContainer_' + this.id + '" style="float:left;">');
+
+					if (_.isNull(numeral(this.priority).value()) || numeral(this.priority).value() != 4)
+					{
+						aHTML.push('<div style="float:left; margin-right:1px;" id="ns1blankspaceActionPriority_' + this.id + '"' +
+										' class="ns1blankspaceAction ns1blankspaceActionPriority"' +
+										' data-priority="' + this.priority + '">Priority</div>');
+					}
+					else
+					{
+						aHTML.push('<div style="margin:0px; margin-right:1px; padding:2px; height:20px; color:white; background-color:red; width:20px; float:left; text-align:center;">!</div>')
+					}
+
+					aHTML.push('</div></td></tr>');
 				});
 				
 				aHTML.push('</table>');
@@ -2457,10 +2479,10 @@ ns1blankspace.action =
 					ns1blankspace.contactPerson.search.send(event.target.id, {source: 1});
 				});
 
-				$('span.ns1blankspaceActionComplete')
+				$('div.ns1blankspaceActionComplete')
 				.button(
 				{
-					label: 'Complete',
+					label: 'Mark as completed',
 					text: false,
 					icons: {primary: 'ui-icon-check'}
 				})
@@ -2479,20 +2501,21 @@ ns1blankspace.action =
 						{
 							if (oResponse.status === 'OK')
 							{
+								ns1blankspace.status.message('Marked as completed')
 								$(oElement).parent().parent().remove();
 							}
 							else
 							{
-								ns1blankspace.status.error('Unable to Complete: ' + oResponse.error.errornotes);
+								ns1blankspace.status.error('Unable to complete: ' + oResponse.error.errornotes);
 							}
 						}
 					})
 				});	
 
-				$('span.ns1blankspaceActionPriority')
+				$('div.ns1blankspaceActionPriority')
 				.button(
 				{
-					label: 'Priority',
+					label: 'Flag as critical',
 					text: false,
 					icons: {primary: 'ui-icon-notice'}
 				})
@@ -2503,12 +2526,7 @@ ns1blankspace.action =
 					var oElement = this;
 					var sID = oElement.id.split('_').pop();
 					var iPriority = $(oElement).attr('data-priority');
-					var iNewPriority = '';
-					if (iPriority == '' || parseInt(iPriority) <= 2 )	// Not set, Low or Medium
-					{
-						iNewPriority = '3';
-					}
-					else {iNewPriority = '1'}
+					var iNewPriority =  '4';
 
 					$.ajax(
 					{
@@ -2519,15 +2537,9 @@ ns1blankspace.action =
 						{
 							if (oResponse.status === 'OK')
 							{
-								$(oElement).attr('data-priority', iNewPriority);
-								if (iNewPriority == '3')
-								{// Add 'Important' class to add
-									$(oElement).parent().parent().children().addClass('ns1blankspaceImportant');
-								}
-								else
-								{
-									$(oElement).parent().parent().children().removeClass('ns1blankspaceImportant');
-								}
+								ns1blankspace.status.message('Flagged as critical');
+								$('#ns1blankspaceActionPriorityContainer_' + sID).html(
+									'<div style="margin:0px; margin-right:1px; padding:2px; height:20px; color:white; background-color:red; width:20px; float:left; text-align:center;">!</div>')
 							}
 							else
 							{
