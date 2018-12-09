@@ -3179,7 +3179,8 @@ ns1blankspace.financial.payroll =
 							oSearch.addField('payrecord.employee.contactperson,payrecord.employee.employeenumber,payrecord.employee.contactperson.firstname,payrecord.employee.contactperson.surname,payrecord.employee.taxfilenumber');
 							oSearch.addFilter('period', 'EQUAL_TO', ns1blankspace.objectContext)
 							oSearch.rows = 200;
-							oSearch.sort('payrecord.employee.contactpersontext', 'asc');
+							oSearch.sort('payrecord.employee.employeenumber', 'asc');
+							oSearch.sort('payrecord.employee.contactperson.firstname', 'asc');
 							oSearch.getResults(function(data) {ns1blankspace.financial.payroll.pays(oParam, data)})	
 						}
 						else
@@ -4011,9 +4012,10 @@ ns1blankspace.financial.payroll =
 
 							var oSearch = new AdvancedSearch();
 							oSearch.method = 'FINANCIAL_PAYROLL_EMPLOYEE_SEARCH';
-							oSearch.addField('contactpersontext,employmentstartdate,statustext,employee.contactperson.firstname,employee.contactperson.surname');
+							oSearch.addField('contactpersontext,employmentstartdate,statustext,employeenumber,employee.contactperson.firstname,employee.contactperson.surname');
 							oSearch.addFilter('status', 'EQUAL_TO', '2')
 							oSearch.rows = 50;
+							oSearch.sort('employeenumber', 'asc');
 							oSearch.sort('employee.contactperson.firstname', 'asc');
 							oSearch.getResults(function(data) {ns1blankspace.financial.payroll.pays(oParam, data)});
 
@@ -4030,6 +4032,8 @@ ns1blankspace.financial.payroll =
 								aHTML.push('<tr class="ns1blankspaceRow">'+ 
 												'<td id="ns1blankspaceEmployee_name-' + this.id + '" class="ns1blankspaceRow">' +
 												this.contactpersontext + '</td>' +
+												'<td id="ns1blankspaceEmployee_name-' + this.id + '" class="ns1blankspaceRow">' +
+												this.employeenumber + '</td>' +
 												'<td style="width:30px;text-align:right;" class="ns1blankspaceRow">' +
 												'<span id="ns1blankspaceEmployee_options_add-' + this.id + '" class="ns1blankspaceEmployeeAdd"></span>' +
 												'</td></tr>');	

@@ -3179,7 +3179,8 @@ ns1blankspace.financial.payroll =
 							oSearch.addField('payrecord.employee.contactperson,payrecord.employee.employeenumber,payrecord.employee.contactperson.firstname,payrecord.employee.contactperson.surname,payrecord.employee.taxfilenumber');
 							oSearch.addFilter('period', 'EQUAL_TO', ns1blankspace.objectContext)
 							oSearch.rows = 200;
-							oSearch.sort('payrecord.employee.contactpersontext', 'asc');
+							oSearch.sort('payrecord.employee.employeenumber', 'asc');
+							oSearch.sort('payrecord.employee.contactperson.firstname', 'asc');
 							oSearch.getResults(function(data) {ns1blankspace.financial.payroll.pays(oParam, data)})	
 						}
 						else
@@ -3293,7 +3294,7 @@ ns1blankspace.financial.payroll =
 							oSearch.method = 'FINANCIAL_PAYROLL_PAY_RECORD_SEARCH';
 							oSearch.addFilter('id', 'EQUAL_TO', iPay)
 							oSearch.addField('grosssalary,calculations,netsalary,deductions,superannuation,calculations,taxbeforerebate,notes,' +
-													'payrecord.employee.contactperson,hecs,leaveloading,posttaxsuper,pretaxsuper,rebate,studentloandeduction,taxadjustments,taxafterrebate,taxbeforerebate');
+													'payrecord.employee.contactperson,hecs,leaveloading,posttaxsuper,pretaxsuper,rebate,studentloandeduction,taxadjustments,taxafterrebate,taxbeforerebate,payrecord.employee.superannuationrate');
 							oSearch.rows = 1;
 							oSearch.getResults(function(data) {ns1blankspace.financial.payroll.pays(oParam, data)})	
 						}
@@ -3345,6 +3346,10 @@ ns1blankspace.financial.payroll =
 								aHTML.push('<tr><td colspan=2 id="ns1blankspaceFinancialPayrollCalcsContainer" class="ns1blankspaceSub" style="color:#444444;"></td></tr>');
 
 								aHTML.push('<tr><td colspan=2 class="ns1blankspaceSubNote ns1blankspaceRowSelect" id="ns1blankspaceFinancialPayrollRecalculate">Recalculate</td></tr>');
+
+								aHTML.push('<tr><td colspan=2 class="ns1blankspaceSubNote" style="padding-top:8px;">' +
+									'Employee current superannuation rate is ' + oRow["payrecord.employee.superannuationrate"] + '%.' +
+									'</td></tr>');
 
 								aHTML.push('</table>');																
 							}
@@ -4011,9 +4016,10 @@ ns1blankspace.financial.payroll =
 
 							var oSearch = new AdvancedSearch();
 							oSearch.method = 'FINANCIAL_PAYROLL_EMPLOYEE_SEARCH';
-							oSearch.addField('contactpersontext,employmentstartdate,statustext,employee.contactperson.firstname,employee.contactperson.surname');
+							oSearch.addField('contactpersontext,employmentstartdate,statustext,employeenumber,employee.contactperson.firstname,employee.contactperson.surname');
 							oSearch.addFilter('status', 'EQUAL_TO', '2')
 							oSearch.rows = 50;
+							oSearch.sort('employeenumber', 'asc');
 							oSearch.sort('employee.contactperson.firstname', 'asc');
 							oSearch.getResults(function(data) {ns1blankspace.financial.payroll.pays(oParam, data)});
 
@@ -4030,6 +4036,8 @@ ns1blankspace.financial.payroll =
 								aHTML.push('<tr class="ns1blankspaceRow">'+ 
 												'<td id="ns1blankspaceEmployee_name-' + this.id + '" class="ns1blankspaceRow">' +
 												this.contactpersontext + '</td>' +
+												'<td id="ns1blankspaceEmployee_name-' + this.id + '" class="ns1blankspaceRow">' +
+												this.employeenumber + '</td>' +
 												'<td style="width:30px;text-align:right;" class="ns1blankspaceRow">' +
 												'<span id="ns1blankspaceEmployee_options_add-' + this.id + '" class="ns1blankspaceEmployeeAdd"></span>' +
 												'</td></tr>');	
