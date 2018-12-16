@@ -255,6 +255,7 @@ ns1blankspace.admin.space =
 
 											oSearch.addBracket(')');
 											oSearch.addCustomOption('allregistrationspaces', (ns1blankspace.admin.space.data.superUser?'Y':'N'));
+											oSearch.sort('spacetext', 'asc');
 											oSearch.getResults(function(data) {ns1blankspace.admin.space.search.process(oParam, data)})	
 										}
 									};	
@@ -278,21 +279,24 @@ ns1blankspace.admin.space =
 											
 										$.each(oResponse.data.rows, function()
 										{	
-											iColumn = iColumn + 1;
-											
-											if (iColumn == 1)
+											if (this.spacetext != '')
 											{
-												aHTML.push('<tr class="ns1blankspaceSearch">');
-											}
-											
-											aHTML.push('<td class="ns1blankspaceSearch" id="registration-' +
-															this.id + '">' +
-															this.spacetext + '</td>');
-											
-											if (iColumn == iMaximumColumns)
-											{
-												aHTML.push('</tr>');
-												iColumn = 0;
+												iColumn = iColumn + 1;
+												
+												if (iColumn == 1)
+												{
+													aHTML.push('<tr class="ns1blankspaceSearch">');
+												}
+												
+												aHTML.push('<td class="ns1blankspaceSearch" id="registration-' +
+																this.id + '">' +
+																this.spacetext + '</td>');
+												
+												if (iColumn == iMaximumColumns)
+												{
+													aHTML.push('</tr>');
+													iColumn = 0;
+												}	
 											}	
 										});
 								    	
