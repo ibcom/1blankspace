@@ -1201,7 +1201,7 @@ ns1blankspace.financial.payroll =
 											aHTML.push('<tr><td id="ns1blankspaceFinancialEmployee_details-15" class="ns1blankspaceRow ns1blankspaceRowSelect ns1blankspacePayrollEmployeeDetails">' +
 																	'Superannuation</td></tr>');
 
-											aHTML.push('<tr><td id="ns1blankspaceFinancialEmployee_details-18" class="ns1blankspaceRow ns1blankspaceRowSelect ns1blankspacePayrollEmployeeDetails">' +
+											aHTML.push('<tr><td id="ns1blankspaceFinancialEmployee_details-19" class="ns1blankspaceRow ns1blankspaceRowSelect ns1blankspacePayrollEmployeeDetails">' +
 																	'Leave</td></tr>');
 
 											aHTML.push('<tr><td id="ns1blankspaceFinancialEmployee_details-16" class="ns1blankspaceRow ns1blankspaceRowSelect ns1blankspacePayrollEmployeeDetails">' +
@@ -1983,15 +1983,15 @@ ns1blankspace.financial.payroll =
 									}
 
 									//LEAVE
-									if (iStep == 18)
+									if (iStep == 19)
 									{
 										var aHTML = [];
 
 										aHTML.push('<table class="ns1blankspaceContainer">' +
 														'<tr class="ns1blankspaceContainer">' +
-														'<td id="ns1blankspacePayrollEmployeeDetails18Column1" style="font-size:0.875em;">' +
+														'<td id="ns1blankspacePayrollEmployeeDetails19Column1" style="font-size:0.875em;">' +
 														ns1blankspace.xhtml.loading + '</td>' +
-														'<td id="ns1blankspacePayrollEmployeeDetails18Column2" style="width:75px;">' +
+														'<td id="ns1blankspacePayrollEmployeeDetails19Column2" style="width:75px;">' +
 														'</td>' +
 														'</tr>' + 
 														'</table>');	
@@ -2028,7 +2028,7 @@ ns1blankspace.financial.payroll =
 															
 										aHTML.push('</table>');					
 											
-										$('#ns1blankspacePayrollEmployeeDetails18Column1').html(aHTML.join(''));
+										$('#ns1blankspacePayrollEmployeeDetails19Column1').html(aHTML.join(''));
 
 										$('input.ns1blankspaceDate').datepicker({dateFormat: 'dd M yy'});
 
@@ -2045,7 +2045,7 @@ ns1blankspace.financial.payroll =
 														'<span id="ns1blankspacePayrollEmployee_options_save" class="ns1blankspaceAction">' +
 														'Save</span></td></tr></table>');					
 										
-										$('#ns1blankspacePayrollEmployeeDetails18Column2').html(aHTML.join(''));
+										$('#ns1blankspacePayrollEmployeeDetails19Column2').html(aHTML.join(''));
 
 										$('#ns1blankspacePayrollEmployee_options_save').button(
 										{
@@ -3231,7 +3231,7 @@ ns1blankspace.financial.payroll =
 												'<div id="ns1blankspacePayrollPay_grosssalary-' + this.id + '" class="ns1blankspaceSub" style="margin-top:-2px;">' + this["grosssalary"] + '</div>');
 
 										aHTML.push('<div class="ns1blankspaceSub" style="font-size:0.5em; margin-top:4px;">TAX</div>' +
-												'<div id="ns1blankspacePayrollPay_tax-' + this.id + '" class="ns1blankspaceSub" style="margin-top:-2px;">' + this["taxafterrebate"] + '</div>');
+												'<div id="ns1blankspacePayrollPay_tax-' + this.id + '" class="ns1blankspaceSub" style="margin-top:-2px;">' + this["taxbeforerebate"] + '</div>');
 
 										aHTML.push('<div class="ns1blankspaceSub" style="font-size:0.5em; margin-top:4px;">NET SALARY</div>' +
 												'<div id="ns1blankspacePayrollPay_netsalary-' + this.id + '" class="ns1blankspaceSub" style="margin-top:-2px;">' + this["netsalary"] + '</div>');
@@ -3382,7 +3382,12 @@ ns1blankspace.financial.payroll =
 									'Employee current superannuation rate is ' + oRow["payrecord.employee.superannuationrate"] + '%.' +
 									'</td></tr>');
 
-								aHTML.push('</table>');																
+								aHTML.push('</table>');
+
+								$('#ns1blankspacePayrollPay_grosssalary-' + iPay).html(oRow["grosssalary"])
+								$('#ns1blankspacePayrollPay_tax-' + iPay).html(oRow["taxbeforerebate"])	
+								$('#ns1blankspacePayrollPay_netsalary-' + iPay).html(oRow["netsalary"])	
+								$('#ns1blankspacePayrollPay_superannuation-' + iPay).html(oRow["superannuation"])																
 							}
 								
 							$('#ns1blankspacePayrollPayRunColumn1').html(aHTML.join(''));

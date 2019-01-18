@@ -3231,7 +3231,7 @@ ns1blankspace.financial.payroll =
 												'<div id="ns1blankspacePayrollPay_grosssalary-' + this.id + '" class="ns1blankspaceSub" style="margin-top:-2px;">' + this["grosssalary"] + '</div>');
 
 										aHTML.push('<div class="ns1blankspaceSub" style="font-size:0.5em; margin-top:4px;">TAX</div>' +
-												'<div id="ns1blankspacePayrollPay_tax-' + this.id + '" class="ns1blankspaceSub" style="margin-top:-2px;">' + this["taxafterrebate"] + '</div>');
+												'<div id="ns1blankspacePayrollPay_tax-' + this.id + '" class="ns1blankspaceSub" style="margin-top:-2px;">' + this["taxbeforerebate"] + '</div>');
 
 										aHTML.push('<div class="ns1blankspaceSub" style="font-size:0.5em; margin-top:4px;">NET SALARY</div>' +
 												'<div id="ns1blankspacePayrollPay_netsalary-' + this.id + '" class="ns1blankspaceSub" style="margin-top:-2px;">' + this["netsalary"] + '</div>');
@@ -3382,7 +3382,12 @@ ns1blankspace.financial.payroll =
 									'Employee current superannuation rate is ' + oRow["payrecord.employee.superannuationrate"] + '%.' +
 									'</td></tr>');
 
-								aHTML.push('</table>');																
+								aHTML.push('</table>');
+
+								$('#ns1blankspacePayrollPay_grosssalary-' + iPay).html(oRow["grosssalary"])
+								$('#ns1blankspacePayrollPay_tax-' + iPay).html(oRow["taxbeforerebate"])	
+								$('#ns1blankspacePayrollPay_netsalary-' + iPay).html(oRow["netsalary"])	
+								$('#ns1blankspacePayrollPay_superannuation-' + iPay).html(oRow["superannuation"])																
 							}
 								
 							$('#ns1blankspacePayrollPayRunColumn1').html(aHTML.join(''));
