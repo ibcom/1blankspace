@@ -919,7 +919,7 @@ ns1blankspace.supportIssue =
 				$.each(aColumns, function()
 				{
 					aHTML.push('<td class="ns1blankspaceHeaderCaption' + ((sSortColumn != '') ? ' ns1blankspaceHeaderSort' : '') + '"' +
-								' style="color:#B8B8B8; padding:4px; background-color:#F8F8F8; vertical-align:top;"' +
+								' style="color:#B8B8B8; padding:4px; vertical-align:top;"' +
 								' data-column="' + this.name + '"' +
 								' data-sortdirection="' + ((sSortColumn == this.label) ? sSortDirection : 'asc') + '">' +
 									this.label + 
@@ -1012,7 +1012,7 @@ ns1blankspace.supportIssue =
 					icons: {primary: 'ui-icon-plus'}
 				})
 				.css('height', '23px')
-				.css('width', '23px')
+				.css('width', '28px')
 				.off('click')
 				.on('click', function()
 				{
@@ -1054,11 +1054,14 @@ ns1blankspace.supportIssue =
 					{	// We were adding and now we've decided to view an existing one
 						bContinue = false; 		// Has to be false otherwise it falls through to next step before user has responded.
 						ns1blankspace.container.confirm({
-							html: 'You are currently part-way through adding a new record. Do you want to discard this record or continue saving?',
+							html: 'You are currently part-way through adding a new record. Do you want to discard this record or keep editing it?',
+							title: 'Just checking...',
 							buttons:
 							[
 								{
-									label: 'Discard', icons: {primary: 'ui-icon-check'},
+									label: 'Discard',
+									text: 'Discard',
+									icons: {primary: 'ui-icon-check'},
 									click: function()
 									{
 										bContinue = false;
@@ -1068,7 +1071,9 @@ ns1blankspace.supportIssue =
 									}
 								},
 								{
-									label: 'Continue', icons: {primary: 'ui-icon-close'},
+									label: 'Keep editing',
+									text: 'Keep editing',
+									icons: {primary: 'ui-icon-close'},
 									click: function()
 									{
 										bContinue = false;
@@ -2903,7 +2908,7 @@ ns1blankspace.supportIssue =
 					if (fFunctionProcess || fFunctionDelete)
 					{
 						aHTML.push('<td class="ns1blankspaceHeaderCaption ns1blankspaceMainRowOptionsSelect"' +
-									' style="color:#B8B8B8; padding:4px; background-color:#F8F8F8; vertical-align:top;">' + 
+									' style="color:#B8B8B8; padding:4px; vertical-align:top;">' + 
 									'<input type="checkbox" id="ns1blankspace' + sXHTMLContext + 'CheckAll"' +
 										' class="ns1blankspace' + sXHTMLContext + '" checked="false">' +
 									'</td>');
@@ -2955,7 +2960,7 @@ ns1blankspace.supportIssue =
 				$.each($.grep(aColumns, function(x) {return x.hidden == undefined || x.hidden === false}), function()
 				{
 					aHTML.push('<td class="ns1blankspaceHeaderCaption"' +
-									' style="color:#B8B8B8; padding:4px; background-color:#F8F8F8; vertical-align:top;"' +
+									' style="color:#B8B8B8; padding:4px; vertical-align:top;"' +
 									'>' +
 									this.title + 
 								'</td>');
