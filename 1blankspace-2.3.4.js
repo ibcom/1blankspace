@@ -143,21 +143,6 @@ ns1blankspace.formFactor =
 	}
 }
 
-/*window.addEventListener("beforeunload", function(event)
-{
-	if (ns1blankspace.unloadWarning)
-	{
-	   event.returnValue = "You potentially will lose unsaved information if you close. Press Cancel to stop the close."
-	}
-	else
-	{
-		event.preventDefault();
-		event.returnValue = '';
-		ns1blankspace.unloadWarning = true;
-		return;
-	}
-})*/
-
 window.onbeforeunload = function()
 {
 	if (ns1blankspace.unloadWarning)

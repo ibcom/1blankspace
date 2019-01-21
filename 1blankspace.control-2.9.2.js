@@ -33,7 +33,7 @@ ns1blankspace.option = $.extend(true, ns1blankspace.option,
 	taxOffice: 'ATO',
 	bulkInvoicing: true,
 	postInit: undefined,
-	initialiseSpaceTemplate: '/site/312/1blankspace.setup.space-2.0.1.json',
+	initialiseSpaceTemplate: '/site/1433/1blankspace.setup.space-2.0.1.json',
 	searchWatermark: 'search',
 	showLogonOptions: false,
 	showLogonOptionsOnHover: false,
@@ -47,8 +47,8 @@ ns1blankspace.option = $.extend(true, ns1blankspace.option,
 	logonSuffix: undefined,
 	passwordSuffix: undefined,
 	financialShowProjects: true,
-	pdfStyles: '<link rel=stylesheet href="/jscripts/1blankspace-2.0.2.css">',
-	_messagingCheckURL: 'https://api.mydigitalstructure.com',
+	pdfStyles: '<link rel=stylesheet href="/jscripts/1blankspace-2.0.3.css">',
+	messagingCheckURL: 'https://api.mydigitalstructure.com',
 	financialOverride: true,
 	showProductCodes: true,
 	defaultDatePickerOptions:
@@ -60,10 +60,7 @@ ns1blankspace.option = $.extend(true, ns1blankspace.option,
 	employeeInsuranceURL: 
 	{
 		australia: 'https://www.safeworkaustralia.gov.au/workers-compensation/comparing-australias-workers-compensation-schemes'
-	},
-	logonTOTP: true,
-	logonAccessToken: true,
-	userRelationshipManagerBasedAccess: true
+	}
 });
 
 ns1blankspace.option.yodlee =
@@ -129,7 +126,7 @@ ns1blankspace.xhtml.logonNotes =
 	'<br /><a href="https://console.mydigitalstructure.com" target="_blank"><strong>Modify this app or create your own app using the simple jQuery IDE.</strong></a>';
 
 ns1blankspace.xhtml.header =
-	'<div id="ns1blankspaceLogo" style="height:46px; float:left; "><img style="height:46px;" src="/site/312/1blankspace.aoe.miy-2.0.3.png"></div>' +
+	'<div id="ns1blankspaceLogo" style="float:left; "><img style="height:46px;" src="/site/1433/images/1blankspace.aoe.miy-2.0.3.png"></div>' +
 	'<div style="float:right; margin-right:3px;">' +
 	'<div id="ns1blankspaceSpaceText" style="width:450px; margin-top:-3px; margin-bottom:0px;"></div>' +
 	'<div id="ns1blankspaceLogonName" style="width:' + (ns1blankspace.option.showLogoff?'410':'450') + 'px; margin-top:-2px; overflow:auto; height:20px; float:left;"></div>' +
@@ -146,19 +143,19 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.home',
-		source: '/site/312/1blankspace.home-2.0.5.js'
+		source: '/site/1433/1blankspace.home-2.0.5.js'
 	},
 	{
 		nameSpace: '1blankspace.format',
-		source: '/site/312/1blankspace.format-2.1.9.js'
+		source: '/site/1433/1blankspace.format-2.1.9.js'
 	},
 	{
 		nameSpace: '1blankspace.contactPerson',
-		source: '/jscripts/1blankspace.contactperson-2.0.5.js'
+		source: '/site/1433/1blankspace.contactperson-2.0.6.js'
 	},
 	{
 		nameSpace: '1blankspace.contactBusiness',
-		source: '/site/312/1blankspace.contactbusiness-2.0.9.js'
+		source: '/site/1433/1blankspace.contactbusiness-2.0.8.js'
 	},
 	{
 		nameSpace: '1blankspace.opportunity',
@@ -166,7 +163,7 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.action',
-		source: '/site/312/1blankspace.action-2.0.9.js'
+		source: '/site/1433/1blankspace.action-2.0.9.js'
 	},
 	{
 		nameSpace: '1blankspace.messaging.conversation',
@@ -174,11 +171,11 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.messaging.imap',
-		source: '/site/312/1blankspace.messaging.imap-2.2.4.js'
+		source: '/site/1433/1blankspace.messaging.imap-2.2.4.js'
 	},
 	{
 		nameSpace: '1blankspace.document',
-		source: '/site/312/1blankspace.document-2.0.2.js'
+		source: '/site/1433/1blankspace.document-2.0.2.js'
 	},
 	{
 		nameSpace: '1blankspace.news',
@@ -202,23 +199,23 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.order',
-		source: '/site/312/1blankspace.order-2.0.2.js'
+		source: '/jscripts/1blankspace.order-2.0.1.js'
 	},
 	{
 		nameSpace: '1blankspace.financial',
-		source: '/site/312/1blankspace.financial-2.3.7.js'
+		source: '/site/1433/1blankspace.financial-2.3.7.js'
 	},
 	{
 		nameSpace: '1blankspace.financial.bankAccount',
-		source: '/site/312/1blankspace.financial.bankaccount-2.4.3.js'
+		source: '/site/1433/1blankspace.financial.bankaccount-2.4.3.js'
 	},
 	{
 		nameSpace: '1blankspace.financial.invoice',
-		source: '/site/312/1blankspace.financial.invoice-2.1.9.js'
+		source: '/site/1433/1blankspace.financial.invoice-2.1.9.js'
 	},
 	{
 		nameSpace: '1blankspace.financial.expense',
-		source: '/site/312/1blankspace.financial.expense-2.1.4.js'
+		source: '/site/1433/1blankspace.financial.expense-2.1.4.js'
 	},
 	{
 		nameSpace: '1blankspace.financial.receipt',
@@ -238,11 +235,11 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.financial.tax',
-		source: '/site/312/1blankspace.financial.tax-2.0.5.js'
+		source: '/site/1433/1blankspace.financial.tax-2.0.5.js'
 	},
 	{
 		nameSpace: '1blankspace.financial.payroll',
-		source: '/site/312/1blankspace.financial.payroll-2.4.3.js'
+		source: '/site/1433/1blankspace.financial.payroll-2.4.3.js'
 	},
 	{
 		nameSpace: '1blankspace.financial.budget',
@@ -258,15 +255,15 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.setup',
-		source: '/site/312/1blankspace.setup-2.0.1.js'
+		source: '/jscripts/1blankspace.setup-2.0.1.js'
 	},
 	{
 		nameSpace: '1blankspace.setup.automation',
-		source: '/site/312/1blankspace.setup.automation-2.0.0.js'
+		source: '/site/1433/1blankspace.setup.automation-2.0.0.js'
 	},
 	{
 		nameSpace: '1blankspace.setup.financial',
-		source: '/site/312/1blankspace.setup.financial-2.1.9.js'
+		source: '/site/1433/1blankspace.setup.financial-2.1.9.js'
 	},
 	{
 		nameSpace: '1blankspace.setup.action',
@@ -274,11 +271,11 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.setup.messaging',
-		source: '/site/312/1blankspace.setup.messaging-2.1.1.js'
+		source: '/site/1433/1blankspace.setup.messaging-2.1.1.js'
 	},
 	{
 		nameSpace: '1blankspace.setup.networkGroup',
-		source: '/site/312/1blankspace.setup.networkgroup-2.0.1.js'
+		source: '/site/1433/1blankspace.setup.networkgroup-2.0.1.js'
 	},
 	{
 		nameSpace: '1blankspace.setup.project',
@@ -290,7 +287,7 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.setup.space',
-		source: '/site/312/1blankspace.setup.space-2.0.8.js'
+		source: '/site/1433/1blankspace.setup.space-2.0.8.js'
 	},
 	{
 		nameSpace: '1blankspace.setup.structure',
@@ -298,15 +295,15 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.setup.user',
-		source: '/site/312/1blankspace.setup.user-2.1.0.js'
+		source: '/site/1433/1blankspace.setup.user-2.1.0.js'
 	},
 	{
 		nameSpace: '1blankspace.setup.userRole',
-		source: '/site/312/1blankspace.setup.userRole-2.0.4.js'
+		source: '/site/1433/1blankspace.setup.userRole-2.0.4.js'
 	},
 	{
 		nameSpace: '1blankspace.setup.website',
-		source: '/site/312/1blankspace.setup.website-2.1.7.js'
+		source: '/site/1433/1blankspace.setup.website-2.1.7.js'
 	},
 	{
 		nameSpace: '1blankspace.setup.websiteForm',
@@ -318,11 +315,11 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.structureData',
-		source: '/site/312/1blankspace.structuredata-2.0.1.js'
+		source: '/jscripts/1blankspace.structuredata-2.0.1.js'
 	},
 	{
 		nameSpace: '1blankspace.supportIssue',
-		source: '/site/312/1blankspace.supportissue-2.0.9.js'
+		source: '/site/1433/1blankspace.supportissue-2.0.9.js'
 	},
 	{
 		nameSpace: '1blankspace.setup.file',
@@ -342,7 +339,7 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.connect',
-		source: '/site/312/1blankspace.connect-2.0.3.js'
+		source: '/jscripts/1blankspace.connect-2.0.2.js'
 	},
 	{
 		nameSpace: '1blankspace.util.whenDone',
@@ -366,11 +363,11 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.admin.space',
-		source: '/site/312/1blankspace.admin.space-2.0.6.js'
+		source: '/site/1433/1blankspace.admin.space-2.0.6.js'
 	},
 	{
 		nameSpace: '1blankspace.admin.monitoring',
-		source: '/site/312/1blankspace.admin.monitoring-2.0.2.js'
+		source: '/site/1433/1blankspace.admin.monitoring-2.0.2.js'
 	},
 	{
 		nameSpace: '1blankspace.developer.membership',
@@ -410,7 +407,7 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.util.contacts',
-		source: '/site/312/1blankspace.util.contact-2.0.1.js'
+		source: '/site/1433/1blankspace.util.contact-2.0.1.js'
 	}
 ])
 
@@ -419,7 +416,7 @@ ns1blankspace.themes =
 	{
 		title: 				'Standard',
 		cssURI: 			'', 
-		xhtmlHeaderLogo: 	'<img style="height:46px;" src="/site/312/1blankspace.aoe.miy-2.0.3.png">',
+		xhtmlHeaderLogo: 	'<img style="height:46px;" src="/site/1433/1blankspace.aoe.miy-2.0.3.png">',
 		"default": 			true
 	},
 	{
@@ -1263,12 +1260,12 @@ ns1blankspace.control =
 
 	setView:	
 	{
-		"default": function ()
+		"default": 		function ()
 		{
 			ns1blankspace.home.show();
 		},
 
-		setup: function ()
+		setup:			function ()
 		{
 			if (ns1blankspace.util.toFunction('ns1blankspace.setup.website.init') !== undefined)
 			{	
@@ -1907,7 +1904,7 @@ ns1blankspace.control =
 			}
 		},		
 
-		key:		function (oParam, oResponse)
+		key: function (oParam, oResponse)
 		{
 			var aHTML = [];
 			var h = -1;
@@ -1958,8 +1955,7 @@ ns1blankspace.control =
 				if (oResponse.access_token == undefined)
 				{
 					aHTML.push('<tr><td>' +
-									'<br />No key has been set up.  Click <b>New Token</b> to create a token, which you can use to link to your information.<br /><br /></td></tr>');
-					
+									'<br />No key has been set up.  Click <b>New Token</b> to create a token, which you can use to link to your information.<br /><br /></td></tr>');	
 				}
 				else
 				{
@@ -2047,7 +2043,7 @@ ns1blankspace.control =
 				.css('width', '150px');
 			}		
 		},
-	
+
 		device:
 		{
 			trust: function (oParam, oResponse)
@@ -2058,7 +2054,7 @@ ns1blankspace.control =
 				{
 					ns1blankspace.util.local.cache.save(
 					{
-						key: '_at',
+						key: 'accessToken',
 						persist: true,
 						data: sAccessToken
 					})
@@ -2067,20 +2063,14 @@ ns1blankspace.control =
 
 			logon: function ()
 			{
-				var sAccessToken = ns1blankspace.util.local.cache.save(
-				{
-					key: '_at',
-					persist: true
-				})
-
-				$.ajax({url: '/rpc/core/?method=CORE_SID_SEARCH', data: {access_token: sAccessToken}, type: 'POST'})
+				//$.ajax({url: '/rpc/core/?method=CORE_SID_SEARCH, data: {access_token: '123'}, type: 'POST'})
 			}
 		}
 	},
-
+					
 	spaces:			
 	{					
-		show:		function (oElement, oResponse)
+		show:	function (oElement, oResponse)
 		{
 			var aHTML = [];
 
@@ -2309,6 +2299,7 @@ ns1blankspace.attachments =
 		var oActions = ns1blankspace.util.getParam(oParam, 'actions', {'default': {add: true}}).value;
 		var sHelpNotes = ns1blankspace.util.getParam(oParam, 'helpNotes').value;
 		var oContext = ns1blankspace.util.getParam(oParam, 'context', {'default': {inContext: false}}).value;
+
 		var sSortBy = ns1blankspace.util.getParam(oParam, 'sortBy', {"default": 'filename'}).value;
 		var sSortDirection = ns1blankspace.util.getParam(oParam, 'sortDirection', {"default": 'asc'}).value;
 		var sSearchText = ns1blankspace.util.getParam(oParam, 'searchText').value;
@@ -2408,8 +2399,7 @@ ns1blankspace.attachments =
 						$('#ns1blankspaceAttachmentsAddContainer .ns1blankspaceRowSelect').click(function ()
 						{
 							var sSourceType = this.id.split('-')[1];
-							oParam = ns1blankspace.util.setParam(oParam, 'sourceType', sSourceType)
-							ns1blankspace.attachments.add.init(oParam);
+							ns1blankspace.attachments.add[sSourceType](oParam);
 							ns1blankspace.container.hide(
 							{
 								xhtmlElementID: 'ns1blankspaceAttachmentsAdd',
@@ -2626,30 +2616,6 @@ ns1blankspace.attachments =
 
 	add:
 	{
-		init:  function (oParam, oResponse)
-		{
-			$.ajax(
-			{
-				type: 'GET',
-				url: ns1blankspace.util.endpointURI('CORE_GET_USER_DETAILS'),
-				dataType: 'json',
-				cache: false,
-				global: false,
-				success: function(data) 
-				{
-					if (data.status == 'ER')
-					{
-						ns1blankspace.logOff()
-					}
-					else
-					{
-						var sSourceType = ns1blankspace.util.getParam(oParam, 'sourceType').value;
-						ns1blankspace.attachments.add[sSourceType](oParam);	
-					}
-				}
-			});
-		},
-
 		file:  function (oParam, oResponse)
 		{
 			var bShowUpload = ns1blankspace.util.getParam(oParam, 'showUpload', {"default": true}).value;
