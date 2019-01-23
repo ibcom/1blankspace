@@ -292,7 +292,6 @@ ns1blankspace.format.tags =
 		caption: 'Pay Now',
 		sourceMethod: 'ns1blankspace.util.financial.paynow'
 	},
-
 	{
 		type: 6,
 		caption: "Today"
@@ -345,7 +344,18 @@ ns1blankspace.format.tags =
 		caption: "Project",
 		source: "receipt.projecttext"
 	},
-
+	{
+		object: 6,
+		type: 1,
+		caption: "Area",
+		source: "receipt.areatext"
+	},
+	{
+		object: 6,
+		type: 1,
+		caption: "Transaction Reference",
+		source: "receipt.paymentreferencetransactionreference"
+	},
 	{
 		object: 175,
 		type: 1,

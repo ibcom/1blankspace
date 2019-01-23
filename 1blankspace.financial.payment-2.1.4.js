@@ -1795,7 +1795,7 @@ ns1blankspace.financial.payment =
 									var emailTo = ns1blankspace.objectContextData['payment.contactpersonpaidto.email'];
 									if (emailTo == '') {emailTo = ns1blankspace.objectContextData['payment.contactbusinesspaidto.email']}
 									$('#ns1blankspaceEmailTo').val(emailTo);
-									$('#ns1blankspaceEmailSubject').val(ns1blankspace.user.contactBusinessText + ' Payment Remittance ' + ns1blankspace.objectContextData['reference']);
+									$('#ns1blankspaceEmailSubject').val('Payment has been made by ' + ns1blankspace.user.contactBusinessText + ' for ' + ns1blankspace.objectContextData['amount']);
 
 									if (ns1blankspace.objectContextData['payment.contactpersonpaidto.email'] == '')
 									{
