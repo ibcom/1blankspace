@@ -2154,8 +2154,6 @@ ns1blankspace.logon =
 								{	
 									if (ns1blankspace.authenticationDelivery == '1' || ns1blankspace.authenticationDelivery == '2')
 									{
-										$('#ns1blankspaceLogonMessage').html('A logon code is being sent to you via ' + (ns1blankspace.authenticationDelivery==1?'email':'SMS') + '.')
-
 										var oData = 
 										{
 											method: 'LOGON_SEND_PASSWORD_CODE',
@@ -2183,7 +2181,8 @@ ns1blankspace.logon =
 												}
 												else
 												{
-													$('#ns1blankspaceLogonStatus').html('There is an issue with your user account (' + data.error.errornotes + ').');
+													$('#ns1blankspaceLogonStatus').html((ns1blankspace.authenticationDelivery==1?'email':'SMS') + 
+															' code can not be sent as there is an issue with your user account (' + data.error.errornotes + ').');
 													$('#ns1blankspaceContainer').effect("shake", { times:2 }, 100);
 												}	
 											}
@@ -2273,7 +2272,14 @@ ns1blankspace.logon =
 						}
 						else
 						{	
-							$('#ns1blankspaceLogonStatus').html('Logon name or password is incorrect.');
+							if (oResponse.error.errornotes == 'User is disabled')
+							{
+								$('#ns1blankspaceLogonStatus').html('<div>Access has been disabled.</div>');
+							}
+							else
+							{
+								$('#ns1blankspaceLogonStatus').html('Logon name or password is incorrect.');
+							}	
 						}
 
 						$('#ns1blankspaceContainer').effect("shake", { times:2 }, 100);

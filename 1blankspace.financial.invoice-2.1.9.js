@@ -707,7 +707,6 @@ ns1blankspace.financial.invoice =
 												
 												if (ns1blankspace.objectContextData.contactbusinesssenttotext != '')
 												{
-
 													aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Business</td></tr>' +
 																	'<tr><td id="ns1blankspaceSummaryBusiness" data-id="' + ns1blankspace.objectContextData.contactbusinesssentto + '" data-object="contactBusiness" class="ns1blankspaceSummary ns1blankspaceViewLink">' +
 																	ns1blankspace.objectContextData.contactbusinesssenttotext +

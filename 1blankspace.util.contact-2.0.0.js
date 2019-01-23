@@ -151,6 +151,37 @@ ns1blankspace.util.contact.bulk =
 	{
 		data: {},
 
+		getActions: function (oParam, oResponse)
+		{
+			if (oResponse == undefined)
+			{
+				if (sIDs != undefined)
+				{
+					var oSearch = new AdvancedSearch();
+					oSearch.method = 'ACTION_SEARCH';		
+					oSearch.addField('id');
+					oSearch.addFilter('contactperson', 'IN_LIST', sIDs);
+					oSearch.rows = 9999;				
+					oSearch.getResults(function(data)
+					{
+						ns1blankspace.util.contact.bulk.attachments.getActions(oParam, data)
+					});
+				}
+				else
+				{
+					ns1blankspace.status.error('No IDs');
+				}
+			}
+			else
+			{
+				ns1blankspace.util.contact.bulk.attachments.data.actions = oResponse.data.rows;
+
+				oParam = ns1blankspace.util.setParam(oParam, 'type', 'ACTION');
+				oParam = ns1blankspace.util.setParam(oParam, 'IDs', ns1blankspace.util.contact.bulk.attachments.data.actions.join(','));
+				ns1blankspace.util.contact.bulk.attachments.remove.init(oParam);
+			}
+		},
+
 		remove:
 		{
 			init: function (oParam, oResponse)
@@ -161,7 +192,8 @@ ns1blankspace.util.contact.bulk =
 
 				var sObject = 32;
 
-				if (sType.toUpperCase() == 'BUSINESS') {sObject = 12} 
+				if (sType.toUpperCase() == 'BUSINESS') {sObject = 12}
+				if (sType.toUpperCase() == 'ACTION') {sObject = 17} 
 				
 				if (oResponse == undefined)
 				{
@@ -200,7 +232,7 @@ ns1blankspace.util.contact.bulk =
 				aFile.push('Attachments to be removed: ' + ns1blankspace.util.contact.bulk.attachments.data.attachments.length)
 				aFile.push('\r\n');
 
-				console.log('Contacts to be removed: ' + ns1blankspace.util.contact.bulk.attachments.data.attachments.length);
+				console.log('Attachments to be removed: ' + ns1blankspace.util.contact.bulk.attachments.data.attachments.length);
 				console.log('More Rows: ' + ns1blankspace.util.contact.attachments.bulk.data.morerows);
 				console.log('More: ' + ns1blankspace.util.contact.bulk.attachments.data.more);
 

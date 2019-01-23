@@ -151,6 +151,122 @@ _.assign(ns1blankspace.util.contact.bulk,
 	{
 		data: {},
 
+		getActions: function (oParam, oResponse)
+		{
+			if (oResponse == undefined)
+			{
+				var sIDs = ns1blankspace.util.getParam(oParam, 'IDs').value;
+
+				if (sIDs != undefined)
+				{
+					var oSearch = new AdvancedSearch();
+					oSearch.method = 'ACTION_SEARCH';		
+					oSearch.addField('id');
+					//oSearch.addFilter('object', 'EQUAL_TO', 17);
+					//oSearch.addFilter('objectcontext', 'IN_LIST', sIDs);
+					oSearch.rows = 999999;				
+					oSearch.getResults(function(data)
+					{
+						ns1blankspace.util.contact.bulk.attachments.getActions(oParam, data)
+					});
+				}
+				else
+				{
+					ns1blankspace.status.error('No IDs');
+				}
+			}
+			else
+			{
+				ns1blankspace.util.contact.bulk.attachments.data.getActions = oResponse.data.rows;
+
+				console.log('Actions got')
+
+				//oParam = ns1blankspace.util.setParam(oParam, 'type', 'ACTION');
+				//oParam = ns1blankspace.util.setParam(oParam, 'IDs', $.map(ns1blankspace.util.contact.bulk.attachments.data.getActions, function (d) {return d.id}).join(','));
+				//ns1blankspace.util.contact.bulk.attachments.remove.init(oParam);
+			}
+		},
+
+		getAttachments: function (oParam, oResponse)
+		{
+			if (oResponse == undefined)
+			{
+				var sIDs = ns1blankspace.util.getParam(oParam, 'IDs').value;
+
+				if (sIDs != undefined)
+				{
+					var oSearch = new AdvancedSearch();
+					oSearch.method = 'CORE_ATTACHMENT_SEARCH';		
+					oSearch.addField('id,objectcontext');
+					oSearch.addFilter('object', 'EQUAL_TO', 17);
+					//oSearch.addFilter('objectcontext', 'IN_LIST', sIDs);
+					oSearch.rows = 999;				
+					oSearch.getResults(function(data)
+					{
+						ns1blankspace.util.contact.bulk.attachments.getAttachments(oParam, data)
+					});
+				}
+				else
+				{
+					ns1blankspace.status.error('No IDs');
+				}
+			}
+			else
+			{
+				ns1blankspace.util.contact.bulk.attachments.data.getAttachments = oResponse.data.rows;
+
+				console.log('Attachments got')
+
+				oParam = ns1blankspace.util.setParam(oParam, 'type', 'ACTION');
+				//oParam = ns1blankspace.util.setParam(oParam, 'IDs', $.map(ns1blankspace.util.contact.bulk.attachments.data.getAttachments, function (d) {return d.id}).join(','));
+				//ns1blankspace.util.contact.bulk.attachments.remove.init(oParam);
+			}
+		},
+
+		checkAttachments: function ()
+		{
+			/*$.each(ns1blankspace.util.contact.bulk.attachments.data.getAttachments, function (a, attachment)
+			{
+				attachment.hasAction = !_.isEmpty(_.find(ns1blankspace.util.contact.bulk.attachments.data.getActions,
+							function (action) {return action.id == attachment.objectcontext}))
+			});*/
+
+			var aActionIDs = _.map(ns1blankspace.util.contact.bulk.attachments.data.getActions, 'id');
+			var aAttachmentIDs = _.map(ns1blankspace.util.contact.bulk.attachments.data.getAttachments, 'objectcontext');
+
+			console.log('Mapped')
+			console.log(aActionIDs.length)
+			console.log(aAttachmentIDs.length)
+
+		/*	ns1blankspace.util.contact.bulk.attachments.data.checkAttachmentIDs =
+				_.filter(aAttachmentIDs, function (attachmentID)
+				{
+					return _.includes(aActionIDs, attachmentID)
+				});*/
+
+			var oActionLookup = {};
+
+			for (var j in aActionIDs) {
+			    oActionLookup[aActionIDs[j]] = aActionIDs[j];
+			}
+
+			ns1blankspace.util.contact.bulk.attachments.data.getActionsLookup = oActionLookup;
+
+			console.log('Look up created')
+
+			console.log('Attachments with missing action:')
+
+			for (var i in aAttachmentIDs) {
+			    if (typeof oActionLookup[aAttachmentIDs[i]] == 'undefined') {
+			        console.log(aAttachmentIDs[i]);
+			        //break;
+			    } 
+			}	
+
+			console.log('Checked')
+			ns1blankspace.status.message('Check done!')
+		},
+
 		remove:
 		{
 			init: function (oParam, oResponse)
