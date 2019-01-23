@@ -19,7 +19,7 @@ ns1blankspace.connect =
 					cryptoKeyReference: '1blankspace-connect-auth-key'
 				},
 
-	init: 		function (oParam)
+	init: 	function (oParam)
 				{
 					if (oParam === undefined) {oParam = {}}
 
@@ -101,7 +101,7 @@ ns1blankspace.connect =
 					});
 				},			
 
-	home: 		function (oParam, oResponse)
+	home: 	function (oParam, oResponse)
 				{
 					if (oResponse == undefined)
 					{
@@ -173,7 +173,6 @@ ns1blankspace.connect =
 						oSearch.sort('title', 'asc');
 						
 						oSearch.getResults(function(data) {ns1blankspace.connect.home(oParam, data)});
-
 					}
 					else
 					{
@@ -278,7 +277,7 @@ ns1blankspace.connect =
 				},								
 
 	search: 	{
-					send: 		function (sXHTMLElementID, oParam)
+					send: 	function (sXHTMLElementID, oParam)
 								{
 									var aSearch = sXHTMLElementID.split('-');
 									var sElementID = aSearch[0];
@@ -702,7 +701,7 @@ ns1blankspace.connect =
 								}
 				},				
 
-	details: 	function ()
+	details: function ()
 				{
 					var aHTML = [];
 
