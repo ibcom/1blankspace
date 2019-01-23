@@ -297,14 +297,14 @@ ns1blankspace.format.tags =
 		caption: "Today"
 	},
 	{
-		object: 3,
-		type: 6,
+		object: 6,
+		type: 1,
 		caption: "Reference",
 		source: "receipt.reference"
 	},
 	{
-		object: 3,
-		type: 6,
+		object: 6,
+		type: 1,
 		caption: "Amount",
 		source: "receipt.amount"
 	},
@@ -318,7 +318,7 @@ ns1blankspace.format.tags =
 		object: 6,
 		type: 1,
 		caption: "Received Date",
-		source: "receipt.receivedDate"
+		source: "receipt.receiveddate"
 	},
 	{
 		object: 6,
