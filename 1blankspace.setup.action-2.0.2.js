@@ -114,6 +114,11 @@ ns1blankspace.setup.action =
 						}
 
 						$('#ns1blankspaceMainTypes').html(aHTML.join(''));
+
+						$('td.ns1blankspaceRowSelect').click(function(event)
+						{
+							ns1blankspace.setup.action.search.send(event.target.id, {source: 1});
+						});
 					}			
 				},
 
@@ -366,6 +371,27 @@ ns1blankspace.setup.action =
 											ns1blankspace.objectContextData.title +
 											'</td></tr>');
 
+						aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Show In Calendar?</td></tr>' +
+											'<tr><td class="ns1blankspaceSummary">' +
+											(ns1blankspace.objectContextData.showincalendar=='Y'?'Yes':'No') +
+											'</td></tr>');
+
+						if (ns1blankspace.objectContextData.textcolour != '')
+						{
+							aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Text Colour</td></tr>' +
+											'<tr><td class="ns1blankspaceSummary">' +
+											ns1blankspace.objectContextData.textcolour +
+											'</td></tr>');
+						}
+
+						if (ns1blankspace.objectContextData.backgroundcolour != '')
+						{
+							aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Background Colour</td></tr>' +
+											'<tr><td class="ns1blankspaceSummary">' +
+											ns1blankspace.objectContextData.backgroundcolour +
+											'</td></tr>');
+						}
+
 						aHTML.push('</table>');								
 
 						$('#ns1blankspaceSummaryColumn1').html(aHTML.join(''));
@@ -402,6 +428,61 @@ ns1blankspace.setup.action =
 										'<input id="ns1blankspaceDetailsTitle" class="ns1blankspaceText">' +
 										'</td></tr>');
 
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
+										'Text Colour' +
+										'</td></tr>' +
+										'<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceText">' +
+										'<input id="ns1blankspaceDetailsTextColour" class="ns1blankspaceText">' +
+										'</td></tr>');
+
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
+										'Background Colour' +
+										'</td></tr>' +
+										'<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceText">' +
+										'<input id="ns1blankspaceDetailsBackgroundColour" class="ns1blankspaceText">' +
+										'</td></tr>');
+
+						aHTML.push('<tr><td class="ns1blankspaceCaption">' +
+										'Show In Calendar?' +
+										'</td></tr>' +
+										'<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceRadio">' +
+										'<input type="radio" id="radioShowInCalendarY" name="radioShowInCalendar" value="Y"/>Yes' +
+										'<br /><input type="radio" id="radioShowInCalendarN" name="radioShowInCalendar" value="N"/>No' +
+										'</td></tr>');
+
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
+										'Display Order' +
+										'</td></tr>' +
+										'<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceText">' +
+										'<input id="ns1blankspaceDetailsDisplayOrder" class="ns1blankspaceText">' +
+										'</td></tr>');
+
+						aHTML.push('<tr><td class="ns1blankspaceCaption">' +
+										'Equivalent Email Type' +
+										'</td></tr>' +
+										'<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceRadio">' +
+										'<input type="radio" id="radioSystemType" name="radioSystemType" value=""/>Not Applicable' +
+										'<br /><input type="radio" id="radioSystemType5" name="radioSystemType" value="5"/>Sent' +
+										'<br /><input type="radio" id="radioSystemType9" name="radioSystemType" value="9"/>Received' +
+										'</td></tr>');
+
+
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
+										'Notes' +
+										'</td></tr>' +
+										'<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceRadio">' +
+										'<textarea id="ns1blankspaceDetailsNotes" style="width: 100%; height:100px;" rows="5" cols="35" class="ns1blankspaceTextMulti"></textarea>' +
+										'</td></tr>');
 
 						aHTML.push('</table>');					
 
@@ -410,11 +491,17 @@ ns1blankspace.setup.action =
 						if (ns1blankspace.objectContextData != undefined)
 						{
 							$('#ns1blankspaceDetailsTitle').val(ns1blankspace.objectContextData.title);
-							//$('[name="radioPrivate"][value="' + ns1blankspace.objectContextData.private + '"]').attr('checked', true);
+							$('#ns1blankspaceDetailsTextColour').val(ns1blankspace.objectContextData.textcolour);
+							$('#ns1blankspaceDetailsBackgroundColour').val(ns1blankspace.objectContextData.backgroundcolour);
+							$('#ns1blankspaceDetailsNotes').val(ns1blankspace.objectContextData.notes);
+							$('#ns1blankspaceDetailsDisplayOrder').val(ns1blankspace.objectContextData.displayorder);
+							$('[name="radioShowInCalendar"][value="' + ns1blankspace.objectContextData.showincalendar + '"]').attr('checked', true);
+							$('[name="radioSystemType"][value="' + ns1blankspace.objectContextData.systemtype + '"]').attr('checked', true);
 						}
 						else
 						{
-							//$('[name="radioPrivate"][value="Y"]').attr('checked', true);
+							$('[name="radioShowInCalendar"][value="Y"]').attr('checked', true);
+							$('[name="radioSystemType"][value=""]').attr('checked', true);
 						}
 					}	
 				},
@@ -434,6 +521,12 @@ ns1blankspace.setup.action =
 									if ($('#ns1blankspaceMainDetails').html() != '')
 									{
 										oData.title = $('#ns1blankspaceDetailsTitle').val();
+										oData.textcolour = $('#ns1blankspaceDetailsTextColour').val();
+										oData.backgroundcolour = $('#ns1blankspaceDetailsBackgroundColour').val();
+										oData.notes = $('#ns1blankspaceDetailsNotes').val();
+										oData.displayorder = $('#ns1blankspaceDetailsDisplayOrder').val();
+										oData.showincalendar = $('input[name="radioShowInCalendar"]:checked').val();
+										oData.systemtype = $('input[name="radioSystemType"]:checked').val();
 									}
 
 									if (!ns1blankspace.util.isEmpty(oData))
@@ -446,7 +539,6 @@ ns1blankspace.setup.action =
 											dataType: 'json',
 											success: function (data) {ns1blankspace.setup.action.save.process(data, oData)}
 										});
-										
 									}
 									else
 									{

@@ -167,7 +167,7 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.action',
-		source: '/site/312/1blankspace.action-2.0.9.js'
+		source: '/site/312/1blankspace.action-2.1.0.js'
 	},
 	{
 		nameSpace: '1blankspace.messaging.conversation',
@@ -951,7 +951,8 @@ ns1blankspace.views =
 		endpoint: "SETUP", 
 		show: true,
 		group: 9,
-		type: 2
+		type: 2,
+		subNote: 'Types & Templates'
 	},
 	{
 		title: 'Person&nbsp;Groups',

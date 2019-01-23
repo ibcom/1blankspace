@@ -1871,11 +1871,22 @@ ns1blankspace.action =
 
 						var oSearch = new AdvancedSearch();
 						oSearch.method = 'ACTION_SEARCH';
-						oSearch.addField('contactperson,actionby,actionbytext,actionreference,actiontype,actiontypetext,billingstatus,' +
+
+						if (ns1blankspace.data.lab)
+						{
+							oSearch.addField('contactperson,actionby,actionbytext,actionreference,actiontype,actiontypetext,billingstatus,' +
 											'billingstatustext,completed,completedtime,contactbusiness,contactbusinesstext,contactperson,' +
 											'contactpersontext,date,description,duedate,duedatetime,object,objectcontext,objecttext,' +
 											'priority,prioritytext,status,statustext,subject,text,totaltimehrs,totaltimemin,' +
 											'action.actiontype.textcolour,action.actiontype.backgroundcolour');
+						}
+						else
+						{
+							oSearch.addField('contactperson,actionby,actionbytext,actionreference,actiontype,actiontypetext,billingstatus,' +
+											'billingstatustext,completed,completedtime,contactbusiness,contactbusinesstext,contactperson,' +
+											'contactpersontext,date,description,duedate,duedatetime,object,objectcontext,objecttext,' +
+											'priority,prioritytext,status,statustext,subject,text,totaltimehrs,totaltimemin');
+						}
 						
 						oSearch.addFilter('actionby', 'EQUAL_TO', user);
 						oSearch.addFilter('duedate', 'GREATER_THAN_OR_EQUAL_TO', start.format('DD MMM YYYY') + ' 00:00:00');
@@ -1900,6 +1911,19 @@ ns1blankspace.action =
 								row.editable = (row.status == 2 || row.status == 4);
 								row.title = sTitle;
 								row.user = user;
+
+								if (ns1blankspace.data.lab)
+								{
+									if (row['action.actiontype.textcolour'] != '')
+									{
+										row.textColor = row['action.actiontype.textcolour']
+									}
+
+									if (row['action.actiontype.backgroundcolour'] != '')
+									{
+										row.color = row['action.actiontype.backgroundcolour'] 
+									}
+								}	
 
 								events.push(row);
 							});
