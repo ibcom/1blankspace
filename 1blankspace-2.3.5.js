@@ -622,7 +622,6 @@ ns1blankspace.app =
 								}
 							})
 							.click(function() {
-								// 2.1.9 Was calling contact.email.search which doesn't exist??
 								ns1blankspace.search.email.show(ns1blankspace.xhtml.divID, {
 										source: 4, 
 										emailOnly: true,
