@@ -6645,7 +6645,7 @@ ns1blankspace.financial.payroll.superannuation =
 						.click(function() 
 						{
 							oParam = ns1blankspace.util.setParam(oParam, 'searchText', undefined);
-							oParam = ns1blankspace.util.setParam(oParam, 'searchDate', $('#ns1blankspacePayrollSuperannuationExpenseSearchDate').val());
+							oParam = ns1blankspace.util.setParam(oParam, 'searchDate', undefined);
 							ns1blankspace.financial.payroll.superannuation.expenses(oParam);
 						})
 						.css('width', '57px');

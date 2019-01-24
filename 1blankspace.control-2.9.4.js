@@ -164,7 +164,7 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.action',
-		source: '/site/1433/1blankspace.action-2.0.9.js'
+		source: '/site/1433/1blankspace.action-2.1.0.js'
 	},
 	{
 		nameSpace: '1blankspace.messaging.conversation',
@@ -216,7 +216,7 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.financial.expense',
-		source: '/site/1433/1blankspace.financial.expense-2.1.4.js'
+		source: '/site/1433/1blankspace.financial.expense-2.1.5.js'
 	},
 	{
 		nameSpace: '1blankspace.financial.receipt',
@@ -268,7 +268,7 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.setup.action',
-		source: '/jscripts/1blankspace.setup.action-2.0.1.js'
+		source: '/site/1433/1blankspace.setup.action-2.0.1.js'
 	},
 	{
 		nameSpace: '1blankspace.setup.messaging',
@@ -948,7 +948,8 @@ ns1blankspace.views =
 		endpoint: "SETUP", 
 		show: true,
 		group: 9,
-		type: 2
+		type: 2,
+		subNote: 'Types & Templates'
 	},
 	{
 		title: 'Person&nbsp;Groups',
