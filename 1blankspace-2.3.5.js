@@ -1978,7 +1978,7 @@ ns1blankspace.logon =
 									'</td></tr>');
 
 					aHTML.push('<tr class="ns1blankspacePasswordCodeContainer" style="display:none;"><td class="ns1blankspaceLogonText" colspan=2 style="padding-bottom: 15px;">' +
-									'<input id="ns1blankspaceLogonPasswordCode" class="ns1blankspaceLogon" type="password" autocomplete="off">' +
+									'<input id="ns1blankspaceLogonPasswordCode" class="ns1blankspaceLogon" type="tel" autocomplete="nope">' +
 									'</td></tr>');
 
 					aHTML.push('<tr class="ns1blankspacePasswordTOTPCodeContainer" colspan=2 style="display:none;">' +
@@ -1986,7 +1986,7 @@ ns1blankspace.logon =
 									'Code</td>');
 
 					aHTML.push('<tr class="ns1blankspacePasswordTOTPCodeContainer" style="display:none;"><td class="ns1blankspaceLogonText" colspan=2 style="padding-bottom: 15px;">' +
-									'<input id="ns1blankspaceLogonPasswordTOTPCode" class="ns1blankspaceLogon" type="password" autocomplete="off">' +
+									'<input id="ns1blankspaceLogonPasswordTOTPCode" class="ns1blankspaceLogon" type="tel" autocomplete="nope">' +
 									'</td></tr>');
 
 					aHTML.push('<tr>' +

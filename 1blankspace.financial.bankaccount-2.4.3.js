@@ -5325,19 +5325,25 @@ ns1blankspace.financial.bankAccount =
 														'<br /><input type="radio" id="radioStatus2" name="radioStatus" value="2"/>Locked <span class="ns1blankspaceSub">(Completed)</span>' +
 														'</td></tr>');
 
+										if (sID != undefined)
+										{
 											aHTML.push('<tr class="ns1blankspaceCaption">' +
 														'<td class="ns1blankspaceCaption">' +
 														'Statement' +
 														'</td></tr>')
 
-										aHTML.push('<tr><td id="ns1blankspaceBankAccountReconcileAttachmentContainer">');
-										aHTML.push('</td></tr>');
+											aHTML.push('<tr><td id="ns1blankspaceBankAccountReconcileAttachmentContainer">');
+											aHTML.push('</td></tr>');
+										}	
 
 										aHTML.push('</table>');					
 										
 										$('#ns1blankspaceBankAccountColumnReconcileEdit1').html(aHTML.join(''));
 
-										ns1blankspace.financial.bankAccount.reconcile.attachment.init({objectContext: sID})
+										if (sID != undefined)
+										{
+											ns1blankspace.financial.bankAccount.reconcile.attachment.init({objectContext: sID})
+										}	
 										
 										$('input.ns1blankspaceDate').datepicker({dateFormat: ns1blankspace.option.dateFormat});
 		

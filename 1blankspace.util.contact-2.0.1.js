@@ -159,11 +159,14 @@ _.assign(ns1blankspace.util.contact.bulk,
 
 				if (sIDs != undefined)
 				{
+					//only works if no private=Y actions.
+					
 					var oSearch = new AdvancedSearch();
 					oSearch.method = 'ACTION_SEARCH';		
 					oSearch.addField('id');
 					//oSearch.addFilter('object', 'EQUAL_TO', 17);
 					//oSearch.addFilter('objectcontext', 'IN_LIST', sIDs);
+
 					oSearch.rows = 999999;				
 					oSearch.getResults(function(data)
 					{
@@ -199,7 +202,7 @@ _.assign(ns1blankspace.util.contact.bulk,
 					oSearch.method = 'CORE_ATTACHMENT_SEARCH';		
 					oSearch.addField('id,objectcontext');
 					oSearch.addFilter('object', 'EQUAL_TO', 17);
-					//oSearch.addFilter('objectcontext', 'IN_LIST', sIDs);
+					oSearch.addFilter('id', 'EQUAL_TO', 122064);
 					oSearch.rows = 999;				
 					oSearch.getResults(function(data)
 					{
@@ -232,11 +235,12 @@ _.assign(ns1blankspace.util.contact.bulk,
 			});*/
 
 			var aActionIDs = _.map(ns1blankspace.util.contact.bulk.attachments.data.getActions, 'id');
-			var aAttachmentIDs = _.map(ns1blankspace.util.contact.bulk.attachments.data.getAttachments, 'objectcontext');
+			var aAttachmentObjectContexts = _.map(ns1blankspace.util.contact.bulk.attachments.data.getAttachments, 'objectcontext');
+			var aAttachmentIDs = _.map(ns1blankspace.util.contact.bulk.attachments.data.getAttachments, 'id');
 
 			console.log('Mapped')
 			console.log(aActionIDs.length)
-			console.log(aAttachmentIDs.length)
+			console.log(aAttachmentObjectContexts.length)
 
 		/*	ns1blankspace.util.contact.bulk.attachments.data.checkAttachmentIDs =
 				_.filter(aAttachmentIDs, function (attachmentID)
@@ -245,21 +249,32 @@ _.assign(ns1blankspace.util.contact.bulk,
 				});*/
 
 			var oActionLookup = {};
+		
+			for (var j in aActionIDs)
+			{
+			   oActionLookup[aActionIDs[j]] = aActionIDs[j];
+			}
 
-			for (var j in aActionIDs) {
-			    oActionLookup[aActionIDs[j]] = aActionIDs[j];
+			var oAttachmentLookup = {};
+		
+			for (var j in aAttachmentObjectContexts)
+			{
+			   oAttachmentLookup[aAttachmentObjectContexts[j]] = ns1blankspace.util.contact.bulk.attachments.data.getAttachments[j];
 			}
 
 			ns1blankspace.util.contact.bulk.attachments.data.getActionsLookup = oActionLookup;
+			ns1blankspace.util.contact.bulk.attachments.data.getAttachmentsLookup = oAttachmentLookup;
 
 			console.log('Look up created')
 
 			console.log('Attachments with missing action:')
 
-			for (var i in aAttachmentIDs) {
-			    if (typeof oActionLookup[aAttachmentIDs[i]] == 'undefined') {
-			        console.log(aAttachmentIDs[i]);
-			        //break;
+			for (var i in aAttachmentObjectContexts)
+			{
+			    if (typeof oActionLookup[aAttachmentObjectContexts[i]] == 'undefined')
+			    {
+			        console.log('action-id:' + aAttachmentObjectContexts[i]);
+			        console.log('attachment-id:' + aAttachmentIDs[i])
 			    } 
 			}	
 
