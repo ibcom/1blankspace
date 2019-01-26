@@ -6295,7 +6295,7 @@ ns1blankspace.financial.bankAccount =
 																		'</td></tr>' +
 																		'<tr class="ns1blankspaceText">' +
 																		'<td class="ns1blankspaceText">' +
-																		'<input id="ns1blankspaceItemsEditSearchDate" class="ns1blankspaceDate">' +
+																		'<input id="ns1blankspaceItemsEditSearchDate" class="ns1blankspaceDate" data-1blankspace="ignore">' +
 																		'</td></tr>');
 															
 														aHTML.push('<tr><td class="ns1blankspaceCaption">' +
@@ -6303,7 +6303,7 @@ ns1blankspace.financial.bankAccount =
 																		'</td></tr>' +
 																		'<tr class="ns1blankspaceText">' +
 																		'<td class="ns1blankspaceText">' +
-																		'<input id="ns1blankspaceItemsEditSearchAmount" class="ns1blankspaceText">' +
+																		'<input id="ns1blankspaceItemsEditSearchAmount" class="ns1blankspaceText" data-1blankspace="ignore">' +
 																		'</td></tr>');
 
 														aHTML.push('<tr><td class="ns1blankspaceCaption">' +
@@ -6311,7 +6311,7 @@ ns1blankspace.financial.bankAccount =
 																		'</td></tr>' +
 																		'<tr class="ns1blankspaceText">' +
 																		'<td class="ns1blankspaceText">' +
-																		'<input id="ns1blankspaceItemsEditSearchReference" class="ns1blankspaceText">' +
+																		'<input id="ns1blankspaceItemsEditSearchReference" class="ns1blankspaceText" data-1blankspace="ignore">' +
 																		'</td></tr>');
 																						
 														aHTML.push('<tr><td class="ns1blankspaceAction">' +
