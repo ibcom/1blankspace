@@ -580,7 +580,21 @@ ns1blankspace.views =
 		endpoint: "MESSAGING_IMAP",
 		show: true,
 		group: 1,
-		type: 1
+		type: 1,
+		search:
+		{
+			filters:
+			[
+				{
+					caption: "Email",
+					name: "from",
+					type: 'Text',
+					comparison: 'TEXT_IS_LIKE',
+					fixed: false
+				}
+			],
+			advanced: false	
+		}
 	},
 	{
 		title: "Conversations",
