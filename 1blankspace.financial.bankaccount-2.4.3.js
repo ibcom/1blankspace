@@ -5102,7 +5102,7 @@ ns1blankspace.financial.bankAccount =
 										{
 											xhtmlElementID: 'ns1blankspaceControlContext_reco_summary_statement-' + iReconciliation,
 											objectContext: iReconciliation,
-											downloadText: 'Download Bank Statement'
+											downloadText: 'View Bank Statement'
 										})
 
 										$('#ns1blankspaceBankAccountColumnItemType').buttonset().css('font-size', '0.75em');
