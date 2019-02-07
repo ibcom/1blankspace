@@ -963,11 +963,11 @@ ns1blankspace.setup.website =
 
 						if (bIsPage)
 						{
-							aHTML.push('<input type="radio" id="radio' + sContext + '" name="radio' + sContext + '" value=""/>' +
+							aHTML.push('<input type="radio" id="radio' + sContext + '-2" name="radio' + sContext + '" value="-2"/>' +
 													'As per website<br />');
 						}
 
-						aHTML.push('<input type="radio" id="radio' + sContext + '-2" name="radio' + sContext + '" value="-2"/>' +
+						aHTML.push('<input type="radio" id="radio' + sContext + '" name="radio' + sContext + '" value=""/>' +
 													'None<br />');
 
 						if (oResponse.data.rows.length == 0)
