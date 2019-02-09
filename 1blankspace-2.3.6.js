@@ -997,7 +997,8 @@ ns1blankspace.app =
 					}		
 				},
 
-	postInit: 	function (oParam)
+	postInit: 
+				function (oParam)
 				{			
 					var aHTML = [];
 					var sSpaceText = ns1blankspace.user.spaceText;

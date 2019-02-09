@@ -61,9 +61,14 @@ ns1blankspace.option = $.extend(true, ns1blankspace.option,
 	{
 		australia: 'https://www.safeworkaustralia.gov.au/workers-compensation/comparing-australias-workers-compensation-schemes'
 	},
-	logonTOTP: true,
+	logonTOTP: 
+	{
+		enabled: true,
+		name: 'Google Authenticator'
+	},
 	logonAccessToken: true,
-	userRelationshipManagerBasedAccess: true
+	userRelationshipManagerBasedAccess: true,
+	siteName: '1blankspace (lab)'
 });
 
 ns1blankspace.option.yodlee =
@@ -299,7 +304,7 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.setup.user',
-		source: '/site/312/1blankspace.setup.user-2.1.1.js'
+		source: '/site/312/1blankspace.setup.user-2.1.2.js'
 	},
 	{
 		nameSpace: '1blankspace.setup.userRole',

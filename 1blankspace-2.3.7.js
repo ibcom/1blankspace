@@ -2195,7 +2195,18 @@ ns1blankspace.logon =
 									{
 										$('tr.ns1blankspacePasswordTOTPCodeContainer').show();
 										$('#ns1blankspaceLogonStatus').html('');
-										$('#ns1blankspaceLogonMessage').html('Please enter the code from Google Authenticator and then press Logon again.');
+
+										var sLogonTOTPName = 'your TOTP client (eg Google Authenticator)';
+
+										if (ns1blankspace.option.logonTOTP != undefined)
+										{
+											if (ns1blankspace.option.logonTOTP.name != undefined)
+											{
+												sLogonTOTPName = ns1blankspace.option.logonTOTP.name
+											}
+										}
+
+										$('#ns1blankspaceLogonMessage').html('Please enter the code from ' + sLogonTOTPName + ' and then press Logon again.');
 										ns1blankspace.logonInitialised = true;
 										$('#ns1blankspaceLogonPasswordTOTPCode').focus();
 									}	
@@ -2241,12 +2252,19 @@ ns1blankspace.logon =
 					{
 						var sPasswordCode = $('#ns1blankspaceLogonPasswordCode').val();
 
-						if (iAuthenticationLevel == 4)
+						if (sPasswordCode == undefined)
 						{
 							sPasswordCode = $('#ns1blankspaceLogonPasswordTOTPCode').val()
 						}
 						
-						oData.passwordhash = ns1blankspace.util.hash({value: sLogonName + sPassword + ns1blankspace.logonKey + sPasswordCode})
+						if (sPasswordCode != undefined && sPasswordCode != '')
+						{
+							oData.passwordhash = ns1blankspace.util.hash({value: sLogonName + sPassword + ns1blankspace.logonKey + sPasswordCode})
+						}
+						else
+						{
+							$('#ns1blankspaceLogonStatus').html('You need to enter a code.')
+						}
 					}
 					
 					$('#ns1blankspaceLogonStatus').html(ns1blankspace.xhtml.loading);
