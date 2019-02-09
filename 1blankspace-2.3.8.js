@@ -5446,11 +5446,11 @@ ns1blankspace.util =
 ns1blankspace.debug = 
 {
 	enabled: true,
-	persist: true,
-	log: true;
+	persist: false,
+	log: true,
 	data: {log: []},
 
-	message: function (oParam, bLog, sData, bRemote)
+	message: function (oParam, bLog, sData, bPersist)
 				{
 					var sMessage;
 

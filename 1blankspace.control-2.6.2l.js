@@ -144,11 +144,10 @@ ns1blankspace.xhtml.header =
 	'</div>';
 
 ns1blankspace.scripts =
-ns1blankspace.scripts.concat(
 [
 	{
 		nameSpace: '1blankspace.advancedsearch',
-		source: '/jscripts/1blankspace.advancedsearch-2.0.5.js'
+		source: '/site/312/1blankspace.advancedsearch-2.0.6.js'
 	},
 	{
 		nameSpace: '1blankspace.home',
@@ -376,7 +375,7 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.admin.monitoring',
-		source: '/site/312/1blankspace.admin.monitoring-2.0.2.js'
+		source: '/site/312/1blankspace.admin.monitoring-2.0.3.js'
 	},
 	{
 		nameSpace: '1blankspace.developer.membership',
@@ -418,7 +417,7 @@ ns1blankspace.scripts.concat(
 		nameSpace: '1blankspace.util.contacts',
 		source: '/site/312/1blankspace.util.contact-2.0.1.js'
 	}
-])
+]
 
 ns1blankspace.themes = 
 [
