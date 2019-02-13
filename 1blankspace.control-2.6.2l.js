@@ -2809,7 +2809,7 @@ ns1blankspace.attachments =
 
 	upload: 	
 	{ 
-		show: 	function (oParam)
+		show: function (oParam)
 		{
 			var iObject = ns1blankspace.util.getParam(oParam, 'object', {'default': ns1blankspace.object}).value;
 			var lObjectContext = ns1blankspace.util.getParam(oParam, 'objectContext', {'default': ns1blankspace.objectContext}).value;
@@ -2886,7 +2886,7 @@ ns1blankspace.attachments =
 			for (var i = 0; i < iMaxFiles; i++) 	
 			{
 				aHTML.push('<div id="ns1blankspaceUploadFile' + i + '" class="ns1blankspaceUpload" style="padding:3px;">' +
-								'<input class="ns1blankspaceUpload" type="file" name="oFile' + i + '" id="oFile' + i + '"' +
+								'<input class="ns1blankspaceUpload" type="file" name="file' + i + '" id="oFile' + i + '"' +
 								(bImage?' accept="image/*" capture="camera"':'') + '>');
 				
 				if (aAttachmentTypes.length > 0)
