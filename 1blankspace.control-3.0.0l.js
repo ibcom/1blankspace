@@ -2438,13 +2438,13 @@ ns1blankspace.attachments =
 						ns1blankspace.container.position(
 						{
 							xhtmlElementID: 'ns1blankspaceAttachmentsAdd',
-							topOffset: -36,
-							leftOffset: -70
+							topOffset: -25,
+							leftOffset: -66
 						});
 
 						$vq.clear({queue: 'sourcetype'});
 
-						$vq.add('<div class="ns1blankspaceViewControlContainer" id="ns1blankspaceAttachmentsAddContainer" style="font-size:0.875em; width:50px; text-align:center;">',
+						$vq.add('<div class="ns1blankspaceViewControlContainer" id="ns1blankspaceAttachmentsAddContainer" style="font-size:0.875em; width:60px; text-align:center;">',
 							{queue: 'sourcetype'});
 
 						$vq.add('<div class="ns1blankspaceRow ns1blankspaceRowSelect" style="border-width: 0px; margin:8px;"' +

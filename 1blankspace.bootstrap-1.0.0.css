@@ -4701,7 +4701,7 @@ a.thumbnail.active {
   line-height: 20px;
   color: #ffffff;
   text-align: center;
-  background-color: #428bca;
+  background-color: #ee8f00;
   -webkit-box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.15);
   box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.15);
   -webkit-transition: width 0.6s ease;
@@ -6935,14 +6935,22 @@ td.ns1blankspaceAction
   padding-left: 12px;
   padding-right: 12px;
   font-weight: 600;
+  color: #333333bf;
 }
 
 #ns1blankspaceUpload:hover
 {
   background-color: #ff9600;
+  color: white;
 }
 
 #ns1blankspaceViewControlHistoryContainer
 {
   left: 48px;
+}
+
+td.ns1blankspaceRow, div.ns1blankspaceRow
+{
+  padding-top: 4px;
+  padding-bottom: 4px;
 }
