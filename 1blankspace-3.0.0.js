@@ -1137,11 +1137,11 @@ ns1blankspace.app =
 									primary: "ui-icon-triangle-1-s"
 								}
 							})
-							.click(function() {
+							.click(function()
+							{
 								ns1blankspace.home.options.show(this);
 							})
-							.css('width', '12px')
-							.css('margin-left', '1px')
+							.css('width', '16px')
 							.parent()
 								.buttonset();
 
@@ -1149,7 +1149,6 @@ ns1blankspace.app =
 					{
 						$('#ns1blankspaceViewControlRefresh')
 								.button({
-									label: 'Back to top',
 									text: false,
 									icons:
 									{
@@ -1170,14 +1169,13 @@ ns1blankspace.app =
 										window[sNS][ns1blankspace.objectName].init();
 									}	
 								})
-								.css('width', '25px')
-								.css('margin-left', '20px')
+								.css('width', '26px')
+								.css('margin-left', '7px')
 							.next()
 								.button(
 								{
 									text: false,
 									disabled: false,
-									label: 'Most used',
 									icons:
 									{
 										primary: "ui-icon-star"
@@ -1188,7 +1186,10 @@ ns1blankspace.app =
 									ns1blankspace.control.favourites.show({instruction: 3});
 								})
 								.css('width', '25px')
-								.css('margin-left', '4px')
+								.css('padding-top', '6px')
+								.css('font-size', '1.1em')
+								.css('padding-left', '5px')
+								.css('height', '28px')
 								.parent()
 									.buttonset();
 					}
@@ -1228,8 +1229,8 @@ ns1blankspace.app =
 										window[sNS][ns1blankspace.objectName].init();
 									}	
 								})
-								.css('width', '25px')
-								.css('margin-left', '1px')
+								.css('width', '26px')
+								.css('margin-left', '0px')
 							.next()
 								.button( {
 									text: false,
@@ -1239,7 +1240,7 @@ ns1blankspace.app =
 									ns1blankspace.history.view({instruction: 3});
 								})
 								.css('width', '19px')
-								.css('margin-left', '1px')
+								.css('margin-left', '0px')
 								.parent()
 									.buttonset();
 					}				
@@ -1288,8 +1289,8 @@ ns1blankspace.app =
 									primary: "ui-icon-triangle-1-s"
 								}
 							})
-							.css('width', '12px')
-							.css('margin-left', '1px')
+							.css('width', '16px')
+							.css('padding-right', '2px')
 							.parent()
 								.buttonset();	
 														
@@ -1721,7 +1722,7 @@ ns1blankspace.app =
 					if (bAll || bActionOptions) {$('#ns1blankspaceViewControlActionOptions').button({disabled: !bContext && (!bSpecific || bActionOptions)})};
 				},				
 
-	options: 	{
+	options: {
 					show: 		function (oParam)
 								{
 									var oElement;
@@ -1796,7 +1797,7 @@ ns1blankspace.app =
 										$(ns1blankspace.xhtml.container).attr('data-initiator', oElement.id)
 																		.html("&nbsp;")
 																		.show()
-																		.offset({ top: $(oElement).offset().top + $(oElement).height(), left: $(oElement).offset().left })
+																		.offset({ top: $(oElement).offset().top + $(oElement).height() + 11 , left: $(oElement).offset().left })
 																		.html(sXHTML);
 										
 										if (fBind !== undefined)
@@ -2606,7 +2607,7 @@ ns1blankspace.logOff = function ()
 						global: false,
 						success: function ()
 						{
-							if (!ns1blankspace.debug.enabled)
+							if (!ns1blankspace.debug.noRefresh)
 							{
 								ns1blankspace.logonInitialised = false;
 								ns1blankspace.logonKey = '';
@@ -7030,7 +7031,7 @@ ns1blankspace.extend =
 							aHTML.push('</table>');
 						}
 						
-						$('table.ns1blankspaceControl :last').append(aHTML.join(''));	
+						$('table.ns1blankspaceControl:last').append(aHTML.join(''));	
 						$('#ns1blankspaceMain').append(aHTMLDIV.join(''));
 
 						$($.grep(ns1blankspace.extend.structure, function (a) {return a.object == iObject;})).each(function()

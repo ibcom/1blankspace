@@ -1402,9 +1402,11 @@ ns1blankspace.setup.user =
 										sData += '&unrestrictedaccess=' + $('input[name="radioAccessUnrestricted"]:checked').val();
 										ns1blankspace.objectContextData.unrestrictedaccess = $('input[name="radioAccessUnrestricted"]:checked').val();
 
-										sData += '&relationshipmanagersecuritytype=' + $('input[name="radioRelationshipManagerBasedAccessLevel"]:checked').val();
-										ns1blankspace.objectContextData.relationshipmanagersecuritytype = $('input[name="radioRelationshipManagerBasedAccessLevel"]:checked').val();
-
+										if (ns1blankspace.option.userRelationshipManagerBasedAccess)
+										{
+											sData += '&relationshipmanagersecuritytype=' + $('input[name="radioRelationshipManagerBasedAccessLevel"]:checked').val();
+											ns1blankspace.objectContextData.relationshipmanagersecuritytype = $('input[name="radioRelationshipManagerBasedAccessLevel"]:checked').val();
+										}
 									};
 
 									$.ajax(

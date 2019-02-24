@@ -1667,6 +1667,7 @@ ns1blankspace.action =
 
 			$('#' + sXHTMLElementID).fullCalendar(
 			{
+				themeSystem: 'bootstrap3',
 				theme: true,
 				defaultView: 'agendaWeek',
 				header:
@@ -2470,7 +2471,7 @@ ns1blankspace.action =
 					aHTML.push('<td id="ns1blankspaceAction_contact-' + this.contactperson + '" class="ns1blankspaceRow ns1blankspaceRowSelectContact">' +
 									this.contactpersontext + '</td>');
 										
-					aHTML.push('<td id="ns1blankspaceAction_options-' + this.id + '" class="ns1blankspaceRow" >');
+					aHTML.push('<td id="ns1blankspaceAction_options-' + this.id + '" class="ns1blankspaceRow" style="width:60px;">');
 					aHTML.push('<div id="ns1blankspaceActionComplete_' + this.id + '" class="ns1blankspaceAction ns1blankspaceActionComplete"></div>')
 					aHTML.push('<div id="ns1blankspaceActionPriorityContainer_' + this.id + '" style="float:left;">');
 
@@ -2478,7 +2479,7 @@ ns1blankspace.action =
 					{
 						aHTML.push('<div style="float:left; margin-right:1px;" id="ns1blankspaceActionPriority_' + this.id + '"' +
 										' class="ns1blankspaceAction ns1blankspaceActionPriority"' +
-										' data-priority="' + this.priority + '">Priority</div>');
+										' data-priority="' + this.priority + '"></div>');
 					}
 					else
 					{
@@ -2507,7 +2508,6 @@ ns1blankspace.action =
 				$('div.ns1blankspaceActionComplete')
 				.button(
 				{
-					label: 'Mark as completed',
 					text: false,
 					icons: {primary: 'ui-icon-check'}
 				})
@@ -2540,7 +2540,6 @@ ns1blankspace.action =
 				$('div.ns1blankspaceActionPriority')
 				.button(
 				{
-					label: 'Flag as critical',
 					text: false,
 					icons: {primary: 'ui-icon-notice'}
 				})

@@ -1444,7 +1444,7 @@ th {
   padding: 8px;
   line-height: 1.428571429;
   vertical-align: top;
-  border-top: 1px solid #dddddd;
+  border-top: 0px solid #dddddd;
 }
 .table > thead > tr > th {
   vertical-align: bottom;
@@ -2097,7 +2097,7 @@ select[multiple].input-lg {
   background-image: none;
   border: 1px solid transparent;
   white-space: nowrap;
-  padding: 4px 12px;
+  padding: 4px 8px;
   font-size: 13px;
   line-height: 1.428571429;
   border-radius: 0px;
@@ -2136,17 +2136,19 @@ fieldset[disabled] .btn {
   -webkit-box-shadow: none;
   box-shadow: none;
 }
-.btn-default {
-  color: #525252;
+.btn-default
+{
   background-color: #d4d4d4;
   border-color:#d4d4d4;
   font-weight: 600;
+  color: #333333bf;
 }
 .btn-default:hover,
 .btn-default:focus,
 .btn-default:active,
 .btn-default.active,
 .btn-default:active:hover,
+.btn-default.ui-state-active,
 .open > .dropdown-toggle.btn-default {
   color:#ffffff;
   background-color: #ff9600;
@@ -2480,11 +2482,7 @@ tbody.collapse.in {
   -o-transition: height 0.35s ease;
   transition: height 0.35s ease;
 }
-@font-face {
-  font-family: 'Glyphicons Halflings';
-  src: url('../fonts/glyphicons-halflings-regular.eot');
-  src: url('../fonts/glyphicons-halflings-regular.eot?#iefix') format('embedded-opentype'), url('../fonts/glyphicons-halflings-regular.woff') format('woff'), url('../fonts/glyphicons-halflings-regular.ttf') format('truetype'), url('../fonts/glyphicons-halflings-regular.svg#glyphicons_halflingsregular') format('svg');
-}
+
 .glyphicon {
   position: relative;
   top: 1px;
@@ -6562,7 +6560,6 @@ a.fa-links:focus {
     display: none;
   }
 }
-/*# sourceMappingURL=/dist/css/metro-bootstrap.css.map */
 
 /* 1blankspace */
 
@@ -6575,12 +6572,84 @@ a.fa-links:focus {
   content: "\e014";
 }
 
+.ui-icon-plus:before {
+  content:"\2b";
+}
+
+.ui-icon-check:before {
+  content:"\e013";
+}
+
+.ui-icon-play:before {
+  content:"\e080";
+}
+
+.ui-icon-circle-triangle-e:before {
+  content:"\e080";
+}
+
+.ui-icon-circle-triangle-w:before {
+  content:"\e079";
+}
+
 .ui-icon-newwin:before {
+  content:"\e164";
+}
+
+.ui-icon-extlink:before {
   content:"\e164";
 }
 
 .ui-icon-home:before {
   content:"\e021";
+}
+
+.ui-icon-notice:before {
+  content:"\e101";
+}
+
+.ui-icon-pencil:before {
+  content:"\270f";
+}
+
+.ui-icon-arrowrefresh-1-e:before {
+  content:"\e031";
+}
+
+.ui-icon-locked:before {
+  content:"\e033";
+}
+
+.ui-icon-person:before {
+  content:"\e008";
+}
+
+.ui-icon-triangle-1-s:before {
+  content:"\2212";
+}
+
+.ui-icon-comment:before {
+  content:"\e111";
+}
+
+.ui-icon-star:before {
+  content:"\e006";
+}
+
+.ui-accordion-header-icon
+{
+  padding-top: 2px;
+  padding-right: 2px;
+}
+
+.ui-accordion-header
+{
+  cursor: pointer;
+}
+
+#ns1blankspaceViewControlActionContainer
+{
+  left: 553px;
 }
 
 #ns1blankspaceViewControlHome
@@ -6614,6 +6683,21 @@ a.fa-links:focus {
   content:"\e257";
 }
 
+.ui-icon-arrowreturnthick-1-w:before
+{
+  content:"\e095";
+}
+
+.ui-icon-arrowreturnthick-1-w
+{
+  -moz-transform: scaleX(-1);
+  -o-transform: scaleX(-1);
+  -webkit-transform: scaleX(-1);
+  transform: scaleX(-1);
+  filter: FlipH;
+  -ms-filter: "FlipH";
+}
+
 #ns1blankspaceViewControlBack
 {
   font-size: 1.1em;
@@ -6625,6 +6709,22 @@ a.fa-links:focus {
 
 .ui-icon-arrowthickstop-1-n:before {
   content:"\e260";
+}
+
+.ui-icon-arrowthickstop-1-s:before {
+  content:"\e259";
+}
+
+.ui-icon-search:before {
+  content:"\e003";
+}
+
+.ui-icon-arrowthickstop-1-w:before {
+  content:"\e079";
+}
+
+.ui-icon-arrowthickstop-1-e:before {
+  content:"\e080";
 }
 
 #ns1blankspaceViewControlRefresh
@@ -6664,7 +6764,14 @@ a.fa-links:focus {
   font-size: 13px;
   padding-left: 10px;
   padding-bottom: 5px;
-  padding-top: 5px;
+  padding-top: 3px;
+  left: 118px;
+  width: 232px;
+}
+
+#ns1blankspaceViewControlNew
+{
+  padding-top: 3px;
 }
 
 .ui-icon-help:before
@@ -6672,9 +6779,14 @@ a.fa-links:focus {
   content:"\e085";
 }
 
+#ns1blankspaceViewControlAction
+{
+  padding-top: 3px;
+}
+
 #ns1blankspaceViewControlActionOptions
 {
-  padding-top: 9px;
+  padding-top: 8px;
   padding-bottom: 5px;
   margin-left: 0px;
   padding-left: 2px;
@@ -6709,11 +6821,16 @@ a.fa-links:focus {
 {
   height: 27px;
   border-width: 1px;
+  left: 620px;
+  top: 2px;
+  width: 210px;
 }
 
 #ns1blankspaceViewControlSearch
 {
   height:27px;
+  left: 355px;
+  width: 144px;
 }
 
 table.ns1blankspaceColumn2
@@ -6756,4 +6873,76 @@ input.ns1blankspaceLogon
   padding-left:3px;
   padding-right:3px;
   font-size: 0.5em;
+}
+
+input[type="file"]
+{
+  font-size: 11px;
+  
+}
+
+input[type="radio"]
+{
+  margin-right: 4px;
+}
+
+.ns1blankspaceAction
+{
+  white-space: normal;
+  padding-left:6px;
+  padding-right:6px;
+  font-size:12px;
+}
+
+td.ns1blankspaceAction
+{
+  padding-left:0px;
+  padding-right:0px;
+}
+
+.ns1blankspaceViewControlColumn
+{
+  width:95px;
+}
+
+#ns1blankspaceViewControlSetupContainer
+{
+  left: 839px;
+}
+
+.ui-checkboxradio-radio-label
+{
+  white-space: normal;
+}
+
+#ns1blankspaceContactPersonFavourite, #ns1blankspaceContactBusinessFavourite
+{
+  white-space: normal;
+}
+
+#ns1blankspaceMessagingConversationPosts .ui-button-icon-only
+{
+  padding-top: 6px;
+  padding-left: 4px;
+  padding-bottom: 4px;
+}
+
+#ns1blankspaceUpload
+{
+  background-color: #d4d4d4;
+  border: none;
+  padding: 6px;
+  padding-left: 12px;
+  padding-right: 12px;
+  font-weight: 600;
+}
+
+#ns1blankspaceUpload:hover
+{
+  background-color: #ff9600;
+}
+
+#ns1blankspaceViewControlHistoryContainer
+{
+  left: 48px;
 }

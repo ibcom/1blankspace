@@ -212,7 +212,8 @@ ns1blankspace.setup.file =
 												primary: "ui-icon-triangle-1-w"
 											}
 										})
-										.click(function() {
+										.click(function()
+										{
 											ns1blankspace.setup.file["import"].init({object: undefined, objectText: undefined});
 										})
 										.css('width', '15px')

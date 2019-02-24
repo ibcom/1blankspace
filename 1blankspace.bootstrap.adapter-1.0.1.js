@@ -12,6 +12,8 @@
 	$.ui.accordion.prototype.options.classes[ "ui-accordion-content" ] = "panel-collapse collapse";
 	$.ui.accordion.prototype.options.classes[ "ui-accordion-content-active" ] = "in";
 	$.ui.accordion.prototype.options.classes[ "ui-accordion-header" ] = "panel-heading";
+	$.ui.accordion.prototype.options.icons[ "activeHeader" ] = "glyphicon glyphicon-triangle-bottom";
+	$.ui.accordion.prototype.options.icons[ "header" ] = "glyphicon glyphicon-triangle-right";
 
 })(jQuery);
 ;
