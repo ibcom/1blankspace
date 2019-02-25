@@ -954,7 +954,13 @@ ns1blankspace.setup.website =
 					oSearch.method = 'DOCUMENT_SEARCH';
 					
 					oSearch.addField('title');
+
+					oSearch.addBracket('(')
 					oSearch.addFilter('content', 'TEXT_IS_LIKE', 'TemplateField|166|4016')
+					oSearch.addOperator('or')
+					oSearch.addFilter('content', 'TEXT_IS_LIKE', '{{mydigitalstructure:content}}')
+					oSearch.addBracket(')')
+
 					oSearch.sort('title', 'asc');
 					
 					oSearch.getResults(function(oResponse)
@@ -965,10 +971,15 @@ ns1blankspace.setup.website =
 						{
 							aHTML.push('<input type="radio" id="radio' + sContext + '" name="radio' + sContext + '" value=""/>' +
 													'As per website<br />');
-						}
 
-						aHTML.push('<input type="radio" id="radio' + sContext + '-2" name="radio' + sContext + '" value="-2"/>' +
+							aHTML.push('<input type="radio" id="radio' + sContext + '-2" name="radio' + sContext + '" value="-2"/>' +
 													'None<br />');
+						}
+						else
+						{
+							aHTML.push('<input type="radio" id="radio' + sContext + '" name="radio' + sContext + '" value=""/>' +
+													'None<br />');
+						}	
 
 						if (oResponse.data.rows.length == 0)
 						{
