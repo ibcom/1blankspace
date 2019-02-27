@@ -1262,7 +1262,7 @@ ns1blankspace.setup.user =
 								}										
 				},	
 
-	save: 		{
+	save: 	{
 					send: 	function (oResponse)
 								{
 									ns1blankspace.status.working();
