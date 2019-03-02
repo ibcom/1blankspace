@@ -1032,6 +1032,7 @@ ns1blankspace.messaging.conversation =
 			var bLinkedToObject = ns1blankspace.util.getParam(oParam, 'linkedToObject', {'default': false}).value;
 
 			delete (ns1blankspace.param);
+
 			if (oSearchText.exists)
 			{
 				sSearchText = oSearchText.value;
@@ -1178,7 +1179,7 @@ ns1blankspace.messaging.conversation =
 					{
 						ns1blankspace.messaging.conversation.posts.show(
 						{
-							searchText: undefined, 
+							searchText: '', 
 							conversationID: iConversationID,
 							xhtmlElementID: sXHTMLElementID,
 							linkedToObject: bLinkedToObject
@@ -1232,7 +1233,7 @@ ns1blankspace.messaging.conversation =
 					oSearch.addFilter('id', 'EQUAL_TO', iID);
 				}
 
-				if (sSearchText != undefined)
+				if (sSearchText != undefined && sSearchText != '')
 				{
 					oSearch.addBracket('(');
 					oSearch.addFilter('subject', 'TEXT_IS_LIKE', sSearchText);
