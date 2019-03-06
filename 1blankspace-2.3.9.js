@@ -489,22 +489,22 @@ ns1blankspace.app =
 							ns1blankspace.unloadWarning = false;
 						});
 
-						$(document).on('click', 'td.ns1blankspaceControl', function()
+						$('td.ns1blankspaceControl').live('click', function()
 						{
 							ns1blankspace.history.control({xhtmlElementID: this.id});
 						});
 						
-						$(document).on('mousedown', 'td.ns1blankspaceControl', function() 
+						$('td.ns1blankspaceControl').live('mousedown', function() 
 						{
 							$('td.ns1blankspaceHighlight').removeClass('ns1blankspaceHighlight');
 						});
 
-						$(document).on('mouseup', 'td.ns1blankspaceControl', function() 
+						$('td.ns1blankspaceControl').live('mouseup', function() 
 						{
 							$(this).addClass('ns1blankspaceHighlight');
 						});
 
-						$(document).on('focus', '.ns1blankspaceWatermark', function() 
+						$('.ns1blankspaceWatermark').live('focus', function() 
 						{
 							if ($(this).hasClass('ns1blankspaceWatermark'))
 							{
@@ -513,12 +513,12 @@ ns1blankspace.app =
 							}	
 						});		
 						
-						$(document).on('focusout', 'input.ns1blankspaceSelect', function() 
+						$('input.ns1blankspaceSelect').live('focusout', function() 
 						{	
 							$(this).removeClass('ns1blankspaceHighlight');
 						});
 
-						$(document).on('focusin', 'input.ns1blankspaceSelect', function() 
+						$('input.ns1blankspaceSelect').live('focusin', function() 
 						{		
 							$('input.ns1blankspaceHighlight').removeClass('ns1blankspaceHighlight');
 
@@ -552,7 +552,7 @@ ns1blankspace.app =
 							.css('height', '21px')
 						});
 							
-						$(document).on('keyup', 'input.ns1blankspaceSelect', function(e)
+						$('input.ns1blankspaceSelect').live('keyup', function(e)
 						{
 							if ($(this).val().length == 0) {$(this).attr('data-id', '')}
 
@@ -572,7 +572,7 @@ ns1blankspace.app =
 							}		
 						});	
 						
-						$(document).on('focusin', '.ns1blankspaceSelectAddress', function() 
+						$('.ns1blankspaceSelectAddress').live('focusin', function() 
 						{
 							$('input.ns1blankspaceHighlight').removeClass('ns1blankspaceHighlight');
 
@@ -602,17 +602,17 @@ ns1blankspace.app =
 							.css('height', '21px')
 						});
 						
-						$(document).on('keyup', 'input.ns1blankspaceSelectAddress', function()
+						$('input.ns1blankspaceSelectAddress').live('keyup', function()
 						{
 							ns1blankspace.search.address.show(ns1blankspace.xhtml.divID, {source: 1, minimumLength: 3});	
 						});	
 						
-						$(document).on('keyup', '.ns1blankspaceSelectAddress', function() 
+						$('.ns1blankspaceSelectAddress').live('keyup', function() 
 						{
 							$(ns1blankspace.xhtml.container).hide();
 						});
 							
-						$(document).on('focusin', '.ns1blankspaceSelectContactEmail', function() 
+						$('.ns1blankspaceSelectContactEmail').live('focusin', function() 
 						{
 							ns1blankspace.xhtml.divID = this.id;
 							$(ns1blankspace.xhtml.container).html('');
@@ -638,7 +638,7 @@ ns1blankspace.app =
 							.css('height', '21px')
 						});
 						
-						$(document).on('keyup', '.ns1blankspaceSelectContactEmail', function() 
+						$('.ns1blankspaceSelectContactEmail').live('keyup', function() 
 						{
 							if (ns1blankspace.timer.delayCurrent != 0) {clearTimeout(ns1blankspace.timer.delayCurrent)};
 							
@@ -652,25 +652,24 @@ ns1blankspace.app =
 							
 						});
 						
-						$(document).on('click', '.ns1blankspaceOptionsClose', function() 
+						$('.ns1blankspaceOptionsClose').live('click', function() 
 						{
 							$(ns1blankspace.xhtml.container).slideUp(500);
 							$(ns1blankspace.xhtml.container).attr('data-initiator', '');
 						});
 						
-						/* DELETE
-						$(document).on('click', '.ns1blankspaceSearchHeaderPage', function() 
+						$('.ns1blankspaceSearchHeaderPage').live('click', function() 
 						{
 							interfaceAuditSearchShowPage(this.id);
-						}); */
+						}); //???
 								
-						$(document).on('focus', 'input.ns1blankspaceText', function() 
+						$('input.ns1blankspaceText').live('focus', function() 
 						{
 							$(this).addClass('ns1blankspaceHighlight');
 							if (!$(this).attr('data-nohide') == 'true') {$(ns1blankspace.xhtml.container).hide()};
 						});
 
-						$(document).on('keyup', 'input.ns1blankspaceText', function() 
+						$('input.ns1blankspaceText').live('keyup', function() 
 						{
 							if ($(this).attr('data-1blankspace') != 'ignore')
 							{
@@ -678,18 +677,18 @@ ns1blankspace.app =
 							}	
 						});
 							
-						$(document).on('blur', 'input.ns1blankspaceText', function() 
+						$('input.ns1blankspaceText').live('blur', function() 
 						{
 							$(this).removeClass('ns1blankspaceHighlight');
 						});
 
-						$(document).on('focus', 'input.ns1blankspaceDate', function() 
+						$('input.ns1blankspaceDate').live('focus', function() 
 						{
 							$(this).addClass('ns1blankspaceHighlight');
 							$(ns1blankspace.xhtml.container).hide();
 						});
 
-						$(document).on('blur', 'input.ns1blankspaceDate', function() 
+						$('input.ns1blankspaceDate').live('blur', function() 
 						{
 							$(this).removeClass('ns1blankspaceHighlight');
 							if ($(this).attr('data-1blankspace') != 'ignore')
@@ -698,18 +697,18 @@ ns1blankspace.app =
 							}
 						});
 
-						$(document).on('focus', '.ns1blankspaceTextMulti', function()
+						$('.ns1blankspaceTextMulti').live('focus', function()
 						{
 							$(this).addClass('ns1blankspaceHighlight');
 							$(ns1blankspace.xhtml.container).hide();
 						});
 
-						$(document).on('blur', '.ns1blankspaceTextMulti', function() 
+						$('.ns1blankspaceTextMulti').live('blur', function() 
 						{
 							$(this).removeClass('ns1blankspaceHighlight');
 						});
 
-						$(document).on('keyup', '.ns1blankspaceTextMulti', function() 
+						$('.ns1blankspaceTextMulti').live('keyup', function() 
 						{
 							if ($(this).attr('data-1blankspace') != 'ignore')
 							{
@@ -717,7 +716,7 @@ ns1blankspace.app =
 							}
 						});
 
-						$(document).on('click', '.ns1blankspaceViewLink', function()
+						$('.ns1blankspaceViewLink').live('click', function()
 						{
 							if ($(this).attr('data-id') != undefined && $(this).attr('data-object') != undefined)
 							{
@@ -728,7 +727,7 @@ ns1blankspace.app =
 							}	
 						});
 
-						$(document).on('click','.ns1blankspaceRadio', function()
+						$('.ns1blankspaceRadio').live('click', function()
 						{
 							if ($(this).attr('data-1blankspace') != 'ignore')
 							{
@@ -1080,7 +1079,8 @@ ns1blankspace.app =
 						if (ns1blankspace.setupShow) 
 						{
 							aHTML.push('<div id="ns1blankspaceViewControlSetupContainer">' +
-											'<span id="ns1blankspaceViewControlSetup"/>' +
+											'<input type="checkbox" id="ns1blankspaceViewControlSetup"/>' +
+											'<label for="ns1blankspaceViewControlSetup">&nbsp;</label>' +
 											'</div>');
 						}				
 						
@@ -1137,11 +1137,11 @@ ns1blankspace.app =
 									primary: "ui-icon-triangle-1-s"
 								}
 							})
-							.click(function()
-							{
+							.click(function() {
 								ns1blankspace.home.options.show(this);
 							})
-							.css('width', '16px')
+							.css('width', '12px')
+							.css('margin-left', '2px')
 							.parent()
 								.buttonset();
 
@@ -1149,6 +1149,7 @@ ns1blankspace.app =
 					{
 						$('#ns1blankspaceViewControlRefresh')
 								.button({
+									label: 'Back to top',
 									text: false,
 									icons:
 									{
@@ -1169,13 +1170,14 @@ ns1blankspace.app =
 										window[sNS][ns1blankspace.objectName].init();
 									}	
 								})
-								.css('width', '26px')
-								.css('margin-left', '7px')
+								.css('width', '25px')
+								.css('margin-left', '20px')
 							.next()
 								.button(
 								{
 									text: false,
 									disabled: false,
+									label: 'Most used',
 									icons:
 									{
 										primary: "ui-icon-star"
@@ -1186,21 +1188,18 @@ ns1blankspace.app =
 									ns1blankspace.control.favourites.show({instruction: 3});
 								})
 								.css('width', '25px')
-								.css('padding-top', '6px')
-								.css('font-size', '1.1em')
-								.css('padding-left', '5px')
-								.css('height', '28px')
+								.css('margin-left', '4px')
 								.parent()
 									.buttonset();
 					}
 					else
 					{
 						$('#ns1blankspaceViewControlBack')
-							.button(
-							{
-								text: false,
-								icons: {}
-								})
+							.button({
+									label: 'Previous',
+									text: false,
+									icons: {}
+									})
 							.click(function(event)
 							{
 								ns1blankspace.history.view({instruction: 2});
@@ -1209,6 +1208,7 @@ ns1blankspace.app =
 							.next()
 								.button(
 								{
+									label: 'Back to top',
 									text: false,
 									icons:
 									{
@@ -1229,8 +1229,8 @@ ns1blankspace.app =
 										window[sNS][ns1blankspace.objectName].init();
 									}	
 								})
-								.css('width', '26px')
-								.css('margin-left', '0px')
+								.css('width', '25px')
+								.css('margin-left', '2px')
 							.next()
 								.button( {
 									text: false,
@@ -1240,7 +1240,7 @@ ns1blankspace.app =
 									ns1blankspace.history.view({instruction: 3});
 								})
 								.css('width', '19px')
-								.css('margin-left', '0px')
+								.css('margin-left', '2px')
 								.parent()
 									.buttonset();
 					}				
@@ -1252,7 +1252,8 @@ ns1blankspace.app =
 							{
 								primary: "ui-icon-grip-dotted-vertical",
 								secondary: "ui-icon-triangle-1-s"
-							}
+							},
+							label: ns1blankspace.option.defaultView
 						})
 						.click(function() 
 						{
@@ -1261,10 +1262,9 @@ ns1blankspace.app =
 						.css('text-align', 'left');
 					
 					$('#ns1blankspaceViewControlNew')
-						.button(
-						{
-							label: "New"
-						})
+						.button({
+								label: "New"
+								})
 							
 						.next()
 							.button( {
@@ -1289,21 +1289,19 @@ ns1blankspace.app =
 									primary: "ui-icon-triangle-1-s"
 								}
 							})
-							.css('width', '16px')
-							.css('padding-right', '2px')
+							.css('width', '12px')
+							.css('margin-left', '2px')
 							.parent()
 								.buttonset();	
 														
 					$('#ns1blankspaceViewControlSetup')
-						.button(
-						{
-							text: false,
-							showLabel: 'Set up your space.  Once finished click on this icon again.',
-							icons:
-							{
-								primary: "ui-icon-gear"
-							}
-						})		
+						.button({
+									text: false,
+									label: 'Set up your space.  Once finished click on this icon again.',
+									icons: {
+										primary: "ui-icon-gear"
+									}})
+						.css('font-size', '0.75em')			
 						.click(function() 
 						{
 							if (ns1blankspace.util.checkIfInput())
@@ -1722,7 +1720,7 @@ ns1blankspace.app =
 					if (bAll || bActionOptions) {$('#ns1blankspaceViewControlActionOptions').button({disabled: !bContext && (!bSpecific || bActionOptions)})};
 				},				
 
-	options: {
+	options: 	{
 					show: 		function (oParam)
 								{
 									var oElement;
@@ -1797,7 +1795,7 @@ ns1blankspace.app =
 										$(ns1blankspace.xhtml.container).attr('data-initiator', oElement.id)
 																		.html("&nbsp;")
 																		.show()
-																		.offset({ top: $(oElement).offset().top + $(oElement).height() + 11 , left: $(oElement).offset().left })
+																		.offset({ top: $(oElement).offset().top + $(oElement).height(), left: $(oElement).offset().left })
 																		.html(sXHTML);
 										
 										if (fBind !== undefined)
@@ -2614,7 +2612,7 @@ ns1blankspace.logOff = function ()
 						global: false,
 						success: function ()
 						{
-							if (!ns1blankspace.debug.noRefresh)
+							if (!ns1blankspace.debug.enabled)
 							{
 								ns1blankspace.logonInitialised = false;
 								ns1blankspace.logonKey = '';
@@ -6751,7 +6749,7 @@ ns1blankspace.remove =
 						{	
 							$(ns1blankspace.xhtml.container).attr('data-initiator', sXHTMLElementID)
 
-							ns1blankspace.container.position({xhtmlElementID: sXHTMLElementID, leftOffset: -66, topOffset: -13});
+							ns1blankspace.container.position({xhtmlElementID: sXHTMLElementID, leftOffset: -66, topOffset: -21});
 
 							var aHTML = [];
 											
@@ -7038,7 +7036,7 @@ ns1blankspace.extend =
 							aHTML.push('</table>');
 						}
 						
-						$('table.ns1blankspaceControl:last').append(aHTML.join(''));	
+						$('table.ns1blankspaceControl :last').append(aHTML.join(''));	
 						$('#ns1blankspaceMain').append(aHTMLDIV.join(''));
 
 						$($.grep(ns1blankspace.extend.structure, function (a) {return a.object == iObject;})).each(function()
