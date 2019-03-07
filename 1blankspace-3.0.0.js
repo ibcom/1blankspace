@@ -2313,7 +2313,14 @@ ns1blankspace.logon =
 							}
 							else
 							{
-								$('#ns1blankspaceLogonStatus').html('Logon name or password is incorrect.');
+								if (ns1blankspace.authenticationLevel == 3)
+								{
+									$('#ns1blankspaceLogonStatus').html('Logon name, password or code is incorrect.');
+								}
+								else
+								{
+									$('#ns1blankspaceLogonStatus').html('Logon name or password is incorrect.');
+								}
 							}	
 						}
 
@@ -5466,7 +5473,7 @@ ns1blankspace.debug =
 					if (typeof oParam == 'object')
 					{
 						sMessage = ns1blankspace.util.getParam(oParam, 'message').value;
-						if (sMessage == undefined) {sMessage = ns1blankspace.util.getParam(oParam, 'description').value}
+						if (sMessage == undefined) {sMessage = ns1blankspace.util.getParam(oParam, 'notes').value}
 						sData = ns1blankspace.util.getParam(oParam, 'data').value;
 						bLog = ns1blankspace.util.getParam(oParam, 'log', {"default": ns1blankspace.debug.log}).value;
 						bPersist = ns1blankspace.util.getParam(oParam, 'persist', {"default": ns1blankspace.debug.persist}).value;
@@ -5483,19 +5490,24 @@ ns1blankspace.debug =
 						if (bLog)
 						{
 							ns1blankspace.debug.data.log.push({time: Date(), message: sMessage});
-						}
-
-						if (window.console != undefined)
-						{
-							console.log(sMessage);
-							if (sData != undefined) {console.log(sData)};
+						
+							if (window.console != undefined)
+							{
+								console.log(sMessage);
+								if (sData != undefined) {console.log(sData)};
+							}
 						}
 
 						if (bPersist)
 						{
+							if (typeof sData == 'object')
+							{
+								sData = JSON.stringify(sData)
+							}
+
 							var oData =
 							{
-								description: sMessage,
+								notes: sMessage,
 								data: sData
 							}
 
@@ -5516,6 +5528,8 @@ ns1blankspace.debug =
 					ns1blankspace.debug.data.log = [];
 				}			
 }
+
+ns1blankspace.debug.add = ns1blankspace.debug.message;
 
 ns1blankspace.search.address =
 {

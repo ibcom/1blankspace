@@ -1815,7 +1815,8 @@ ns1blankspace.contactPerson =
 									{
 										label: "Send"
 									})
-									.click(function() {
+									.click(function()
+									{
 										ns1blankspace.contactPerson.sms.send();
 									})
 

@@ -5498,6 +5498,11 @@ ns1blankspace.debug =
 
 						if (bPersist)
 						{
+							if (typeof sData == 'object')
+							{
+								sData = JSON.stringify(sData)
+							}
+
 							var oData =
 							{
 								notes: sMessage,

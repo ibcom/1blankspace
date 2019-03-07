@@ -165,6 +165,11 @@ ns1blankspace.admin.monitoring =
 									ns1blankspace.xhtml.loadingSmall +
 									'</td></tr>');
 
+					aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Debug logs in last 24 hours</td></tr>' +
+									'<tr><td id="ns1blankspaceSummaryDebugLog" class="ns1blankspaceSummary">' +
+									ns1blankspace.xhtml.loadingSmall +
+									'</td></tr>');
+
 					if (ns1blankspace.space == 1)
 					{
 						aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">News sent in last 24 hours (All spaces)</td></tr>' +
@@ -234,6 +239,7 @@ ns1blankspace.admin.monitoring =
 
 					ns1blankspace.admin.monitoring.serviceFaults.count();
 					//ns1blankspace.admin.monitoring.requests.count();
+					ns1blankspace.admin.monitoring.debugLog.count();
 
 					if (ns1blankspace.space == 1)
 					{
@@ -948,14 +954,14 @@ ns1blankspace.admin.monitoring.debugLog =
 
 						var oSearch = new AdvancedSearch();
 						oSearch.method = 'ADMIN_DEBUG_LOG_SEARCH';
-						oSearch.addField('description,data,site,sitetext,createddate,createdusertext,guid');
+						oSearch.addField('notes,data,site,sitetext,createddate,createdusertext,guid');
 
 						if (sSearchText != undefined)
 						{
 							oSearch.addBracket('(');
 							oSearch.addFilter('sitetext', 'TEXT_IS_LIKE', sSearchText);
 							oSearch.addOperator('or');
-							oSearch.addFilter('description', 'TEXT_IS_LIKE', sSearchText);
+							oSearch.addFilter('notes', 'TEXT_IS_LIKE', sSearchText);
 							oSearch.addOperator('or');
 							oSearch.addFilter('guid', 'TEXT_IS_LIKE', sSearchText);
 							
@@ -1000,7 +1006,7 @@ ns1blankspace.admin.monitoring.debugLog =
 							aHTML.push('<table id="ns1blankspaceAdminMonitoringDebugLog" class="ns1blankspace" style="font-size:0.875em;">' +
 										'<tr class="ns1blankspaceHeaderCaption">' +
 										'<td class="ns1blankspaceHeaderCaption" style="width:65px;">When</td>' +
-										'<td class="ns1blankspaceHeaderCaption">Description</td>' +
+										'<td class="ns1blankspaceHeaderCaption">Notes</td>' +
 										'<td class="ns1blankspaceHeaderCaption">User</td>' +
 										'<td class="ns1blankspaceHeaderCaption">Site</td>' +
 										'</tr>');
@@ -1074,7 +1080,7 @@ ns1blankspace.admin.monitoring.debugLog =
 						})
 						.click(function() 
 						{
-							oParam = ns1blankspace.util.setParam(oParam, 'searchText', undefined);
+							oParam = ns1blankspace.util.setParam(oParam, 'searchText', '');
 							ns1blankspace.admin.monitoring.debugLog.show(oParam);
 						})
 						.css('width', '57px');
@@ -1083,7 +1089,7 @@ ns1blankspace.admin.monitoring.debugLog =
 						{
 							if (e.which === 13)
 					    	{
-					    		oParam = ns1blankspace.util.setParam(oParam, 'searchText', $('#ns1blankspaceAdminMonitoringDebugLogvSearchText').val())
+					    		oParam = ns1blankspace.util.setParam(oParam, 'searchText', $('#ns1blankspaceAdminMonitoringDebugLogSearchText').val())
 					    		ns1blankspace.admin.monitoring.debugLog.show(oParam);
 					    	}
 						});				
@@ -1100,17 +1106,17 @@ ns1blankspace.admin.monitoring.debugLog =
 
 					aHTML.push('<tr id="ns1blankspaceAdminMonitoringDebugLog_container-' + oRow["id"] + '">');
 
-					aHTML.push('<td id="ns1blankspaceAdminMonitoringDebugLog_createddate-' + oRow["id"] + '" class="ns1blankspaceRow ns1blankspaceRowSelect">' +
+					aHTML.push('<td style="width:120px;" id="ns1blankspaceAdminMonitoringDebugLog_createddate-' + oRow["id"] + '" class="ns1blankspaceRow ns1blankspaceRowSelect">' +
 										oRow["createddate"] + '</td>');
 
 					aHTML.push('<td id="ns1blankspaceAdminMonitoringDebugLog_description-' + oRow["id"] + '" class="ns1blankspaceRow">' +
-										oRow["description"] + '</td>');
+										oRow["notes"] + '</td>');
 
 						aHTML.push('<td id="ns1blankspaceAdminMonitoringDebugLog_user-' + oRow["id"] + '" class="ns1blankspaceRow">' +
 										oRow["createdusertext"] + '</td>');
 
 					aHTML.push('<td id="ns1blankspaceAdminMonitoringDebugLog_site-' + oRow["id"] + '" class="ns1blankspaceRow">' +
-										oRow["sitetext"] + '(' + oRow["site"] + ')</td>');
+										oRow["sitetext"] + '</td>');
 
 					aHTML.push('</tr>');
 
@@ -1149,7 +1155,7 @@ ns1blankspace.admin.monitoring.debugLog =
 
 						if (oDetail)
 						{
-							sHTML = '<div class="ns1blankspaceSummaryCaption">Data:</div><div>' + oDetail.data + '</div>' +
+							sHTML = '<div class="ns1blankspaceSummaryCaption">Data:</div><div>' + (oDetail.data!=''?oDetail.data:'<i>No data</i>') + '</div>' +
 										'<div class="ns1blankspaceSummaryCaption">GUID:</div><div>' + oDetail.guid + '</div>' +
 										'<div class="ns1blankspaceSummaryCaption">Site:</div><div>' + oDetail.site + '</div>';
 							

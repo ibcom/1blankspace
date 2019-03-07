@@ -1093,7 +1093,8 @@ ns1blankspace.views =
 		endpoint: "SETUP_SPACE", 
 		show: true,
 		group: 10,
-		type: 2
+		type: 2,
+		subNote: 'includes monitoring'
 	},
 	{
 		title: "Structures",
