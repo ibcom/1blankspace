@@ -2259,7 +2259,7 @@ ns1blankspace.logon =
 
 						var sPasswordCode = $('#ns1blankspaceLogonPasswordCode').val();
 
-						if (sPasswordCode == undefined)
+						if (sPasswordCode == undefined || sPasswordCode == '' )
 						{
 							sPasswordCode = $('#ns1blankspaceLogonPasswordTOTPCode').val();
 							bSendPasswordCode = true
@@ -2311,7 +2311,14 @@ ns1blankspace.logon =
 							}
 							else
 							{
-								$('#ns1blankspaceLogonStatus').html('Logon name or password is incorrect.');
+								if (ns1blankspace.authenticationLevel == 3)
+								{
+									$('#ns1blankspaceLogonStatus').html('Logon name, password or code is incorrect.');
+								}
+								else
+								{
+									$('#ns1blankspaceLogonStatus').html('Logon name or password is incorrect.');
+								}
 							}	
 						}
 
@@ -2612,7 +2619,7 @@ ns1blankspace.logOff = function ()
 						global: false,
 						success: function ()
 						{
-							if (!ns1blankspace.debug.enabled)
+							if (!ns1blankspace.debug.noRefresh)
 							{
 								ns1blankspace.logonInitialised = false;
 								ns1blankspace.logonKey = '';

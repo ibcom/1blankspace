@@ -150,7 +150,10 @@ ns1blankspace.setup.user =
 										var oSearch = new AdvancedSearch();
 										oSearch.method = 'SETUP_USER_SEARCH';
 										oSearch.addField('username,contactpersontext,contactperson,lastlogon,disabled,disabledreason,unrestrictedaccess,authenticationlevel,' +
-															'authenticationdelivery,timezoneoffset,passwordexpiry,contactbusinesstext,contactbusiness,guid,sessiontimeout,relationshipmanagersecuritytype,supportcontactlist');
+															'authenticationdelivery,timezoneoffset,passwordexpiry,contactbusinesstext,contactbusiness,guid,' +
+															'sessiontimeout,relationshipmanagersecuritytype,supportcontactlist' +
+															',user.contactperson.email,user.contactperson.mobile,user.contactperson.firstname');
+
 										oSearch.addFilter('id', 'EQUAL_TO', ns1blankspace.objectContext);
 										oSearch.getResults(function(data) {ns1blankspace.setup.user.show(data)});
 									}
@@ -473,17 +476,18 @@ ns1blankspace.setup.user =
 						aHTML.push('<tr><td id="ns1blankspaceResetPasswordContainer"><span style="font-size:0.75em;" id="ns1blankspaceResetPassword">' +
 										'Reset Password</span></td></tr>');
 
-						aHTML.push('<tr><td class="ns1blankspaceSubNote" style="padding-top:10px;">' +
+						aHTML.push('<tr class="ns1blankspaceUserGenerateTOTP"><td class="ns1blankspaceSubNote" style="padding-top:10px;">' +
 										'Generate a random password that the user will be prompted to reset when they use it to log on.' +
 										'</td></tr>');
 
 						if (ns1blankspace.objectContextData.authenticationdelivery == 3) //TOTP
 						{
-							aHTML.push('<tr><td style="padding-top:20px">' +
+							aHTML.push('<tr class="ns1blankspaceUserGenerateTOTP"><td style="padding-top:20px">' +
 												'<span class="ns1blankspaceAction" id="ns1blankspaceUserGenerateTOTP"></span>' +
 												'</td></tr>' +
-												'<tr><td class="ns1blankspaceSubNote" style="padding-top:10px;">' +
-												'Generate a random key/QR code that can be used to setup a TOTP client, ie like Google Authenticator.' +
+												'<tr class="ns1blankspaceUserGenerateTOTP"><td class="ns1blankspaceSubNote">' +
+												'<p>Generate a new random key/QR code that can be used to setup a TOTP client, ie like Google Authenticator.</p>' +
+												'<p>If the user already has a TOTP client setup then clicking this will disable it and it will need to be reset up using the new key.</p>' +
 												'</td></tr>' +
 												'<tr><td id="ns1blankspaceUserGenerateTOTPContainer" style="padding-top:10px;">' +
 												'</td></tr>')
@@ -499,35 +503,9 @@ ns1blankspace.setup.user =
 						})
 						.click(function()
 						{	
-							ns1blankspace.status.working();
-
-							var sIssuer = (ns1blankspace.option.siteName!=undefined?ns1blankspace.option.siteName:'1blankspace')
-
-							var oData =
+							ns1blankspace.setup.user.util.generateTOTPKey(
 							{
-								user: ns1blankspace.objectContext,
-								issuer: sIssuer
-							}
-
-							$.ajax(
-							{
-								type: 'POST',
-								url: ns1blankspace.util.endpointURI('SETUP_LOGON_GENERATE_TOKEN'),
-								data: oData,
-								dataType: 'json',
-								async: false,
-								success: function(data)
-								{
-									ns1blankspace.status.clear();
-
-									if (data.status == 'OK')
-									{
-										$('#ns1blankspaceUserGenerateTOTPContainer').html(
-											'<div>Key is ' + data.key + '<div>' +
-											'<div><img src="' + data.qrurl + '"></div>'
-										)
-									}
-								}
+								xhtmlElementID: 'ns1blankspaceUserGenerateTOTPContainer'
 							});
 						});
 						
@@ -742,11 +720,11 @@ ns1blankspace.setup.user =
 
 						if (ns1blankspace.objectContextData.authenticationdelivery == 3) //TOTP
 						{
-							aHTML.push('<tr class="ns1blankspaceCaption">' +
+							aHTML.push('<tr class="ns1blankspaceUserGenerateTOTP">' +
 											'<td class="ns1blankspaceCaption" style="padding-top:12px;">' +
 											'TOTP Client Set up' +
 											'</td></tr>' +
-											'<tr><td>' +
+											'<tr class="ns1blankspaceUserGenerateTOTP"><td>' +
 												'<span class="ns1blankspaceAction" id="ns1blankspaceUserDetailsGenerateTOTP"></span>' +
 												'</td></tr>' +
 											'<tr><td id="ns1blankspaceUserDetailsGenerateTOTPContainer">' +
@@ -781,35 +759,9 @@ ns1blankspace.setup.user =
 						})
 						.click(function()
 						{	
-							ns1blankspace.status.working();
-
-							var sIssuer = (ns1blankspace.option.siteName!=undefined?ns1blankspace.option.siteName:'1blankspace')
-
-							var oData =
+							ns1blankspace.setup.user.util.generateTOTPKey(
 							{
-								user: ns1blankspace.objectContext,
-								issuer: sIssuer
-							}
-
-							$.ajax(
-							{
-								type: 'POST',
-								url: ns1blankspace.util.endpointURI('SETUP_LOGON_GENERATE_TOKEN'),
-								data: oData,
-								dataType: 'json',
-								async: false,
-								success: function(data)
-								{
-									ns1blankspace.status.clear();
-
-									if (data.status == 'OK')
-									{
-										$('#ns1blankspaceUserDetailsGenerateTOTPContainer').html(
-											'<div>Key is ' + data.key + '<div>' +
-											'<div><img src="' + data.qrurl + '"></div>'
-										)
-									}
-								}
+								xhtmlElementID: 'ns1blankspaceUserDetailsGenerateTOTPContainer'
 							});
 						})
 					}	
@@ -1970,7 +1922,7 @@ ns1blankspace.setup.user =
 								}
 				},
 
-	util: 		{
+	util: 	{
 					getUsername: 	function (oParam)
 									{
 										var sUsername = ns1blankspace.util.getParam(oParam, 'username').value;
@@ -2049,6 +2001,140 @@ ns1blankspace.setup.user =
         							function (oParam)
         							{
         								
-        							}												
+        							},
+
+        			generateTOTPKey:
+        							function (oParam)
+        							{
+        								var sXHTMLElementID = ns1blankspace.util.getParam(oParam, 'xhtmlElementID', {"default": 'ns1blankspaceUserDetailsGenerateTOTPContainer'}).value;
+
+        								ns1blankspace.status.working();
+
+        								$('.ns1blankspaceUserGenerateTOTP').hide();
+
+										var sIssuer = (ns1blankspace.option.siteName!=undefined?ns1blankspace.option.siteName:'1blankspace')
+
+										var oData =
+										{
+											user: ns1blankspace.objectContext,
+											issuer: sIssuer
+										}
+
+										$.ajax(
+										{
+											type: 'POST',
+											url: ns1blankspace.util.endpointURI('SETUP_LOGON_GENERATE_TOKEN'),
+											data: oData,
+											dataType: 'json',
+											async: false,
+											success: function(data)
+											{
+												ns1blankspace.status.clear();
+
+												if (data.status == 'OK')
+												{
+													var aHTML = [];
+
+													aHTML.push('<div data-key="' + data.manualentrycode + '" class="ns1blankspaceSummaryCaption" style="margin-bottom:6px;">TOTP Key</div>' +
+														'<div style="font-size:0.625em; width:200px; word-wrap:break-word;">' + data.manualentrycode + '</div>' +
+														'<div data-qrurl="' + data.qrurl + '"><img style="width:200px;" src="' + data.qrurl + '"></div>');
+													aHTML.push('<div class="ns1blankspaceSubNote">' +
+														'<p>The user now needs to open their TOTP client (ie Google Authenticator, Auth) and either enter the key manually or scan the QR code.</p>' +
+														'</div>')
+
+													if (ns1blankspace.objectContextData['user.contactperson.mobile'] != '')
+													{
+														aHTML.push('<span class="ns1blankspaceAction" id="ns1blankspaceUserTOTPSendSMS"></span>');
+														aHTML.push('<div class="ns1blankspaceSubNote" style="width:140px; text-align: center;">(' + ns1blankspace.objectContextData['user.contactperson.mobile'] + ')</div>')
+													}
+
+													if (ns1blankspace.objectContextData['user.contactperson.email'] != '')
+													{
+														aHTML.push('<div style="margin-top:10px;"><span class="ns1blankspaceAction" id="ns1blankspaceUserTOTPSendEmail"></span>');
+														aHTML.push('<div class="ns1blankspaceSubNote" style="width:140px; text-align: center;">(' + ns1blankspace.objectContextData['user.contactperson.email'] + ')</div></div>')
+													}
+
+													$('#' + sXHTMLElementID).html(aHTML.join(''));
+
+													$('#ns1blankspaceUserTOTPSendSMS').button(
+													{
+														label: "Send as SMS"
+													})
+													.click(function()
+													{	
+														ns1blankspace.status.working('Sending SMS...');
+
+														var sMessage = 'Hello ' + ns1blankspace.objectContextData['user.contactperson.firstname'] + ', ' +
+																			'please open your TOTP Client (ie Google Authenticator, authy), select add new account and enter the following key manually (copy & paste): ' +
+																				data.manualentrycode
+
+														var oData =
+														{
+															contactperson: ns1blankspace.objectContextData.contactperson,
+															message: sMessage
+														}
+
+														$.ajax(
+														{
+															type: 'POST',
+															url: ns1blankspace.util.endpointURI('MESSAGING_SMS_SEND'),
+															data: oData,
+															dataType: 'json',
+															success: function(data) 
+															{
+																ns1blankspace.status.message('SMS Sent');
+															}
+														});
+													})
+													.css('width', '140px');
+
+													$('#ns1blankspaceUserTOTPSendEmail').button(
+													{
+														label: "Send as Email"
+													})
+													.click(function()
+													{	
+														ns1blankspace.status.working('Sending Email...');
+
+														var sMessage = '<p>Hello ' + ns1blankspace.objectContextData['user.contactperson.firstname'] + ',</p>' +
+																			'<p>Please open your TOTP Client (ie Google Authenticator, authy), select add new account and enter the following key manually (copy & paste):</p>' +
+																			'<p>'	+ data.manualentrycode + '</p>' +
+																			'<p><b>OR</b> scan the following QR code:</p>' +
+																			'<p><img style="width:200px;" src="' + data.qrurl + '">' +
+																			'<p>Thank you,</p>' +
+																			'<p>' + ns1blankspace.user.commonName + '</p>'
+
+														var oData = 
+														{
+															subject: 'TOTP client set up',
+															message: sMessage,
+															to: ns1blankspace.objectContextData.contactperson,
+															send: 'Y',
+															applysystemtemplate: 'Y',
+															fromemail: ns1blankspace.user.email
+														}
+
+														$.ajax(
+														{
+															type: 'POST',
+															url: ns1blankspace.util.endpointURI('MESSAGING_EMAIL_SEND'),
+															data: oData,
+															dataType: 'json',
+															success: function(data) 
+															{
+																ns1blankspace.status.message('Email Sent');
+															}
+														});
+													})
+													.css('width', '140px')
+												}
+												else
+												{
+													ns1blankspace.status.error(data.error.errornotes)
+												}
+											}
+										});
+        							}
+        																			
 				}			
 }									
