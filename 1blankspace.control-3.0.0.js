@@ -60,7 +60,13 @@ ns1blankspace.option = $.extend(true, ns1blankspace.option,
 	employeeInsuranceURL: 
 	{
 		australia: 'https://www.safeworkaustralia.gov.au/workers-compensation/comparing-australias-workers-compensation-schemes'
-	}
+	},
+	logonTOTP: 
+	{
+		enabled: true,
+		name: 'Google Authenticator'
+	},
+	siteName: '1blankspace'
 });
 
 ns1blankspace.option.showFavourites = true;
@@ -295,7 +301,7 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.setup.user',
-		source: '/site/1903/1blankspace.setup.user-2.1.2.js'
+		source: '/site/1903/1blankspace.setup.user-2.1.3.js'
 	},
 	{
 		nameSpace: '1blankspace.setup.userRole',
@@ -363,11 +369,11 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.admin.space',
-		source: '/site/1433/1blankspace.admin.space-2.0.6.js'
+		source: '/site/1433/1blankspace.admin.space-2.0.7.js'
 	},
 	{
 		nameSpace: '1blankspace.admin.monitoring',
-		source: '/site/1903/1blankspace.admin.monitoring-2.0.3.js'
+		source: '/site/1903/1blankspace.admin.monitoring-2.0.4.js'
 	},
 	{
 		nameSpace: '1blankspace.developer.membership',
@@ -1085,7 +1091,8 @@ ns1blankspace.views =
 		endpoint: "SETUP_SPACE", 
 		show: true,
 		group: 10,
-		type: 2
+		type: 2,
+		subNote: 'includes monitoring'
 	},
 	{
 		title: "Structures",

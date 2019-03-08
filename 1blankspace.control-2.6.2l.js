@@ -303,7 +303,7 @@ ns1blankspace.scripts =
 	},
 	{
 		nameSpace: '1blankspace.setup.user',
-		source: '/site/312/1blankspace.setup.user-2.1.2.js'
+		source: '/site/312/1blankspace.setup.user-2.1.3.js'
 	},
 	{
 		nameSpace: '1blankspace.setup.userRole',
