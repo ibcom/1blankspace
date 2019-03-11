@@ -5473,14 +5473,36 @@ ns1blankspace.debug =
 						sMessage = ns1blankspace.util.getParam(oParam, 'message').value;
 						if (sMessage == undefined) {sMessage = ns1blankspace.util.getParam(oParam, 'notes').value}
 						sData = ns1blankspace.util.getParam(oParam, 'data').value;
-						bLog = ns1blankspace.util.getParam(oParam, 'log', {"default": ns1blankspace.debug.log}).value;
-						bPersist = ns1blankspace.util.getParam(oParam, 'persist', {"default": ns1blankspace.debug.persist}).value;
+						bLog = ns1blankspace.util.getParam(oParam, 'log').value;
+						bPersist = ns1blankspace.util.getParam(oParam, 'persist').value;
 					} 
 					else
 					{
 						sMessage = oParam;
-						if (bLog == undefined) {bLog = ns1blankspace.debug.log}
-						if (bPersist == undefined) {bPersist = ns1blankspace.debug.persist}
+					}
+
+					if (bLog == undefined)
+					{
+						if (ns1blankspace.option.debug != undefined)
+						{
+							bLog = ns1blankspace.option.debug.log;
+						}
+						else
+						{
+							bLog = ns1blankspace.debug.log
+						}
+					}
+
+					if (bPersist == undefined)
+					{
+						if (ns1blankspace.option.debug != undefined)
+						{
+							bPersist = ns1blankspace.option.debug.persist;
+						}
+						else
+						{
+							bPersist = ns1blankspace.debug.persist
+						}
 					}
 
 					if (ns1blankspace.debug.enabled && sMessage != undefined)

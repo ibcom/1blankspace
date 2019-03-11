@@ -60,7 +60,14 @@ ns1blankspace.option = $.extend(true, ns1blankspace.option,
 	employeeInsuranceURL: 
 	{
 		australia: 'https://www.safeworkaustralia.gov.au/workers-compensation/comparing-australias-workers-compensation-schemes'
-	}
+	},
+	logonTOTP: 
+	{
+		enabled: true,
+		name: 'Google Authenticator'
+	},
+	siteName: '1blankspace',
+	debug: {log: false}
 });
 
 ns1blankspace.option.yodlee =
@@ -74,7 +81,6 @@ ns1blankspace.option.stripe =
 	url: 'https://docs.mydigitalstructure.com/paynow',
 	text: 'Pay now using a card'
 }
-
 
 ns1blankspace.option.dateFormats = ['DD MMM YYYY', 'D MMM YYYY', 'D/MM/YYYY', 'DD/MM/YYYY', 'DD MMM YYYY HH:mm:ss'];
 
@@ -296,7 +302,7 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.setup.user',
-		source: '/site/1433/1blankspace.setup.user-2.1.2.js'
+		source: '/site/1433/1blankspace.setup.user-2.1.3.js'
 	},
 	{
 		nameSpace: '1blankspace.setup.userRole',
