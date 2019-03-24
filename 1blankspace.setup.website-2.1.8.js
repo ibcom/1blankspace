@@ -1652,7 +1652,7 @@ ns1blankspace.setup.website =
 											{
 												containerSelector: '#ns1blankspaceWebsitePageTemplateContainer',
 												isPage: true,
-												value: '-2'
+												value: ''
 											});
 										}
 									}
