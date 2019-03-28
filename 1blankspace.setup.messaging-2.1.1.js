@@ -933,7 +933,7 @@ ns1blankspace.setup.messaging =
 										dataType: 'json',
 										success: function(oResponse)
 										{
-											if (oResponse.status = 'OK')
+											if (oResponse.status == 'OK')
 											{
 												ns1blankspace.inputDetected = false;
 												ns1blankspace.status.message('Saved');
