@@ -379,7 +379,7 @@ ns1blankspace.scripts =
 	},
 	{
 		nameSpace: '1blankspace.developer.membership',
-		source: '/jscripts/1blankspace.developer.membership-2.0.1.js'
+		source: '/site/312/1blankspace.developer.membership-2.0.1.js'
 	},
 	{
 		nameSpace: '1blankspace.util.timezone',
