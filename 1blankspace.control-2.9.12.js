@@ -179,7 +179,7 @@ ns1blankspace.scripts.concat(
 	},
 	{
 		nameSpace: '1blankspace.messaging.imap',
-		source: '/site/1433/1blankspace.messaging.imap-2.2.5.js'
+		source: '/site/1433/1blankspace.messaging.imap-2.2.7.js'
 	},
 	{
 		nameSpace: '1blankspace.document',
