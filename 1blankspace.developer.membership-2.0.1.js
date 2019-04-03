@@ -196,12 +196,12 @@ ns1blankspace.developer.membership =
 										aHTML.push('</table>');
 
 										$(ns1blankspace.xhtml.searchContainer).html(aHTML.join(''));
-										$(ns1blankspace.xhtml.searchContainer).show(giShowSpeedOptions);
+										$(ns1blankspace.xhtml.searchContainer).show();
 										
 										$('td.ns1blankspaceSearch').click(function(event)
 										{
 											$(ns1blankspace.xhtml.dropDownContainer).html('&nbsp;');
-											$(ns1blankspace.xhtml.dropDownContainer).hide(giHideSpeedOptions)
+											$(ns1blankspace.xhtml.dropDownContainer).hide()
 											ns1blankspace.developer.membership.search.send(event.target.id, {source: 1});
 										});
 									}	
@@ -1003,8 +1003,8 @@ ns1blankspace.developer.membership =
 									if ($('#ns1blankspaceMainDetails').html() != '')
 									{
 										sData += '&title=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsTitle').val());
-										sData += '&reference=' + ns1blankspace.util.fs($('#s1blankspaceDetailsReference').val());
-										sData += '&description=' + ns1blankspace.util.fs($('#is1blankspaceDetailsDescription').val());
+										sData += '&reference=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsReference').val());
+										sData += '&description=' + ns1blankspace.util.fs($('#ns1blankspaceDetailsDescription').val());
 										sData += '&basesubscription=' + ns1blankspace.util.fs($('input[name="radioBasedOnSubscription"]:checked').val());
 									};
 
