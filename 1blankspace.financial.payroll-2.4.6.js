@@ -3191,16 +3191,16 @@ ns1blankspace.financial.payroll =
 							oSearch.method = 'FINANCIAL_PAYROLL_PAY_RECORD_SEARCH';
 							oSearch.addField('payrecord.employee.contactperson,payrecord.employee.employeenumber,payrecord.employee.contactperson.firstname,' + 
 												'payrecord.employee.contactperson.surname,payrecord.employee.taxfilenumber' +
-												',grosssalary,netsalary,superannuation,taxafterrebate,taxbeforerebate')
-
-												/*',supercalculationmonthallowances' +
+												',grosssalary,netsalary,superannuation,taxafterrebate,taxbeforerebate' +
+												',supercalculationmonthallowances' +
 											 	',supercalculationmonthexclusion' +
 											 	',supercalculationmonthinitialgrosssalary' +
-											 	',supercalculationmonthinitalsuperannuation' +
+											 	',supercalculationmonthinitialsuperannuation' +
 											 	',supercalculationmonthleaveloading' +
 											 	',supercalculationmonthsalarysacrificesuper' +
 											 	',supercalculationmonthposthighincomecap' +
-											 	',supercalculationmonthpreviouscalculation');*/
+											 	',supercalculationmonthpreviouscalculation' +
+											 	',supercalculationrate');
 
 							oSearch.addFilter('period', 'EQUAL_TO', ns1blankspace.objectContext)
 							oSearch.rows = 200;
@@ -3335,7 +3335,19 @@ ns1blankspace.financial.payroll =
 							oSearch.method = 'FINANCIAL_PAYROLL_PAY_RECORD_SEARCH';
 							oSearch.addFilter('id', 'EQUAL_TO', iPay)
 							oSearch.addField('grosssalary,calculations,netsalary,deductions,superannuation,calculations,taxbeforerebate,notes,' +
-													'payrecord.employee.contactperson,hecs,leaveloading,posttaxsuper,pretaxsuper,rebate,studentloandeduction,taxadjustments,taxafterrebate,taxbeforerebate,payrecord.employee.superannuationrate');
+												'payrecord.employee.contactperson,hecs,leaveloading,posttaxsuper,pretaxsuper,rebate,' +
+												'studentloandeduction,taxadjustments,taxafterrebate,taxbeforerebate,' +
+												'payrecord.employee.superannuationrate' +
+												',supercalculationmonthallowances' +
+											 	',supercalculationmonthexclusion' +
+											 	',supercalculationmonthinitialgrosssalary' +
+											 	',supercalculationmonthinitialsuperannuation' +
+											 	',supercalculationmonthleaveloading' +
+											 	',supercalculationmonthsalarysacrificesuper' +
+											 	',supercalculationmonthposthighincomecap' +
+											 	',supercalculationmonthpreviouscalculation' +
+											 	',supercalculationrate');
+
 							oSearch.rows = 1;
 							oSearch.getResults(function(data) {ns1blankspace.financial.payroll.pays(oParam, data)})	
 						}
@@ -3386,19 +3398,108 @@ ns1blankspace.financial.payroll =
 								aHTML.push('<tr><td class="ns1blankspaceCaption" colspan="2" style="padding-top:14px;">' +
 												'Superannuation</td></tr>');
 
-								aHTML.push('<tr><td class="ns1blankspaceRow ns1blankspaceSub" colspan="2" style="font-size:0.75em;">' +
-												'Superannuation is calculated monthly.</td></tr>');
+								aHTML.push('<tr><td class="ns1blankspaceSub" colspan="2" style="font-size:0.825em;">' +
+												'Superannuation is calculated on a monthly basis.</td></tr>');
 
-								aHTML.push('<tr><td class="ns1blankspaceRow ns1blankspaceSub">This pays contribution to the monthly superannuation</td>' +
+								aHTML.push('<tr><td class="ns1blankspaceRow ns1blankspaceSub" colspan="2" style="font-size:0.825em; padding-bottom:8px;">' +
+												'Below is the cumulative superannuation for pays with a pay date in the month of <b>' +
+												moment(ns1blankspace.objectContextData.paydate, ns1blankspace.option.dateFormats).format('MMMM YYYY') + 
+												'</b> with a pay date on or prior to ' +
+												ns1blankspace.objectContextData.paydate + '.</td></tr>');
+
+								var cSuper = 
+								{
+									initialGrossSalary: numeral(oRow["supercalculationmonthinitialgrosssalary"]).value(),
+									leaveLoading: numeral(oRow["supercalculationmonthleaveloading"]).value(),
+									exclusions: numeral(oRow["supercalculationmonthexclusion"]).value(),
+									allowances: numeral(oRow["supercalculationmonthallowances"]).value(),
+									salarysSacrifice: numeral(oRow["supercalculationmonthsalarysacrificesuper"]).value(),
+									rate: numeral(oRow["supercalculationrate"]).value()
+								}
+
+								if (cSuper.rate == 0)
+								{
+									cSuper.rate = numeral(oRow["payrecord.employee.superannuationrate"]).value()
+								}
+
+								cSuper.total = 
+								(
+									cSuper.initialGrossSalary
+									- cSuper.leaveLoading
+									- cSuper.exclusions
+									+ cSuper.allowances
+									+ cSuper.salarysSacrifice
+								)
+
+								cSuper.contribution = cSuper.total * cSuper.rate / 100;
+
+								aHTML.push('<tr><td class="ns1blankspaceRow ns1blankspaceSub" style="padding-top:0px;">' +
+												'Gross Salary</td>' +
+												'<td class="ns1blankspaceRow" style="text-align:right;">' +
+												oRow["supercalculationmonthinitialgrosssalary"]  +
+												'</td></tr>');
+
+								aHTML.push('<tr><td class="ns1blankspaceRow ns1blankspaceSub" style="padding-top:0px;">' +
+												'<i>minus</i> Leave Loading</td>' +
+												'<td class="ns1blankspaceRow" style="text-align:right;">' +
+												oRow["supercalculationmonthleaveloading"]  +
+												'</td></tr>');
+
+								aHTML.push('<tr><td class="ns1blankspaceRow ns1blankspaceSub" style="padding-top:0px;">' +
+												'<i>minus</i> Superannuation Excluded Activity</td>' +
+												'<td class="ns1blankspaceRow" style="text-align:right;">' +
+												oRow["supercalculationmonthexclusion"]  +
+												'</td></tr>');
+
+								aHTML.push('<tr><td class="ns1blankspaceRow ns1blankspaceSub" style="padding-top:0px;">' +
+												'<i>plus</i> Allowances</td>' +
+												'<td class="ns1blankspaceRow" style="text-align:right;">' +
+												oRow["supercalculationmonthallowances"]  +
+												'</td></tr>');
+
+								aHTML.push('<tr><td class="ns1blankspaceRow ns1blankspaceSub" style="padding-top:0px;">' +
+												'<i>plus</i> Salary Sacrificed as Superannuation</td>' +
+												'<td class="ns1blankspaceRow" style="text-align:right;">' +
+												oRow["supercalculationmonthsalarysacrificesuper"]  +
+												'</td></tr>');
+
+								aHTML.push('<tr><td class="ns1blankspaceRow ns1blankspaceSub" style="padding-top:0px;">' +
+												'Gross for Superannuation</td>' +
+												'<td class="ns1blankspaceRow" style="text-align:right;">' +
+												numeral(cSuper.total).format('(0,0.00)') +
+												'</td></tr>');
+
+								aHTML.push('<tr><td class="ns1blankspaceRow ns1blankspaceSub">' +
+												'Superannuation Rate</td>' +
+												'<td class="ns1blankspaceRow" style="text-align:right;">' +
+												numeral(cSuper.rate).format('(0,0.00)') + '%' +
+												'</td></tr>');
+
+								aHTML.push('<tr><td class="ns1blankspaceRow ns1blankspaceSub" style="padding-top:0px;">' +
+												'Cumulative Contribution</td>' +
+												'<td class="ns1blankspaceRow" style="text-align:right;">' +
+												numeral(cSuper.contribution).format('(0,0.00)') +
+												'</td></tr>');
+
+
+								aHTML.push('<tr><td class="ns1blankspaceRow ns1blankspaceCaption">This Pays Contribution</td>' +
 												'<td class="ns1blankspaceRow" style="text-align:right;">' +
 												oRow["superannuation"] +
 												'</td></tr>');
 
-								aHTML.push('<tr><td class="ns1blankspaceRow ns1blankspaceSub" style="padding-top:0px;">' +
-											'Employee current superannuation rate</td><td class="ns1blankspaceRow">' + oRow["payrecord.employee.superannuationrate"] + '%' +
-												'</td></tr>');
-
 								aHTML.push('</table>');
+
+								/*
+
+								https://docs.mydigitalstructure.com/financial_payroll_pay_record_search
+
+								MonthGrossSalary = SuperCalculationMonthInitialGrossSalary
+								- SuperCalculationMonthLeaveLoading
+								- SuperCalculationMonthExclusion
+								+ SuperCalculationMonthAllowances
+								- SuperCalculationMonthSalarySacrificeSuper
+
+								*/
 
 								$('#ns1blankspacePayrollPay_grosssalary-' + iPay).html(oRow["grosssalary"])
 								$('#ns1blankspacePayrollPay_tax-' + iPay).html(oRow["taxbeforerebate"])	
