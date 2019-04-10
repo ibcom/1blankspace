@@ -3414,7 +3414,9 @@ ns1blankspace.financial.payroll =
 									exclusions: numeral(oRow["supercalculationmonthexclusion"]).value(),
 									allowances: numeral(oRow["supercalculationmonthallowances"]).value(),
 									salarysSacrifice: numeral(oRow["supercalculationmonthsalarysacrificesuper"]).value(),
-									rate: numeral(oRow["supercalculationrate"]).value()
+									rate: numeral(oRow["supercalculationrate"]).value(),
+									contribution: 0,
+									payable: false
 								}
 
 								if (cSuper.rate == 0)
@@ -3431,7 +3433,11 @@ ns1blankspace.financial.payroll =
 									+ cSuper.salarysSacrifice
 								)
 
-								cSuper.contribution = cSuper.total * cSuper.rate / 100;
+								if (cSuper.total >= 450)
+								{
+									cSuper.payable = true;
+									cSuper.contribution = cSuper.total * cSuper.rate / 100;
+								}
 
 								aHTML.push('<tr><td class="ns1blankspaceRow ns1blankspaceSub" style="padding-top:0px;">' +
 												'Gross Salary</td>' +
@@ -3468,6 +3474,12 @@ ns1blankspace.financial.payroll =
 												'<td class="ns1blankspaceRow" style="text-align:right;">' +
 												numeral(cSuper.total).format('(0,0.00)') +
 												'</td></tr>');
+
+								if (!cSuper.payable)
+								{
+									aHTML.push('<tr><td class="ns1blankspaceRow ns1blankspaceSub" style="padding-top:0px;" colspan="2">' +
+												'Superannuation contribution is not required as <i>Gross for Superannuation</i> is under the threshold.</td>');
+								}
 
 								aHTML.push('<tr><td class="ns1blankspaceRow ns1blankspaceSub">' +
 												'Superannuation Rate</td>' +
