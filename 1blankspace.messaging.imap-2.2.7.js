@@ -2909,7 +2909,7 @@ ns1blankspace.messaging.imap =
 							{
 								type: 'POST',
 								url: ns1blankspace.util.endpointURI('MESSAGING_EMAIL_SEND'),
-								data: sData,
+								data: oData,
 								dataType: 'json',
 								success: function(oResponse)
 								{

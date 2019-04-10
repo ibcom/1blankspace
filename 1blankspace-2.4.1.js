@@ -203,6 +203,9 @@ ns1blankspace.app =
 					var bInitialise = ns1blankspace.util.getParam(oParam, 'initialise', {"default": false}).value;
 					var bInitialiseScripts = ns1blankspace.util.getParam(oParam, 'initialiseScripts', {"default": false}).value;
 
+					ns1blankspace.rootnamespace = ns1blankspace;
+					ns1blankspace.rootnamespacetext = ns1blankspacetext;
+
 					if ($('#ns1blankspaceContainer').length === 0)
 					{
 						$(ns1blankspace.selector).append('<div id="ns1blankspaceContainer">' +
@@ -1535,8 +1538,6 @@ ns1blankspace.app =
 					var bExtendInit = true;
 					var oRoot = ns1blankspace.util.getParam(oParam, 'rootNamespace', {"default": ns1blankspace}).value
 					var sRoot = ns1blankspace.util.getParam(oParam, 'rootNameSpaceText', {"default": 'ns1blankspace'}).value;
-
-					ns1blankspace.rootnamespace = oRoot;
 
 					if (oParam != undefined)
 					{
@@ -5834,8 +5835,17 @@ ns1blankspace.search.email =
 						
 					if (sElementID != '')
 					{
-						var sMethod = $('#' + sElementID).attr("data-method")
-						var sParentElementID = $('#' + sElementID).attr("data-parent")
+						var sMethod = $('#' + sElementID).attr("data-method");
+						var sParentElementID = $('#' + sElementID).attr("data-parent");
+						oParam.onComplete = $('#' + sElementID).attr("data-click");
+						if ($.type(oParam.onComplete) == 'string')
+						{
+							oParam.onComplete = ns1blankspace.util.toFunction(oParam.onComplete);
+						}
+						else if ($.type(oParam.onComplete) != 'function')
+						{
+							delete(oParam.onComplete);
+						}
 					}	
 					
 					if (lElementSearchContext != undefined)
@@ -5848,6 +5858,9 @@ ns1blankspace.search.email =
 						
 						var sValue = $('#' + sSetXHTMLElementID).val();
 						
+						oParam.contactBusiness = $('#' + sXHTMLElementID).parent().attr('data-contactbusiness');
+						oParam.contactPerson = aSearch[1];
+						oParam.value = sValue;
 						if (bEmailOnly) 
 						{
 							sValue = (sValue === '') 
@@ -5879,6 +5892,10 @@ ns1blankspace.search.email =
 						$('#' + sParentElementID).val($('#' + sXHTMLElementID).parent().attr('data-contactbusinesstext'));
 
 						$(ns1blankspace.xhtml.container).hide();
+						if (oParam.onComplete)
+						{
+							ns1blankspace.util.onComplete(oParam);
+						}
 					}
 					else
 					{

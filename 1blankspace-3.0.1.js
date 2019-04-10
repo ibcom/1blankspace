@@ -203,6 +203,9 @@ ns1blankspace.app =
 					var bInitialise = ns1blankspace.util.getParam(oParam, 'initialise', {"default": false}).value;
 					var bInitialiseScripts = ns1blankspace.util.getParam(oParam, 'initialiseScripts', {"default": false}).value;
 
+					ns1blankspace.rootnamespace = ns1blankspace;
+					ns1blankspace.rootnamespacetext = ns1blankspacetext;
+
 					if ($('#ns1blankspaceContainer').length === 0)
 					{
 						$(ns1blankspace.selector).append('<div id="ns1blankspaceContainer">' +
@@ -1537,8 +1540,6 @@ ns1blankspace.app =
 					var bExtendInit = true;
 					var oRoot = ns1blankspace.util.getParam(oParam, 'rootNamespace', {"default": ns1blankspace}).value
 					var sRoot = ns1blankspace.util.getParam(oParam, 'rootNameSpaceText', {"default": 'ns1blankspace'}).value;
-
-					ns1blankspace.rootnamespace = oRoot;
 
 					if (oParam != undefined)
 					{
