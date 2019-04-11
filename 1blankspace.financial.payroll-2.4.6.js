@@ -3389,20 +3389,14 @@ ns1blankspace.financial.payroll =
 												' style="width:100%; height:100px;">' + oRow["notes"] + '</textarea>' +
 												'</td></tr>');	
 											
-								aHTML.push('<tr><td colspan=2 class="ns1blankspaceSubNote ns1blankspaceRowSelect" id="ns1blankspaceFinancialPayrollShowCalcs">Show Calculations</td></tr>');
-
-								aHTML.push('<tr><td colspan=2 id="ns1blankspaceFinancialPayrollCalcsContainer" class="ns1blankspaceSub" style="color:#444444;"></td></tr>');
-
-								aHTML.push('<tr><td colspan=2 class="ns1blankspaceSubNote ns1blankspaceRowSelect" id="ns1blankspaceFinancialPayrollRecalculate">Recalculate</td></tr>');
-
-								aHTML.push('<tr><td class="ns1blankspaceCaption" colspan="2" style="padding-top:14px;">' +
+								aHTML.push('<tr><td class="ns1blankspaceCaption" colspan="2" style="padding-top:12px;">' +
 												'Superannuation</td></tr>');
 
 								aHTML.push('<tr><td class="ns1blankspaceSub" colspan="2" style="font-size:0.825em;">' +
 												'Superannuation is calculated on a monthly basis.</td></tr>');
 
 								aHTML.push('<tr><td class="ns1blankspaceRow ns1blankspaceSub" colspan="2" style="font-size:0.825em; padding-bottom:8px;">' +
-												'Below is the cumulative superannuation for pays with a pay date in the month of <b>' +
+												'Below is the cumulative superannuation calculations for pays with a pay date in the month of <b>' +
 												moment(ns1blankspace.objectContextData.paydate, ns1blankspace.option.dateFormats).format('MMMM YYYY') + 
 												'</b> with a pay date on or prior to ' +
 												ns1blankspace.objectContextData.paydate + '.</td></tr>');
@@ -3475,17 +3469,17 @@ ns1blankspace.financial.payroll =
 												numeral(cSuper.total).format('(0,0.00)') +
 												'</td></tr>');
 
-								if (!cSuper.payable)
-								{
-									aHTML.push('<tr><td class="ns1blankspaceRow ns1blankspaceSub" style="padding-top:0px;" colspan="2">' +
-												'Superannuation contribution is not required as <i>Gross for Superannuation</i> is under the threshold.</td>');
-								}
-
 								aHTML.push('<tr><td class="ns1blankspaceRow ns1blankspaceSub">' +
 												'Superannuation Rate</td>' +
 												'<td class="ns1blankspaceRow" style="text-align:right;">' +
 												numeral(cSuper.rate).format('(0,0.00)') + '%' +
 												'</td></tr>');
+
+								if (!cSuper.payable)
+								{
+									aHTML.push('<tr><td class="ns1blankspaceRow ns1blankspaceSub" style="padding-top:0px;" colspan="2">' +
+												'Superannuation contribution is not required as <i>Gross for Superannuation</i> is under the threshold.</td>');
+								}
 
 								aHTML.push('<tr><td class="ns1blankspaceRow ns1blankspaceSub" style="padding-top:0px;">' +
 												'Cumulative Contribution</td>' +
@@ -3498,6 +3492,12 @@ ns1blankspace.financial.payroll =
 												'<td class="ns1blankspaceRow" style="text-align:right;">' +
 												oRow["superannuation"] +
 												'</td></tr>');
+
+								aHTML.push('<tr><td style="padding-top:16px;" colspan=2 class="ns1blankspaceSubNote ns1blankspaceRowSelect" id="ns1blankspaceFinancialPayrollShowCalcs">Show All Calculations</td></tr>');
+
+								aHTML.push('<tr><td colspan=2 id="ns1blankspaceFinancialPayrollCalcsContainer" class="ns1blankspaceSub" style="color:#444444;"></td></tr>');
+
+								aHTML.push('<tr><td colspan=2 class="ns1blankspaceSubNote ns1blankspaceRowSelect" id="ns1blankspaceFinancialPayrollRecalculate">Recalculate</td></tr>');
 
 								aHTML.push('</table>');
 
