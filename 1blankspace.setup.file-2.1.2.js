@@ -1489,7 +1489,13 @@ ns1blankspace.setup.file =
 														_data.current.length = _data.current.text.length
 													}
 
-													_data.current.textLength = _data.current.text.length;
+													_data.current.textLength = 0
+
+													if (!_.isUndefined(_data.current.text))
+													{
+														_data.current.textLength = _data.current.text.length;
+													}
+
 													_data.current.textEnd = _.toNumber(_data.start) + _.toNumber(_data.current.textLength) - 1;
 													_data.current.end = _.toNumber(_data.start) + _.toNumber(_data.current.length) - 1;
 													_data.start = _data.current.end + 1;
