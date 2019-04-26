@@ -2161,6 +2161,8 @@ ns1blankspace.logon =
 								ns1blankspace.authenticationLevel = data.authenticationlevel;
 								ns1blankspace.authenticationDelivery = data.authenticationdelivery;
 
+								ns1blankspace.logonKey = data.logonkey;
+
 								if (ns1blankspace.authenticationLevel == '3')
 								{	
 									if (ns1blankspace.authenticationDelivery == '1' || ns1blankspace.authenticationDelivery == '2')
