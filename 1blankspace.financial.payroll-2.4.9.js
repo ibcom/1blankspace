@@ -4971,8 +4971,9 @@ ns1blankspace.financial.payroll.totals =
 												label: 'Get Data'
 											})
 											.click(function()
-											{										
-												ns1blankspace.financial.payroll.totals.employees.report.init(oParam);
+											{		
+												oParam = {onCompleteWhenCan: ns1blankspace.financial.payroll.totals.employees.report.init};
+												ns1blankspace.financial.payroll.totals.employees.preview.init(oParam);
 											})
 											.css('width', '90px');
 
@@ -5711,6 +5712,62 @@ ns1blankspace.financial.payroll.totals =
 														param: 'contactBusinessText'
 													},
 													{
+														name: 'OrgABN',
+														param: 'contactBusinessABN'
+													},
+													{
+														name: 'BranchID',
+														value: '1'
+													},
+													{
+														name: 'BMSID',
+														value: 'mydigitalstructure'
+													},
+													{
+														name: 'PayrollGroupID',
+														value: '1'
+													},
+													{
+														name: 'ProductID',
+														param: 'ATOProductID'
+													},
+													{
+														name: 'EventDate',
+														value: '{{now}}'
+													},
+													{
+														name: 'PayDate',
+														param: 'payDate'
+													},
+													{
+														name: 'PayrollTrxID',
+														param: 'guid'
+													},
+													{
+														name: 'IsUpdate',
+														value: 'false'
+													},
+													{
+														name: 'IsFullFileReplacement',
+														value: 'true'
+													},
+													{
+														name: 'DeclarationAcceptedBy',
+														param: 'declarationAcceptedBy'
+													},
+													{
+														name: 'EmployerPeriodW1',
+														param: 'TaxW1'
+													},
+													{
+														name: 'EmployerPeriodW2',
+														param: 'TaxW2'
+													},
+													{
+														name: 'RecordID',
+														value: '0'
+													},
+													{
 														name: 'EventRecords',
 														value: []
 													}
@@ -5727,11 +5784,181 @@ ns1blankspace.financial.payroll.totals =
 														{
 															name: 'PayeePayrollID',
 															field: 'employee.employeenumber'
+														},
+														{
+															name: 'PayeeTFN',
+															field: 'employee.taxfilenumber'
+														},
+														{
+															name: 'PayeeFamilyName',
+															field: 'employee.contactperson.surname'
+														},
+														{
+															name: 'PayeeFirstName',
+															field: 'employee.contactperson.firstname'
+														},
+														{
+															name: 'PayeeOtherName',
+															field: 'employee.contactperson.firstname'
+														},
+														{
+															name: 'PayeeDateOfBirth',
+															field: 'employee.contactperson.firstname'
+														},
+														{
+															name: 'PayeeCommencementDate',
+															field: 'employee.contactperson.firstname'
+														},
+														{
+															name: 'PayeeCessationDate',
+															field: 'employee.contactperson.firstname'
+														},
+														{
+															name: 'PayeeAddressLine1',
+															field: 'employee.contactperson.firstname'
+														},
+														{
+															name: 'PayeeAddressLine2',
+															field: 'employee.contactperson.firstname'
+														},
+														{
+															name: 'PayeeSuburb',
+															field: 'employee.contactperson.firstname'
+														},
+														{
+															name: 'PayeeState',
+															field: 'employee.contactperson.firstname'
+														},
+														{
+															name: 'PayeePostcode',
+															field: 'employee.contactperson.firstname'
+														},
+														{
+															name: 'PayeeCountry',
+															field: 'employee.contactperson.firstname'
+														},
+														{
+															name: 'PayeeEmail',
+															field: 'employee.contactperson.firstname'
+														},
+														{
+															name: 'PayeePhone',
+															field: 'employee.contactperson.firstname'
+														},
+														{
+															name: 'PeriodStartDate',
+															field: 'employee.contactperson.firstname'
+														},
+														{
+															name: 'PeriodEndDate',
+															field: 'employee.contactperson.firstname'
+														},
+														{
+															name: 'FinalEventIndicator',
+															field: 'employee.contactperson.firstname'
+														},
+														{
+															name: 'PayeeCDEPPaymentAmount',
+															field: 'employee.contactperson.firstname'
+														},
+														{
+															name: 'PayeeTotalINBPAYGWAmount',
+															field: 'employee.contactperson.firstname'
+														},
+														{
+															name: 'SuperGuaranteeAmount',
+															field: 'employee.contactperson.firstname'
+														},
+														{
+															name: 'OTEAmount',
+															field: 'employee.contactperson.firstname'
+														},
+														{
+															name: 'PayeeLumpSumPaymentAType',
+															field: 'employee.contactperson.firstname'
+														},
+														{
+															name: 'PayeeLumpSumPaymentA',
+															field: 'employee.contactperson.firstname'
+														},
+														{
+															name: 'PayeeLumpSumPaymentB',
+															field: 'employee.contactperson.firstname'
+														},
+														{
+															name: 'PayeeLumpSumPaymentD',
+															field: 'employee.contactperson.firstname'
+														},
+														{
+															name: 'PayeeLumpSumPaymentE',
+															field: 'employee.contactperson.firstname'
+														},
+														{
+															name: 'PayeeRFBTaxableAmount',
+															field: 'employee.contactperson.firstname'
+														},
+														{
+															name: 'PayeeRFBTaxableAmount',
+															field: 'employee.contactperson.firstname'
+														},
+														{
+															name: 'PayeeRFBExemptAmount',
+															field: 'employee.contactperson.firstname'
+														},
+														{
+															name: 'PayeeResidencyStatus',
+															field: 'employee.contactperson.firstname'
+														},
+														{
+															name: 'PayeeTaxFreeThresholdClaimed',
+															field: 'employee.contactperson.firstname'
+														},
+														{
+															name: 'PayeeSeniorAustralianTaxOffsetClaimed',
+															field: 'employee.contactperson.firstname'
+														},
+														{
+															name: 'PayeeTaxOffsetDownwardVariationAmount',
+															field: 'employee.contactperson.firstname'
+														},
+														{
+															name: 'PayeeHELPIndicator',
+															field: 'employee.contactperson.firstname'
+														},
+														{
+															name: 'PayeeTradeSupportLoanIndicator',
+															field: 'employee.contactperson.firstname'
+														},
+														{
+															name: 'PayeeStudentLoanIndicator',
+															field: 'employee.contactperson.firstname'
+														},
+														{
+															name: 'PayeeDeclarerIdentifier',
+															field: 'employee.contactperson.firstname'
+														},
+														{
+															name: 'PayeeDeclarationDate',
+															field: 'employee.contactperson.firstname'
+														},
+														{
+															name: 'PayeeDeclarationAcceptanceIndicator',
+															field: 'employee.contactperson.firstname'
+														},
+														{
+															name: 'PayeeAllowances',
+															value: []
+														},
+														{
+															name: 'PayeeDeductions',
+															field: []
+														},
+														{
+															name: 'ETPItems',
+															field: []
 														}
 													]
 												}
-
-
 											]
 										}
 									},	
@@ -5741,6 +5968,8 @@ ns1blankspace.financial.payroll.totals =
 										//ns1blankspace.financial.payroll.data.summaries
 										var iPayPeriod = ns1blankspace.util.getParam(oParam, 'payPeriod').value;
 										//for W1/W2
+
+										oParam = ns1blankspace.util.setParam(oParam, 'contactBusinessText', ns1blankspace.user.contactBusinessText)
 
 										if (_.isUndefined(oResponse))
 										{
@@ -5758,26 +5987,48 @@ ns1blankspace.financial.payroll.totals =
 										var oFormat = ns1blankspace.financial.payroll.totals.employees.report.data.format;
 										var oSummaries = ns1blankspace.financial.payroll.data.summaries;
 										var oData = {};
+										var oItemData = {};
 
-										$.each(oFormat.header.fields, function (f, field)
-										{
-											oData[field.name] = oParam[field.param]
-										});
+										ns1blankspace.financial.payroll.totals.employees.report.data.object = undefined;
 
-										$.each(oFormat.item, function (i, item)
+										if (oSummaries != undefined)
 										{
-											$.each(oSummaries, function (s, summary)
+											$.each(oFormat.header.fields, function (f, field)
 											{
-												oData[item.parentName] = {};
-
-												$.each(item.fields, function (f, field)
+												if (!_.isUndefined(field.value))
 												{
-													oData[item.parentName][field.name] = oSummaries[field.field]
+													oData[field.name] = field.value;
+												}
+												else
+												{
+													oData[field.name] = oParam[field.param];
+												}
+											});
+
+											$.each(oFormat.item, function (i, oItem)
+											{
+												$.each(oSummaries, function (s, oSummary)
+												{
+													oItemData = {};
+
+													$.each(oItem.fields, function (f, oField)
+													{
+														oItemData[oField.name] = oSummary[oField.field]
+													});
+
+													if (_.isArray(oData[oItem.parentName]))
+													{
+														oData[oItem.parentName].push(oItemData);
+													}
+													else
+													{
+														oData[oItem.parentName] = oItemData;
+													}
 												});
 											});
-										});
 
-										ns1blankspace.financial.payroll.totals.employees.report.data.object = oData;
+											ns1blankspace.financial.payroll.totals.employees.report.data.object = oData;
+										}	
 									}
 								}								
 				}
