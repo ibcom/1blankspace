@@ -5776,6 +5776,15 @@ ns1blankspace.financial.payroll.totals =
 
 											item:
 											[
+/*
+'employee.contactpersontext,employee.employmentstartdate,employee.statustext,employee.employeenumber,employee.taxfilenumber,' +
+'employee.contactperson,employee.contactperson.firstname,employee.contactperson.surname,employee.contactperson.email,' +
+'employee.contactperson.streetaddress1,employee.contactperson.streetaddress2,employee.contactperson.streetsuburb,' +
+'employee.contactperson.streetstate,employee.contactperson.streetpostcode,employee.contactperson.dateofbirth,' +
+'employee.contactbusiness.tradename,employee.contactbusiness.abn,employee.contactbusiness.streetaddress1,employee.contactbusiness.streetaddress2,' +
+'employee.contactbusiness.streetsuburb,employee.contactbusiness.streetstate,employee.contactbusiness.streetpostcode'*/
+
+	
 												{
 													parentName: 'EventRecords',
 													mustBeSetDefault: true,
@@ -5799,59 +5808,59 @@ ns1blankspace.financial.payroll.totals =
 														},
 														{
 															name: 'PayeeOtherName',
-															field: 'employee.contactperson.firstname'
+															value: ''
 														},
 														{
 															name: 'PayeeDateOfBirth',
-															field: 'employee.contactperson.firstname'
+															field: 'employee.contactperson.dateofbirth'
 														},
 														{
 															name: 'PayeeCommencementDate',
-															field: 'employee.contactperson.firstname'
+															field: 'employmentstartdate'
 														},
 														{
 															name: 'PayeeCessationDate',
-															field: 'employee.contactperson.firstname'
+															field: 'employmentenddate'
 														},
 														{
 															name: 'PayeeAddressLine1',
-															field: 'employee.contactperson.firstname'
+															field: 'employee.contactperson.streetaddress1'
 														},
 														{
 															name: 'PayeeAddressLine2',
-															field: 'employee.contactperson.firstname'
+															field: 'employee.contactperson.streetaddress1'
 														},
 														{
 															name: 'PayeeSuburb',
-															field: 'employee.contactperson.firstname'
+															field: 'employee.contactperson.streetsuburb'
 														},
 														{
 															name: 'PayeeState',
-															field: 'employee.contactperson.firstname'
+															field: 'employee.contactperson.streetstate'
 														},
 														{
 															name: 'PayeePostcode',
-															field: 'employee.contactperson.firstname'
+															field: 'employee.contactperson.streetpostcode'
 														},
 														{
 															name: 'PayeeCountry',
-															field: 'employee.contactperson.firstname'
+															field: 'employee.contactperson.streetcountry'
 														},
 														{
 															name: 'PayeeEmail',
-															field: 'employee.contactperson.firstname'
+															field: 'employee.contactperson.email'
 														},
 														{
 															name: 'PayeePhone',
-															field: 'employee.contactperson.firstname'
+															field: ['employee.contactperson.mobile', 'employee.contactperson.phone']
 														},
 														{
 															name: 'PeriodStartDate',
-															field: 'employee.contactperson.firstname'
+															param: 'periodStartDate'
 														},
 														{
 															name: 'PeriodEndDate',
-															field: 'employee.contactperson.firstname'
+															field: 'periodEndDate'
 														},
 														{
 															name: 'FinalEventIndicator',
