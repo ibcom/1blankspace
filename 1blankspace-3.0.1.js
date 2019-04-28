@@ -203,22 +203,35 @@ ns1blankspace.app =
 					var bInitialise = ns1blankspace.util.getParam(oParam, 'initialise', {"default": false}).value;
 					var bInitialiseScripts = ns1blankspace.util.getParam(oParam, 'initialiseScripts', {"default": false}).value;
 
-					ns1blankspace.rootnamespace = ns1blankspace;
-					ns1blankspace.rootnamespacetext = ns1blankspacetext;
 
 					if ($('#ns1blankspaceContainer').length === 0)
 					{
-						$(ns1blankspace.selector).append('<div id="ns1blankspaceContainer">' +
-											'<div id="ns1blankspaceHeader"></div>' +
-											'<div id="ns1blankspaceViewControl"><span style="font-size:1.3em; padding-left:6px; color: #999999;">Initialising the app...</span></div>' +
-											'<div id="ns1blankspaceViewControlBrowse"></div>' +
-											'<div id="ns1blankspaceControl"></div>' +
-											'<div id="ns1blankspaceMain"></div>' +
-											'<div id="ns1blankspaceFooter"></div>' +
-											'<div id="ns1blankspaceMultiUseContainer"></div>' +
-											'<div id="ns1blankspaceMultiUseDialog"></div>' +
-											'<div id="ns1blankspaceToolTip" style="display:none;"></div>' +
-											'</div>');
+						if (ns1blankspace.option.bootstrap)
+						{	
+							$(ns1blankspace.selector).append('<div id="ns1blankspaceContainer">' +
+								'<div id="ns1blankspaceHeader"></div>' +
+								'<div id="ns1blankspaceControl"></div>' +
+								'<div id="ns1blankspaceMain"></div>' +
+								'<div id="ns1blankspaceFooter"></div>' +
+								'<div id="ns1blankspaceMultiUseContainer"></div>' +
+								'<div id="ns1blankspaceMultiUseDialog"></div>' +
+								'<div id="ns1blankspaceToolTip" style="display:none;"></div>' +
+								'</div>');
+						}
+						else
+						{
+							$(ns1blankspace.selector).append('<div id="ns1blankspaceContainer">' +
+								'<div id="ns1blankspaceHeader"></div>' +
+								'<div id="ns1blankspaceViewControl"><span style="font-size:1.3em; padding-left:6px; color: #999999;">Initialising the app...</span></div>' +
+								'<div id="ns1blankspaceViewControlBrowse"></div>' +
+								'<div id="ns1blankspaceControl"></div>' +
+								'<div id="ns1blankspaceMain"></div>' +
+								'<div id="ns1blankspaceFooter"></div>' +
+								'<div id="ns1blankspaceMultiUseContainer"></div>' +
+								'<div id="ns1blankspaceMultiUseDialog"></div>' +
+								'<div id="ns1blankspaceToolTip" style="display:none;"></div>' +
+								'</div>');
+						}
 					}		
 
 					if (!bInitialise)
