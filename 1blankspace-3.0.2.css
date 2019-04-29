@@ -1,9 +1,19 @@
 @media only screen
 {
+	input.ns1blankspaceUpload
+	{
+	  font-size: 11px;
+	}
+
+	table.ns1blankspaceColumn2 td
+	{
+		padding-left: 10px;
+	}
+
 	.glyphicon
 	{
 		top:0px;
-	},
+	}
 
 	html
 	{
@@ -286,7 +296,7 @@
 		transform: scale(.95, .95);
 		-ms-transform: scale(.95, .95);
 		-moz-transform: scale(.95, .95);
-		-o-transform: scale(.95, .95));
+		-o-transform: scale(.95, .95);
 	}
 
 	iframe.ns1blankspaceScale85
@@ -295,7 +305,7 @@
 		transform: scale(.95, .95);
 		-ms-transform: scale(.95, .95);
 		-moz-transform: scale(.95, .95);
-		-o-transform: scale(.95, .95));
+		-o-transform: scale(.95, .95);
 	}
 
 	table.ns1blankspaceMessagingIMAPInbox
@@ -1316,7 +1326,87 @@
 		background-image: none !important;
 	}
 
-	.fc-list-item-title a {cursor: pointer};
+	.fc-list-item-title a
+	{
+		cursor: pointer
+	}
+
+
+	input[type="radio"]
+	{
+	  margin-right: 4px;
+	}
+
+	.ns1blankspaceAction
+	{
+	  white-space: normal;
+	  padding-left:6px;
+	  padding-right:6px;
+	  font-size:12px;
+	}
+
+	td.ns1blankspaceAction
+	{
+	  padding-left:0px;
+	  padding-right:0px;
+	}
+
+	.ns1blankspaceViewControlColumn
+	{
+	  width:95px;
+	}
+
+	#ns1blankspaceViewControlSetupContainer
+	{
+	  left: 839px;
+	}
+
+	.ui-checkboxradio-radio-label
+	{
+	  white-space: normal;
+	}
+
+	#ns1blankspaceContactPersonFavourite, #ns1blankspaceContactBusinessFavourite
+	{
+	  white-space: normal;
+	}
+
+	#ns1blankspaceMessagingConversationPosts .ui-button-icon-only
+	{
+	  padding-top: 6px;
+	  padding-left: 4px;
+	  padding-bottom: 4px;
+	}
+
+	#ns1blankspaceUpload
+	{
+	  background-color: #d4d4d4;
+	  border: none;
+	  padding: 6px;
+	  padding-left: 12px;
+	  padding-right: 12px;
+	  font-weight: 600;
+	  color: #333333bf;
+	}
+
+	#ns1blankspaceUpload:hover
+	{
+	  background-color: #ff9600;
+	  color: white;
+	}
+
+	#ns1blankspaceViewControlHistoryContainer
+	{
+	  left: 48px;
+	}
+
+	td.ns1blankspaceRow, div.ns1blankspaceRow
+	{
+	  padding-top: 4px;
+	  padding-bottom: 4px;
+	}
+
+
 }
 
 @media print
