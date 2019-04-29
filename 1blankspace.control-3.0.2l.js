@@ -11,7 +11,7 @@ ns1blankspace.xhtml.editorCSS = '';
 ns1blankspace.option = $.extend(true, ns1blankspace.option, 
 {
 	defaultRows: 20,
-	defaultView: "Select...",
+	defaultView: '<span style="font-weight:600;">Select...</span> <span class="caret"></span>',
 	defaultSetupView: "Website",
 	returnToLast: true,
 	restLevel: 0,
@@ -85,7 +85,7 @@ ns1blankspace.option.stripe =
 	text: 'Pay now using a card'
 }
 
-ns1blankspace.option.showFavourites = true;
+ns1blankspace.option.showFavourites = false;
 
 ns1blankspace.option.dateFormats = ['DD MMM YYYY', 'D MMM YYYY', 'D/MM/YYYY', 'DD/MM/YYYY', 'DD MMM YYYY HH:mm:ss'];
 
@@ -176,12 +176,14 @@ ns1blankspace.xhtml.header =
 	'</nav>';
 
 
+ns1blankspace.setupShow = true;
+
 ns1blankspace.xhtml.viewContainer =
 	'<ul class="nav navbar-nav">' +
 		'<li>' +
 		 	'<div class="btn-group">' +
- 				'<button type="button" class="btn btn-default">Home</button>' +
-  				'<button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">' +
+ 				'<button type="button" class="btn btn-default glyphicon glyphicon-home"></button>' +
+  				'<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">' +
     				'<span class="caret"></span>' +
     				'<span class="sr-only">Toggle Dropdown</span>' +
 				'</button>' +
@@ -189,15 +191,54 @@ ns1blankspace.xhtml.viewContainer =
 				    '<li><a href="#">Calendar</a></li>' +
 				 '</ul>' +
 			'</div>' +
+		'</li>' +
+		'<li style="margin-left:10px;">' +
+		 	'<div class="btn-group">' +
+ 				'<button type="button" class="btn btn-default glyphicon glyphicon-chevron-left" id="ns1blankspaceViewControlBack"></button>' +
+ 				'<button type="button" class="btn btn-default glyphicon glyphicon-chevron-up" id="ns1blankspaceViewControlRefresh"></button>' +
+ 				'<button type="button" class="btn btn-default glyphicon glyphicon-chevron-right" id="ns1blankspaceViewControlForward"></button>' +
+			'</div>' +
+		'</li>' +
+		'<li style="margin-left:10px;">' +
+		 	'<div id="ns1blankspaceViewControlViewContainer">' +
+				'<span id="ns1blankspaceViewControlView"></span>' +
+			'</div>' +
 		 '</li>' +
-	'</ul>'
+		 '<li style="margin-left:10px;">' +
+		 	'<div>' +
+				'<input id="_ns1blankspaceViewControlSearch" class="form-control' +
+				(ns1blankspace.option.searchWatermark!=undefined?' ns1blankspaceWatermark" value="' + ns1blankspace.option.searchWatermark + '"':'"') +
+				'>' +
+			'</div>' +
+		 '</li>' +
+		 '<li style="margin-left:10px;">' +
+		 	'<button type="button" class="btn btn-default" id="_ns1blankspaceViewControlNew">New</button>' +
+		 '</li>' +
+		 '<li style="margin-left:10px;">' +
+		 	'<div class="btn-group">' +
+ 				'<button type="button" class="btn btn-default" id="_ns1blankspaceViewControlAction">Save</button>' +
+ 				'<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">' +
+    				'<span class="caret"></span>' +
+    				'<span class="sr-only">Toggle Dropdown</span>' +
+				'</button>' +
+				'<ul class="dropdown-menu">' +
+				    '<li><a href="#">Remove</a></li>' +
+				 '</ul>' +
+			'</div>' +
+		'</li>' +
+		'<li style="margin-left:10px;">' +
+		 	'<div id="_ns1blankspaceViewControlActionStatus"></div>' +
+		'</li>' +
+		'</ul><ul class="nav navbar-nav pull-right">' +
+		(ns1blankspace.setupShow?'<li style="margin-left:10px;">' +
+									'<button type="button" class="btn btn-default glyphicon glyphicon-cog" id="ns1blankspaceViewControlSetup"></button>' +
+									'</li>':'') +
+		'<li style="margin-left:4px;">' +
+			'<button type="button" class="btn btn-default glyphicon glyphicon-question-sign" id="_ns1blankspaceViewControlHelp"></button>' +
+		'</li>' +
+	'</ul>';
 
-
-'<div id="ns1blankspaceViewControlHomeContainer">' +
-										'<span id="ns1blankspaceViewControlHome">&nbsp;</span>' +
-										'<span id="ns1blankspaceViewControlHomeOptions">&nbsp;</span>' +
-										'</div>'
-
+	
 ns1blankspace.scripts =
 [
 	{
@@ -1387,7 +1428,7 @@ ns1blankspace.control =
 
 	views:		
 	{					
-		show: 			function ()
+		show: function ()
 		{
 			if (ns1blankspace.xhtml.viewControl == undefined)
 			{

@@ -32,10 +32,13 @@ ns1blankspace.home =
 					$('#ns1blankspaceViewControlNew').button({disabled: true});
 					$('#ns1blankspaceViewControlActionOptions').button({disabled: true});
 
-					$('#ns1blankspaceViewControlViewContainer').button(
+					if (!ns1blankspace.option.bootstrap)
+					{
+						$('#ns1blankspaceViewControlViewContainer').button(
 						{
 							label: 'Select...'
 						});
+					}
 
 					var aHTML = [];
 					
