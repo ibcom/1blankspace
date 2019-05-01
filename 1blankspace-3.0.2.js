@@ -219,7 +219,7 @@ ns1blankspace.app =
 								'</div>' +	
 
 								'<div id="ns1blankspaceFooter"></div>' +
-								'<div id="ns1blankspaceMultiUseContainer"></div>' +
+								'<div id="ns1blankspaceMultiUseContainer" style="z-index:9999999;"></div>' +
 								'<div id="ns1blankspaceMultiUseDialog"></div>' +
 								'<div id="ns1blankspaceToolTip" style="display:none;"></div>' +
 								'</div>');
@@ -1044,6 +1044,8 @@ ns1blankspace.app =
 					$('#ns1blankspaceLogonName').html(ns1blankspace.user.logonName);
 					$('#ns1blankspaceLogoff').html(',&nbsp;log&nbsp;off');
 
+					$('#ns1blankspaceViewControl').css('height', '');
+
 					if (ns1blankspace.xhtml.viewContainer !== undefined)
 					{
 						aHTML.push(ns1blankspace.xhtml.viewContainer);
@@ -1140,6 +1142,27 @@ ns1blankspace.app =
 				{					
 					if (ns1blankspace.option.bootstrap)
 					{
+						$('#ns1blankspaceViewControlHome')
+						.click(function(event)
+						{
+							if (ns1blankspace.util.checkIfInput())
+							{
+								ns1blankspace.home.init();
+							}	
+						})		
+						.next()
+						.click(function()
+						{
+							//ns1blankspace.home.options.show(this);
+						});
+								
+
+						$('#ns1blankspaceViewControlBack')
+						.click(function(event)
+						{
+							ns1blankspace.history.view({instruction: 2});
+						})
+
 						$('#ns1blankspaceViewControlRefresh')
 						.unbind('click').click(function()
 						{
@@ -1156,6 +1179,19 @@ ns1blankspace.app =
 							}	
 						});
 
+						$('#ns1blankspaceViewControlForward')
+						.click(function()
+						{
+							ns1blankspace.history.view({instruction: 3});
+						});
+
+						$('#ns1blankspaceViewControlViewContainer')
+						.click(function() 
+						{
+							ns1blankspace.control.views.show(this);
+						});
+
+						
 						$('#ns1blankspaceViewControlSetup')	
 						.click(function() 
 						{
@@ -1165,6 +1201,14 @@ ns1blankspace.app =
 							}	
 						});	
 
+						$('#ns1blankspaceViewControlHelp')
+						.click(function() 
+						{
+							if (ns1blankspace.util.checkIfInput())
+							{
+								ns1blankspace.supportIssue.init();
+							}	
+						});
 					}
 					else
 					{
@@ -1376,102 +1420,102 @@ ns1blankspace.app =
 								{
 									ns1blankspace.supportIssue.init();
 								}	
-							});		
-						
-						$('#ns1blankspaceLogonOptions').button(
-						{
-							text: false,
-							label: 'Log off, change password...',
-							icons:
-							{
-								primary: "ui-icon-triangle-1-s"
-							}
-						})
-						.click(function(event)
-						{
-							ns1blankspace.control.user.show(this);
-						})
-						.css('width', '12px;')
-						.css('height', '27px;');
-
-						if (ns1blankspace.option.showLogonOptionsOnHover)
-						{
-							$('#ns1blankspaceLogonName').hover(
-							function(event)
-							{
-								ns1blankspace.container.position({xhtmlElementID: this.id, leftOffset: 379, topOffset: -5});
-								$(ns1blankspace.xhtml.container).attr('data-initiator', '');
-
-								$vq.clear({queue: 'logoff'});
-								$vq.add('<div id="ns1blankspaceUserLogOnOff" class="ns1blankspaceViewControlContainer" style="font-size:0.875em; width:60px; cursor:pointer; text-align:center;">Log off</div>', {queue: 'logoff'});
-								$vq.render(ns1blankspace.xhtml.container, {queue: 'logoff'});
-
-								$(ns1blankspace.xhtml.container).show();
-
-								$('#ns1blankspaceUserLogOnOff').click(function(event)
-								{
-									ns1blankspace.logOff();
-								})
-								.mouseleave(function()
-								{
-									$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions);
-									$(ns1blankspace.xhtml.container).attr('data-initiator', '');
-								});
-							},
-							function(event)
-							{
-								if (event.toElement != undefined)
-								{	
-									if (event.toElement.id != 'ns1blankspaceMultiUseContainer' && event.toElement.id != this.id)
-									{
-										$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions);
-										$(ns1blankspace.xhtml.container).attr('data-initiator', '');
-									}
-								}	
 							});
-						}	
-
-						$('#ns1blankspaceLogonName')
-						.off('click')
-						.on('click', function(event)
+					}			
+						
+					$('#ns1blankspaceLogonOptions').button(
+					{
+						text: false,
+						label: 'Log off, change password...',
+						icons:
 						{
-							ns1blankspace.control.user.show(this);
-						});
+							primary: "ui-icon-triangle-1-s"
+						}
+					})
+					.click(function(event)
+					{
+						ns1blankspace.control.user.show(this);
+					})
+					.css('width', '12px;')
+					.css('height', '27px;');
 
-						$('#ns1blankspaceLogoff').click(function(event)
-						{
-							ns1blankspace.logOff();
-						});
-
-						$('#ns1blankspaceSpaceText').click(function(event)
-						{
-							ns1blankspace.control.spaces.show(this);
-						});
-
-						$('#ns1blankspaceSpaceTextExtra').hover(
+					if (ns1blankspace.option.showLogonOptionsOnHover)
+					{
+						$('#ns1blankspaceLogonName').hover(
 						function(event)
 						{
-							var sSpaceText = $(this).html();
-							var sSpaceTextExtra = $(this).attr('data-extraText');
-							$(this).html(sSpaceTextExtra);
+							ns1blankspace.container.position({xhtmlElementID: this.id, leftOffset: 379, topOffset: -5});
+							$(ns1blankspace.xhtml.container).attr('data-initiator', '');
+
+							$vq.clear({queue: 'logoff'});
+							$vq.add('<div id="ns1blankspaceUserLogOnOff" class="ns1blankspaceViewControlContainer" style="font-size:0.875em; width:60px; cursor:pointer; text-align:center;">Log off</div>', {queue: 'logoff'});
+							$vq.render(ns1blankspace.xhtml.container, {queue: 'logoff'});
+
+							$(ns1blankspace.xhtml.container).show();
+
+							$('#ns1blankspaceUserLogOnOff').click(function(event)
+							{
+								ns1blankspace.logOff();
+							})
+							.mouseleave(function()
+							{
+								$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions);
+								$(ns1blankspace.xhtml.container).attr('data-initiator', '');
+							});
 						},
 						function(event)
 						{
-							$(this).html('..');
+							if (event.toElement != undefined)
+							{	
+								if (event.toElement.id != 'ns1blankspaceMultiUseContainer' && event.toElement.id != this.id)
+								{
+									$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions);
+									$(ns1blankspace.xhtml.container).attr('data-initiator', '');
+								}
+							}	
 						});
+					}	
 
-						if (ns1blankspace.option.showBrowsing)
-						{
-							$('#ns1blankspaceViewControlBrowse').html(ns1blankspace.app.browse());
-							$('#ns1blankspaceControl')
-								.css('top', '90px');
-							$('#ns1blankspaceMain')
-								.css('top', '90px');
-						}
-						else
-						{
-							$('#ns1blankspaceViewControlBrowse').remove();
-						}
+					$('#ns1blankspaceLogonName')
+					.off('click')
+					.on('click', function(event)
+					{
+						ns1blankspace.control.user.show(this);
+					});
+
+					$('#ns1blankspaceLogoff').click(function(event)
+					{
+						ns1blankspace.logOff();
+					});
+
+					$('#ns1blankspaceSpaceText').click(function(event)
+					{
+						ns1blankspace.control.spaces.show(this);
+					});
+
+					$('#ns1blankspaceSpaceTextExtra').hover(
+					function(event)
+					{
+						var sSpaceText = $(this).html();
+						var sSpaceTextExtra = $(this).attr('data-extraText');
+						$(this).html(sSpaceTextExtra);
+					},
+					function(event)
+					{
+						$(this).html('..');
+					});
+
+					if (ns1blankspace.option.showBrowsing)
+					{
+						$('#ns1blankspaceViewControlBrowse').html(ns1blankspace.app.browse());
+						$('#ns1blankspaceControl')
+							.css('top', '90px');
+						$('#ns1blankspaceMain')
+							.css('top', '90px');
+					}
+					else
+					{
+						$('#ns1blankspaceViewControlBrowse').remove();
 					}
 				},
 
@@ -1778,6 +1822,9 @@ ns1blankspace.app =
 					var bAll = ns1blankspace.util.getParam(oParam, 'all', {"default": true}).value;
 
 					var bSpecific = (oParam['new'] != undefined || oParam.action != undefined || oParam.actionOptions != undefined);
+
+					$('#ns1blankspaceViewControlNew').blur();
+					$('#ns1blankspaceViewControlAction').blur();
 
 					if (bAll || bNew) {$('#ns1blankspaceViewControlNew').button({disabled: !bContext && (!bSpecific || bNew)})};
 					if (bAll || bAction) {$('#ns1blankspaceViewControlAction').button({disabled: !bContext && (!bSpecific || bAction)})};
@@ -2124,13 +2171,14 @@ ns1blankspace.logon =
 					
 					$('#ns1blankspaceMain').html('');
 					$('#ns1blankspaceControl').html('');
+					$('#ns1blankspaceViewControl').css('height', '0px');
 
 					ns1blankspace.container.show(
 					{
 						xhtmlElementID: 'ns1blankspaceViewControl',
 						xhtml: aHTML.join(''),
 						forceShow: true,
-						offsetTop: -15
+						offsetTop: 20
 					});	
 
 					var sLogonName = $.cookie('mydigitalstucturelogonname')
@@ -3139,7 +3187,7 @@ ns1blankspace.status =
 					var bTimeout = ns1blankspace.util.getParam(oParam, 'timeout', {"default": true}).value;
 					var iDuration = ns1blankspace.util.getParam(oParam, 'duration', {"default": 6000}).value;
 
-					$('#ns1blankspaceViewControlActionStatus').html('<div style="position:relative;width:100%;height:35px;width:180px;">' +
+					$('#ns1blankspaceViewControlActionStatus').html('<div style="position:relative;width:100%;height:35px;">' +
 							'<div id="ns1blankspaceViewControlActionStatusMessage" style="display:table-cell; vertical-align:bottom; padding-bottom:5px; height:25px;">' + sStatus + '</div></div>');
 
 					if (bTimeout)
@@ -3150,7 +3198,7 @@ ns1blankspace.status =
 
 	working:	function (sStatus)
 				{	
-					$('#ns1blankspaceViewControlActionStatus').html('<div style="position:relative;width:100%;height:35px;width:180px;">' +
+					$('#ns1blankspaceViewControlActionStatus').html('<div style="position:relative;width:100%;height:35px;">' +
 							'<div style="display:table-cell; vertical-align:bottom; padding-bottom:5px; height:25px;">' + ns1blankspace.xhtml.loadingSmall + 
 							(sStatus===undefined?'':' ' + sStatus) + '</div></div>');
 				},

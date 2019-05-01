@@ -23,8 +23,12 @@ ns1blankspace.home =
 
 					if (ns1blankspace.setupView)
 					{	
-						$('#ns1blankspaceViewControlSetup').attr('checked', false);
-						$('#ns1blankspaceViewControlSetup').button('refresh');
+						if (!ns1blankspace.option.bootstrap)
+						{
+							$('#ns1blankspaceViewControlSetup').attr('checked', false);
+							$('#ns1blankspaceViewControlSetup').button('refresh');
+						}
+							
 						ns1blankspace.setup["switch"]({viewScript: 'ns1blankspace.home.show()'});
 					}	
 

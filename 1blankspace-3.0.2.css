@@ -1,5 +1,11 @@
 @media only screen
 {
+	.btn:focus
+	{
+	  outline: none;
+	  font-weight: 600;
+	}
+
 	input.ns1blankspaceUpload
 	{
 	  font-size: 11px;
@@ -34,6 +40,7 @@
 		background-color: white;
 		color: black;
 		opacity: 0.95;
+		padding: 3px;
 	}
 
 	span, div, textarea, input, td
@@ -50,7 +57,7 @@
 
 	td
 	{
-		padding: 2px;
+		padding: 4px;
 		vertical-align: top;
 		color: #000000;
 	}
@@ -205,12 +212,12 @@
 
 	.ui-button-icon-only .ui-icon
 	{
-		margin-left: -8px;
+		margin-left: -6px;
 	}
 
 	.ui-button-icon-only .ui-icon, .ui-button-text-icon-primary .ui-icon, .ui-button-text-icon-secondary .ui-icon, .ui-button-text-icons .ui-icon, .ui-button-icons-only .ui-icon
 	{
-		margin-top: -8px;
+		margin-top: -3px;
 	}
 
 	.ui-icon-paperclip
@@ -449,7 +456,7 @@
 
 	table.ns1blankspaceControl
 	{
-		padding-top: 20px;
+		margin-top: 20px;
 		padding-right: 0px;
 	}
 
@@ -607,6 +614,7 @@
 	{
 		cursor: pointer;
 		color: black;
+		padding: 6px;
 	}
 
 	td.ns1blankspaceControl
@@ -677,7 +685,6 @@
 
 	input.ns1blankspaceLogon
 	{
-		height: 23px;
 		width: 234px;
 		font-size: 1em;
 		padding-left: 5px;
@@ -862,7 +869,7 @@
 	#ns1blankspaceMultiUseContainer
 	{
 		position: relative;
-		z-index: 999;
+		z-index: 9999999999;
 		background-color: transparent;
 	}
 
@@ -918,56 +925,15 @@
 	#ns1blankspaceViewControlSearchStatus
 	{
 		position: relative;
-		top: 5px;
-		left: 461px;
-		width: 35px;
-		height: 20px;
 		z-index: 1;
 		padding-top: 5px;
 	}
 
-	#ns1blankspaceViewControlNewContainer
-	{
-		position: relative;
-		top: 0px;
-		left: 504px;	
-	}
-
-	#ns1blankspaceViewControlActionContainer
-	{
-		position: relative;
-		top: 0px;
-		left: 567px;
-	}
-
 	#ns1blankspaceViewControlActionStatus
 	{
-		position: relative;
-		top: 0px;
-		left: 648px;
-		padding-top: 0px;
-		padding-left: 2px;
-		height: 25px;
 		color: #A0A0A0;
-		width:170px;
-		padding-bottom: 4px;
-		border-bottom-style:solid;
-		border-width: 2px;
-		border-color: #f3f3f3;
-	}
-
-	#ns1blankspaceViewControlSetupContainer
-	{
-		position: relative;
-		top: 0px;
-		left: 838px;
-	}
-
-	#ns1blankspaceViewControlHelpContainer
-	{
-		position: relative;
-		top: 0px;
-		left: 870px;
+		font-size: 0.825em;
+    	padding-top: 6px;
 	}
 
 	#ns1blankspaceViewContact
@@ -1406,6 +1372,156 @@
 	  padding-bottom: 4px;
 	}
 
+	.ui-button-icon-only .ui-icon
+	{
+	  margin-left: -6px;
+	}
+
+	.ui-icon-close:before {
+	  content: "\e014";
+	}
+
+	.ui-icon-plus:before {
+	  content:"\2b";
+	}
+
+	.ui-icon-check:before {
+	  content:"\e013";
+	}
+
+	.ui-icon-play:before {
+	  content:"\e080";
+	}
+
+	.ui-icon-circle-triangle-e:before {
+	  content:"\e080";
+	}
+
+	.ui-icon-circle-triangle-w:before {
+	  content:"\e079";
+	}
+
+	.ui-icon-newwin:before {
+	  content:"\e164";
+	}
+
+	.ui-icon-extlink:before {
+	  content:"\e164";
+	}
+
+	.ui-icon-home:before {
+	  content:"\e021";
+	}
+
+	.ui-icon-notice:before {
+	  content:"\e101";
+	}
+
+	.ui-icon-pencil:before {
+	  content:"\270f";
+	}
+
+	.ui-icon-arrowrefresh-1-e:before {
+	  content:"\e031";
+	}
+
+	.ui-icon-locked:before {
+	  content:"\e033";
+	}
+
+	.ui-icon-person:before {
+	  content:"\e008";
+	}
+
+	.ui-icon-triangle-1-s:before {
+	  content:"\2212";
+	}
+
+	.ui-icon-comment:before {
+	  content:"\e111";
+	}
+
+	.ui-icon-star:before {
+	  content:"\e006";
+	}
+
+	.ui-accordion-header-icon
+	{
+	  padding-top: 2px;
+	  padding-right: 2px;
+	}
+
+	.ui-accordion-header
+	{
+	  cursor: pointer;
+	}
+
+	.ui-icon-triangle-1-s:before {
+	  content:"\e259";
+	}
+
+	.ui-icon-triangle-1-s {
+	  margin-left: 0px;
+	}
+
+	.ui-icon-triangle-1-w:before {
+	  content:"\e257";
+	}
+
+	.ui-icon-arrowreturnthick-1-w:before
+	{
+	  content:"\e095";
+	}
+
+	.ui-icon-arrowreturnthick-1-w
+	{
+	  -moz-transform: scaleX(-1);
+	  -o-transform: scaleX(-1);
+	  -webkit-transform: scaleX(-1);
+	  transform: scaleX(-1);
+	  filter: FlipH;
+	  -ms-filter: "FlipH";
+	}
+
+	.ui-icon-arrowthickstop-1-n:before {
+	  content:"\e260";
+	}
+
+	.ui-icon-arrowthickstop-1-s:before {
+	  content:"\e259";
+	}
+
+	.ui-icon-search:before {
+	  content:"\e003";
+	}
+
+	.ui-icon-arrowthickstop-1-w:before {
+	  content:"\e079";
+	}
+
+	.ui-icon-arrowthickstop-1-e:before {
+	  content:"\e080";
+	}
+
+	.ui-icon-grip-dotted-vertical:before {
+	  content:"\e011";
+	}
+
+	.ui-icon-grip-dotted-vertical
+	{
+	  top:3px;
+	  padding-right:4px;
+	}
+
+	.ui-icon-help:before
+	{
+	  content:"\e085";
+	}
+
+	.ui-icon-gear:before
+	{
+	  content:"\e019";
+	}
 
 }
 

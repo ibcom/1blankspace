@@ -157,7 +157,7 @@ ns1blankspace.xhtml.header =
 				       	'<span class="icon-bar"></span>' +
 				        '<span class="icon-bar"></span>' +
 			      	'</button>' +
-			      	'<a class="navbar-brand" href="/"><img style="height:36px;" src="/site/312/1blankspace.aoe.miy-2.0.3.png"></a>' +
+			      	'<a class="navbar-brand" style="padding-top: 10px;" href="/"><img id="ns1blankspaceNavigationLogo" style="height:40px;" src="/site/312/1blankspace.aoe.miy-2.0.3.png"></a>' +
 			    '</div>' +
 
 			    '<div class="collapse navbar-collapse" id="ns1blankspace-navbar-collapse-1">' +
@@ -182,7 +182,7 @@ ns1blankspace.xhtml.viewContainer =
 	'<ul class="nav navbar-nav">' +
 		'<li>' +
 		 	'<div class="btn-group">' +
- 				'<button type="button" class="btn btn-default glyphicon glyphicon-home"></button>' +
+ 				'<button type="button" id="ns1blankspaceViewControlHome" class="btn btn-default glyphicon glyphicon-home"></button>' +
   				'<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">' +
     				'<span class="caret"></span>' +
     				'<span class="sr-only">Toggle Dropdown</span>' +
@@ -192,31 +192,31 @@ ns1blankspace.xhtml.viewContainer =
 				 '</ul>' +
 			'</div>' +
 		'</li>' +
-		'<li style="margin-left:10px;">' +
+		'<li style="margin-left:6px;">' +
 		 	'<div class="btn-group">' +
  				'<button type="button" class="btn btn-default glyphicon glyphicon-chevron-left" id="ns1blankspaceViewControlBack"></button>' +
  				'<button type="button" class="btn btn-default glyphicon glyphicon-chevron-up" id="ns1blankspaceViewControlRefresh"></button>' +
  				'<button type="button" class="btn btn-default glyphicon glyphicon-chevron-right" id="ns1blankspaceViewControlForward"></button>' +
 			'</div>' +
 		'</li>' +
-		'<li style="margin-left:10px;">' +
+		'<li style="margin-left:6px;">' +
 		 	'<div id="ns1blankspaceViewControlViewContainer">' +
 				'<span id="ns1blankspaceViewControlView"></span>' +
 			'</div>' +
 		 '</li>' +
-		 '<li style="margin-left:10px;">' +
+		 '<li style="margin-left:6px;">' +
 		 	'<div>' +
 				'<input id="_ns1blankspaceViewControlSearch" class="form-control' +
 				(ns1blankspace.option.searchWatermark!=undefined?' ns1blankspaceWatermark" value="' + ns1blankspace.option.searchWatermark + '"':'"') +
 				'>' +
 			'</div>' +
 		 '</li>' +
-		 '<li style="margin-left:10px;">' +
-		 	'<button type="button" class="btn btn-default" id="_ns1blankspaceViewControlNew">New</button>' +
+		 '<li style="margin-left:6px;">' +
+		 	'<button type="button" class="btn btn-default" id="ns1blankspaceViewControlNew">New</button>' +
 		 '</li>' +
-		 '<li style="margin-left:10px;">' +
+		 '<li style="margin-left:6px;">' +
 		 	'<div class="btn-group">' +
- 				'<button type="button" class="btn btn-default" id="_ns1blankspaceViewControlAction">Save</button>' +
+ 				'<button type="button" class="btn btn-default" id="ns1blankspaceViewControlAction">Save</button>' +
  				'<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">' +
     				'<span class="caret"></span>' +
     				'<span class="sr-only">Toggle Dropdown</span>' +
@@ -226,15 +226,15 @@ ns1blankspace.xhtml.viewContainer =
 				 '</ul>' +
 			'</div>' +
 		'</li>' +
-		'<li style="margin-left:10px;">' +
-		 	'<div id="_ns1blankspaceViewControlActionStatus"></div>' +
+		'<li style="margin-left:6px;">' +
+		 	'<div id="ns1blankspaceViewControlActionStatus"></div>' +
 		'</li>' +
 		'</ul><ul class="nav navbar-nav pull-right">' +
-		(ns1blankspace.setupShow?'<li style="margin-left:10px;">' +
+		(ns1blankspace.setupShow?'<li style="margin-left:4px;">' +
 									'<button type="button" class="btn btn-default glyphicon glyphicon-cog" id="ns1blankspaceViewControlSetup"></button>' +
 									'</li>':'') +
 		'<li style="margin-left:4px;">' +
-			'<button type="button" class="btn btn-default glyphicon glyphicon-question-sign" id="_ns1blankspaceViewControlHelp"></button>' +
+			'<button type="button" class="btn btn-default glyphicon glyphicon-question-sign" id="ns1blankspaceViewControlHelp"></button>' +
 		'</li>' +
 	'</ul>';
 
@@ -275,7 +275,7 @@ ns1blankspace.scripts =
 	},
 	{
 		nameSpace: '1blankspace.messaging.imap',
-		source: '/site/388/1blankspace.messaging.imap-2.2.7.js'
+		source: '/site/388/1blankspace.messaging.imap-2.2.8.js'
 	},
 	{
 		nameSpace: '1blankspace.document',
@@ -1807,7 +1807,16 @@ ns1blankspace.control =
 				$(ns1blankspace.xhtml.container).attr('data-initiator', oElement.id);
 				$(ns1blankspace.xhtml.container).html("&nbsp;");
 				$(ns1blankspace.xhtml.container).show(ns1blankspace.option.showSpeedOptions);
-				$(ns1blankspace.xhtml.container).offset({ top: $(oElement).offset().top + $(oElement).height() - 3, left: $(oElement).offset().left + 220});
+
+				if (ns1blankspace.option.bootstrap)
+				{
+					$(ns1blankspace.xhtml.container).offset({ top: $(oElement).offset().top + $(oElement).height() - 10, left: $(oElement).offset().left + 20});
+				}
+				else
+				{
+					$(ns1blankspace.xhtml.container).offset({ top: $(oElement).offset().top + $(oElement).height() - 3, left: $(oElement).offset().left + 220});
+				}
+					
 				$(ns1blankspace.xhtml.container).html(this.layout());
 					
 				ns1blankspace.control.user.bind();
@@ -2227,7 +2236,7 @@ ns1blankspace.control =
 
 	spaces:			
 	{					
-		show:		function (oElement, oResponse)
+		show: function (oElement, oResponse)
 		{
 			var aHTML = [];
 
@@ -2243,7 +2252,15 @@ ns1blankspace.control =
 					$(ns1blankspace.xhtml.container).attr('data-initiator', oElement.id);
 					$(ns1blankspace.xhtml.container).html('<table style="width: 250px;" class="ns1blankspaceViewControlContainer"><tr><td>' + ns1blankspace.xhtml.loadingSmall + '</tr><td></table>');
 					$(ns1blankspace.xhtml.container).show(ns1blankspace.option.showSpeedOptions);
-					$(ns1blankspace.xhtml.container).offset({ top: $(oElement).offset().top + $(oElement).height() - 5, left: $(oElement).offset().left + 150});
+
+					if (ns1blankspace.option.bootstrap)
+					{
+						$(ns1blankspace.xhtml.container).offset({ top: $(oElement).offset().top + $(oElement).height() + 1, left: $(oElement).offset().left - 50});
+					}
+					else
+					{
+						$(ns1blankspace.xhtml.container).offset({ top: $(oElement).offset().top + $(oElement).height() - 5, left: $(oElement).offset().left + 150});
+					}
 
 					if (ns1blankspace.space == ns1blankspace.user.space)
 					{	
@@ -2310,7 +2327,7 @@ ns1blankspace.control =
 				{
 					aHTML.push('<tr><td class="ns1blankspaceSubNote" style="padding-left:5px;padding-right:10px;">Search for a space to switch to</td></tr>' +
 						'<tr><td class="ns1blankspaceNothing" style="padding-left:5px;padding-right:10px;">' +
-						'<input id="ns1blankspaceControlSpaceSearch" class="ns1blankspaceMainText" style="font-size:1.1em; width:100%; height:23px;"></td></tr>');
+						'<input id="ns1blankspaceControlSpaceSearch" class="ns1blankspaceMainText" style="font-size:1.1em; width:100%;"></td></tr>');
 
 					aHTML.push('<tr><td id="ns1blankspaceSpaceSearchResults"></td></tr>');
 				}	
@@ -2739,7 +2756,7 @@ ns1blankspace.attachments =
 		
 		aHTML.push('<td style="width:30px;text-align:right;" class="ns1blankspaceRow">' +
 						'<span id="ns1blankspaceAttachment_options_remove-' + oRow.attachment + 
-						'" class="ns1blankspaceAttachmentsRemove">&nbsp;</span></td>');
+						'" class="ns1blankspaceAttachmentsRemove"></span></td>');
 		
 		aHTML.push('</tr>');
 		
@@ -3253,7 +3270,7 @@ ns1blankspace.actions =
 			aHTML.push('<table id="tablens1blankspaceActionsColumn2" class="ns1blankspaceColumn2">');
 			
 			aHTML.push('<tr><td class="ns1blankspaceAction">' +
-							'<span id="ns1blankspaceActionsAdd">Add</span>' +
+							'<span id="ns1blankspaceActionsAdd"></span>' +
 							'</td></tr>');
 									
 			aHTML.push('</table>');					
@@ -3402,7 +3419,7 @@ ns1blankspace.actions =
 			});
 		})
 		.css('width', '15px')
-		.css('height', '17px');
+		.css('height', '20px');
 		
 		$('#' + sXHTMLContainerID + ' td.ns1blankspaceRowSelect').click(function()
 		{
@@ -3423,7 +3440,7 @@ ns1blankspace.actions =
 			window.open(document.location.origin + '/#/action/' + this.id);
 		})
 		.css('width', '15px')
-		.css('height', '17px');
+		.css('height', '20px');
 
 	},	
 
