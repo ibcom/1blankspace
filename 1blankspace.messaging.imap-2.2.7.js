@@ -854,6 +854,8 @@ ns1blankspace.messaging.imap =
 				}
 
 				ns1blankspace.messaging.imap.account = aXHTMLElementID[1];
+				ns1blankspace.messaging.imap.emailAccount = $.grep(ns1blankspace.messaging.imap.emailAccounts, function(x)
+					{return x.id == ns1blankspace.messaging.imap.account}).shift();
 			}	
 			
 			if (bRefresh)
@@ -2676,7 +2678,8 @@ ns1blankspace.messaging.imap =
 			{
 				ns1blankspace.messaging.imap.message.attachments();
 				ns1blankspace.messaging.imap.message.contents.show();
-				if (ns1blankspace.objectContextData.imapflags && ns1blankspace.objectContextData.imapflags.indexOf('SEEN') == -1)
+				if (ns1blankspace.objectContextData.imapflags != undefined 
+					&& ns1blankspace.objectContextData.imapflags.indexOf('SEEN') == -1)
 				{
 					ns1blankspace.messaging.imap.inbox.markReadUnread({xhtmlElementID: 'ns1blankspaceMessagingInbox_from-' + ns1blankspace.objectContext});		
 				}
@@ -5494,7 +5497,7 @@ ns1blankspace.messaging.imap =
 								ns1blankspace.objectContextData.subject = oRow.subject;
 								ns1blankspace.objectContextData.message = oRow.message;
 								ns1blankspace.objectContextData.date = oRow.duedatetime;	
-								ns1blankspace.objectContextData.imapflags = '';
+								ns1blankspace.objectContextData.imapflags = 'SEEN';
 								ns1blankspace.objectContextData.actiontype = oRow.actiontype;
 								ns1blankspace.objectContextData.detailscached = 'Y';
 								ns1blankspace.objectContextData.sourcetypetext = 'ACTION';

@@ -115,6 +115,9 @@ ns1blankspace.data = {search: []};
 ns1blankspace.debug = {};
 ns1blankspace.authenticationLevel = 1;
 ns1blankspace.session = {};
+ns1blankspace.rootnamespace = ns1blankspace;
+ns1blankspace.rootnamespacetext = "ns1blankspace";
+
 
 ns1blankspace.selector = 'body';
 
@@ -202,9 +205,6 @@ ns1blankspace.app =
 					var bInitialise = false;
 					var bInitialise = ns1blankspace.util.getParam(oParam, 'initialise', {"default": false}).value;
 					var bInitialiseScripts = ns1blankspace.util.getParam(oParam, 'initialiseScripts', {"default": false}).value;
-
-					ns1blankspace.rootnamespace = ns1blankspace;
-					ns1blankspace.rootnamespacetext = ns1blankspacetext;
 
 					if ($('#ns1blankspaceContainer').length === 0)
 					{

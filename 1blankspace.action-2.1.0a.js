@@ -331,6 +331,7 @@ ns1blankspace.action =
 				aHTML.push('<tr><td id="ns1blankspaceControlText" class="ns1blankspaceControl">' +
 								'Text (Long)</td></tr>');
 			}
+
 		}
 		else
 		{	
@@ -456,7 +457,7 @@ ns1blankspace.action =
 					iMessageActionID = ns1blankspace.objectContextData.id;
 				}
 			}
-
+			
 			if (ns1blankspace.objectContextData.actiontype == ns1blankspace.data.actionTypes.fileNote.id && ns1blankspace.objectContextData.object == 17)
 					{iMessageActionID = ns1blankspace.objectContextData.objectcontext}
 					
@@ -954,7 +955,7 @@ ns1blankspace.action =
 	},
 
 	reminders: 
-	{	// v2.0.4 Added Reminders
+	{	
 		show: function(oParam)
 		{	// Show list of reminders linked to the action
 
@@ -998,6 +999,7 @@ ns1blankspace.action =
 			}
 			else
 			{
+				// v2.0.4b Don't refresh list if currently adding a reminder
 				if (!$('#ns1blankspaceReminderEditColumn1').is('*'))
 				{
 					if (oActions.add)
@@ -1812,7 +1814,6 @@ ns1blankspace.action =
 
 			$('#' + sXHTMLElementID).fullCalendar(
 			{
-				themeSystem: 'bootstrap3',
 				theme: true,
 				defaultView: 'agendaWeek',
 				header:
@@ -2617,7 +2618,7 @@ ns1blankspace.action =
 					aHTML.push('<td id="ns1blankspaceAction_contact-' + this.contactperson + '" class="ns1blankspaceRow ns1blankspaceRowSelectContact">' +
 									this.contactpersontext + '</td>');
 										
-					aHTML.push('<td id="ns1blankspaceAction_options-' + this.id + '" class="ns1blankspaceRow" style="width:60px;">');
+					aHTML.push('<td id="ns1blankspaceAction_options-' + this.id + '" class="ns1blankspaceRow" >');
 					aHTML.push('<div id="ns1blankspaceActionComplete_' + this.id + '" class="ns1blankspaceAction ns1blankspaceActionComplete"></div>')
 					aHTML.push('<div id="ns1blankspaceActionPriorityContainer_' + this.id + '" style="float:left;">');
 
@@ -2625,7 +2626,7 @@ ns1blankspace.action =
 					{
 						aHTML.push('<div style="float:left; margin-right:1px;" id="ns1blankspaceActionPriority_' + this.id + '"' +
 										' class="ns1blankspaceAction ns1blankspaceActionPriority"' +
-										' data-priority="' + this.priority + '"></div>');
+										' data-priority="' + this.priority + '">Priority</div>');
 					}
 					else
 					{
@@ -2654,6 +2655,7 @@ ns1blankspace.action =
 				$('div.ns1blankspaceActionComplete')
 				.button(
 				{
+					label: 'Mark as completed',
 					text: false,
 					icons: {primary: 'ui-icon-check'}
 				})
@@ -2686,6 +2688,7 @@ ns1blankspace.action =
 				$('div.ns1blankspaceActionPriority')
 				.button(
 				{
+					label: 'Flag as critical',
 					text: false,
 					icons: {primary: 'ui-icon-notice'}
 				})
