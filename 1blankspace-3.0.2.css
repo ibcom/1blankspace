@@ -1,5 +1,10 @@
 @media only screen
 {
+	.ns1blankspaceLogonCaption
+	{
+		color: '#999999';
+	}
+
 	.ui-checkboxradio
 	{ display: none; }
 

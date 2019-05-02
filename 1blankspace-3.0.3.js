@@ -203,12 +203,7 @@ ns1blankspace.app =
 					var bInitialise = ns1blankspace.util.getParam(oParam, 'initialise', {"default": false}).value;
 					var bInitialiseScripts = ns1blankspace.util.getParam(oParam, 'initialiseScripts', {"default": false}).value;
 
-					/*'<div class="container-fluid">' +
-									'<div class="row">' +
-										'<div class="col-xs-2 col-sm-2 col-md-2 col-lg-2" id="ns1blankspaceControl"></div>' +
-										'<div class="col-xs-10 col-sm-10 col-md-10 col-lg-10" id="ns1blankspaceMain"></div>' +
-									'</div>' +
-								'</div>' +*/
+					/*class="background-cover" background: url(/site/388/features-bg.jpg);*/
 
 					if ($('#ns1blankspaceContainer').length === 0)
 					{
@@ -831,7 +826,15 @@ ns1blankspace.app =
 								
 								ns1blankspace.logonKey = data.logonkey;
 								ns1blankspace.session.logonkey = ns1blankspace.logonKey;
-								ns1blankspace.util.local.cache.save({key: '_lk', data: ns1blankspace.logonKey, persist: true})
+								ns1blankspace.util.local.cache.save({key: '_lk', data: ns1blankspace.logonKey, persist: true});
+
+								var sXHTML = '';
+
+								if (ns1blankspace.xhtml.logonContainer != undefined)
+								{
+									$('#ns1blankspaceContainer').css(ns1blankspace.xhtml.logonContainer)
+								}
+
 								ns1blankspace.logon.show(oParam);
 							}
 							else
@@ -900,7 +903,7 @@ ns1blankspace.app =
 					if (!bInitialised)
 					{	
 						ns1blankspace.container.hide({sXHTMLElementID: 'ns1blankspaceViewControl'});
-						$('#ns1blankspaceViewControl').html('<span style="font-size:1.3em; padding-left:6px; color: #999999;">Initialising the app...</span>');
+						$('#ns1blankspaceViewControl').html('<span style="padding-left:6px; color: #999999;">Initialising the app...</span>');
 						oParam = ns1blankspace.util.setParam(oParam, 'onComplete', ns1blankspace.app.show);
 						ns1blankspace.extend.init(oParam);
 					}	
@@ -2079,7 +2082,7 @@ ns1blankspace.logon =
 					
 					aHTML.push('<tr><td style="width:235px; padding-right:25px;">');
 
-					aHTML.push('<form><table id="ns1blankspaceLogon" class="ns1blankspaceLogonContainer">');
+					aHTML.push('<form><table id="ns1blankspaceLogon" class="ns1blankspaceLogonContainer" style="width:235px;">');
 
 					aHTML.push('<tr>' +
 									'<td class="ns1blankspaceLogonCaption">' +
@@ -2197,7 +2200,8 @@ ns1blankspace.logon =
 						xhtmlElementID: 'ns1blankspaceViewControl',
 						xhtml: aHTML.join(''),
 						forceShow: true,
-						offsetTop: 20
+						offsetTop: 20,
+						zIndex: 0
 					});	
 
 					var sLogonName = $.cookie('mydigitalstucturelogonname')
@@ -2275,7 +2279,7 @@ ns1blankspace.logon =
 
 						oData.passwordhash = ns1blankspace.util.hash({value: sLogonName + sPassword})
 						
-						$('#ns1blankspaceLogonStatus').html(ns1blankspace.xhtml.loading);
+						$('#ns1blankspaceLogonStatus').html('Logging on...');
 						
 						$.ajax(
 						{
@@ -2412,7 +2416,7 @@ ns1blankspace.logon =
 						}
 					}
 					
-					$('#ns1blankspaceLogonStatus').html(ns1blankspace.xhtml.loading);
+					$('#ns1blankspaceLogonStatus').html('Logging on...');
 					
 					$.ajax(
 					{
@@ -2483,7 +2487,9 @@ ns1blankspace.logon =
 							if (oResponse.url === '#' || ns1blankspace.option.logonStayOnDocument)
 							{
 								ns1blankspace.container.hide({force: true});
-								ns1blankspace.app.start();
+								$('#ns1blankspaceContainer').remove()
+								//ns1blankspace.app.start();
+								ns1blankspace.app.init();
 							}	
 							else
 							{
@@ -3292,6 +3298,7 @@ ns1blankspace.container =
 					var fOnShow;
 					var sContainerID = ns1blankspace.xhtml.container;
 					var bMatchWidth = true;
+					var sZIndex = '9999999';
 
 					if (oParam != undefined)
 					{
@@ -3308,10 +3315,13 @@ ns1blankspace.container =
 						if (oParam.onShow != undefined) {fOnShow = oParam.onShow}
 						if (oParam.containerID != undefined) {sContainerID = oParam.containerID}
 						if (oParam.setWidth != undefined) {bMatchWidth = oParam.matchWidth}
+						if (oParam.zIndex != undefined) {sZIndex = oParam.zIndex}
 					}
 
 					var bDropdown = ns1blankspace.util.getParam(oParam, 'dropdown', {"default": false}).value;
 					if (bDropdown) {sContainerID = ns1blankspace.xhtml.dropDownContainer}
+
+					$(sContainerID).css('zIndex', sZIndex);
 					
 					if (oXHTMLElement === undefined && sXHTMLElementID != undefined && $('#' + sXHTMLElementID.replace('#', '')).is('*'))
 					{
@@ -3377,6 +3387,8 @@ ns1blankspace.container =
 					var sContainerID = ns1blankspace.util.getParam(oParam, 'containerID', {"default": ns1blankspace.xhtml.container}).value;
 					var bDropdown = ns1blankspace.util.getParam(oParam, 'dropdown', {"default": false}).value;
 					if (bDropdown) {sContainerID = ns1blankspace.xhtml.dropDownContainer}
+
+					$(sContainerID).css('zIndex', '9999999');
 
 					if (bForce || $(ns1blankspace.xhtml.container).attr('data-initiator') == sXHTMLElementID)
 					{

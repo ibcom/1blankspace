@@ -2649,3 +2649,26 @@ ns1blankspace.setup.structure =
 								}
 				}			
 }				
+
+
+ns1blankspace.setup.structure.util =
+{
+	categories: function (oParam, oResponse)
+	{	
+		if (oResponse == undefined)
+		{
+			var oSearch = new AdvancedSearch();
+			oSearch.method = 'SETUP_STRUCTURE_CATEGORY_SEARCH';
+			oSearch.addField( 'description,displayorder,id,structure,structuretext,title,type,typetext');
+			oSearch.addFilter('description', 'TEXT_IS_LIKE', oParam.search);
+			oSearch.getResults(function(data)
+			{
+				ns1blankspace.setup.structure.util.categories(oParam, data)
+			})
+		}
+		else
+		{
+			console.log(oResponse)
+		}
+	}
+}

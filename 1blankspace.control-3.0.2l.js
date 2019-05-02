@@ -4,8 +4,8 @@
  * http://creativecommons.org/licenses/by-sa/4.0/
  */
 
-ns1blankspace.xhtml.loading = '<img class="ns1blankspaceLoading" id="ns1blankspaceLoading" src="/jscripts/images/1blankspace.loading.square.20.gif">';
-ns1blankspace.xhtml.loadingSmall = '<img class="ns1blankspaceLoadingSmall" id="ns1blankspaceLoadingSmall" src="/jscripts/images/1blankspace.loading.square.10.gif">';
+ns1blankspace.xhtml.loading = '<img class="ns1blankspaceLoading" id="ns1blankspaceLoading" src="/site/388/1blankspace.loading.round.20.gif">';
+ns1blankspace.xhtml.loadingSmall = '<img class="ns1blankspaceLoadingSmall" id="ns1blankspaceLoadingSmall" src="/site/388/1blankspace.loading.round.10.gif">';
 ns1blankspace.xhtml.editorCSS = '';
 
 ns1blankspace.option = $.extend(true, ns1blankspace.option, 
@@ -124,30 +124,12 @@ ns1blankspace.xhtml.templates.source =
 	receipt: '/site/312/1blankspace.setup.financial.receipt-1.0.0.html'
 }	
 
-ns1blankspace.xhtml.logonNotes =
-	'<span style="font-weight:bold;">THIS IS AN UI BEING WORKED ON BY THE COMMUNITY.</span><br /><br />' +
-	'As much as mydigitalstructure is well proven and stable, this HTML/js UI code is not yet stable and should not be used in production as is. ' +
-	'It exists to allow the community to debug and others to learn from. ' +
-	'Each day it gets more stable, so keep a watch on the repo.  If you find a bug, please raise an issue on github.<br /><br />' +
-	'<span style="font-weight:bold">Thanks!</span></span><br /><br />' +
-	'1blankspace all-of-enterprise is an example app based on the mydigitalstructure platform.' +
-	'<br /><br /><a href="http://mydigitalstructure.com/1blankspace" target="_blank">1blankspace namespace</a>' +
-	'<br /><br /><a href="https://github.com/ibcom/1blankspace" target="_blank">github repository</a>' +
-	'<br /><br /><a href="http://mydigitalstructure.com/examples" target="_blank">More code examples</a>' +
-	'<br /><br /><a href="http://mydigitalstructure.com/documentation" target="_blank">Documentation</a>' +
-	'<br /><br /><a href="http://mydigitalstructure.com/gettingstarted" target="_blank">Getting started</a>' +
-	'<br /><br /><a href="http://twitter.com/ibComMYDS" target="_blank">twitter.com/ibComMYDS</a>' +
-	'<br /><br /><hr />' +
-	'<br /><a href="https://console.mydigitalstructure.com" target="_blank"><strong>Modify this app or create your own app using the simple jQuery IDE.</strong></a>';
-
-ns1blankspace.xhtml._header =
-	'<div id="ns1blankspaceLogo" style="height:46px; float:left; margin-top:2px;"><img style="height:46px;" src="/site/312/1blankspace.aoe.miy-2.0.3.png"></div>' +
-	'<div style="float:right; margin-right:3px;">' +
-	'<div id="ns1blankspaceSpaceText" style="width:450px; margin-top:0px; margin-bottom:0px;"></div>' +
-	'<div id="ns1blankspaceLogonName" style="width:' + (ns1blankspace.option.showLogoff?'410':'450') + 'px; margin-top:-5px; overflow:auto; height:20px; float:left;"></div>' +
-	(ns1blankspace.option.showLogonOptions?'<div id="ns1blankspaceLogonOptions" style="width:20px; margin-top:0px; float:right;"></div>':'') +
-	(ns1blankspace.option.showLogoff?'<div id="ns1blankspaceLogoff" style="width:40px; margin-top:1px; float:right; font-size:0.75em; cursor:pointer;" class="ns1blankspaceSub"></div>':'') +
-	'</div>';
+ns1blankspace.xhtml.logonNotes = undefined;
+ns1blankspace.xhtml.logonContainer =
+{
+	"background": 'url(/site/388/1blankspace.cover-1.0.1.jpg)',
+	"background-size": 'cover'
+}
 
 ns1blankspace.xhtml.header =
 	'<nav class="navbar navbar-default navbar-fixed-top">' +
@@ -406,7 +388,7 @@ ns1blankspace.scripts =
 	},
 	{
 		nameSpace: '1blankspace.setup.structure',
-		source: '/jscripts/1blankspace.setup.structure-2.0.4.js'
+		source: '/site/388/1blankspace.setup.structure-2.0.4.js'
 	},
 	{
 		nameSpace: '1blankspace.setup.user',
