@@ -1384,13 +1384,13 @@
 	  margin-left: -6px;
 	}
 
-	ui-icon-document
+	.ui-icon-document:before 
 	{
-		
+		content:"\e022";
 	}
 
 	.ui-icon-close:before {
-	  content: "\e014";
+	  	content: "\e014";
 	}
 
 	.ui-icon-plus:before {
