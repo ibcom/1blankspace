@@ -155,10 +155,10 @@ ns1blankspace.xhtml.header =
   			'<div>' +
 	  			'<div class="navbar-header">' +
 	      			'<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#ns1blankspace-navbar-collapse-1" aria-expanded="false">' +
-				        '<span class="sr-only">Toggle navigation</span>' +
-				        '<span class="icon-bar"></span>' +
+				        	'<span class="sr-only">Toggle navigation</span>' +
+				        	'<span class="icon-bar"></span>' +
 				       	'<span class="icon-bar"></span>' +
-				        '<span class="icon-bar"></span>' +
+				        	'<span class="icon-bar"></span>' +
 			      	'</button>' +
 			      	'<a class="navbar-brand" style="padding-top: 10px;" href="/"><img id="ns1blankspaceNavigationLogo" style="height:40px;" src="/site/312/1blankspace.aoe.miy-2.0.3.png"></a>' +
 			    '</div>' +
@@ -183,7 +183,7 @@ ns1blankspace.setupShow = true;
 
 ns1blankspace.xhtml.viewContainer =
 	'<ul class="nav navbar-nav">' +
-		'<li>' +
+		'<li class="hidden-xs hidden-sm">' +
 		 	'<div class="btn-group">' +
  				'<button type="button" id="ns1blankspaceViewControlHome" class="btn btn-default glyphicon glyphicon-home"></button>' +
   				'<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" id="ns1blankspaceHomeOptions" aria-haspopup="true" aria-expanded="false">' +
@@ -205,29 +205,29 @@ ns1blankspace.xhtml.viewContainer =
 				 '</ul>' +
 			'</div>' +
 		'</li>' +
-		'<li style="margin-left:6px;">' +
+		'<li style="margin-left:6px;" class="hidden-xs hidden-sm">' +
 		 	'<div class="btn-group">' +
  				'<button type="button" class="btn btn-default glyphicon glyphicon-chevron-left" id="ns1blankspaceViewControlBack"></button>' +
  				'<button type="button" class="btn btn-default glyphicon glyphicon-chevron-up" id="ns1blankspaceViewControlRefresh"></button>' +
  				'<button type="button" class="btn btn-default glyphicon glyphicon-chevron-right" id="ns1blankspaceViewControlForward"></button>' +
 			'</div>' +
 		'</li>' +
-		'<li style="margin-left:6px;">' +
+		'<li style="margin-left:6px;" class="">' +
 		 	'<div id="ns1blankspaceViewControlViewContainer">' +
 				'<span id="ns1blankspaceViewControlView"></span>' +
 			'</div>' +
 		 '</li>' +
-		 '<li style="margin-left:6px;">' +
+		 '<li style="margin-left:6px;" class="hidden-xs">' +
 		 	'<div>' +
 				'<input id="ns1blankspaceViewControlSearch" class="form-control' +
 				(ns1blankspace.option.searchWatermark!=undefined?' ns1blankspaceWatermark" value="' + ns1blankspace.option.searchWatermark + '"':'"') +
 				'>' +
 			'</div>' +
 		 '</li>' +
-		 '<li style="margin-left:6px;">' +
+		 '<li style="margin-left:6px;" class="hidden-xs">' +
 		 	'<button type="button" class="btn btn-default" id="ns1blankspaceViewControlNew">New</button>' +
 		 '</li>' +
-		 '<li style="margin-left:6px;">' +
+		 '<li style="margin-left:6px;" class="hidden-xs">' +
 		 	'<div class="btn-group">' +
  				'<button type="button" class="btn btn-default" id="ns1blankspaceViewControlAction">Save</button>' +
  				'<button type="button" class="btn btn-default dropdown-toggle" id="ns1blankspaceViewControlActionOptions" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">' +
@@ -236,10 +236,11 @@ ns1blankspace.xhtml.viewContainer =
 				'</button>' +
 			'</div>' +
 		'</li>' +
-		'<li style="margin-left:6px;">' +
+		'<li style="margin-left:6px;" class="hidden-xs hidden-sm">' +
 		 	'<div id="ns1blankspaceViewControlActionStatus"></div>' +
 		'</li>' +
-		'</ul><ul class="nav navbar-nav pull-right">' +
+		'</ul>' +
+		'<ul class="nav navbar-nav pull-right hidden-xs">' +
 		(ns1blankspace.setupShow?'<li style="margin-left:4px;">' +
 									'<button type="button" class="btn btn-default glyphicon glyphicon-cog" id="ns1blankspaceViewControlSetup"></button>' +
 									'</li>':'') +

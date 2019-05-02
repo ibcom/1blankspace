@@ -203,6 +203,12 @@ ns1blankspace.app =
 					var bInitialise = ns1blankspace.util.getParam(oParam, 'initialise', {"default": false}).value;
 					var bInitialiseScripts = ns1blankspace.util.getParam(oParam, 'initialiseScripts', {"default": false}).value;
 
+					/*'<div class="container-fluid">' +
+									'<div class="row">' +
+										'<div class="col-xs-2 col-sm-2 col-md-2 col-lg-2" id="ns1blankspaceControl"></div>' +
+										'<div class="col-xs-10 col-sm-10 col-md-10 col-lg-10" id="ns1blankspaceMain"></div>' +
+									'</div>' +
+								'</div>' +*/
 
 					if ($('#ns1blankspaceContainer').length === 0)
 					{
@@ -213,8 +219,8 @@ ns1blankspace.app =
 								
 								'<div class="container-fluid">' +
 									'<div class="row">' +
-										'<div class="col-sm-2" id="ns1blankspaceControl"></div>' +
-										'<div class="col-sm-10" id="ns1blankspaceMain"></div>' +
+										'<div class="col-xs-2 col-sm-2 col-md-2 col-lg-2" id="ns1blankspaceControl"></div>' +
+										'<div class="col-xs-8 col-sm-9 col-md-10 col-lg-10" id="ns1blankspaceMain"></div>' +
 									'</div>' +
 								'</div>' +	
 
@@ -1914,10 +1920,12 @@ ns1blankspace.app =
 									}
 									else
 									{	
+										var iTopOffset = (ns1blankspace.option.bootstrap?8:11);
+
 										$(ns1blankspace.xhtml.container).attr('data-initiator', oElement.id)
 																		.html("&nbsp;")
 																		.show()
-																		.offset({ top: $(oElement).offset().top + $(oElement).height() + 11 , left: $(oElement).offset().left })
+																		.offset({ top: $(oElement).offset().top + $(oElement).height() + iTopOffset, left: $(oElement).offset().left })
 																		.html(sXHTML);
 										
 										if (fBind !== undefined)
