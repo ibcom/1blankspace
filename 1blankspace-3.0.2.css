@@ -1384,6 +1384,11 @@
 	  margin-left: -6px;
 	}
 
+	ui-icon-document
+	{
+		
+	}
+
 	.ui-icon-close:before {
 	  content: "\e014";
 	}
