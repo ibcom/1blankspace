@@ -1,5 +1,11 @@
 @media only screen
 {
+	.ui-checkboxradio
+	{ display: none; }
+
+	.ui-checkboxradio-label
+	{ font-size: 1.2em; }
+
 	.btn:focus
 	{
 	  outline: none;
@@ -197,6 +203,7 @@
 		text-align: right;
 		width: 100%;
 		margin-right: 20px;
+		margin-top: 8px;
 	}
 
 	.ns1blankspaceSummaryCaption
@@ -213,6 +220,11 @@
 	.ui-button-icon-only .ui-icon
 	{
 		margin-left: -6px;
+	}
+
+	.ui-button-icon-only
+	{
+		height: 20px !important;
 	}
 
 	.ui-button-icon-only .ui-icon, .ui-button-text-icon-primary .ui-icon, .ui-button-text-icon-secondary .ui-icon, .ui-button-text-icons .ui-icon, .ui-button-icons-only .ui-icon
@@ -468,6 +480,7 @@
 		padding-left: 10px;
 		margin-left: 15px;
 		margin-right: 15px;
+		border-collapse: separate;
 	}
 
 	#ns1blankspaceLogonContainer
@@ -620,7 +633,7 @@
 	td.ns1blankspaceControl
 	{
 		text-align: right;
-		padding-right: 0px;
+		padding: 0px;
 		cursor: pointer;
 	}
 
@@ -842,7 +855,7 @@
 		width: 150px;
 		left: 0px;
 		top: 80px;
-		margin-top: 20px;
+		margin-top: 18px;
 		border-right-style:solid;
 		border-width: 1px;
 		border-color: #B8B8B8;
@@ -876,7 +889,7 @@
 	#ns1blankspaceMultiUseDialog
 	{
 		position: relative;
-		z-index: 99;
+		z-index: 9999999999;
 		background-color: transparent;
 	}
 
@@ -912,14 +925,7 @@
 
 	#ns1blankspaceViewControlSearch
 	{
-		position: relative;
-		left: 360px;
-		width: 130px;
-		padding-top: 0px;
-		padding-left: 3px;
-		margin-top: 1px;
-		font-size: 1.25em;
-		height: 23px;
+		height: 33px;
 	}
 
 	#ns1blankspaceViewControlSearchStatus
@@ -934,6 +940,7 @@
 		color: #A0A0A0;
 		font-size: 0.825em;
     	padding-top: 6px;
+    	height: 40px;
 	}
 
 	#ns1blankspaceViewContact
@@ -1523,6 +1530,12 @@
 	  content:"\e019";
 	}
 
+	#ns1blankspaceViewControlSearchHeaderContainer
+	{
+		z-index: 9999999;
+		margin-top: 15px;
+	}
+
 }
 
 @media print
@@ -1564,6 +1577,7 @@
 	div#ns1blankspaceMultiUseDialog 
 	{
 		display: none;
+		z-index: 9999999;
 	}
 
 	div#ns1blankspaceToolTip

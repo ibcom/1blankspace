@@ -70,7 +70,9 @@ ns1blankspace.option = $.extend(true, ns1blankspace.option,
 	userRelationshipManagerBasedAccess: true,
 	siteName: '1blankspace (lab)',
 	messagingCreateContacts: true,
-	bootstrap: true
+	bootstrap: true,
+	rowButtonHeight: '20px',
+	rowButtonWidth: '15px'
 });
 
 ns1blankspace.option.yodlee =
@@ -183,12 +185,22 @@ ns1blankspace.xhtml.viewContainer =
 		'<li>' +
 		 	'<div class="btn-group">' +
  				'<button type="button" id="ns1blankspaceViewControlHome" class="btn btn-default glyphicon glyphicon-home"></button>' +
-  				'<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">' +
+  				'<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" id="ns1blankspaceHomeOptions" aria-haspopup="true" aria-expanded="false">' +
     				'<span class="caret"></span>' +
     				'<span class="sr-only">Toggle Dropdown</span>' +
 				'</button>' +
 				'<ul class="dropdown-menu">' +
-				    '<li><a href="#">Calendar</a></li>' +
+				   '<li><a href="#" id="ns1blankspaceHomeOptionsCalendar">Calendar</a></li>' +
+				   '<li >' +
+				   	'<a id="ns1blankspaceHomeOptionsNewWindow" href="#" target="_blank">Open in a new window</a>' +
+				   '</li>' +
+				   '<li><a href="#" id="ns1blankspaceHomeOptionsConnections">' +
+				   	'<div>Connections</div><div class="ns1blankspaceSubNote">Other webapps, websites..</div></a>' +
+				   '</li>' +
+				   '<li><a href="#" id="ns1blankspaceHomeOptionsSearch">' +
+				   	'<div>Search & reporting</div><div class="ns1blankspaceSubNote">Export, update, email & SMS..</div></a>' +
+				   '</li>' +
+				    
 				 '</ul>' +
 			'</div>' +
 		'</li>' +
@@ -206,7 +218,7 @@ ns1blankspace.xhtml.viewContainer =
 		 '</li>' +
 		 '<li style="margin-left:6px;">' +
 		 	'<div>' +
-				'<input id="_ns1blankspaceViewControlSearch" class="form-control' +
+				'<input id="ns1blankspaceViewControlSearch" class="form-control' +
 				(ns1blankspace.option.searchWatermark!=undefined?' ns1blankspaceWatermark" value="' + ns1blankspace.option.searchWatermark + '"':'"') +
 				'>' +
 			'</div>' +
@@ -217,13 +229,10 @@ ns1blankspace.xhtml.viewContainer =
 		 '<li style="margin-left:6px;">' +
 		 	'<div class="btn-group">' +
  				'<button type="button" class="btn btn-default" id="ns1blankspaceViewControlAction">Save</button>' +
- 				'<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">' +
+ 				'<button type="button" class="btn btn-default dropdown-toggle" id="ns1blankspaceViewControlActionOptions" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">' +
     				'<span class="caret"></span>' +
     				'<span class="sr-only">Toggle Dropdown</span>' +
 				'</button>' +
-				'<ul class="dropdown-menu">' +
-				    '<li><a href="#">Remove</a></li>' +
-				 '</ul>' +
 			'</div>' +
 		'</li>' +
 		'<li style="margin-left:6px;">' +
@@ -343,7 +352,7 @@ ns1blankspace.scripts =
 	},
 	{
 		nameSpace: '1blankspace.financial.payroll',
-		source: '/site/388/1blankspace.financial.payroll-2.4.5.js'
+		source: '/site/388/1blankspace.financial.payroll-2.4.9.js'
 	},
 	{
 		nameSpace: '1blankspace.financial.budget',
@@ -375,7 +384,7 @@ ns1blankspace.scripts =
 	},
 	{
 		nameSpace: '1blankspace.setup.messaging',
-		source: '/site/312/1blankspace.setup.messaging-2.1.1.js'
+		source: '/site/388/1blankspace.setup.messaging-2.1.2.js'
 	},
 	{
 		nameSpace: '1blankspace.setup.networkGroup',
@@ -399,7 +408,7 @@ ns1blankspace.scripts =
 	},
 	{
 		nameSpace: '1blankspace.setup.user',
-		source: '/site/312/1blankspace.setup.user-2.1.2.js'
+		source: '/site/388/1blankspace.setup.user-2.1.3.js'
 	},
 	{
 		nameSpace: '1blankspace.setup.userRole',
@@ -407,7 +416,7 @@ ns1blankspace.scripts =
 	},
 	{
 		nameSpace: '1blankspace.setup.website',
-		source: '/site/312/1blankspace.setup.website-2.1.8.js'
+		source: '/site/388/1blankspace.setup.website-2.1.8.js'
 	},
 	{
 		nameSpace: '1blankspace.setup.websiteForm',
@@ -443,7 +452,7 @@ ns1blankspace.scripts =
 	},
 	{
 		nameSpace: '1blankspace.connect',
-		source: '/site/312/1blankspace.connect-2.0.3.js'
+		source: '/site/388/1blankspace.connect-2.0.4.js'
 	},
 	{
 		nameSpace: '1blankspace.util.whenDone',
@@ -1434,7 +1443,7 @@ ns1blankspace.control =
 			{
 				var aHTML = [];
 
-				aHTML.push('<table class="table ns1blankspaceViewControlContainer">');
+				aHTML.push('<table class="ns1blankspaceViewControlContainer" style="border-collapse: separate;">');
 				aHTML.push('<tr class="ns1blankspaceViewControl">');
 
 				var oGroups = $.grep(ns1blankspace.viewGroups, function (a) {return a.type == 1;});
@@ -1500,11 +1509,13 @@ ns1blankspace.control =
 				ns1blankspace.xhtml.viewControl = aHTML.join('');
 			}
 
+			var iTopOffset = (ns1blankspace.option.bootstrap?10:5);
+
 			ns1blankspace.container.show(
 			{
 				xhtmlElementID: 'ns1blankspaceViewControlViewContainer',
 				xhtml: ns1blankspace.xhtml.viewControl,
-				topOffset: 5
+				topOffset: iTopOffset
 			});	
 
 			ns1blankspace.control.views.bind();	
@@ -1577,7 +1588,7 @@ ns1blankspace.control =
 			{
 				var aHTML = [];
 
-				aHTML.push('<table class="table ns1blankspaceViewControlContainer">');
+				aHTML.push('<table class="ns1blankspaceViewControlContainer" style="border-collapse:separate;">');
 				aHTML.push('<tr class="ns1blankspaceViewControl">');
 				
 				var aHTMLViewport = [];
@@ -1621,11 +1632,13 @@ ns1blankspace.control =
 
 				aHTML.push('</tr></table>');
 				
+				var iTopOffset = (ns1blankspace.option.bootstrap?10:5);
+
 				ns1blankspace.container.show(
 				{
 					xhtmlElementID: 'ns1blankspaceViewControlViewContainer',
 					xhtml: aHTML.join(''),
-					topOffset: 5
+					topOffset: iTopOffset
 				});	
 
 				ns1blankspace.control.setup.views.bind();	
@@ -2568,6 +2581,8 @@ ns1blankspace.attachments =
 						$vq.add('</div>', {queue: 'sourcetype'});
 
 						$vq.render(ns1blankspace.xhtml.container, {queue: 'sourcetype', show: true});
+
+						$(ns1blankspace.xhtml.container).css('width', $(ns1blankspace.xhtml.container + ' div').width() + 'px');
 
 						$('#ns1blankspaceAttachmentsAddContainer .ns1blankspaceRowSelect').click(function ()
 						{

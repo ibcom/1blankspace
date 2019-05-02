@@ -1149,14 +1149,10 @@ ns1blankspace.app =
 							{
 								ns1blankspace.home.init();
 							}	
-						})		
-						.next()
-						.click(function()
-						{
-							//ns1blankspace.home.options.show(this);
 						});
+						
+						ns1blankspace.home.options.bind();
 								
-
 						$('#ns1blankspaceViewControlBack')
 						.click(function(event)
 						{
@@ -1186,12 +1182,16 @@ ns1blankspace.app =
 						});
 
 						$('#ns1blankspaceViewControlViewContainer')
+						.button(
+						{
+							label: '<span style="font-weight:600">Select...</span> <span class="caret"></span>'
+						})
 						.click(function() 
 						{
 							ns1blankspace.control.views.show(this);
-						});
+						})
+						.css('text-align', 'left');
 
-						
 						$('#ns1blankspaceViewControlSetup')	
 						.click(function() 
 						{
@@ -1209,6 +1209,16 @@ ns1blankspace.app =
 								ns1blankspace.supportIssue.init();
 							}	
 						});
+
+						$('#ns1blankspaceHomeOptions').bind('click', function (event)
+						{
+							var sLink = window.location.protocol + '//' + window.location.host + '/#/' +
+							(ns1blankspace.objectParentName !== undefined ? ns1blankspace.objectParentName + '.' : '') +
+							ns1blankspace.objectName +
+							(ns1blankspace.objectContext !== undefined && ns1blankspace.objectContext !== -1 ? '/' + ns1blankspace.objectContext : '');
+
+							$('#ns1blankspaceHomeOptionsNewWindow').attr('href', sLink)
+						})
 					}
 					else
 					{
@@ -3272,6 +3282,7 @@ ns1blankspace.container =
 					var iTimeOut = ns1blankspace.util.getParam(oParam, 'timeOut').value;
 					var fOnShow;
 					var sContainerID = ns1blankspace.xhtml.container;
+					var bMatchWidth = true;
 
 					if (oParam != undefined)
 					{
@@ -3287,6 +3298,7 @@ ns1blankspace.container =
 						if (oParam.setWidth != undefined) {bSetWidth = oParam.setWidth}
 						if (oParam.onShow != undefined) {fOnShow = oParam.onShow}
 						if (oParam.containerID != undefined) {sContainerID = oParam.containerID}
+						if (oParam.setWidth != undefined) {bMatchtWidth = oParam.matchWidth}
 					}
 
 					var bDropdown = ns1blankspace.util.getParam(oParam, 'dropdown', {"default": false}).value;
@@ -3318,7 +3330,24 @@ ns1blankspace.container =
 								.offset({ top: $(oXHTMLElement).offset().top + $(oXHTMLElement).height() + iOffsetTop, left: $(oXHTMLElement).offset().left + iOffsetLeft})
 								.html(sXHTML);
 							
-							if (bSetWidth) {$(sContainerID + ' table').css('width', oXHTMLElement.width())}
+							if (bSetWidth)
+							{
+								$(sContainerID + ' table').css('width', oXHTMLElement.width());
+							}
+
+							if (bMatchWidth)
+							{
+								var oXHTMLElementChild = $(ns1blankspace.xhtml.container + ' table');
+								if (oXHTMLElementChild.length == 0)
+								{
+									oXHTMLElementChild = $(ns1blankspace.xhtml.container + ' div');
+								}
+
+								if (oXHTMLElementChild.length != 0)
+								{
+									$(ns1blankspace.xhtml.container).css('width', oXHTMLElementChild.width() + 'px');
+								}
+							}
 
 							if (sFunctionBind != undefined)
 								{eval(sFunctionBind)}
@@ -5109,7 +5138,7 @@ ns1blankspace.util =
 					return function(a,b) { return new Date(a[prop]) - new Date(b[prop]) }
 				},			
 
-	remove:		function (array, property, value)
+	remove:	function (array, property, value)
 				{
 					return $.grep(array, function (a)
 					{ 
@@ -6970,9 +6999,11 @@ ns1blankspace.remove =
 
 							var aHTML = [];
 											
-							aHTML.push('<div style="margin-right:4px;" id="ns1blankspaceMessageRemove" class="ns1blankspaceAction">' + sCaption + '</div>');
+							aHTML.push('<div style="margin-right:4px; width:' + sWidth + '" id="ns1blankspaceMessageRemove" class="ns1blankspaceAction">' + sCaption + '</div>');
 		
 							$(ns1blankspace.xhtml.container).html(aHTML.join(''));
+
+							$(ns1blankspace.xhtml.container).css('width', $(ns1blankspace.xhtml.container + ' div').width() + 'px');
 
 							$('#ns1blankspaceMessageRemove').button(
 							{

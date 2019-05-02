@@ -871,7 +871,7 @@ ns1blankspace.setup.user =
 										
 											aHTML.push('<table class="ns1blankspaceColumn2">' +
 															'<tr><td><span class="ns1blankspaceAction" id="ns1blankspaceUserAccessRolesAdd">' +
-															'Add Role</span></td></tr>');
+															'</span></td></tr>');
 
 											aHTML.push('</table>');				
 											
@@ -994,6 +994,7 @@ ns1blankspace.setup.user =
 																'To add a user role select User Roles from the main menu.</td></tr></table>');
 
 												$(ns1blankspace.xhtml.container).html(aHTML.join(''));
+												$(ns1blankspace.xhtml.container).css('width', $(ns1blankspace.xhtml.container + ' table').width() + 'px');
 												$(ns1blankspace.xhtml.container).show(ns1blankspace.option.showSpeedOptions);
 											}
 											else
@@ -1013,6 +1014,7 @@ ns1blankspace.setup.user =
 												aHTML.push('</table>');;
 
 												$(ns1blankspace.xhtml.container).html(aHTML.join(''));
+												$(ns1blankspace.xhtml.container).css('width', $(ns1blankspace.xhtml.container + ' table').width() + 'px');
 												$(ns1blankspace.xhtml.container).show(ns1blankspace.option.showSpeedOptions);
 												
 												$('#ns1blankspaceUserRoles td.ns1blankspaceRowSelect').click(function(event)
