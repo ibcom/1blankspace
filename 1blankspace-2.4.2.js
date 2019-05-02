@@ -33,18 +33,18 @@ String.prototype.formatXHTML = function(bDirection)
 	var sValue = this;
 	
 	var aFind = [
-		String.fromCharCode(8220), //Ã¢â‚¬Å“
-		String.fromCharCode(8221), //Ã¢â‚¬Â
-		String.fromCharCode(8216), //Ã¢â‚¬Ëœ
-		String.fromCharCode(8217), //Ã¢â‚¬Ëœ
-		String.fromCharCode(8211), //Ã¢â‚¬â€œ
-		String.fromCharCode(8212), //Ã¢â‚¬â€
-		String.fromCharCode(189), //Ã‚Â½
-		String.fromCharCode(188), //Ã‚Â¼
-		String.fromCharCode(190), //Ã‚Â¾
-		String.fromCharCode(169), //Ã‚Â©
-		String.fromCharCode(174), //Ã‚Â®
-		String.fromCharCode(8230) //Ã¢â‚¬Â¦
+		String.fromCharCode(8220), //â€œ
+		String.fromCharCode(8221), //â€
+		String.fromCharCode(8216), //â€˜
+		String.fromCharCode(8217), //â€˜
+		String.fromCharCode(8211), //â€“
+		String.fromCharCode(8212), //â€”
+		String.fromCharCode(189), //Â½
+		String.fromCharCode(188), //Â¼
+		String.fromCharCode(190), //Â¾
+		String.fromCharCode(169), //Â©
+		String.fromCharCode(174), //Â®
+		String.fromCharCode(8230) //â€¦
 	];	
 
 	var aReplace = [
@@ -3339,7 +3339,8 @@ ns1blankspace.search =
 
 										$.each(aColumns, function(i) 
 										{
-											if (this != 'space' && this != 'comma' && this != 'pipe' && this != 'column' && this != 'hyphen')
+											if (this != 'space' && this != 'comma' && this != 'pipe' && this != 'column' 
+												&& this != 'hyphen' && this != 'openbracket' && this != 'closebracket')
 											{	
 												if (i != 0)
 												{
@@ -3566,7 +3567,8 @@ ns1blankspace.search =
 
 						$.each(aColumns, function() 
 						{
-							if (this != 'space' && this != 'comma' && this != 'pipe' && this != 'column' && this != 'hyphen')
+							if (this != 'space' && this != 'comma' && this != 'pipe' && this != 'column' && this != 'hyphen'
+								&& this != 'openbracket' && this != 'closebracket')
 							{	
 								oSearch.addField(this);
 							}	
@@ -3594,7 +3596,8 @@ ns1blankspace.search =
 
 							$.each(aColumns, function(i) 
 							{
-								if (this != 'space' && this != 'comma' && this != 'pipe' && this != 'column' && this != 'hyphen')
+								if (this != 'space' && this != 'comma' && this != 'pipe' && this != 'column' && this != 'hyphen'
+									&& this != 'openbracket' && this != 'closebracket')
 								{	
 									if (i != 0)
 									{
@@ -3826,6 +3829,14 @@ ns1blankspace.search =
 									case 'hyphen':
 										aHTML.push('-');
 										break;	
+
+									case 'openbracket':
+										aHTML.push('(')
+										break;
+
+									case 'closebracket':
+										aHTML.push(')')
+										break;
 
 									default:
 
@@ -6390,7 +6401,8 @@ ns1blankspace.render =
 					}
 					
 					if (sColumns.indexOf('-space-') == -1 && sColumns.indexOf('-comma-') == -1 && sColumns.indexOf('-pipe-') == -1 &&
-						sColumns.indexOf('-hyphen-') == -1 && sColumns.indexOf('-column-') == -1)
+						sColumns.indexOf('-hyphen-') == -1 && sColumns.indexOf('-column-') == -1
+						&& sColumns.indexOf('-openbracket-') == -1 && sColumns.indexOf('-closebracket-') == -1)
 					{
 						sColumns = sColumns.split('-').join('-column-');
 					}
@@ -6419,6 +6431,12 @@ ns1blankspace.render =
 							break;
 						case 'hyphen':
 							aHTML.push('-');
+							break;
+						case 'openbracket':
+							aHTML.push('(');
+							break;	
+						case 'closebracket':
+							aHTML.push(')');
 							break;
 						case 'column':
 							aHTML.push('</td><td class=' + sClass + '" id="' +
