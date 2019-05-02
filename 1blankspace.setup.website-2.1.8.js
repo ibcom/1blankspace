@@ -1324,8 +1324,8 @@ ns1blankspace.setup.website =
 											ifNoneMessage: 'No pages.'
 										});
 									})
-									.css('width', '15px')
-									.css('height', '17px');
+									.css('width', ns1blankspace.option.rowButtonWidth)
+									.css('height', ns1blankspace.option.rowButtonHeight);
 									
 									$('#' + oParam.xhtmlContainerID + ' td.ns1blankspaceRowSelect')
 									.click(function()
@@ -1844,8 +1844,8 @@ ns1blankspace.setup.website =
 							{
 								ns1blankspace.setup.websiteForm.init({id: (this.id).split('-')[1]});
 							})
-							.css('width', '15px')
-							.css('height', '17px');
+							.css('width', ns1blankspace.option.rowButtonWidth)
+							.css('height', ns1blankspace.option.rowButtonHeight);
 						}
 					}	
 				},
@@ -1957,7 +1957,7 @@ ns1blankspace.setup.website =
 												aHTML.push('<td id="ns1blankspaceWebsiteURL_url-' + this.id + '" class="ns1blankspaceRow ns1blankspaceRowSelect">' +
 																this.url + '</td>');
 																		
-												aHTML.push('<td style="width:60px; text-align:right;" class="ns1blankspaceRow">');
+												aHTML.push('<td style="width:70px; text-align:right;" class="ns1blankspaceRow">');
 													
 												aHTML.push('<span id="ns1blankspaceWebsiteURL_options_remove-' + this.id + '" class="ns1blankspaceRowRemove"></span>' +
 																'<a href="' + this.url + '" target="_blank" class="ns1blankspaceRowGoTo"></a>');
@@ -1987,16 +1987,14 @@ ns1blankspace.setup.website =
 													ifNoneMessage: 'No URLs.'
 												});
 											})
-											.css('width', '15px')
-											.css('height', '17px')
+											.css('width', ns1blankspace.option.rowButtonWidth)
+											.css('height', ns1blankspace.option.rowButtonHeight);
 											
 											$('#ns1blankspaceSetupWebsiteURLs .ns1blankspaceRowSelect')
 											.click(function()
 											{
 												ns1blankspace.setup.website.urls.add({xhtmlElementID: this.id})
 											})
-											.css('width', '15px')
-											.css('height', '17px');
 
 											$('#ns1blankspaceSetupWebsiteURLs .ns1blankspaceRowGoTo')
 											.button(
@@ -2007,8 +2005,8 @@ ns1blankspace.setup.website =
 													primary: "ui-icon-extlink"
 												}
 											})
-											.css('width', '15px')
-											.css('height', '17px');
+											.css('width', ns1blankspace.option.rowButtonWidth)
+											.css('height', ns1blankspace.option.rowButtonHeight);
 										}
 									}
 								},
@@ -2262,8 +2260,8 @@ ns1blankspace.setup.website =
 													ifNoneMessage: 'No HTTP Headers.'
 												});
 											})
-											.css('width', '15px')
-											.css('height', '17px');
+											.css('width', ns1blankspace.option.rowButtonWidth)
+											.css('height', ns1blankspace.option.rowButtonHeight);
 											
 											$('#ns1blankspaceSetupWebsiteHTTPHeaders .ns1blankspaceRowSelect')
 											.click(function()
@@ -2530,8 +2528,8 @@ ns1blankspace.setup.website =
 													ifNoneMessage: 'No redirects.'
 												});
 											})
-											.css('width', '15px')
-											.css('height', '17px');
+											.css('width', ns1blankspace.option.rowButtonWidth)
+											.css('height', ns1blankspace.option.rowButtonHeight);
 											
 											$('#ns1blankspaceSetupWebsiteRedirects .ns1blankspaceRowSelect')
 											.click(function()

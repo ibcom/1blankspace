@@ -1031,9 +1031,13 @@ ns1blankspace.financial.payroll =
 													'<div id="ns1blankspacePayrollEmployeeColumn1ShowAllContainer"></div>' +
 													'</td>' +
 													'<td id="ns1blankspacePayrollEmployeeColumn2" class="ns1blankspaceColumn2">' + 
-													'<table class="ns1blankspaceColumn2"><tr><td class="ns1blankspaceSubNote">' +
-													'Click New to add an employee' +
-													'</td></tr></table>' +	
+													'<table class="ns1blankspaceColumn2">' +
+													'<tr><td class="ns1blankspaceSubNote" id="ns1blankspacePayrollEmployeeColumn2Count" style="font-weight:600;">' +
+													'</td></tr>' +
+													'<tr><td class="ns1blankspaceSubNote">' +
+													'Click New to add an employee or select an employee to update their details.' +
+													'</td></tr>' +
+													'</table>' +	
 													'</td>' +
 													'</tr>' + 
 													'</table>');		
@@ -1070,6 +1074,15 @@ ns1blankspace.financial.payroll =
 												' id="ns1blankspacePayrollEmployeeColumn1ShowAll">Show ' +
 												(bShowAll?'only active':'all employees') +
 												'</div>');
+
+											if (bShowAll)
+											{
+												$('#ns1blankspacePayrollEmployeeColumn2Count').html('')
+											}
+											else
+											{
+												$('#ns1blankspacePayrollEmployeeColumn2Count').html('There are ' + oResponse.data.rows.length + ' active employees.')
+											}
 											
 											var aHTML = [];
 
@@ -6037,6 +6050,8 @@ ns1blankspace.financial.payroll.totals =
 											});
 
 											ns1blankspace.financial.payroll.totals.employees.report.data.object = oData;
+
+											$('#ns1blankspacePayrollEmployeeTotalsColumn1').html(JSON.stringify(ns1blankspace.financial.payroll.totals.employees.report.data.object))
 										}	
 									}
 								}								

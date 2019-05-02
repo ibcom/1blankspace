@@ -23,8 +23,12 @@ ns1blankspace.home =
 
 					if (ns1blankspace.setupView)
 					{	
-						$('#ns1blankspaceViewControlSetup').attr('checked', false);
-						$('#ns1blankspaceViewControlSetup').button('refresh');
+						if (!ns1blankspace.option.bootstrap)
+						{
+							$('#ns1blankspaceViewControlSetup').attr('checked', false);
+							$('#ns1blankspaceViewControlSetup').button('refresh');
+						}
+							
 						ns1blankspace.setup["switch"]({viewScript: 'ns1blankspace.home.show()'});
 					}	
 
@@ -177,56 +181,63 @@ ns1blankspace.home =
 
 ns1blankspace.home.options = 
 {
-	show: 		function (oElement)
+	show: 	function (oElement)
 				{
-					var aHTML = [];
-					
-					aHTML.push('<table id="ns1blankspaceHomeOptions" class="ns1blankspaceViewControlContainer" style="width:190px;">');
-									
-					aHTML.push('<tr><td id="ns1blankspaceHomeOptionsCalendar" class="ns1blankspaceRowSelect">' +
-											'Calendar</td></tr>');
-
-					var sLink = window.location.protocol + '//' + window.location.host + '/#/' +
-									(ns1blankspace.objectParentName !== undefined ? ns1blankspace.objectParentName + '.' : '') +
-									ns1blankspace.objectName +
-									(ns1blankspace.objectContext !== undefined && ns1blankspace.objectContext !== -1 ? '/' + ns1blankspace.objectContext : '');
-
-					aHTML.push('<tr><td id="ns1blankspaceHomeOptionsNewWindow" class="ns1blankspaceRowSelect">' +
-									'<a href="' + sLink + '" target="_blank">' +
-											'Open in a new window</a></td></tr>');
-
-					if (ns1blankspace.option.classicURI)
-					{	
-						aHTML.push('<tr><td id="ns1blankspaceHomeOptionsMyStartPage" class="ns1blankspaceRowSelect">' +
-											'<a href="' + ns1blankspace.option.classicURI + '" target="_blank">' +
-											'Go to classic</a></td></tr>');
-					}
-
-					aHTML.push('<tr><td id="ns1blankspaceHomeOptionsConnections" class="ns1blankspaceRowSelect">' +
-									'Connections<br />' +
-									'<span class="ns1blankspaceSubNote">Other webapps, websites..</span>' +
-									'</td></tr>');
-
-					aHTML.push('<tr><td id="ns1blankspaceHomeOptionsSearch" class="ns1blankspaceRowSelect">' +
-									'Search & reporting<br />' +
-									'<span class="ns1blankspaceSubNote">Export, update, email & SMS..</span>' +
-									'</td></tr>');
-
-					aHTML.push('</table>');
-						
-					if ($(ns1blankspace.xhtml.container).attr('data-initiator') == oElement.id)
+					if (ns1blankspace.option.bootstrap)
 					{
-						$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions);
-						$(ns1blankspace.xhtml.container).attr('data-initiator', '');
+						ns1blankspace.home.options.bind();
 					}
 					else
-					{	
-						$(ns1blankspace.xhtml.container).attr('data-initiator', oElement.id);
-						$(ns1blankspace.xhtml.container).html("&nbsp;");
-						$(ns1blankspace.xhtml.container).show(ns1blankspace.option.showSpeedOptions);
-						$(ns1blankspace.xhtml.container).offset({ top: $(oElement).offset().top + $(oElement).height() + 10, left: $(oElement).offset().left });
-						$(ns1blankspace.xhtml.container).html(aHTML.join(''));
-						ns1blankspace.home.options.bind();
+					{
+						var aHTML = [];
+						
+						aHTML.push('<table id="ns1blankspaceHomeOptions" class="ns1blankspaceViewControlContainer" style="width:190px;">');
+										
+						aHTML.push('<tr><td id="ns1blankspaceHomeOptionsCalendar" class="ns1blankspaceRowSelect">' +
+												'Calendar</td></tr>');
+
+						var sLink = window.location.protocol + '//' + window.location.host + '/#/' +
+										(ns1blankspace.objectParentName !== undefined ? ns1blankspace.objectParentName + '.' : '') +
+										ns1blankspace.objectName +
+										(ns1blankspace.objectContext !== undefined && ns1blankspace.objectContext !== -1 ? '/' + ns1blankspace.objectContext : '');
+
+						aHTML.push('<tr><td id="ns1blankspaceHomeOptionsNewWindow" class="ns1blankspaceRowSelect">' +
+										'<a href="' + sLink + '" target="_blank">' +
+												'Open in a new window</a></td></tr>');
+
+						if (ns1blankspace.option.classicURI)
+						{	
+							aHTML.push('<tr><td id="ns1blankspaceHomeOptionsMyStartPage" class="ns1blankspaceRowSelect">' +
+												'<a href="' + ns1blankspace.option.classicURI + '" target="_blank">' +
+												'Go to classic</a></td></tr>');
+						}
+
+						aHTML.push('<tr><td id="ns1blankspaceHomeOptionsConnections" class="ns1blankspaceRowSelect">' +
+										'Connections<br />' +
+										'<span class="ns1blankspaceSubNote">Other webapps, websites..</span>' +
+										'</td></tr>');
+
+						aHTML.push('<tr><td id="ns1blankspaceHomeOptionsSearch" class="ns1blankspaceRowSelect">' +
+										'Search & reporting<br />' +
+										'<span class="ns1blankspaceSubNote">Export, update, email & SMS..</span>' +
+										'</td></tr>');
+
+						aHTML.push('</table>');
+							
+						if ($(ns1blankspace.xhtml.container).attr('data-initiator') == oElement.id)
+						{
+							$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions);
+							$(ns1blankspace.xhtml.container).attr('data-initiator', '');
+						}
+						else
+						{	
+							$(ns1blankspace.xhtml.container).attr('data-initiator', oElement.id);
+							$(ns1blankspace.xhtml.container).html("&nbsp;");
+							$(ns1blankspace.xhtml.container).show(ns1blankspace.option.showSpeedOptions);
+							$(ns1blankspace.xhtml.container).offset({ top: $(oElement).offset().top + $(oElement).height() + 10, left: $(oElement).offset().left });
+							$(ns1blankspace.xhtml.container).html(aHTML.join(''));
+							ns1blankspace.home.options.bind();
+						}
 					}
 				},
 
