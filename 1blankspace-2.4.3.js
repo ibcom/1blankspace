@@ -3349,7 +3349,7 @@ ns1blankspace.search =
 
 										$.each(aColumns, function(i) 
 										{
-											if (this != 'space' && this != 'comma' && this != 'pipe' && this != 'column' && this != 'hyphen')
+											if (this != 'space' && this != 'comma' && this != 'pipe' && this != 'column' && this != 'hyphen' && this != 'openbracket' && this != 'closebracket')
 											{	
 												if (i != 0)
 												{
@@ -3576,7 +3576,7 @@ ns1blankspace.search =
 
 						$.each(aColumns, function() 
 						{
-							if (this != 'space' && this != 'comma' && this != 'pipe' && this != 'column' && this != 'hyphen')
+							if (this != 'space' && this != 'comma' && this != 'pipe' && this != 'column' && this != 'hyphen' && this != 'openbracket' && this != 'closebracket')
 							{	
 								oSearch.addField(this);
 							}	
@@ -3835,7 +3835,15 @@ ns1blankspace.search =
 										
 									case 'hyphen':
 										aHTML.push('-');
-										break;	
+										break;
+
+									case 'openbracket':
+										aHTML.push('(')
+										break;
+
+									case 'closebracket':
+										aHTML.push(')')
+										break;
 
 									default:
 
@@ -5812,10 +5820,9 @@ ns1blankspace.search.address =
 				}
 }				
 
-
 ns1blankspace.search.email =
 {
-	show: 		function (sXHTMLElementID, oParam)
+	show: function (sXHTMLElementID, oParam)
 	{
 		oParam = oParam || {};
 		var iSource = ns1blankspace.util.getParam(oParam, 'source', {'default': ns1blankspace.data.searchSource.text}).value;
@@ -6161,7 +6168,7 @@ ns1blankspace.search.email =
 
 		return aHTML.join('');
 	}			
-}				
+}					
 
 ns1blankspace.render =
 {
@@ -6400,7 +6407,8 @@ ns1blankspace.render =
 					}
 					
 					if (sColumns.indexOf('-space-') == -1 && sColumns.indexOf('-comma-') == -1 && sColumns.indexOf('-pipe-') == -1 &&
-						sColumns.indexOf('-hyphen-') == -1 && sColumns.indexOf('-column-') == -1)
+						sColumns.indexOf('-hyphen-') == -1 && sColumns.indexOf('-column-') == -1 &&
+						sColumns.indexOf('-openbracket-') == -1 && sColumns.indexOf('-closebracket-') == -1)
 					{
 						sColumns = sColumns.split('-').join('-column-');
 					}
@@ -6429,6 +6437,12 @@ ns1blankspace.render =
 							break;
 						case 'hyphen':
 							aHTML.push('-');
+							break;
+						case 'openbracket':
+							aHTML.push('(');
+							break;	
+						case 'closebracket':
+							aHTML.push(')');
 							break;
 						case 'column':
 							aHTML.push('</td><td class=' + sClass + '" id="' +
