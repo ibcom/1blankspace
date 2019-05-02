@@ -3299,7 +3299,7 @@ ns1blankspace.container =
 						if (oParam.setWidth != undefined) {bSetWidth = oParam.setWidth}
 						if (oParam.onShow != undefined) {fOnShow = oParam.onShow}
 						if (oParam.containerID != undefined) {sContainerID = oParam.containerID}
-						if (oParam.setWidth != undefined) {bMatchtWidth = oParam.matchWidth}
+						if (oParam.setWidth != undefined) {bMatchWidth = oParam.matchWidth}
 					}
 
 					var bDropdown = ns1blankspace.util.getParam(oParam, 'dropdown', {"default": false}).value;
@@ -7216,7 +7216,7 @@ ns1blankspace.remove =
 
 ns1blankspace.extend =
 {
-	init: 		function (oParam, oResponse)
+	init: 	function (oParam, oResponse)
 				{
 					oParam = oParam || {};
 					var iObject = ns1blankspace.object;
@@ -7292,7 +7292,7 @@ ns1blankspace.extend =
 								oSearch.method = 'SETUP_STRUCTURE_ELEMENT_SEARCH';		
 								oSearch.addField('structure,backgroundcolour,caption,category,categorytext,datatype,datatypetext,' +
 													'description,displayorder,hint,id,notes,notestype,notestypetext,' +
-													'reference,structure,structuretext,textcolour,title,alias,object,objecttext');
+													'reference,structure,structuretext,textcolour,title,alias');
 								oSearch.rows = 1000;
 								oSearch.addFilter('category', 'IN_LIST', aCategories.join(','))
 								oSearch.sort('category', 'asc');

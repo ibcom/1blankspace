@@ -5813,10 +5813,9 @@ ns1blankspace.search.address =
 				}
 }				
 
-
 ns1blankspace.search.email =
 {
-	show: 		function (sXHTMLElementID, oParam)
+	show: function (sXHTMLElementID, oParam)
 	{
 		oParam = oParam || {};
 		var iSource = ns1blankspace.util.getParam(oParam, 'source', {'default': ns1blankspace.data.searchSource.text}).value;
@@ -7309,7 +7308,7 @@ ns1blankspace.extend =
 							aHTML.push('</table>');
 						}
 						
-						$('table.ns1blankspaceControl :last').append(aHTML.join(''));	
+						$('table.ns1blankspaceControl:last').append(aHTML.join(''));	
 						$('#ns1blankspaceMain').append(aHTMLDIV.join(''));
 
 						$($.grep(ns1blankspace.extend.structure, function (a) {return a.object == iObject;})).each(function()

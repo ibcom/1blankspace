@@ -7080,7 +7080,7 @@ ns1blankspace.remove =
 
 ns1blankspace.extend =
 {
-	init: 		function (oParam, oResponse)
+	init: 	function (oParam, oResponse)
 				{
 					oParam = oParam || {};
 					var iObject = ns1blankspace.object;
@@ -7315,7 +7315,7 @@ ns1blankspace.extend =
 							aHTML.push('</table>');
 						}
 						
-						$('table.ns1blankspaceControl :last').append(aHTML.join(''));	
+						$('table.ns1blankspaceControl:last').append(aHTML.join(''));	
 						$('#ns1blankspaceMain').append(aHTMLDIV.join(''));
 
 						$($.grep(ns1blankspace.extend.structure, function (a) {return a.object == iObject;})).each(function()

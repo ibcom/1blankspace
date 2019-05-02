@@ -72,7 +72,8 @@ ns1blankspace.option = $.extend(true, ns1blankspace.option,
 	messagingCreateContacts: true,
 	bootstrap: true,
 	rowButtonHeight: '20px',
-	rowButtonWidth: '15px'
+	rowButtonWidth: '15px',
+	showActionText: false
 });
 
 ns1blankspace.option.yodlee =
@@ -264,7 +265,7 @@ ns1blankspace.scripts =
 	},
 	{
 		nameSpace: '1blankspace.contactPerson',
-		source: '/site/388/1blankspace.contactperson-2.0.7.js'
+		source: '/site/388/1blankspace.contactperson-2.0.8.js'
 	},
 	{
 		nameSpace: '1blankspace.contactBusiness',
@@ -364,7 +365,7 @@ ns1blankspace.scripts =
 	},
 	{
 		nameSpace: '1blankspace.report',
-		source: '/site/388/1blankspace.report-2.1.2.js'
+		source: '/site/388/1blankspace.report-2.4.2.js'
 	},
 	{
 		nameSpace: '1blankspace.setup',
@@ -3318,6 +3319,11 @@ ns1blankspace.actions =
 
 			if (bContactBusiness || bContactPerson)
 			{
+				if (iObject)
+				{
+					oSearch.addOperator('or');
+				}
+
 				oSearch.addBracket('(');
 
 				if (bContactBusiness)
