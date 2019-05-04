@@ -3240,9 +3240,18 @@ ns1blankspace.status =
 					}
 					else
 					{
-						$('#ns1blankspaceViewControlActionStatus').html(
-							'<div id="ns1blankspaceStatusError" style="margin:2px; padding: 4px; height:17px; color:white; background-color:red; width:10px; float:left; font-size:1.35em; text-align:center; cursor: pointer">!</div>' +
-							'<div style="margin:2px; margin-left: 6px; padding-left: 7px; padding-top:10px; height:14px;"></div>');
+						if (ns1blankspace.option.bootstrap)
+						{
+							$('#ns1blankspaceViewControlActionStatus').html(
+								'<div id="ns1blankspaceStatusError" style="margin:0px; margin-top: -2px; padding: 0px; height:25px; width:18px; color:white; background-color:red; float:left; font-size:1.35em; text-align:center; cursor: pointer">!</div>' +
+								'<div style="margin:2px; margin-left: 6px; padding-left: 7px; padding-top:10px; height:14px;"></div>');
+						}
+						else
+						{
+							$('#ns1blankspaceViewControlActionStatus').html(
+								'<div id="ns1blankspaceStatusError" style="margin:2px; padding: 4px; height:17px; color:white; background-color:red; width:10px; float:left; font-size:1.35em; text-align:center; cursor: pointer">!</div>' +
+								'<div style="margin:2px; margin-left: 6px; padding-left: 7px; padding-top:10px; height:14px;"></div>');
+						}
 
 						$('#ns1blankspaceStatusError').click(function()
 						{

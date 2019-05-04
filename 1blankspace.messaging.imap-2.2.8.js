@@ -667,7 +667,7 @@ ns1blankspace.messaging.imap =
 						}
 						else
 						{
-							$('#ns1blankspaceMainInbox').html('<span class="ns1blankspaceSub" style="font-size:0.875em;">Select an email inbox<br />or click <b>New</b> to send an email.</span>');
+							$('#ns1blankspaceMainInbox').html('<span class="ns1blankspaceSub" style="font-size:0.875em;">Select an email inbox<br />or click <span style="font-weight:600">New</span> to send an email.</span>');
 						}
 					}
 				}	
@@ -2982,11 +2982,11 @@ ns1blankspace.messaging.imap =
 							aHTML.push('<table class="ns1blankspace">');				
 										
 							aHTML.push('<tr>');
-								aHTML.push('<td class="ns1blankspaceCaption" style="font-size:0.875em; width:58px; padding-top:0px;">From:</td>');
+								aHTML.push('<td class="ns1blankspaceCaption" style="font-size:1em; width:58px; padding-top:2px; text-align:center;">From</td>');
 								aHTML.push('<td class="ns1blankspaceHighlight" style="font-size:0.875em; cursor:pointer; font-weight: normal;" colspan="2" id="ns1blankspaceSenderEmail" data-accountid="' + ns1blankspace.messaging.imap.account + '">' +
 											((ns1blankspace.messaging.imap.data.fromEmail != '' )
 											 ? ns1blankspace.messaging.imap.data.fromEmail
-											 : 'Choose an email account to send from') +
+											 : 'Select...') +
 									'</td>');
 							aHTML.push('</tr></table>');
 							aHTML.push('</td></tr>');
@@ -2999,9 +2999,24 @@ ns1blankspace.messaging.imap =
 
 								if (ns1blankspace.option.bootstrap)
 								{
-									
+									aHTML.push('<div class="btn-group-vertical" role="group" data-toggle="buttons" id="ns1blankspaceRecipientType" style="font-size:0.8745em;">');
 
-									
+									aHTML.push('<label class="btn btn-default active" id="ns1blankspaceRecipientType-To">' +
+														'<input type="radio" name="radioType" data-1blankspace="ignore" />' +
+														'To <span id="ns1blankspaceRecipientTypeCount-To" style="vertical-align: super; font-size: 0.6em; color:#ffffff;"></span>' +
+														'</label>');
+
+									aHTML.push('<label class="btn btn-default" id="ns1blankspaceRecipientType-Cc">' +
+														'<input type="radio" name="radioType" data-1blankspace="ignore" />' +
+														'Cc <span id="ns1blankspaceRecipientTypeCount-Cc" style="vertical-align: super; font-size: 0.6em; color:#ffffff;"></span>' +
+														'</label>');
+
+									aHTML.push('<label class="btn btn-default" id="ns1blankspaceRecipientType-Bcc">' +
+														'<input type="radio" name="radioType" data-1blankspace="ignore" />' +
+														'Bcc <span id="ns1blankspaceRecipientTypeCount-Bcc" style="vertical-align: super; font-size: 0.6em; color:#ffffff;"></span>' +
+														'</label>');
+
+									aHTML.push('</div>');
 								}
 								else
 								{
@@ -3196,10 +3211,16 @@ ns1blankspace.messaging.imap =
 					{	
 						$('#ns1blankspaceEditMessageTo').attr('data-id', iContactPersonTo)
 					}
-						
-					$('#ns1blankspaceRecipientType').buttonset().css('font-size', '0.75em');
+					
+					var sSelect = 'label';
 
-					$('#ns1blankspaceRecipientType :radio').click(function()
+					if (!ns1blankspace.option.bootstrap)
+					{
+						$('#ns1blankspaceRecipientType').buttonset().css('font-size', '0.75em');
+						sSelect = ':radio'
+					}
+
+					$('#ns1blankspaceRecipientType ' + sSelect).click(function()
 					{
 						$('div.ns1blankspaceRecipientTypeContainer').hide();
 
