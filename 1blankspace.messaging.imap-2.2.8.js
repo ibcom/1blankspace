@@ -1505,8 +1505,8 @@ ns1blankspace.messaging.imap =
 				{	
 					aHTML.push('<tr><td style="text-align:right; padding-bottom:10px; border-bottom-style:solid; border-width: 1px; border-color:#D0D0D0;" colspan=2 id="ns1blankspaceMessageContainerColumn1">' +
 								'<div style="margin-right:4px;" id="ns1blankspaceMessageMarkReadUnread" class="ns1blankspaceAction">Mark as ' + ((bRead) ? 'un': '') + 'read</div>' +
-								'<div style="margin-right:4px;" id="ns1blankspaceMessageReplyAll" class="ns1blankspaceAction">Reply All</div>' +
-								'<div style="margin-right:4px;" id="ns1blankspaceMessageForward" class="ns1blankspaceAction">Forward</div>' +
+								'<div style="margin-right:4px;" id="ns1blankspaceMessageReplyAll" class="ns1blankspaceAction"></div>' +
+								'<div style="margin-right:4px;" id="ns1blankspaceMessageForward" class="ns1blankspaceAction"></div>' +
 								'</td></tr>');
 				}
 
@@ -1518,7 +1518,7 @@ ns1blankspace.messaging.imap =
 
 				$('#ns1blankspaceMessageMarkReadUnread').button(
 				{
-					label: 'Mark as ' + ((bRead) ? 'un': '') + 'read'
+					label: 'Mark as ' + ((bRead) ? 'Unread': 'Read')
 				})
 				.click(function()
 				{
@@ -1529,11 +1529,7 @@ ns1blankspace.messaging.imap =
 
 				$('#ns1blankspaceMessageReplyAll').button(
 				{
-					label: 'All',
-					icons:
-					{
-						 primary: "ui-icon-arrowreturnthick-1-w"
-					}
+					label: 'Reply all',
 				})
 				.click(function()
 				{
@@ -1557,12 +1553,7 @@ ns1blankspace.messaging.imap =
 
 				$('#ns1blankspaceMessageForward').button(
 				{
-					text: false,
-					label: 'Forward',
-					icons:
-					{
-						 primary: "ui-icon-arrow-1-e"
-					}
+					label: 'Forward'
 				})
 				.click(function()
 				{
@@ -1599,11 +1590,11 @@ ns1blankspace.messaging.imap =
 									'</td></tr>');
 
 					aHTML.push('<tr id="ns1blankspaceMessageSaveContactNameLabel" style="display:' + (sFromName != sFrom ? 'none' : 'block') + ';">' +
-									'<td style="padding-left:25px;" class="ns1blankspaceCaption">' +
+									'<td style="padding-left:5px;" class="ns1blankspaceCaption">' +
 									'Contact Name</td></tr>');
 
 					aHTML.push('<tr id="ns1blankspaceMessageSaveContactNameValue" style="display:' + (sFromName != sFrom ? 'none' : 'block') + ';">' +
-									'<td id="ns1blankspaceMessageSaveContactNameValueCell" style="font-size:0.75em;padding-left:25px;padding-bottom:8px;">' +
+									'<td id="ns1blankspaceMessageSaveContactNameValueCell" style="font-size:0.75em;padding-left:5px;padding-bottom:8px;">' +
 										ns1blankspace.xhtml.loadingSmall +
 									'</td></tr>');
 
@@ -1616,17 +1607,17 @@ ns1blankspace.messaging.imap =
 								'<input type="checkbox" id="ns1blankspaceMessageSavePrivate"/> Set as private' +
 								'</td></tr>');
 
-				aHTML.push('<tr><td style="padding-left:25px;style="font-size: 0.875em;"" class="ns1blankspaceCaption">' +
+				aHTML.push('<tr><td style="padding-left:5px;style="font-size: 0.875em;"" class="ns1blankspaceCaption">' +
 								'Subject</td></tr>');
 
-				aHTML.push('<tr><td style="padding-left:25px;">' +
+				aHTML.push('<tr><td style="padding-left:5px;">' +
 								'<input id="ns1blankspaceMessageSaveSubject" class="ns1blankspaceText">' +
 								'</td></tr>');
 
 				aHTML.push('<tr class="ns1blankspace">' +
 								'<td class="ns1blankspaceRadio">' +
 								'<input type="checkbox" id="ns1blankspaceMessageSaveObject" />' +
-								'<select id="ns1blankspaceMessageSaveObjectValue" style="width:138px;">');
+								'<select id="ns1blankspaceMessageSaveObjectValue" style="margin-left:4px; width:138px;">');
 
 
 				$.each(ns1blankspace.messaging.imap.data.objects, function(i, v)
@@ -1640,7 +1631,7 @@ ns1blankspace.messaging.imap =
 				aHTML.push('</select>' +
 								'</td></tr>');
 
-				aHTML.push('<tr><td style="padding-left:25px;">' +
+				aHTML.push('<tr><td style="padding-left:5px;">' +
 								'<input id="ns1blankspaceMessageSaveObjectContext" style="padding:3px;">' +
 								'</td></tr>');
 
@@ -1665,7 +1656,7 @@ ns1blankspace.messaging.imap =
 								'</td></tr>');
 
 				aHTML.push('<tr><td style="padding-top:10px;">' +
-								'<span id="ns1blankspaceMessageToDo" class="ns1blankspaceAction">Save as To Do</span>' +
+								'<span id="ns1blankspaceMessageToDo" class="ns1blankspaceAction"></span>' +
 								'</td></tr>');
 				
 				aHTML.push('</table>');					
@@ -1789,7 +1780,7 @@ ns1blankspace.messaging.imap =
 			
 				$('#ns1blankspaceMessageToDo').button(
 				{
-					label: "Save as<br />To Do"
+					label: "Save as To Do"
 				})
 				.click(function()
 				{
@@ -2631,7 +2622,6 @@ ns1blankspace.messaging.imap =
 				$('span.ns1blankspaceMessagingEmailOptions').button(
 				{
 					text: false,
-					label: "Save, To Do",
 					icons:
 					{
 						 primary: "ui-icon-triangle-1-s"
@@ -2721,12 +2711,7 @@ ns1blankspace.messaging.imap =
 			{
 				if (bShow === undefined)
 				{
-					bShow = false;
-
-					if ($.browser.chrome || $.browser.safari || $.browser.webkit)
-					{
-						bShow = true
-					}
+					bShow = true;
 				}
 
 				if (!bShow)
@@ -2744,7 +2729,7 @@ ns1blankspace.messaging.imap =
 						
 					$('#ifMessage').contents().find('html').html(sHTML);
 					
-					if ($.browser.msie)
+					if (navigator.userAgent.indexOf('MSIE') != -1)
 					{
 						setTimeout("ns1blankspace.messaging.imap.message.contents.setHeight()", 100);
 					}
@@ -3012,21 +2997,30 @@ ns1blankspace.messaging.imap =
 											
 								aHTML.push('<tr><td id="ns1blankspaceRecipientTypeColumn1" style="width:32px;">');
 
-								aHTML.push('<div id="ns1blankspaceRecipientType" style="font-size:0.8745em;">');											
-								
-								aHTML.push('<input type="radio" id="ns1blankspaceRecipientType-To" name="radioRecipientType" checked="checked" />' +
-												'<label for="ns1blankspaceRecipientType-To" style="width: 100%;  margin-bottom:1px;">' +
-												'To <span id="ns1blankspaceRecipientTypeCount-To" style="vertical-align: super; font-size: 0.6em; color:#ffffff;"></span></label>');
+								if (ns1blankspace.option.bootstrap)
+								{
+									
 
-								aHTML.push('<input type="radio" id="ns1blankspaceRecipientType-Cc" name="radioRecipientType" />' +
-												'<label for="ns1blankspaceRecipientType-Cc" style="width: 100%; margin-bottom:1px;">' +
-												'Cc <span id="ns1blankspaceRecipientTypeCount-Cc" style="vertical-align: super; font-size: 0.6em; color:#ffffff;"></span></label>');
+									
+								}
+								else
+								{
+									aHTML.push('<div id="ns1blankspaceRecipientType" style="font-size:0.8745em;">');											
+									
+									aHTML.push('<input type="radio" id="ns1blankspaceRecipientType-To" name="radioRecipientType" checked="checked" />' +
+													'<label for="ns1blankspaceRecipientType-To" style="width: 100%;  margin-bottom:1px;">' +
+													'To <span id="ns1blankspaceRecipientTypeCount-To" style="vertical-align: super; font-size: 0.6em; color:#ffffff;"></span></label>');
 
-								aHTML.push('<input type="radio" id="ns1blankspaceRecipientType-Bcc" name="radioRecipientType" />' +
-												'<label for="ns1blankspaceRecipientType-Bcc" style="width: 100%;  margin-bottom:1px;">' +
-												'Bcc <span id="ns1blankspaceRecipientTypeCount-Bcc" style="vertical-align: super; font-size: 0.6em; color:#ffffff;"></span></label>');
-								
-								aHTML.push('</div>');
+									aHTML.push('<input type="radio" id="ns1blankspaceRecipientType-Cc" name="radioRecipientType" />' +
+													'<label for="ns1blankspaceRecipientType-Cc" style="width: 100%; margin-bottom:1px;">' +
+													'Cc <span id="ns1blankspaceRecipientTypeCount-Cc" style="vertical-align: super; font-size: 0.6em; color:#ffffff;"></span></label>');
+
+									aHTML.push('<input type="radio" id="ns1blankspaceRecipientType-Bcc" name="radioRecipientType" />' +
+													'<label for="ns1blankspaceRecipientType-Bcc" style="width: 100%;  margin-bottom:1px;">' +
+													'Bcc <span id="ns1blankspaceRecipientTypeCount-Bcc" style="vertical-align: super; font-size: 0.6em; color:#ffffff;"></span></label>');
+									
+									aHTML.push('</div>');
+								}
 
 								aHTML.push('</td><td id="ns1blankspaceRecipientTypeColumn2">');
 
@@ -3109,10 +3103,20 @@ ns1blankspace.messaging.imap =
 											
 								aHTML.push('<td style="width:30px; padding-top: 0px;">');
 							
-								aHTML.push('<div id="ns1blankspaceEditMessageAttachContainer" style="font-size:0.875em;">' +
-												'<input type="checkbox" id="ns1blankspaceEditMessageAttach" class="ns1blankspaceAction"/>' +
-												'<label style="font-size:0.875em;" for="ns1blankspaceEditMessageAttach">&nbsp;</label>' +
+								if (ns1blankspace.option.bootstrap)
+								{
+									aHTML.push('<div id="ns1blankspaceEditMessageAttachContainer">' +
+														'<label class="btn btn-default" id="ns1blankspaceEditMessageAttach">' +
+														'</label>' +
 												'</div>');
+								}
+								else
+								{
+									aHTML.push('<div id="ns1blankspaceEditMessageAttachContainer" style="font-size:0.875em;">' +
+												'<input type="checkbox" id="ns1blankspaceEditMessageAttach" class="ns1blankspaceAction"/>' +
+												'<label style="font-size:0.875em;" for="ns1blankspaceEditMessageAttach"></label>' +
+												'</div>');
+								}
 							
 								aHTML.push('</td>');				
 
@@ -3163,8 +3167,6 @@ ns1blankspace.messaging.imap =
 
 					$('.ns1blankspaceEditMessageContactGroupSearch').button(
 					{
-						text: false,
-						label: "Select contact group",
 						icons:
 						{
 							 primary: "ui-icon-contact"
@@ -3174,9 +3176,16 @@ ns1blankspace.messaging.imap =
 					{
 						ns1blankspace.messaging.imap.message.edit.groupSearch.show({xhtmlElementID: this.id});
 					})
-					.css('width', '15px')
-					.css('height', '20px');
 
+					if (ns1blankspace.option.bootstrap)
+					{
+						$('.ns1blankspaceEditMessageContactGroupSearch').css('height', '28px');
+					}
+					else
+					{
+						$('.ns1blankspaceEditMessageContactGroupSearch').css('width', '15px')
+						.css('height', '20px');
+					}
 
 					if (sEmailTo !== undefined)
 					{	
@@ -3200,19 +3209,30 @@ ns1blankspace.messaging.imap =
 				
 					$('#ns1blankspaceEditMessageAttach').button(
 					{
-						text: false,
-						icons:	{
-									primary: "ui-icon-paperclip"
-								}
+						icons:
+						{
+							primary: "ui-icon-paperclip"
+						}
 					})
 					.click(function() 
 					{
 						ns1blankspace.messaging.imap.message.edit.attach.show(oParam);
 					})
-					.css('width', '20px')
-					.css('height', '23px')
-					.css('font-size', '0.75em');
-						
+					
+					if (!ns1blankspace.option.bootstrap)
+					{
+						$('#ns1blankspaceEditMessageAttach')
+						.css('width', '20px')
+						.css('height', '23px')
+						.css('font-size', '0.75em');
+					}
+					else
+					{
+						$('#ns1blankspaceEditMessageAttach')
+						.css('vertical-align', 'middle')
+						.css('height', '26px');
+					}
+
 					$('#ns1blankspaceSenderEmail')
 					.click(function()
 					{
@@ -5103,7 +5123,7 @@ ns1blankspace.messaging.imap =
 				{
 					if ($('#ns1blankspaceMessageTemplatesSelect').length == 0)
 					{
-						$('#ns1blankspaceMessagingEditMessageSubject').css('width', ($('#ns1blankspaceMessagingEditMessageSubject').width() - 30) + 'px');
+						$('#ns1blankspaceMessagingEditMessageSubject').css('width', ($('#ns1blankspaceMessagingEditMessageSubject').width() - 50) + 'px');
 						$('#ns1blankspaceMessagingEditMessageSubject').after('<span style="margin-left:2px;" id="ns1blankspaceMessageTemplatesSelect"></span>');
 					
 						$('#ns1blankspaceMessageTemplatesSelect')

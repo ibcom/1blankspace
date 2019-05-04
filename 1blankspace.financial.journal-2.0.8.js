@@ -706,7 +706,7 @@ ns1blankspace.financial.journal =
 						
 						$('#ns1blankspaceDetailsColumn1').html(aHTML.join(''));
 						
-						$('input.ns1blankspaceDate').datepicker({dateFormat: 'dd M yy'});
+						ns1blankspace.util.initDatePicker({select: 'input.ns1blankspaceDate'});
 						
 						var aHTML = [];
 						

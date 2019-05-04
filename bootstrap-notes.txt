@@ -1,0 +1,16 @@
+.css('width', ns1blankspace.option.rowButtonWidth)
+.css('height', ns1blankspace.option.rowButtonHeight);
+
+$(ns1blankspace.xhtml.container).css(
+{
+width: $(ns1blankspace.xhtml.container + ' table').width()
+});
+
+ns1blankspace.util.initDatePicker({select: 'input.ns1blankspaceDate'});
+
+
+aHTML.push('<div class="btn-group-vertical" role="group" data-toggle="buttons" id="ns1blankspaceUnallocatedColumnType" style="width:95px; margin-top:3px; text-align:right;">');
+
+aHTML.push('<label class="btn btn-default" id="ns1blankspaceUnallocatedColumnType-3">' +
+						'<input type="radio" name="radioType" data-1blankspace="ignore" />Expenses' +
+						'</label>');

@@ -256,7 +256,7 @@ ns1blankspace.scripts =
 	},
 	{
 		nameSpace: '1blankspace.opportunity',
-		source: '/jscripts/1blankspace.opportunity-2.0.0.js'
+		source: '/site/388/1blankspace.opportunity-2.0.1.js'
 	},
 	{
 		nameSpace: '1blankspace.action',
@@ -264,7 +264,7 @@ ns1blankspace.scripts =
 	},
 	{
 		nameSpace: '1blankspace.messaging.conversation',
-		source: '/site/388/1blankspace.messaging.conversation-2.1.0.js'
+		source: '/site/388/1blankspace.messaging.conversation-2.1.2.js'
 	},
 	{
 		nameSpace: '1blankspace.messaging.imap',
@@ -272,7 +272,7 @@ ns1blankspace.scripts =
 	},
 	{
 		nameSpace: '1blankspace.document',
-		source: '/site/312/1blankspace.document-2.0.2.js'
+		source: '/site/388/1blankspace.document-2.0.2.js'
 	},
 	{
 		nameSpace: '1blankspace.news',
@@ -300,31 +300,31 @@ ns1blankspace.scripts =
 	},
 	{
 		nameSpace: '1blankspace.financial',
-		source: '/site/312/1blankspace.financial-2.3.7.js'
+		source: '/site/388/1blankspace.financial-2.3.8.js'
 	},
 	{
 		nameSpace: '1blankspace.financial.bankAccount',
-		source: '/site/388/1blankspace.financial.bankaccount-2.4.4.js'
+		source: '/site/388/1blankspace.financial.bankaccount-2.4.5.js'
 	},
 	{
 		nameSpace: '1blankspace.financial.invoice',
-		source: '/site/312/1blankspace.financial.invoice-2.1.9.js'
+		source: '/site/388/1blankspace.financial.invoice-2.2.0.js'
 	},
 	{
 		nameSpace: '1blankspace.financial.expense',
-		source: '/site/312/1blankspace.financial.expense-2.1.5.js'
+		source: '/site/388/1blankspace.financial.expense-2.1.6.js'
 	},
 	{
 		nameSpace: '1blankspace.financial.receipt',
-		source: '/site/312/1blankspace.financial.receipt-2.1.2.js'
+		source: '/site/388/1blankspace.financial.receipt-2.1.3.js'
 	},
 	{
 		nameSpace: '1blankspace.financial.payment',
-		source: '/site/312/1blankspace.financial.payment-2.1.4.js'
+		source: '/site/388/1blankspace.financial.payment-2.1.5.js'
 	},
 	{
 		nameSpace: '1blankspace.financial.credit',
-		source: '/jscripts/1blankspace.financial.credit-2.0.6.js'
+		source: '/site/388/1blankspace.financial.credit-2.0.7.js'
 	},
 	{
 		nameSpace: '1blankspace.financial.journal',
@@ -332,7 +332,7 @@ ns1blankspace.scripts =
 	},
 	{
 		nameSpace: '1blankspace.financial.tax',
-		source: '/site/312/1blankspace.financial.tax-2.0.5.js'
+		source: '/site/388/1blankspace.financial.tax-2.0.6.js'
 	},
 	{
 		nameSpace: '1blankspace.financial.payroll',
@@ -340,11 +340,11 @@ ns1blankspace.scripts =
 	},
 	{
 		nameSpace: '1blankspace.financial.budget',
-		source: '/site/388/1blankspace.financial.budget-2.0.3.js'
+		source: '/site/388/1blankspace.financial.budget-2.0.4.js'
 	},
 	{
 		nameSpace: '1blankspace.financial.compliance',
-		source: '/jscripts/1blankspace.financial.compliance-2.0.6.js'
+		source: '/site/388/1blankspace.financial.compliance-2.0.7.js'
 	},
 	{
 		nameSpace: '1blankspace.report',
@@ -372,7 +372,7 @@ ns1blankspace.scripts =
 	},
 	{
 		nameSpace: '1blankspace.setup.networkGroup',
-		source: '/site/312/1blankspace.setup.networkgroup-2.0.1.js'
+		source: '/site/388/1blankspace.setup.networkgroup-2.0.2.js'
 	},
 	{
 		nameSpace: '1blankspace.setup.project',
@@ -2535,56 +2535,7 @@ ns1blankspace.attachments =
 			})
 			.click(function()
 			{
-				if (ns1blankspace.option.attachmentsAsURLs)
-				{
-					if ($(ns1blankspace.xhtml.container).attr('data-initiator') == 'ns1blankspaceAttachmentsAdd')
-					{
-						$(ns1blankspace.xhtml.container).slideUp(500);
-						$(ns1blankspace.xhtml.container).attr('data-initiator', '');
-					}
-					else
-					{
-						ns1blankspace.container.position(
-						{
-							xhtmlElementID: 'ns1blankspaceAttachmentsAdd',
-							topOffset: -25,
-							leftOffset: -66
-						});
-
-						$vq.clear({queue: 'sourcetype'});
-
-						$vq.add('<div class="ns1blankspaceViewControlContainer" id="ns1blankspaceAttachmentsAddContainer" style="font-size:0.875em; width:60px; text-align:center;">',
-							{queue: 'sourcetype'});
-
-						$vq.add('<div class="ns1blankspaceRow ns1blankspaceRowSelect" style="border-width: 0px; margin:8px;"' +
-										' id="ns1blankspaceAttachmentsAdd-file">File</div>', {queue: 'sourcetype'});
-							
-						$vq.add('<div class="ns1blankspaceRow ns1blankspaceRowSelect" style="border-width: 0px; margin:8px;"' +
-										' id="ns1blankspaceAttachmentsAdd-url">URL</div>', {queue: 'sourcetype'});
-
-						$vq.add('</div>', {queue: 'sourcetype'});
-
-						$vq.render(ns1blankspace.xhtml.container, {queue: 'sourcetype', show: true});
-
-						$(ns1blankspace.xhtml.container).css('width', $(ns1blankspace.xhtml.container + ' div').width() + 'px');
-
-						$('#ns1blankspaceAttachmentsAddContainer .ns1blankspaceRowSelect').click(function ()
-						{
-							var sSourceType = this.id.split('-')[1];
-							oParam = ns1blankspace.util.setParam(oParam, 'sourceType', sSourceType)
-							ns1blankspace.attachments.add.init(oParam);
-							ns1blankspace.container.hide(
-							{
-								xhtmlElementID: 'ns1blankspaceAttachmentsAdd',
-								fadeOutTime: 0
-							});
-						})
-					}
-				}
-				else
-				{
-					ns1blankspace.attachments.add.file(oParam);
-				}
+				ns1blankspace.attachments.sourceType(oParam)
 			})
 			.css('width', '80px');
 
@@ -2652,6 +2603,60 @@ ns1blankspace.attachments =
 
 			oSearch.sort(sSortBy, sSortDirection);
 			oSearch.getResults(function(data) {ns1blankspace.attachments.process(data, oParam)});
+		}
+	},
+
+	sourceType: function (oParam)
+	{
+		if (ns1blankspace.option.attachmentsAsURLs)
+		{
+			if ($(ns1blankspace.xhtml.container).attr('data-initiator') == 'ns1blankspaceAttachmentsAdd')
+			{
+				$(ns1blankspace.xhtml.container).slideUp(500);
+				$(ns1blankspace.xhtml.container).attr('data-initiator', '');
+			}
+			else
+			{
+				ns1blankspace.container.position(
+				{
+					xhtmlElementID: 'ns1blankspaceAttachmentsAdd',
+					topOffset: -25,
+					leftOffset: -66
+				});
+
+				$vq.clear({queue: 'sourcetype'});
+
+				$vq.add('<div class="ns1blankspaceViewControlContainer" id="ns1blankspaceAttachmentsAddContainer" style="font-size:0.875em; width:60px; text-align:center;">',
+					{queue: 'sourcetype'});
+
+				$vq.add('<div class="ns1blankspaceRow ns1blankspaceRowSelect" style="border-width: 0px; margin:8px;"' +
+								' id="ns1blankspaceAttachmentsAdd-file">File</div>', {queue: 'sourcetype'});
+					
+				$vq.add('<div class="ns1blankspaceRow ns1blankspaceRowSelect" style="border-width: 0px; margin:8px;"' +
+								' id="ns1blankspaceAttachmentsAdd-url">URL</div>', {queue: 'sourcetype'});
+
+				$vq.add('</div>', {queue: 'sourcetype'});
+
+				$vq.render(ns1blankspace.xhtml.container, {queue: 'sourcetype', show: true});
+
+				$(ns1blankspace.xhtml.container).css('width', $(ns1blankspace.xhtml.container + ' div').width() + 'px');
+
+				$('#ns1blankspaceAttachmentsAddContainer .ns1blankspaceRowSelect').click(function ()
+				{
+					var sSourceType = this.id.split('-')[1];
+					oParam = ns1blankspace.util.setParam(oParam, 'sourceType', sSourceType)
+					ns1blankspace.attachments.add.init(oParam);
+					ns1blankspace.container.hide(
+					{
+						xhtmlElementID: 'ns1blankspaceAttachmentsAdd',
+						fadeOutTime: 0
+					});
+				})
+			}
+		}
+		else
+		{
+			ns1blankspace.attachments.add.file(oParam);
 		}
 	},
 
@@ -3110,8 +3115,7 @@ ns1blankspace.attachments =
 			if ($.grep($('.ns1blankspaceUpload'), function(x) {return $(x).val() != ''}).length === 0)
 			{
 				$('#ns1blankspaceUploadStatus')
-					.html('No attachments to upload.')
-					.css('color', 'red');
+					.html('<div class="alert alert-danger">No attachments to upload.</div>');
 				bValid = false;
 			}
 			else

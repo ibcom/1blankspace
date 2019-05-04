@@ -98,8 +98,8 @@ ns1blankspace.contactPerson =
 						}
 						else
 						{
-							aHTML.push('<table id="ns1blankspaceMostLikely">');
-							aHTML.push('<tr><td class="ns1blankspaceCaption">RECENT</td></tr>');
+							aHTML.push('<div class="ns1blankspaceCaption" style="padding-left:8px;">RECENT</div>');
+							aHTML.push('<table id="ns1blankspaceMostLikely" class="table">');
 
 							$.each(oResponse.data.rows, function()
 							{
@@ -1426,6 +1426,11 @@ ns1blankspace.contactPerson =
 											}	
 
 											$(ns1blankspace.xhtml.container).html(aHTML.join(''));
+											$(ns1blankspace.xhtml.container).css(
+											{
+												width: $(ns1blankspace.xhtml.container + ' table').width()
+											});
+
 											$(ns1blankspace.xhtml.container).show(ns1blankspace.option.showSpeedOptions);
 											
 											$('td.ns1blankspaceGroupsAddRowSelect').click(function(event)

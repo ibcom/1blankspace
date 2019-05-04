@@ -251,7 +251,7 @@ ns1blankspace.financial.expense =
 						}
 						else
 						{
-							aHTML.push('<div class="ns1blankspaceCaption">RECENT</div>');
+							aHTML.push('<div class="ns1blankspaceCaption" style="padding-left:8px;">RECENT</div>');
 							aHTML.push('<table id="ns1blankspaceMostLikely" class="table">');
 						
 							$.each(oResponse.data.rows, function()
@@ -264,7 +264,7 @@ ns1blankspace.financial.expense =
 								aHTML.push('<td id="ns1blankspaceMostLikely_amount-' + this.id + '" class="ns1blankspaceMostLikelySub" style="width:65px;text-align:right;padding-left:10px;padding-right:10px;">' +
 														'$' + this.amount + '</td>');
 
-								aHTML.push('<td id="ns1blankspaceMostLikely_date-' + this.id + '" class="ns1blankspaceMostLikelySub" style="width:90px;text-align:right;padding-right:15px;">' +
+								aHTML.push('<td id="ns1blankspaceMostLikely_date-' + this.id + '" class="ns1blankspaceMostLikelySub" style="width:100px;text-align:right;padding-right:15px;">' +
 														ns1blankspace.util.fd(this.accrueddate) + '</td>');
 
 								var sContact = this.contactbusinesspaidtotext
@@ -835,7 +835,7 @@ ns1blankspace.financial.expense =
 						
 						$('#ns1blankspaceDetailsColumn1').html(aHTML.join(''));
 						
-						$('input.ns1blankspaceDate').datepicker({dateFormat: 'dd M yy'});
+						ns1blankspace.util.initDatePicker({select: 'input.ns1blankspaceDate'});
 
 						var aHTML = [];
 						
@@ -1612,7 +1612,7 @@ ns1blankspace.financial.expense =
 										$('#ns1blankspacePaymentAmount').select();
 
 										$('#ns1blankspacePaymentDate').val(Date.today().toString("d MMM yyyy"));
-										$('input.ns1blankspaceDate').datepicker({dateFormat: 'dd M yy'});
+										ns1blankspace.util.initDatePicker({select: 'input.ns1blankspaceDate'});
 
 										$('#ns1blankspacePaymentAdd').button(
 										{
@@ -1973,7 +1973,7 @@ ns1blankspace.financial.expense.outstanding =
 							$('#ns1blankspaceExpenseOutstandingColumn2 table').before(aHTML.join(''));
 						}
 
-						$('#ns1blankspaceFinancialOutstandingSearchDate').datepicker({dateFormat: 'dd M yy'});
+						ns1blankspace.util.initDatePicker({select: '#ns1blankspaceFinancialOutstandingSearchDate'});
 
 						$('[name="radioBankAccount"][value="' + iSearchBankAccount + '"]').attr('checked', 'checked');
 						$('[name="radioSearch"][value="' + sSearchType + '"]').attr('checked', 'checked');

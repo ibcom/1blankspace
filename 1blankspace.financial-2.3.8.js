@@ -495,7 +495,9 @@ ns1blankspace.financial.home = function (oParam)
 						aHTML.push('<table class="ns1blankspaceControl">');
 
 						aHTML.push('<tr class="ns1blankspaceControl">' +
-									'<td id="ns1blankspaceControlTax" class="ns1blankspaceControl">Tax<br /><span class="ns1blankspaceSub" style="font-size:0.75em;">GST &<br />Employee</span></td>' +
+									'<td id="ns1blankspaceControlTax" class="ns1blankspaceControl"><div>Tax</div>' +
+									'<div class="ns1blankspaceSub" style="font-size:0.75em;">GST &</div>' +
+									'<div class="ns1blankspaceSub" style="font-size:0.75em;">Employee</div></td>' +
 									'</tr>');				
 						
 						aHTML.push('</table>');	
@@ -1041,8 +1043,7 @@ ns1blankspace.financial.debtors =
 							oParam = {onCompleteWhenCan: ns1blankspace.financial.debtors.email.init};
 							ns1blankspace.financial.debtors.preview.init(oParam);
 						})
-						.css('width', '115px')
-						.css('text-align', 'left');
+						.css('width', '115px');
 
 						var oData = {reportby: iType, rows: 1000, view: iView}
 
@@ -1055,7 +1056,7 @@ ns1blankspace.financial.debtors =
 
 						$('#ns1blankspaceDebtorsCreatePDF').button(
 						{
-							label: 'PDF'
+							label: 'Create PDF'
 						})
 						.click(function(event)
 						{
@@ -1096,8 +1097,7 @@ ns1blankspace.financial.debtors =
 								objectContext: ns1blankspace.spaceContactBusiness
 							});
 						})
-						.css('width', '115px')
-						.css('text-align', 'left');
+						.css('width', '115px');
 
 						$.ajax(
 						{
@@ -1816,11 +1816,7 @@ ns1blankspace.financial.creditors =
 
 						$('#ns1blankspaceCreditorsCreatePDF').button(
 						{
-							label: 'PDF',
-							icons:
-							{
-								primary: "ui-icon-arrowthickstop-1-s"
-							}
+							label: 'Create PDF'
 						})
 						.click(function(event)
 						{
@@ -1861,8 +1857,7 @@ ns1blankspace.financial.creditors =
 								objectContext: ns1blankspace.spaceContactBusiness
 							});
 						})
-						.css('width', '65px')
-						.css('text-align', 'left');
+						.css('width', '115px');
 
 						var oData = {rows: 1000, view: 1}
 
@@ -2252,10 +2247,7 @@ ns1blankspace.financial.profitLoss =
 
 						$('#ns1blankspacePLRefresh').button(
 						{
-							label: 'Refresh',
-							icons: {
-								primary: "ui-icon-arrowrefresh-1-e"
-							}
+							label: 'Refresh'
 						})
 						.click(function()
 						{
@@ -2268,10 +2260,7 @@ ns1blankspace.financial.profitLoss =
 
 						$('#ns1blankspacePLShowAll').button(
 						{
-							label: 'Show All',
-							icons: {
-								primary: "ui-icon-document"
-							}
+							label: 'Show All'
 						})
 						.click(function()
 						{
@@ -2842,10 +2831,7 @@ ns1blankspace.financial.balanceSheet =
 
 						$('#ns1blankspaceBSRefresh').button(
 						{
-							label: 'Refresh',
-							icons: {
-								primary: "ui-icon-arrowrefresh-1-e"
-							}
+							label: 'Refresh'
 						})
 						.click(function() {
 							ns1blankspace.financial.balanceSheet.show(
@@ -2857,10 +2843,7 @@ ns1blankspace.financial.balanceSheet =
 
 						$('#ns1blankspaceBSShowAll').button(
 						{
-							label: 'Show All',
-							icons: {
-								primary: "ui-icon-document"
-							}
+							label: 'Show All'
 						})
 						.click(function() {
 							ns1blankspace.financial.balanceSheet.show(
@@ -3289,10 +3272,7 @@ ns1blankspace.financial.accounts =
 
 						$('#ns1blankspaceAccountRefresh').button(
 						{
-							label: 'Refresh',
-							icons: {
-								primary: "ui-icon-arrowrefresh-1-e"
-							}
+							label: 'Refresh'
 						})
 						.click(function() {
 							ns1blankspace.financial.accounts.show(
@@ -3461,21 +3441,15 @@ ns1blankspace.financial.accounts =
 									summary: oResponse.summary
 							   });
 								
-								$('#ns1blankspaceAccountTransactionsColumn3').html('<span class="ns1blankspaceAction" id="ns1blankspaceAccountExport">Refresh</span>');
+								$('#ns1blankspaceAccountTransactionsColumn3').html('<span class="ns1blankspaceAction" id="ns1blankspaceAccountExport"></span>');
 								$('#ns1blankspaceAccountExport').button(
 								{
-									label: false,
-									icons:
-									{
-										primary: "ui-icon-arrowthickstop-1-s"
-									}
+									label: 'Export'
 								})
 								.click(function()
 								{
 									ns1blankspace.financial.accounts.export()
-								})
-								.css('width', '24px')
-								.css('height', '20px');
+								});
 							}
 						}
 					}
@@ -3585,17 +3559,56 @@ ns1blankspace.financial.unallocated =
 							
 						var aHTML = [];
 
-						aHTML.push('<div id="ns1blankspaceUnallocatedColumnType" style="width:85px; margin-top:3px; text-align:right;">');
-						if (bShowAccrued) {aHTML.push('<input type="radio" id="ns1blankspaceUnallocatedColumnType-3" name="radioType" data-1blankspace="ignore" /><label for="ns1blankspaceUnallocatedColumnType-3" style="width: 85px; margin-bottom:2px;">Expenses</label>');}
-						aHTML.push('<input type="radio" id="ns1blankspaceUnallocatedColumnType-4" name="radioType" data-1blankspace="ignore" /><label for="ns1blankspaceUnallocatedColumnType-4" style="width: 85px; margin-bottom:2px;">Payments</label>');
-						if (bShowAccrued) {aHTML.push('<input type="radio" id="ns1blankspaceUnallocatedColumnType-1" name="radioType" data-1blankspace="ignore" /><label for="ns1blankspaceUnallocatedColumnType-1" style="width: 85px; margin-bottom:2px;">Invoices</label>');}
-						aHTML.push('<input type="radio" id="ns1blankspaceUnallocatedColumnType-2" name="radioType" data-1blankspace="ignore" /><label for="ns1blankspaceUnallocatedColumnType-2" style="width: 85px; margin-bottom:2px;">Receipts</label>');
-						aHTML.push('</div>');
-
-						$('#ns1blankspaceUnallocatedColumn1').html(aHTML.join(''));
-					
-						$('#ns1blankspaceUnallocatedColumnType').buttonset().css('font-size', '0.875em');
+						if (ns1blankspace.option.bootstrap)
+						{
+							aHTML.push('<div class="btn-group-vertical" role="group" data-toggle="buttons" id="ns1blankspaceUnallocatedColumnType" style="width:95px; margin-top:3px; text-align:right;">');
 						
+							if (bShowAccrued)
+							{
+								aHTML.push('<label class="btn btn-default" id="ns1blankspaceUnallocatedColumnType-3">' +
+												'<input type="radio" name="radioType" data-1blankspace="ignore" />Expenses' +
+												'</label>');
+							}
+
+							aHTML.push('<label class="btn btn-default" id="ns1blankspaceUnallocatedColumnType-4">' +
+											'<input type="radio"  name="radioType" data-1blankspace="ignore" />Payments' +
+											'</label>');
+
+							if (bShowAccrued)
+							{
+								aHTML.push('<label class="btn btn-default" id="ns1blankspaceUnallocatedColumnType-1">' +
+												'<input type="radio" name="radioType" data-1blankspace="ignore" />Invoices' +
+												'</label>');
+							}
+
+							aHTML.push('<label class="btn btn-default" id="ns1blankspaceUnallocatedColumnType-2">' +
+											'<input type="radio"  name="radioType" data-1blankspace="ignore" />Receipts' +
+											'</label>');
+							aHTML.push('</div>');
+
+							$('#ns1blankspaceUnallocatedColumn1').html(aHTML.join(''));
+
+							$('#ns1blankspaceUnallocatedColumnType label').click(function()
+							{
+								var aID = (this.id).split('-');
+								$.extend(true, oParam, {step: 2, type: parseInt(aID[1])});
+								ns1blankspace.financial.unallocated.show(oParam);
+							});
+						}
+						else
+						{
+							aHTML.push('<div class="btn-group-vertical" id="ns1blankspaceUnallocatedColumnType" style="width:95px; margin-top:3px; text-align:right;">');
+							if (bShowAccrued) {aHTML.push('<input type="radio" id="ns1blankspaceUnallocatedColumnType-3" name="radioType" data-1blankspace="ignore" /><label class="btn btn-default" for="ns1blankspaceUnallocatedColumnType-3" style="width: 95px; margin-bottom:2px;">Expenses</label>');}
+							aHTML.push('<input type="radio" id="ns1blankspaceUnallocatedColumnType-4" name="radioType" data-1blankspace="ignore" /><label class="btn btn-default" for="ns1blankspaceUnallocatedColumnType-4" style="width: 95px; margin-bottom:2px;">Payments</label>');
+							if (bShowAccrued) {aHTML.push('<input type="radio" id="ns1blankspaceUnallocatedColumnType-1" name="radioType" data-1blankspace="ignore" /><label class="btn btn-default" for="ns1blankspaceUnallocatedColumnType-1" style="width: 95px; margin-bottom:2px;">Invoices</label>');}
+							aHTML.push('<input type="radio" id="ns1blankspaceUnallocatedColumnType-2" name="radioType" data-1blankspace="ignore" /><label class="btn btn-default" for="ns1blankspaceUnallocatedColumnType-2" style="width: 95px; margin-bottom:2px;">Receipts</label>');
+							aHTML.push('</div>');
+
+							$('#ns1blankspaceUnallocatedColumn1').html(aHTML.join(''));
+					
+							$('#ns1blankspaceUnallocatedColumnType').buttonset().css('font-size', '0.875em');
+						}
+
 						$('#ns1blankspaceUnallocatedColumnType :radio').click(function()
 						{
 							var aID = (this.id).split('-');
@@ -3812,17 +3825,12 @@ ns1blankspace.financial.unallocated =
 				{
 					$('#ns1blankspaceUnallocatedItems .ns1blankspaceUnallocatedEdit').button(
 					{
-						label: '&nbsp;Allocate',
-						icons: {
-							primary: "ui-icon-pencil"
-						}
+						label: 'Allocate'
 					})
-					.click(function() {
+					.click(function()
+					{
 						ns1blankspace.financial.unallocated.edit({xhtmlElementID: this.id});
-					})
-					.css('font-weight', '200')
-					.css('font-size', '0.625em')
-					.css('height', '20px');
+					});
 				},
 
 	edit: 	function(oParam, oResponse)
@@ -3855,6 +3863,10 @@ ns1blankspace.financial.unallocated =
 						aHTML.push('</table>');
 
 						$(ns1blankspace.xhtml.container).html(aHTML.join(''));
+						$(ns1blankspace.xhtml.container).css(
+						{
+							width: $(ns1blankspace.xhtml.container + ' table').width()
+						});
 
 						$('.ns1blankspaceUnallocatedType').click(function ()
 						{
@@ -3954,6 +3966,11 @@ ns1blankspace.financial.unallocated =
 							$vq.add('</table>', {queue: 'allocate'});
 		
 							$vq.render(ns1blankspace.xhtml.container, {queue: 'allocate'})
+
+							$(ns1blankspace.xhtml.container).css(
+							{
+								width: $(ns1blankspace.xhtml.container + ' table').width()
+							});
 
 							$('#ns1blankspaceUnallocatedExpenses td.ns1blankspaceRowSelect').click(function()
 							{
@@ -4064,6 +4081,10 @@ ns1blankspace.financial.unallocated =
 							aHTML.push('</table>');
 		
 							$(ns1blankspace.xhtml.container).html(aHTML.join(''));
+							$(ns1blankspace.xhtml.container).css(
+							{
+								width: $(ns1blankspace.xhtml.container + ' table').width()
+							});
 
 							$('#ns1blankspaceUnallocatedAllocate').click(function ()
 							{
@@ -5401,7 +5422,7 @@ ns1blankspace.financial.item =
 				aHTML.push('<td id="ns1blankspaceItem_tax-' + oRow.id + '" class="ns1blankspaceRow ns1blankspaceSub" style="text-align:right;">' +
 								oRow.preadjustmenttax + '</td>');
 
-				aHTML.push('<td style="width:60px;text-align:right;" class="ns1blankspaceRow">');
+				aHTML.push('<td style="width:70px;text-align:right;" class="ns1blankspaceRow">');
 
 				if (oOptions.remove)
 				{
@@ -6754,10 +6775,7 @@ ns1blankspace.financial.taxSummary =
 
 						$('#ns1blankspaceTaxRefresh').button(
 						{
-							label: 'Refresh',
-							icons: {
-								primary: "ui-icon-arrowrefresh-1-e"
-							}
+							label: 'Refresh'
 						})
 						.click(function()
 						{

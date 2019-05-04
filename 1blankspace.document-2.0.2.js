@@ -518,7 +518,7 @@ ns1blankspace.document =
 										'<tr>' + 
 										'<td class="ns1blankspaceCaption" id="ns1blankspaceDocumentNetworkGroupsCaption">Shared With</td>' +
 										'<td style="padding-right:10px; text-align:right;">' +
-										'<span class="ns1blankspaceAction" id="ns1blankspaceDocumentNetworkGroupsAdd"></span></td>' +
+										'<span id="ns1blankspaceDocumentNetworkGroupsAdd"></span></td>' +
 										'</tr>');
 
 						aHTML.push('<td colspan=2 class="ns1blankspaceText" id="ns1blankspaceDocumentNetworkGroups">' +

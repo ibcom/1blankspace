@@ -5642,7 +5642,14 @@ ns1blankspace.util =
 
 								if ($.fn.datepicker != undefined)
 								{
-									$('input.ns1blankspaceDate').datepicker({dateFormat: 'dd M yy'});
+									if (ns1blankspace.util.initDatePicker != undefined)
+									{
+										ns1blankspace.util.initDatePicker({select: 'input.ns1blankspaceDate'});
+									}
+									else
+									{
+										$('input.ns1blankspaceDate').datepicker({dateFormat: 'dd M yy'});
+									}
 								}	
 									
 								ns1blankspace.util.view.queue.clear(oParam);
@@ -5713,8 +5720,21 @@ ns1blankspace.util =
 						oOptions = $.extend(true, oOptions, ns1blankspace.option.defaultDatePickerOptions)
 					}
 
+					oOptions.beforeShow = ns1blankspace.util.dataPickerOpen
+					oOptions.onClose = ns1blankspace.util.dataPickerClose
+
 					$(sSelect).datepicker(oOptions);
-				}																
+				},
+
+	dataPickerOpen: function (oElement, oInstance)
+				{
+					$('#ui-datepicker-div').css('box-shadow', '0 6px 12px rgba(0,0,0,.175)')
+				},
+
+	dataPickerClose: function (sDate, oElement)
+				{
+					$('#ui-datepicker-div').css('box-shadow', '')
+				}																		
 }
 
 ns1blankspace.debug = 

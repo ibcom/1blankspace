@@ -142,8 +142,8 @@ ns1blankspace.financial.invoice =
 						if (ns1blankspace.option.bulkInvoicing)
 						{
 							aHTML.push('<tr class="ns1blankspaceControl">' +
-									'<td style="padding-top:15px;" id="ns1blankspaceControlInvoicing" class="ns1blankspaceControl">Bulk<br />' +
-									'<span class="ns1blankspaceSub" style="font-size:0.75em;">Create &/or<br />send unsent<br />invoices</span></td>' +
+									'<td style="padding-top:15px;" id="ns1blankspaceControlInvoicing" class="ns1blankspaceControl"><div>Bulk</div>' +
+									'<div class="ns1blankspaceSub" style="font-size:0.75em;">Create &/or send unsent invoices</div></td>' +
 									'</tr>');
 						}	
 
@@ -187,8 +187,8 @@ ns1blankspace.financial.invoice =
 						}
 						else
 						{
-							aHTML.push('<table id="ns1blankspaceMostLikely">');
-							aHTML.push('<tr><td class="ns1blankspaceCaption" colspan="4">RECENT</td></tr>');
+							aHTML.push('<div class="ns1blankspaceCaption" style="padding-left:8px;">RECENT</div>');
+							aHTML.push('<table id="ns1blankspaceMostLikely" class="table">');
 							
 							$.each(oResponse.data.rows, function()
 							{					
@@ -200,7 +200,7 @@ ns1blankspace.financial.invoice =
 								aHTML.push('<td id="ns1blankspaceMostLikely_Amount-' + this.id + '" class="ns1blankspaceMostLikelySub" style="width:50px;text-align:right;padding-left:10px;padding-right:10px;">' +
 														'$' + this.amount + '</td>');
 																		
-								aHTML.push('<td id="ns1blankspaceMostLikely_DueDate-' + this.id + '" class="ns1blankspaceMostLikelySub" style="width:90px;text-align:right;padding-right:15px;">' +
+								aHTML.push('<td id="ns1blankspaceMostLikely_DueDate-' + this.id + '" class="ns1blankspaceMostLikelySub" style="width:100px;text-align:right;padding-right:15px;">' +
 														this.sentdate + '</td>');
 																										
 								var sContact = this.contactbusinesssenttotext;
@@ -1498,7 +1498,7 @@ ns1blankspace.financial.invoice =
 		
 						$('#ns1blankspaceItemAccount').focus();
 						
-						$('input.ns1blankspaceDate').datepicker({dateFormat: 'dd M yy'});
+						ns1blankspace.util.initDatePicker({select: 'input.ns1blankspaceDate'});
 						
 						var aHTML = [];
 						
@@ -2380,7 +2380,7 @@ ns1blankspace.financial.invoice =
 										$('#ns1blankspacePaymentAmount').select();
 
 										$('#ns1blankspaceReceiptDate').val(Date.today().toString("d MMM yyyy"));
-										$('input.ns1blankspaceDate').datepicker({dateFormat: 'dd M yy'});
+										ns1blankspace.util.initDatePicker({select: 'input.ns1blankspaceDate'});
 
 										$('#ns1blankspaceReceiptAdd').button(
 										{

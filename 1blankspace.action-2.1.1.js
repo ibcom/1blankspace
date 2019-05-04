@@ -2266,7 +2266,7 @@ ns1blankspace.action =
 
 				aHTML.push('</table>');	
 			
-				aHTML.push('<table style="background-color:#E8E8E8;"><tr>');
+				aHTML.push('<table class="ns1blankspaceSearchMedium" style="background-color:#E8E8E8;"><tr>');
 				
 				if (iActionID != -1)
 				{	
@@ -2287,7 +2287,7 @@ ns1blankspace.action =
 				
 				$('#ns1blankspaceMultiUseDialog').html('');
 				$('#ns1blankspaceMultiUseDialog').show();
-				$('#ns1blankspaceMultiUseDialog').offset({ top: $(oElement).offset().top - 2 , left: $(oElement).offset().left - 160 });
+				$('#ns1blankspaceMultiUseDialog').offset({ top: $(oElement).offset().top - 2 , left: $(oElement).offset().left - 140 });
 				$('#ns1blankspaceMultiUseDialog').html(aHTML.join(''));
 
 				$('input.ns1blankspaceDate').datetimepicker(

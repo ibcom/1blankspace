@@ -684,7 +684,7 @@ ns1blankspace.financial.payroll =
 					
 						$('#ns1blankspaceDetailsColumn1').html(aHTML.join(''));
 					
-						$('input.ns1blankspaceDate').datepicker({dateFormat: 'dd M yy'});
+						ns1blankspace.util.initDatePicker({select: 'input.ns1blankspaceDate'});
 					}	
 
 					if (ns1blankspace.objectContextData != undefined)
@@ -1341,7 +1341,7 @@ ns1blankspace.financial.payroll =
 											
 										$('#ns1blankspacePayrollEmployeeDetails11Column1').html(aHTML.join(''));
 
-										$('input.ns1blankspaceDate').datepicker({dateFormat: 'dd M yy'});
+										ns1blankspace.util.initDatePicker({select: 'input.ns1blankspaceDate'});
 
 										if (ns1blankspace.financial.employee != undefined)
 										{
@@ -2043,7 +2043,7 @@ ns1blankspace.financial.payroll =
 											
 										$('#ns1blankspacePayrollEmployeeDetails19Column1').html(aHTML.join(''));
 
-										$('input.ns1blankspaceDate').datepicker({dateFormat: 'dd M yy'});
+										ns1blankspace.util.initDatePicker({select: 'input.ns1blankspaceDate'});
 
 										if (ns1blankspace.financial.employee != undefined)
 										{
@@ -2311,7 +2311,7 @@ ns1blankspace.financial.payroll =
 											
 										$('#ns1blankspacePayrollEmployeeDetails17Column1').html(aHTML.join(''));
 
-										$('input.ns1blankspaceDate').datepicker({dateFormat: 'dd M yy'});
+										ns1blankspace.util.initDatePicker({select: 'input.ns1blankspaceDate'});
 
 										if (ns1blankspace.financial.employee != undefined)
 										{
@@ -2701,7 +2701,7 @@ ns1blankspace.financial.payroll =
 
 													$('#ns1blankspacePayrollEmployeeDetailsPayRateColumn2').html(aHTML.join(''));
 
-													$('input.ns1blankspaceDate').datepicker({dateFormat: 'dd M yy'});
+													ns1blankspace.util.initDatePicker({select: 'input.ns1blankspaceDate'});
 
 													$('#ns1blankspacePayrollEmployeeDetailsPayRateStartDate').val(Date.today().toString("dd MMM yyyy"));
 
@@ -4656,7 +4656,7 @@ ns1blankspace.financial.payroll.totals =
 						
 						$('#ns1blankspacePayrollTotalsColumn1').html(aHTML.join(''));
 
-						$('input.ns1blankspaceDate').datepicker({dateFormat: ns1blankspace.option.dateFormat});
+						ns1blankspace.util.initDatePicker({select: 'input.ns1blankspaceDate'});
 
 						$('#ns1blankspacePayrollRefresh').button(
 						{
@@ -7098,7 +7098,7 @@ ns1blankspace.financial.payroll.superannuation =
 							$('#ns1blankspacePayrollSuperannuationExpenseColumn2 table').before(aHTML.join(''));
 						}
 
-						$('#ns1blankspacePayrollSuperannuationExpenseSearchDate').datepicker({dateFormat: 'dd M yy'});
+						ns1blankspace.util.initDatePicker({select: '#ns1blankspacePayrollSuperannuationExpenseSearchDate'});
 
 						$('#ns1blankspacePayrollSuperannuationExpenseSearch').button(
 						{
@@ -7458,7 +7458,7 @@ ns1blankspace.financial.payroll.insurance =
 						
 						$('#ns1blankspacePayrollInsuranceColumn1').html(aHTML.join(''));
 
-						$('input.ns1blankspaceDate').datepicker({dateFormat: ns1blankspace.option.dateFormat});
+						ns1blankspace.util.initDatePicker({select: 'input.ns1blankspaceDate'});
 
 						$('#ns1blankspacePayrollInsuranceRefresh').button(
 						{
@@ -7634,7 +7634,7 @@ ns1blankspace.financial.payroll.dashboard =
 					
 					$('#ns1blankspacePayrollDashboardColumn1').html(aHTML.join(''));
 
-					$('input.ns1blankspaceDate').datepicker({dateFormat: ns1blankspace.option.dateFormat});
+					ns1blankspace.util.initDatePicker({select: 'input.ns1blankspaceDate'});
 
 					$('#ns1blankspacePayrollDashboardRefresh').button(
 					{

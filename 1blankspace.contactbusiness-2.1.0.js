@@ -99,10 +99,8 @@ ns1blankspace.contactBusiness =
 						}
 						else
 						{
-							aHTML.push('<table>');
-							aHTML.push('<tr>');
-							aHTML.push('<td class="ns1blankspaceCaption">RECENT</td>');
-							aHTML.push('</tr>');
+							aHTML.push('<div class="ns1blankspaceCaption" style="padding-left:8px;">RECENT</div>');
+							aHTML.push('<table id="ns1blankspaceMostLikely" class="table">');
 
 							$.each(oResponse.data.rows, function()
 							{
@@ -2065,6 +2063,10 @@ ns1blankspace.contactBusiness =
 												aHTML.push('</table>');
 
 												$(ns1blankspace.xhtml.container).html(aHTML.join(''));
+												$(ns1blankspace.xhtml.container).css(
+												{
+													width: $(ns1blankspace.xhtml.container + ' table').width()
+												});
 												$(ns1blankspace.xhtml.container).show(ns1blankspace.option.showSpeedOptions);
 												
 												$('td.ns1blankspaceGroupsAddRowSelect').click(function(event)
@@ -2130,7 +2132,7 @@ ns1blankspace.contactBusiness =
 													if (oResponse == undefined)
 													{
 														var oSearch = new AdvancedSearch();
-														oSearch.method = 'SETUP_CONTACT_BUSINESS_GROUP_TYPE_SEARCH';
+														oSearch.method = 'SETUP_CONTACT_BUSINESS_GROUP_SEARCH';
 														oSearch.addField('title');
 														oSearch.rows = 100;
 														oSearch.sort('title', 'asc');

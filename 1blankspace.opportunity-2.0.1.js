@@ -90,7 +90,7 @@ ns1blankspace.opportunity =
 												this.reference + 
 												'</td>');
 
-								aHTML.push('<td id="ns1blankspaceMostLikely_orderdate-' + this.id + '" class="ns1blankspaceMostLikelySub">' +
+								aHTML.push('<td id="ns1blankspaceMostLikely_description-' + this.id + '" class="ns1blankspaceMostLikelySub">' +
 																		this.description + '</td>');
 
 								aHTML.push('</tr>');
