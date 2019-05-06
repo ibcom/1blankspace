@@ -5717,30 +5717,62 @@ ns1blankspace.util =
 						ns1blankspace.inputDetected = false;
 					}
 					
-					return bContinue	
+					return bContinue
 				},
 
 	initDatePicker: function (oParam)
 				{
 					var sSelect = ns1blankspace.util.getParam(oParam, 'select', {"default": 'input.ns1blankspaceDate'}).value;
+					var bTime = ns1blankspace.util.getParam(oParam, 'time', {"default": false}).value;
+
 					var oOptions = {dateFormat: ns1blankspace.option.dateFormat};
+
 					if (ns1blankspace.option.defaultDatePickerOptions != undefined)
 					{
 						oOptions = $.extend(true, oOptions, ns1blankspace.option.defaultDatePickerOptions)
 					}
 
-					oOptions.beforeShow = ns1blankspace.util.dataPickerOpen
-					oOptions.onClose = ns1blankspace.util.dataPickerClose
+					if (oParam != undefined)
+					{
+						oOptions = $.extend(true, oOptions, oParam.options)
+					}
 
-					$(sSelect).datepicker(oOptions);
+					oOptions.beforeShow = ns1blankspace.util.datePickerOpen
+					oOptions.onClose = ns1blankspace.util.datePickerClose
+
+					if (bTime)
+					{
+						oOptions.stepMinute = 5;
+						oOptions.ampm = true;
+						oOptions.controlType = 'select';
+						oOptions.showTime = false;
+						oOptions.showButtonPanel = false;
+						oOptions.oneLine = true;
+						oOptions.timeFormat = 'h:mm tt';
+
+						$(sSelect).datetimepicker(oOptions);
+					}
+					else
+					{
+						$(sSelect).datepicker(oOptions);
+					}
 				},
 
-	dataPickerOpen: function (oElement, oInstance)
+	datePickerOpen: function (oElement, oInstance)
 				{
-					$('#ui-datepicker-div').css('box-shadow', '0 6px 12px rgba(0,0,0,.175)')
+					$('#ui-datepicker-div').css('box-shadow', '0 6px 12px rgba(0,0,0,.175)');
+
+					if ($('.ui-timepicker-div').length > 0)
+					{
+						$('.ui-timepicker-div').after('<div style="text-align:right; width:100%;" id="ui-datepicker-div-close">Close</div>');
+						$('#ui-datepicker-div-close').click(function ()
+						{
+							$('#ui-datepicker-div').hide()
+						})
+					}
 				},
 
-	dataPickerClose: function (sDate, oElement)
+	datePickerClose: function (sDate, oElement)
 				{
 					$('#ui-datepicker-div').css('box-shadow', '')
 				}																		
@@ -6007,353 +6039,266 @@ ns1blankspace.search.address =
 
 ns1blankspace.search.email =
 {
-	show: function (sXHTMLElementID, oParam)
-	{
-		oParam = oParam || {};
-		var iSource = ns1blankspace.util.getParam(oParam, 'source', {'default': ns1blankspace.data.searchSource.text}).value;
-		var iMinimumLength = ns1blankspace.util.getParam(oParam, 'minimumLength', {'default': 1}).value;
-		var sMethod = ns1blankspace.util.getParam(oParam, 'method').value;
-		var sSearchText = ns1blankspace.util.getParam(oParam, 'searchText').value;
-		var iMaximumColumns = ns1blankspace.util.getParam(oParam, 'maximumColumns', {'default': 3}).value;
-		var bEmailOnly = ns1blankspace.util.getParam(oParam, 'emailOnly', {'default': false}).value;
-		var sParentSearchID = ns1blankspace.util.getParam(oParam, 'contactBusiness').value;
-		var sSetXHTMLElementID = ns1blankspace.util.getParam(oParam, 'setXHTMLElementID').value;
-		var sParentElementID;
-		
-		var sElementID = sXHTMLElementID.split('-').shift();
-		var lElementSearchContext = (sXHTMLElementID.indexOf('-') > -1) ? sXHTMLElementID.split('-').pop() : undefined;
-			
-		if (sElementID != '')
-		{
-			var sMethod = $('#' + sElementID).attr("data-method");
-			var sParentElementID = $('#' + sElementID).attr("data-parent");
-			oParam.onComplete = $('#' + sElementID).attr("data-click");
-			if ($.type(oParam.onComplete) == 'string')
-			{
-				oParam.onComplete = ns1blankspace.util.toFunction(oParam.onComplete);
-			}
-			else if ($.type(oParam.onComplete) != 'function')
-			{
-				delete(oParam.onComplete);
-			}
-		}	
-		
-		if (lElementSearchContext != undefined)
-		{
-			if (sSetXHTMLElementID === undefined) {sSetXHTMLElementID = sElementID}
-			sXHTMLElementID = 'contactEmail-' + lElementSearchContext;
-
-			
-			if (bEmailOnly) 
-			{
-				oParam.value = $('#' + sXHTMLElementID).html();
-				oParam.contactBusiness = $('#' + sXHTMLElementID).attr('data-contactbusiness');
-				oParam.contactBusinessText = $('#' + sXHTMLElementID.replace('Email', 'Business')).html();
-				oParam.contactPerson = lElementSearchContext;
-				oParam.contactPersonText = $('#' + sXHTMLElementID).attr('data-firstname') + ' ' + $('#' + sXHTMLElementID).attr('data-surname');
-				ns1blankspace.search.email.convertAddressToDiv(oParam);
-			}
-			else
-			{
-				$('#' + sSetXHTMLElementID).val($('#' + sXHTMLElementID).parent().attr('data-firstname') + ' ' + $('#' + sXHTMLElementID).parent().attr('data-surname'))
-			}	
-			
-			$('#' + sParentElementID).attr("data-id", $('#' + sXHTMLElementID).parent().attr('data-contactbusiness'));
-			$('#' + sParentElementID).val($('#' + sXHTMLElementID).parent().attr('data-contactbusinesstext'));
-
-			$(ns1blankspace.xhtml.container).hide();
-			if (oParam.onComplete)
-			{
-				ns1blankspace.util.onComplete(oParam);
-			}
-		}
-		else
-		{
-			ns1blankspace.container.position({xhtmlElementID: sXHTMLElementID});
-		
-			if (sSearchText === undefined) {sSearchText = ''};
-				
-			if (sSearchText === '' && iSource === ns1blankspace.data.searchSource.text)
-			{
-				sSearchText = $('#' + sElementID).val();
-			}	
-			
-			if (sSearchText.length >= iMinimumLength || iSource === ns1blankspace.data.searchSource.all)
-			{						
-				var sFirstName = sSearchText;
-				var sSurname = sSearchText;
-				if (sSearchText.split(' ').length == 2)
+	show: 		function (sXHTMLElementID, oParam)
 				{
-					sFirstName = sSearchText.split(' ').shift();
-					sSurname = sSearchText.split(' ').pop();
-				}
+					var iSource = ns1blankspace.data.searchSource.text;
+					var iMinimumLength = 1;
+					var sMethod;
+					var sSearchText;
+					var iMaximumColumns = 3;
+					var bEmailOnly = false;
+					var sParentSearchID;
+					var sParentElementID;
+					var sSetXHTMLElementID;
+					
+					if (oParam != undefined)
+					{
+						if (oParam.source != undefined) {iSource = oParam.source}
+						if (oParam.minimumLength != undefined) {iMinimumLength = oParam.minimumLength}
+						if (oParam.method != undefined) {sMethod = oParam.method}
+						if (oParam.searchText != undefined) {sSearchText = oParam.searchText}
+						if (oParam.maximumColumns != undefined) {iMaximumColumns = oParam.maximumColumns}
+						if (oParam.emailOnly != undefined) {bEmailOnly = oParam.emailOnly}
+						if (oParam.contactBusiness != undefined) {sParentSearchId = oParam.contactBusiness}
+						if (oParam.setXHTMLElementID != undefined) {sSetXHTMLElementID = oParam.setXHTMLElementID}
+					}
 
-				var oSearch = new AdvancedSearch();
-				oSearch.rows = 10;
-				oSearch.method = 'CONTACT_PERSON_SEARCH';
-				oSearch.addField( 'firstname,surname,contactbusinesstext,contactbusiness,email');
+					var aSearch = sXHTMLElementID.split('-');
+					var sElementID = aSearch[0];
+					var lElementSearchContext = aSearch[1];
+						
+					if (sElementID != '')
+					{
+						var sMethod = $('#' + sElementID).attr("data-method");
+						var sParentElementID = $('#' + sElementID).attr("data-parent");
+						oParam.onComplete = $('#' + sElementID).attr("data-click");
+						if ($.type(oParam.onComplete) == 'string')
+						{
+							oParam.onComplete = ns1blankspace.util.toFunction(oParam.onComplete);
+						}
+						else if ($.type(oParam.onComplete) != 'function')
+						{
+							delete(oParam.onComplete);
+						}
+					}	
+					
+					if (lElementSearchContext != undefined)
+					{
+						if (sSetXHTMLElementID === undefined) {sSetXHTMLElementID = sElementID}
+					
+						var lDataID = $('#' + sSetXHTMLElementID).attr("data-id")
+						lDataID = (lDataID === undefined) ? aSearch[1] : lDataID + '-' + aSearch[1];
+						$('#' + sSetXHTMLElementID).attr("data-id", lDataID)
+						
+						var sValue = $('#' + sSetXHTMLElementID).val();
+						
+						oParam.contactBusiness = $('#' + sXHTMLElementID).parent().attr('data-contactbusiness');
+						oParam.contactPerson = aSearch[1];
+						oParam.value = sValue;
+						if (bEmailOnly) 
+						{
+							sValue = (sValue === '') 
+									? $('#' + sXHTMLElementID).parent().attr('data-email') 
+									: sValue + ';' + $('#' + sXHTMLElementID).parent().attr('data-email');
+								
+							$('#' + sSetXHTMLElementID)
+								.val(sValue)
+								.attr('data-values', sValue) 
+								//.attr('data-values', ($('#' + sSetXHTMLElementID).attr('data-values') === undefined 
+								//											? $('#' + sXHTMLElementID).parent().attr('data-email') 
+								//											: sValue + ';' + $('#' + sXHTMLElementID).parent().attr('data-email')
+								//											))
+								.attr('data-contactbusiness', ($('#' + sSetXHTMLElementID).attr('data-contactbusiness') == undefined
+																	? $('#' + sXHTMLElementID).parent().attr('data-contactbusiness')
+																	: $('#' + sSetXHTMLElementID).attr('data-contactbusiness') + 
+																		'-' + $('#' + sXHTMLElementID).parent().attr('data-contactbusiness')))
+								.attr('data-contactbusinesstext', ($('#' + sSetXHTMLElementID).attr('data-contactbusinesstext') == undefined)
+																	? $('#' + sXHTMLElementID).parent().attr('data-contactbusinesstext')
+																	: $('#' + sSetXHTMLElementID).attr('data-contactbusinesstext') + 
+																		'-' + $('#' + sXHTMLElementID).parent().attr('data-contactbusinesstext'));
+						}
+						else
+						{
+							$('#' + sSetXHTMLElementID).val($('#' + sXHTMLElementID).parent().attr('data-firstname') + ' ' + $('#' + sXHTMLElementID).parent().attr('data-surname'))
+						}	
+						
+						$('#' + sParentElementID).attr("data-id", $('#' + sXHTMLElementID).parent().attr('data-contactbusiness'));
+						$('#' + sParentElementID).val($('#' + sXHTMLElementID).parent().attr('data-contactbusinesstext'));
 
-				oSearch.addBracket('(');
-				oSearch.addFilter('contactbusinesstext', 'TEXT_IS_LIKE', sSearchText);
-				oSearch.addOperator('or');
-				oSearch.addBracket('(');
-				oSearch.addFilter('firstname', 'TEXT_IS_LIKE', (sSearchText != sFirstName) ? sFirstName : sSearchText);
-				oSearch.addOperator((sFirstName != sSurname ? 'and' : 'or'));
-				oSearch.addFilter('surname', 'TEXT_IS_LIKE', (sSearchText != sSurname) ? sSurname : sSearchText);
-				oSearch.addBracket(')');
-				
-				if (bEmailOnly)
-				{
-					oSearch.addOperator('or');
-					oSearch.addFilter('email', 'TEXT_IS_LIKE', sSearchText);
-				}
+						$(ns1blankspace.xhtml.container).hide();
+						if (oParam.onComplete)
+						{
+							ns1blankspace.util.onComplete(oParam);
+						}
+					}
+					else
+					{
+						ns1blankspace.container.position({xhtmlElementID: sXHTMLElementID});
+					
+						if (sSearchText === undefined) {sSearchText = ''};
+							
+						if (sSearchText === '' && iSource === ns1blankspace.data.searchSource.text)
+						{
+							sSearchText = $('#' + sElementID).val();
+						}	
+						
+						if (sSearchText.length >= iMinimumLength || iSource === ns1blankspace.data.searchSource.all)
+						{						
+							var sFirstName = sSearchText;
+							var sSurname = sSearchText;
+							if (sSearchText.split(' ').length == 2)
+							{
+								sFirstName = sSearchText.split(' ').shift();
+								sSurname = sSearchText.split(' ').pop();
+							}
 
-				oSearch.addBracket(')');
-				
-				if (sParentElementID != undefined)
-				{
-					var sParentSearchText = $('#' + sParentElementID).val();
-					sParentSearchID = $('#' + sParentElementID).attr("data-id");
-				}	
-				
-				if (sParentSearchID != undefined)
-				{
-					oSearch.addFilter('contactbusiness', 'EQUAL_TO', sParentSearchID);
-				}
-				else if	(sParentSearchText != undefined)
-				{
-					oSearch.addFilter('contactbusinesstext', 'TEXT_STARTS_WITH', sParentSearchText);
-				}
-				
-				if (bEmailOnly)
-				{
-					oSearch.addFilter('email', 'TEXT_IS_NOT_EMPTY');
-				}	
-										
-				oSearch.getResults(function (data) {ns1blankspace.search.email.process(data, sElementID, oParam)}) 								
-			}
-		};
-	},
+							var oSearch = new AdvancedSearch();
+							oSearch.rows = 10;
+							oSearch.method = 'CONTACT_PERSON_SEARCH';
+							oSearch.addField( 'firstname,surname,contactbusinesstext,contactbusiness,email');
 
-	convertAddressToDiv: function(oParam)
-	{	
-		var iContactPerson = ns1blankspace.util.getParam(oParam, 'contactPerson').value;
-		var iContactBusiness = ns1blankspace.util.getParam(oParam, 'contactBusiness').value;
-		var sContactBusinessText = ns1blankspace.util.getParam(oParam, 'contactBusinessText').value;
-		var sName = ns1blankspace.util.getParam(oParam, 'contactPersonText').value;
-		var oElement = ns1blankspace.util.getParam(oParam, 'element').value;
-		var oParentElement = ns1blankspace.util.getParam(oParam, 'setXHTMLElementID').value;
-		var sValue = ns1blankspace.util.getParam(oParam, 'value').value;
-		var sHTML = '';
-		var aParentHTML = [];
+							oSearch.addBracket('(');
+							oSearch.addFilter('contactbusinesstext', 'TEXT_IS_LIKE', sSearchText);
+							oSearch.addOperator('or');
+							oSearch.addBracket('(');
+							oSearch.addFilter('firstname', 'TEXT_IS_LIKE', (sSearchText != sFirstName) ? sFirstName : sSearchText);
+							oSearch.addOperator((sFirstName != sSurname ? 'and' : 'or'));
+							oSearch.addFilter('surname', 'TEXT_IS_LIKE', (sSearchText != sSurname) ? sSurname : sSearchText);
+							oSearch.addBracket(')');
+							
+							if (bEmailOnly)
+							{
+								oSearch.addOperator('or');
+								oSearch.addFilter('email', 'TEXT_IS_LIKE', sSearchText);
+							}
 
-		if (oParentElement)
-		{
-			oParentElement = $('#' + oParentElement);
-
-			// First check if valid email address
-			if (sValue.length > 0 && sValue.indexOf('@') > 0 && sValue.indexOf('.') > 1)
-			{
-				sValue = sValue.replace(/,/g, ';');
-				sValue = sValue.replace(/ /g, '');
-
-				// Now put the email address in a span (if oElement passed, reset input element) and add to oParentElement
-				ns1blankspace.status.clear();
-				
-				sHTML = '<div class="emailRecipient ns1blankspaceRecipient"' + 
-							(iContactBusiness ? ' data-contactBusiness="' + iContactBusiness + '"' : '') +
-							(iContactPerson ? ' data-contactPerson="' + iContactPerson + '"' : '') +
-							(sName ? ' data-contactPersonText="' + sName + '"' : '') +
-							(sContactBusinessText ? 'data-contactBusinessText="' + sContactBusinessText + '"' : '') +
-							'>' +
-						sValue + ' <span class="removeRecipient" style="color: #545454; font-weight: bold;">x</span>' +
-						'</div>';
-
-				if (oElement)
-				{
-					$(oElement)
-						.addClass('ns1blankspaceWatermark')
-						.val('Type new address');
-				}
-
-				if ($(oParentElement).get(0).tagName == 'INPUT')
-				{
-					$(oParentElement).html($(oParentElement).html().split('<input ').shift() +
-																sHTML + '<input ' + 
-																$(oParentElement).html().split('<input ').pop());
-				}
-				else
-				{
-					$(oParentElement).html(sHTML + $(oParentElement).html());
-				}
-			
-			}
-			else
-			{
-				if (oElement) 
-				{
-					$(oElement)
-						.addClass('ns1blankspaceWatermark')
-						.val('Enter address manually');
-				}
-			}
-
-
-			ns1blankspace.search.email.recipientBind();
-		}
-	},
-
-	recipientBind: function()
-	{		
-		// Bind remove recipient button
-		$('span.removeRecipient').unbind('click');
-
-		$('span.removeRecipient')
-			.css('cursor', 'pointer')
-			.click(function()
-			{
-				$(this).parent().remove();
-			});
-
-		$('span.emailRecipient').unbind('hover')
-
-		// Bind the email Recipient - changed background when hover over
-		$('span.emailRecipient')
-		.on( 'hover', function()
-		{
-			$(this).css('background-color', '#F0F0EE')
-		},
-		function()
-		{
-			$(this).css('background-color', '#FFFFFF')
-		});
-
-		// bind manual entry of recipient
-		$('.ns1blankspaceRecipientManual')
-		.off('click')
-		.on('keyup', function(event)
-		{
-			// enter, space, comma, semi-colon (different for FF)
-			if (event.which == 13 || event.which == 32 || event.which == 188  
-				|| (navigator.userAgent.indexOf('Firefox') > -1 && event.which == 59)
-				|| (navigator.userAgent.indexOf('Firefox') == -1 && event.which == 186))
-			{
-				ns1blankspace.search.email.convertAddressToDiv(
-				{
-					element: this, 
-					setXHTMLElementID: $(this).parent().attr('id'), 
-					value: $(this).val()
-				});	
-			}
-
-		})
-		.focusout(function()
-		{
-			ns1blankspace.search.email.convertAddressToDiv(
-			{
-				element: this, 
-				setXHTMLElementID: $(this).parent().attr('id'), 
-				value: $(this).val()
-			});	
-		});
-	},
+							oSearch.addBracket(')');
+							
+							if (sParentElementID != undefined)
+							{
+								var sParentSearchText = $('#' + sParentElementID).val();
+								sParentSearchID = $('#' + sParentElementID).attr("data-id");
+							}	
+							
+							if (sParentSearchID != undefined)
+							{
+								oSearch.addFilter('contactbusiness', 'EQUAL_TO', sParentSearchID);
+							}
+							else if	(sParentSearchText != undefined)
+							{
+								oSearch.addFilter('contactbusinesstext', 'TEXT_STARTS_WITH', sParentSearchText);
+							}
+							
+							if (bEmailOnly)
+							{
+								oSearch.addFilter('email', 'TEXT_IS_NOT_EMPTY');
+							}	
+													
+							oSearch.getResults(function (data) {ns1blankspace.search.email.process(data, sElementID, oParam)}) 								
+						}
+					};
+				},
 
 	process: function (oResponse, sElementID, oParam)
-	{
-		var iColumn = 0;
-		var aHTML = [];
-		var h = -1;
-		var iMaximumColumns = 1;
-		var sData;
-		
-		if (oResponse.data.rows.length === 0)
-		{
-			$(ns1blankspace.xhtml.container).hide();
-		}
-		else
-		{
-			aHTML.push('<table class="ns1blankspaceSearchMedium">');
-				
-			$.each(oResponse.data.rows, function()
-			{								
-				aHTML.push(ns1blankspace.search.email.row(this, oParam));
-			});
-	    	
-			aHTML.push('</table>');
-		
-			$(ns1blankspace.xhtml.container).html(
-				ns1blankspace.render.init(
 				{
-					html: aHTML.join(''),
-					more: (oResponse.morerows === 'true')
-				})
-			);
-		
-			$(ns1blankspace.xhtml.container).show(ns1blankspace.option.showSpeedOptions);
-			
-			$('td.ns1blankspaceSearch').click(function(event)
-			{
-				$(ns1blankspace.xhtml.container).hide(200);
-				ns1blankspace.search.email.show(event.target.id, oParam);
-			});
+					var iColumn = 0;
+					var aHTML = [];
+					var h = -1;
+					var iMaximumColumns = 1;
+					var sData;
+					
+					if (oResponse.data.rows.length === 0)
+					{
+						$(ns1blankspace.xhtml.container).hide();
+					}
+					else
+					{
+						aHTML.push('<table class="ns1blankspaceSearchMedium">');
+							
+						$.each(oResponse.data.rows, function()
+						{								
+							aHTML.push(ns1blankspace.search.email.row(this, oParam));
+						});
+				    	
+						aHTML.push('</table>');
+					
+						$(ns1blankspace.xhtml.container).html(
+							ns1blankspace.render.init(
+							{
+								html: aHTML.join(''),
+								more: (oResponse.morerows === 'true')
+							})
+						);
+					
+						$(ns1blankspace.xhtml.container).show(ns1blankspace.option.showSpeedOptions);
+						
+						$('td.ns1blankspaceSearch').click(function(event)
+						{
+							$(ns1blankspace.xhtml.container).hide(200);
+							ns1blankspace.search.email.show(event.target.id, oParam);
+						});
 
-			ns1blankspace.render.bind(
-			$.extend(oParam,
-			{
-				columns: 'firstname-surname-email-contactbusinesstext',
-				idColumns: 'firstname-surname-contactbusiness-contactbusinesstext-email',
-				more: oResponse.moreid, 
-				rows: oResponse.rows,
-				functionSearch: ns1blankspace.search.email.show,
-				xhtmlElementID: sElementID,
-				type: 'JSON',
-				functionRow: ns1blankspace.search.email.row
-			}));
-		}
-	},
+						ns1blankspace.render.bind(
+						$.extend(oParam,
+						{
+							columns: 'firstname-surname-email-contactbusinesstext',
+							idColumns: 'firstname-surname-contactbusiness-contactbusinesstext-email',
+							more: oResponse.moreid, 
+							rows: oResponse.rows,
+							functionSearch: ns1blankspace.search.email.show,
+							xhtmlElementID: sElementID,
+							type: 'JSON',
+							functionRow: ns1blankspace.search.email.row
+						}));
+					}
+				},
 
 	row: 		function (oRow, oParam)
-	{
-		var bCompact = ns1blankspace.util.getParam(oParam, 'compact', {"default": true}).value
+				{
+					var bCompact = ns1blankspace.util.getParam(oParam, 'compact', {"default": true}).value
 
-		var sData = ' data-firstname="' + oRow.firstname + '"' +
-						' data-surname="' + oRow.surname + '"' +
-						' data-contactbusiness="' + oRow.contactbusiness + '"' +
-						' data-contactbusinesstext="'+ oRow.contactbusinesstext + '"' +
-						' data-email="' + oRow.email + '"';
-		
-		var aHTML = [];
+					var sData = ' data-firstname="' + oRow.firstname + '"' +
+									' data-surname="' + oRow.surname + '"' +
+									' data-contactbusiness="' + oRow.contactbusiness + '"' +
+									' data-contactbusinesstext="'+ oRow.contactbusinesstext + '"' +
+									' data-email="' + oRow.email + '"';
+					
+					var aHTML = [];
 
-		aHTML.push('<tr class="ns1blankspaceSearch"' + sData + '>');
-		
-		if (bCompact)
-		{
-			aHTML.push('<td class="ns1blankspaceSearch" id="contact-' + oRow.id + '">' + 
-							'<div id="contactEmail-' + oRow.id + '"' + sData + '>' + oRow.email + '</div>' +
-							'<div class="ns1blankspaceSub" id="contactName-' + oRow.id + '">' + oRow.firstname + ' ' + oRow.surname + '</div>' +
-							'<div class="ns1blankspaceSub" id="contactBusiness-' + oRow.id + '">' + oRow.contactbusinesstext + '</div>' +
-									'</td>');
-		}
-		else
-		{
-			aHTML.push('<td class="ns1blankspaceSearch" id="contactName-' + oRow.id +
-									'"' + sData + '>' + oRow.firstname + ' ' + oRow.surname + 
-									'</td>');
-									
-			aHTML.push('<td class="ns1blankspaceSearch" id="contactEmail-' + oRow.id +
-									'">' + oRow.email +
-									'</td>');
-									
-			aHTML.push('<td class="ns1blankspaceSearch" id="contactBusiness-' + oRow.id +
-									'">' + oRow.contactbusinesstext +
-									'</td>');
-		}	
-									
-		aHTML.push('</tr>');
+					aHTML.push('<tr class="ns1blankspaceSearch"' + sData + '>');
+					
+					if (bCompact)
+					{
+						aHTML.push('<td class="ns1blankspaceSearch" id="-' + oRow.id + '">' + 
+										'<div id="-' + oRow.id + '">' + oRow.email + '</div>' +
+										'<div class="ns1blankspaceSub" id="-' + oRow.id + '">' + oRow.firstname + ' ' + oRow.surname + '</div>' +
+										'<div class="ns1blankspaceSub" id="-' + oRow.id + '">' + oRow.contactbusinesstext + '</div>' +
+												'</td>');
+					}
+					else
+					{
+						aHTML.push('<td class="ns1blankspaceSearch" id="-' + oRow.id +
+												'">' + oRow.firstname +
+												'</td>');
+												
+						aHTML.push('<td class="ns1blankspaceSearch" id="-' + oRow.id +
+												'">' + oRow.surname +
+												'</td>');
+																		
+						aHTML.push('<td class="ns1blankspaceSearch" id="-' + oRow.id +
+												'">' + oRow.email +
+												'</td>');
+												
+						aHTML.push('<td class="ns1blankspaceSearch" id="-' + oRow.id +
+												'">' + oRow.contactbusinesstext +
+												'</td>');
+					}	
+												
+					aHTML.push('</tr>');
 
-		return aHTML.join('');
-	}			
-}								
+					return aHTML.join('');
+				}			
+}				
 
 ns1blankspace.render =
 {

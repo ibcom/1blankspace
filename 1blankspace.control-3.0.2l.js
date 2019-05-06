@@ -127,7 +127,7 @@ ns1blankspace.xhtml.templates.source =
 ns1blankspace.xhtml.logonNotes = undefined;
 ns1blankspace.xhtml.logonContainer =
 {
-	"background": 'url(/site/388/1blankspace.cover-1.0.1.jpg)',
+	"background": 'url(/site/388/1blankspace.cover-1.0.4.jpg)',
 	"background-size": 'cover'
 }
 
@@ -284,7 +284,7 @@ ns1blankspace.scripts =
 	},
 	{
 		nameSpace: '1blankspace.project',
-		source: '/jscripts/1blankspace.project-2.0.1.js'
+		source: '/site/388/1blankspace.project-2.0.2.js'
 	},
 	{
 		nameSpace: '1blankspace.projectTask',
@@ -292,7 +292,7 @@ ns1blankspace.scripts =
 	},
 	{
 		nameSpace: '1blankspace.product',
-		source: '/jscripts/1blankspace.product-2.0.1.js'
+		source: '/site/388/1blankspace.product-2.0.4.js'
 	},
 	{
 		nameSpace: '1blankspace.order',

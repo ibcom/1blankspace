@@ -14,3 +14,18 @@ aHTML.push('<div class="btn-group-vertical" role="group" data-toggle="buttons" i
 aHTML.push('<label class="btn btn-default" id="ns1blankspaceUnallocatedColumnType-3">' +
 						'<input type="radio" name="radioType" data-1blankspace="ignore" />Expenses' +
 						'</label>');
+
+
+var sSelect = 'label';
+
+if (!ns1blankspace.option.bootstrap)
+{
+	$('#ns1blankspaceBankAccountColumnItemType').buttonset().css('font-size', '0.75em');
+	$('#ns1blankspaceBankAccountColumnItemMode').buttonset().css('font-size', '0.75em');
+	sSelect = ':radio'
+}
+
+$('#ns1blankspaceBankAccountColumnItemType ' + sSelect).click(function()
+
+aHTML.push('<div class="ns1blankspaceCaption" style="padding-left:8px;">RECENT</div>');
+aHTML.push('<table id="ns1blankspaceMostLikely" class="table">');

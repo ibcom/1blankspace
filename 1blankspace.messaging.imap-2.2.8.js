@@ -703,14 +703,16 @@ ns1blankspace.messaging.imap =
 					html: '<br />You are already editing a message.<br />', 
 					buttons:  
 					[
-						{text: "Continue editing",
+						{
+							text: "Continue editing",
 							click: function() 
 							{
 								$(this).dialog('destroy');
 								ns1blankspace.messaging.imap.message.edit.show({continueEditing: true});
 							}
 						},
-						{text: "Discard & delete Draft", 
+						{
+							text: "Discard & delete Draft", 
 							click: function() 
 							{
 								$(this).dialog('destroy');
@@ -721,7 +723,8 @@ ns1blankspace.messaging.imap =
 								ns1blankspace.messaging.imap.inbox.discardMessage(oParam);
 							}
 						},
-						{text: "Discard & keep Draft",
+						{
+							text: "Discard & keep Draft",
 							click: function() 
 							{
 								$(this).dialog('destroy');
@@ -3120,14 +3123,14 @@ ns1blankspace.messaging.imap =
 							
 								if (ns1blankspace.option.bootstrap)
 								{
-									aHTML.push('<div id="ns1blankspaceEditMessageAttachContainer">' +
+									aHTML.push('<div>' +
 														'<label class="btn btn-default" id="ns1blankspaceEditMessageAttach">' +
 														'</label>' +
 												'</div>');
 								}
 								else
 								{
-									aHTML.push('<div id="ns1blankspaceEditMessageAttachContainer" style="font-size:0.875em;">' +
+									aHTML.push('<div style="font-size:0.875em;">' +
 												'<input type="checkbox" id="ns1blankspaceEditMessageAttach" class="ns1blankspaceAction"/>' +
 												'<label style="font-size:0.875em;" for="ns1blankspaceEditMessageAttach"></label>' +
 												'</div>');
@@ -3930,7 +3933,7 @@ ns1blankspace.messaging.imap =
 				{
 					sXHTMLElementID = "ns1blankspaceEditMessageAttach";
 					
-					if (!$('#ns1blankspaceEditMessageAttach').attr('checked'))
+					if ($('#ns1blankspaceEditMessageAttachContainer:visible').length > 0)
 					{
 						$(ns1blankspace.xhtml.dropDownContainer).hide()
 					}
@@ -3965,21 +3968,38 @@ ns1blankspace.messaging.imap =
 							ns1blankspace.container.position({xhtmlElementContainerID: ns1blankspace.xhtml.dropDownContainer.replace('#',''),
 																xhtmlElementID: sXHTMLElementID, leftOffset: 28, topOffset: -36})
 						
-							aHTML.push('<table style="width:287px; padding-top:0px;" class="ns1blankspaceViewControlContainer">');
+							aHTML.push('<table id="ns1blankspaceEditMessageAttachContainer" style="width:287px; padding-top:0px;" class="ns1blankspaceViewControlContainer">');
 
 							aHTML.push('<tr><td>');
 
-							aHTML.push('<div id="ns1blankspaceAttachMethod" style="font-size:0.875em;">');
+							if (ns1blankspace.option.bootstrap)
+							{
+								aHTML.push('<div class="btn-group" role="group" data-toggle="buttons" id="ns1blankspaceAttachMethod" style="margin-left:5px; font-size:0.875em;">');
 
-							aHTML.push('<input type="radio" id="ns1blankspaceAttachMethod-upload" name="radioAttachMethod" checked="checked" />' +
-											'<label for="ns1blankspaceAttachMethod-upload" style="width:100px; margin-right:2px; font-size:0.75em; width:75px;">' +
-											'Upload</label>');
+								aHTML.push('<label class="btn btn-sm btn-default active" id="ns1blankspaceAttachMethod-upload">' +
+												'<input type="radio" name="radioType" data-1blankspace="ignore" />Upload' +
+												'</label>');
 
-							aHTML.push('<input type="radio" id="ns1blankspaceAttachMethod-existing" name="radioAttachMethod" />' +
-											'<label for="ns1blankspaceAttachMethod-existing" style="width:100px; margin-right:2px; font-size:0.75em; width:75px;">' +
-											'Existing</label>');
+								aHTML.push('<label class="btn btn-sm btn-default" id="ns1blankspaceAttachMethod-existing">' +
+												'<input type="radio" name="radioType" data-1blankspace="ignore" />Existing' +
+												'</label>');
 
-							aHTML.push('</div>');
+								aHTML.push('</div>');
+							}
+							else
+							{
+								aHTML.push('<div id="ns1blankspaceAttachMethod" style="font-size:0.875em;">');
+
+								aHTML.push('<input type="radio" id="ns1blankspaceAttachMethod-upload" name="radioAttachMethod" checked="checked" />' +
+												'<label for="ns1blankspaceAttachMethod-upload" style="width:100px; margin-right:2px; font-size:0.75em; width:75px;">' +
+												'Upload</label>');
+
+								aHTML.push('<input type="radio" id="ns1blankspaceAttachMethod-existing" name="radioAttachMethod" />' +
+												'<label for="ns1blankspaceAttachMethod-existing" style="width:100px; margin-right:2px; font-size:0.75em; width:75px;">' +
+												'Existing</label>');
+
+								aHTML.push('</div>');
+							}
 
 							aHTML.push('</td></tr>');
 
@@ -4034,9 +4054,16 @@ ns1blankspace.messaging.imap =
 								 //ns1blankspace.attachments.upload.process({functionPostUpdate: ns1blankspace.messaging.imap.message.edit.attach.process});
 							});
 
-							$('#ns1blankspaceAttachMethod').buttonset();
+							var sSelect = 'label';
 
-							$('#ns1blankspaceAttachMethod :radio').click(function()
+							if (!ns1blankspace.option.bootstrap)
+							{
+								$('#ns1blankspaceAttachMethod').buttonset();
+
+								sSelect = ':radio'
+							}
+
+							$('#ns1blankspaceAttachMethod ' + sSelect).click(function()
 							{
 								$('div.ns1blankspaceMessageEditAttach').hide();
 

@@ -708,12 +708,18 @@ ns1blankspace.action =
 			
 			$('#ns1blankspaceDetailsColumn1').html(aHTML.join(''));
 			
-			$('input.ns1blankspaceDate').datetimepicker({ 
+			/*$('input.ns1blankspaceDate').datetimepicker({ 
 				dateFormat: 'dd M yy',
 				timeFormat: 'h:mm TT',
 				stepMinute: 5,
 				ampm: true
-				});
+				});*/
+
+			ns1blankspace.util.initDatePicker(
+			{
+				select: 'input.ns1blankspaceDate',
+				time: true
+			});
 			
 			var aHTML = [];
 				

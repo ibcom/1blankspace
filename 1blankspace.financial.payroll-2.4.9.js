@@ -6849,7 +6849,7 @@ ns1blankspace.financial.payroll.superannuation =
 						var sSearchText = ns1blankspace.financial.payroll.superannuation.data.searchText;
 						var sSearchDate = ns1blankspace.financial.payroll.superannuation.data.searchDate;
 
-						if (sSearchText != undefined)
+						if (sSearchText != undefined && sSearchText != '')
 						{
 							oSearch.addBracket('(');
 							oSearch.addFilter('contactpersonpaidtotext', 'TEXT_IS_LIKE', sSearchText);
@@ -6860,7 +6860,7 @@ ns1blankspace.financial.payroll.superannuation =
 							oSearch.addBracket(')');
 						}
 
-						if (sSearchDate != undefined)
+						if (sSearchDate != undefined && sSearchDate != '')
 						{
 							oSearch.addFilter('accrueddate', 'LESS_THAN_OR_EQUAL_TO', sSearchDate);
 						}
@@ -6948,7 +6948,7 @@ ns1blankspace.financial.payroll.superannuation =
 						oSearch.addFilter('outstandingamount', 'NOT_EQUAL_TO', 0);
 						oSearch.addFilter('contactbusinesspaidto', 'IN_LIST', aContactBusiness.join(','));
 
-						if (sSearchText != undefined)
+						if (sSearchText != undefined && sSearchText != '')
 						{
 							oSearch.addBracket('(');
 							oSearch.addFilter('contactpersonpaidtotext', 'TEXT_IS_LIKE', sSearchText);
@@ -6964,7 +6964,7 @@ ns1blankspace.financial.payroll.superannuation =
 							oSearch.addFilter('bankaccount', 'EQUAL_TO', iSearchBankAccount);
 						}
 
-						if (sSearchDate != undefined)
+						if (sSearchDate != undefined && sSearchDate != '')
 						{
 							oSearch.addFilter('accrueddate', 'LESS_THAN_OR_EQUAL_TO', sSearchDate);
 						}
@@ -6998,7 +6998,7 @@ ns1blankspace.financial.payroll.superannuation =
 
 							aHTML.push('<table id="ns1blankspacePayrollSuperannuationExpense" class="ns1blankspace" style="font-size:0.875em;">' +
 										'<tr class="ns1blankspaceHeaderCaption">' +
-										'<td class="ns1blankspaceHeaderCaption" style="width:100px;">Contact</td>' +
+										'<td class="ns1blankspaceHeaderCaption" style="width:100px;">Fund</td>' +
 										'<td class="ns1blankspaceHeaderCaption">Description</td>' +
 										'<td class="ns1blankspaceHeaderCaption" style="width:50px; text-align:right;">Amount</td>' +
 										'<td class="ns1blankspaceHeaderCaption" style="width:70px; text-align:right;">Due Date</td>' +
@@ -7118,8 +7118,8 @@ ns1blankspace.financial.payroll.superannuation =
 						})
 						.click(function() 
 						{
-							oParam = ns1blankspace.util.setParam(oParam, 'searchText', undefined);
-							oParam = ns1blankspace.util.setParam(oParam, 'searchDate', undefined);
+							oParam = ns1blankspace.util.setParam(oParam, 'searchText', '');
+							oParam = ns1blankspace.util.setParam(oParam, 'searchDate', '');
 							ns1blankspace.financial.payroll.superannuation.expenses(oParam);
 						})
 						.css('width', '57px');
