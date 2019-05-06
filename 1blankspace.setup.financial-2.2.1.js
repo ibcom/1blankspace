@@ -462,7 +462,7 @@ ns1blankspace.setup.financial =
 						
 						$('#ns1blankspaceGeneralColumn2').html(aHTML.join(''));
 
-						$('input.ns1blankspaceDate').datepicker({dateFormat: 'dd M yy'});
+						ns1blankspace.util.initDatePicker({select: 'input.ns1blankspaceDate'});
 
 						if (ns1blankspace.objectContextData != undefined)
 						{

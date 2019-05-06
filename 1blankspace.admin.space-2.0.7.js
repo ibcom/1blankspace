@@ -155,8 +155,8 @@ ns1blankspace.admin.space =
 						}
 						else
 						{
-							aHTML.push('<table>');
-							aHTML.push('<tr><td class="ns1blankspaceCaption">RECENT</td></tr>');
+							aHTML.push('<div class="ns1blankspaceCaption" style="padding-left:8px;">RECENT</div>');
+							aHTML.push('<table id="ns1blankspaceMostLikely" class="table">');
 
 							$.each(oResponse.data.rows, function(r, row)
 							{
