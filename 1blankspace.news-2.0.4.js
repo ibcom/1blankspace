@@ -70,12 +70,9 @@ ns1blankspace.news =
 							aHTML.push('</table>');
 						}
 						else
-						{
-						
-							aHTML.push('<table id="ns1blankspaceMostLikely">');
-							aHTML.push('<tr>');
-							aHTML.push('<td class="ns1blankspaceCaption">RECENT</td>');
-							aHTML.push('</tr>');
+						{			
+							aHTML.push('<div class="ns1blankspaceCaption" style="padding-left:8px;">RECENT</div>');
+							aHTML.push('<table id="ns1blankspaceMostLikely" class="table">');
 
 							$.each(oResponse.data.rows, function()
 							{
@@ -535,8 +532,8 @@ search: 		{
 							
 						$('#ns1blankspaceDetailsColumn2').html(aHTML.join(''));
 
-						$('input.ns1blankspaceDate').datepicker({ dateFormat: ns1blankspace.option.dateFormat });
-						
+						ns1blankspace.util.initDatePicker({select: 'input.ns1blankspaceDate'});
+
 						if (ns1blankspace.objectContextData != undefined)
 						{
 							$('#ns1blankspaceDetailsSubject').val(ns1blankspace.objectContextData.subject);

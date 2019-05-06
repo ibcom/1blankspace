@@ -838,7 +838,7 @@ ns1blankspace.financial.receipt =
 						
 						$('#ns1blankspaceDetailsColumn1').html(aHTML.join(''));
 						
-						$('input.ns1blankspaceDate').datepicker({dateFormat: 'dd M yy'});
+						ns1blankspace.util.initDatePicker({select: 'input.ns1blankspaceDate'});
 						
 						ns1blankspace.financial.util.tax.codes(
 						{

@@ -5761,15 +5761,21 @@ ns1blankspace.util =
 	datePickerOpen: function (oElement, oInstance)
 				{
 					$('#ui-datepicker-div').css('box-shadow', '0 6px 12px rgba(0,0,0,.175)');
+					$('#ui-datepicker-div').css('font-size', '0.75em');	
 
-					if ($('.ui-timepicker-div').length > 0)
+					setTimeout(function()
 					{
-						$('.ui-timepicker-div').after('<div style="text-align:right; width:100%;" id="ui-datepicker-div-close">Close</div>');
-						$('#ui-datepicker-div-close').click(function ()
+			            $('.ui-datepicker').css('z-index', 9999999);
+			            if ($('.ui-timepicker-div').length > 0)
 						{
-							$('#ui-datepicker-div').hide()
-						})
-					}
+							$('.ui-timepicker-div').css('margin-top', '6px;')
+							$('.ui-timepicker-div').after('<div style="text-align:right; width:100%; padding-right:6px; padding-bottom:4px;" class="ns1blankspaceRowSelect" id="ui-datepicker-div-close">Close</div>');
+							$('#ui-datepicker-div-close').click(function ()
+							{
+								$('#ui-datepicker-div').hide()
+							})
+						}
+			        }, 0);
 				},
 
 	datePickerClose: function (sDate, oElement)

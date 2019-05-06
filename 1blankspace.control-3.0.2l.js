@@ -296,7 +296,7 @@ ns1blankspace.scripts =
 	},
 	{
 		nameSpace: '1blankspace.order',
-		source: '/site/312/1blankspace.order-2.0.2.js'
+		source: '/site/388/1blankspace.order-2.0.5.js'
 	},
 	{
 		nameSpace: '1blankspace.financial',
@@ -3606,7 +3606,7 @@ ns1blankspace.actions =
 			
 			$('#ns1blankspaceEditColumn1').html(aHTML.join(''));
 
-			$('input.ns1blankspaceDate').datepicker({dateFormat: 'dd M yy'});
+			ns1blankspace.util.initDatePicker({select: 'input.ns1blankspaceDate'});
 
 			$('#ns1blankspaceActionAddSubject').focus();
 
