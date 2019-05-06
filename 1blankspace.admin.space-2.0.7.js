@@ -827,6 +827,12 @@ ns1blankspace.admin.space =
 								aHTML.push('</table>');
 
 								$(ns1blankspace.xhtml.container).html(aHTML.join(''));
+
+								$(ns1blankspace.xhtml.container).css(
+								{
+									width: $(ns1blankspace.xhtml.container + ' table').width()
+								});
+
 								$(ns1blankspace.xhtml.container).show();
 								
 								$('#ns1blankspaceSpaceSubscriptionsSelect td.ns1blankspaceRowSelect').click(function(event)

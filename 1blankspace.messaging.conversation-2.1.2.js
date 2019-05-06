@@ -78,9 +78,9 @@ ns1blankspace.messaging.conversation =
 			}
 			else
 			{
-				aHTML.push('<table>');
-				aHTML.push('<tr><td class="ns1blankspaceCaption">RECENT</td></tr>');
-
+				aHTML.push('<div class="ns1blankspaceCaption" style="padding-left:8px;">RECENT</div>');
+				aHTML.push('<table id="ns1blankspaceMostLikely" class="table">');
+				
 				$.each(oResponse.data.rows, function()
 				{
 					aHTML.push('<tr class="ns1blankspaceRow">');

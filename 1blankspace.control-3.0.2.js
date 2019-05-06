@@ -33,7 +33,7 @@ ns1blankspace.option = $.extend(true, ns1blankspace.option,
 	taxOffice: 'ATO',
 	bulkInvoicing: true,
 	postInit: undefined,
-	initialiseSpaceTemplate: '/site/312/1blankspace.setup.space-2.0.1.json',
+	initialiseSpaceTemplate: '/site/1903/1blankspace.setup.space-2.0.1.json',
 	searchWatermark: 'search',
 	showLogonOptions: false,
 	showLogonOptionsOnHover: false,
@@ -121,7 +121,7 @@ ns1blankspace.xhtml.templates.source =
 	invoiceschedule: '/jscripts/1blankspace.setup.financial.invoiceschedule-1.0.0.html',
 	payment: '/jscripts/1blankspace.setup.financial.payment-1.0.0.html',
 	action: '/jscripts/1blankspace.setup.action-1.0.0.html',
-	receipt: '/site/312/1blankspace.setup.financial.receipt-1.0.0.html'
+	receipt: '/site/1903/1blankspace.setup.financial.receipt-1.0.0.html'
 }	
 
 ns1blankspace.xhtml.logonNotes = undefined;
@@ -142,7 +142,7 @@ ns1blankspace.xhtml.header =
 				       	'<span class="icon-bar"></span>' +
 				        	'<span class="icon-bar"></span>' +
 			      	'</button>' +
-			      	'<a class="navbar-brand" style="padding-top: 10px;" href="/"><img id="ns1blankspaceNavigationLogo" style="height:40px;" src="/site/312/1blankspace.aoe.miy-2.0.3.png"></a>' +
+			      	'<a class="navbar-brand" style="padding-top: 10px;" href="/"><img id="ns1blankspaceNavigationLogo" style="height:40px;" src="/site/1903/1blankspace.aoe.miy-2.0.3.png"></a>' +
 			    '</div>' +
 
 			    '<div class="collapse navbar-collapse" id="ns1blankspace-navbar-collapse-1">' +
@@ -236,7 +236,7 @@ ns1blankspace.scripts =
 [
 	{
 		nameSpace: '1blankspace.advancedsearch',
-		source: '/site/312/1blankspace.advancedsearch-2.0.6.js'
+		source: '/site/1903/1blankspace.advancedsearch-2.0.6.js'
 	},
 	{
 		nameSpace: '1blankspace.home',
@@ -364,7 +364,7 @@ ns1blankspace.scripts =
 	},
 	{
 		nameSpace: '1blankspace.setup.action',
-		source: '/site/312/1blankspace.setup.action-2.0.2.js'
+		source: '/site/1903/1blankspace.setup.action-2.0.2.js'
 	},
 	{
 		nameSpace: '1blankspace.setup.messaging',
@@ -384,7 +384,7 @@ ns1blankspace.scripts =
 	},
 	{
 		nameSpace: '1blankspace.setup.space',
-		source: '/site/312/1blankspace.setup.space-2.0.9.js'
+		source: '/site/1903/1blankspace.setup.space-2.1.0.js'
 	},
 	{
 		nameSpace: '1blankspace.setup.structure',
@@ -412,7 +412,7 @@ ns1blankspace.scripts =
 	},
 	{
 		nameSpace: '1blankspace.structureData',
-		source: '/site/312/1blankspace.structuredata-2.0.1.js'
+		source: '/site/1903/1blankspace.structuredata-2.0.1.js'
 	},
 	{
 		nameSpace: '1blankspace.supportIssue',
@@ -464,7 +464,7 @@ ns1blankspace.scripts =
 	},
 	{
 		nameSpace: '1blankspace.admin.monitoring',
-		source: '/site/312/1blankspace.admin.monitoring-2.0.3.js'
+		source: '/site/1903/1blankspace.admin.monitoring-2.0.3.js'
 	},
 	{
 		nameSpace: '1blankspace.developer.membership',
@@ -504,7 +504,7 @@ ns1blankspace.scripts =
 	},
 	{
 		nameSpace: '1blankspace.util.contacts',
-		source: '/site/312/1blankspace.util.contact-2.0.1.js'
+		source: '/site/1903/1blankspace.util.contact-2.0.1.js'
 	}
 ]
 
@@ -513,7 +513,7 @@ ns1blankspace.themes =
 	{
 		title: 				'Standard',
 		cssURI: 			'', 
-		xhtmlHeaderLogo: 	'<img style="height:46px;" src="/site/312/1blankspace.aoe.miy-2.0.3.png">',
+		xhtmlHeaderLogo: 	'<img style="height:46px;" src="/site/1903/1blankspace.aoe.miy-2.0.3.png">',
 		"default": 			true
 	},
 	{

@@ -1,5 +1,10 @@
 @media only screen
 {
+	.progress-bar
+	{
+		background-color: #ee8f00;
+	}
+
 	.btn.active, .btn:active
 	{
 		box-shadow: none;

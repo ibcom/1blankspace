@@ -2129,14 +2129,30 @@ ns1blankspace.logon =
 									'<input id="ns1blankspaceLogonPasswordTOTPCode" class="ns1blankspaceLogon" type="tel" autocomplete="nope">' +
 									'</td></tr>');
 
-					aHTML.push('<tr>' +
+					if (ns1blankspace.option.bootstrap)
+					{
+						aHTML.push('<tr>' +
 								'<td class="ns1blankspaceLogon" style="width:110px">' +
 								'<span id="ns1blankspaceLogonSend">Log on</span>' +
 								'</td>');
 
-					aHTML.push('<td id="ns1blankspaceLogonStatus" style="vertical-align:middle;">' +
+						aHTML.push('<td class="ns1blankspaceSub" style="vertical-align:middle;">' +
+								'<div style="margin-left:-28px; margin-top:1px;" id="ns1blankspaceLogonStatus"></div>' +
+								'</td></tr>');
+					}
+					else
+					{
+						aHTML.push('<tr>' +
+								'<td class="ns1blankspaceLogon" style="width:110px">' +
+								'<span id="ns1blankspaceLogonSend">Log on</span>' +
+								'</td>');
+
+						aHTML.push('<td id="ns1blankspaceLogonStatus" style="vertical-align:middle;">' +
 								'&nbsp;' +
 								'</td></tr>');
+					}	
+
+					
 
 					aHTML.push('<tr><td id="ns1blankspaceLogonMessage" class="ns1blankspaceSub" colspan=2 style="padding-top:15px; padding-bottom:15px;">' +
 									sMessage + '</td></tr>');
@@ -2235,6 +2251,22 @@ ns1blankspace.logon =
 					});
 
 					$('#ns1blankspaceLogonPassword').keypress(function(e)
+					{
+					    if (e.which === 13)
+					    {
+					        ns1blankspace.logon.init();
+					    }
+					});
+
+					$('#ns1blankspaceLogonPasswordCode').keypress(function(e)
+					{
+					    if (e.which === 13)
+					    {
+					        ns1blankspace.logon.init();
+					    }
+					});
+
+					$('#ns1blankspaceLogonPasswordTOTPCode').keypress(function(e)
 					{
 					    if (e.which === 13)
 					    {
@@ -2394,7 +2426,12 @@ ns1blankspace.logon =
 					{
 						var bSendPasswordCode = false;
 
-						var sPasswordCode = $('#ns1blankspaceLogonPasswordCode').val();
+						var sPasswordCode;
+
+						if ($('#ns1blankspaceLogonPasswordCode').is(':visible'))
+						{
+							sPasswordCode = $('#ns1blankspaceLogonPasswordCode').val();
+						}
 
 						if (sPasswordCode == undefined)
 						{
