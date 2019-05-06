@@ -290,7 +290,14 @@ ns1blankspace.financial.payroll =
 									.click(function()
 									{
 										ns1blankspace.show({selector: '#ns1blankspaceMainTotals', refresh: true});
-										ns1blankspace.financial.payroll.totals.show();
+
+										var oData = $(this);
+
+										ns1blankspace.financial.payroll.totals.show(
+										{
+											startDate: oData.attr('data-startdate'),
+											endDate: oData.attr('data-paydate')
+										});
 									});
 								}		
 				},
@@ -4605,8 +4612,8 @@ ns1blankspace.financial.payroll.totals =
 {
 	show: 		function (oParam, oResponse)
 				{
-					var sStartDate = ns1blankspace.util.getParam(oParam, 'startDate', {"default":ns1blankspace.financial.data.defaults.startdate}).value;
-					var sEndDate = ns1blankspace.util.getParam(oParam, 'endDate', {"default":ns1blankspace.financial.data.defaults.enddate}).value;
+					var sStartDate = ns1blankspace.util.getParam(oParam, 'startDate', {"default": ns1blankspace.financial.data.defaults.startdate}).value;
+					var sEndDate = ns1blankspace.util.getParam(oParam, 'endDate', {"default": ns1blankspace.financial.data.defaults.enddate}).value;
 
 					if (oParam == undefined)
 					{	
@@ -7293,7 +7300,7 @@ ns1blankspace.financial.payroll.superannuation =
 					aHTML.push('<span id="ns1blankspacePayrollSuperannuationExpense_option-' + oRow['id'] + '-1"' +
 									' class="ns1blankspaceRowView"></span></td>');
 					aHTML.push('</tr>');
-					
+
 
 					return aHTML.join('');
 				},
