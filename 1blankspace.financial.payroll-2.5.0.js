@@ -224,7 +224,7 @@ ns1blankspace.financial.payroll =
 											aHTML.push('<td class="ns1blankspaceHeaderCaption" style="width:100px;">Pay Date</td>');
 											aHTML.push('<td class="ns1blankspaceHeaderCaption" style="width:120px;">Start Date</td>');
 											aHTML.push('<td class="ns1blankspaceHeaderCaption">Status</td>');
-											aHTML.push('<td class="ns1blankspaceHeaderCaption">&nbsp&</td>');
+											aHTML.push('<td class="ns1blankspaceHeaderCaption" style="text-align:right;">Totals & ' + ns1blankspace.option.taxOffice + ' Reporting</td>');
 											aHTML.push('<tr>')
 	
 											$.each(oResponse.data.rows, function()
@@ -269,7 +269,7 @@ ns1blankspace.financial.payroll =
 
 									aHTML.push('<span id="ns1blankspaceMostLikely_totals-' + this.id + '"' +
 													' data-startdate="' + oRow["startdate"] + '"' +
-													' data-paydate="' + oRow["paydate"] + '"'
+													' data-paydate="' + oRow["paydate"] + '"' + 
 													' class="ns1blankspaceRowTotals"></span></td>');
 									aHTML.push('</tr>');
 
@@ -285,7 +285,11 @@ ns1blankspace.financial.payroll =
 
 									$('#ns1blankspaceMostLikely .ns1blankspaceRowTotals').button(
 									{
-										label: 'totals'
+										text: false,
+										icons:
+										{
+											primary: "glyphicon-list-alt"
+										}
 									})
 									.click(function()
 									{
@@ -298,7 +302,8 @@ ns1blankspace.financial.payroll =
 											startDate: oData.attr('data-startdate'),
 											endDate: oData.attr('data-paydate')
 										});
-									});
+									})
+									.css('width', '30px');
 								}		
 				},
 
@@ -4171,8 +4176,8 @@ ns1blankspace.financial.payroll =
 							{
 								ns1blankspace.financial.expense.init({id: (this.id).split('-')[1]});
 							})
-							.css('width', '15px')
-							.css('height', '20px');
+							.css('width', ns1blankspace.option.rowButtonWidth)
+							.css('height', ns1blankspace.option.rowButtonHeight);
 						}
 					}
 
@@ -6038,11 +6043,6 @@ ns1blankspace.financial.payroll.totals =
 										}
 									},
 
-									payPeriod: function (oParam, oResponse)
-									{
-										if (oResponse.)
-									},
-
 									process: function (oParam, oResponse)
 									{
 										var oFormat = ns1blankspace.financial.payroll.totals.employees.report.data.format;
@@ -6092,6 +6092,11 @@ ns1blankspace.financial.payroll.totals =
 
 											$('#ns1blankspacePayrollEmployeeTotalsColumn1').html(JSON.stringify(ns1blankspace.financial.payroll.totals.employees.report.data.object))
 										}	
+									},
+
+									show: function (oParam, oResponse)
+									{
+
 									}
 								}								
 				}
