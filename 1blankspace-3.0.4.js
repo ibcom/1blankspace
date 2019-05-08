@@ -115,6 +115,8 @@ ns1blankspace.data = {search: []};
 ns1blankspace.debug = {};
 ns1blankspace.authenticationLevel = 1;
 ns1blankspace.session = {};
+ns1blankspace.rootnamespace = ns1blankspace;
+ns1blankspace.rootnamespacetext = "ns1blankspace";
 
 ns1blankspace.selector = 'body';
 
