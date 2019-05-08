@@ -3349,7 +3349,8 @@ ns1blankspace.search =
 
 										$.each(aColumns, function(i) 
 										{
-											if (this != 'space' && this != 'comma' && this != 'pipe' && this != 'column' && this != 'hyphen' && this != 'openbracket' && this != 'closebracket')
+											if (this != 'space' && this != 'comma' && this != 'pipe' && this != 'column' 
+												&& this != 'hyphen' && this != 'openbracket' && this != 'closebracket')
 											{	
 												if (i != 0)
 												{
@@ -3576,7 +3577,8 @@ ns1blankspace.search =
 
 						$.each(aColumns, function() 
 						{
-							if (this != 'space' && this != 'comma' && this != 'pipe' && this != 'column' && this != 'hyphen' && this != 'openbracket' && this != 'closebracket')
+							if (this != 'space' && this != 'comma' && this != 'pipe' && this != 'column' && this != 'hyphen'
+								&& this != 'openbracket' && this != 'closebracket')
 							{	
 								oSearch.addField(this);
 							}	
@@ -3604,7 +3606,8 @@ ns1blankspace.search =
 
 							$.each(aColumns, function(i) 
 							{
-								if (this != 'space' && this != 'comma' && this != 'pipe' && this != 'column' && this != 'hyphen')
+								if (this != 'space' && this != 'comma' && this != 'pipe' && this != 'column' && this != 'hyphen'
+									&& this != 'openbracket' && this != 'closebracket')
 								{	
 									if (i != 0)
 									{
@@ -3835,7 +3838,7 @@ ns1blankspace.search =
 										
 									case 'hyphen':
 										aHTML.push('-');
-										break;
+										break;	
 
 									case 'openbracket':
 										aHTML.push('(')
