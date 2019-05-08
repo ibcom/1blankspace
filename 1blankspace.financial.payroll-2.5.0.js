@@ -199,7 +199,7 @@ ns1blankspace.financial.payroll =
 											
 											var oSearch = new AdvancedSearch();
 											oSearch.method = 'FINANCIAL_PAYROLL_PAY_PERIOD_SEARCH';
-											oSearch.addField('startdate,paydate,statustext');
+											oSearch.addField('startdate,paydate,statustext,guid');
 											oSearch.sort('paydate', 'desc');
 											oSearch.getResults(function(data){ns1blankspace.financial.payroll.home.show(oParam, data)});
 										}
@@ -259,17 +259,19 @@ ns1blankspace.financial.payroll =
 									aHTML.push('<td id="ns1blankspaceMostLikely_paydate-' + oRow.id + '" class="ns1blankspaceRow ns1blankspaceRowSelect" style="width:150px;">' +
 																		oRow["paydate"] + '</td>');
 
-									aHTML.push('<td id="ns1blankspaceMostLikely_startdate-' + this.id + '" class="ns1blankspaceRow ns1blankspaceSub">' +
+									aHTML.push('<td id="ns1blankspaceMostLikely_startdate-' + oRow.id + '" class="ns1blankspaceRow ns1blankspaceSub">' +
 																		oRow["startdate"] + '</td>');
 												
-									aHTML.push('<td id="ns1blankspaceMostLikely_status-' + this.id + '" class="ns1blankspaceRow  ns1blankspaceSub">' +
+									aHTML.push('<td id="ns1blankspaceMostLikely_status-' + oRow.id + '" class="ns1blankspaceRow  ns1blankspaceSub">' +
 																		oRow.statustext + '</td>');
 
 									aHTML.push('<td style="text-align:right;" class="ns1blankspaceRow">');
 
-									aHTML.push('<span id="ns1blankspaceMostLikely_totals-' + this.id + '"' +
+									aHTML.push('<span id="ns1blankspaceMostLikely_totals-' + oRow.id + '"' +
 													' data-startdate="' + oRow["startdate"] + '"' +
-													' data-paydate="' + oRow["paydate"] + '"' + 
+													' data-paydate="' + oRow["paydate"] + '"' +
+													' data-guid="' + oRow["guid"] + '"' +
+													' data-id="' + oRow["id"] + '"' +  
 													' class="ns1blankspaceRowTotals"></span></td>');
 									aHTML.push('</tr>');
 
@@ -300,7 +302,9 @@ ns1blankspace.financial.payroll =
 										ns1blankspace.financial.payroll.totals.show(
 										{
 											startDate: oData.attr('data-startdate'),
-											endDate: oData.attr('data-paydate')
+											endDate: oData.attr('data-paydate'),
+											guid: oData.attr('data-guid'),
+											id: oData.attr('data-id')
 										});
 									})
 									.css('width', '30px');
@@ -4619,6 +4623,7 @@ ns1blankspace.financial.payroll.totals =
 				{
 					var sStartDate = ns1blankspace.util.getParam(oParam, 'startDate', {"default": ns1blankspace.financial.data.defaults.startdate}).value;
 					var sEndDate = ns1blankspace.util.getParam(oParam, 'endDate', {"default": ns1blankspace.financial.data.defaults.enddate}).value;
+					var sGUID = ns1blankspace.util.getParam(oParam, 'guid', {"default": sStartDate + '-' + sEndDate}).value;
 
 					if (oParam == undefined)
 					{	
@@ -4641,6 +4646,7 @@ ns1blankspace.financial.payroll.totals =
 					
 					ns1blankspace.financial.payroll.data.startDate = sStartDate;
 					ns1blankspace.financial.payroll.data.endDate = sEndDate;
+					ns1blankspace.financial.payroll.data.guid = sGUID;
 
 					ns1blankspace.financial.payroll.data.context = 'totals';
 
@@ -5771,7 +5777,7 @@ ns1blankspace.financial.payroll.totals =
 													},
 													{
 														name: 'ProductID',
-														param: 'ATOProductID'
+														param: 'atoProductID'
 													},
 													{
 														name: 'EventDate',
@@ -6016,11 +6022,50 @@ ns1blankspace.financial.payroll.totals =
 										
 									init: function (oParam, oResponse)
 									{
+										//singletouch.com.au Sandbox Client ID: "8d7e6f25-2c6e-44ee-a65a-e9b9c12f5fc0"
+										//https://sandbox.singletouch.com.au/Support/StpEventModel
+
 										//ns1blankspace.financial.payroll.data.summaries
 										var iPayPeriod = ns1blankspace.util.getParam(oParam, 'payPeriod').value;
-										//for W1/W2
 
-										oParam = ns1blankspace.util.setParam(oParam, 'contactBusinessText', ns1blankspace.user.contactBusinessText)
+										if (oResponse == undefined)
+										{
+											var oSearch = new AdvancedSearch();
+											oSearch.method = 'CONTACT_BUSINESS_SEARCH';		
+											oSearch.addField('tradename,legalname,abn,phonenumber,faxnumber,email,streetaddress1,streetaddress2,streetsuburb,streetstate,streetpostcode,' +
+																	'mailingaddress1,mailingaddress2,mailingsuburb,mailingstate,mailingpostcode');
+											oSearch.rows = 1;
+											oSearch.addFilter('id', 'EQUAL_TO', (ns1blankspace.spaceContactBusiness || ns1blankspace.user.contactBusiness))
+											
+											oSearch.getResults(function(oResponse)
+											{
+
+											});
+										}
+										
+										//for W1/W2
+										var oData = ns1blankspace.financial.payroll.data;
+
+										var oPeriod = {W1: 0, W2: 0};
+
+										$.each(oData.summaries, function (s, summary)
+										{
+											oPeriod.W1 = oPeriod.W1 + numeral(summary.grosssalary).value();
+											oPeriod.W2 = oPeriod.W2 + numeral(summary.taxbeforerebate).value();
+										});
+
+										if (oParam == undefined) {oParam = {}}
+
+										$.extend(true, oParam,
+										{
+											contactBusinessText: ns1blankspace.user.contactBusinessText,
+											contactBusinessABN: 
+											payDate: oData.enddate,
+											atoProductID: '10594',
+											employerPeriodW1: oPeriod.W1,
+											employerPeriodW2: oPeriod.W2
+											guid: oData.startdate + '-' + oData.enddate
+										})
 
 										if (_.isUndefined(oResponse))
 										{
@@ -6090,13 +6135,27 @@ ns1blankspace.financial.payroll.totals =
 
 											ns1blankspace.financial.payroll.totals.employees.report.data.object = oData;
 
-											$('#ns1blankspacePayrollEmployeeTotalsColumn1').html(JSON.stringify(ns1blankspace.financial.payroll.totals.employees.report.data.object))
+											ns1blankspace.financial.payroll.totals.employees.report.show(oParam)
 										}	
 									},
 
 									show: function (oParam, oResponse)
 									{
+										console.log(ns1blankspace.financial.payroll.totals.employees.report.data.object);
 
+										var aHTML = [];
+
+										if (ns1blankspace.financial.payroll.totals.employees.report.data.object != undefined)
+										{
+											$.each(ns1blankspace.financial.payroll.totals.employees.report.data.object, function (key ,value)
+											{
+												aHTML.push(
+													'<tr><td>' + key + '</td><td>' + value + '</td></tr>'
+												);
+											});
+										}
+
+										$('#ns1blankspacePayrollEmployeeTotalsColumn1').html(aHTML.join(''))
 									}
 								}								
 				}

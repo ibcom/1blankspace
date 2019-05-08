@@ -4,8 +4,8 @@
  * http://creativecommons.org/licenses/by-sa/4.0/
  */
 
-ns1blankspace.xhtml.loading = '<img class="ns1blankspaceLoading" id="ns1blankspaceLoading" src="/site/388/1blankspace.loading.round.20.gif">';
-ns1blankspace.xhtml.loadingSmall = '<img class="ns1blankspaceLoadingSmall" id="ns1blankspaceLoadingSmall" src="/site/388/1blankspace.loading.round.10.gif">';
+ns1blankspace.xhtml.loading = '<img class="ns1blankspaceLoading" id="ns1blankspaceLoading" src="/site/1903/1blankspace.loading.round.20.gif">';
+ns1blankspace.xhtml.loadingSmall = '<img class="ns1blankspaceLoadingSmall" id="ns1blankspaceLoadingSmall" src="/site/1903/1blankspace.loading.round.10.gif">';
 ns1blankspace.xhtml.editorCSS = '';
 
 ns1blankspace.option = $.extend(true, ns1blankspace.option, 
@@ -33,7 +33,7 @@ ns1blankspace.option = $.extend(true, ns1blankspace.option,
 	taxOffice: 'ATO',
 	bulkInvoicing: true,
 	postInit: undefined,
-	initialiseSpaceTemplate: '/site/312/1blankspace.setup.space-2.0.1.json',
+	initialiseSpaceTemplate: '/site/1903/1blankspace.setup.space-2.0.1.json',
 	searchWatermark: 'search',
 	showLogonOptions: false,
 	showLogonOptionsOnHover: false,
@@ -121,13 +121,13 @@ ns1blankspace.xhtml.templates.source =
 	invoiceschedule: '/jscripts/1blankspace.setup.financial.invoiceschedule-1.0.0.html',
 	payment: '/jscripts/1blankspace.setup.financial.payment-1.0.0.html',
 	action: '/jscripts/1blankspace.setup.action-1.0.0.html',
-	receipt: '/site/312/1blankspace.setup.financial.receipt-1.0.0.html'
+	receipt: '/site/1903/1blankspace.setup.financial.receipt-1.0.0.html'
 }	
 
 ns1blankspace.xhtml.logonNotes = undefined;
 ns1blankspace.xhtml.logonContainer =
 {
-	"background": 'url(/site/388/1blankspace.cover-1.0.4.jpg)',
+	"background": 'url(/site/1903/1blankspace.cover-1.0.4.jpg)',
 	"background-size": 'cover'
 }
 
@@ -142,7 +142,7 @@ ns1blankspace.xhtml.header =
 				       	'<span class="icon-bar"></span>' +
 				        	'<span class="icon-bar"></span>' +
 			      	'</button>' +
-			      	'<a class="navbar-brand" style="padding-top: 10px;" href="/"><img id="ns1blankspaceNavigationLogo" style="height:40px;" src="/site/312/1blankspace.aoe.miy-2.0.3.png"></a>' +
+			      	'<a class="navbar-brand" style="padding-top: 10px;" href="/"><img id="ns1blankspaceNavigationLogo" style="height:40px;" src="/site/1903/1blankspace.aoe.miy-2.0.3.png"></a>' +
 			    '</div>' +
 
 			    '<div class="collapse navbar-collapse" id="ns1blankspace-navbar-collapse-1">' +
@@ -236,47 +236,47 @@ ns1blankspace.scripts =
 [
 	{
 		nameSpace: '1blankspace.advancedsearch',
-		source: '/site/312/1blankspace.advancedsearch-2.0.6.js'
+		source: '/site/1903/1blankspace.advancedsearch-2.0.6.js'
 	},
 	{
 		nameSpace: '1blankspace.home',
-		source: '/site/388/1blankspace.home-2.0.6.js'
+		source: '/site/1903/1blankspace.home-2.0.6.js'
 	},
 	{
 		nameSpace: '1blankspace.format',
-		source: '/site/388/1blankspace.format-2.2.1.js'
+		source: '/site/1903/1blankspace.format-2.2.1.js'
 	},
 	{
 		nameSpace: '1blankspace.contactPerson',
-		source: '/site/388/1blankspace.contactperson-2.0.8.js'
+		source: '/site/1903/1blankspace.contactperson-2.0.8.js'
 	},
 	{
 		nameSpace: '1blankspace.contactBusiness',
-		source: '/site/388/1blankspace.contactbusiness-2.1.0.js'
+		source: '/site/1903/1blankspace.contactbusiness-2.1.0.js'
 	},
 	{
 		nameSpace: '1blankspace.opportunity',
-		source: '/site/388/1blankspace.opportunity-2.0.1.js'
+		source: '/site/1903/1blankspace.opportunity-2.0.1.js'
 	},
 	{
 		nameSpace: '1blankspace.action',
-		source: '/site/388/1blankspace.action-2.1.1.js'
+		source: '/site/1903/1blankspace.action-2.1.1.js'
 	},
 	{
 		nameSpace: '1blankspace.messaging.conversation',
-		source: '/site/388/1blankspace.messaging.conversation-2.1.2.js'
+		source: '/site/1903/1blankspace.messaging.conversation-2.1.2.js'
 	},
 	{
 		nameSpace: '1blankspace.messaging.imap',
-		source: '/site/388/1blankspace.messaging.imap-2.2.8.js'
+		source: '/site/1903/1blankspace.messaging.imap-2.2.8.js'
 	},
 	{
 		nameSpace: '1blankspace.document',
-		source: '/site/388/1blankspace.document-2.0.2.js'
+		source: '/site/1903/1blankspace.document-2.0.2.js'
 	},
 	{
 		nameSpace: '1blankspace.news',
-		source: '/site/388/1blankspace.news-2.0.4.js'
+		source: '/site/1903/1blankspace.news-2.0.4.js'
 	},
 	{
 		nameSpace: '1blankspace.event',
@@ -284,7 +284,7 @@ ns1blankspace.scripts =
 	},
 	{
 		nameSpace: '1blankspace.project',
-		source: '/site/388/1blankspace.project-2.0.2.js'
+		source: '/site/1903/1blankspace.project-2.0.2.js'
 	},
 	{
 		nameSpace: '1blankspace.projectTask',
@@ -292,87 +292,87 @@ ns1blankspace.scripts =
 	},
 	{
 		nameSpace: '1blankspace.product',
-		source: '/site/388/1blankspace.product-2.0.4.js'
+		source: '/site/1903/1blankspace.product-2.0.4.js'
 	},
 	{
 		nameSpace: '1blankspace.order',
-		source: '/site/388/1blankspace.order-2.0.5.js'
+		source: '/site/1903/1blankspace.order-2.0.5.js'
 	},
 	{
 		nameSpace: '1blankspace.financial',
-		source: '/site/388/1blankspace.financial-2.3.8.js'
+		source: '/site/1903/1blankspace.financial-2.3.8.js'
 	},
 	{
 		nameSpace: '1blankspace.financial.bankAccount',
-		source: '/site/388/1blankspace.financial.bankaccount-2.4.5.js'
+		source: '/site/1903/1blankspace.financial.bankaccount-2.4.5.js'
 	},
 	{
 		nameSpace: '1blankspace.financial.invoice',
-		source: '/site/388/1blankspace.financial.invoice-2.2.0.js'
+		source: '/site/1903/1blankspace.financial.invoice-2.2.0.js'
 	},
 	{
 		nameSpace: '1blankspace.financial.expense',
-		source: '/site/388/1blankspace.financial.expense-2.1.6.js'
+		source: '/site/1903/1blankspace.financial.expense-2.1.6.js'
 	},
 	{
 		nameSpace: '1blankspace.financial.receipt',
-		source: '/site/388/1blankspace.financial.receipt-2.1.3.js'
+		source: '/site/1903/1blankspace.financial.receipt-2.1.3.js'
 	},
 	{
 		nameSpace: '1blankspace.financial.payment',
-		source: '/site/388/1blankspace.financial.payment-2.1.5.js'
+		source: '/site/1903/1blankspace.financial.payment-2.1.5.js'
 	},
 	{
 		nameSpace: '1blankspace.financial.credit',
-		source: '/site/388/1blankspace.financial.credit-2.0.7.js'
+		source: '/site/1903/1blankspace.financial.credit-2.0.7.js'
 	},
 	{
 		nameSpace: '1blankspace.financial.journal',
-		source: '/site/388/1blankspace.financial.journal-2.0.7.js'
+		source: '/site/1903/1blankspace.financial.journal-2.0.7.js'
 	},
 	{
 		nameSpace: '1blankspace.financial.tax',
-		source: '/site/388/1blankspace.financial.tax-2.0.6.js'
+		source: '/site/1903/1blankspace.financial.tax-2.0.6.js'
 	},
 	{
 		nameSpace: '1blankspace.financial.payroll',
-		source: '/site/388/1blankspace.financial.payroll-2.5.0.js'
+		source: '/site/1903/1blankspace.financial.payroll-2.4.9.js'
 	},
 	{
 		nameSpace: '1blankspace.financial.budget',
-		source: '/site/388/1blankspace.financial.budget-2.0.4.js'
+		source: '/site/1903/1blankspace.financial.budget-2.0.4.js'
 	},
 	{
 		nameSpace: '1blankspace.financial.compliance',
-		source: '/site/388/1blankspace.financial.compliance-2.0.7.js'
+		source: '/site/1903/1blankspace.financial.compliance-2.0.7.js'
 	},
 	{
 		nameSpace: '1blankspace.report',
-		source: '/site/388/1blankspace.report-2.4.2.js'
+		source: '/site/1903/1blankspace.report-2.4.2.js'
 	},
 	{
 		nameSpace: '1blankspace.setup',
-		source: '/site/388/1blankspace.setup-2.0.2.js'
+		source: '/site/1903/1blankspace.setup-2.0.2.js'
 	},
 	{
 		nameSpace: '1blankspace.setup.automation',
-		source: '/site/388/1blankspace.setup.automation-2.0.1.js'
+		source: '/site/1903/1blankspace.setup.automation-2.0.1.js'
 	},
 	{
 		nameSpace: '1blankspace.setup.financial',
-		source: '/site/388/1blankspace.setup.financial-2.2.1.js'
+		source: '/site/1903/1blankspace.setup.financial-2.2.1.js'
 	},
 	{
 		nameSpace: '1blankspace.setup.action',
-		source: '/site/312/1blankspace.setup.action-2.0.2.js'
+		source: '/site/1903/1blankspace.setup.action-2.0.2.js'
 	},
 	{
 		nameSpace: '1blankspace.setup.messaging',
-		source: '/site/388/1blankspace.setup.messaging-2.1.2.js'
+		source: '/site/1903/1blankspace.setup.messaging-2.1.2.js'
 	},
 	{
 		nameSpace: '1blankspace.setup.networkGroup',
-		source: '/site/388/1blankspace.setup.networkgroup-2.0.3.js'
+		source: '/site/1903/1blankspace.setup.networkgroup-2.0.3.js'
 	},
 	{
 		nameSpace: '1blankspace.setup.project',
@@ -384,23 +384,23 @@ ns1blankspace.scripts =
 	},
 	{
 		nameSpace: '1blankspace.setup.space',
-		source: '/site/312/1blankspace.setup.space-2.0.9.js'
+		source: '/site/1903/1blankspace.setup.space-2.1.0.js'
 	},
 	{
 		nameSpace: '1blankspace.setup.structure',
-		source: '/site/388/1blankspace.setup.structure-2.0.5.js'
+		source: '/site/1903/1blankspace.setup.structure-2.0.5.js'
 	},
 	{
 		nameSpace: '1blankspace.setup.user',
-		source: '/site/388/1blankspace.setup.user-2.1.4.js'
+		source: '/site/1903/1blankspace.setup.user-2.1.4.js'
 	},
 	{
 		nameSpace: '1blankspace.setup.userRole',
-		source: '/site/388/1blankspace.setup.userRole-2.0.5.js'
+		source: '/site/1903/1blankspace.setup.userRole-2.0.5.js'
 	},
 	{
 		nameSpace: '1blankspace.setup.website',
-		source: '/site/388/1blankspace.setup.website-2.1.8.js'
+		source: '/site/1903/1blankspace.setup.website-2.1.8.js'
 	},
 	{
 		nameSpace: '1blankspace.setup.websiteForm',
@@ -412,15 +412,15 @@ ns1blankspace.scripts =
 	},
 	{
 		nameSpace: '1blankspace.structureData',
-		source: '/site/312/1blankspace.structuredata-2.0.1.js'
+		source: '/site/1903/1blankspace.structuredata-2.0.1.js'
 	},
 	{
 		nameSpace: '1blankspace.supportIssue',
-		source: '/site/388/1blankspace.supportissue-2.1.0.js'
+		source: '/site/1903/1blankspace.supportissue-2.1.0.js'
 	},
 	{
 		nameSpace: '1blankspace.setup.file',
-		source: '/site/388/1blankspace.setup.file-2.1.0.js'
+		source: '/site/1903/1blankspace.setup.file-2.1.0.js'
 	},
 	{
 		nameSpace: '1blankspace.developer.space',
@@ -436,7 +436,7 @@ ns1blankspace.scripts =
 	},
 	{
 		nameSpace: '1blankspace.connect',
-		source: '/site/388/1blankspace.connect-2.0.4.js'
+		source: '/site/1903/1blankspace.connect-2.0.4.js'
 	},
 	{
 		nameSpace: '1blankspace.util.whenDone',
@@ -460,11 +460,11 @@ ns1blankspace.scripts =
 	},
 	{
 		nameSpace: '1blankspace.admin.space',
-		source: '/site/388/1blankspace.admin.space-2.0.7.js'
+		source: '/site/1903/1blankspace.admin.space-2.0.7.js'
 	},
 	{
 		nameSpace: '1blankspace.admin.monitoring',
-		source: '/site/312/1blankspace.admin.monitoring-2.0.3.js'
+		source: '/site/1903/1blankspace.admin.monitoring-2.0.3.js'
 	},
 	{
 		nameSpace: '1blankspace.developer.membership',
@@ -504,7 +504,7 @@ ns1blankspace.scripts =
 	},
 	{
 		nameSpace: '1blankspace.util.contacts',
-		source: '/site/312/1blankspace.util.contact-2.0.1.js'
+		source: '/site/1903/1blankspace.util.contact-2.0.1.js'
 	}
 ]
 
@@ -513,7 +513,7 @@ ns1blankspace.themes =
 	{
 		title: 				'Standard',
 		cssURI: 			'', 
-		xhtmlHeaderLogo: 	'<img style="height:46px;" src="/site/312/1blankspace.aoe.miy-2.0.3.png">',
+		xhtmlHeaderLogo: 	'<img style="height:46px;" src="/site/1903/1blankspace.aoe.miy-2.0.3.png">',
 		"default": 			true
 	},
 	{
@@ -1792,7 +1792,7 @@ ns1blankspace.control =
 
 	user:			
 	{
-		show: function (oElement)
+		show: 		function (oElement)
 		{
 			if ($(ns1blankspace.xhtml.container).attr('data-initiator') == oElement.id)
 			{
@@ -1807,7 +1807,7 @@ ns1blankspace.control =
 
 				if (ns1blankspace.option.bootstrap)
 				{
-					$(ns1blankspace.xhtml.container).offset({ top: $(oElement).offset().top + $(oElement).height() - 10, left: $(oElement).offset().left + $(oElement).width() - 232});
+					$(ns1blankspace.xhtml.container).offset({ top: $(oElement).offset().top + $(oElement).height() - 10, left: $(oElement).offset().left + 20});
 				}
 				else
 				{
@@ -2252,7 +2252,7 @@ ns1blankspace.control =
 
 					if (ns1blankspace.option.bootstrap)
 					{
-						$(ns1blankspace.xhtml.container).offset({ top: $(oElement).offset().top + $(oElement).height() + 1, left: $(oElement).offset().left + $(oElement).width() - 300});
+						$(ns1blankspace.xhtml.container).offset({ top: $(oElement).offset().top + $(oElement).height() + 1, left: $(oElement).offset().left - 50});
 					}
 					else
 					{
