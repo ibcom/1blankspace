@@ -128,7 +128,8 @@ ns1blankspace.xhtml.logonNotes = undefined;
 ns1blankspace.xhtml.logonContainer =
 {
 	"background": 'url(/site/388/1blankspace.cover-1.0.4.jpg)',
-	"background-size": 'cover'
+	"background-size": 'cover',
+	"height": '100vh'
 }
 
 ns1blankspace.xhtml.header =
