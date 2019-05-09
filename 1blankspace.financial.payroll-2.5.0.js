@@ -4794,12 +4794,12 @@ ns1blankspace.financial.payroll.totals =
 
 										var oSearch = new AdvancedSearch();
 										oSearch.method = 'FINANCIAL_PAYROLL_EMPLOYEE_SEARCH';
-										oSearch.addField('employee.contactpersontext,employee.employmentstartdate,employee.statustext,employee.employeenumber,employee.taxfilenumber,' +
-															'employee.contactperson,employee.contactperson.firstname,employee.contactperson.surname,employee.contactperson.email,' +
+										oSearch.addField('employee.contactpersontext,employee.employmentstartdate,employee.employmentenddate,employee.statustext,employee.employeenumber,employee.taxfilenumber,' +
+															'employee.contactperson,employee.contactperson.firstname,employee.contactperson.surname,employee.contactperson.email,employee.contactperson.mobile,' +
 															'employee.contactperson.streetaddress1,employee.contactperson.streetaddress2,employee.contactperson.streetsuburb,' +
-															'employee.contactperson.streetstate,employee.contactperson.streetpostcode,employee.contactperson.dateofbirth,' +
+															'employee.contactperson.streetstate,employee.contactperson.streetpostcode,employee.contactperson.streetcountry,employee.contactperson.dateofbirth,' +
 															'employee.contactbusiness.tradename,employee.contactbusiness.abn,employee.contactbusiness.streetaddress1,employee.contactbusiness.streetaddress2,' +
-															'employee.contactbusiness.streetsuburb,employee.contactbusiness.streetstate,employee.contactbusiness.streetpostcode');
+															'employee.contactbusiness.streetsuburb,employee.contactbusiness.streetstate,employee.contactbusiness.streetpostcode,employee.contactbusiness.streetcountry');
 
 										if (sStartDate != undefined)
 										{
@@ -5016,7 +5016,7 @@ ns1blankspace.financial.payroll.totals =
 
 											$('#ns1blankspacePayrollTotalsSTPData').button(
 											{
-												label: 'Get Data'
+												label: 'Show Data'
 											})
 											.click(function()
 											{		
@@ -5596,7 +5596,7 @@ ns1blankspace.financial.payroll.totals =
 
 													var oSearch = new AdvancedSearch();
 													oSearch.method = 'CONTACT_BUSINESS_SEARCH';		
-													oSearch.addField('tradename,legalname,abn,phonenumber,faxnumber,email,streetaddress1,streetaddress2,streetsuburb,streetstate,streetpostcode,' +
+													oSearch.addField('tradename,legalname,abn,phonenumber,faxnumber,email,streetaddress1,streetaddress2,streetsuburb,streetstate,streetpostcode,streetcountry' +
 																			'mailingaddress1,mailingaddress2,mailingsuburb,mailingstate,mailingpostcode');
 													oSearch.rows = 1;
 													oSearch.addFilter('id', 'EQUAL_TO', (ns1blankspace.spaceContactBusiness || ns1blankspace.user.contactBusiness))
@@ -5753,6 +5753,7 @@ ns1blankspace.financial.payroll.totals =
 										{
 											header:
 											{
+												mustBeSetDefault: true,
 												fields:
 												[
 													{
@@ -5765,7 +5766,7 @@ ns1blankspace.financial.payroll.totals =
 													},
 													{
 														name: 'BranchID',
-														value: '1'
+														param: 'branchID'
 													},
 													{
 														name: 'BMSID',
@@ -5773,7 +5774,7 @@ ns1blankspace.financial.payroll.totals =
 													},
 													{
 														name: 'PayrollGroupID',
-														value: '1'
+														param: 'payrollGroupID'
 													},
 													{
 														name: 'ProductID',
@@ -5781,10 +5782,10 @@ ns1blankspace.financial.payroll.totals =
 													},
 													{
 														name: 'EventDate',
-														value: '{{now}}'
+														param: 'now'
 													},
 													{
-														name: 'PayDate',
+														name: 'PaymentDate',
 														param: 'payDate'
 													},
 													{
@@ -5793,11 +5794,11 @@ ns1blankspace.financial.payroll.totals =
 													},
 													{
 														name: 'IsUpdate',
-														value: 'false'
+														param: 'isUpdate'
 													},
 													{
 														name: 'IsFullFileReplacement',
-														value: 'true'
+														param: 'isFull'
 													},
 													{
 														name: 'DeclarationAcceptedBy',
@@ -5805,11 +5806,36 @@ ns1blankspace.financial.payroll.totals =
 													},
 													{
 														name: 'EmployerPeriodW1',
-														param: 'TaxW1'
+														param: 'employerPeriodW1'
 													},
 													{
 														name: 'EmployerPeriodW2',
-														param: 'TaxW2'
+														param: 'employerPeriodW2'
+													},
+													{
+														name: 'RegisteredAgentABN',
+														param: 'registeredAgentABN',
+														onlyIfData: true
+													},
+													{
+														name: 'RegisteredAgentNumber',
+														param: 'registeredAgentNumber',
+														onlyIfData: true
+													},
+													{
+														name: 'RegisteredAgentDecAcceptedBy',
+														param: 'registeredAgentDecAcceptedBy',
+														onlyIfData: true
+													},
+													{
+														name: 'RegisteredAgentEmail',
+														param: 'registeredAgentEmail',
+														onlyIfData: true
+													},
+													{
+														name: 'RegisteredAgentPhone',
+														param: 'registeredAgentPhone',
+														onlyIfData: true
 													},
 													{
 														name: 'RecordID',
@@ -5824,15 +5850,6 @@ ns1blankspace.financial.payroll.totals =
 
 											item:
 											[
-/*
-'employee.contactpersontext,employee.employmentstartdate,employee.statustext,employee.employeenumber,employee.taxfilenumber,' +
-'employee.contactperson,employee.contactperson.firstname,employee.contactperson.surname,employee.contactperson.email,' +
-'employee.contactperson.streetaddress1,employee.contactperson.streetaddress2,employee.contactperson.streetsuburb,' +
-'employee.contactperson.streetstate,employee.contactperson.streetpostcode,employee.contactperson.dateofbirth,' +
-'employee.contactbusiness.tradename,employee.contactbusiness.abn,employee.contactbusiness.streetaddress1,employee.contactbusiness.streetaddress2,' +
-'employee.contactbusiness.streetsuburb,employee.contactbusiness.streetstate,employee.contactbusiness.streetpostcode'*/
-
-	
 												{
 													parentName: 'EventRecords',
 													mustBeSetDefault: true,
@@ -5864,11 +5881,11 @@ ns1blankspace.financial.payroll.totals =
 														},
 														{
 															name: 'PayeeCommencementDate',
-															field: 'employmentstartdate'
+															field: 'employee.employmentstartdate'
 														},
 														{
 															name: 'PayeeCessationDate',
-															field: 'employmentenddate'
+															field: 'employee.employmentenddate'
 														},
 														{
 															name: 'PayeeAddressLine1',
@@ -5892,7 +5909,7 @@ ns1blankspace.financial.payroll.totals =
 														},
 														{
 															name: 'PayeeCountry',
-															field: 'employee.contactperson.streetcountry'
+															value: 'au'
 														},
 														{
 															name: 'PayeeEmail',
@@ -5900,15 +5917,15 @@ ns1blankspace.financial.payroll.totals =
 														},
 														{
 															name: 'PayeePhone',
-															field: ['employee.contactperson.mobile', 'employee.contactperson.phone']
+															field: 'employee.contactperson.mobile'
 														},
 														{
 															name: 'PeriodStartDate',
-															param: 'periodStartDate'
+															field: 'startdate'
 														},
 														{
 															name: 'PeriodEndDate',
-															field: 'periodEndDate'
+															field: 'enddate'
 														},
 														{
 															name: 'FinalEventIndicator',
@@ -6004,15 +6021,15 @@ ns1blankspace.financial.payroll.totals =
 														},
 														{
 															name: 'PayeeAllowances',
-															value: []
+															value: ''
 														},
 														{
 															name: 'PayeeDeductions',
-															field: []
+															value: ''
 														},
 														{
 															name: 'ETPItems',
-															field: []
+															value: ''
 														}
 													]
 												}
@@ -6027,68 +6044,102 @@ ns1blankspace.financial.payroll.totals =
 
 										//ns1blankspace.financial.payroll.data.summaries
 										var iPayPeriod = ns1blankspace.util.getParam(oParam, 'payPeriod').value;
+										var iBranchID = ns1blankspace.util.getParam(oParam, 'branchID', {"default": '1'}).value;
+										var sATOProductID = ns1blankspace.util.getParam(oParam, 'atoProductID', {"default": '10594'}).value;
+										var sPayrollGroupID = ns1blankspace.util.getParam(oParam, 'payrollGroupID', {"default": '1'}).value;
+										var sIsUpdate = ns1blankspace.util.getParam(oParam, 'isUpdate', {"default": 'false'}).value;
+										var sIsFull = ns1blankspace.util.getParam(oParam, 'isFull', {"default": 'true'}).value;
+										var sDeclarationAcceptedBy = ns1blankspace.util.getParam(oParam, 'declarationAcceptedBy', {"default": ns1blankspace.user.email}).value;
+
+										ns1blankspace.financial.payroll.data.payPeriod = undefined;
 
 										if (oResponse == undefined)
 										{
 											var oSearch = new AdvancedSearch();
 											oSearch.method = 'CONTACT_BUSINESS_SEARCH';		
-											oSearch.addField('tradename,legalname,abn,phonenumber,faxnumber,email,streetaddress1,streetaddress2,streetsuburb,streetstate,streetpostcode,' +
+											oSearch.addField('tradename,legalname,abn,phonenumber,faxnumber,email,streetaddress1,streetaddress2,streetsuburb,' +
+																	'streetstate,streetpostcode,' +
 																	'mailingaddress1,mailingaddress2,mailingsuburb,mailingstate,mailingpostcode');
 											oSearch.rows = 1;
 											oSearch.addFilter('id', 'EQUAL_TO', (ns1blankspace.spaceContactBusiness || ns1blankspace.user.contactBusiness))
 											
-											oSearch.getResults(function(oResponse)
-											{
-
-											});
-										}
-										
-										//for W1/W2
-										var oData = ns1blankspace.financial.payroll.data;
-
-										var oPeriod = {W1: 0, W2: 0};
-
-										$.each(oData.summaries, function (s, summary)
-										{
-											oPeriod.W1 = oPeriod.W1 + numeral(summary.grosssalary).value();
-											oPeriod.W2 = oPeriod.W2 + numeral(summary.taxbeforerebate).value();
-										});
-
-										if (oParam == undefined) {oParam = {}}
-
-										$.extend(true, oParam,
-										{
-											contactBusinessText: ns1blankspace.user.contactBusinessText,
-											contactBusinessABN: 
-											payDate: oData.enddate,
-											atoProductID: '10594',
-											employerPeriodW1: oPeriod.W1,
-											employerPeriodW2: oPeriod.W2
-											guid: oData.startdate + '-' + oData.enddate
-										})
-
-										if (_.isUndefined(oResponse))
-										{
-											//Get payperiod totals
-											ns1blankspace.financial.payroll.totals.employees.report.process(oParam);
-
-											var oSearch = new AdvancedSearch();
-											oSearch.method = 'FINANCIAL_PAYROLL_PAY_PERIOD_SEARCH';
-											oSearch.addField('startdate,paydate,statustext,status,notes,modifieddate,frequency,frequencytext');
-											oSearch.addFilter('id', 'EQUAL_TO', iPayPeriod);
-											
 											oSearch.getResults(function(data)
 											{
-												ns1blankspace.financial.payroll.totals.employees.report.process(oParam, data)
+												ns1blankspace.financial.payroll.totals.employees.report.init(oParam, data)
 											});
 										}
 										else
 										{
-											ns1blankspace.financial.payroll.totals.employees.report.process(oParam);
+											ns1blankspace.financial.payroll.data.contactBusiness = oResponse.data.rows[0];
+
+											//for W1/W2
+											var oData = ns1blankspace.financial.payroll.data;
+
+											var oPeriod = {W1: 0, W2: 0};
+
+											$.each(oData.summaries, function (s, summary)
+											{
+												oPeriod.W1 = oPeriod.W1 + numeral(summary.grosssalary).value();
+												oPeriod.W2 = oPeriod.W2 + numeral(summary.taxbeforerebate).value();
+											});
+
+											if (oParam == undefined) {oParam = {}}
+
+											$.extend(true, oParam,
+											{
+												contactBusinessText: ns1blankspace.user.contactBusinessText,
+												contactBusinessABN: oData.contactBusiness.abn,
+												payDate: moment(oData.endDate, ns1blankspace.option.dateFormats).format('YYYY-MM-DDTHH:mm:ss'),
+												atoProductID: sATOProductID,
+												guid: oData.contactBusiness.abn + '-' + iBranchID + '-' + moment(oData.startDate, ns1blankspace.option.dateFormats).format('YYYY-MM-DD')  + '-' + moment(oData.endDate, ns1blankspace.option.dateFormats).format('YYYY-MM-DD'),
+												now: moment().format('YYYY-MM-DDTHH:mm:ss'),
+												branchID: iBranchID,
+												payrollGroupID: sPayrollGroupID,
+												isUpdate: sIsUpdate,
+												isFull: sIsFull,
+												declarationAcceptedBy: sDeclarationAcceptedBy,
+												employerPeriodW1: oPeriod.W1,
+												employerPeriodW2: oPeriod.W2
+											});
+
+											if (ns1blankspace.option.financialRegisteredAgent != undefined)
+											{
+												$.extend(true, oParam, ns1blankspace.option.financialRegisteredAgent)
+											}
+
+											if (_.isUndefined(oResponse))
+											{
+												if (iPayPeriod == undefined)
+												{
+													ns1blankspace.financial.payroll.totals.employees.report.create(oParam);
+												}
+												else
+												{
+													var oSearch = new AdvancedSearch();
+													oSearch.method = 'FINANCIAL_PAYROLL_PAY_PERIOD_SEARCH';
+													oSearch.addField('startdate,paydate,statustext,status,notes,modifieddate,frequency,frequencytext');
+													oSearch.addFilter('id', 'EQUAL_TO', iPayPeriod);
+													
+													oSearch.getResults(function(data)
+													{
+														ns1blankspace.financial.payroll.totals.employees.report.payPeriod(oParam, data)
+													});
+												}
+											}
+											else
+											{
+												ns1blankspace.financial.payroll.totals.employees.report.create(oParam);
+											}
 										}
 									},
 
-									process: function (oParam, oResponse)
+									payPeriod: function (oParam, oResponse)
+									{
+										ns1blankspace.financial.payroll.data.payPeriod = oResponse.data.rows[0];
+										ns1blankspace.financial.payroll.totals.employees.report.create(oParam);
+									},
+
+									create: function (oParam, oResponse)
 									{
 										var oFormat = ns1blankspace.financial.payroll.totals.employees.report.data.format;
 										var oSummaries = ns1blankspace.financial.payroll.data.summaries;
@@ -6096,6 +6147,9 @@ ns1blankspace.financial.payroll.totals =
 										var oItemData = {};
 
 										ns1blankspace.financial.payroll.totals.employees.report.data.object = undefined;
+										ns1blankspace.financial.payroll.totals.employees.report.data.errors = undefined;
+
+mustBeSetDefault
 
 										if (oSummaries != undefined)
 										{
@@ -6103,12 +6157,25 @@ ns1blankspace.financial.payroll.totals =
 											{
 												if (!_.isUndefined(field.value))
 												{
-													oData[field.name] = field.value;
+													if (_.isArray(field.value))
+													{
+														oData[field.name] = _.clone(field.value);
+													}
+													else
+													{
+														oData[field.name] = field.value;
+													}
 												}
 												else
 												{
 													oData[field.name] = oParam[field.param];
 												}
+
+												if (field.onlyIfData && oData[field.name] == undefined)
+												{
+													delete oData[field.name]
+												}
+
 											});
 
 											$.each(oFormat.item, function (i, oItem)
@@ -6119,7 +6186,14 @@ ns1blankspace.financial.payroll.totals =
 
 													$.each(oItem.fields, function (f, oField)
 													{
-														oItemData[oField.name] = oSummary[oField.field]
+														if (!_.isUndefined(oField.value))
+														{
+															oItemData[oField.name] = oField.value;
+														}
+														else
+														{
+															oItemData[oField.name] = oSummary[oField.field];
+														}
 													});
 
 													if (_.isArray(oData[oItem.parentName]))
@@ -6143,17 +6217,57 @@ ns1blankspace.financial.payroll.totals =
 									{
 										console.log(ns1blankspace.financial.payroll.totals.employees.report.data.object);
 
-										var aHTML = [];
+										var aHTML = ['<table class="table table-condensed table-hover" style="font-size:0.825em;">'];
+										var aItemHTML;
 
 										if (ns1blankspace.financial.payroll.totals.employees.report.data.object != undefined)
 										{
-											$.each(ns1blankspace.financial.payroll.totals.employees.report.data.object, function (key ,value)
+											$.each(ns1blankspace.financial.payroll.totals.employees.report.data.object, function (key, value)
 											{
-												aHTML.push(
-													'<tr><td>' + key + '</td><td>' + value + '</td></tr>'
-												);
+												if (!_.isArray(value))
+												{
+													aHTML.push(
+														'<tr><td style="width:170px;">' + key + '</td><td>' + value + '</td></tr>');
+												}
+												else
+												{
+													aItemHTML = ['<div class="panel-group" id="' + key + '">']
+
+													$.each(value, function (v, itemValue)
+													{
+														aItemHTML.push('<div class="panel panel-default">' +
+   																		'<div class="panel-heading">' +
+   																			'<a data-toggle="collapse" data-parent="#' + key + '" href="#' + key + v + '">' +
+   																			itemValue['PayeeFirstName'] + ' ' + itemValue['PayeeFamilyName'] + ' (' + itemValue['PayeePayrollID'] + ')' +
+   																			'</a>' +
+      																	'</div>')
+      
+      												aItemHTML.push('<div id="' + key + v + '" class="panel-collapse collapse">' +
+																	      	'<div class="panel-body">' +
+																	      	'<table class="table table-condensed table-hover" style="font-size:0.825em;">')
+
+      												$.each(itemValue, function (ivkey, itemValueValue)
+														{
+															aItemHTML.push(
+																'<tr><td>' + ivkey + '</td><td>' + itemValueValue + '</td></tr>');
+
+														});
+
+      												aItemHTML.push('</table>' +
+      																	'</div>' + 
+																	    	'</div></div>');					
+
+													});
+
+													aItemHTML.push('</div>');
+
+													aHTML.push(
+														'<tr><td>' + key + '</td><td>' + aItemHTML.join('') + '</td></tr>');
+												}
 											});
 										}
+
+										aHTML.push('</table>')
 
 										$('#ns1blankspacePayrollEmployeeTotalsColumn1').html(aHTML.join(''))
 									}
