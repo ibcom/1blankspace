@@ -4,12 +4,13 @@
 	{
 		color: #a0a0a0; 
 		font-weight: normal; 
-		border: 1px solid #B8B8B8; 
+		border: 0px solid #B8B8B8; 
 		border-radius: 4px; 
 		background-color: #F2F2F2;
-		padding: 1px;
+		padding: 2px;
 		margin-bottom: 2px;
 		font-size: 0.75em;
+		padding-left: 4px;
 	}
 
 	input.ns1blankspaceRecipientManual

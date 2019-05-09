@@ -92,6 +92,11 @@ ns1blankspace.option.showFavourites = false;
 
 ns1blankspace.option.dateFormats = ['DD MMM YYYY', 'D MMM YYYY', 'D/MM/YYYY', 'DD/MM/YYYY', 'DD MMM YYYY HH:mm:ss'];
 
+ns1blankspace.option.financialRegisteredAgent = 
+{
+	registeredAgentABN: '123'
+}
+
 ns1blankspace.formFactor.size.value = ns1blankspace.formFactor.size.options.medium;
 
 ns1blankspace.data.object = {person: 32, business: 12, opportunity: 35};

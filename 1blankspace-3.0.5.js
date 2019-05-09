@@ -6268,7 +6268,7 @@ ns1blankspace.search.email =
 				{
 					$(oElement)
 						.addClass('ns1blankspaceWatermark')
-						.val('Enter address manually');
+						.val('Enter email address...');
 				}
 			}
 

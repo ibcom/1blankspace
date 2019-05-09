@@ -577,9 +577,9 @@ ns1blankspace.messaging.imap =
 					
 					aHTML.push('</table>');
 
-					aHTML.push('<table class="ns1blankspaceControl" style="padding-top:10px; margin-top:12px; border-top-style:solid; border-top-width: 1px; border-top-color:#D0D0D0;">');
+					aHTML.push('<table class="ns1blankspaceControl" style="padding-top:20px; margin-top:18px; border-top-style:solid; border-top-width: 1px; border-top-color:#D0D0D0;">');
 
-					aHTML.push('<tr><td id="ns1blankspaceMessaging-Drafts" ' +
+					aHTML.push('<tr><td id="ns1blankspaceMessaging-Drafts" style="padding-top:10px;" ' +
 										'class="ns1blankspaceControl">' +
 										'Drafts</td></tr>');
 
@@ -3217,7 +3217,7 @@ ns1blankspace.messaging.imap =
 										
 								aHTML.push('<tr><td style="padding:0px;">' +
 											'<input id="ns1blankspaceEditMessageToContact" class="ns1blankspaceSelectContactEmail ns1blankspaceWatermark"' +
-												' data-setelementid="ns1blankspaceEditMessageTo" value="search for contact" style="width:250px; margin-bottom:1px; padding-top:3px; margin-top:0px;"');
+												' data-setelementid="ns1blankspaceEditMessageTo" value="Search for contact" style="width:250px; margin-bottom:1px; padding-top:3px; margin-top:0px;"');
 											
 								if (iContactBusiness != undefined)
 								{
@@ -3233,8 +3233,8 @@ ns1blankspace.messaging.imap =
 								aHTML.push('<tr><td style="padding:0px; padding-top:1px;">')
 								aHTML.push('<table class="ns1blankspace"><tr>' +
 											'<td id="ns1blankspaceEditMessageTo" style="height:65px; width:249px;" class="ns1blankspaceBorder">' +
-											'<input class="ns1blankspaceText ns1blankspaceWatermark ns1blankspaceRecipientManual"' +
-												' id="ns1blankspaceEditMessageManual" value=" Enter email address..."></td>' +
+											'<input class="ns1blankspaceText ns1blankspaceWatermark ns1blankspaceRecipientManual" style="border-width:0px;"' +
+												' id="ns1blankspaceEditMessageManual" value="Enter email address..."></td>' +
 											'<td><span id="ns1blankspaceEditMessageToContact-group-To" class="ns1blankspaceEditMessageContactGroupSearch"></span>' +
 											'</td></tr></table>');
 								aHTML.push('</td></tr>');
@@ -3247,7 +3247,7 @@ ns1blankspace.messaging.imap =
 								
 								aHTML.push('<tr><td style="padding:0px;">' +
 												'<input id="ns1blankspaceEditMessageCcContact" class="ns1blankspaceSelectContactEmail ns1blankspaceWatermark ns1blankspaceText"' +
-												' data-setelementid="ns1blankspaceEditMessageCc" value="search for contact" style="width:250px; margin-bottom:1px; padding-top:3px; margin-top:0px;"');
+												' data-setelementid="ns1blankspaceEditMessageCc" value="Search for contact" style="width:250px; margin-bottom:1px; padding-top:3px; margin-top:0px;"');
 											
 								if (iContactBusiness != undefined)
 								{
@@ -3259,8 +3259,8 @@ ns1blankspace.messaging.imap =
 								aHTML.push('<tr><td style="padding:0px; padding-top:1px;">');
 								aHTML.push('<table class="ns1blankspace"><tr>' +
 											'<td id="ns1blankspaceEditMessageCc" style="height:65px; width:249px;" class="ns1blankspaceBorder">' +
-											'<input class="ns1blankspaceText ns1blankspaceWatermark ns1blankspaceRecipientManual"' +
-												' id="ns1blankspaceEditMessageManual" value=" Enter address manually"></td>' +
+											'<input class="ns1blankspaceText ns1blankspaceWatermark ns1blankspaceRecipientManual" style="border-width:0px;"' +
+												' id="ns1blankspaceEditMessageManual" value="Enter email address..."></td>' +
 											'<td><span id="ns1blankspaceEditMessageToContact-group-Cc" class="ns1blankspaceEditMessageContactGroupSearch"></span>' +
 											'</td></tr></table>');
 								aHTML.push('</td></tr>');
@@ -3273,7 +3273,7 @@ ns1blankspace.messaging.imap =
 							
 								aHTML.push('<tr><td style="padding:0px;">' +
 											'<input id="ns1blankspaceEditMessageBccContact" class="ns1blankspaceSelectContactEmail ns1blankspaceWatermark ns1blankspaceText"' +
-												' data-setelementid="ns1blankspaceEditMessageBcc" value="search for contact"' +
+												' data-setelementid="ns1blankspaceEditMessageBcc" value="Search for contact"' +
 												' style="width:250px; margin-bottom:1px; padding-top:3px; margin-top:0px;"');
 											
 								if (iContactBusiness != undefined)
@@ -3286,8 +3286,8 @@ ns1blankspace.messaging.imap =
 								aHTML.push('<tr><td style="padding:0px; padding-top:1px;">');
 								aHTML.push('<table class="ns1blankspace"><tr>' +
 											'<td id="ns1blankspaceEditMessageBcc" style="height:65px; width:249px;" class="ns1blankspaceBorder">' +
-											'<input class="ns1blankspaceText ns1blankspaceWatermark ns1blankspaceRecipientManual"' +
-												' id="ns1blankspaceEditMessageManual" value=" Enter address manually"></td>' +
+											'<input class="ns1blankspaceText ns1blankspaceWatermark ns1blankspaceRecipientManual" style="border-width:0px;"' +
+												' id="ns1blankspaceEditMessageManual" value=""></td>' +
 												'<td><span id="ns1blankspaceEditMessageToContact-group-Bcc" class="ns1blankspaceEditMessageContactGroupSearch"></span>' +
 											'</td></tr></table>');
 								aHTML.push('</td></tr>');
