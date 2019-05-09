@@ -249,7 +249,7 @@ ns1blankspace.scripts =
 	},
 	{
 		nameSpace: '1blankspace.contactPerson',
-		source: '/site/388/1blankspace.contactperson-2.0.8.js'
+		source: '/site/388/1blankspace.contactperson-3.0.5.js'
 	},
 	{
 		nameSpace: '1blankspace.contactBusiness',
