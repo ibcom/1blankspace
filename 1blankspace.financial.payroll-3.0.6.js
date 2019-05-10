@@ -5967,17 +5967,20 @@ ns1blankspace.financial.payroll.totals =
 														{
 															name: 'PayeeDateOfBirth',
 															field: 'employee.contactperson.dateofbirth',
-															help: 'Set the Employee\'s Date of Birth.'
+															help: 'Set the Employee\'s Date of Birth.',
+															dateFormat: 'YYYY-MM-DDTHH:mm:ss'
 														},
 														{
 															name: 'PayeeCommencementDate',
 															field: 'employee.employmentstartdate',
-															help: 'This is the Employee\'s Start Date.'
+															help: 'This is the Employee\'s Start Date.',
+															dateFormat: 'YYYY-MM-DDTHH:mm:ss'
 														},
 														{
 															name: 'PayeeCessationDate',
 															field: 'employee.employmentenddate',
-															mustBeSet: false
+															mustBeSet: false,
+															dateFormat: 'YYYY-MM-DDTHH:mm:ss'
 														},
 														{
 															name: 'PayeeAddressLine1',
@@ -6020,11 +6023,13 @@ ns1blankspace.financial.payroll.totals =
 														},
 														{
 															name: 'PeriodStartDate',
-															field: 'startdate'
+															field: 'startdate',
+															dateFormat: 'YYYY-MM-DDTHH:mm:ss'
 														},
 														{
 															name: 'PeriodEndDate',
-															field: 'enddate'
+															field: 'enddate',
+															dateFormat: 'YYYY-MM-DDTHH:mm:ss'
 														},
 														{
 															name: 'FinalEventIndicator',
@@ -6140,7 +6145,8 @@ ns1blankspace.financial.payroll.totals =
 														},
 														{
 															name: 'PayeeDeclarationDate',
-															field: 'startdate'
+															field: 'startdate',
+															dateFormat: 'YYYY-MM-DDTHH:mm:ss'
 														},
 														{
 															name: 'PayeeDeclarationAcceptanceIndicator',
@@ -6231,7 +6237,9 @@ ns1blankspace.financial.payroll.totals =
 												isFull: sIsFull,
 												declarationAcceptedBy: sDeclarationAcceptedBy,
 												employerPeriodW1: oPeriod.W1,
-												employerPeriodW2: oPeriod.W2
+												employerPeriodW2: oPeriod.W2,
+												endDate: oData.endDate,
+												startDate: oData.startDate
 											});
 
 											if (ns1blankspace.option.financialRegisteredAgent != undefined)
@@ -6281,6 +6289,12 @@ ns1blankspace.financial.payroll.totals =
 
 										ns1blankspace.financial.payroll.totals.employees.report.data.object = undefined;
 										ns1blankspace.financial.payroll.totals.employees.report.data.errors = [];
+
+										$.each(oSummaries, function (s, oSummary)
+										{
+											if (oSummary.startdate == undefined) {oSummary.startdate = oParam.startDate}
+											if (oSummary.enddate == undefined) {oSummary.enddate = oParam.endDate}
+										})
 
 										if (oSummaries != undefined)
 										{
@@ -6359,10 +6373,20 @@ ns1blankspace.financial.payroll.totals =
 														{
 															if (oItemData[oField.name] == '' || oItemData[oField.name] == undefined)
 															{
-																oItemData[oField.name] = 0
+																oItemData[oField.name] = '0'
 															}
 
-															oItemData[oField.name] = numeral(oItemData[oField.name]).value()
+															oItemData[oField.name] = numeral(numeral(oItemData[oField.name]).value()).format('0');
+														}
+
+														if (oField.dateFormat != undefined)
+														{
+															var oDate = moment(oItemData[oField.name], ns1blankspace.option.dateFormats)
+
+															if (oDate.isValid())
+															{
+																oItemData[oField.name] = oDate.format(oField.dateFormat);
+															}
 														}
 
 														if (bMustBeSet && (oItemData[oField.name] == undefined || oItemData[oField.name] == ''))
