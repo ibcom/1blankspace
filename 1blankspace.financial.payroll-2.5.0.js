@@ -5109,6 +5109,7 @@ ns1blankspace.financial.payroll.totals =
 					row: 		function (oRow, oParam)
 								{
 									var bShowAsList = ns1blankspace.util.getParam(oParam, 'showAsList', {"default": true}).value;
+									var sChecked;
 
 									var sKey = oRow.id;									
 									var aHTML = [];
@@ -5120,9 +5121,18 @@ ns1blankspace.financial.payroll.totals =
 									{}
 									else
 									{		
+										if (oPayRecord == undefined)
+										{
+											sChecked = ''
+										}
+										else
+										{
+											sChecked = ' checked="checked"'
+										}
+
 										aHTML.push('<tr class="ns1blankspaceRow" id="ns1blankspacePayrollTotals_container-' + sKey + '">' +
 																		'<td class="ns1blankspaceRow ns1blankspaceSub" id="ns1blankspacePayrollTotals_selectContainer-' + sKey + '">' +
-																		'<input type="checkbox" checked="checked" id="ns1blankspacePayrollTotals_select-' + sKey + '" /></td>');
+																		'<input type="checkbox"' + sChecked + ' id="ns1blankspacePayrollTotals_select-' + sKey + '" /></td>');
 
 										aHTML.push('<td id="ns1blankspacePayrollTotals_employee" class="ns1blankspaceRow ns1blankspaceRowSelect">' +
 													(oRow["employee.contactperson.firstname"] != ''?'<div>' + oRow["employee.contactperson.firstname"] + '</div>':'') +
@@ -5839,7 +5849,7 @@ ns1blankspace.financial.payroll.totals =
 													},
 													{
 														name: 'RecordID',
-														value: '0'
+														value: ''
 													},
 													{
 														name: 'EventRecords',
@@ -6039,6 +6049,8 @@ ns1blankspace.financial.payroll.totals =
 										
 									init: function (oParam, oResponse)
 									{
+										$('#ns1blankspacePayrollEmployeeTotalsColumn2').html('').css('width', '0px');
+										
 										//singletouch.com.au Sandbox Client ID: "8d7e6f25-2c6e-44ee-a65a-e9b9c12f5fc0"
 										//https://sandbox.singletouch.com.au/Support/StpEventModel
 
@@ -6145,16 +6157,18 @@ ns1blankspace.financial.payroll.totals =
 										var oSummaries = ns1blankspace.financial.payroll.data.summaries;
 										var oData = {};
 										var oItemData = {};
+										var bMustBeSet;
 
 										ns1blankspace.financial.payroll.totals.employees.report.data.object = undefined;
-										ns1blankspace.financial.payroll.totals.employees.report.data.errors = undefined;
-
-mustBeSetDefault
+										ns1blankspace.financial.payroll.totals.employees.report.data.errors = [];
 
 										if (oSummaries != undefined)
 										{
 											$.each(oFormat.header.fields, function (f, field)
 											{
+												bMustBeSet = field.mustBeSet;
+												if (bMustBeSet == undefined) {bMustBeSet = oFormat.header.mustBeSetDefault}
+
 												if (!_.isUndefined(field.value))
 												{
 													if (_.isArray(field.value))
@@ -6176,16 +6190,36 @@ mustBeSetDefault
 													delete oData[field.name]
 												}
 
+												if (bMustBeSet && (oData[field.name] == undefined || oData[field.name] == ''))
+												{
+													ns1blankspace.financial.payroll.totals.employees.report.data.errors.push(
+													{
+														type: 'header',
+														name: field.name
+													});
+												}
 											});
+
+											var bMustBeSetDefault;
 
 											$.each(oFormat.item, function (i, oItem)
 											{
+												$.each(oItem.fields, function (f, oField)
+												{
+													if (oField.mustBeSet == undefined)
+													{
+														oField.mustBeSet = oItem.mustBeSetDefault
+													}
+												});
+
 												$.each(oSummaries, function (s, oSummary)
 												{
-													oItemData = {};
+													oItemData = {id: oSummary.id};
 
 													$.each(oItem.fields, function (f, oField)
 													{
+														bMustBeSet = oField.mustBeSet;
+														
 														if (!_.isUndefined(oField.value))
 														{
 															oItemData[oField.name] = oField.value;
@@ -6193,6 +6227,21 @@ mustBeSetDefault
 														else
 														{
 															oItemData[oField.name] = oSummary[oField.field];
+														}
+
+														if (oField.onlyIfData && oItemData[oField.name] == undefined)
+														{
+															delete oItemData[oField.name]
+														}
+
+														if (bMustBeSet && (oItemData[oField.name] == undefined || oItemData[oField.name] == ''))
+														{
+															ns1blankspace.financial.payroll.totals.employees.report.data.errors.push(
+															{
+																type: 'item',
+																name: oField.name,
+																id: oSummary.id
+															});
 														}
 													});
 
@@ -6204,6 +6253,7 @@ mustBeSetDefault
 													{
 														oData[oItem.parentName] = oItemData;
 													}
+
 												});
 											});
 
@@ -6217,8 +6267,10 @@ mustBeSetDefault
 									{
 										console.log(ns1blankspace.financial.payroll.totals.employees.report.data.object);
 
-										var aHTML = ['<table class="table table-condensed table-hover" style="font-size:0.825em;">'];
+										var aHTML = ['<table class="table table-condensed" style="font-size:0.825em;">'];
 										var aItemHTML;
+										var oError;
+										var sStatus;
 
 										if (ns1blankspace.financial.payroll.totals.employees.report.data.object != undefined)
 										{
@@ -6226,19 +6278,60 @@ mustBeSetDefault
 											{
 												if (!_.isArray(value))
 												{
+													sStatus = '';
+													oError = _.find(ns1blankspace.financial.payroll.totals.employees.report.data.errors,
+																			function (error)
+																			{
+																				return (error.name == key && error.type == 'header')
+																			});
+
+													if (oError != undefined)
+													{
+														sStatus = '<i style="color:red; text-align:center;" class="glyphicon glyphicon-warning-sign"></i>'
+													}
+
 													aHTML.push(
-														'<tr><td style="width:170px;">' + key + '</td><td>' + value + '</td></tr>');
+														'<tr>' +
+														'<td style="width:10px;">' + sStatus + '</td>' +
+														'<td style="width:170px;">' + key + '</td><td>' + value + '</td></tr>');
 												}
 												else
 												{
+													var sPayrollID;
+													var aErrors;
+
 													aItemHTML = ['<div class="panel-group" id="' + key + '">']
 
 													$.each(value, function (v, itemValue)
 													{
+														if (itemValue['PayeePayrollID'] == '' || itemValue['PayeePayrollID'] == undefined)
+														{
+															sPayrollID = ''
+														}
+														else
+														{
+															sPayrollID = ' (' + itemValue['PayeePayrollID'] + ')'
+														}
+
+														sStatus = '';
+
+														aErrors = _.filter(ns1blankspace.financial.payroll.totals.employees.report.data.errors,
+																			function (error)
+																			{
+																				return (error.type == 'item' && error.id == itemValue.id)
+																			});
+
+														if (aErrors.length != 0)
+														{
+															sStatus = '<i style="color:red; text-align:center; margin-right:6px; margin-left:3px;" class="glyphicon glyphicon-warning-sign"></i>'
+														}
+
 														aItemHTML.push('<div class="panel panel-default">' +
    																		'<div class="panel-heading">' +
    																			'<a data-toggle="collapse" data-parent="#' + key + '" href="#' + key + v + '">' +
-   																			itemValue['PayeeFirstName'] + ' ' + itemValue['PayeeFamilyName'] + ' (' + itemValue['PayeePayrollID'] + ')' +
+   																			sStatus + 
+   																			itemValue['PayeeFirstName'] + ' ' + itemValue['PayeeFamilyName'] + 
+   																			sPayrollID +
    																			'</a>' +
       																	'</div>')
       
@@ -6248,8 +6341,20 @@ mustBeSetDefault
 
       												$.each(itemValue, function (ivkey, itemValueValue)
 														{
+															sStatus = '';
+															oError = _.find(ns1blankspace.financial.payroll.totals.employees.report.data.errors,
+																			function (error)
+																			{
+																				return (error.name == ivkey && error.type == 'item' && error.id == itemValue.id)
+																			});
+
+															if (oError != undefined)
+															{
+																sStatus = '<i style="color:red; text-align:center;" class="glyphicon glyphicon-warning-sign"></i>'
+															}
+
 															aItemHTML.push(
-																'<tr><td>' + ivkey + '</td><td>' + itemValueValue + '</td></tr>');
+																'<tr><td style="width:10px;">' + sStatus + '</td><td>' + ivkey + '</td><td>' + itemValueValue + '</td></tr>');
 
 														});
 
@@ -6262,7 +6367,7 @@ mustBeSetDefault
 													aItemHTML.push('</div>');
 
 													aHTML.push(
-														'<tr><td>' + key + '</td><td>' + aItemHTML.join('') + '</td></tr>');
+														'<tr><td style="width:10px;"></td><td>' + key + '</td><td>' + aItemHTML.join('') + '</td></tr>');
 												}
 											});
 										}
