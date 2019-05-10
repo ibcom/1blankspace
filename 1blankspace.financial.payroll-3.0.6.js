@@ -224,7 +224,7 @@ ns1blankspace.financial.payroll =
 											aHTML.push('<td class="ns1blankspaceHeaderCaption" style="width:100px;">Pay Date</td>');
 											aHTML.push('<td class="ns1blankspaceHeaderCaption" style="width:120px;">Start Date</td>');
 											aHTML.push('<td class="ns1blankspaceHeaderCaption">Status</td>');
-											aHTML.push('<td class="ns1blankspaceHeaderCaption" style="text-align:right;">Totals & ' + ns1blankspace.option.taxOffice + ' Reporting</td>');
+											aHTML.push('<td class="ns1blankspaceHeaderCaption" style="text-align:right;">&nbsp;</td>');
 											aHTML.push('<tr>')
 	
 											$.each(oResponse.data.rows, function()
@@ -287,8 +287,8 @@ ns1blankspace.financial.payroll =
 
 									$('#ns1blankspaceMostLikely .ns1blankspaceRowTotals').button(
 									{
-										text: false,
-										icons:
+										label: 'Totals & ' + ns1blankspace.option.taxOffice + ' Reporting',
+										_icons:
 										{
 											primary: "glyphicon-list-alt"
 										}
@@ -301,13 +301,13 @@ ns1blankspace.financial.payroll =
 
 										ns1blankspace.financial.payroll.totals.show(
 										{
-											startDate: oData.attr('data-startdate'),
+											startDate: ns1blankspace.financial.util.financialYear().start,
 											endDate: oData.attr('data-paydate'),
 											guid: oData.attr('data-guid'),
 											id: oData.attr('data-id')
 										});
 									})
-									.css('width', '30px');
+									.css('font-size', '0.65em')
 								}		
 				},
 
