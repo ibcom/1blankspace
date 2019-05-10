@@ -231,7 +231,7 @@ ns1blankspace.app =
 						{
 							$(ns1blankspace.selector).append('<div id="ns1blankspaceContainer">' +
 								'<div id="ns1blankspaceHeader"></div>' +
-								'<div id="ns1blankspaceViewControl"><span style="font-size:1.3em; padding-left:6px; color: #999999;">Initialising the app...</span></div>' +
+								'<div id="ns1blankspaceViewControl"><span style="font-size:1.3em; padding-left:6px; color: #999999; padding-bottom:6px;">Initialising the app...</span></div>' +
 								'<div id="ns1blankspaceViewControlBrowse"></div>' +
 								'<div id="ns1blankspaceControl"></div>' +
 								'<div id="ns1blankspaceMain"></div>' +
@@ -905,7 +905,7 @@ ns1blankspace.app =
 					if (!bInitialised)
 					{	
 						ns1blankspace.container.hide({sXHTMLElementID: 'ns1blankspaceViewControl'});
-						$('#ns1blankspaceViewControl').html('<span style="padding-left:6px; color: #999999;">Initialising the app...</span>');
+						$('#ns1blankspaceViewControl').html('<span style="padding-left:6px; color: #999999; padding-bottom:8px;">Initialising the app...</span>');
 						oParam = ns1blankspace.util.setParam(oParam, 'onComplete', ns1blankspace.app.show);
 						ns1blankspace.extend.init(oParam);
 					}	

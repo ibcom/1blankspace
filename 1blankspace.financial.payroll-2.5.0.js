@@ -1206,7 +1206,9 @@ ns1blankspace.financial.payroll =
 																'internalrelationships,jobdetails,kpi,responsibilities,tasks,copyreceived,expirydate,' +
 																'inductionprogram,medicalreport,medicalreportdate,programdate,registrationnumber,workerscompform,workhoursform,' +
 																'employee.contactperson.firstname,employee.contactperson.surname,employee.contactperson.email,employee.contactperson.dateofbirth,' +
-																'superguaranteeapplyhighincomecap');
+																'superguaranteeapplyhighincomecap,' +
+																'employee.contactperson.streetaddress1,employee.contactperson.streetaddress2,employee.contactperson.streetsuburb,' +
+																'employee.contactperson.streetstate,employee.contactperson.streetpostcode,employee.contactperson.streetcountry');
 
 											oSearch.addFilter('id', 'EQUAL_TO', iEmployee);
 											oSearch.getResults(function(data) {ns1blankspace.financial.payroll.employees.show(oParam, data)});
@@ -1297,6 +1299,40 @@ ns1blankspace.financial.payroll =
 
 										aHTML.push('<tr class="ns1blankspaceCaption">' +
 														'<td class="ns1blankspaceCaption">' +
+														'Employee Number' +
+														'</td></tr>' +	
+														'<tr><td class="ns1blankspaceText">' +
+														'<input id="ns1blankspaceDetailsEmployeeNumber" class="ns1blankspaceText">' +
+														'</td></tr>');
+
+										aHTML.push('<tr class="ns1blankspaceCaption">' +
+														'<td class="ns1blankspaceCaption">' +
+														'Status' +
+														'</td></tr>' +
+														'<tr><td class="ns1blankspaceRadio">' +
+														'<input type="radio" id="radioStatus1" name="radioStatus" value="1"/>Proposed' +
+														'<br /><input type="radio" id="radioStatus2" name="radioStatus" value="2"/>Active' +
+														'<br /><input type="radio" id="radioStatus3" name="radioStatus" value="3"/>In-active' +
+														'</td></tr>');
+
+										aHTML.push('<tr class="ns1blankspaceCaption">' +
+														'<td class="ns1blankspaceCaption">' +
+														'Start Date' +
+														'</td></tr>' +
+														'<tr><td class="ns1blankspaceDate">' +
+														'<input id="ns1blankspaceDetailsStartDate" class="ns1blankspaceDate">' +
+														'</td></tr>');
+
+										aHTML.push('<tr class="ns1blankspaceCaption">' +
+														'<td class="ns1blankspaceCaption">' +
+														'End Date' +
+														'</td></tr>' +
+														'<tr><td class="ns1blankspaceDate">' +
+														'<input id="ns1blankspaceDetailsEndDate" class="ns1blankspaceDate">' +
+														'</td></tr>');
+
+										aHTML.push('<tr class="ns1blankspaceCaption">' +
+														'<td class="ns1blankspaceCaption">' +
 														'First name' +
 														'</td></tr>' +	
 														'<tr><td class="ns1blankspaceText">' +
@@ -1321,6 +1357,14 @@ ns1blankspace.financial.payroll =
 
 										aHTML.push('<tr class="ns1blankspaceCaption">' +
 														'<td class="ns1blankspaceCaption">' +
+														'Mobile (Phone)' +
+														'</td></tr>' +	
+														'<tr><td class="ns1blankspaceText">' +
+														'<input id="ns1blankspaceDetailsMobile" class="ns1blankspaceText">' +
+														'</td></tr>');
+
+										aHTML.push('<tr class="ns1blankspaceCaption">' +
+														'<td class="ns1blankspaceCaption">' +
 														'Date of Birth' +
 														'</td></tr>' +
 														'<tr class="ns1blankspace">' +
@@ -1330,36 +1374,50 @@ ns1blankspace.financial.payroll =
 
 										aHTML.push('<tr class="ns1blankspaceCaption">' +
 														'<td class="ns1blankspaceCaption">' +
-														'Status' +
-														'</td></tr>' +
-														'<tr><td class="ns1blankspaceRadio">' +
-														'<input type="radio" id="radioStatus1" name="radioStatus" value="1"/>Proposed' +
-														'<br /><input type="radio" id="radioStatus2" name="radioStatus" value="2"/>Active' +
-														'<br /><input type="radio" id="radioStatus3" name="radioStatus" value="3"/>In-active' +
-														'</td></tr>');
-
-										aHTML.push('<tr class="ns1blankspaceCaption">' +
-														'<td class="ns1blankspaceCaption">' +
-														'Employee Number' +
+														'Street Address 1' +
 														'</td></tr>' +	
 														'<tr><td class="ns1blankspaceText">' +
-														'<input id="ns1blankspaceDetailsEmployeeNumber" class="ns1blankspaceText">' +
+														'<input id="ns1blankspaceDetailsStreetAddress1" class="ns1blankspaceText">' +
 														'</td></tr>');
 
 										aHTML.push('<tr class="ns1blankspaceCaption">' +
 														'<td class="ns1blankspaceCaption">' +
-														'Start Date' +
-														'</td></tr>' +
-														'<tr><td class="ns1blankspaceDate">' +
-														'<input id="ns1blankspaceDetailsStartDate" class="ns1blankspaceDate">' +
+														'Street Address 2' +
+														'</td></tr>' +	
+														'<tr><td class="ns1blankspaceText">' +
+														'<input id="ns1blankspaceDetailsStreetAddress2" class="ns1blankspaceText">' +
 														'</td></tr>');
 
 										aHTML.push('<tr class="ns1blankspaceCaption">' +
 														'<td class="ns1blankspaceCaption">' +
-														'End Date' +
-														'</td></tr>' +
-														'<tr><td class="ns1blankspaceDate">' +
-														'<input id="ns1blankspaceDetailsEndDate" class="ns1blankspaceDate">' +
+														'Suburb' +
+														'</td></tr>' +	
+														'<tr><td class="ns1blankspaceText">' +
+														'<input id="ns1blankspaceDetailsStreetSuburb" class="ns1blankspaceText">' +
+														'</td></tr>');
+
+										aHTML.push('<tr class="ns1blankspaceCaption">' +
+														'<td class="ns1blankspaceCaption">' +
+														'State' +
+														'</td></tr>' +	
+														'<tr><td class="ns1blankspaceText">' +
+														'<input id="ns1blankspaceDetailsStreetState" class="ns1blankspaceText">' +
+														'</td></tr>');
+
+										aHTML.push('<tr class="ns1blankspaceCaption">' +
+														'<td class="ns1blankspaceCaption">' +
+														'Post Code' +
+														'</td></tr>' +	
+														'<tr><td class="ns1blankspaceText">' +
+														'<input id="ns1blankspaceDetailsStreetPostCode" class="ns1blankspaceText">' +
+														'</td></tr>');
+
+										aHTML.push('<tr class="ns1blankspaceCaption">' +
+														'<td class="ns1blankspaceCaption">' +
+														'Country' +
+														'</td></tr>' +	
+														'<tr><td class="ns1blankspaceText">' +
+														'<input id="ns1blankspaceDetailsStreetCountry" class="ns1blankspaceText">' +
 														'</td></tr>');
 
 										aHTML.push('<tr class="ns1blankspaceCaption">' +
@@ -1381,12 +1439,19 @@ ns1blankspace.financial.payroll =
 											$('#ns1blankspaceDetailsFirstName').val(ns1blankspace.financial.employee["employee.contactperson.firstname"]);
 											$('#ns1blankspaceDetailsSurname').val(ns1blankspace.financial.employee["employee.contactperson.surname"]);
 											$('#ns1blankspaceDetailsEmail').val(ns1blankspace.financial.employee["employee.contactperson.email"]);
+											$('#ns1blankspaceDetailsMobile').val(ns1blankspace.financial.employee["employee.contactperson.mobile"]);
 											$('#ns1blankspaceDetailsDateOfBirth').val(ns1blankspace.financial.employee["employee.contactperson.dateofbirth"]);
 											$('[name="radioStatus"][value="' + ns1blankspace.financial.employee["status"] + '"]').attr('checked', true);
 											$('#ns1blankspaceDetailsNotes').val(ns1blankspace.financial.employee["notes"]);
 											$('#ns1blankspaceDetailsStartDate').val(ns1blankspace.financial.employee["employmentstartdate"]);
 											$('#ns1blankspaceDetailsEndDate').val(ns1blankspace.financial.employee["employmentenddate"]);
 											$('#ns1blankspaceDetailsEmployeeNumber').val(ns1blankspace.financial.employee["employeenumber"]);
+											$('#ns1blankspaceDetailsStreetAddress1').val(ns1blankspace.financial.employee["employee.contactperson.streetaddress1"]);
+											$('#ns1blankspaceDetailsStreetAddress2').val(ns1blankspace.financial.employee["employee.contactperson.streetaddress2"]);
+											$('#ns1blankspaceDetailsStreetSuburb').val(ns1blankspace.financial.employee["employee.contactperson.streetsuburb"]);
+											$('#ns1blankspaceDetailsStreetState').val(ns1blankspace.financial.employee["employee.contactperson.streetstate"]);
+											$('#ns1blankspaceDetailsStreetPostCode').val(ns1blankspace.financial.employee["employee.contactperson.streetpostcode"]);
+											$('#ns1blankspaceDetailsStreetCountry').val(ns1blankspace.financial.employee["employee.contactperson.streetcountry"]);
 										}
 										else
 										{
@@ -1435,7 +1500,14 @@ ns1blankspace.financial.payroll =
 															firstname: $('#ns1blankspaceDetailsFirstName').val(),
 															surname: $('#ns1blankspaceDetailsSurname').val(),
 															email: $('#ns1blankspaceDetailsEmail').val(),
-															dateofbirth: $('#ns1blankspaceDetailsDateOfBirth').val()
+															mobile: $('#ns1blankspaceDetailsMobile').val(),
+															dateofbirth: $('#ns1blankspaceDetailsDateOfBirth').val(),
+															streetaddress1: $('#ns1blankspaceDetailsStreetAddress1').val(),
+															streetaddress2: $('#ns1blankspaceDetailsStreetAddress2').val(),
+															streetsuburb: $('#ns1blankspaceDetailsStreetSuburb').val(),
+															streetstate: $('#ns1blankspaceDetailsStreetState').val(),
+															streetpostcode: $('#ns1blankspaceDetailsStreetPostCode').val(),
+															streetcountry: $('#ns1blankspaceDetailsStreetCountry').val()
 														}	
 
 														$.ajax(
@@ -5883,7 +5955,8 @@ ns1blankspace.financial.payroll.totals =
 														},
 														{
 															name: 'PayeeOtherName',
-															value: ''
+															value: '',
+															mustBeSet: false
 														},
 														{
 															name: 'PayeeDateOfBirth',
@@ -5895,7 +5968,8 @@ ns1blankspace.financial.payroll.totals =
 														},
 														{
 															name: 'PayeeCessationDate',
-															field: 'employee.employmentenddate'
+															field: 'employee.employmentenddate',
+															mustBeSet: false
 														},
 														{
 															name: 'PayeeAddressLine1',
@@ -5903,7 +5977,8 @@ ns1blankspace.financial.payroll.totals =
 														},
 														{
 															name: 'PayeeAddressLine2',
-															field: 'employee.contactperson.streetaddress1'
+															field: 'employee.contactperson.streetaddress1',
+															mustBeSet: false
 														},
 														{
 															name: 'PayeeSuburb',
@@ -5939,107 +6014,125 @@ ns1blankspace.financial.payroll.totals =
 														},
 														{
 															name: 'FinalEventIndicator',
-															field: 'employee.contactperson.firstname'
+															value: 'N'
 														},
 														{
 															name: 'PayeeCDEPPaymentAmount',
-															field: 'employee.contactperson.firstname'
+															value: '',
+															mustBeSet: false
 														},
 														{
 															name: 'PayeeTotalINBPAYGWAmount',
-															field: 'employee.contactperson.firstname'
+															value: '',
+															mustBeSet: false
 														},
 														{
 															name: 'SuperGuaranteeAmount',
-															field: 'employee.contactperson.firstname'
+															field: 'superannuation'
 														},
 														{
 															name: 'OTEAmount',
-															field: 'employee.contactperson.firstname'
+															value: '',
+															mustBeSet: false
 														},
 														{
 															name: 'PayeeLumpSumPaymentAType',
-															field: 'employee.contactperson.firstname'
+															value: '',
+															mustBeSet: false
 														},
 														{
 															name: 'PayeeLumpSumPaymentA',
-															field: 'employee.contactperson.firstname'
+															value: '',
+															mustBeSet: false
 														},
 														{
 															name: 'PayeeLumpSumPaymentB',
-															field: 'employee.contactperson.firstname'
+															value: '',
+															mustBeSet: false
 														},
 														{
 															name: 'PayeeLumpSumPaymentD',
-															field: 'employee.contactperson.firstname'
+															value: '',
+															mustBeSet: false
 														},
 														{
 															name: 'PayeeLumpSumPaymentE',
-															field: 'employee.contactperson.firstname'
+															value: '',
+															mustBeSet: false
 														},
 														{
 															name: 'PayeeRFBTaxableAmount',
-															field: 'employee.contactperson.firstname'
+															value: '',
+															mustBeSet: false
 														},
 														{
 															name: 'PayeeRFBTaxableAmount',
-															field: 'employee.contactperson.firstname'
+															value: '',
+															mustBeSet: false
 														},
 														{
 															name: 'PayeeRFBExemptAmount',
-															field: 'employee.contactperson.firstname'
+															value: '',
+															mustBeSet: false
 														},
 														{
 															name: 'PayeeResidencyStatus',
-															field: 'employee.contactperson.firstname'
+															value: 'Resident',
+															mustBeSet: false
 														},
 														{
 															name: 'PayeeTaxFreeThresholdClaimed',
-															field: 'employee.contactperson.firstname'
+															value: 'false'
 														},
 														{
 															name: 'PayeeSeniorAustralianTaxOffsetClaimed',
-															field: 'employee.contactperson.firstname'
+															value: '',
+															mustBeSet: false
 														},
 														{
 															name: 'PayeeTaxOffsetDownwardVariationAmount',
-															field: 'employee.contactperson.firstname'
+															value: '',
+															mustBeSet: false
 														},
 														{
 															name: 'PayeeHELPIndicator',
-															field: 'employee.contactperson.firstname'
+															value: 'false'
 														},
 														{
 															name: 'PayeeTradeSupportLoanIndicator',
-															field: 'employee.contactperson.firstname'
+															value: 'false'
 														},
 														{
 															name: 'PayeeStudentLoanIndicator',
-															field: 'employee.contactperson.firstname'
+															value: 'false'
 														},
 														{
 															name: 'PayeeDeclarerIdentifier',
-															field: 'employee.contactperson.firstname'
+															value: '',
+															mustBeSet: false
 														},
 														{
 															name: 'PayeeDeclarationDate',
-															field: 'employee.contactperson.firstname'
+															field: 'startdate'
 														},
 														{
 															name: 'PayeeDeclarationAcceptanceIndicator',
-															field: 'employee.contactperson.firstname'
+															value: 'true'
 														},
 														{
 															name: 'PayeeAllowances',
-															value: ''
+															value: '',
+															mustBeSet: false
 														},
 														{
 															name: 'PayeeDeductions',
-															value: ''
+															value: '',
+															mustBeSet: false
 														},
 														{
 															name: 'ETPItems',
-															value: ''
+															value: '',
+															mustBeSet: false
 														}
 													]
 												}
@@ -6050,7 +6143,7 @@ ns1blankspace.financial.payroll.totals =
 									init: function (oParam, oResponse)
 									{
 										$('#ns1blankspacePayrollEmployeeTotalsColumn2').html('').css('width', '0px');
-										
+
 										//singletouch.com.au Sandbox Client ID: "8d7e6f25-2c6e-44ee-a65a-e9b9c12f5fc0"
 										//https://sandbox.singletouch.com.au/Support/StpEventModel
 
