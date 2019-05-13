@@ -2695,7 +2695,7 @@ ns1blankspace.report =
 								aHTML.push('<td style="color:#B8B8B8; padding:4px; background-color:#F8F8F8; vertical-align:middle;">' +
 												'<input id="ns1blankspaceReport_input_custom_' + this.name.replace(/\./g, '_') + '"' +
 													' class="ns1blankspace' + this.type + '"' +
-													' data-mandatory="' + bMandatory + '"' +
+													' data-mandatory="' + bMandatory + '" data-1blankspace="ignore"' +
 													(this.type == 'Select'?' data-method="' + this.method + '"':'') +
 													((this.type == 'Select' && this.methodColumns) ? ' data-columns="' + this.methodColumns + '"': '') +
 													((this.type == 'Select' && this.methodFilter) ? ' data-methodFilter="' + this.methodFilter + '"': '') +
