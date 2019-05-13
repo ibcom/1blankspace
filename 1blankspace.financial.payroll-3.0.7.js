@@ -5097,7 +5097,7 @@ ns1blankspace.financial.payroll.totals =
 
 											$('#ns1blankspacePayrollTotalsSTPData').button(
 											{
-												label: 'Check Data'
+												label: 'Check Data & Download'
 											})
 											.click(function()
 											{		
@@ -5879,11 +5879,13 @@ ns1blankspace.financial.payroll.totals =
 													},
 													{
 														name: 'EventDate',
+														dateFormat: 'YYYY-MM-DDTHH:mm:ss',
 														param: 'now'
 													},
 													{
 														name: 'PaymentDate',
 														param: 'payDate',
+														dateFormat: 'YYYY-MM-DDTHH:mm:ss',
 														caption: 'Payment date'
 													},
 													{
@@ -5915,27 +5917,32 @@ ns1blankspace.financial.payroll.totals =
 													{
 														name: 'RegisteredAgentABN',
 														param: 'registeredAgentABN',
-														onlyIfData: true
+														onlyIfData: true,
+														mustBeSet: false
 													},
 													{
 														name: 'RegisteredAgentNumber',
 														param: 'registeredAgentNumber',
-														onlyIfData: true
+														onlyIfData: true,
+														mustBeSet: false
 													},
 													{
 														name: 'RegisteredAgentDecAcceptedBy',
 														param: 'registeredAgentDecAcceptedBy',
-														onlyIfData: true
+														onlyIfData: true,
+														mustBeSet: false
 													},
 													{
 														name: 'RegisteredAgentEmail',
 														param: 'registeredAgentEmail',
-														onlyIfData: true
+														onlyIfData: true,
+														mustBeSet: false
 													},
 													{
 														name: 'RegisteredAgentPhone',
 														param: 'registeredAgentPhone',
-														onlyIfData: true
+														onlyIfData: true,
+														mustBeSet: false
 													},
 													{
 														name: 'RecordID',
@@ -5944,7 +5951,8 @@ ns1blankspace.financial.payroll.totals =
 													},
 													{
 														name: 'EventRecords',
-														value: []
+														value: [],
+														mustBeSet: false
 													}
 												]
 											},
@@ -5960,7 +5968,7 @@ ns1blankspace.financial.payroll.totals =
 															name: 'PayeePayrollID',
 															field: 'employee.employeenumber',
 															help: 'Set the Employee\'s Number.',
-															caotion: 'Payroll number'
+															caption: 'Payroll number'
 														},
 														{
 															name: 'PayeeTFN',
@@ -6015,7 +6023,7 @@ ns1blankspace.financial.payroll.totals =
 														},
 														{
 															name: 'PayeeAddressLine2',
-															field: 'employee.contactperson.streetaddress1',
+															field: 'employee.contactperson.streetaddress2',
 															mustBeSet: false,
 															caption: 'Address 2'
 														},
@@ -6285,10 +6293,10 @@ ns1blankspace.financial.payroll.totals =
 											{
 												contactBusinessText: ns1blankspace.user.contactBusinessText,
 												contactBusinessABN: oData.contactBusiness.abn,
-												payDate: moment(oData.endDate, ns1blankspace.option.dateFormats).format('YYYY-MM-DDTHH:mm:ss'),
+												payDate: oData.endDate,
 												atoProductID: sATOProductID,
-												guid: oData.contactBusiness.abn + '-' + iBranchID + '-' + moment(oData.startDate, ns1blankspace.option.dateFormats).format('YYYY-MM-DD')  + '-' + moment(oData.endDate, ns1blankspace.option.dateFormats).format('YYYY-MM-DD'),
-												now: moment().format('YYYY-MM-DDTHH:mm:ss'),
+												guid: oData.contactBusiness.abn + '-' + iBranchID,
+												now: moment().format('DD MMM YYYY HH:mm:ss'),
 												branchID: iBranchID,
 												payrollGroupID: sPayrollGroupID,
 												isUpdate: sIsUpdate,
@@ -6344,10 +6352,13 @@ ns1blankspace.financial.payroll.totals =
 										}
 										else
 										{
-											ns1blankspace.financial.payroll.data.payPeriod = $.extend(true, oResponse.summary, oResponse)
+											ns1blankspace.financial.payroll.data.payPeriod = $.extend(true, ns1blankspace.financial.payroll.data.payPeriod, oResponse.summary)
 
-											oParam.employerPeriodW1 = numeral(numeral(ns1blankspace.financial.payroll.data.payPeriod.grosssalary).value()).format('0.00')
-											oParam.employerPeriodW2 = numeral(numeral(ns1blankspace.financial.payroll.data.payPeriod.taxbeforerebate).value()).format('0.00')
+											oParam.employerPeriodW1 = numeral(numeral(ns1blankspace.financial.payroll.data.payPeriod.grosssalary).value()).format('0.00');
+											oParam.employerPeriodW2 = numeral(numeral(ns1blankspace.financial.payroll.data.payPeriod.taxbeforerebate).value()).format('0.00');
+
+											oParam.guid = oParam.guid + '-' + moment(ns1blankspace.financial.payroll.data.payPeriod.startdate, ns1blankspace.option.dateFormats).format('YYYY-MM-DD')  + '-' + moment(ns1blankspace.financial.payroll.data.payPeriod.paydate, ns1blankspace.option.dateFormats).format('YYYY-MM-DD'),
+
 
 											ns1blankspace.financial.payroll.totals.employees.report.create(oParam);
 										}
@@ -6394,6 +6405,16 @@ ns1blankspace.financial.payroll.totals =
 													oData[field.name] = oParam[field.param];
 												}
 
+												if (field.dateFormat != undefined)
+													{
+														var oDate = moment(oData[field.name], ns1blankspace.option.dateFormats)
+
+														if (oDate.isValid())
+														{
+															oData[field.name] = oDate.format(field.dateFormat);
+														}
+													}
+
 												if (field.onlyIfData && oData[field.name] == undefined)
 												{
 													delete oData[field.name]
@@ -6401,7 +6422,17 @@ ns1blankspace.financial.payroll.totals =
 
 												if (oData[field.name] != undefined && field.caption != undefined)
 												{
-													oDataFileHeader[field.caption] =  oData[field.name]
+													oDataFileHeader[field.caption] =  oData[field.name];
+
+													if (field.dateFormat != undefined)
+													{
+														var oDate = moment(oDataFileHeader[field.caption], field.dateFormat)
+
+														if (oDate.isValid())
+														{
+															oDataFileHeader[field.caption] = oDate.format('D/M/YYYY');
+														}
+													}
 												}
 
 												if (bMustBeSet && (oData[field.name] == undefined || oData[field.name] == ''))
@@ -6429,6 +6460,8 @@ ns1blankspace.financial.payroll.totals =
 														oField.mustBeSet = oItem.mustBeSetDefault
 													}
 												});
+
+												var oDataFileItem;
 
 												$.each(oSummaries, function (s, oSummary)
 												{
@@ -6486,12 +6519,22 @@ ns1blankspace.financial.payroll.totals =
 
 														if (oItemData[oField.name] != undefined && oField.caption != undefined)
 														{
-															oDataFileItem[oField.caption] = oItemData[oField.name]
+															oDataFileItem[oField.caption] = oItemData[oField.name];
+
+															if (oField.dateFormat != undefined)
+															{
+																var oDate = moment(oDataFileItem[oField.caption], oField.dateFormat)
+
+																if (oDate.isValid())
+																{
+																	oDataFileItem[oField.caption] = oDate.format('D/M/YYYY');
+																}
+															}
 														}
 													});
 
 													ns1blankspace.financial.payroll.totals.employees.report.data.fileData.push(
-																$.extend(true, oDataFileItem, ns1blankspace.financial.payroll.totals.employees.report.data.fileHeader))
+																$.extend(true, _.clone(ns1blankspace.financial.payroll.totals.employees.report.data.fileHeader), _.clone(oDataFileItem)))
 
 													if (_.isArray(oData[oItem.parentName]))
 													{
@@ -6513,11 +6556,16 @@ ns1blankspace.financial.payroll.totals =
 
 									show: function (oParam, oResponse)
 									{
-										var aHTML = ['<table class="table table-condensed" style="font-size:0.825em;">'];
+										var aHTML = [];
 										var aItemHTML;
 										var oError;
 										var sStatus;
 										var sValue;
+
+										aHTML.push('<div style="font-size:0.875em; margin-bottom:12px;" class="alert alert-warning"> ' +
+															' The following <em>' + ns1blankspace.option.taxOffice + ' Single Touch Payroll</em> data is in a format for use with the <a href="https://singletouch.com.au" target="_blank">singletouch.com.au</a> service.</div>');
+
+										aHTML.push('<table class="table table-condensed" style="font-size:0.825em; margin-bottom:2px;">');
 
 										if (ns1blankspace.financial.payroll.totals.employees.report.data.object != undefined)
 										{
