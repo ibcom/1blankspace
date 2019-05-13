@@ -295,6 +295,9 @@ ns1blankspace.financial.payroll =
 									})
 									.click(function()
 									{
+										$('td.ns1blankspaceHighlight').removeClass('ns1blankspaceHighlight');
+										$('#ns1blankspaceControl_totals').addClass('ns1blankspaceHighlight');
+
 										ns1blankspace.show({selector: '#ns1blankspaceMainTotals', refresh: true});
 
 										var oData = $(this);
@@ -304,7 +307,7 @@ ns1blankspace.financial.payroll =
 											startDate: ns1blankspace.financial.util.financialYear().start,
 											endDate: oData.attr('data-paydate'),
 											guid: oData.attr('data-guid'),
-											id: oData.attr('data-id')
+											payPeriod: oData.attr('data-id')
 										});
 									})
 									.css('font-size', '0.65em')
@@ -4696,6 +4699,7 @@ ns1blankspace.financial.payroll.totals =
 					var sStartDate = ns1blankspace.util.getParam(oParam, 'startDate', {"default": ns1blankspace.financial.data.defaults.startdate}).value;
 					var sEndDate = ns1blankspace.util.getParam(oParam, 'endDate', {"default": ns1blankspace.financial.data.defaults.enddate}).value;
 					var sGUID = ns1blankspace.util.getParam(oParam, 'guid', {"default": sStartDate + '-' + sEndDate}).value;
+					var iPayPeriod = ns1blankspace.util.getParam(oParam, 'payPeriod').value;
 
 					if (oParam == undefined)
 					{	
@@ -4719,6 +4723,7 @@ ns1blankspace.financial.payroll.totals =
 					ns1blankspace.financial.payroll.data.startDate = sStartDate;
 					ns1blankspace.financial.payroll.data.endDate = sEndDate;
 					ns1blankspace.financial.payroll.data.guid = sGUID;
+					ns1blankspace.financial.payroll.data.payPeriodID = iPayPeriod;
 
 					ns1blankspace.financial.payroll.data.context = 'totals';
 
@@ -4849,6 +4854,7 @@ ns1blankspace.financial.payroll.totals =
 								{
 									var bShowAsList = ns1blankspace.util.getParam(oParam, 'showAsList', {"default": true}).value;
 									var sStartDate = ns1blankspace.util.getParam(oParam, 'startDate').value;
+									var iPayPeriod = ns1blankspace.util.getParam(oParam, 'payPeriod').value;
 
 									if (oResponse == undefined)
 									{
@@ -5001,12 +5007,15 @@ ns1blankspace.financial.payroll.totals =
 
 											aHTML.push('<tr><td id="ns1blankspacePayrollTotalsFileStatus" style="padding-top:10px; font-size:0.75em;" class="ns1blankspaceSub"></td></tr>');
 
-											aHTML.push('<tr>' +
-														'<td class="ns1blankspaceSubNote" style="padding-top:2px;">' +
-														'Single Touch Payroll</td></tr>');
+											if (iPayPeriod != undefined)
+											{
+												aHTML.push('<tr>' +
+															'<td class="ns1blankspaceSubNote" style="padding-top:2px;">' +
+															'Single Touch Payroll</td></tr>');
 
-											aHTML.push('<tr><td><span id="ns1blankspacePayrollTotalsSTPData" class="ns1blankspaceAction" >' +
-															'</span></td></tr>');
+												aHTML.push('<tr><td><span id="ns1blankspacePayrollTotalsSTPData" class="ns1blankspaceAction" >' +
+																'</span></td></tr>');
+											}
 
 											aHTML.push('</table>');					
 											
@@ -5092,6 +5101,7 @@ ns1blankspace.financial.payroll.totals =
 											})
 											.click(function()
 											{		
+												ns1blankspace.financial.payroll.data.payPerio = iPayPeriod;
 												oParam = {onCompleteWhenCan: ns1blankspace.financial.payroll.totals.employees.report.init};
 												ns1blankspace.financial.payroll.totals.employees.preview.init(oParam);
 											})
@@ -5193,7 +5203,7 @@ ns1blankspace.financial.payroll.totals =
 									{}
 									else
 									{		
-										if (oPayRecord == undefined)
+										if (false && oPayRecord == undefined)
 										{
 											sChecked = ''
 										}
@@ -6189,7 +6199,10 @@ ns1blankspace.financial.payroll.totals =
 										var sIsFull = ns1blankspace.util.getParam(oParam, 'isFull', {"default": 'true'}).value;
 										var sDeclarationAcceptedBy = ns1blankspace.util.getParam(oParam, 'declarationAcceptedBy', {"default": ns1blankspace.user.email}).value;
 
-										ns1blankspace.financial.payroll.data.payPeriod = undefined;
+										if (iPayPeriod == undefined)
+										{
+											iPayPeriod = ns1blankspace.financial.payroll.data.payPeriodID
+										}
 
 										if (oResponse == undefined)
 										{
@@ -6210,16 +6223,7 @@ ns1blankspace.financial.payroll.totals =
 										{
 											ns1blankspace.financial.payroll.data.contactBusiness = oResponse.data.rows[0];
 
-											//for W1/W2
 											var oData = ns1blankspace.financial.payroll.data;
-
-											var oPeriod = {W1: 0, W2: 0};
-
-											$.each(oData.summaries, function (s, summary)
-											{
-												oPeriod.W1 = oPeriod.W1 + numeral(summary.grosssalary).value();
-												oPeriod.W2 = oPeriod.W2 + numeral(summary.taxbeforerebate).value();
-											});
 
 											if (oParam == undefined) {oParam = {}}
 
@@ -6236,8 +6240,6 @@ ns1blankspace.financial.payroll.totals =
 												isUpdate: sIsUpdate,
 												isFull: sIsFull,
 												declarationAcceptedBy: sDeclarationAcceptedBy,
-												employerPeriodW1: oPeriod.W1,
-												employerPeriodW2: oPeriod.W2,
 												endDate: oData.endDate,
 												startDate: oData.startDate
 											});
@@ -6247,36 +6249,54 @@ ns1blankspace.financial.payroll.totals =
 												$.extend(true, oParam, ns1blankspace.option.financialRegisteredAgent)
 											}
 
-											if (_.isUndefined(oResponse))
+											if (iPayPeriod == undefined)
 											{
-												if (iPayPeriod == undefined)
-												{
-													ns1blankspace.financial.payroll.totals.employees.report.create(oParam);
-												}
-												else
-												{
-													var oSearch = new AdvancedSearch();
-													oSearch.method = 'FINANCIAL_PAYROLL_PAY_PERIOD_SEARCH';
-													oSearch.addField('startdate,paydate,statustext,status,notes,modifieddate,frequency,frequencytext');
-													oSearch.addFilter('id', 'EQUAL_TO', iPayPeriod);
-													
-													oSearch.getResults(function(data)
-													{
-														ns1blankspace.financial.payroll.totals.employees.report.payPeriod(oParam, data)
-													});
-												}
+												ns1blankspace.financial.payroll.totals.employees.report.create(oParam);
 											}
 											else
 											{
-												ns1blankspace.financial.payroll.totals.employees.report.create(oParam);
+												var oSearch = new AdvancedSearch();
+												oSearch.method = 'FINANCIAL_PAYROLL_PAY_PERIOD_SEARCH';
+												oSearch.addField('startdate,paydate,statustext,status,notes,modifieddate,frequency,frequencytext');
+												oSearch.addFilter('id', 'EQUAL_TO', iPayPeriod);
+												
+												oSearch.getResults(function(oResponse)
+												{
+													ns1blankspace.financial.payroll.data.payPeriod = oResponse.data.rows[0];
+													ns1blankspace.financial.payroll.totals.employees.report.payPeriod(oParam)
+												});
 											}
 										}
 									},
 
 									payPeriod: function (oParam, oResponse)
 									{
-										ns1blankspace.financial.payroll.data.payPeriod = oResponse.data.rows[0];
-										ns1blankspace.financial.payroll.totals.employees.report.create(oParam);
+										if (oResponse == undefined)
+										{
+											var oSearch = new AdvancedSearch();
+											oSearch.method = 'FINANCIAL_PAYROLL_PAY_RECORD_SEARCH';
+											oSearch.addField('period');
+											oSearch.addSummaryField('sum(grosssalary) grosssalary');
+											oSearch.addSummaryField('sum(netsalary) netsalary');
+											oSearch.addSummaryField('sum(superannuation) superannuation');
+											oSearch.addSummaryField('sum(taxbeforerebate) taxbeforerebate');
+											oSearch.addFilter('period', 'EQUAL_TO', ns1blankspace.financial.payroll.data.payPeriodID)
+											oSearch.rows = 0;
+											oSearch.getResults(function(data)
+											{
+												ns1blankspace.financial.payroll.data.payPeriodID = undefined;
+												ns1blankspace.financial.payroll.totals.employees.report.payPeriod(oParam, data)
+											});
+										}
+										else
+										{
+											ns1blankspace.financial.payroll.data.payPeriod = $.extend(true, oResponse.summary, oResponse)
+
+											oParam.employerPeriodW1 = numeral(numeral(ns1blankspace.financial.payroll.data.payPeriod.grosssalary).value()).format('0.00')
+											oParam.employerPeriodW2 = numeral(numeral(ns1blankspace.financial.payroll.data.payPeriod.taxbeforerebate).value()).format('0.00')
+
+											ns1blankspace.financial.payroll.totals.employees.report.create(oParam);
+										}
 									},
 
 									create: function (oParam, oResponse)
@@ -6376,7 +6396,7 @@ ns1blankspace.financial.payroll.totals =
 																oItemData[oField.name] = '0'
 															}
 
-															oItemData[oField.name] = numeral(numeral(oItemData[oField.name]).value()).format('0');
+															oItemData[oField.name] = numeral(numeral(oItemData[oField.name]).value()).format('0.00');
 														}
 
 														if (oField.dateFormat != undefined)
