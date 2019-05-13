@@ -291,14 +291,15 @@ ns1blankspace.setup.website =
 										if (sSearchText.length >= iMinimumLength || iSource == ns1blankspace.data.searchSource.browse)
 										{
 											ns1blankspace.search.start();
+
+											var oSearch = new AdvancedSearch();
+											oSearch.method = 'SETUP_SITE_SEARCH';
+											oSearch.addField('title');
+											oSearch.addFilter('title', 'TEXT_IS_LIKE', sSearchText);
 											
-											$.ajax(
+											oSearch.getResults(function(oResponse)
 											{
-												type: 'GET',
-												url: ns1blankspace.util.endpointURI('SETUP_SITE_SEARCH'),
-												data: 'quicksearch=' + sSearchText,
-												dataType: 'json',
-												success: function(data) {ns1blankspace.setup.website.search.process(oParam, data)}
+												ns1blankspace.setup.website.search.process(oParam, oResponse)
 											});
 										}
 									};	
