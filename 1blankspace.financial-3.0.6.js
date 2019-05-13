@@ -7007,13 +7007,17 @@ ns1blankspace.financial.util.financialYear = function ()
 
 	if (moment().quarter() > 2)
 	{
-	  oReturn.start = moment().month('July').startOf('month');
-	  oReturn.end = moment().add('year', 1).month('June').endOf('month')
+	  oReturn.start = moment().month('July').startOf('month').format('DD MMM YYYY');
+	  oReturn.end = moment().add('year', 1).month('June').endOf('month').format('DD MMM YYYY');
+	  oReturn._start = moment().month('July').startOf('month');
+	  oReturn._end = moment().add('year', 1).month('June').endOf('month')
 	}
 	else
 	{
-	  oReturn.start = moment().subtract('year', 1).month('July').startOf('month');
-	  oReturn.end = moment().month('June').endOf('month');
+	  oReturn.start = moment().subtract('year', 1).month('July').startOf('month').format('DD MMM YYYY');
+	  oReturn.end = moment().month('June').endOf('month').format('DD MMM YYYY');
+	  oReturn._start = moment().subtract('year', 1).month('July').startOf('month');
+	  oReturn._end = moment().month('June').endOf('month');
 	}
 
 	return oReturn

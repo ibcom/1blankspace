@@ -301,7 +301,7 @@ ns1blankspace.scripts =
 	},
 	{
 		nameSpace: '1blankspace.financial',
-		source: '/site/1903/1blankspace.financial-2.3.8.js'
+		source: '/site/1903/1blankspace.financial-3.0.6.js'
 	},
 	{
 		nameSpace: '1blankspace.financial.bankAccount',
