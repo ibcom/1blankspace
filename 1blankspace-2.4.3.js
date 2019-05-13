@@ -1473,7 +1473,7 @@ ns1blankspace.app =
 					$('#ns1blankspaceViewControlAction').button({label: "Save"});
 					if (ns1blankspace.timer.messaging != 0) {clearInterval(ns1blankspace.timer.messaging)};
 					ns1blankspace.util.app.option({titleSuffix: ''});
-//					ns1blankspace.inputDetected = false;
+					//ns1blankspace.inputDetected = false;
 					ns1blankspace.xhtml.action = '';
 					ns1blankspace.object = undefined;
 					ns1blankspace.objectParentName = undefined;
@@ -1530,6 +1530,7 @@ ns1blankspace.app =
 
 	set: 		function (oParam)
 				{
+					oParam = oParam || {};
 					var bShowHome = true;
 					var sParentNamespace = ns1blankspace.objectParentName;
 					var sNamespace = ns1blankspace.objectName;
@@ -1538,6 +1539,9 @@ ns1blankspace.app =
 					var bExtendInit = true;
 					var oRoot = ns1blankspace.util.getParam(oParam, 'rootNamespace', {"default": ns1blankspace}).value
 					var sRoot = ns1blankspace.util.getParam(oParam, 'rootNameSpaceText', {"default": 'ns1blankspace'}).value;
+
+					ns1blankspace.objectRootNamespace = oRoot;
+					ns1blankspace.objectRootNamespaceText = sRoot;
 
 					if (oParam != undefined)
 					{
@@ -4054,7 +4058,7 @@ ns1blankspace.search =
 										})
 										.click(function()
 										{
-											var oNS = ns1blankspace.rootnamespace;
+											var oNS = ns1blankspace.objectRootNamespace;
 											if (oNS) 
 											{
 												if (ns1blankspace.objectParentName) {oNS = oNS[ns1blankspace.objectParentName]}
@@ -4083,7 +4087,7 @@ ns1blankspace.search =
 											{
 												aHTMLFilter.push('<td style="padding-right:7px;vertical-align:middle;">' + 
 																 '<input type="checkbox" style="margin:0px;"' + 
-																 ' nohide="true"' + 
+																 ' nohide="true" data-1blankspace="ignore"' + 
 																 ' id="ns1blankspaceViewControlSearchFilter_' + sName + '"' +
 															' class="ns1blankspace' + v.type + ' ns1blankspaceViewControlSearchFilter"' +
 															' data-comparison="' + v.comparison + '"' +
@@ -4094,7 +4098,7 @@ ns1blankspace.search =
 											{
 												aHTMLFilter.push('<td style="padding-right:7px;">' + 
 																 '<input style="margin:0px;"' + 
-																 ' nohide="true"' + 
+																 ' nohide="true" data-1blankspace="ignore"' + 
 																 ' id="ns1blankspaceViewControlSearchFilter_' + sName + '"' +
 															' class="ns1blankspace' + v.type + ' ns1blankspaceViewControlSearchFilter"' +
 															' data-comparison="' + v.comparison + '"' +
@@ -4111,7 +4115,7 @@ ns1blankspace.search =
 																	v.caption + ((v.comparison === "BETWEEN") ? " To": "") + '</td>');
 												aHTMLFilter.push('<td style="padding-right:7px;">' + 
 																 '<input style="margin:0px;"' + 
-																 ' nohide="true"' + 
+																 ' nohide="true" data-1blankspace="ignore"' + 
 																 ' id="ns1blankspaceViewControlSearchFilter_' + sName + '_value2"' +
 															' class="ns1blankspace' + v.type + ' ns1blankspaceViewControlSearchFilter">' +
 															'</td></tr>');

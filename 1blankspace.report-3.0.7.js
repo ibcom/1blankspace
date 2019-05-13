@@ -464,7 +464,7 @@ ns1blankspace.report =
 						{name: "action.duedatetime", caption: "Action Date & Time"},
 						{name: "action.completeddate", caption: "Completed Date"},
 						{name: "action.completeddatetime", caption: "Completed Date & Time"},
-						{name: "action.billingstatus", caption: "Billing Status"},
+						{name: "action.billingstatustext", caption: "Billing Status"},
 						{name: "action.totaltimehrs", caption: "Time (Hours)"},
 						{name: "action.prioritytext", caption: "Priority"},
 						{name: "action.statustext", caption: "Status"},
@@ -1417,6 +1417,16 @@ ns1blankspace.report =
 				name: "supportissue.contactpersontext",
 				columns: "contactperson.firstname-space-contactperson.surname",
 				methodFilter: 'contactperson.firstname-TEXT_IS_LIKE|contactperson.surname-TEXT_IS_LIKE'
+			},
+			{
+				name: "action.contactbusinesstext",
+				columns: "tradename",
+				methodFilter: 'tradename-TEXT_IS_LIKE|legalname-TEXT_IS_LIKE'
+			},
+			{
+				name: "action.contactpersontext",
+				columns: "firstname-space-surname",
+				methodFilter: 'firstname-TEXT_IS_LIKE|surname-TEXT_IS_LIKE'
 			},
 			{
 				name: "payment.contactbusinesspaidtotext", 
