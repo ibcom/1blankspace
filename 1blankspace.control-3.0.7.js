@@ -345,7 +345,7 @@ ns1blankspace.scripts =
 	},
 	{
 		nameSpace: '1blankspace.financial.compliance',
-		source: '/site/1903/1blankspace.financial.compliance-2.0.7.js'
+		source: '/site/1903/1blankspace.financial.compliance-3.0.7.js'
 	},
 	{
 		nameSpace: '1blankspace.report',
