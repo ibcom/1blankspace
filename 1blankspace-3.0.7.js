@@ -4308,7 +4308,7 @@ ns1blankspace.search =
 											{
 												aHTMLFilter.push('<td style="padding-right:7px;vertical-align:middle;">' + 
 																 '<input type="checkbox" style="margin:0px;"' + 
-																 ' nohide="true"' + 
+																 ' nohide="true" data-1blankspace="ignore"' + 
 																 ' id="ns1blankspaceViewControlSearchFilter_' + sName + '"' +
 															' class="ns1blankspace' + v.type + ' ns1blankspaceViewControlSearchFilter"' +
 															' data-comparison="' + v.comparison + '"' +
@@ -4319,7 +4319,7 @@ ns1blankspace.search =
 											{
 												aHTMLFilter.push('<td style="padding-right:7px;">' + 
 																 '<input style="margin:0px;"' + 
-																 ' nohide="true"' + 
+																 ' nohide="true" data-1blankspace="ignore"' + 
 																 ' id="ns1blankspaceViewControlSearchFilter_' + sName + '"' +
 															' class="ns1blankspace' + v.type + ' ns1blankspaceViewControlSearchFilter"' +
 															' data-comparison="' + v.comparison + '"' +
@@ -4336,7 +4336,7 @@ ns1blankspace.search =
 																	v.caption + ((v.comparison === "BETWEEN") ? " To": "") + '</td>');
 												aHTMLFilter.push('<td style="padding-right:7px;">' + 
 																 '<input style="margin:0px;"' + 
-																 ' nohide="true"' + 
+																 ' nohide="true" data-1blankspace="ignore"' + 
 																 ' id="ns1blankspaceViewControlSearchFilter_' + sName + '_value2"' +
 															' class="ns1blankspace' + v.type + ' ns1blankspaceViewControlSearchFilter">' +
 															'</td></tr>');
