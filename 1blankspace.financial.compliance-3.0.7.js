@@ -11,7 +11,7 @@ ns1blankspace.financial.compliance =
 
 	init: function (oParam, oResponse)
 	{
-		$('#ns1blankspaceComplianceCreatePDF').button('destroy');
+		//$('#ns1blankspaceComplianceCreatePDF').button('destroy');
 
 		var sStartDate = ns1blankspace.util.getParam(oParam, 'startDate').value;
 		var sEndDate = ns1blankspace.util.getParam(oParam, 'endDate').value;
