@@ -7242,6 +7242,7 @@ ns1blankspace.financial.bankAccount =
 															if (dSet.compareTo(dLast) != 1)
 															{	
 																dDate = dLast.add({days: 1});
+																dDate = moment(dDate).format("DD MMM YYYY")
 															}
 
 															var cAmount = oSearchSource.attr('data-searchAmount');
@@ -7257,7 +7258,7 @@ ns1blankspace.financial.bankAccount =
 														{
 															var dDate = ns1blankspace.util.getParam(oParam, 'date').value;
 															if (dDate == undefined) {dDate = ns1blankspace.util.getParam(oParam, 'reconciliationEndDate').value};
-															if (dDate == undefined) {dDate = Date.today().toString("dd-MMM-yyyy")};
+															if (dDate == undefined) {dDate = moment().format("dd MMM yyyy")};
 															var cAmount = cOutstandingAmount;
 														}
 
@@ -7277,19 +7278,22 @@ ns1blankspace.financial.bankAccount =
 														//	if (oParam.amount != undefined) {cAmount = oParam.amount}
 														//	if (oParam.date != undefined) {dDate = oParam.date}	
 														//}
-															
-														var sData = 'id=' + ns1blankspace.util.fs(aXHTMLElementID[1]);
-														sData += '&amount=' + ns1blankspace.util.fs(cAmount);
-														sData += '&receiptdate=' + ns1blankspace.util.fs(dDate);
-														sData += '&paiddate=' + ns1blankspace.util.fs(dDate);
-														sData += '&paymentmethod=3';
-														sData += '&bankaccount=' + ns1blankspace.objectContext;
-																
+
+														var oData =
+														{
+															id: aXHTMLElementID[1],
+															amount: cAmount,
+															receiptdate: dDate,
+															paiddate: dDate,
+															paymentmethod: 3,
+															bankaccount: ns1blankspace.objectContext
+														}
+																		
 														$.ajax(
 														{
 															type: 'POST',
 															url: ns1blankspace.util.endpointURI((iType==1?'FINANCIAL_AUTO_PAYMENT':'FINANCIAL_AUTO_RECEIPT')),
-															data: sData,
+															data: oData,
 															dataType: 'json',
 															success: function(data)
 															{
