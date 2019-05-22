@@ -5041,7 +5041,7 @@ ns1blankspace.financial.payroll.totals =
 												aHTML.push('<tr><td><span id="ns1blankspacePayrollTotalsSTPData" class="ns1blankspaceAction" >' +
 																'</span></td></tr>');
 
-												aHTML.push('<tr><td><input type="checkbox" id="ns1blankspacePayrollTotalsSTPDataFinal"> Mark as final pay for the year</td></tr>');
+												aHTML.push('<tr><td><input type="checkbox" id="ns1blankspacePayrollTotalsSTPDataFinal"> <span class="ns1blankspaceSubNote">Mark as final pay for the year</span></td></tr>');
 											}
 
 											aHTML.push('</table>');					
@@ -6797,6 +6797,10 @@ ns1blankspace.financial.payroll.totals =
 
 										aHTML.push('</div>');
 
+										aHTML.push('<div style="margin-left:12px; margin-top:6px;">' +
+														'<input type="checkbox" id="ns1blankspacePayrollTotalsSTPDataFileProductID"> <span class="ns1blankspaceSubNote">Include the Product ID?  Leave unticked if not sure.</span>' +
+														'</div>');
+
 										aHTML.push('<div style="margin-top:12px;" id="ns1blankspacePayrollTotalsSTPDataSubmitContainer">' +
 																'</div>');
 
@@ -6827,6 +6831,8 @@ ns1blankspace.financial.payroll.totals =
 										{
 											ns1blankspace.status.working('Creating file...');
 
+											var bIncludeProductID = $('#ns1blankspacePayrollTotalsSTPDataFileProductID').prop('checked');
+
 											var oOptions = 
 											{
 												delimiter: ',',
@@ -6849,6 +6855,8 @@ ns1blankspace.financial.payroll.totals =
 											{
 												$.each(oFileData, function (sKeyFileData, sValueFileData, index)
 												{
+													if (!bIncludeProductID && sKeyFileData == 'Product ID') {sValueFileData = ''}
+
 													aFile.push(oOptions.surroundWith);
 													aFile.push(sValueFileData)
 													aFile.push(oOptions.surroundWith);

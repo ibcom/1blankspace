@@ -5041,7 +5041,7 @@ ns1blankspace.financial.payroll.totals =
 												aHTML.push('<tr><td><span id="ns1blankspacePayrollTotalsSTPData" class="ns1blankspaceAction" >' +
 																'</span></td></tr>');
 
-												aHTML.push('<tr><td><input type="checkbox" id="ns1blankspacePayrollTotalsSTPDataFinal"> Mark as final pay for the year</td></tr>');
+												aHTML.push('<tr><td><input type="checkbox" id="ns1blankspacePayrollTotalsSTPDataFinal"> <span class="ns1blankspaceSubNote">Mark as final pay for the year</span></td></tr>');
 											}
 
 											aHTML.push('</table>');					

@@ -1056,6 +1056,7 @@ ns1blankspace.financial.payroll =
 									var iID = '';
 									var sXHTMLElementID;
 									var bShowAll = ns1blankspace.util.getParam(oParam, 'showAll', {"default": false}).value;
+									var sSearchText = ns1blankspace.util.getParam(oParam, 'searchText', {"default": ''}).value;
 
 									if (oParam != undefined)
 									{
@@ -1082,10 +1083,21 @@ ns1blankspace.financial.payroll =
 										ns1blankspace.financial.payroll.data.context = 'employees';
 
 										var aHTML = [];
+										var sSearchClass = '';
+										var sSearchValue = '';
+
+										if (sSearchText == '')
+										{
+											sSearchValue = 'search'
+											sSearchClass = ' ns1blankspaceWatermark'
+										}
 
 										aHTML.push('<table class="ns1blankspaceContainer">' +
 													'<tr class="ns1blankspaceContainer">' +
 													'<td id="ns1blankspacePayrollEmployeeColumn1Container" class="ns1blankspaceColumn1" style="width:125px;padding-right:10px;">' +
+													'<div style="font-size:0.875em;">' +
+													'<input id="ns1blankspacePayrollEmployeeColumn1Search" class="ns1blankspaceText' + sSearchClass + '" value="' + sSearchValue + '">' +
+													'</div>' +
 													'<div id="ns1blankspacePayrollEmployeeColumn1" style="font-size:0.875em;"></div>' +
 													'<div id="ns1blankspacePayrollEmployeeColumn1ShowAllContainer"></div>' +
 													'</td>' +
@@ -1103,6 +1115,11 @@ ns1blankspace.financial.payroll =
 															
 										$('#ns1blankspaceMainEmployee').html(aHTML.join(''));
 
+										if (sSearchText != '')
+										{
+											$('#ns1blankspacePayrollEmployeeColumn1Search').focus().val(sSearchText);;
+										}
+
 										$('#ns1blankspacePayrollEmployeeColumn1').html(ns1blankspace.xhtml.loading);
 										
 										if (oResponse == undefined)
@@ -1114,7 +1131,18 @@ ns1blankspace.financial.payroll =
 											if (!bShowAll)
 											{	
 												oSearch.addFilter('status', 'EQUAL_TO', '2')
-											}	
+											}
+
+											if (sSearchText != '')
+											{	
+												oSearch.addBracket('(');
+												oSearch.addFilter('employee.contactperson.firstname', 'TEXT_IS_LIKE', sSearchText)
+												oSearch.addOperator('or');
+												oSearch.addFilter('employee.contactperson.surname', 'TEXT_IS_LIKE', sSearchText)
+												oSearch.addOperator('or');
+												oSearch.addFilter('employeenumber', 'TEXT_IS_LIKE', sSearchText)
+												oSearch.addBracket(')');
+											}		
 
 											if (iFilterEmployee !== undefined)
 											{
@@ -1128,6 +1156,13 @@ ns1blankspace.financial.payroll =
 										}
 										else
 										{
+											$('#ns1blankspacePayrollEmployeeColumn1Search').keyup(function()
+											{
+												oParam = ns1blankspace.util.setParam(oParam, 'searchText', $(this).val());
+												if (ns1blankspace.timer.delayCurrent != 0) {clearTimeout(ns1blankspace.timer.delayCurrent)};
+												ns1blankspace.timer.delayCurrent = setTimeout('ns1blankspace.financial.payroll.employees.show(' + JSON.stringify(oParam) + ')', ns1blankspace.option.typingWait);
+											});
+
 											$('#ns1blankspacePayrollEmployeeColumn1ShowAllContainer').html(
 												'<div class="ns1blankspaceSubNote" style="margin-top:12px; cursor:pointer;"' +
 												' id="ns1blankspacePayrollEmployeeColumn1ShowAll">Show ' +
@@ -1140,7 +1175,7 @@ ns1blankspace.financial.payroll =
 											}
 											else
 											{
-												$('#ns1blankspacePayrollEmployeeColumn2Count').html('There are ' + oResponse.data.rows.length + ' active employees.')
+												$('#ns1blankspacePayrollEmployeeColumn2Count').html(oResponse.data.rows.length + ' active employees.')
 											}
 											
 											var aHTML = [];
@@ -4900,7 +4935,8 @@ ns1blankspace.financial.payroll.totals =
 															'employee.contactperson.streetaddress1,employee.contactperson.streetaddress2,employee.contactperson.streetsuburb,' +
 															'employee.contactperson.streetstate,employee.contactperson.streetpostcode,employee.contactperson.streetcountry,employee.contactperson.dateofbirth,' +
 															'employee.contactbusiness.tradename,employee.contactbusiness.abn,employee.contactbusiness.streetaddress1,employee.contactbusiness.streetaddress2,' +
-															'employee.contactbusiness.streetsuburb,employee.contactbusiness.streetstate,employee.contactbusiness.streetpostcode,employee.contactbusiness.streetcountry');
+															'employee.contactbusiness.streetsuburb,employee.contactbusiness.streetstate,employee.contactbusiness.streetpostcode,employee.contactbusiness.streetcountry,' +
+															'employee.taxfreethreshold,employee.deducthelp');
 
 										if (sStartDate != undefined)
 										{
@@ -4922,7 +4958,7 @@ ns1blankspace.financial.payroll.totals =
 									{
 										var aHTML = [];
 										
-										if (oResponse.data.rows.length == 0 )
+										if (oResponse.data.rows.length == 0)
 										{
 											aHTML.push('<table><tr class="ns1blankspace">' +
 															'<td class="ns1blankspaceNothing">No employees</td>' +
@@ -5041,7 +5077,7 @@ ns1blankspace.financial.payroll.totals =
 												aHTML.push('<tr><td><span id="ns1blankspacePayrollTotalsSTPData" class="ns1blankspaceAction" >' +
 																'</span></td></tr>');
 
-												aHTML.push('<tr><td><input type="checkbox" id="ns1blankspacePayrollTotalsSTPDataFinal"> Mark as final pay for the year</td></tr>');
+												aHTML.push('<tr><td><input type="checkbox" id="ns1blankspacePayrollTotalsSTPDataFinal"> <span class="ns1blankspaceSubNote">Mark as final pay for the year</span></td></tr>');
 											}
 
 											aHTML.push('</table>');					
@@ -5913,12 +5949,16 @@ ns1blankspace.financial.payroll.totals =
 													{
 														name: 'ProductID',
 														param: 'atoProductID',
-														caption: 'Product ID'
+														caption: 'Product ID',
+														help: 'Software developers must obtain a Product ID from the ATO ' +
+                                        				'If you are not a software developer leave this value blank.'
 													},
 													{
 														name: 'EventDate',
 														dateFormat: 'YYYY-MM-DDTHH:mm:ss',
-														param: 'now'
+														param: 'now',
+														help: 'Date on which a payment has been made by an entity. Example: "2018-03-31T00:00:00"',
+                                        	spec: 'PAYEVNT 0002 2017/0003 2018: PaymentRecord.Transaction.Date'
 													},
 													{
 														name: 'PaymentDate',
@@ -5932,11 +5972,13 @@ ns1blankspace.financial.payroll.totals =
 													},
 													{
 														name: 'IsUpdate',
-														param: 'isUpdate'
+														param: 'isUpdate',
+														help: '"true" or "false". Signifies that the pay event submitted is an update event.'
 													},
 													{
 														name: 'IsFullFileReplacement',
-														param: 'isFull'
+														param: 'isFull',
+														help: '"true" or "false". Signifies that the pay event submitted is a full file replacement.'
 													},
 													{
 														name: 'DeclarationAcceptedBy',
@@ -6006,13 +6048,20 @@ ns1blankspace.financial.payroll.totals =
 															name: 'PayeePayrollID',
 															field: 'employee.employeenumber',
 															help: 'Set the Employee\'s Number.',
-															caption: 'Payroll number'
+															caption: 'Payroll number',
+															help: 'ID given to an employee (payee) in the payroll system identified by the BMSID provided',
+                                             spec: 'PAYEVNT 0002 2017/0003 2018: Identifiers.EmploymentPayrollNumber.Identifier'
 														},
 														{
 															name: 'PayeeTFN',
 															field: 'employee.taxfilenumber',
 															help: 'Set the Employee\'s Tax File Number.',
 															caption: 'Employee TFN'
+														},
+														{
+															name: 'ContractorABN',
+															value: '',
+															help: 'If employee (payee) is a contractor, the ABN of the contractor must be supplied'
 														},
 														{
 															name: 'PayeeFamilyName',
@@ -6132,7 +6181,9 @@ ns1blankspace.financial.payroll.totals =
 															value: '',
 															mustBeSet: false,
 															numeric: true,
-															caption: 'Employee CDEP'
+															caption: 'Employee CDEP',
+															help: 'Payee CDEP Payment Amount',
+                                             spec: 'PAYEVNT 0002 2017/0003 2018: Remuneration.IndividualNonBusinessCommunityDevelopmentEmploymentProject.Amount'
 														},
 														{
 															name: 'PayeeTotalINBPAYGWAmount',
@@ -6146,7 +6197,9 @@ ns1blankspace.financial.payroll.totals =
 															value: '',
 															mustBeSet: false,
 															numeric: true,
-															caption: 'Foreign income'
+															caption: 'Foreign income',
+															help: 'Payee Exempt Foreign Income Amount',
+                                             spec: 'PAYEVNT 0002 2017/0003 2018: Remuneration.IndividualNonBusinessExemptForeignEmploymentIncome.Amount'
 														},
 														{
 															name: 'SuperGuaranteeAmount',
@@ -6159,7 +6212,12 @@ ns1blankspace.financial.payroll.totals =
 															value: '',
 															mustBeSet: false,
 															numeric: true,
-															caption: 'SG earnings amount'
+															caption: 'SG earnings amount',
+															help: 'This is the value, during the relevant period, for what an individual has earned ' +
+                                                      'during their ordinary hours of work.' +
+                                                      'Note: You must provide a value for either "OTEAmount" or "SuperGuaranteeAmount"' +
+                                                      'or both (recommended).',
+                                             spec: 'PAYEVNT 0002 2017/0003 2018: Remuneration.OrdinaryTimeEarnings.Amount'
 														},
 														{
 															name: 'ReportableEmployerSuperContribution',
@@ -6169,7 +6227,8 @@ ns1blankspace.financial.payroll.totals =
 															caption: 'Reportable Employer Super Contribution (RESC)',
 															help: 'This is the value, during the relevant period, for employer superannuation contributions ' +
                                                       'that are additional to the compulsory contributions where the employee influenced ' +
-                                                      'the rate or amount of contribution.'
+                                                      'the rate or amount of contribution.',
+                                             spec: 'PAYEVNT 0002 2017/0003 2018: SuperannuationContribution.EmployerReportable.Amount'
 														},
 														{
 															name: 'PayeeLumpSumPaymentAType',
@@ -6226,23 +6285,14 @@ ns1blankspace.financial.payroll.totals =
 														},
 														{
 															name: 'PayeeTaxFreeThresholdClaimed',
-															value: 'false',
+															field: 'employee.taxfreethreshold',
+															defaultValue: 'false',
 															help: ''
 														},
 														{
-															name: 'PayeeSeniorAustralianTaxOffsetClaimed',
-															value: 'false',
-															mustBeSet: false
-														},
-														{
-															name: 'PayeeTaxOffsetDownwardVariationAmount',
-															value: '',
-															mustBeSet: false,
-															numeric: true
-														},
-														{
 															name: 'PayeeHELPIndicator',
-															value: 'false'
+															field: 'employee.deducthelp',
+															defaultValue: 'false'
 														},
 														{
 															name: 'PayeeTradeSupportLoanIndicator',
@@ -6259,7 +6309,7 @@ ns1blankspace.financial.payroll.totals =
 														},
 														{
 															name: 'PayeeDeclarationDate',
-															field: 'startdate',
+															field: 'employee.employmentstartdate',
 															dateFormat: 'YYYY-MM-DDTHH:mm:ss'
 														},
 														{
@@ -6521,6 +6571,9 @@ ns1blankspace.financial.payroll.totals =
 												{
 													oItemData = {id: oSummary.id};
 													oDataFileItem = {};
+
+													oSummary['employee.taxfreethreshold'] = (oSummary['employee.taxfreethreshold']=='Y'?'true':'false')
+													oSummary['employee.deducthelp'] = (oSummary['employee.deducthelp']=='Y'?'true':'false')
 
 													$.each(oItem.fields, function (f, oField)
 													{
@@ -6784,7 +6837,7 @@ ns1blankspace.financial.payroll.totals =
 										{
 											aHTML.push('<div style="font-size: 0.875em;" class="alert alert-danger"><i style="color:red; text-align:center; padding-right:6px;" class="glyphicon glyphicon-warning-sign"></i> ' +
 															' There ' + (ns1blankspace.financial.payroll.totals.employees.report.data.inProgress.length==1?'is one pay period':'are ' +
-															ns1blankspace.financial.payroll.totals.employees.report.data.inProgress.length + ' pay periods') + ' prior to this reporting date that are still in progress, you should not submit this file to the ' + ns1blankspace.option.taxOffice + '.</div>');
+															ns1blankspace.financial.payroll.totals.employees.report.data.inProgress.length + ' pay periods') + ' prior to this reporting end date that are still in progress, you should not submit this file to the ' + ns1blankspace.option.taxOffice + '.</div>');
 										}
 
 										aHTML.push('<div style="margin-left:12px; margin-top:12px;">' +
@@ -6796,6 +6849,10 @@ ns1blankspace.financial.payroll.totals =
 										}
 
 										aHTML.push('</div>');
+
+										aHTML.push('<div style="margin-left:12px; margin-top:6px;">' +
+														'<input type="checkbox" id="ns1blankspacePayrollTotalsSTPDataFileProductID"> <span class="ns1blankspaceSubNote">Include the Product ID?  Leave unticked if not sure.</span>' +
+														'</div>');
 
 										aHTML.push('<div style="margin-top:12px;" id="ns1blankspacePayrollTotalsSTPDataSubmitContainer">' +
 																'</div>');
@@ -6827,6 +6884,8 @@ ns1blankspace.financial.payroll.totals =
 										{
 											ns1blankspace.status.working('Creating file...');
 
+											var bIncludeProductID = $('#ns1blankspacePayrollTotalsSTPDataFileProductID').prop('checked');
+
 											var oOptions = 
 											{
 												delimiter: ',',
@@ -6849,6 +6908,8 @@ ns1blankspace.financial.payroll.totals =
 											{
 												$.each(oFileData, function (sKeyFileData, sValueFileData, index)
 												{
+													if (!bIncludeProductID && sKeyFileData == 'Product ID') {sValueFileData = ''}
+
 													aFile.push(oOptions.surroundWith);
 													aFile.push(sValueFileData)
 													aFile.push(oOptions.surroundWith);
