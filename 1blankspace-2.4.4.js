@@ -491,22 +491,22 @@ ns1blankspace.app =
 							ns1blankspace.unloadWarning = false;
 						});
 
-						$('td.ns1blankspaceControl').live('click', function()
+						$(document).on('click', 'td.ns1blankspaceControl', function()
 						{
 							ns1blankspace.history.control({xhtmlElementID: this.id});
 						});
 						
-						$('td.ns1blankspaceControl').live('mousedown', function() 
+						$(document).on('mousedown', 'td.ns1blankspaceControl', function() 
 						{
 							$('td.ns1blankspaceHighlight').removeClass('ns1blankspaceHighlight');
 						});
 
-						$('td.ns1blankspaceControl').live('mouseup', function() 
+						$(document).on('mouseup', 'td.ns1blankspaceControl', function() 
 						{
 							$(this).addClass('ns1blankspaceHighlight');
 						});
 
-						$('.ns1blankspaceWatermark').live('focus', function() 
+						$(document).on('focus', '.ns1blankspaceWatermark', function() 
 						{
 							if ($(this).hasClass('ns1blankspaceWatermark'))
 							{
@@ -515,12 +515,12 @@ ns1blankspace.app =
 							}	
 						});		
 						
-						$('input.ns1blankspaceSelect').live('focusout', function() 
+						$(document).on('focusout', 'input.ns1blankspaceSelect', function() 
 						{	
 							$(this).removeClass('ns1blankspaceHighlight');
 						});
 
-						$('input.ns1blankspaceSelect').live('focusin', function() 
+						$(document).on('focusin', 'input.ns1blankspaceSelect', function() 
 						{		
 							$('input.ns1blankspaceHighlight').removeClass('ns1blankspaceHighlight');
 
@@ -554,7 +554,7 @@ ns1blankspace.app =
 							.css('height', '21px')
 						});
 							
-						$('input.ns1blankspaceSelect').live('keyup', function(e)
+						$(document).on('keyup', 'input.ns1blankspaceSelect', function(e)
 						{
 							if ($(this).val().length == 0) {$(this).attr('data-id', '')}
 
@@ -574,7 +574,7 @@ ns1blankspace.app =
 							}		
 						});	
 						
-						$('.ns1blankspaceSelectAddress').live('focusin', function() 
+						$(document).on('focusin', '.ns1blankspaceSelectAddress', function() 
 						{
 							$('input.ns1blankspaceHighlight').removeClass('ns1blankspaceHighlight');
 
@@ -604,17 +604,17 @@ ns1blankspace.app =
 							.css('height', '21px')
 						});
 						
-						$('input.ns1blankspaceSelectAddress').live('keyup', function()
+						$(document).on('keyup', 'input.ns1blankspaceSelectAddress', function()
 						{
 							ns1blankspace.search.address.show(ns1blankspace.xhtml.divID, {source: 1, minimumLength: 3});	
 						});	
 						
-						$('.ns1blankspaceSelectAddress').live('keyup', function() 
+						$(document).on('keyup', '.ns1blankspaceSelectAddress', function() 
 						{
 							$(ns1blankspace.xhtml.container).hide();
 						});
 							
-						$('.ns1blankspaceSelectContactEmail').live('focusin', function() 
+						$(document).on('focusin', '.ns1blankspaceSelectContactEmail', function() 
 						{
 							ns1blankspace.xhtml.divID = this.id;
 							$(ns1blankspace.xhtml.container).html('');
@@ -640,7 +640,7 @@ ns1blankspace.app =
 							.css('height', '21px')
 						});
 						
-						$('.ns1blankspaceSelectContactEmail').live('keyup', function() 
+						$(document).on('keyup', '.ns1blankspaceSelectContactEmail', function() 
 						{
 							if (ns1blankspace.timer.delayCurrent != 0) {clearTimeout(ns1blankspace.timer.delayCurrent)};
 							
@@ -651,27 +651,26 @@ ns1blankspace.app =
 										"setXHTMLElementID: '" + $(this).attr('data-setelementid') + "'});"
 							
 							ns1blankspace.timer.delayCurrent = setTimeout(sFunction, ns1blankspace.option.typingWait);
-							
 						});
 						
-						$('.ns1blankspaceOptionsClose').live('click', function() 
+						$(document).on('click', '.ns1blankspaceOptionsClose', function() 
 						{
 							$(ns1blankspace.xhtml.container).slideUp(500);
 							$(ns1blankspace.xhtml.container).attr('data-initiator', '');
 						});
 						
-						$('.ns1blankspaceSearchHeaderPage').live('click', function() 
+						$(document).on('click', '.ns1blankspaceSearchHeaderPage', function() 
 						{
 							interfaceAuditSearchShowPage(this.id);
 						}); //???
 								
-						$('input.ns1blankspaceText').live('focus', function() 
+						$(document).on('focus', 'input.ns1blankspaceText', function() 
 						{
 							$(this).addClass('ns1blankspaceHighlight');
 							if (!$(this).attr('data-nohide') == 'true') {$(ns1blankspace.xhtml.container).hide()};
 						});
 
-						$('input.ns1blankspaceText').live('keyup', function() 
+						$(document).on('keyup', 'input.ns1blankspaceText', function() 
 						{
 							if ($(this).attr('data-1blankspace') != 'ignore')
 							{
@@ -679,18 +678,18 @@ ns1blankspace.app =
 							}	
 						});
 							
-						$('input.ns1blankspaceText').live('blur', function() 
+						$(document).on('blur', 'input.ns1blankspaceText', function() 
 						{
 							$(this).removeClass('ns1blankspaceHighlight');
 						});
 
-						$('input.ns1blankspaceDate').live('focus', function() 
+						$(document).on('focus', 'input.ns1blankspaceDate', function() 
 						{
 							$(this).addClass('ns1blankspaceHighlight');
 							$(ns1blankspace.xhtml.container).hide();
 						});
 
-						$('input.ns1blankspaceDate').live('blur', function() 
+						$(document).on('blur', 'input.ns1blankspaceDate', function() 
 						{
 							$(this).removeClass('ns1blankspaceHighlight');
 							if ($(this).attr('data-1blankspace') != 'ignore')
@@ -699,18 +698,18 @@ ns1blankspace.app =
 							}
 						});
 
-						$('.ns1blankspaceTextMulti').live('focus', function()
+						$(document).on('focus', '.ns1blankspaceTextMulti', function()
 						{
 							$(this).addClass('ns1blankspaceHighlight');
 							$(ns1blankspace.xhtml.container).hide();
 						});
 
-						$('.ns1blankspaceTextMulti').live('blur', function() 
+						$(document).on('blur', '.ns1blankspaceTextMulti', function() 
 						{
 							$(this).removeClass('ns1blankspaceHighlight');
 						});
 
-						$('.ns1blankspaceTextMulti').live('keyup', function() 
+						$(document).on('keyup', '.ns1blankspaceTextMulti', function() 
 						{
 							if ($(this).attr('data-1blankspace') != 'ignore')
 							{
@@ -718,7 +717,7 @@ ns1blankspace.app =
 							}
 						});
 
-						$('.ns1blankspaceViewLink').live('click', function()
+						$(document).on('click', '.ns1blankspaceViewLink', function()
 						{
 							if ($(this).attr('data-id') != undefined && $(this).attr('data-object') != undefined)
 							{
@@ -729,7 +728,7 @@ ns1blankspace.app =
 							}	
 						});
 
-						$('.ns1blankspaceRadio').live('click', function()
+						$(document).on('click', '.ns1blankspaceRadio', function()
 						{
 							if ($(this).attr('data-1blankspace') != 'ignore')
 							{
@@ -5537,13 +5536,40 @@ ns1blankspace.util =
 	initDatePicker: function (oParam)
 				{
 					var sSelect = ns1blankspace.util.getParam(oParam, 'select', {"default": 'input.ns1blankspaceDate'}).value;
+					var bTime = ns1blankspace.util.getParam(oParam, 'time', {"default": false}).value;
+
 					var oOptions = {dateFormat: ns1blankspace.option.dateFormat};
+
 					if (ns1blankspace.option.defaultDatePickerOptions != undefined)
 					{
 						oOptions = $.extend(true, oOptions, ns1blankspace.option.defaultDatePickerOptions)
 					}
 
-					$(sSelect).datepicker(oOptions);
+					if (oParam != undefined)
+					{
+						oOptions = $.extend(true, oOptions, oParam.options)
+					}
+
+					oOptions.beforeShow = ns1blankspace.util.datePickerOpen
+					oOptions.onClose = ns1blankspace.util.datePickerClose
+					oOptions.yearRange = 'c-100:c+50';
+
+					if (bTime)
+					{
+						oOptions.stepMinute = 5;
+						oOptions.ampm = true;
+						oOptions.controlType = 'select';
+						oOptions.showTime = false;
+						oOptions.showButtonPanel = false;
+						oOptions.oneLine = true;
+						oOptions.timeFormat = 'h:mm tt';
+
+						$(sSelect).datetimepicker(oOptions);
+					}
+					else
+					{
+						$(sSelect).datepicker(oOptions);
+					}
 				}																
 }
 

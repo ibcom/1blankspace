@@ -261,7 +261,7 @@ ns1blankspace.scripts =
 	},
 	{
 		nameSpace: '1blankspace.action',
-		source: '/site/1903/1blankspace.action-2.1.1.js'
+		source: '/site/1903/1blankspace.action-3.0.8.js'
 	},
 	{
 		nameSpace: '1blankspace.messaging.conversation',
