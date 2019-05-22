@@ -6122,8 +6122,8 @@ ns1blankspace.financial.payroll.totals =
 														},
 														{
 															name: 'PayeeTotalINBPAYGWAmount',
-															value: '',
-															mustBeSet: false,
+															field: 'taxbeforerebate',
+															mustBeSet: true,
 															numeric: true,
 															caption: 'Employee tax'
 														},
@@ -6212,7 +6212,8 @@ ns1blankspace.financial.payroll.totals =
 														},
 														{
 															name: 'PayeeTaxFreeThresholdClaimed',
-															value: 'false'
+															value: 'false',
+															help: ''
 														},
 														{
 															name: 'PayeeSeniorAustralianTaxOffsetClaimed',
@@ -6287,6 +6288,7 @@ ns1blankspace.financial.payroll.totals =
 										var sIsUpdate = ns1blankspace.util.getParam(oParam, 'isUpdate', {"default": 'false'}).value;
 										var sIsFull = ns1blankspace.util.getParam(oParam, 'isFull', {"default": 'true'}).value;
 										var sDeclarationAcceptedBy = ns1blankspace.util.getParam(oParam, 'declarationAcceptedBy', {"default": ns1blankspace.user.email}).value;
+										var sIsFinalForYear = ns1blankspace.util.getParam(oParam, 'isFinalForYear', {"default": 'N'}).value;
 
 										if (iPayPeriod == undefined)
 										{
