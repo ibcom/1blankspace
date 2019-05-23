@@ -6220,7 +6220,6 @@ ns1blankspace.financial.payroll.totals =
 															value: '',
 															mustBeSet: false,
 															numeric: true,
-															caption: 'SG earnings amount',
 															help: 'This is the value, during the relevant period, for what an individual has earned ' +
                                                       'during their ordinary hours of work.' +
                                                       'Note: You must provide a value for either "OTEAmount" or "SuperGuaranteeAmount"' +
@@ -6886,6 +6885,16 @@ ns1blankspace.financial.payroll.totals =
 															ns1blankspace.financial.payroll.totals.employees.report.data.inProgress.length + ' pay periods') + ' prior to this reporting end date that are still in progress, you should not submit this file to the ' + ns1blankspace.option.taxOffice + '.</div>');
 										}
 
+										aHTML.push('<div style="margin-left:12px; margin-top:12px;" id="ns1blankspacePayrollTotalsSTPDataStatus"></div>');
+
+										aHTML.push('<div style="margin-left:12px; margin-top:6px;">' +
+														'<input type="checkbox" checked="checked" id="ns1blankspacePayrollTotalsSTPDataFileProductID"> <span class="ns1blankspaceSubNote">Are you using <em>singletouch Lite</em>?</span>' +
+														'</div>');
+
+										aHTML.push('<div style="margin-left:12px; margin-top:6px;">' +
+														'<input type="checkbox" checked="checked" id="ns1blankspacePayrollTotalsSTPDataFileRecord"> <span class="ns1blankspaceSubNote">Mark as submitted to ' + ns1blankspace.option.taxOffice + '?</span>' +
+														'</div>');
+
 										aHTML.push('<div style="margin-left:12px; margin-top:12px;">' +
 															'<span id="ns1blankspacePayrollTotalsSTPDataFile" class="ns1blankspaceAction"></span>');
 
@@ -6893,12 +6902,8 @@ ns1blankspace.financial.payroll.totals =
 										{
 											aHTML.push(' <span id="ns1blankspacePayrollTotalsSTPDataSubmit" class="ns1blankspaceAction"></span>');
 										}
-
+										
 										aHTML.push('</div>');
-
-										aHTML.push('<div style="margin-left:12px; margin-top:6px;">' +
-														'<input type="checkbox" checked="checked" id="ns1blankspacePayrollTotalsSTPDataFileProductID"> <span class="ns1blankspaceSubNote">Include the Product ID?  Leave ticked if not sure.</span>' +
-														'</div>');
 
 										aHTML.push('<div style="margin-top:12px;" id="ns1blankspacePayrollTotalsSTPDataSubmitContainer">' +
 																'</div>');
@@ -6922,6 +6927,8 @@ ns1blankspace.financial.payroll.totals =
 										{		
 											 ns1blankspace.financial.payroll.totals.employees.report.submit.confirm(oParam)
 										});
+
+										ns1blankspace.financial.payroll.totals.employees.report.history.show(oParam)
 									},
 
 									file: function (oParam, oResponse)
@@ -6930,7 +6937,8 @@ ns1blankspace.financial.payroll.totals =
 										{
 											ns1blankspace.status.working('Creating file...');
 
-											var bIncludeProductID = $('#ns1blankspacePayrollTotalsSTPDataFileProductID').prop('checked');
+											var bIncludeProductID = !($('#ns1blankspacePayrollTotalsSTPDataFileProductID').prop('checked'));
+											var bHistoryRecord = !($('#ns1blankspacePayrollTotalsSTPDataFileRecord').prop('checked'));
 
 											var oOptions = 
 											{
@@ -6976,7 +6984,80 @@ ns1blankspace.financial.payroll.totals =
 
 											ns1blankspace.setup.file["export"].saveToFile(oParam);
 
+											ns1blankspace.financial.payroll.totals.employees.report.history.record(oParam);
+
 											ns1blankspace.status.message('File created');
+										}
+									},
+
+									history:
+									{
+										record: function (oParam, oResponse)
+										{
+											if (oResponse == undefined)
+											{
+												var oData = 
+												{
+													object: 37,
+													objectcontext: ns1blankspace.financial.payroll.data.payPeriod.id,
+													actionreference: '[STP-S-STL]',
+													description: 'STP Submitted to ATO using singletouch/Lite',
+													duedate: moment().format('DD MMM YYYY HH:mm'),
+													completed: moment().format('DD MMM YYYY HH:mm'),
+													status: 1,
+													actionby: ns1blankspace.user.id
+												}
+
+												$.ajax(
+												{
+													type: 'POST',
+													url: ns1blankspace.util.endpointURI('ACTION_MANAGE'),
+													data: oData,
+													dataType: 'json',
+													global: false,
+													success: function(data)
+													{
+														ns1blankspace.financial.payroll.totals.employees.report.history.record(oParam, data)
+													}
+												});
+											}
+											else
+											{
+												if (oResponse.status == 'OK')
+												{
+													ns1blankspace.status.message('Record as submitted');
+												}
+											}
+										},
+
+										show: function (oParam, oResponse)
+										{
+											if (oResponse == undefined)
+											{
+												var oSearch = new AdvancedSearch();
+												oSearch.method = 'ACTION_SEARCH';
+												oSearch.addField('actionreference,duedatetime');
+												oSearch.addFilter('object', 'EQUAL_TO', 37);
+												//oSearch.addFilter('completed', 'GREATER_THAN_OR_EQUAL_TO', ns1blankspace.financial.payroll.data.startDate);
+												oSearch.addFilter('objectcontext', 'EQUAL_TO', ns1blankspace.financial.payroll.data.payPeriod.id)
+												oSearch.addFilter('actionreference', 'EQUAL_TO', '[STP-S-STL]');
+												oSearch.rows = 1;
+												oSearch.getResults(function(data) {ns1blankspace.financial.payroll.totals.employees.report.history.show(oParam, data)});	
+											}
+											else
+											{
+												if (oResponse.status == 'OK')
+												{
+													var sHTML = 'This pay period has NOT been marked as submitted to the ' + ns1blankspace.option.taxOffice;
+
+													if (oResponse.data.rows.length > 0)
+													{
+														 sHTML = 'This pay period has been marked as submitted to the ' + ns1blankspace.option.taxOffice + ' (' + oResponse.data.rows[0].duedatetime + ').';
+													}
+													
+													$('#ns1blankspacePayrollTotalsSTPDataStatus').html('<span class="ns1blankspaceSubNote" style="font-weight:bold; font-size:0.875em;">' + sHTML + '</span>');
+												}
+											}
 										}
 									},
 
