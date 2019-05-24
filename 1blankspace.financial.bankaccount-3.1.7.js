@@ -7922,7 +7922,7 @@ ns1blankspace.financial.bankAccount =
 														sSearch = sSearch.toLowerCase();
 														var oData = $.grep(ns1blankspace.financial.data.accounts, function (a)
 														{
-															if ($('##ns1blankspaceItemFinancialAccountAll').prop('checked') == true)
+															if ($('#ns1blankspaceItemFinancialAccountAll').prop('checked') == true)
 															{
 																return ((a.title).toLowerCase().indexOf(sSearch) != -1 && a.postable == 'Y')
 															}

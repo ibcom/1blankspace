@@ -7048,7 +7048,7 @@ ns1blankspace.financial.payroll.totals =
 											{
 												if (oResponse.status == 'OK')
 												{
-													var sHTML = 'This pay period has NOT been marked as submitted to the ' + ns1blankspace.option.taxOffice;
+													var sHTML = 'This pay period has NOT been marked as submitted to the ' + ns1blankspace.option.taxOffice + '.';
 
 													if (oResponse.data.rows.length > 0)
 													{
