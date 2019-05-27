@@ -6,6 +6,7 @@
  * http://docs.mydigitalstructure.com/community_authentication_msal
  *
  * https://github.com/AzureAD/microsoft-authentication-library-for-js
+ * <script src="https://secure.aadcdn.microsoftonline-p.com/lib/1.0.0/js/msal.js"></script>
  *
  */
 
@@ -54,14 +55,14 @@ ns1blankspace.util.msal =
                 }
                 else
                 {
-                    ns1blankspace.status.error('Can not get MSAL account.');
+                    ns1blankspace.status.error('Can not get MSAL account. Is this URL registered with MSAL service account?');
                 }
             }
             else if (iLoginType == 'REDIRECT')
             {
-                document.getElementById("SignIn").onclick = function () {
-                   ns1blankspace.util.msal.instance.loginRedirect({scopes: ns1blankspace.util.msal.scopes});
-                };
+                //document.getElementById("SignIn").onclick = function () {
+                //   ns1blankspace.util.msal.instance.loginRedirect({scopes: ns1blankspace.util.msal.scopes});
+                // };
 
                 if (ns1blankspace.util.msal.instance.getAccount() && !ns1blankspace.util.msal.instance.isCallback(window.location.hash))
                 {
@@ -173,17 +174,21 @@ ns1blankspace.util.msal =
     {
         welcomeMessage: function ()
         {
-            var divWelcome = document.getElementById('WelcomeMessage');
-            divWelcome.innerHTML = "Welcome " + (ns1blankspace.util.msal.account.userName || ns1blankspace.util.msal.account.idToken.given_name) + ', aquiring token for you...';
-            var loginbutton = document.getElementById('SignIn');
-            loginbutton.innerHTML = 'Sign Out';
-            loginbutton.setAttribute('onclick', 'signOut();');
-        },
-        updateMessage: function (message)
-        {
+            var sXHTMLElementID = ns1blankspace.util.getParam(oParam, 'xhtmlElementID').value;
 
-            var divWelcome = document.getElementById('WelcomeMessage');
-            divWelcome.innerHTML = "Hi " + (ns1blankspace.util.msal.account.userName || ns1blankspace.util.msal.account.idToken.given_name) + ', ' + message;
+            if (sXHTMLElementID != undefined)
+            {
+                $('#' + sXHTMLElementID).html('Aquiring token for you...');
+            }
+        },
+        updateMessage: function (sMessage)
+        {
+            var sXHTMLElementID = ns1blankspace.util.getParam(oParam, 'xhtmlElementID').value;
+
+            if (sXHTMLElementID != undefined)
+            {
+                $('#' + sXHTMLElementID).html(sMessage);
+            }
         }
     },
     endpoint:
