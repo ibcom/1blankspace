@@ -2063,7 +2063,7 @@ ns1blankspace.control =
 			}
 		},		
 
-		key:		function (oParam, oResponse)
+		key: function (oParam, oResponse)
 		{
 			var aHTML = [];
 			var h = -1;
@@ -2079,7 +2079,7 @@ ns1blankspace.control =
 				if (oParam.show != undefined) {bShow = oParam.show}
 				if (oParam.setPosition != undefined) {bSetPosition = oParam.setPosition}
 			}	
-			
+
 			if (oResponse == undefined)
 			{
 				$.ajax(
@@ -2103,50 +2103,92 @@ ns1blankspace.control =
 				{
 					aHTML.push('<table style="width:400px;">' + 
 									'<tr><td class="ns1blankspaceCaption">Secure Access Token</td>' +
-									'<td id="tdns1blankspaceHomeOptionClose" style="text-align:right;">' +
-									'<span id="ns1blankspaceClose">Close</span></td>' +
+									'<td id="ns1blankspaceHomeOptionClose" style="text-align:right;">' +
+									'<span id="ns1blankspaceClose"></span></td>' +
 									'</tr>' +
 									'</table>');
 				}
-				
-				aHTML.push('<table id="ns1blankspaceControlUserCreateSecureKey" style="width:400px; font-size:0.75em">');
-				
-				if (oResponse.access_token == undefined)
+
+
+				if (ns1blankspace.authenticationUsingAccessToken == 1)
 				{
-					aHTML.push('<tr><td>' +
-									'<br />No key has been set up.  Click <b>New Token</b> to create a token, which you can use to link to your information.<br /><br /></td></tr>');
-					
+					aHTML.push('<table id="ns1blankspaceControlUserCreateSecureKey" style="width:400px; font-size:0.825em">' +
+									'<tr><td>Your user account has access key creation disabled.</td></tr>' +
+									'<tr><td>Please contact your system administrator for more information.</td></tr></table>');
+
 				}
 				else
 				{
-					aHTML.push('<tr><td>' +	oResponse.access_token + '<br /><br /></td></tr>');
+					aHTML.push('<table id="ns1blankspaceControlUserCreateSecureKey" style="width:400px; font-size:0.75em">');
 					
-					aHTML.push('<tr><td><span id="ns1blankspaceControlUserCreateSecureKeyDisable">Disable Token</span></td></tr>');								
-					aHTML.push('<tr><td><br />If you generate a new token, the current token will no longer work.<br /><br /></td></tr>');
+					if (oResponse.access_token == undefined)
+					{
+						aHTML.push('<tr><td>' +
+										'No key has been set up.  Click <b>New Token</b> to create a token, which you can use ' +
+										(ns1blankspace.authenticationUsingAccessToken==3?'to link to your information':'2nd factor logon code') +
+										'.</td></tr>');
+					}
+					else
+					{
+						aHTML.push('<tr><td>' +	oResponse.access_token + '</td></tr>');
+						
+						aHTML.push('<tr><td><span id="ns1blankspaceControlUserCreateSecureKeyDisable">Disable Token</span></td></tr>');								
+						aHTML.push('<tr><td>If you generate a new token, the current token will no longer work.</td></tr>');
+					}
+					
+					aHTML.push('<tr><td><span id="ns1blankspaceControlUserCreateSecureKeyNew">New Token</span></td></tr>');
+					
+					if (oResponse.access_token != undefined)
+					{
+						if (ns1blankspace.authenticationUsingAccessToken == 3 || ns1blankspace.authenticationUsingAccessToken == undefined)
+						{
+							aHTML.push('<tr><td><b>Example link for future diary events in iCal format:</b>');
+
+							aHTML.push('<tr><td>' + window.location.protocol + '//' + window.location.host + '/rpc/action/' +
+											'<br />?method=ACTION_ICAL_SEARCH' +
+											'<br />&access_token=' + oResponse.access_token + '</td></tr>');			
+					
+							aHTML.push('<tr><td><b>Security Note</b></td></tr>');
+							aHTML.push('<tr><td>Given that this token gives privileged access (outside of the multi-token authorisation process),' +
+									' make sure you protect this token and be wary of using it in the URL query string,' +
+									' as data in the query string is not encrypted during transmission (even if using SSL).' + 
+									' It is recommended that the user associated with this token has limited access to methods.</td></tr>');
+						}
+						else if (ns1blankspace.authenticationUsingAccessToken == 2)
+						{
+							var sAccessToken = ns1blankspace.util.local.cache.search(
+							{
+								persist: true,
+								key: 'myds.access-token-' + ns1blankspace.user.logonName
+							});
+
+							aHTML.push('<tr><td class="ns1blankspaceCaption" style="font-size:1.2em;">Using Access Token as a Log On 2nd Factor</td></tr>');
+								
+							aHTML.push('<tr><td>Given that this access token can be used as a 2nd factor code when logging on,' +
+									' make sure you protect this token and only use it on devices you trust.</td></tr>');
+
+							if (sAccessToken == oResponse.access_token)
+							{
+								aHTML.push('<tr><td><b>The access token is currently saved on this device.</b></td></tr>');
+
+								aHTML.push('<tr><td><span id="ns1blankspaceControlUserCreateSecureKeyRemoveLocal"' +
+												'>Remove Token From This Device</span></td></tr>');
+							}
+							else
+							{
+								aHTML.push('<tr><td><span id="ns1blankspaceControlUserCreateSecureKeySaveLocal" ' +
+												'data-access-token="' +  oResponse.access_token + '"' +
+												'>Save Token On This Device</span></td></tr>');
+							}		
+						}
+					}
+
+					aHTML.push('<tr><td style="padding-top: 12px;"><a href="http://mydigitalstructure.com/gettingstarted_authentication" target="_blank">More on authentication...</a></td></tr>');
+
+					
+					aHTML.push('</table>');
 				}
-				
-				aHTML.push('<tr><td><span id="ns1blankspaceControlUserCreateSecureKeyNew">New Token</span></td></tr>');
-				
-				if (oResponse.access_token != undefined)
-				{
-					aHTML.push('<tr><td><br /><b>Example link for future diary events in iCal format:</b>');
 
-					aHTML.push('<tr><td>' + window.location.protocol + '//' + window.location.host + '/rpc/action/' +
-										'<br />?method=ACTION_ICAL_SEARCH' +
-										'<br />&access_token=' + oResponse.access_token + '<br /><br /></td></tr>');			
-				}
-
-				aHTML.push('<tr><td><b>Security Note</b></td></tr>');
-				aHTML.push('<tr><td>Given that this token gives privileged access (outside of the multi-token authorisation process),' +
-								' make sure you protect this token and be wary of using it in the URL query string,' +
-								' as data in the query string is not encrypted during transmission (even if using SSL).' + 
-								' It is recommended that the user associated with this token has limited access to methods.</td></tr>');
-
-				aHTML.push('<tr><td><a href="http://mydigitalstructure.com/gettingstarted_authentication" target="_blank">More on authentication...</a></td></tr>');
-
-				
-				aHTML.push('</table>');
-				
 				aHTML.push('</td></tr></table>');
 				
 				$('#' + sXHTMLElementID).html(aHTML.join(''));	
@@ -2178,11 +2220,23 @@ ns1blankspace.control =
 							data: 'remove=1',
 							dataType: 'json',
 							async: false,
-							success: function(data) {ns1blankspace.control.user.key({setPosition: false})}
+							success: function(data)
+							{
+								if (data.status == 'OK')
+								{
+									ns1blankspace.util.local.cache.remove(
+									{
+										persist: true,
+										key: 'myds.access-token-' + ns1blankspace.user.logonName
+									});
+								}	
+
+								ns1blankspace.control.user.key({setPosition: false})
+							}
 						})
 					}		
 				})
-				.css('width', '150px')
+				.css('width', '220px')
 				
 				$('#ns1blankspaceControlUserCreateSecureKeyNew').button()
 				.click(function() {
@@ -2200,7 +2254,17 @@ ns1blankspace.control =
 							{
 								if (data.status == 'OK')
 								{
-									ns1blankspace.control.user.key({setPosition: false})
+									ns1blankspace.control.user.key({setPosition: false});
+
+									if ($('#ns1blankspaceControlUserCreateSecureKeyNewSaveLocal').prop('checked'))
+									{
+										ns1blankspace.util.local.cache.save(
+										{
+											persist: true,
+											key: 'myds.access-token-' + ns1blankspace.user.logonName,
+											data: data.access_token
+										});
+									}
 								}
 								else
 								{
@@ -2210,7 +2274,37 @@ ns1blankspace.control =
 						})
 					}		
 				})
-				.css('width', '150px');
+				.css('width', '220px');
+
+				$('#ns1blankspaceControlUserCreateSecureKeySaveLocal').button()
+				.click(function(event)
+				{	
+					var sAccessToken = $(this).attr('data-access-token');
+
+					ns1blankspace.util.local.cache.save(
+					{
+						persist: true,
+						key: 'myds.access-token-' + ns1blankspace.user.logonName,
+						data: sAccessToken
+					});
+
+					ns1blankspace.control.user.key({setPosition: false});
+				})
+				.css('width', '220px');
+
+				$('#ns1blankspaceControlUserCreateSecureKeyRemoveLocal').button()
+				.click(function(event)
+				{	
+					ns1blankspace.util.local.cache.remove(
+					{
+						persist: true,
+						key: 'myds.access-token-' + ns1blankspace.user.logonName
+					});
+
+					ns1blankspace.control.user.key({setPosition: false});
+				})
+				.css('width', '220px');
+
 			}		
 		},
 	
@@ -2224,7 +2318,7 @@ ns1blankspace.control =
 				{
 					ns1blankspace.util.local.cache.save(
 					{
-						key: '_at',
+						key: 'myds.access-token-' + ns1blankspace.user.logonName,
 						persist: true,
 						data: sAccessToken
 					})
@@ -2233,9 +2327,9 @@ ns1blankspace.control =
 
 			logon: function ()
 			{
-				var sAccessToken = ns1blankspace.util.local.cache.save(
+				var sAccessToken = ns1blankspace.util.local.cache.search(
 				{
-					key: '_at',
+					key: 'myds.access-token-' + ns1blankspace.user.logonName,
 					persist: true
 				})
 
