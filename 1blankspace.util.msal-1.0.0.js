@@ -252,6 +252,32 @@ ns1blankspace.util.msal =
             return errorCode === "consent_required" ||
                 errorCode === "interaction_required" ||
                 errorCode === "login_required";
+        },
+
+        accessToken:
+        {
+            search: function (oParam, oResponse)
+            {
+                if (oResponse == undefined)
+                {
+                    var oSearch = new AdvancedSearch();
+                    oSearch.method = 'CORE_URL_SEARCH';     
+                    oSearch.addField('notes,url,urllogon');
+                    oSearch.addFilter('private', 'EQUAL_TO', 'Y');
+                    oSearch.addFilter('title', 'EQUAL_TO', 'singletouch.com.au');
+                    oSearch.rows = 1
+                    oSearch.getResults(function(data) {ns1blankspace.util.msal.util.accessToken.search(oParam, data)});
+                }
+                else
+                {
+                    
+                }    
+            },
+
+            save: function (oParam, oResponse)
+            {
+
+            }
         }
     }
 }
