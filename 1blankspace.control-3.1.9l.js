@@ -343,7 +343,7 @@ ns1blankspace.scripts =
 	},
 	{
 		nameSpace: '1blankspace.financial.payroll',
-		source: '/site/388/1blankspace.financial.payroll-3.1.7.js'
+		source: '/site/388/1blankspace.financial.payroll-3.1.9.js'
 	},
 	{
 		nameSpace: '1blankspace.financial.budget',
@@ -2178,7 +2178,7 @@ ns1blankspace.control =
 
 							if (sAccessToken == oResponse.access_token)
 							{
-								aHTML.push('<tr><td><b>The access token is currently saved on this device.</b></td></tr>');
+								aHTML.push('<tr><td><b>The access token is currently saved on this device for use as a log on 2nd factor.</b></td></tr>');
 
 								aHTML.push('<tr><td><span id="ns1blankspaceControlUserCreateSecureKeyRemoveLocal"' +
 												'>Remove Token From This Device</span></td></tr>');

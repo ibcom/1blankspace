@@ -61,7 +61,7 @@ ns1blankspace.util.msal =
             else if (iLoginType == 'REDIRECT')
             {
                 //document.getElementById("SignIn").onclick = function () {
-                //   ns1blankspace.util.msal.instance.loginRedirect({scopes: ns1blankspace.util.msal.scopes});
+                //   ns1blankspace.util.msal.instance.loginRedirect({scopes: ns1blankspace.util.msal.config.scopes});
                 // };
 
                 if (ns1blankspace.util.msal.instance.getAccount() && !ns1blankspace.util.msal.instance.isCallback(window.location.hash))
@@ -116,7 +116,7 @@ ns1blankspace.util.msal =
         },
         signIn: function ()
         {
-            ns1blankspace.util.msal.instance.loginPopup({scopes: ns1blankspace.util.msal.scopes})
+            ns1blankspace.util.msal.instance.loginPopup({scopes: ns1blankspace.util.msal.config.scopes})
             .then(function (loginResponse)
             {
                 console.log(loginResponse)
@@ -135,7 +135,7 @@ ns1blankspace.util.msal =
         acquireToken: function ()
         {
             console.log('Attempting to acquire token silently...');
-            ns1blankspace.util.msal.instance.acquireTokenSilent({scopes: ns1blankspace.util.msal.scopes})
+            ns1blankspace.util.msal.instance.acquireTokenSilent({scopes: ns1blankspace.util.msal.config.scopes})
             .then(function (tokenResponse)
             {
                 ns1blankspace.util.msal.auth.tokenResponse = tokenResponse;
@@ -151,7 +151,7 @@ ns1blankspace.util.msal =
  
                 if (ns1blankspace.util.msal.util.requiresInteraction(error.errorCode))
                 {
-                    ns1blankspace.util.msal.instance.acquireTokenPopup({scopes: ns1blankspace.util.msal.scopes})
+                    ns1blankspace.util.msal.instance.acquireTokenPopup({scopes: ns1blankspace.util.msal.config.scopes})
                     .then(function (tokenResponse)
                     {
                         ns1blankspace.util.msal.auth.tokenResponse = tokenResponse;
@@ -172,7 +172,7 @@ ns1blankspace.util.msal =
     },
     show:
     {
-        welcomeMessage: function ()
+        welcomeMessage: function (oParam)
         {
             var sXHTMLElementID = ns1blankspace.util.getParam(oParam, 'xhtmlElementID').value;
 
@@ -181,7 +181,7 @@ ns1blankspace.util.msal =
                 $('#' + sXHTMLElementID).html('Aquiring token for you...');
             }
         },
-        updateMessage: function (sMessage)
+        updateMessage: function (oParam, sMessage)
         {
             var sXHTMLElementID = ns1blankspace.util.getParam(oParam, 'xhtmlElementID').value;
 
@@ -270,7 +270,7 @@ ns1blankspace.util.msal =
                 }
                 else
                 {
-                    
+
                 }    
             },
 
