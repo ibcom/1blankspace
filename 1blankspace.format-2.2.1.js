@@ -1073,7 +1073,7 @@ ns1blankspace.format.editor =
 									if (aToolbars == undefined)
 									{
 										oInit.toolbar1 = 'bold italic underline strikethrough | alignleft aligncenter alignright alignjustify | formatselect fontselect fontsizeselect | fullscreen';
-							      		oInit.toolbar2 = 'forecolor backcolor | cut copy paste | bullist numlist | outdent indent blockquote | undo redo | link unlink anchor image media code';
+										oInit.toolbar2 = 'forecolor backcolor | cut copy paste | bullist numlist | outdent indent blockquote | undo redo | link unlink anchor image media code';
 							     		oInit.toolbar3 = 'table | hr removeformat | subscript superscript | charmap emoticons | ltr rtl | visualchars visualblocks nonbreaking pagebreak | template';
 									}
 									else

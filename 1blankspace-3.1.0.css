@@ -2,8 +2,7 @@
 {
 	div.mce-fullscreen
 	{
-    z-index: 9999;
-    top: 100px!important;
+    z-index: 9999;;
 	}
 
 	#ns1blankspaceViewControlActionStatus img

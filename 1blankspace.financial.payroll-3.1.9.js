@@ -8,9 +8,9 @@
 ns1blankspace.financial.payroll = 
 {
 	data: 	{
-				context: 'pays',
-				payPeriods: ['Not Set', 'Weekly', 'Fortnightly', 'Monthly', 'Bi-Monthly']
-			},
+					context: 'pays',
+					payPeriods: ['Not Set', 'Weekly', 'Fortnightly', 'Monthly', 'Bi-Monthly']
+				},
 
 	init: 	function (oParam)
 				{
