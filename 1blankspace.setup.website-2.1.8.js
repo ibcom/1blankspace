@@ -1904,7 +1904,7 @@ ns1blankspace.setup.website =
 												if (ns1blankspace.session.instance.indexOf('lab') != -1)
 												{
 													aHTML.push('<tr><td class="ns1blankspaceSubNote" style="padding-bottom:12px;">' +
-															 		'<strong>You are in lab.</strong><br />So don\'t forget to use the lab.ibcom.biz URL!' +
+															 		'<strong>You are in lab.</strong><br />So don\'t forget to use the mydigitalstructure-lab.cloud URL!' +
 																	'</td></tr>');
 												}
 											}	
