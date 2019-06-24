@@ -3612,37 +3612,37 @@ ns1blankspace.financial.payroll =
 									cSuper.contribution = cSuper.total * cSuper.rate / 100;
 								}
 
-								aHTML.push('<tr><td class="ns1blankspaceRow ns1blankspaceSub" style="padding-top:0px;">' +
+								aHTML.push('<tr><td class="ns1blankspaceRow ns1blankspaceSub">' +
 												'Gross Salary</td>' +
 												'<td class="ns1blankspaceRow" style="text-align:right;">' +
 												oRow["supercalculationmonthinitialgrosssalary"]  +
 												'</td></tr>');
 
-								aHTML.push('<tr><td class="ns1blankspaceRow ns1blankspaceSub" style="padding-top:0px;">' +
+								aHTML.push('<tr><td class="ns1blankspaceRow ns1blankspaceSub">' +
 												'<i>minus</i> Leave Loading</td>' +
 												'<td class="ns1blankspaceRow" style="text-align:right;">' +
 												oRow["supercalculationmonthleaveloading"]  +
 												'</td></tr>');
 
-								aHTML.push('<tr><td class="ns1blankspaceRow ns1blankspaceSub" style="padding-top:0px;">' +
+								aHTML.push('<tr><td class="ns1blankspaceRow ns1blankspaceSub">' +
 												'<i>minus</i> Superannuation Excluded Activity</td>' +
 												'<td class="ns1blankspaceRow" style="text-align:right;">' +
 												oRow["supercalculationmonthexclusion"]  +
 												'</td></tr>');
 
-								aHTML.push('<tr><td class="ns1blankspaceRow ns1blankspaceSub" style="padding-top:0px;">' +
+								aHTML.push('<tr><td class="ns1blankspaceRow ns1blankspaceSub">' +
 												'<i>plus</i> Allowances</td>' +
 												'<td class="ns1blankspaceRow" style="text-align:right;">' +
 												oRow["supercalculationmonthallowances"]  +
 												'</td></tr>');
 
-								aHTML.push('<tr><td class="ns1blankspaceRow ns1blankspaceSub" style="padding-top:0px;">' +
+								aHTML.push('<tr><td class="ns1blankspaceRow ns1blankspaceSub">' +
 												'<i>plus</i> Salary Sacrificed as Superannuation</td>' +
 												'<td class="ns1blankspaceRow" style="text-align:right;">' +
 												oRow["supercalculationmonthsalarysacrificesuper"]  +
 												'</td></tr>');
 
-								aHTML.push('<tr><td class="ns1blankspaceRow ns1blankspaceSub" style="padding-top:0px;">' +
+								aHTML.push('<tr><td class="ns1blankspaceRow ns1blankspaceSub">' +
 												'Gross for Superannuation</td>' +
 												'<td class="ns1blankspaceRow" style="text-align:right;">' +
 												numeral(cSuper.total).format('(0,0.00)') +
@@ -3656,11 +3656,11 @@ ns1blankspace.financial.payroll =
 
 								if (!cSuper.payable)
 								{
-									aHTML.push('<tr><td class="ns1blankspaceRow ns1blankspaceSub" style="padding-top:0px;" colspan="2">' +
+									aHTML.push('<tr><td class="ns1blankspaceRow ns1blankspaceSub" colspan="2">' +
 												'Superannuation contribution is not required as <i>Gross for Superannuation</i> is under the threshold.</td>');
 								}
 
-								aHTML.push('<tr><td class="ns1blankspaceRow ns1blankspaceSub" style="padding-top:0px;">' +
+								aHTML.push('<tr><td class="ns1blankspaceRow ns1blankspaceSub">' +
 												'Cumulative Contribution</td>' +
 												'<td class="ns1blankspaceRow" style="text-align:right;">' +
 												numeral(cSuper.contribution).format('(0,0.00)') +
