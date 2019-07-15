@@ -2697,7 +2697,7 @@ ns1blankspace.financial.payroll =
 
 											if (oResponse.data.rows.length == 0)
 											{
-												aHTML.push('<div class="ns1blankspaceNothing">No pays.</div>');
+												aHTML.push('<table class="ns1blankspaceColumn2"><tr><td><div class="ns1blankspaceNothing">No pays.</div></td></tr></table>');
 											}
 											else
 											{	
@@ -2788,7 +2788,7 @@ ns1blankspace.financial.payroll =
 
 											if (oResponse.data.rows.length == 0)
 											{
-												aHTML.push('<div class="ns1blankspaceNothing">No pay items.</div>');
+												aHTML.push('<table class="ns1blankspaceColumn2"><tr><td><div class="ns1blankspaceNothing">No pay items.</div></td></tr></table>');
 											}
 											else
 											{	
@@ -2841,7 +2841,10 @@ ns1blankspace.financial.payroll =
 							
 											$('#ns1blankspacePayrollEmployeeDetailsPayItemsColumn1').html(aHTML.join(''));
 
-											$('#ns1blankspacePayrollEmployeeDetailsPayItemsColumn2').html('<span class="ns1blankspaceAction" id="ns1blankspacePayItemsExport"></span>');
+											$('#ns1blankspacePayrollEmployeeDetailsPayItemsColumn2').html(
+													'<table class="ns1blankspaceColumn2"><tr><td>' +
+													'<span class="ns1blankspaceAction" id="ns1blankspacePayItemsExport"></span></td></tr></table>');
+
 											$('#ns1blankspacePayItemsExport').button(
 											{
 												label: 'Export'
@@ -2896,8 +2899,8 @@ ns1blankspace.financial.payroll =
 												var sFileName = 'payroll-employee-pay-items.csv'
 
 												ns1blankspace.setup.file.export.process(
-											   	{
-											   		items: oResponse.data.rows,
+											   {
+											   	items: oResponse.data.rows,
 													format: oFormat,
 													saveToFile: true,
 													open: true,
@@ -2942,7 +2945,7 @@ ns1blankspace.financial.payroll =
 
 											if (oResponse.data.rows.length == 0)
 											{
-												aHTML.push('<div class="ns1blankspaceNothing">No employee leave.</div>');
+												aHTML.push('<table class="ns1blankspaceColumn2"><tr><td><div class="ns1blankspaceNothing">No employee leave.</div></td></tr></table>');
 											}
 											else
 											{	
@@ -2976,8 +2979,12 @@ ns1blankspace.financial.payroll =
 
 											var aHTML = [];
 
-											aHTML.push('<span class="ns1blankspaceAction" id="ns1blankspaceActualLeaveExport"></span>');
-
+											aHTML.push('<table class="ns1blankspaceColumn2"><tr><td>');
+											aHTML.push('<div class="ns1blankspaceSubNote">Total Leave (hours)</div>')
+											aHTML.push('<div class="ns1blankspaceSub" style="padding-top:0px; font-size: 1.2em; padding-bottom:16px;">' +
+																numeral(numeral(oResponse.summary.hours).value()).format('0,0.00') + '</div>')
+											aHTML.push('<div><span class="ns1blankspaceAction" id="ns1blankspaceActualLeaveExport"></span></div>');
+											aHTML.push('</td></tr></table>')
 
 											$('#ns1blankspacePayrollEmployeeDetailsActualLeaveColumn2').html(aHTML.join(''));
 											$('#ns1blankspaceActualLeaveExport').button(

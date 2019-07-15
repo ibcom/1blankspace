@@ -259,6 +259,7 @@ ns1blankspace.home.options =
 					{
 						$(ns1blankspace.xhtml.container).attr('data-initiator', '');
 						$(ns1blankspace.xhtml.container).hide();
+						window.open(ns1blankspace.option.classicURI)
 					});
 
 					$('#ns1blankspaceHomeOptionsConnections').click(function(event)
