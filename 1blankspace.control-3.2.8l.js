@@ -184,13 +184,17 @@ ns1blankspace.xhtml.viewContainer =
 				   '<li >' +
 				   	'<a id="ns1blankspaceHomeOptionsNewWindow" href="#" target="_blank">Open in a new window</a>' +
 				   '</li>' +
+				   (ns1blankspace.option.classicURI!=undefined ? '<li><a href="#" id="ns1blankspaceHomeOptionsMyStartPage">' +
+				   	'Open as Classic</a>' +
+				   '</li>':'') +
+
 				   '<li><a href="#" id="ns1blankspaceHomeOptionsConnections">' +
-				   	'<div>Connections</div><div class="ns1blankspaceSubNote">Other webapps, websites..</div></a>' +
+				   	'<div>Connections</div><div class="ns1blankspaceSubNote">Other webapps, websites</div></a>' +
 				   '</li>' +
 				   '<li><a href="#" id="ns1blankspaceHomeOptionsSearch">' +
-				   	'<div>Search & reporting</div><div class="ns1blankspaceSubNote">Export, update, email & SMS..</div></a>' +
+				   	'<div>Search & reporting</div><div class="ns1blankspaceSubNote">Export, update, email & SMS</div></a>' +
 				   '</li>' +
-				    
+				  
 				 '</ul>' +
 			'</div>' +
 		'</li>' +
