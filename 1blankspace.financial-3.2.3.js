@@ -3427,7 +3427,7 @@ ns1blankspace.financial.accounts =
 								aHTML.push('</table>');
 
 								ns1blankspace.render.page.show(
-							   {
+							   	{
 									type: 'JSON',
 									xhtmlElementID: 'ns1blankspaceAccountTransactionsColumn2',
 									xhtmlContext: 'FinancialAccountTransactions',
@@ -3439,7 +3439,7 @@ ns1blankspace.financial.accounts =
 									functionOpen: undefined,
 									functionOnNewPage: undefined,
 									summary: oResponse.summary
-							   });
+							   	});
 								
 								$('#ns1blankspaceAccountTransactionsColumn3').html('<span class="ns1blankspaceAction" id="ns1blankspaceAccountExport"></span>');
 								$('#ns1blankspaceAccountExport').button(
