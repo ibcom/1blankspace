@@ -1349,6 +1349,9 @@ ns1blankspace.financial.payroll =
 											aHTML.push('<tr><td id="ns1blankspaceFinancialEmployee_details-21" class="ns1blankspaceRow ns1blankspaceRowSelect ns1blankspacePayrollEmployeeDetails">' +
 																	'Pay Items</td></tr>');
 
+											aHTML.push('<tr><td id="ns1blankspaceFinancialEmployee_details-22" class="ns1blankspaceRow ns1blankspaceRowSelect ns1blankspacePayrollEmployeeDetails">' +
+																	'Leave</td></tr>');
+
 											aHTML.push('</table>');
 
 											$('#ns1blankspacePayrollEmployeeDetailsColumn1').html(aHTML.join(''));
@@ -2749,59 +2752,6 @@ ns1blankspace.financial.payroll =
 												$.extend(true, oParam, {showPay: true, xhtmlElementID: this.id});
 												ns1blankspace.financial.payroll.init(oParam);
 											});
-
-											$('#ns1blankspacePayrollEmployeeDetailsPaysColumn2').html('<span class="ns1blankspaceAction" id="ns1blankspacePayItemsExport"></span>');
-											$('#ns1blankspacePayItemsExport').button(
-											{
-												label: 'Export'
-											})
-											.click(function()
-											{
-												var oFormat =
-												[{
-													options:
-													{
-														delimiter: ',',
-														surroundWith: '"'
-													},
-
-													header:
-													[
-														{
-															line: 1,
-															fields:
-															[
-																{value: 'Date'},
-																{value: 'Description'},
-																{value: 'Amount'}
-															]
-														}	
-													],
-
-													item:
-													[
-														{
-															fields:
-															[
-																{field: 'date'},
-																{field: 'description'},
-																{field: 'amount'}
-															]
-														}		
-													]
-												}]
-
-												var sFileName = $('#' + sXHTMLContext).attr('data-filename');
-
-												ns1blankspace.setup.file.export.process(
-											   	{
-											   		items: oResponse.data.rows,
-													format: oFormat,
-													saveToFile: true,
-													open: true,
-													fileName: sFileName
-												});
-											});
 										}
 									}
 
@@ -2816,7 +2766,7 @@ ns1blankspace.financial.payroll =
 															'<tr class="ns1blankspaceContainer">' +
 															'<td id="ns1blankspacePayrollEmployeeDetailsPayItemsColumn1" style="font-size:0.875em;">' +
 															ns1blankspace.xhtml.loading + '</td>' +
-															'<td id="ns1blankspacePayrollEmployeeDetailsPayItemsColumn2" style="width:0px;">' +
+															'<td id="ns1blankspacePayrollEmployeeDetailsPayItemsColumn2" style="width:40px; padding-left:18px;">' +
 															'</td>' +
 															'</tr>' + 
 															'</table>');				
@@ -2825,7 +2775,7 @@ ns1blankspace.financial.payroll =
 
 											var oSearch = new AdvancedSearch();
 											oSearch.method = 'FINANCIAL_PAYROLL_PAY_RECORD_ITEM_SEARCH';
-											oSearch.addField('payrecorditem.payrecord.payperiod.paydate,type,typetext,hours,rate,total,includeinsuper,manuallyupdated,notes,standardline,standardlinetext,taxable');
+											oSearch.addField('payrecorditem.payrecord.payperiod.paydate,payrecorditem.payrecord.employeetext,type,typetext,hours,rate,total,includeinsuper,manuallyupdated,notes,standardline,standardlinetext,taxable');
 											oSearch.addFilter('payrecorditem.payrecord.employee', 'EQUAL_TO', iEmployee);
 											oSearch.sort('payrecorditem.payrecord.payperiod.paydate', 'desc')
 											oSearch.sort('typetext', 'asc');
@@ -2890,6 +2840,198 @@ ns1blankspace.financial.payroll =
 											}	
 							
 											$('#ns1blankspacePayrollEmployeeDetailsPayItemsColumn1').html(aHTML.join(''));
+
+											$('#ns1blankspacePayrollEmployeeDetailsPayItemsColumn2').html('<span class="ns1blankspaceAction" id="ns1blankspacePayItemsExport"></span>');
+											$('#ns1blankspacePayItemsExport').button(
+											{
+												label: 'Export'
+											})
+											.click(function()
+											{
+												var oFormat =
+												[{
+													options:
+													{
+														delimiter: ',',
+														surroundWith: '"'
+													},
+
+													header:
+													[
+														{
+															line: 1,
+															fields:
+															[
+																{value: 'Pay Date'},
+																{value: 'Type'},
+																{value: 'Hours'},
+																{value: 'Rate'},
+																{value: 'Total'},
+																{value: 'Included In Superannuation Calculation'},
+																{value: 'Taxable'},
+																{value: 'Notes'}
+															]
+														}	
+													],
+
+
+													item:
+													[
+														{
+															fields:
+															[
+																{field: 'payrecorditem.payrecord.payperiod.paydate'},
+																{field: 'typetext'},
+																{field: 'hours'},
+																{field: 'rate'},
+																{field: 'total'},
+																{field: 'includeinsuper'},
+																{field: 'taxable'},
+																{field: 'notes'}
+															]
+														}		
+													]
+												}]
+
+												var sFileName = 'payroll-employee-pay-items.csv'
+
+												ns1blankspace.setup.file.export.process(
+											   	{
+											   		items: oResponse.data.rows,
+													format: oFormat,
+													saveToFile: true,
+													open: true,
+													fileName: sFileName
+												});
+											});
+										}
+									}
+
+									//ACTUAL LEAVE
+									if (iStep == 22)
+									{
+										if (oResponse == undefined)
+										{
+											var aHTML = [];
+
+											aHTML.push('<table class="ns1blankspaceContainer">' +
+															'<tr class="ns1blankspaceContainer">' +
+															'<td id="ns1blankspacePayrollEmployeeDetailsActualLeaveColumn1" style="font-size:0.875em;">' +
+															ns1blankspace.xhtml.loading + '</td>' +
+															'<td id="ns1blankspacePayrollEmployeeDetailsActualLeaveColumn2" style="width:40px; padding-left:18px;">' +
+															'</td>' +
+															'</tr>' + 
+															'</table>');				
+											
+											$('#ns1blankspacePayrollEmployeeDetailsColumn2').html(aHTML.join(''));
+
+//can't find payemployeeleave.period.paydate
+											var oSearch = new AdvancedSearch();
+											oSearch.method = 'FINANCIAL_PAYROLL_EMPLOYEE_LEAVE_SEARCH';
+											oSearch.addField('payemployeeleave.period.paydate,typetext,hours,itemtext');
+											oSearch.addFilter('employee', 'EQUAL_TO', iEmployee);
+											oSearch.addSummaryField('sum(hours) hours');
+											oSearch.sort('payemployeeleave.period.paydate', 'desc')
+											oSearch.sort('typetext', 'asc');
+											oSearch.rows = 9999;
+											oSearch.getResults(function(data){ns1blankspace.financial.payroll.employees.show(oParam, data)});
+										}
+										else
+										{
+											var aHTML = [];
+
+											if (oResponse.data.rows.length == 0)
+											{
+												aHTML.push('<div class="ns1blankspaceNothing">No employee leave.</div>');
+											}
+											else
+											{	
+												aHTML.push('<table class="ns1blankspaceColumn2">');
+												aHTML.push('<tr class="ns1blankspaceCaption">');
+												aHTML.push('<td class="ns1blankspaceHeaderCaption">Pay Date</td>');
+												aHTML.push('<td class="ns1blankspaceHeaderCaption">Type</td>');
+												aHTML.push('<td class="ns1blankspaceHeaderCaption" style="text-align:right;">Hours</td>');
+												aHTML.push('</tr>');
+
+												$(oResponse.data.rows).each(function(i, item) 
+												{
+													aHTML.push('<tr class="ns1blankspaceRow">');
+
+													aHTML.push('<td id="ns1blankspacePayrollEmployeeDetailsPays_paydate-' + this['id'] + '" class="ns1blankspaceRow ns1blankspacePayrollEmployeeDetailsActualLeave">' +
+																	this['payemployeeleave.period.paydate'] + '</td>');
+											
+													aHTML.push('<td id="ns1blankspaceFinancialPayPeriodItem_type-' + this.id + '" class="ns1blankspaceRow">' +
+																			this.typetext + '</td>');
+
+													aHTML.push('<td id="ns1blankspaceFinancialPayPeriodItem_hours-' + this.id + '" class="ns1blankspaceRow" style="text-align:right;">' +
+																			this.hours + '</td>');
+																																
+													aHTML.push('</tr>');
+												});
+												
+												aHTML.push('</table>');
+											}	
+							
+											$('#ns1blankspacePayrollEmployeeDetailsActualLeaveColumn1').html(aHTML.join(''));
+
+											var aHTML = [];
+
+											aHTML.push('<span class="ns1blankspaceAction" id="ns1blankspaceActualLeaveExport"></span>');
+
+
+											$('#ns1blankspacePayrollEmployeeDetailsActualLeaveColumn2').html(aHTML.join(''));
+											$('#ns1blankspaceActualLeaveExport').button(
+											{
+												label: 'Export'
+											})
+											.click(function()
+											{
+												var oFormat =
+												[{
+													options:
+													{
+														delimiter: ',',
+														surroundWith: '"'
+													},
+
+													header:
+													[
+														{
+															line: 1,
+															fields:
+															[
+																{value: 'Pay Date'},
+																{value: 'Type'},
+																{value: 'Hours'}
+															]
+														}	
+													],
+
+
+													item:
+													[
+														{
+															fields:
+															[
+																{field: 'payemployeeleave.period.paydate'},
+																{field: 'typetext'},
+																{field: 'hours'}
+															]
+														}		
+													]
+												}]
+
+												var sFileName = 'payroll-employee-leave.csv'
+
+												ns1blankspace.setup.file.export.process(
+											   	{
+											   		items: oResponse.data.rows,
+													format: oFormat,
+													saveToFile: true,
+													open: true,
+													fileName: sFileName
+												});
+											});
 										}
 
 									}
