@@ -184,6 +184,7 @@ ns1blankspace.xhtml.viewContainer =
 				   '<li >' +
 				   	'<a id="ns1blankspaceHomeOptionsNewWindow" href="#" target="_blank">Open in a new window</a>' +
 				   '</li>' +
+				   (ns1blankspace.option.classicURI!=undefined?'<li><a href="#" id="ns1blankspaceHomeOptionsMyStartPage">Open as Classic</a></li>':'') +
 				   '<li><a href="#" id="ns1blankspaceHomeOptionsConnections">' +
 				   	'<div>Connections</div><div class="ns1blankspaceSubNote">Other webapps, websites..</div></a>' +
 				   '</li>' +
@@ -247,7 +248,7 @@ ns1blankspace.scripts =
 	},
 	{
 		nameSpace: '1blankspace.home',
-		source: '/site/388/1blankspace.home-2.0.6.js'
+		source: '/site/388/1blankspace.home-3.2.9.js'
 	},
 	{
 		nameSpace: '1blankspace.format',
