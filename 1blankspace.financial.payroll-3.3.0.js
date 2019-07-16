@@ -5525,8 +5525,11 @@ ns1blankspace.financial.payroll.totals =
 												aHTML.push('<tr><td class="ns1blankspaceSubNote" style="padding-bottom:14px;">To create a Single Touch Payroll report, select <b>Pay Runs</b> and then <b>Totals & ATO Reporting</b> for the period you need to submit.</td></tr>');
 											}
 
-											aHTML.push('<tr><td id="ns1blankspacePayrollTotalsPreviewStatus" style="padding-top:14px; padding-bottom:2px; font-size:0.75em; border-top-style:solid; border-width:1px; border-color:#D0D0D0;" class="ns1blankspaceSub">' +
+											aHTML.push('<tr><td style="padding-top:14px; padding-bottom:2px; font-size:0.75em; border-top-style:solid; border-width:1px; border-color:#D0D0D0;" class="ns1blankspaceSub">' +
 															'Create summaries for selected employees</td></tr>');
+
+											aHTML.push('<tr><td id="ns1blankspacePayrollTotalsPreviewStatus" style="display:none; padding-top:2px; padding-bottom:2px; font-size:0.75em;" class="ns1blankspaceSub">' +
+															'</td></tr>');
 																	
 											aHTML.push('<tr><td><span id="ns1blankspacePayrollTotalsPreview" class="ns1blankspaceAction">' +
 															'Show</span></td></tr>');
@@ -5864,7 +5867,7 @@ ns1blankspace.financial.payroll.totals =
 
 														if ($('#ns1blankspacePayrollEmployeeTotals input:checked').length > 0)
 														{	
-															$('#ns1blankspacePayrollTotalsPreviewStatus').html('<span style="font-size:2.25em;" class="ns1blankspaceSub">' +
+															$('#ns1blankspacePayrollTotalsPreviewStatus').css('display', 'block').html('<span style="font-size:2.25em;" class="ns1blankspaceSub">' +
 																		'<span id="ns1blankspacePayrollTotalsPreviewStatusIndex">1</span>/' + $('#ns1blankspacePayrollEmployeeTotals input:checked').length + 
 																		'</span>');
 														}
@@ -5989,7 +5992,7 @@ ns1blankspace.financial.payroll.totals =
 														}
 														else
 														{
-															$('#ns1blankspacePayrollTotalsPreviewStatus').fadeOut(3000);
+															$('#ns1blankspacePayrollTotalsPreviewStatus').css('display', 'none');
 															ns1blankspace.util.onComplete(oParam);
 														}	
 													}						

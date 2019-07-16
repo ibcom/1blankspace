@@ -5525,8 +5525,11 @@ ns1blankspace.financial.payroll.totals =
 												aHTML.push('<tr><td class="ns1blankspaceSubNote" style="padding-bottom:14px;">To create a Single Touch Payroll report, select <b>Pay Runs</b> and then <b>Totals & ATO Reporting</b> for the period you need to submit.</td></tr>');
 											}
 
-											aHTML.push('<tr><td id="ns1blankspacePayrollTotalsPreviewStatus" style="padding-top:14px; padding-bottom:2px; font-size:0.75em; border-top-style:solid; border-width:1px; border-color:#D0D0D0;" class="ns1blankspaceSub">' +
+											aHTML.push('<tr><td style="padding-top:14px; padding-bottom:2px; font-size:0.75em; border-top-style:solid; border-width:1px; border-color:#D0D0D0;" class="ns1blankspaceSub">' +
 															'Create summaries for selected employees</td></tr>');
+
+											aHTML.push('<tr><td id="ns1blankspacePayrollTotalsPreviewStatus" style="display:none; padding-top:2px; padding-bottom:2px; font-size:0.75em;" class="ns1blankspaceSub">' +
+															'</td></tr>');
 																	
 											aHTML.push('<tr><td><span id="ns1blankspacePayrollTotalsPreview" class="ns1blankspaceAction">' +
 															'Show</span></td></tr>');
@@ -5864,7 +5867,7 @@ ns1blankspace.financial.payroll.totals =
 
 														if ($('#ns1blankspacePayrollEmployeeTotals input:checked').length > 0)
 														{	
-															$('#ns1blankspacePayrollTotalsPreviewStatus').html('<span style="font-size:2.25em;" class="ns1blankspaceSub">' +
+															$('#ns1blankspacePayrollTotalsPreviewStatus').css('display', 'block').html('<span style="font-size:2.25em;" class="ns1blankspaceSub">' +
 																		'<span id="ns1blankspacePayrollTotalsPreviewStatusIndex">1</span>/' + $('#ns1blankspacePayrollEmployeeTotals input:checked').length + 
 																		'</span>');
 														}
@@ -5989,7 +5992,7 @@ ns1blankspace.financial.payroll.totals =
 														}
 														else
 														{
-															$('#ns1blankspacePayrollTotalsPreviewStatus').fadeOut(3000);
+															$('#ns1blankspacePayrollTotalsPreviewStatus').css('display', 'none');
 															ns1blankspace.util.onComplete(oParam);
 														}	
 													}						
@@ -7701,7 +7704,7 @@ ns1blankspace.financial.payroll.pays.totals =
 										var oSearch = new AdvancedSearch();
 										oSearch.method = 'FINANCIAL_PAYROLL_PAY_RECORD_SEARCH';
 										oSearch.addField('payrecord.grosssalary,payrecord.netsalary,payrecord.superannuation,payrecord.taxafterrebate,payrecord.taxbeforerebate,taxadjustments,' +
-															'payrecord.employee.taxfilenumber,payrecord.employee.employeenumber,' +
+															'payrecord.employee.id,payrecord.employee.taxfilenumber,payrecord.employee.employeenumber,' +
 															'payrecord.employee.contactperson,payrecord.employee.contactperson.firstname,payrecord.employee.contactperson.surname,payrecord.employee.contactperson.email,' +
 															'payrecord.payperiod.startdate,payrecord.payperiod.paydate');
 										oSearch.addFilter('period', 'EQUAL_TO', ns1blankspace.objectContext)
@@ -7742,7 +7745,7 @@ ns1blankspace.financial.payroll.pays.totals =
 											aHTML.push('</table>');
 
 											ns1blankspace.render.page.show(
-										   	{
+										   {
 												type: 'JSON',
 												xhtmlElementID: 'ns1blankspacePayrollPaySlipTotalsColumn1',
 												xhtmlContext: 'Slips',
@@ -7753,7 +7756,7 @@ ns1blankspace.financial.payroll.pays.totals =
 												functionShowRow: ns1blankspace.financial.payroll.pays.totals.slips.row,
 												functionOpen: undefined,
 												functionOnNewPage: ns1blankspace.financial.payroll.pays.totals.slips.bind,
-										   	});
+										   });
 
 											var aHTML = [];
 																	
@@ -7860,13 +7863,89 @@ ns1blankspace.financial.payroll.pays.totals =
 									.css('width', '14px');		
 								},
 
-					preview: 	{
-									init: 		function (oParam)
+					preview: {
+									init: 	function (oParam)
 												{
-													oParam = ns1blankspace.util.setParam(oParam, 'onComplete', ns1blankspace.financial.payroll.pays.totals.slips.preview.show);
+													//ns1blankspace.financial.payroll.pays.totals.slips.preview.show
+													oParam = ns1blankspace.util.setParam(oParam, 'onComplete', ns1blankspace.financial.payroll.pays.totals.slips.preview.leaveTotal);
 													oParam = ns1blankspace.util.setParam(oParam, 'template', 'payslip');
 													oParam = ns1blankspace.util.setParam(oParam, 'object', 371);
 													ns1blankspace.format.templates.init(oParam);
+												},
+
+									leaveTotal: function (oParam)
+												{
+													var oSearch = new AdvancedSearch();
+													oSearch.method = 'FINANCIAL_PAYROLL_EMPLOYEE_LEAVE_SEARCH';
+													oSearch.addField('employee,type,sum(hours) hours');
+													oSearch.rows = 9999;
+
+													oSearch.getResults(function(oResponse)
+													{
+														var oLeaveType;
+														var aLeave;
+
+														_.each(ns1blankspace.financial.payroll.data.pays, function (oPay)
+														{	
+															aLeave = _.filter(oResponse.data.rows, function (oRow) {return oPay['payrecord.employee.id'] == oRow['employee']})
+															
+															oPay.leaveTotalAnnual = 0;
+															oPay.leaveTotalSick = 0;
+															oPay.leaveTotalLongService = 0;
+
+															if (aLeave.length != 0)
+															{
+																oLeaveType = _.find(aLeave, function (oLeave) {return oLeave.type == 1});
+																if (oLeaveType != undefined) {oPay.leaveTotalAnnual = oLeaveType.hours};
+
+																oLeaveType = _.find(aLeave, function (oLeave) {return oLeave.type == 2});
+																if (oLeaveType != undefined) {oPay.leaveTotalSick = oLeaveType.hours};
+
+																oLeaveType = _.find(aLeave, function (oLeave) {return oLeave.type == 3});
+																if (oLeaveType != undefined) {oPay.leaveTotalLongService = oLeaveType.hours};
+															}
+														});
+													});
+
+													ns1blankspace.financial.payroll.pays.totals.slips.preview.leave(oParam)
+												},
+
+									leave: function (oParam)
+												{
+													var oSearch = new AdvancedSearch();
+													oSearch.method = 'FINANCIAL_PAYROLL_EMPLOYEE_LEAVE_SEARCH';
+													oSearch.addField('employee,type,sum(hours) hours');
+													oSearch.addFilter('period', 'EQUAL_TO', ns1blankspace.objectContext);
+													oSearch.rows = 9999;
+
+													oSearch.getResults(function(oResponse)
+													{
+														var oLeaveType;
+														var aLeave;
+
+														_.each(ns1blankspace.financial.payroll.data.pays, function (oPay)
+														{	
+															aLeave = _.filter(oResponse.data.rows, function (oRow) {return oPay['payrecord.employee.id'] == oRow['employee']})
+
+															oPay.leaveAnnual = 0;
+															oPay.leaveSick = 0;
+															oPay.leaveLongService = 0;
+
+															if (aLeave.length != 0)
+															{
+																oLeaveType = _.find(aLeave, function (oLeave) {return oLeave.type == 1});
+																if (oLeaveType != undefined) {oPay.leaveAnnual = oLeaveType.hours};
+
+																oLeaveType = _.find(aLeave, function (oLeave) {return oLeave.type == 2});
+																if (oLeaveType != undefined) {oPay.leaveSick = oLeaveType.hours};
+
+																oLeaveType = _.find(aLeave, function (oLeave) {return oLeave.type == 3});
+																if (oLeaveType != undefined) {oPay.leaveLongService = oLeaveType.hours};
+															}
+														});
+													});
+
+													ns1blankspace.financial.payroll.pays.totals.slips.preview.show(oParam)
 												},
 
 									show:		function (oParam)
@@ -7915,7 +7994,7 @@ ns1blankspace.financial.payroll.pays.totals =
 
 														oParam.step = 2;
 														ns1blankspace.financial.payroll.pays.totals.slips.preview.show(oParam);
-													}			
+													}	
 
 													if (iStep == 2)
 													{
