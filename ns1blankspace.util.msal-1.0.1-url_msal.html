@@ -1,0 +1,61 @@
+<html>
+  <head>
+    <title>MSAL</title>
+  </head>
+
+  <body>
+    <script src="https://secure.aadcdn.microsoftonline-p.com/lib/1.0.0/js/msal.js"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js" class="pre"></script>
+    <script src="/site/388/1blankspace.util.msal-1.0.3.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+    <div data-tenant="singletouchsandbox.onmicrosoft.com/b2c_1_singletouch" style="display:none;">
+
+      <div class="container" style="margin-top:20px;">
+        <div class="row">
+          <div class="col-sm-12">
+            <div class="well">
+              <h3 style="margin-top:10px;">Sign in to singletouch.com.au ... </h2>
+              <p>If prompted, use the username and password provided by <a href="https://singletouch.com.au" target="_blank">singletouch.com.au</a>.</p>
+              <div>
+                <button id="ns1blankspaceMSALGetToken" onClick="ns1blankspace.util.msal.init(true)">Sign in</button>
+              </div>
+
+              <div style="margin-top:10px;" id="ns1blankspaceMSALStatus"></div>
+
+              <div class="well text-muted" style="font-size:0.825em; display:none;">
+                <p>
+                  Tick the box below to sign the declaration with the credentials you used to login and to authorise lodgement with Single Touch Pty Ltd\s AUSkey
+                </p>
+                    <p>
+                      I am notifying the ATO that:
+                    </p>
+                    <ul>
+                      <li>Single Touch Pty Ltd provides my business with lodgment transaction services;</li>
+                      <li>and my business, for the purposes of its transactions with the ATO via the SBR channel, sends (and receives) those transactions
+                      to (and from) the ATO via Single Touch Pty Ltd</li>
+                   </ul>
+                   <p>
+                    <input type="checkbox" id="#ns1blankspaceMSALSendDeclaration"> I declare the information transmitted in this payroll report is true and correct and I am authorised to make this declaration
+                   </p>
+                   <div class="form-group">
+                    <label for="ns1blankspaceMSALSendName" class="text-muted">Your name</label>
+                    <input type="text" class="form-control" id="ns1blankspaceMSALSendName">
+                </div>
+                <div id="ns1blankspaceMSALSend" class="ns1blankspaceAction">Send</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>  
+    </div>
+
+    <script>
+      if (typeof(ns1blankspace.util.msal.init) == 'function')
+      {
+        ns1blankspace.util.msal.init(false);
+      }
+    </script>
+
+  </body>
+</html>

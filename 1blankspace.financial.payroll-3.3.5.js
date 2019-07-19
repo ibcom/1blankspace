@@ -7804,13 +7804,15 @@ ns1blankspace.financial.payroll.totals =
 
 										send: function (oParam)
 										{
-											ns1blankspace.util.msal.init(
+											var oConfig;
+
+											if (!ns1blankspace.session.labInstance && ns1blankspace.user.super)
 											{
-												config:
+												oConfig =
 												{
 													auth:
 													{
-														clientId: ' 198014d6-e28f-4835-b02e-1e5005df667d  ',
+														clientId: '198014d6-e28f-4835-b02e-1e5005df667d',
 														authority: 'https://login.microsoftonline.com/tfp/singletouch.onmicrosoft.com/b2c_1_singletouch'
 													},
 													cache:
@@ -7820,10 +7822,16 @@ ns1blankspace.financial.payroll.totals =
 													},
 													scopes:
 													[
-														"https://singletouch.onmicrosoft.com/mydigitalstructure/read",
-														"https://singletouch.onmicrosoft.com/mydigitalstructure/user_impersonation"
-													]
-										    }
+														'https://singletouch.onmicrosoft.com/mydigitalstructure/read',
+														'https://singletouch.onmicrosoft.com/mydigitalstructure/user_impersonation'
+													],
+													apiURI: 'https://api.singletouch.com.au/api/STPEvent2018'
+											   }
+											}
+
+											ns1blankspace.util.msal.init(
+											{
+												config: oConfig
 											})
 										}
 									}

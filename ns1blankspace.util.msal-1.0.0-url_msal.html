@@ -1,0 +1,42 @@
+<html>
+  <head>
+    <title>MSAL</title>
+  </head>
+
+  <body>
+    <script src="https://secure.aadcdn.microsoftonline-p.com/lib/1.0.0/js/msal.js"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js" class="pre"></script>
+    <script src="/site/388/1blankspace.util.msal-1.0.2.js"></script>
+
+    <div id="singletouchsandbox.onmicrosoft.com/b2c_1_singletouch" style="display: none;">
+      <div class="well text-muted" style="font-size:0.825em;">
+        <p>
+          Tick the box below to sign the declaration with the credentials you used to login and to authorise lodgement with Single Touch Pty Ltd\s AUSkey
+        </p>
+            <p>
+              I am notifying the ATO that:
+            </p>
+            <ul>
+              <li>Single Touch Pty Ltd provides my business with lodgment transaction services;</li>
+              <li>and my business, for the purposes of its transactions with the ATO via the SBR channel, sends (and receives) those transactions
+              to (and from) the ATO via Single Touch Pty Ltd</li>
+           </ul>
+           <p>
+            <input type="checkbox" id="#ns1blankspaceMSALSendDeclaration"> I declare the information transmitted in this payroll report is true and correct and I am authorised to make this declaration
+           </p>
+           <div class="form-group">
+            <label for="ns1blankspaceMSALSendName" class="text-muted">Your name</label>
+            <input type="text" class="form-control" id="ns1blankspaceMSALSendName">
+        </div>
+        <div id="ns1blankspaceMSALSend" class="ns1blankspaceAction">Send</div>
+      </div>;
+    </div>
+
+    <script>
+      if (typeof(ns1blankspace.util.msal.init) == 'function')
+      {
+        ns1blankspace.util.msal.init();
+      }
+    </script>
+  </body>
+</html>

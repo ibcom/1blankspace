@@ -343,7 +343,7 @@ ns1blankspace.scripts =
 	},
 	{
 		nameSpace: '1blankspace.financial.payroll',
-		source: '/site/388/1blankspace.financial.payroll-3.3.5.js'
+		source: '/site/388/1blankspace.financial.payroll-3.3.6.js'
 	},
 	{
 		nameSpace: '1blankspace.financial.budget',
@@ -515,7 +515,7 @@ ns1blankspace.scripts =
 	},
 	{
 		nameSpace: '1blankspace.util.msal',
-		source: '/site/388/1blankspace.util.msal-1.0.1.js'
+		source: '/site/388/1blankspace.util.msal-1.0.3.js'
 	}
 ]
 

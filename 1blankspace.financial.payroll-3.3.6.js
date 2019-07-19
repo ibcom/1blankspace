@@ -31,6 +31,17 @@ ns1blankspace.financial.payroll =
 					ns1blankspace.viewName = 'Payroll';
 					ns1blankspace.objectMethod = 'FINANCIAL_PAYROLL_PAY_PERIOD';
 
+					if (ns1blankspace.session.route != undefined)
+					{
+						if (ns1blankspace.session.route['ns1blankspace.financial.payroll'] != undefined)
+						{
+							oParam = ns1blankspace.session.route['ns1blankspace.financial.payroll'].param;
+							ns1blankspace.session.route['ns1blankspace.financial.payroll'] = undefined;
+						}
+					}
+
+					ns1blankspace.financial.payroll.data._param = oParam;
+
 					if (!bInitialised)
 					{
 						ns1blankspace.financial.initData(oParam)
@@ -208,6 +219,13 @@ ns1blankspace.financial.payroll =
 											$('td.ns1blankspaceHighlight').removeClass('ns1blankspaceHighlight');
 											$('#ns1blankspaceControl_totals').addClass('ns1blankspaceHighlight');
 											ns1blankspace.show({selector: '#ns1blankspaceMainTotals', refresh: true});
+											
+											if (oParam.payPeriod != undefined)
+											{
+												ns1blankspace.financial.payroll.data.payPeriod = oParam.payPeriod;
+												ns1blankspace.financial.payroll.data.isFinalForYear = oParam.isFinalForYear;
+											}
+											
 											ns1blankspace.financial.payroll.totals.show(oParam);
 										}
 										else if (bShowPay)
@@ -5639,6 +5657,18 @@ ns1blankspace.financial.payroll.totals =
 										}
 										else
 										{
+											if (ns1blankspace.financial.payroll.data._param.msalAccessToken != undefined)
+											{
+												aHTML.push('<div style="font-size:0.875em; margin-bottom:12px;" class="alert alert-warning"> ' +
+															' <div><strong>You are now signed into the singletouch.com.au service as ' + 
+																ns1blankspace.financial.payroll.data._param.msalUsername + 
+																' (' + ns1blankspace.financial.payroll.data._param.msalEmail + ')' +
+																'</strong>.</div>' +
+															' <div>You can continue with submitting the payroll data online to the ' + ns1blankspace.option.taxOffice +
+															' using the <strong>Submit STP Data</strong> button on the right.</div></div>');
+
+											}
+
 											ns1blankspace.financial.payroll.data.employees = oResponse.data.rows;
 
 											aHTML.push('<table id="ns1blankspacePayrollEmployeeTotals" class="ns1blankspace">' +
@@ -5841,7 +5871,7 @@ ns1blankspace.financial.payroll.totals =
 
 											$('#ns1blankspacePayrollTotalsSTPData').button(
 											{
-												label: 'Check Data for STP & Submit'
+												label: 'Submit STP Data'
 											})
 											.click(function()
 											{		
@@ -7058,7 +7088,7 @@ ns1blankspace.financial.payroll.totals =
 
 										if (sATOProductID == undefined)
 										{
-											sATOProductID = (ns1blankspace.user.super?'582695':'10594')
+											sATOProductID = (ns1blankspace.session.labInstance?'10594':'582695')
 										}
 
 										if (iPayPeriod == undefined)
@@ -7428,8 +7458,18 @@ ns1blankspace.financial.payroll.totals =
 										var sStatus;
 										var sValue;
 
-										aHTML.push('<div style="font-size:0.875em; margin-bottom:12px;" class="alert alert-warning"> ' +
-															' The following <em>' + ns1blankspace.option.taxOffice + ' Single Touch Payroll</em> data is in a format for use with the <a href="https://singletouch.com.au" target="_blank">singletouch.com.au</a> service.</div>');
+										if (ns1blankspace.financial.payroll.data._param.msalAccessToken != undefined)
+										{
+											aHTML.push('<div style="font-size:0.875em; margin-bottom:12px;" class="alert alert-warning">' +
+												'<div><strong>You are currently signed into singletouch.com.au as ' +
+													ns1blankspace.financial.payroll.data._param.msalUsername + 
+														' (' + ns1blankspace.financial.payroll.data._param.msalEmail + ')' +
+														', so you can submit online (see below).</strong></div>');
+										}
+
+										aHTML.push('</div>');
+
+										aHTML.push('<div id="ns1blankspaceFinancialPayrollSTPSubmitContainer">' + ns1blankspace.xhtml.loading + '</div>')
 
 										aHTML.push('<table class="table table-condensed" style="font-size:0.825em; margin-bottom:2px;">');
 
@@ -7550,11 +7590,14 @@ ns1blankspace.financial.payroll.totals =
 
 										aHTML.push('</table>')
 
+										$('#ns1blankspacePayrollEmployeeTotalsColumn1').html(aHTML.join(''));
+
+										var aHTML = [];
 
 										if (ns1blankspace.financial.payroll.totals.employees.report.data.errors.length > 0)
 										{
 											aHTML.push('<div style="font-size: 0.875em;" class="alert alert-danger"><i style="color:red; text-align:center; padding-right:6px;" class="glyphicon glyphicon-warning-sign"></i> ' +
-															' As there are errors in the data, do not submit this file to the ' + ns1blankspace.option.taxOffice + '.</div>');
+															' As there are errors in the data (see below), you should not submit this file to the ' + ns1blankspace.option.taxOffice + '.</div>');
 										}
 
 										if (ns1blankspace.financial.payroll.totals.employees.report.data.inProgress.length > 0)
@@ -7564,43 +7607,86 @@ ns1blankspace.financial.payroll.totals =
 															ns1blankspace.financial.payroll.totals.employees.report.data.inProgress.length + ' pay periods') + ' prior to this reporting end date that are still in progress, you should not submit this file to the ' + ns1blankspace.option.taxOffice + '.</div>');
 										}
 
-										aHTML.push('<div style="margin-left:12px; margin-top:12px;" id="ns1blankspacePayrollTotalsSTPDataStatus"></div>');
+										aHTML.push('<div class="well text-muted" style="font-size:0.825em;">');
 
-										aHTML.push('<div style="margin-left:12px; margin-top:6px;">' +
-														'<input type="checkbox" checked="checked" id="ns1blankspacePayrollTotalsSTPDataFileProductID"> <span class="ns1blankspaceSubNote">Are you using <em>singletouch Lite</em>?</span>' +
-														'</div>');
+											aHTML.push('<div style="font-size:1.6em;"><strong>Submit payroll data to the ' + ns1blankspace.option.taxOffice + '</strong></div>');
 
-										aHTML.push('<div style="margin-left:12px; margin-top:6px;">' +
-														'<input type="checkbox" checked="checked" id="ns1blankspacePayrollTotalsSTPDataFileRecord"> <span class="ns1blankspaceSubNote">Mark as submitted to ' + ns1blankspace.option.taxOffice + '?</span>' +
-														'</div>');
+											aHTML.push('<div style="margin-top:12px;">Payroll data is sent to the ATO using the <a href="https://singletouch.com.au" target="_blank">singletouch.com.au</a> sending service.</div>');
+											aHTML.push('<div>You can either download the data as a CSV file and then upload it, or send online.</div>');
 
-										aHTML.push('<div style="margin-left:12px; margin-top:12px;">' +
-															'<span id="ns1blankspacePayrollTotalsSTPDataFile" class="ns1blankspaceAction"></span>');
+											aHTML.push('<div style="margin-top:12px;" id="ns1blankspacePayrollTotalsSTPDataStatus"></div>');
 
-										if (ns1blankspace.session.preGenerallyAvailableInstance || ns1blankspace.user.super)
-										{
-											aHTML.push(' <span id="ns1blankspacePayrollTotalsSTPDataSubmit" class="ns1blankspaceAction"></span>');
-										}
-										
+											aHTML.push('<div style="margin-top:6px;">' +
+															'<input type="checkbox" checked="checked" id="ns1blankspacePayrollTotalsSTPDataFileRecord"> <span class="ns1blankspaceSub">Mark as submitted to ' + ns1blankspace.option.taxOffice + '?</span>' +
+															'</div>');
+
+											aHTML.push('<div style="margin-top:6px;">' +
+															'<input type="checkbox" checked="checked" id="ns1blankspacePayrollTotalsSTPDataFileProductID"> <span class="ns1blankspaceSub">Are you using <em>singletouch Lite</em>?</span>' +
+															'</div>');
+
+											aHTML.push('<div style="margin-top:12px;">' +
+																'<span id="ns1blankspacePayrollTotalsSTPDataFile" class="ns1blankspaceAction"></span></div>');
+
+											aHTML.push('<div style="margin-top:12px;">');
+
+											if (ns1blankspace.session.preGenerallyAvailableInstance || ns1blankspace.user.super)
+											{
+												if (ns1blankspace.financial.payroll.data._param.msalAccessToken != undefined)
+												{
+													aHTML.push(' <span id="ns1blankspacePayrollTotalsSTPDataSubmit" class="ns1blankspaceAction"></span>');
+												}
+												else
+												{
+													aHTML.push(
+															'<p>' +
+																'To submit your payroll data online you need to sign in to singletouch.com.au using the button below.</p>' +
+																'<p>After you have signed in return to this page.' +
+															'</p>' +
+															'<div id="ns1blankspacePayrollTotalsSTPDataSubmitSignIn" class="ns1blankspaceAction"></div>');
+												}
+											}
+											
+											aHTML.push('</div>');
+
+											aHTML.push('<div style="margin-top:12px;" id="ns1blankspacePayrollTotalsSTPDataSubmitContainer">' +
+																	'</div>');
+
 										aHTML.push('</div>');
 
-										aHTML.push('<div style="margin-top:12px;" id="ns1blankspacePayrollTotalsSTPDataSubmitContainer">' +
-																'</div>');
-
-										$('#ns1blankspacePayrollEmployeeTotalsColumn1').html(aHTML.join(''));
+										$('#ns1blankspaceFinancialPayrollSTPSubmitContainer').html(aHTML.join(''));
 
 										$('#ns1blankspacePayrollTotalsSTPDataFile').button(
 										{
-											label: 'Download as a CSV File'
+											label: 'Download as a CSV file'
 										})
 										.click(function()
 										{		
 											 ns1blankspace.financial.payroll.totals.employees.report.file(oParam)
 										});
 
+										$('#ns1blankspacePayrollTotalsSTPDataSubmitSignIn').button(
+										{
+											label: 'Sign in to singletouch.com.au'
+										})
+										.click(function()
+										{		
+											var oMSAL =
+											{
+												tenant: 'singletouchsandbox.onmicrosoft.com/b2c_1_singletouch',
+												context: 'payPeriod:' + ns1blankspace.financial.payroll.data.payPeriod.id + 
+																',isFinalForYear:' + ns1blankspace.financial.payroll.data.isFinalForYear +
+																',startDate:' + oParam.startDate +
+																',endDate:' + oParam.endDate +
+																',submitOnline:true'
+											}
+
+											ns1blankspace.unloadWarning = false;
+											location.href = location.origin + '/msal/#msal:' + window.btoa(JSON.stringify(oMSAL))	
+										});
+
 										$('#ns1blankspacePayrollTotalsSTPDataSubmit').button(
 										{
-											label: 'Submit Online'
+											label: 'Submit online using singletouch.com.au'
 										})
 										.click(function()
 										{		
@@ -7658,12 +7744,17 @@ ns1blankspace.financial.payroll.totals =
 											{
 												fileName: 'stp-' + oParam.guid + '.csv',
 												data: ns1blankspace.financial.payroll.totals.employees.report.data.file,
-												open: true
+												open: true,
+												includeProductID: bIncludeProductID,
+												type: 'CSV'
 											}
 
 											ns1blankspace.setup.file["export"].saveToFile(oParam);
 
-											ns1blankspace.financial.payroll.totals.employees.report.history.record(oParam);
+											if (bHistoryRecord)
+											{
+												ns1blankspace.financial.payroll.totals.employees.report.history.record(oParam);
+											}
 
 											ns1blankspace.status.message('File created');
 										}
@@ -7675,12 +7766,24 @@ ns1blankspace.financial.payroll.totals =
 										{
 											if (oResponse == undefined)
 											{
+												var sActionReference = '[STP-SUBMIT-ST]';
+
+												if (!oParam.includeProductID)
+												{
+													sActionReference = sActionReference + '[LITE]';
+												}
+
+												if (oParam.type != undefined)
+												{
+													sActionReference = sActionReference + '[' + oParam.type + ']';
+												}
+
 												var oData = 
 												{
 													object: 37,
 													objectcontext: ns1blankspace.financial.payroll.data.payPeriod.id,
-													actionreference: '[STP-S-STL]',
-													description: 'STP Submitted to ATO using singletouch/Lite',
+													actionreference: sActionReference,
+													description: 'STP Submitted to ATO using singletouch.com.au',
 													duedate: moment().format('DD MMM YYYY HH:mm'),
 													completed: moment().format('DD MMM YYYY HH:mm'),
 													status: 1,
@@ -7733,7 +7836,7 @@ ns1blankspace.financial.payroll.totals =
 														 sHTML = 'This pay period has been marked as submitted to the ' + ns1blankspace.option.taxOffice + ' (' + oResponse.data.rows[0].duedatetime + ').';
 													}
 													
-													$('#ns1blankspacePayrollTotalsSTPDataStatus').html('<span class="ns1blankspaceSubNote" style="font-weight:bold; font-size:0.875em;">' + sHTML + '</span>');
+													$('#ns1blankspacePayrollTotalsSTPDataStatus').html('<span class="ns1blankspaceSub" style="font-weight:bold;">' + sHTML + '</span>');
 												}
 											}
 										}
@@ -7743,8 +7846,14 @@ ns1blankspace.financial.payroll.totals =
 									{
 										confirm: function (oParam)
 										{
-											var sHTML = 
-												'<div class="well text-muted" style="font-size:0.825em;">' +
+											if (ns1blankspace.financial.payroll.data._param.msalAccessToken == undefined)
+											{
+												ns1blankspace.status.error('You need to sign in to singletouch.')
+											}
+											else
+											{
+												var sHTML = 
+												'<div class="well text-muted">' +
 													'<p>' +
 														'Tick the box below to sign the declaration with the credentials you used to login and to authorise lodgement with Single Touch Pty Ltd\'s AUSkey' +
 													'</p>' +
@@ -7763,7 +7872,8 @@ ns1blankspace.financial.payroll.totals =
 	  													'<label for="ns1blankspacePayrollTotalsSTPDataSubmitSendName" class="text-muted">Your name</label>' +
 															'<input type="text" class="form-control" id="ns1blankspacePayrollTotalsSTPDataSubmitSendName">' +
 													'</div>' +
-													'<div id="ns1blankspacePayrollTotalsSTPDataSubmitSend" class="ns1blankspaceAction"></div>' +
+													'<div id="ns1blankspacePayrollTotalsSTPDataSubmitSend" class="ns1blankspaceAction hidden"></div>' +
+													'<div id="ns1blankspacePayrollTotalsSTPDataSubmitSendStatus" style="margin-top:18px;"></div>' +
 												'</div>';
 
 												$('#ns1blankspacePayrollTotalsSTPDataSubmitContainer').html(sHTML);
@@ -7788,6 +7898,7 @@ ns1blankspace.financial.payroll.totals =
 												});
 
 												$('#ns1blankspacePayrollTotalsSTPDataSubmitSendName').val(ns1blankspace.user.commonName);
+											}
 										},
 
 										okToSend: function (oParam)
@@ -7804,27 +7915,90 @@ ns1blankspace.financial.payroll.totals =
 
 										send: function (oParam)
 										{
-											ns1blankspace.util.msal.init(
+											ns1blankspace.status.working('Sending to ATO...');
+
+											var sURL = 'https://api.singletouch.com.au/api/STPEvent2018'
+											
+											if (ns1blankspace.session.labInstance)
 											{
-												config:
+												sURL = 'https://sandbox-api.singletouch.com.au/api/STPEvent2018'
+											}
+
+											var oData = 
+											{
+												url: sURL,
+												data: '[' + JSON.stringify(ns1blankspace.financial.payroll.totals.employees.report.data.object) + ']',
+												headeroutname1: 'Authorization',
+												headeroutvalue1: 'Bearer ' + ns1blankspace.financial.payroll.data._param.msalAccessToken,
+												headeroutname2: 'Content-Type',
+												headeroutvalue2: 'application/json',
+												headerall: 'Y',
+												type: 'POST'
+											}	
+
+											$.ajax(
+											{
+												type: 'POST',
+												url: '/rpc/core/?method=CORE_URL_GET',
+												dataType: 'json',
+												global: false,
+												data: oData,
+												success: function(data)
 												{
-													auth:
+													ns1blankspace.financial.payroll.totals.employees.report.submit.process(data)
+												},
+												error: function(data)
+												{
+													ns1blankspace.status.error(data)
+												}
+											});
+										},
+
+										process: function (oResponse)
+										{
+											ns1blankspace.status.clear();
+											console.log(oResponse)
+
+											if (oResponse.status == 'ER')
+											{
+												var oError;
+
+												if (oResponse.error.errornotes.substr(0,1) == '{')
+												{
+													oError = JSON.parse(oResponse.error.errornotes)
+													console.log(oError)
+												}
+
+												var aHTML = [];
+
+												aHTML.push('<p><i style="color:red; text-align:center; padding-right:6px;" class="glyphicon glyphicon-warning-sign"></i>' +
+														'<strong>An error has occured sending payroll data to the ' + ns1blankspace.option.taxOffice + '</strong></p>');
+
+												if (oError != undefined)
+												{
+													if (oError.logMessages != undefined && oError.logMessages != '')
 													{
-														clientId: ' 198014d6-e28f-4835-b02e-1e5005df667d  ',
-														authority: 'https://login.microsoftonline.com/tfp/singletouch.onmicrosoft.com/b2c_1_singletouch'
-													},
-													cache:
+														aHTML.push('<p>' + oError.logMessages + '</p>');
+													}
+
+													if (oError.infoMessages != undefined && oError.infoMessages != '')
 													{
-														cacheLocation: 'localStorage',
-														storeAuthStateInCookie: true
-													},
-													scopes:
-													[
-														"https://singletouch.onmicrosoft.com/mydigitalstructure/read",
-														"https://singletouch.onmicrosoft.com/mydigitalstructure/user_impersonation"
-													]
-										    }
-											})
+														aHTML.push('<p>' + oError.infoMessages + '</p>');
+													}
+												}
+
+												$('#ns1blankspacePayrollTotalsSTPDataSubmitSendStatus').html(aHTML.join(''))
+
+											}
+											else
+											{
+												var bHistoryRecord = !($('#ns1blankspacePayrollTotalsSTPDataFileRecord').prop('checked'));
+
+												if (bHistoryRecord)
+												{
+													ns1blankspace.financial.payroll.totals.employees.report.history.record({type: 'API'});
+												}
+											}
 										}
 									}
 								}								

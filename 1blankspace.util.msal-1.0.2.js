@@ -15,34 +15,91 @@
 if (ns1blankspace === undefined) {var ns1blankspace = {}}
 if (ns1blankspace.util === undefined) {ns1blankspace.util = {}}
 
+var oMSALInstance;
+
 //store token on myds for silent logon
 
 ns1blankspace.util.msal =
 {
-    config:
-    {
-        auth:
+    configs:
+    [
         {
-            clientId: '25859eef-b92a-49dc-b18e-416aba48ee4b',
-            authority: 'https://login.microsoftonline.com/tfp/singletouchsandbox.onmicrosoft.com/b2c_1_singletouch'
+            tenant: 'singletouchsandbox.onmicrosoft.com/b2c_1_singletouch',
+            auth:
+            {
+                clientId: '25859eef-b92a-49dc-b18e-416aba48ee4b',
+                authority: 'https://login.microsoftonline.com/tfp/singletouchsandbox.onmicrosoft.com/b2c_1_singletouch'
+            },
+            cache:
+            {
+                cacheLocation: 'localStorage',
+                storeAuthStateInCookie: true
+            },
+            scopes:
+            [
+                "https://singletouchsandbox.onmicrosoft.com/mydigitalstructure/user_impersonation",
+                "https://singletouchsandbox.onmicrosoft.com/mydigitalstructure/read"
+            ],
+            apiURI: 'https://sandbox-api.singletouch.com.au/api/STPEvent2018',
+            okToSend: function (oParam)
+            {
+                var bOKToSend = $('#ns1blankspaceMSALSendDeclaration').prop('checked');
+
+                if (bOKToSend)
+                {
+                    bOKToSend = ($('#ns1blankspaceMSALSendName').val() != '')
+                }
+
+                $('#ns1blankspaceMSALSend').css('display',(bOKToSend?'block':'none'));
+            },
+            tokenAcquired: function (oToken)
+            {
+                location.href = location.origin + '/#/base64:' + window.btoa('financial.payroll/' + ns1blankspace.util.msal._param.context + ',showTotals:true,msalAccessToken:' + oToken.accessToken)
+            }
         },
-        cache:
         {
-            cacheLocation: 'localStorage',
-            storeAuthStateInCookie: true
-        },
-        scopes:
-        [
-            "https://singletouchsandbox.onmicrosoft.com/mydigitalstructure/read",
-            "https://singletouchsandbox.onmicrosoft.com/mydigitalstructure/user_impersonation"
-        ],
-        apiURI: 'https://sandbox-api.singletouch.com.au/api/STPEvent2018'
-    },
+            tenant: 'singletouch.onmicrosoft.com/b2c_1_singletouch',
+            auth:
+            {
+                clientId: '198014d6-e28f-4835-b02e-1e5005df667d',
+                authority: 'https://login.microsoftonline.com/tfp/singletouch.onmicrosoft.com/b2c_1_singletouch'
+            },
+            cache:
+            {
+                cacheLocation: 'localStorage',
+                storeAuthStateInCookie: true
+            },
+            scopes:
+            [
+                'https://singletouch.onmicrosoft.com/mydigitalstructure/read',
+                'https://singletouch.onmicrosoft.com/mydigitalstructure/user_impersonation'
+            ],
+            apiURI: 'https://api.singletouch.com.au/api/STPEvent2018'
+        }
+    ],
+
     init: function (oParam)
     {
-        var oConfig = ns1blankspace.util.getParam(oParam, 'config').value;
-        var oEndpoint = ns1blankspace.util.getParam(oParam, 'endpoint').value;
-        var iLoginType = ns1blankspace.util.getParam(oParam, 'loginType', {"default": 'POPUP'}).value;
+        var sURIContext = location.hash;
+
+        if (sURIContext.substr(0, 6) == '#msal:')
+        {
+            sURIContext = window.atob(sURIContext.replace('#msal:', ''));
+            oParam = JSON.parse(sURIContext);
+        }
+
+        ns1blankspace.util.msal._param = oParam;
+
+        var oConfig = oParam.config;
+        var oEndpoint = oParam.endpoint;
+        var sTenant = oParam.tenant;
+        var bAutoSignIn = true;
+       
+        if (sTenant != undefined)
+        {
+            var _oConfig = $.grep(ns1blankspace.util.msal.configs, function (oConfig) {return oConfig.tenant == sTenant})
+            if (_oConfig.length != 0) {oConfig = _oConfig[0]}
+        }
 
         if (oConfig != undefined)
         {
@@ -54,56 +111,140 @@ ns1blankspace.util.msal =
             ns1blankspace.util.msal.endpoint = $.extend(true, ns1blankspace.util.msal.endpoint, oEndpoint);
         }
 
-        if (ns1blankspace.util.msal.config.auth == undefined)
+        if (ns1blankspace.util.msal.config == undefined)
         {
-            ns1blankspace.status.error('No MSAL Auth Config');
+            alert('No MSAL Config');
         }
         else
         {
-            var oConfig =
+            var oMSALConfig =
             {
                 auth: ns1blankspace.util.msal.config.auth,
                 cache: ns1blankspace.util.msal.config.cache
             }
 
-            ns1blankspace.util.msal.instance = new Msal.UserAgentApplication(ns1blankspace.util.msal.config);
-            //ns1blankspace.util.msal.instance.handleRedirectCallback(ns1blankspace.util.msal.auth.callback);
-
-            if (iLoginType == 'POPUP')
+            ns1blankspace.util.msal.instance = new Msal.UserAgentApplication(oConfig);
+            //oMSALInstance = new Msal.UserAgentApplication(oMSALConfig)
+ 
+            if (bAutoSignIn)
             {
                 ns1blankspace.util.msal.account = ns1blankspace.util.msal.instance.getAccount();
 
                 if (ns1blankspace.util.msal.account)
                 {
-                    //ns1blankspace.util.msal.show.account();
                     ns1blankspace.util.msal.auth.acquireToken();
                 }
                 else
                 {
                     ns1blankspace.util.msal.auth.signIn();
-                    //ns1blankspace.status.error('Can not get MSAL account. Is this URL registered with MSAL service account?');
-                }
-            }
-            else if (iLoginType == 'REDIRECT')
-            {
-                //document.getElementById("SignIn").onclick = function () {
-                //   ns1blankspace.util.msal.instance.loginRedirect({scopes: ns1blankspace.util.msal.config.scopes});
-                // };
-
-                if (ns1blankspace.util.msal.instance.getAccount() && !ns1blankspace.util.msal.instance.isCallback(window.location.hash))
-                {
-                    //ns1blankspace.util.msal.show.welcomeMessage();
-                    ns1blankspace.util.msal.auth.acquireToken();
                 }
             }
             else
             {
-                ns1blankspace.status.error('Please set a valid login type');
+                $('#' + sTenant).show();
+
+                if (typeof(ns1blankspace.util.msal.config.okToSend) == 'function')
+                {
+                    $('.ns1blankspaceMSAL').click(function (event)
+                    {
+                        ns1blankspace.util.msal.config.okToSend()   
+                    });
+
+                    $('.ns1blankspaceMSAL').keyup(function (event)
+                    {
+                        ns1blankspace.util.msal.config.okToSend()   
+                    });
+                }
+
+                $('#ns1blankspaceMSALSend')
+                .click(function()
+                {       
+                     ns1blankspace.util.msal.auth.signIn();
+                });
             }
         }
     },
     auth:
-    {
+    {   
+        signIn: function ()
+        {
+            var oMSALScopes = 
+            {
+                scopes: ns1blankspace.util.msal.config.scopes
+            }
+
+            //oMSALInstance.loginPopup(oMSALScopes)
+
+            ns1blankspace.util.msal.instance.loginPopup(oMSALScopes)
+            .then(function (loginResponse)
+            {
+                console.log(loginResponse)
+                //ns1blankspace.util.msal.show.welcomeMessage();
+                ns1blankspace.util.msal.auth.acquireToken();
+            })
+            .catch(function (error)
+            {
+                console.log(error);
+            });
+        },
+        signOut: function ()
+        {
+            ns1blankspace.util.msal.instance.logout();
+        },
+        acquireToken: function ()
+        {
+            console.log('Attempting to acquire token silently... Scopes:');
+            console.log(ns1blankspace.util.msal.config.scopes);
+
+            ns1blankspace.util.msal.instance.acquireTokenSilent({scopes: ns1blankspace.util.msal.config.scopes})
+            .then(function (tokenResponse)
+            {
+                if (typeof(ns1blankspace.util.msal.config.tokenAcquired) == 'function')
+                {
+                    ns1blankspace.util.msal.config.tokenAcquired(tokenResponse)
+                }
+                else
+                {
+                    ns1blankspace.util.msal.auth.tokenResponse = tokenResponse;
+                    console.log('Token aquired... Token:');
+                    console.log(tokenResponse);
+                    ns1blankspace.util.msal.show.updateMessage('token has been acquired for you.');
+                    //ns1blankspace.util.msal.endpoint.call(ns1blankspace.util.msal.endpoint.uri, tokenResponse.accessToken, ns1blankspace.util.msal.endpoint.callback);
+                }    
+            })
+            .catch(function (error)
+            {
+                console.log(error.errorMessage);
+                console.log(error.errorCode);
+                console.log('As per error, could not aquire token silently, now prompting user to sign in...');
+ 
+                if (ns1blankspace.util.msal.util.requiresInteraction(error.errorCode))
+                {
+                    ns1blankspace.util.msal.instance.acquireTokenPopup({scopes: ns1blankspace.util.msal.config.scopes})
+                    .then(function (tokenResponse)
+                    {
+                        if (typeof(ns1blankspace.util.msal.config.tokenAcquired) == 'function')
+                        {
+                            ns1blankspace.util.msal.config.tokenAcquired(tokenResponse)
+                        }
+                        else
+                        {
+                            ns1blankspace.util.msal.auth.tokenResponse = tokenResponse;
+                            console.log(tokenResponse);
+                            ns1blankspace.util.msal.show.updateMessage('token has been acquired for you.');
+                            ns1blankspace.util.msal.endpoint.call(ns1blankspace.util.msal.endpoint.uri, tokenResponse.accessToken, ns1blankspace.util.msal.endpoint.callback);
+                        }
+                    })
+                    .catch(function (error)
+                    {
+                        console.log(error.errorMessage);
+                        console.log(error.errorCode);
+                        console.log('Could not acquire a token.');
+                        ns1blankspace.util.msal.show.updateMessage('sorry but could not acquire a token for you.');
+                    });
+                }
+            });
+        },
         callback: function (error, response)
         {
             if (error)
@@ -121,62 +262,6 @@ ns1blankspace.util.msal =
                     console.log("token type is:" + response.tokenType);
                 }
             }
-        },
-        signIn: function ()
-        {
-            //ns1blankspace.util.msal.instance.loginPopup(ns1blankspace.util.msal.config.scopes)
-            ns1blankspace.util.msal.instance.loginPopup({scopes: ns1blankspace.util.msal.config.scopes})
-            .then(function (loginResponse)
-            {
-                console.log(loginResponse)
-                ns1blankspace.util.msal.show.welcomeMessage();
-                ns1blankspace.util.msal.auth.acquireToken();
-            })
-            .catch(function (error)
-            {
-                console.log(error);
-            });
-        },
-        signOut: function ()
-        {
-            ns1blankspace.util.msal.instance.logout();
-        },
-        acquireToken: function ()
-        {
-            console.log('Attempting to acquire token silently...');
-            ns1blankspace.util.msal.instance.acquireTokenSilent({scopes: ns1blankspace.util.msal.config.scopes})
-            .then(function (tokenResponse)
-            {
-                ns1blankspace.util.msal.auth.tokenResponse = tokenResponse;
-                console.log(tokenResponse);
-                ns1blankspace.util.msal.show.updateMessage('token has been acquired for you.');
-                ns1blankspace.util.msal.endpoint.call(ns1blankspace.util.msal.endpoint.uri, tokenResponse.accessToken, ns1blankspace.util.msal.endpoint.callback);
-            })
-            .catch(function (error)
-            {
-                console.log(error.errorMessage);
-                console.log(error.errorCode);
-                console.log('As per error, could not aquire token silently, now prompting user to sign in...');
- 
-                if (ns1blankspace.util.msal.util.requiresInteraction(error.errorCode))
-                {
-                    ns1blankspace.util.msal.instance.acquireTokenPopup({scopes: ns1blankspace.util.msal.config.scopes})
-                    .then(function (tokenResponse)
-                    {
-                        ns1blankspace.util.msal.auth.tokenResponse = tokenResponse;
-                        console.log(tokenResponse);
-                        ns1blankspace.util.msal.show.updateMessage('token has been acquired for you.');
-                        ns1blankspace.util.msal.endpoint.call(ns1blankspace.util.msal.endpoint.uri, tokenResponse.accessToken, ns1blankspace.util.msal.endpoint.callback);
-                    })
-                    .catch(function (error)
-                    {
-                        console.log(error.errorMessage);
-                        console.log(error.errorCode);
-                        console.log('Could not acquire a token.');
-                        ns1blankspace.util.msal.show.updateMessage('sorry but could not acquire a token for you.');
-                    });
-                }
-            });
         }
     },
     show:
