@@ -1,0 +1,176 @@
+<html>
+
+<head>
+  <title>Sign in to singletouch...</title>
+  <style>
+    html
+    {
+       font-family: sans-serif;
+       font-size: 80%;
+    }
+
+    .hidden
+    {
+      visibility: hidden
+    }
+
+    .visible
+    {
+      visibility: visible
+    }
+
+    .well {
+    min-height: 20px;
+    padding: 19px;
+    margin-bottom: 20px;
+    background-color: #f5f5f5;
+    border: 1px solid #e3e3e3;
+    border-radius: 4px;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.05);
+    box-shadow: inset 0 1px 1px rgba(0,0,0,.05);
+  </style>
+</head>
+
+<body>
+  <!-- bluebird only needed if this page needs to run on Internet Explorer -->
+  <!-- msal.min.js can be used in the place of msal.js; included msal.js to make debug easy -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bluebird/3.3.4/bluebird.min.js" class="pre"></script>
+  <script src="https://secure.aadcdn.microsoftonline-p.com/lib/1.0.0/js/msal.js"></script>
+  <script src="https://code.jquery.com/jquery-3.2.1.min.js" class="pre"></script>
+  <script src="/site/1903/1blankspace.util.msal-1.0.2.js"></script>
+
+  
+  <div class="well" style="margin:20px; width:600px;">
+
+    <h2>Sign in to singletouch for online submission to ATO...</h2>
+
+    <p>If prompted, use the username and password provided by <em>singletouch.com.au</em>.</p>
+
+    <button id="auth" onclick="ns1blankspace.util.msal.init()">Sign in</button>
+
+    <p>To register for online ATO STP submission using <a href="https://singletouch.com.au" target="_blank">singletouch.com.au</a>,
+        send an email to <a href="mailto:enquire@singletouch.com.au">enquire@singletouch.com.au</a> and advise that you are using <em>mydigitalstructure STP with ATO Product ID 582695</em>.</p>
+
+    
+  </div>
+
+  <script class="pre">
+
+    // The current application coordinates were pre-registered in a B2C tenant.
+    var appConfig =
+    {
+      b2cScopes:
+      [
+        "https://singletouchsandbox.onmicrosoft.com/mydigitalstructure/user_impersonation",
+        "https://singletouchsandbox.onmicrosoft.com/mydigitalstructure/read"
+      ],
+      webApi: "https://sandbox-api.singletouch.com.au/api/STPEvent2018"
+    };
+  </script>
+
+  <script>
+    "use strict";
+
+    // configuration to initialize msal
+    var msalConfig = {
+        auth: {
+            clientId: "25859eef-b92a-49dc-b18e-416aba48ee4b", //This is your client ID
+            authority: "https://login.microsoftonline.com/tfp/singletouchsandbox.onmicrosoft.com/b2c_1_singletouch" //This is your tenant info
+        },
+        cache: {
+            cacheLocation: "localStorage",
+            storeAuthStateInCookie: true
+        }
+    };
+
+    var clientApplication = new Msal.UserAgentApplication(msalConfig);
+
+    // Register a call back for redirect flow
+    // myMSALObj.handleRedirectCallback(authRedirectCallback);
+
+    function login() {
+
+      var loginRequest = {
+        scopes: appConfig.b2cScopes
+      };
+
+      clientApplication.loginPopup(loginRequest).then(function (loginResponse)
+      {
+        console.log(loginResponse);
+        logMessage(JSON.stringify(loginResponse));
+
+        var tokenRequest = {
+          scopes: appConfig.b2cScopes
+        };
+
+        clientApplication.acquireTokenSilent(tokenRequest).then(function (tokenResponse) {
+          updateUI();
+        }).catch(function (error) {
+          clientApplication.acquireTokenPopup(tokenRequest).then(function (tokenResponse) {
+            updateUI();
+          }).catch (function (error) {
+            logMessage("Error acquiring the popup:\n" + error);
+          });
+        })
+      }).catch (function (error) {
+        logMessage("Error during login:\n" + error);
+      });
+    }
+
+    function updateUI() {
+      var userName = clientApplication.getAccount().name;
+      console.log(clientApplication.getAccount());
+      logMessage("User '" + userName + "' logged-in");
+      var authButton = document.getElementById('auth');
+      authButton.innerHTML = 'logout';
+      authButton.setAttribute('onclick', 'logout();');
+      var label = document.getElementById('label');
+      label.innerText = "Hello " + userName;
+      var callWebApiButton = document.getElementById('callApiButton');
+      callWebApiButton.setAttribute('class', 'visible');
+    }
+
+    function callApi() {
+      var tokenRequest = {
+        scopes: appConfig.b2cScopes
+      }
+      clientApplication.acquireTokenSilent(tokenRequest).then(function (tokenResponse) {
+        callApiWithAccessToken(tokenResponse.accessToken);
+      }).catch(function (error) {
+        clientApplication.acquireTokenPopup(tokenRequest).then(function (tokenResponse) {
+          callApiWithAccessToken(tokenResponse.accessToken);
+        }).catch(function (error) {
+          logMessage("Error acquiring the access token to call the Web api:\n" + error);
+        });
+      })
+    }
+
+    function callApiWithAccessToken(accessToken) {
+      // Call the Web API with the AccessToken
+      $.ajax({
+        type: "GET",
+        url: appConfig.webApi,
+        headers: {
+          'Authorization': 'Bearer ' + accessToken,
+        },
+      }).done(function (data) {
+        logMessage("Web APi returned:\n" + JSON.stringify(data));
+      })
+        .fail(function (jqXHR, textStatus) {
+          logMessage("Error calling the Web api:\n" + textStatus);
+        })
+    }
+
+    function logout() {
+      // Removes all sessions, need to call AAD endpoint to do full logout
+      clientApplication.logout();
+    }
+
+    function logMessage(s) {
+      document.body.querySelector('.response').appendChild(document.createTextNode('\n' + s));
+    }
+
+  </script>
+</body>
+
+</html>

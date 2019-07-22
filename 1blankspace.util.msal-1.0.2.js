@@ -41,21 +41,11 @@ ns1blankspace.util.msal =
                 "https://singletouchsandbox.onmicrosoft.com/mydigitalstructure/read"
             ],
             apiURI: 'https://sandbox-api.singletouch.com.au/api/STPEvent2018',
-            okToSend: function (oParam)
-            {
-                var bOKToSend = $('#ns1blankspaceMSALSendDeclaration').prop('checked');
-
-                if (bOKToSend)
-                {
-                    bOKToSend = ($('#ns1blankspaceMSALSendName').val() != '')
-                }
-
-                $('#ns1blankspaceMSALSend').css('display',(bOKToSend?'block':'none'));
-            },
             tokenAcquired: function (oToken)
             {
-                location.href = location.origin + '/#/base64:' + window.btoa('financial.payroll/' + ns1blankspace.util.msal._param.context + ',showTotals:true,msalAccessToken:' + oToken.accessToken)
-            }
+                location.href = document.referrer + '#/base64:' + window.btoa('financial.payroll/' + ns1blankspace.util.msal._param.context + ',showTotals:true,msalAccessToken:' + oToken.accessToken)
+            },
+            atoproductid: '10594'
         },
         {
             tenant: 'singletouch.onmicrosoft.com/b2c_1_singletouch',
@@ -74,7 +64,12 @@ ns1blankspace.util.msal =
                 'https://singletouch.onmicrosoft.com/mydigitalstructure/read',
                 'https://singletouch.onmicrosoft.com/mydigitalstructure/user_impersonation'
             ],
-            apiURI: 'https://api.singletouch.com.au/api/STPEvent2018'
+            apiURI: 'https://api.singletouch.com.au/api/STPEvent2018',
+            tokenAcquired: function (oToken)
+            {
+                location.href = document.referrer + '#/base64:' + window.btoa('financial.payroll/' + ns1blankspace.util.msal._param.context + ',showTotals:true,msalAccessToken:' + oToken.accessToken)
+            },
+            atoproductid: '582695'
         }
     ],
 
@@ -220,7 +215,7 @@ ns1blankspace.util.msal =
  
                 if (ns1blankspace.util.msal.util.requiresInteraction(error.errorCode))
                 {
-                    ns1blankspace.util.msal.instance.acquireTokenPopup({scopes: ns1blankspace.util.msal.config.scopes})
+                   ns1blankspace.util.msal.instance.acquireTokenPopup({scopes: ns1blankspace.util.msal.config.scopes})
                     .then(function (tokenResponse)
                     {
                         if (typeof(ns1blankspace.util.msal.config.tokenAcquired) == 'function')

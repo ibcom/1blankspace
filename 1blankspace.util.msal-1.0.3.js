@@ -8,6 +8,7 @@
  * https://github.com/AzureAD/microsoft-authentication-library-for-js
  * <script src="https://secure.aadcdn.microsoftonline-p.com/lib/1.0.0/js/msal.js"></script>
  *
+ * !!!!!! USE 1.0.2 as this version is still being stabilised !!!!!
  */
 
 "use strict";
@@ -60,7 +61,8 @@ ns1blankspace.util.msal =
 
                 location.href = location.origin + '/#/base64:' + window.btoa('financial.payroll/' + ns1blankspace.util.msal._param.context +
                          ',showTotals:true,msalUsername:' + sMSALUsername + ',msalEmail:' + sMSALEmail + ',msalAccessToken:' + oToken.accessToken)
-            }
+            },
+            atoproductid: '10594'
         },
         {
             tenant: 'singletouch.onmicrosoft.com/b2c_1_singletouch',
@@ -103,7 +105,8 @@ ns1blankspace.util.msal =
 
                 location.href = location.origin + '/#/base64:' + window.btoa('financial.payroll/' + ns1blankspace.util.msal._param.context +
                          ',showTotals:true,msalUsername:' + sMSALUsername + ',msalEmail:' + sMSALEmail + ',msalAccessToken:' + oToken.accessToken)
-            }
+            },
+            atoproductid: '582695'
         }
     ],
 
