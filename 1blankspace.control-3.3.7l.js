@@ -512,10 +512,6 @@ ns1blankspace.scripts =
 	{
 		nameSpace: '1blankspace.util.contacts',
 		source: '/site/312/1blankspace.util.contact-2.0.1.js'
-	},
-	{
-		nameSpace: '1blankspace.util.msal',
-		source: '/site/388/1blankspace.util.msal-1.0.3.js'
 	}
 ]
 

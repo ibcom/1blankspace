@@ -523,6 +523,13 @@ ns1blankspace.financial.payroll =
 										'<br /><div class="ns1blankspaceSubNote">& pay slips</div></td>' +
 										'</tr>');
 						}
+
+						aHTML.push('</table>');
+
+						aHTML.push('<table class="ns1blankspaceControl">');
+
+						aHTML.push('<tr><td id="ns1blankspaceControlActions" class="ns1blankspaceControl">' +
+										'Actions</td></tr>');	
 					}
 
 					aHTML.push('</table>');
@@ -535,6 +542,7 @@ ns1blankspace.financial.payroll =
 					aHTML.push('<div id="ns1blankspaceMainDetails" class="ns1blankspaceControlMain"></div>');
 					aHTML.push('<div id="ns1blankspaceMainPays" class="ns1blankspaceControlMain"></div>');
 					aHTML.push('<div id="ns1blankspaceMainExpenses" class="ns1blankspaceControlMain"></div>');
+					aHTML.push('<div id="ns1blankspaceMainActions" class="ns1blankspaceControlMain"></div>');
 					aHTML.push('<div id="ns1blankspaceMainPayTotals" class="ns1blankspaceControlMain"></div>');
 					
 					$('#ns1blankspaceMain').html(aHTML.join(''));
@@ -567,6 +575,12 @@ ns1blankspace.financial.payroll =
 					{
 						ns1blankspace.show({selector: '#ns1blankspaceMainExpenses'});
 						ns1blankspace.financial.payroll.financials.show();
+					});
+
+					$('#ns1blankspaceControlActions').click(function(event)
+					{
+						ns1blankspace.show({selector: '#ns1blankspaceMainActions', refresh: true});
+						ns1blankspace.actions.show({xhtmlElementID: 'ns1blankspaceMainActions'});
 					});
 				},
 
@@ -5439,7 +5453,11 @@ ns1blankspace.financial.payroll.totals =
 					ns1blankspace.financial.payroll.data.startDate = sStartDate;
 					ns1blankspace.financial.payroll.data.endDate = sEndDate;
 					ns1blankspace.financial.payroll.data.guid = sGUID;
-					ns1blankspace.financial.payroll.data.payPeriodID = iPayPeriod;
+
+					if (iPayPeriod != undefined)
+					{
+						ns1blankspace.financial.payroll.data.payPeriodID = iPayPeriod;
+					}
 
 					ns1blankspace.financial.payroll.data.context = 'totals';
 
@@ -5580,7 +5598,7 @@ ns1blankspace.financial.payroll.totals =
 								{
 									var bShowAsList = ns1blankspace.util.getParam(oParam, 'showAsList', {"default": true}).value;
 									var sStartDate = ns1blankspace.util.getParam(oParam, 'startDate').value;
-									var iPayPeriod = ns1blankspace.util.getParam(oParam, 'payPeriod').value;
+									var iPayPeriod = ns1blankspace.util.getParam(oParam, 'payPeriod', {"default": ns1blankspace.financial.payroll.data.payPeriod}).value;
 
 									if (oResponse == undefined)
 									{
@@ -7047,9 +7065,15 @@ ns1blankspace.financial.payroll.totals =
 												}
 											]
 										}
-									},	
+									},
+
+									init: function (oParam)
+									{
+										oParam.onComplete = ns1blankspace.financial.payroll.totals.employees.report._init;
+										ns1blankspace.financial.payroll.totals.employees.report.history.actions(oParam)
+									},
 										
-									init: function (oParam, oResponse)
+									_init: function (oParam, oResponse)
 									{
 										$('#ns1blankspacePayrollEmployeeTotalsColumn2').html('').css('width', '0px');
 										$('#ns1blankspacePayrollEmployeeTotalsColumn1').html(ns1blankspace.xhtml.loading);
@@ -7088,7 +7112,7 @@ ns1blankspace.financial.payroll.totals =
 											
 											oSearch.getResults(function(data)
 											{
-												ns1blankspace.financial.payroll.totals.employees.report.init(oParam, data)
+												ns1blankspace.financial.payroll.totals.employees.report._init(oParam, data)
 											});
 										}
 										else
@@ -7168,7 +7192,7 @@ ns1blankspace.financial.payroll.totals =
 											oSearch.rows = 0;
 											oSearch.getResults(function(data)
 											{
-												ns1blankspace.financial.payroll.data.payPeriodID = undefined;
+												//ns1blankspace.financial.payroll.data.payPeriodID = undefined;
 												ns1blankspace.financial.payroll.totals.employees.report.payPeriod(oParam, data)
 											});
 										}
@@ -7181,7 +7205,7 @@ ns1blankspace.financial.payroll.totals =
 
 											oParam.guid = oParam.guid + '-' + moment(ns1blankspace.financial.payroll.data.payPeriod.startdate, ns1blankspace.option.dateFormats).format('YYYY-MM-DD')  + '-' + moment(ns1blankspace.financial.payroll.data.payPeriod.paydate, ns1blankspace.option.dateFormats).format('YYYY-MM-DD'),
 
-											ns1blankspace.financial.payroll.totals.employees.report.create(oParam);
+											ns1blankspace.financial.payroll.totals.employees.report.create(oParam)
 										}
 									},
 
@@ -7445,10 +7469,22 @@ ns1blankspace.financial.payroll.totals =
 											//			' (' + ns1blankspace.financial.payroll.data._param.msalEmail + ')' +
 
 											aHTML.push('<div style="font-size:0.875em; margin-bottom:12px;" class="alert alert-warning">' +
-												'<div><strong>You can submit online (see below) as you are currently signed into singletouch.com.au service.</strong></div>');
-										}
+												'<div><strong>You can submit online (see below) as you are currently signed into singletouch.com.au service.</strong></div></div>');
 
-										aHTML.push('</div>');
+											var aActionsLite = $.grep(ns1blankspace.financial.payroll.totals.employees.report.history.data.actions,
+																		function (oActions)
+																		{
+																			return oActions.lite
+																		});
+
+											if (aActionsLite.length != 0)
+											{
+												aHTML.push('<div style="font-size: 0.875em;" class="alert alert-danger"><i style="color:red; text-align:center; padding-right:6px;" class="glyphicon glyphicon-warning-sign"></i> ' +
+															' Within this financial year you have reported using <em>singletouch Lite</em>.  <strong>You need to set the start date as ' +
+															moment(moment(aActionsLite[0].duedate, ns1blankspace.option.dateFormats).add(1, 'days')).format('DD MMM YYYY') +
+															' and Refresh</strong>, so as to not include any payroll data reported to the ATO via <em>singletouch Lite</em>.</div>');
+											}
+										}
 
 										aHTML.push('<div id="ns1blankspaceFinancialPayrollSTPSubmitContainer">' + ns1blankspace.xhtml.loading + '</div>')
 
@@ -7601,9 +7637,18 @@ ns1blankspace.financial.payroll.totals =
 															'<input type="checkbox" checked="checked" id="ns1blankspacePayrollTotalsSTPDataFileRecord"> <span class="ns1blankspaceSub">Mark as submitted to ' + ns1blankspace.option.taxOffice + '?</span>' +
 															'</div>');
 
-											aHTML.push('<div style="margin-top:6px;">' +
+											var aActionsPortal = $.grep(ns1blankspace.financial.payroll.totals.employees.report.history.data.actions,
+																		function (oActions)
+																		{
+																			return oActions.portal
+																		});
+
+											if (aActionsPortal.length == 0 && ns1blankspace.financial.payroll.data._param.msalAccessToken == undefined)
+											{
+												aHTML.push('<div style="margin-top:6px;">' +
 															'<input type="checkbox" checked="checked" id="ns1blankspacePayrollTotalsSTPDataFileProductID"> <span class="ns1blankspaceSub">Are you using <em>singletouch Lite</em>?</span>' +
 															'</div>');
+											}	
 
 											aHTML.push('<div style="margin-top:12px;">' +
 																'<span id="ns1blankspacePayrollTotalsSTPDataFile" class="ns1blankspaceAction"></span></div>');
@@ -7758,6 +7803,8 @@ ns1blankspace.financial.payroll.totals =
 
 									history:
 									{
+										data: {},
+
 										record: function (oParam, oResponse)
 										{
 											if (oResponse == undefined)
@@ -7783,10 +7830,11 @@ ns1blankspace.financial.payroll.totals =
 													objectcontext: ns1blankspace.financial.payroll.data.payPeriod.id,
 													actionreference: sActionReference,
 													description: sActionDescription,
-													duedate: moment().format('DD MMM YYYY HH:mm'),
+													duedate: moment(ns1blankspace.financial.payroll.data.endDate, ns1blankspace.option.dateFormats).format('DD MMM YYYY'),
 													completed: moment().format('DD MMM YYYY HH:mm'),
 													status: 1,
-													actionby: ns1blankspace.user.id
+													actionby: ns1blankspace.user.id,
+													actiontype: 4
 												}
 
 												$.ajax(
@@ -7806,8 +7854,46 @@ ns1blankspace.financial.payroll.totals =
 											{
 												if (oResponse.status == 'OK')
 												{
-													ns1blankspace.status.message('Record as submitted');
+													ns1blankspace.status.message('Recorded as submitted');
 												}
+											}
+										},
+
+										actions: function (oParam, oResponse)
+										{
+											if (oResponse == undefined)
+											{
+												var oSearch = new AdvancedSearch();
+												oSearch.method = 'ACTION_SEARCH';
+												oSearch.addField('actionreference,duedate,objectcontext,description,completed');
+												oSearch.addFilter('object', 'EQUAL_TO', 37);
+												oSearch.addFilter('duedate', 'GREATER_THAN_OR_EQUAL_TO', ns1blankspace.financial.payroll.data.startDate)
+												oSearch.addFilter('actionreference', 'EQUAL_TO', '[STP-SUBMIT-ST]');
+												oSearch.rows = 9999
+												oSearch.sort('duedate', 'desc');
+												oSearch.getResults(function(data) {ns1blankspace.financial.payroll.totals.employees.report.history.actions(oParam, data)});	
+											}
+											else
+											{
+												var oData = {lite: false, api: false, csv: false}
+												var aActions;
+
+												ns1blankspace.financial.payroll.totals.employees.report.history.data.actions = undefined;
+
+												if (oResponse.status == 'OK')
+												{
+													ns1blankspace.financial.payroll.totals.employees.report.history.data.actions = oResponse.data.rows;
+
+													$.each(ns1blankspace.financial.payroll.totals.employees.report.history.data.actions, function (a, oAction)
+													{
+														oAction.csv = ($.grep(oResponse.data.rows, function (oRow) {return oRow.description.indexOf('[CSV]') != -1}).length != 0)
+														oAction.api = ($.grep(oResponse.data.rows, function (oRow) {return oRow.description.indexOf('[API]') != -1}).length != 0)
+														oAction.lite = ($.grep(oResponse.data.rows, function (oRow) {return oRow.description.indexOf('[LITE]') != -1}).length != 0)
+														oAction.portal = ($.grep(oResponse.data.rows, function (oRow) {return oRow.description.indexOf('[LITE]') == -1}).length != 0)
+													})
+												}
+
+												ns1blankspace.util.onComplete(oParam);
 											}
 										},
 
@@ -7819,20 +7905,22 @@ ns1blankspace.financial.payroll.totals =
 											{
 												var oSearch = new AdvancedSearch();
 												oSearch.method = 'ACTION_SEARCH';
-												oSearch.addField('actionreference,duedatetime,objectcontext,description');
+												oSearch.addField('actionreference,duedatetime,objectcontext,description,completed');
 												oSearch.addFilter('object', 'EQUAL_TO', 37);
 
 												if (aObjectContexts == undefined)
 												{
-													oSearch.addFilter('objectcontext', 'EQUAL_TO', ns1blankspace.financial.payroll.data.payPeriod.id)
+													oSearch.addFilter('objectcontext', 'LESS_THAN_OR_EQUAL_TO', ns1blankspace.financial.payroll.data.payPeriod.id)
+													oSearch.rows = 2
+													oSearch.sort('objectcontext', 'desc');
 												}
 												else
 												{
-													oSearch.addFilter('objectcontext', 'IN_LIST', aObjectContexts.join(','))
+													oSearch.addFilter('objectcontext', 'IN_LIST', aObjectContexts.join(','));
+													oSearch.rows = 9999;
 												}
 													
 												oSearch.addFilter('actionreference', 'EQUAL_TO', '[STP-SUBMIT-ST]');
-												oSearch.rows = 9999;
 												oSearch.getResults(function(data) {ns1blankspace.financial.payroll.totals.employees.report.history.show(oParam, data)});	
 											}
 											else
@@ -7841,13 +7929,13 @@ ns1blankspace.financial.payroll.totals =
 												{
 													var sHTML;
 
-													if (aObjectContexts== undefined)
+													if (aObjectContexts == undefined)
 													{
 														sHTML = '<p>This pay period has NOT been marked as submitted to the ' + ns1blankspace.option.taxOffice + '.</p>';
 
 														if (oResponse.data.rows.length > 0)
 														{
-															sHTML = '<p>This pay period has been marked as submitted to the ' + ns1blankspace.option.taxOffice + ' (' + oResponse.data.rows[0].duedatetime + ').</p>';
+															sHTML = '<p>This pay period has been marked as submitted to the ' + ns1blankspace.option.taxOffice + ' (' + oResponse.data.rows[0].completed + ').</p>';
 
 															if (oResponse.data.rows[0].description.indexOf('[CSV]') != -1)
 															{
@@ -7863,6 +7951,8 @@ ns1blankspace.financial.payroll.totals =
 															{
 																sHTML = sHTML + '<p>It was submitted using <em>singletouch Lite</em>.</p>'
 															}
+
+															$('#ns1blankspacePayrollTotalsSTPDataFileProductID').prop('checked', (oResponse.data.rows[0].description.indexOf('[LITE]') != -1))
 														}
 														
 														$('#ns1blankspacePayrollTotalsSTPDataStatus').html('<span class="ns1blankspaceSub" style="font-weight:bold;">' + sHTML + '</span>');
@@ -7892,22 +7982,22 @@ ns1blankspace.financial.payroll.totals =
 															{
 																bSubmitted = true;
 
-																if (oResponse.data.rows[0].description.indexOf('[CSV]') != -1)
+																if (aActions[0].description.indexOf('[CSV]') != -1)
 																{
 																	sHTML = 'Submitted as a CSV file ';
 
-																	if (oResponse.data.rows[0].description.indexOf('[LITE]') != -1)
+																	if (aActions[0].description.indexOf('[LITE]') != -1)
 																	{
 																		sHTML = sHTML + 'using <em>singletouch Lite</em> ';
 																	}
 																}
 
-																if (oResponse.data.rows[0].description.indexOf('[API]') != -1)
+																if (aActions[0].description.indexOf('[API]') != -1)
 																{
 																	sHTML = 'Submitted online using <em>singletouch</em> ';
 																}
 
-																sHTML = sHTML + '(' + oResponse.data.rows[0].duedatetime + ')' +
+																sHTML = sHTML + '(' + aActions[0].completed + ')' +
 																				' <button class="btn btn-default btn-xs ns1blankspaceRowTotalsView" id="ns1blankspacePayrollTotalsSTPDataStatus-' + sObjectContext + '">View data</button>'
 															}
 
