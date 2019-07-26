@@ -788,9 +788,9 @@ ns1blankspace.app =
 							$('#ns1blankspaceViewControlBrowse').html('');
 							$('#ns1blankspaceMain').html('');
 							$('#ns1blankspaceControl').html('');
-							$('#ns1blankspaceLogonName').html('&nbsp;')
+							$('#ns1blankspaceLogonName').html('') //&nbsp;
 							$('#ns1blankspaceLogonName').unbind('click');
-							$('#ns1blankspaceSpaceText').html('&nbsp;')
+							$('#ns1blankspaceSpaceText').html('') //&nbsp;
 							$('#ns1blankspaceSpaceText').unbind('click');
 							ns1blankspace.status.message('');
 							$('#ns1blankspaceMultiUseDialog').hide();
@@ -2076,7 +2076,7 @@ ns1blankspace.app =
 
 ns1blankspace.logon = 
 {
-	show: 		function (oParam)
+	show: 	function (oParam)
 				{
 					var aHTML = [];
 					var h = -1;
