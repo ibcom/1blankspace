@@ -1541,6 +1541,7 @@ ns1blankspace.financial.bankAccount =
 																date: oTransaction.posteddate,
 																amount: oTransaction.createAmount,
 																description: oTransaction.description,
+																itemDescription: oTransaction.description,
 																contactBusiness: oTransaction.contactbusiness,
 																contactPerson: oTransaction.contactperson,
 																account: oTransaction.financialaccount,
