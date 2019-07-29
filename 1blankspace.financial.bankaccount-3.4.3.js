@@ -1550,7 +1550,8 @@ ns1blankspace.financial.bankAccount =
 																postSave: ns1blankspace.financial.bankAccount.mapping.create.process,
 																showStatus: false,
 																bankTransactionStatus: 2,
-																step: 2
+																step: 2,
+																taxType: oTransaction.taxtype
 															})
 
 															ns1blankspace.financial.save.send(oParam);
