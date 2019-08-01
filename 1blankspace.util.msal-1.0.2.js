@@ -85,77 +85,84 @@ ns1blankspace.util.msal =
 
         ns1blankspace.util.msal._param = oParam;
 
-        var oConfig = oParam.config;
-        var oEndpoint = oParam.endpoint;
-        var sTenant = oParam.tenant;
-        var bAutoSignIn = true;
-       
-        if (sTenant != undefined)
-        {
-            var _oConfig = $.grep(ns1blankspace.util.msal.configs, function (oConfig) {return oConfig.tenant == sTenant})
-            if (_oConfig.length != 0) {oConfig = _oConfig[0]}
-        }
-
-        if (oConfig != undefined)
-        {
-            ns1blankspace.util.msal.config = $.extend(true, ns1blankspace.util.msal.config, oConfig);
-        }
-
-        if (oEndpoint != undefined)
-        {
-            ns1blankspace.util.msal.endpoint = $.extend(true, ns1blankspace.util.msal.endpoint, oEndpoint);
-        }
-
-        if (ns1blankspace.util.msal.config == undefined)
+        if (oParam == undefined)
         {
             alert('No MSAL Config');
         }
         else
         {
-            var oMSALConfig =
+            var oConfig = oParam.config;
+            var oEndpoint = oParam.endpoint;
+            var sTenant = oParam.tenant;
+            var bAutoSignIn = true;
+           
+            if (sTenant != undefined)
             {
-                auth: ns1blankspace.util.msal.config.auth,
-                cache: ns1blankspace.util.msal.config.cache
+                var _oConfig = $.grep(ns1blankspace.util.msal.configs, function (oConfig) {return oConfig.tenant == sTenant})
+                if (_oConfig.length != 0) {oConfig = _oConfig[0]}
             }
 
-            ns1blankspace.util.msal.instance = new Msal.UserAgentApplication(oConfig);
-            //oMSALInstance = new Msal.UserAgentApplication(oMSALConfig)
- 
-            if (bAutoSignIn)
+            if (oConfig != undefined)
             {
-                ns1blankspace.util.msal.account = ns1blankspace.util.msal.instance.getAccount();
+                ns1blankspace.util.msal.config = $.extend(true, ns1blankspace.util.msal.config, oConfig);
+            }
 
-                if (ns1blankspace.util.msal.account)
-                {
-                    ns1blankspace.util.msal.auth.acquireToken();
-                }
-                else
-                {
-                    ns1blankspace.util.msal.auth.signIn();
-                }
+            if (oEndpoint != undefined)
+            {
+                ns1blankspace.util.msal.endpoint = $.extend(true, ns1blankspace.util.msal.endpoint, oEndpoint);
+            }
+
+            if (ns1blankspace.util.msal.config == undefined)
+            {
+                alert('No MSAL Config');
             }
             else
             {
-                $('#' + sTenant).show();
-
-                if (typeof(ns1blankspace.util.msal.config.okToSend) == 'function')
+                var oMSALConfig =
                 {
-                    $('.ns1blankspaceMSAL').click(function (event)
-                    {
-                        ns1blankspace.util.msal.config.okToSend()   
-                    });
-
-                    $('.ns1blankspaceMSAL').keyup(function (event)
-                    {
-                        ns1blankspace.util.msal.config.okToSend()   
-                    });
+                    auth: ns1blankspace.util.msal.config.auth,
+                    cache: ns1blankspace.util.msal.config.cache
                 }
 
-                $('#ns1blankspaceMSALSend')
-                .click(function()
-                {       
-                     ns1blankspace.util.msal.auth.signIn();
-                });
+                ns1blankspace.util.msal.instance = new Msal.UserAgentApplication(oConfig);
+                //oMSALInstance = new Msal.UserAgentApplication(oMSALConfig)
+     
+                if (bAutoSignIn)
+                {
+                    ns1blankspace.util.msal.account = ns1blankspace.util.msal.instance.getAccount();
+
+                    if (ns1blankspace.util.msal.account)
+                    {
+                        ns1blankspace.util.msal.auth.acquireToken();
+                    }
+                    else
+                    {
+                        ns1blankspace.util.msal.auth.signIn();
+                    }
+                }
+                else
+                {
+                    $('#' + sTenant).show();
+
+                    if (typeof(ns1blankspace.util.msal.config.okToSend) == 'function')
+                    {
+                        $('.ns1blankspaceMSAL').click(function (event)
+                        {
+                            ns1blankspace.util.msal.config.okToSend()   
+                        });
+
+                        $('.ns1blankspaceMSAL').keyup(function (event)
+                        {
+                            ns1blankspace.util.msal.config.okToSend()   
+                        });
+                    }
+
+                    $('#ns1blankspaceMSALSend')
+                    .click(function()
+                    {       
+                         ns1blankspace.util.msal.auth.signIn();
+                    });
+                }
             }
         }
     },
