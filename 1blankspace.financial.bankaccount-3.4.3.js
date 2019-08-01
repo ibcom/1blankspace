@@ -5558,7 +5558,7 @@ ns1blankspace.financial.bankAccount =
 										{
 											xhtmlElementID: 'ns1blankspaceControlContext_reco_summary_statement-' + ns1blankspace.financial.bankAccount.reconcile.attachment.data.objectContext,
 											objectContext: ns1blankspace.financial.bankAccount.reconcile.attachment.data.objectContext,
-											downloadText: 'Download Bank Statement'
+											downloadText: 'View Bank Statement'
 										})
 									},
 
