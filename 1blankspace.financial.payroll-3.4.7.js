@@ -7965,6 +7965,8 @@ ns1blankspace.financial.payroll.totals =
 													sActionDescription = sActionDescription + '[' + oParam.type + ']';
 												}
 
+												if (oParam.includeProductID == undefined) {oParam.includeProductID = true}
+
 												if (!oParam.includeProductID)
 												{
 													sActionDescription = sActionDescription + '[LITE]';
@@ -7981,7 +7983,7 @@ ns1blankspace.financial.payroll.totals =
 													duedate: moment(ns1blankspace.financial.payroll.data.endDate, ns1blankspace.option.dateFormats).format('DD MMM YYYY'),
 													completed: moment().format('DD MMM YYYY HH:mm'),
 													status: 1,
-													actionby: ns1blankspace.user.id,
+													xactionby: ns1blankspace.user.id,
 													actiontype: 4
 												}
 
@@ -8323,7 +8325,7 @@ ns1blankspace.financial.payroll.totals =
 													if (oError.infoMessages != undefined && oError.infoMessages != '')
 													{
 														aHTML.push('<p>' + oError.infoMessages + '</p>');
-													}
+													}x
 												}
 												else
 												{
@@ -8340,7 +8342,7 @@ ns1blankspace.financial.payroll.totals =
 
 												$('#ns1blankspacePayrollTotalsSTPDataSubmitSendStatus').html(sMesssage)
 
-												var bHistoryRecord = !($('#ns1blankspacePayrollTotalsSTPDataFileRecord').prop('checked'));
+												var bHistoryRecord = ($('#ns1blankspacePayrollTotalsSTPDataFileRecord').prop('checked'));
 
 												if (bHistoryRecord)
 												{
@@ -8374,7 +8376,7 @@ ns1blankspace.financial.payroll.totals =
 
 												if (oResponse.logMessages != undefined && oResponse.logMessages != '')
 												{
-													oResponse.logMessages = oResponse.logMessages.replace('Response message returned from the SingleTouch API:<br />', '');
+													oResponse.logMessages = oResponse.logMessages.replace('Response message returned from the SingleTouch API:<br/>', '');
 													aHTML.push('<p>' + oResponse.logMessages + '</p>');
 												}
 
@@ -8385,8 +8387,6 @@ ns1blankspace.financial.payroll.totals =
 											}
 
 											return aHTML.join('')
-//"{\"statusCode\":200,\"logMessages\":\"Your pay events have been submitted to the ATO. An email notification will be sent to Stuart@oxygenbookkeeping.com.au detailing whether the pay events were successfully processed including any processing errors from the ATO.<br/>You will also be given a suggested course of action should there be any errors.<br/><br/>Response message returned from the SingleTouch API:<br/>\",\"infoMessages\":\"\"}"
-
 										}
 									}
 								}								
