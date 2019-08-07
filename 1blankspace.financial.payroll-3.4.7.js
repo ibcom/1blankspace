@@ -8374,6 +8374,7 @@ ns1blankspace.financial.payroll.totals =
 
 												if (oResponse.logMessages != undefined && oResponse.logMessages != '')
 												{
+													oResponse.logMessages = oResponse.logMessages.replace('Response message returned from the SingleTouch API:<br />', '');
 													aHTML.push('<p>' + oResponse.logMessages + '</p>');
 												}
 
