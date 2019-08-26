@@ -275,7 +275,7 @@ ns1blankspace.scripts =
 	},
 	{
 		nameSpace: '1blankspace.messaging.imap',
-		source: '/site/388/1blankspace.messaging.imap-3.2.5.js'
+		source: '/site/388/1blankspace.messaging.imap-3.5.0.js'
 	},
 	{
 		nameSpace: '1blankspace.document',
