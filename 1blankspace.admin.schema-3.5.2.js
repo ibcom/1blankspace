@@ -393,7 +393,7 @@ ns1blankspace.admin.schema.endpoints =
 
 					if (ns1blankspace.user.super)
 					{
-						
+						//edit
 					}
 
 					aHTML.push('</tr>');
