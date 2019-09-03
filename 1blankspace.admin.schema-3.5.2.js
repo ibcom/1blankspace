@@ -71,7 +71,7 @@ ns1blankspace.admin.schema =
 						
 					aHTML.push('<table class="ns1blankspaceControl" style="padding-top:10px;">');
 				
-					aHTML.push('<tr><td id="ns1blankspaceControlServiceFaults" class="ns1blankspaceControl">' +
+					aHTML.push('<tr><td id="ns1blankspaceControlObjects" class="ns1blankspaceControl">' +
 									'Objects</td></tr>');
 
 					//if (ns1blankspace.user.super)
@@ -88,8 +88,6 @@ ns1blankspace.admin.schema =
 					aHTML.push('<div id="ns1blankspaceMainMethods" class="ns1blankspaceControlMain"></div>');
 					aHTML.push('<div id="ns1blankspaceMainProperties" class="ns1blankspaceControlMain"></div>');
 					aHTML.push('<div id="ns1blankspaceMainObjects" class="ns1blankspaceControlMain"></div>');
-
-					aHTML.push('<div id="ns1blankspaceMainStateChannel" class="ns1blankspaceControlMain"></div>');
 
 					$('#ns1blankspaceMain').html(aHTML.join(''));
 					
@@ -159,6 +157,11 @@ ns1blankspace.admin.schema =
 									ns1blankspace.xhtml.loadingSmall +
 									'</td></tr>');
 
+					aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Objects</td></tr>' +
+									'<tr><td id="ns1blankspaceSummaryObjects" class="ns1blankspaceSummary">' +
+									ns1blankspace.xhtml.loadingSmall +
+									'</td></tr>');
+
 					aHTML.push('</table>');
 
 					$('#ns1blankspaceSummaryColumn1').html(aHTML.join(''));
@@ -174,6 +177,7 @@ ns1blankspace.admin.schema =
 					ns1blankspace.admin.schema.endpoints.count();
 					ns1blankspace.admin.schema.methods.count();
 					ns1blankspace.admin.schema.properties.count();
+					ns1blankspace.admin.schema.objects.count();
 				}
 }				
 
@@ -280,6 +284,7 @@ ns1blankspace.admin.schema.endpoints =
 										'<td class="ns1blankspaceHeaderCaption">Title</td>' +
 										'<td class="ns1blankspaceHeaderCaption">Type</td>' +
 										'<td class="ns1blankspaceHeaderCaption">Category</td>' +
+										'<td class="ns1blankspaceHeaderCaption"></td>' +
 										'</tr>');
 
 							$(oResponse.data.rows).each(function() 
@@ -386,6 +391,11 @@ ns1blankspace.admin.schema.endpoints =
 					aHTML.push('<td id="ns1blankspaceAdminSchemaEndpoints_category-' + oRow["id"] + '" class="ns1blankspaceRow">' +
 									oRow["categorytext"] + '</td>');
 
+					if (ns1blankspace.user.super)
+					{
+						
+					}
+
 					aHTML.push('</tr>');
 
 					return aHTML.join('');
@@ -393,7 +403,7 @@ ns1blankspace.admin.schema.endpoints =
 
 	bind: 	function ()
 				{
-					$('#ns1blankspaceAdminSchemaEndpoints .ns1blankspaceRowSelect').click(function()
+					$('.ns1blankspaceRowSelect:visible').click(function()
 					{
 						ns1blankspace.admin.schema.endpoints.details({xhtmlElementID: this.id})
 					});	
@@ -648,7 +658,7 @@ ns1blankspace.admin.schema.methods =
 
 	bind: 	function ()
 				{
-					$('#ns1blankspaceAdminSchemaMethods .ns1blankspaceRowSelect').click(function()
+					$('.ns1blankspaceRowSelect:visible').click(function()
 					{
 						ns1blankspace.admin.schema.methods.details({xhtmlElementID: this.id})
 					});		
@@ -760,7 +770,7 @@ ns1blankspace.admin.schema.properties =
 						
 						$('#ns1blankspaceMainProperties').html(aHTML.join(''));
 
-						$('#ns1blankspaceAdminSchemaMethodsColumn1').html(ns1blankspace.xhtml.loading);
+						$('#ns1blankspaceAdminSchemaPropertiesColumn1').html(ns1blankspace.xhtml.loading);
 
 						ns1blankspace.admin.schema.properties.data.details = [];
 
@@ -929,7 +939,7 @@ ns1blankspace.admin.schema.properties =
 
 	bind: 	function ()
 				{
-					$('#ns1blankspaceAdminSchemaProperties .ns1blankspaceRowSelect').click(function()
+					$('.ns1blankspaceRowSelect:visible').click(function()
 					{
 						ns1blankspace.admin.schema.properties.details({xhtmlElementID: this.id})
 					});		
@@ -1014,7 +1024,7 @@ ns1blankspace.admin.schema.objects =
 					}
 					else
 					{
-						$('#ns1blankspaceSummaryProperties').html(oResponse.summary.count);
+						$('#ns1blankspaceSummaryObjects').html(oResponse.summary.count);
 					}	
 				},	
 	
@@ -1026,11 +1036,11 @@ ns1blankspace.admin.schema.objects =
 					if (oSearchText.exists)
 					{
 						sSearchText = oSearchText.value;
-						ns1blankspace.admin.schema.properties.data.searchText = sSearchText;
+						ns1blankspace.admin.schema.objects.data.searchText = sSearchText;
 					}
 					else
 					{	
-						sSearchText = ns1blankspace.admin.schema.properties.data.searchText;
+						sSearchText = ns1blankspace.admin.schema.objects.data.searchText;
 					}	
 
 					if (oResponse == undefined)
@@ -1039,20 +1049,20 @@ ns1blankspace.admin.schema.objects =
 	
 						aHTML.push('<table class="ns1blankspaceContainer">' +
 										'<tr class="ns1blankspaceContainer">' +
-										'<td id="ns1blankspaceAdminSchemaPropertiesColumn1"></td>' +
-										'<td id="ns1blankspaceAdminSchemaPropertiesColumn2" style="width:115px;"></td>' +
+										'<td id="ns1blankspaceAdminSchemaObjectsColumn1"></td>' +
+										'<td id="ns1blankspaceAdminSchemaObjectsColumn2" style="width:115px;"></td>' +
 										'</tr>' +
 										'</table>');				
 						
-						$('#ns1blankspaceMainProperties').html(aHTML.join(''));
+						$('#ns1blankspaceMainObjects').html(aHTML.join(''));
 
-						$('#ns1blankspaceAdminSchemaMethodsColumn1').html(ns1blankspace.xhtml.loading);
+						$('#ns1blankspaceAdminSchemaObjectsColumn1').html(ns1blankspace.xhtml.loading);
 
-						ns1blankspace.admin.schema.properties.data.details = [];
+						ns1blankspace.admin.schema.objects.data.details = [];
 
 						var oSearch = new AdvancedSearch();
-						oSearch.method = 'CORE_METHOD_PROPERTY_SEARCH';
-						oSearch.addField('datalength,datatype,datatypetext,mandatory,method,methodtext,name,notes,searchendpoint,searchmethod,searchrelatedproperty,title');
+						oSearch.method = 'CORE_OBJECT_SEARCH';
+						oSearch.addField('categorytext,title,bulkavailable,advancedsearchmethod,defaulttextcolumn,parentobject,parentobjecttext,prefix,roleobjectaccessavailable,snapshotavailable,notes');
 					
 						if (sSearchText != '')
 						{
@@ -1060,11 +1070,7 @@ ns1blankspace.admin.schema.objects =
 
 							oSearch.addFilter('title', 'TEXT_IS_LIKE', sSearchText);
 							oSearch.addOperator('or');
-							oSearch.addFilter('name', 'TEXT_IS_LIKE', sSearchText);
-							oSearch.addOperator('or');
 							oSearch.addFilter('notes', 'TEXT_IS_LIKE', sSearchText);
-							oSearch.addOperator('or');
-							oSearch.addFilter('methodtext', 'TEXT_IS_LIKE', sSearchText);
 							
 							if (!_.isNaN(_.toNumber(sSearchText)))
 							{
@@ -1077,7 +1083,7 @@ ns1blankspace.admin.schema.objects =
 
 						oSearch.rows = 20;
 						oSearch.sort('title', 'asc');
-						oSearch.getResults(function(data) {ns1blankspace.admin.schema.properties.show(oParam, data)});
+						oSearch.getResults(function(data) {ns1blankspace.admin.schema.objects.show(oParam, data)});
 					}
 					else
 					{
@@ -1085,26 +1091,24 @@ ns1blankspace.admin.schema.objects =
 						
 						if (oResponse.data.rows.length == 0)
 						{
-							aHTML.push('<table id="ns1blankspaceAdminSchemaMethods">' +
-											'<tr><td class="ns1blankspaceSub">No properties.</td></tr></table>');
+							aHTML.push('<table id="ns1blankspaceAdminSchemaObjects">' +
+											'<tr><td class="ns1blankspaceSub">No objects.</td></tr></table>');
 
-							$('#ns1blankspaceAdminSchemaPropertiesColumn1').html(aHTML.join(''));
+							$('#ns1blankspaceAdminSchemaObjectsColumn1').html(aHTML.join(''));
 						}
 						else
 						{
 							var aHTML = [];
 
-							aHTML.push('<table id="ns1blankspaceAdminSchemaProperties" class="ns1blankspace">' +
+							aHTML.push('<table id="ns1blankspaceAdminSchemaObjects" class="ns1blankspace">' +
 										'<tr class="ns1blankspaceHeaderCaption">' +
 										'<td class="ns1blankspaceHeaderCaption">Title</td>' +
-										'<td class="ns1blankspaceHeaderCaption">Name</td>' +
-										'<td class="ns1blankspaceHeaderCaption">Method</td>' +
-										'<td class="ns1blankspaceHeaderCaption">Type</td>' +
+										'<td class="ns1blankspaceHeaderCaption">Category</td>' +
 										'</tr>');
 
 							$(oResponse.data.rows).each(function() 
 							{
-								aHTML.push(ns1blankspace.admin.schema.properties.row(this));
+								aHTML.push(ns1blankspace.admin.schema.objects.row(this));
 							});
 							
 							aHTML.push('</table>');
@@ -1113,15 +1117,15 @@ ns1blankspace.admin.schema.objects =
 						ns1blankspace.render.page.show(
 						{
 							type: 'JSON',
-							xhtmlElementID: 'ns1blankspaceAdminSchemaPropertiesColumn1',
-							xhtmlContext: 'AdminSchemaProperties',
+							xhtmlElementID: 'ns1blankspaceAdminSchemaObjectsColumn1',
+							xhtmlContext: 'AdminSchemaObjects',
 							xhtml: aHTML.join(''),
 							showMore: (oResponse.morerows == "true"),
 							more: oResponse.moreid,
 							rows: 100,
-							functionShowRow: ns1blankspace.admin.schema.properties.row,
+							functionShowRow: ns1blankspace.admin.schema.objects.row,
 							functionOpen: undefined,
-							functionOnNewPage: ns1blankspace.admin.schema.properties.bind
+							functionOnNewPage: ns1blankspace.admin.schema.objects.bind
 						});
 
 						var aHTML = [];
@@ -1129,62 +1133,62 @@ ns1blankspace.admin.schema.objects =
 						aHTML.push('<table class="ns1blankspaceColumn2">');
 
 						aHTML.push('<tr><td class="ns1blankspaceText" style="padding-top:14px;">' +
-												'<input id="ns1blankspaceAdminSchemaPropertiesSearchText" class="ns1blankspaceText" style="width:130px;">' +
+												'<input id="ns1blankspaceAdminSchemaObjectsSearchText" class="ns1blankspaceText" style="width:130px;">' +
 												'</td></tr>');
 																			
 						aHTML.push('<tr><td style="padding-top:0px;">' +
-										'<span id="ns1blankspaceAdminSchemaPropertiesSearch" class="ns1blankspaceAction">Search</span>');
+										'<span id="ns1blankspaceAdminSchemaObjectsSearch" class="ns1blankspaceAction">Search</span>');
 
 						if (sSearchText != undefined)
 						{	
-							aHTML.push(' <span id="ns1blankspaceAdminSchemaPropertiesSearchClear" class="ns1blankspaceAction">Clear</span>');
+							aHTML.push(' <span id="ns1blankspaceAdminSchemaObjectsSearchClear" class="ns1blankspaceAction">Clear</span>');
 						}
 
 						aHTML.push('</td></tr>');
 
 						aHTML.push('</table>');
 
-						if ($('#ns1blankspaceAdminSchemaPropertiesColumn2 table').length == 0)
+						if ($('#ns1blankspaceAdminSchemaObjectsColumn2 table').length == 0)
 						{
-							$('#ns1blankspaceAdminSchemaPropertiesColumn2').html(aHTML.join(''));
+							$('#ns1blankspaceAdminSchemaObjectsColumn2').html(aHTML.join(''));
 						}
 						else
 						{
-							$('#ns1blankspaceAdminSchemaPropertiesColumn2 table').before(aHTML.join(''));
+							$('#ns1blankspaceAdminSchemaObjectsColumn2 table').before(aHTML.join(''));
 						}
 
-						$('#ns1blankspaceAdminSchemaPropertiesSearch').button(
+						$('#ns1blankspaceAdminSchemaObjectsSearch').button(
 						{
 							label: 'Search'
 						})
 						.click(function() 
 						{
-							oParam = ns1blankspace.util.setParam(oParam, 'searchText', $('#ns1blankspaceAdminSchemaPropertiesSearchText').val());
-							ns1blankspace.admin.schema.properties.show(oParam);
+							oParam = ns1blankspace.util.setParam(oParam, 'searchText', $('#ns1blankspaceAdminSchemaObjectsSearchText').val());
+							ns1blankspace.admin.schema.objects.show(oParam);
 						})
 						.css('width', '65px');
 
-						$('#ns1blankspaceAdminSchemaPropertiesSearchClear').button(
+						$('#ns1blankspaceAdminSchemaObjectsSearchClear').button(
 						{
 							label: 'Clear'
 						})
 						.click(function() 
 						{
 							oParam = ns1blankspace.util.setParam(oParam, 'searchText', '');
-							ns1blankspace.admin.schema.properties.show(oParam);
+							ns1blankspace.admin.schema.objects.show(oParam);
 						})
 						.css('width', '57px');
 
-						$('#ns1blankspaceAdminSchemaPropertiesSearchText').keyup(function(e)
+						$('#ns1blankspaceAdminSchemaObjectsSearchText').keyup(function(e)
 						{
 							if (e.which === 13)
 					    	{
-					    		oParam = ns1blankspace.util.setParam(oParam, 'searchText', $('#ns1blankspaceAdminSchemaPropertiesSearchText').val())
-					    		ns1blankspace.admin.schema.properties.show(oParam);
+					    		oParam = ns1blankspace.util.setParam(oParam, 'searchText', $('#ns1blankspaceAdminSchemaObjectsSearchText').val())
+					    		ns1blankspace.admin.schema.objects.show(oParam);
 					    	}
 						});				
 
-						$('#ns1blankspaceAdminSchemaPropertiesSearchText').val(sSearchText);
+						$('#ns1blankspaceAdminSchemaObjectsSearchText').val(sSearchText);
 					}
 				},	
 
@@ -1192,21 +1196,15 @@ ns1blankspace.admin.schema.objects =
 				{
 					var aHTML = [];
 
-					ns1blankspace.admin.schema.properties.data.details.push(oRow);
+					ns1blankspace.admin.schema.objects.data.details.push(oRow);
 
-					aHTML.push('<tr id="ns1blankspaceAdminSchemaProperties_container-' + oRow["id"] + '">');
+					aHTML.push('<tr id="ns1blankspaceAdminSchemaObjects_container-' + oRow["id"] + '">');
 					
-					aHTML.push('<td id="ns1blankspaceAdminSchemaProperties_name-' + oRow["id"] + '" class="ns1blankspaceRow ns1blankspaceRowSelect">' +
-										oRow["name"].toLowerCase() + '</td>');
+					aHTML.push('<td id="ns1blankspaceAdminSchemaObjects_title-' + oRow["id"] + '" class="ns1blankspaceRow ns1blankspaceRowSelect">' +
+										oRow["title"].toLowerCase() + '</td>');
 
-					aHTML.push('<td id="ns1blankspaceAdminSchemaProperties_title-' + oRow["id"] + '" class="ns1blankspaceRow">' +
-										oRow["title"] + '</td>');
-
-					aHTML.push('<td id="ns1blankspaceAdminSchemaProperties_method-' + oRow["id"] + '" class="ns1blankspaceRow">' +
-									oRow["methodtext"] + '</td>');
-
-					aHTML.push('<td id="ns1blankspaceAdminSchemaProperties_type-' + oRow["id"] + '" class="ns1blankspaceRow">' +
-									oRow["datatypetext"] + '</td>');
+					aHTML.push('<td id="ns1blankspaceAdminSchemaObjects_category-' + oRow["id"] + '" class="ns1blankspaceRow">' +
+										oRow["categorytext"] + '</td>');
 
 					aHTML.push('</tr>');
 
@@ -1215,9 +1213,9 @@ ns1blankspace.admin.schema.objects =
 
 	bind: 	function ()
 				{
-					$('#ns1blankspaceAdminSchemaProperties .ns1blankspaceRowSelect').click(function()
+					$('.ns1blankspaceRowSelect:visible').click(function()
 					{
-						ns1blankspace.admin.schema.properties.details({xhtmlElementID: this.id})
+						ns1blankspace.admin.schema.objects.details({xhtmlElementID: this.id})
 					});		
 				},
 
@@ -1233,45 +1231,46 @@ ns1blankspace.admin.schema.objects =
 						sKey = ns1blankspace.util.param(oParam, 'xhtmlElementID', '-').values[1];
 					}
 
-					if ($('#ns1blankspaceAdminSchemaProperties_container_details-' + sKey).length != 0)
+					if ($('#ns1blankspaceAdminSchemaObjects_container_details-' + sKey).length != 0)
 					{
-						$('#ns1blankspaceAdminSchemaProperties_container_details-' + sKey).remove();
+						$('#ns1blankspaceAdminSchemaObjects_container_details-' + sKey).remove();
 					}
 					else
 					{
 						var sHTML = 'No details';
 
-						var oDetail = $.grep(ns1blankspace.admin.schema.properties.data.details, function (a) {return a.id == sKey;})[0];
+						var oDetail = $.grep(ns1blankspace.admin.schema.objects.data.details, function (a) {return a.id == sKey;})[0];
 
 						if (oDetail)
 						{
 							sHTML = '<table class="table table-condensed">' +
 										'<tr><td style="width:40%;">ID</td><td>' + oDetail.id + '</td></tr>' +
-											'<tr><td>Mandatory</td><td>' + oDetail.mandatory + '</td></tr>';
+										'<tr><td>Prefix</td><td>' + oDetail.prefix + '</td></tr>' +
+										'<tr><td>Category</td><td>' + oDetail.categorytext + '</td></tr>' +
+										'<tr><td>Bulk Update Available</td><td>' + oDetail.bulkavailable + '</td></tr>' +
+										'<tr><td>Snapshot Available</td><td>' + oDetail.snapshotavailable + '</td></tr>' +
+										'<tr><td>Role Based Access Available</td><td>' + oDetail.roleobjectaccessavailable + '</td></tr>' +
+										'<tr><td>Default Reference Property</td><td>' + oDetail.defaulttextcolumn + '</td></tr>';
+
 											
-							if (oDetail.searchendpoint != '')
+							if (oDetail.advancedsearchmethod != '')
 							{
-								sHTML = sHTML + '<tr><td>Search Endpoint</td><td>' + oDetail.searchendpoint + '</td></tr>';
+								sHTML = sHTML + '<tr><td>Search Endpoint</td><td>' + oDetail.advancedsearchmethod + '</td></tr>';
 							}
 
-							if (oDetail.searchrelatedproperty != '')
+							if (oDetail.parentobjecttext != '')
 							{
-								sHTML = sHTML + '<tr><td>Search Related Property</td><td>' + oDetail.searchrelatedproperty + '</td></tr>';
+								sHTML = sHTML + '<tr><td>Parent</td><td>' + oDetail.parentobjecttext + '</td></tr>';
 							}
 
-							if (oDetail.typetext != 'Text')
-							{
-								sHTML = sHTML + '<tr><td>Length</td><td>' + oDetail.datalength + '</td></tr>';
-							}
-
-							if (false && oDetail.notes != '')
+							if (oDetail.notes != '')
 							{
 								sHTML = sHTML + '<tr><td>Notes</td><td>' + oDetail.notes + '</td></tr>';
 							}
 
 							sHTML = sHTML + '</table>'
 							
-							$('#ns1blankspaceAdminSchemaProperties_container-' + sKey).after('<tr id="ns1blankspaceAdminSchemaProperties_container_details-' + sKey + '" style="font-size:0.875em;">' +
+							$('#ns1blankspaceAdminSchemaObjects_container-' + sKey).after('<tr id="ns1blankspaceAdminSchemaObjects_container_details-' + sKey + '" style="font-size:0.875em;">' +
 								'<td colspan=4><div style="background-color: #F3F3F3; padding:8px; color:#444444; font-weight:100; font-size:0.875em;">' + sHTML + '</div></td></tr>');	
 						}
 					}
