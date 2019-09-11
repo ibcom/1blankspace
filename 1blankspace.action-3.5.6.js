@@ -2750,19 +2750,19 @@ ns1blankspace.action =
 					aHTML.push('<td id="ns1blankspaceAction_contact-' + this.contactperson + '" class="ns1blankspaceRow ns1blankspaceRowSelectContact">' +
 									this.contactpersontext + '</td>');
 										
-					aHTML.push('<td id="ns1blankspaceAction_options-' + this.id + '" class="ns1blankspaceRow" style="width:60px;">');
-					aHTML.push('<div id="ns1blankspaceActionComplete_' + this.id + '" class="ns1blankspaceAction ns1blankspaceActionComplete"></div>')
+					aHTML.push('<td id="ns1blankspaceAction_options-' + this.id + '" class="ns1blankspaceRow" style="width:70px;">');
+					aHTML.push('<div id="ns1blankspaceActionComplete_' + this.id + '" class="ns1blankspaceActionComplete"></div>')
 					aHTML.push('<div id="ns1blankspaceActionPriorityContainer_' + this.id + '" style="float:left;">');
 
 					if (_.isNull(numeral(this.priority).value()) || numeral(this.priority).value() != 4)
 					{
-						aHTML.push('<div style="float:left; margin-right:1px;" id="ns1blankspaceActionPriority_' + this.id + '"' +
-										' class="ns1blankspaceAction ns1blankspaceActionPriority"' +
+						aHTML.push('<div style="margin-right:2px;" id="ns1blankspaceActionPriority_' + this.id + '"' +
+										' class=" ns1blankspaceActionPriority"' +
 										' data-priority="' + this.priority + '"></div>');
 					}
 					else
 					{
-						aHTML.push('<div style="margin:0px; margin-right:1px; padding:2px; height:20px; color:white; background-color:red; width:20px; float:left; text-align:center;">!</div>')
+						aHTML.push('<div style="margin:0px; margin-right:3px; padding:2px; color:white; background-color:red; width:20px; float:left; text-align:center;">!</div>')
 					}
 
 					aHTML.push('</div></td></tr>');
@@ -2790,8 +2790,7 @@ ns1blankspace.action =
 					text: false,
 					icons: {primary: 'ui-icon-check'}
 				})
-				.css('height', '20px')
-				.css('width', '20px')
+				.css('width', '15px')
 				.on('click', function()
 				{
 					var oElement = this;
@@ -2842,7 +2841,7 @@ ns1blankspace.action =
 							{
 								ns1blankspace.status.message('Flagged as critical');
 								$('#ns1blankspaceActionPriorityContainer_' + sID).html(
-									'<div style="margin:0px; margin-right:1px; padding:2px; height:20px; color:white; background-color:red; width:20px; float:left; text-align:center;">!</div>')
+									'<div style="margin:0px; margin-right:3px; padding:2px; color:white; background-color:red; width:20px; float:left; text-align:center;">!</div>')
 							}
 							else
 							{
