@@ -78,16 +78,6 @@ ns1blankspace.action =
 		aHTML.push('<tr class="ns1blankspaceControl">' +
 						'<td id="ns1blankspaceControlCalendar" style="padding-top:18px;" class="ns1blankspaceControl">Calendar</td>' +
 						'</tr>');
-
-		aHTML.push('<tr class="ns1blankspaceControl">' +
-						'<td id="ns1blankspaceControlCalendaShowUsers" class="ns1blankspaceSubNote"' +
-							' style="margin-top:12px; cursor:pointer;">Show Users</td>' +
-						'</tr>');
-
-		aHTML.push('<tr class="ns1blankspaceControl">' +
-						'<td id="ns1blankspaceControlCalendarUsers" class="ns1blankspaceSubNote"' +
-							'></td>' +
-						'</tr>');
 		
 		aHTML.push('</table>');	
 
@@ -1823,7 +1813,9 @@ ns1blankspace.action =
 
 				var aHTML = [];
 
-				aHTML.push('<div class="ns1blankspaceSub" style="word-wrap: break-word; width:100px;" ' +
+				aHTML.push('<div class="ns1blankspaceViewControlContainer row" style="font-size:0.75em; width:400px; padding:10px;">')
+
+				aHTML.push('<div class="col-sm-12 ns1blankspaceMainCalendarControlUsers" style="word-break:break-word; padding:4px; cursor:pointer;" ' +
 							'data-user="' + ns1blankspace.action.user + '">' +
 							'Me</div>');
 
@@ -1831,7 +1823,7 @@ ns1blankspace.action =
 				{
 					if (user.id != ns1blankspace.action.user)
 					{
-						aHTML.push('<div class="ns1blankspaceSub" style="word-wrap: break-word; width:100px;" ' +
+						aHTML.push('<div class="col-sm-6 ns1blankspaceMainCalendarControlUsers" style="word-break:break-word; padding:4px; cursor:pointer;" ' +
 							'data-user="' + user.id + '">' +
 							user['user.contactperson.firstname'] + ' ' +
 							user['user.contactperson.surname'] +
@@ -1839,7 +1831,30 @@ ns1blankspace.action =
 					}
 				});
 
-				$('#ns1blankspaceControlCalendarUsers').html(aHTML.join(''));
+				aHTML.push('</div>');
+
+				ns1blankspace.container.show(
+				{
+					xhtmlElementID: 'ns1blankspaceMainCalendarControlUsers',
+					xhtml: aHTML.join(''),
+					topOffset: 0
+				});	
+
+				$('div.ns1blankspaceMainCalendarControlUsers').click(function (event)
+				{
+					var iUser = $(this).attr('data-user');
+
+					ns1blankspace.container.hide(
+					{
+						xhtmlElementID: 'ns1blankspaceMainCalendarControlUsers'
+					});
+
+					ns1blankspace.action.calendar.show(
+					{
+						user: iUser,
+						username: $(this).html()
+					});
+				});
 			}
 		},
 
@@ -1849,31 +1864,46 @@ ns1blankspace.action =
 			var bEventFetch = true;
 			var iSourceObject = 17;
 			var bAdvanced = true;
+			var iUser;
+			var sUsername = 'Me';
 			
 			if (oParam != undefined)
 			{
 				if (oParam.xhtmlElementID != undefined) {sXHTMLElementID = oParam.xhtmlElementID}
 				if (oParam.eventFetch != undefined) {bEventFetch = oParam.eventFetch}
 				if (oParam.sourceObject != undefined) {iSourceObject = oParam.sourceObject}
+				if (oParam.user != undefined) {iUser = oParam.user}
+				if (oParam.username != undefined) {sUsername = oParam.username}
 			}
 			
 			$('#' + sXHTMLElementID).html('');
 			
-			if (!ns1blankspace.action.data.calendarUsers) {ns1blankspace.action.data.calendarUsers = []}
-
-			if (ns1blankspace.action.data.calendarUsers.length == 0 && bEventFetch)
+			if (iUser != undefined)
 			{
-				if (ns1blankspace.action.data.user != undefined)
+				ns1blankspace.action.data.user = iUser;
+				ns1blankspace.action.data.calendarUsers = [iUser];
+			}
+			else
+			{
+				if (ns1blankspace.action.data.calendarUsers == undefined) {ns1blankspace.action.data.calendarUsers = []}
+
+				if (ns1blankspace.action.data.calendarUsers.length == 0 && bEventFetch)
 				{
-					ns1blankspace.action.data.calendarUsers.push(ns1blankspace.action.user);
-				}
-				else
-				{	
-					ns1blankspace.action.data.calendarUsers.push(ns1blankspace.user.id);
+					if (ns1blankspace.action.data.user != undefined)
+					{
+						ns1blankspace.action.data.calendarUsers.push(ns1blankspace.action.data.user);
+					}
+					else
+					{	
+						ns1blankspace.action.data.user = ns1blankspace.user.id;
+						ns1blankspace.action.data.calendarUsers.push(ns1blankspace.user.id);
+					}	
 				}	
-			}	
+			}
 			
 			$(ns1blankspace.xhtml.container).hide(0);
+
+			$('#' + sXHTMLElementID).html('');
 			
 			$('#' + sXHTMLElementID).css('font-size', '0.825em');
 
@@ -1884,9 +1914,20 @@ ns1blankspace.action =
 				themeSystem: 'bootstrap3',
 				theme: true,
 				defaultView: 'agendaWeek',
+				customButtons:
+				{
+			    	usersButton:
+			    	{
+				      text: sUsername,
+				      click: function()
+				      {
+				        ns1blankspace.action.calendar.users();
+				      }
+				   }
+			   },
 				header:
 				{
-					left: 'prev,next',
+					left: 'usersButton, prev,next',
 					center: 'title',
 					right: 'today month,agendaWeek,agendaDay,listMonth'
 				},
@@ -2071,7 +2112,12 @@ ns1blankspace.action =
 				{
 					ns1blankspace.action.calendar.unavailable();	
 				}
-			});	
+			});
+
+			$('button.fc-usersButton-button').html('<span style="font-weight:600">' + sUsername + '</span>' +
+						' <span class="caret"></span>');
+
+			$('button.fc-usersButton-button').attr('id', 'ns1blankspaceMainCalendarControlUsers');
 			
 			$.each(ns1blankspace.action.data.calendarUsers, function(u, user) 
 			{ 
@@ -2275,21 +2321,30 @@ ns1blankspace.action =
 
 				var aHTML = [];
 				
-				aHTML.push('<table id="ns1blankspaceActionDialogEdit" class="ns1blankspaceSearchMedium" style="margin-bottom:0px;">');
+				aHTML.push('<table id="ns1blankspaceActionDialogEdit" class="ns1blankspaceViewControlContainer" style="margin-bottom:0px; width:300px; font-size:0.875em;">');
 				
 				aHTML.push('<tr class="ns1blankspaceCaption">' +
 								'<td class="ns1blankspaceCaption">' +
 								'Subject</td></tr>' +
 								'<tr><td class="ns1blankspaceText">' +
-								'<input id="ns1blankspaceActionCalendarSubject" class="ns1blankspaceText">');
-
-				aHTML.push('</td></tr>');
+								'<input id="ns1blankspaceActionCalendarSubject" class="ns1blankspaceText">' +
+								'</td></tr>');
 				
 				aHTML.push('<tr><td class="ns1blankspaceText">' +
 									'<textarea rows="5" cols="35" id="ns1blankspaceActionCalendarDescription"' +
-									' class="ns1blankspaceTextMultiSmall"></textarea>');
-				
-				aHTML.push('</td></tr>');
+									' class="ns1blankspaceTextMultiSmall" style="height:100px;"></textarea>' +
+									'</td></tr>');
+
+				aHTML.push('<tr class="ns1blankspaceCaption">' +
+								'<td class="ns1blankspaceCaption">' +
+								'Type' +
+								'</td></tr>' +
+								'<tr class="ns1blankspace">' +
+								'<td class="ns1blankspaceText">' +
+								'<input id="ns1blankspaceActionCalendarActionType" class="_ns1blankspaceSelect"' +
+									' data-method="SETUP_ACTION_TYPE_SEARCH"' +
+									' data-columns="tradename">' +
+								'</td></tr>');	
 
 				aHTML.push('<tr class="ns1blankspaceCaption">' +
 								'<td class="ns1blankspaceCaption">' +
@@ -2333,22 +2388,20 @@ ns1blankspace.action =
 
 				aHTML.push('<tr><td>');
 
-				aHTML.push('</table>');	
+				//aHTML.push('</table>');	
 			
-				aHTML.push('<table class="ns1blankspaceSearchMedium" style="background-color:#E8E8E8;"><tr>');
+				//aHTML.push('<table class="ns1blankspaceSearchMedium" style="background-color:#E8E8E8;"><tr>');
 				
 				if (iActionID != -1)
 				{	
-					aHTML.push('<td style="text-align:left; padding:4px;">' +
+					aHTML.push('<tr><td style="text-align:left; padding:4px;">' +
 									'<span id="ns1blankspaceActionCalendarMore" class="ns1blankspaceAction">More</span>' +
-									'<td>');
+									'<span id="ns1blankspaceActionCalendarCancel" class="ns1blankspaceAction" style="margin-right:6px; float:right;">Cancel</span>' +
+									'<span id="ns1blankspaceActionCalendarSave" class="ns1blankspaceAction" style="margin-right:3px; float:right;">Save</span>' +
+									
+									'<td></tr>');
 				}
 
-				aHTML.push('<td style="text-align:right; padding:4px;">' +
-									'<span id="ns1blankspaceActionCalendarSave" class="ns1blankspaceAction" style="margin-right:3px;">Save</span>' +
-									'<span id="ns1blankspaceActionCalendarCancel" class="ns1blankspaceAction">Cancel</span>' +
-									'<td></tr>');
-				
 				aHTML.push('</table>');						
 
 			
@@ -2358,6 +2411,19 @@ ns1blankspace.action =
 				$('#ns1blankspaceMultiUseDialog').show();
 				$('#ns1blankspaceMultiUseDialog').offset({ top: $(oElement).offset().top - 2 , left: $(oElement).offset().left - 140 });
 				$('#ns1blankspaceMultiUseDialog').html(aHTML.join(''));
+
+
+				/*//Action Type
+				$('#ns1blankspaceSpaceSearchResults').html(aHTML.join(''));
+			
+				$('#ns1blankspaceControlSpaceSearch').focus();
+
+				$('#ns1blankspaceControlSpaceSearch').keyup(function(event)
+				{
+					if (ns1blankspace.timer.delayCurrent != 0) {clearTimeout(ns1blankspace.timer.delayCurrent)};
+			        ns1blankspace.timer.delayCurrent = setTimeout("ns1blankspace.control.spaces.process('ns1blankspaceControlSpaceSearch')", ns1blankspace.option.typingWait);
+				});*/
+
 
 				ns1blankspace.util.initDatePicker(
 				{
@@ -2442,7 +2508,7 @@ ns1blankspace.action =
 			var bAsync = true;
 			var iHours;
 			var sEndDate;
-			var iActionBy = ns1blankspace.user.id;
+			var iActionBy = ns1blankspace.action.data.user;
 			var oCalEvent;
 			var sContactBusinessText = '';
 			

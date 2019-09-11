@@ -992,7 +992,7 @@
 	#ns1blankspaceMultiUseDialog
 	{
 		position: relative;
-		z-index: 9999999999;
+		z-index: 9999;
 		background-color: transparent;
 	}
 
@@ -1643,6 +1643,16 @@
 		margin-top: 15px;
 	}
 
+	button.fc-next-button, button.fc-prev-button
+	{
+		padding-top: 5px;
+	}
+
+	.fc-toolbar h2
+	{
+		font-size: 25px;
+	}
+
 }
 
 @media print
@@ -1684,7 +1694,7 @@
 	div#ns1blankspaceMultiUseDialog 
 	{
 		display: none;
-		z-index: 9999999;
+		z-index: 9999;
 	}
 
 	div#ns1blankspaceToolTip
