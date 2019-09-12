@@ -1653,7 +1653,7 @@ ns1blankspace.action =
 					sData += '&description=' + ns1blankspace.util.fs(oParam.description);
 					sData += '&priority=' + ns1blankspace.util.fs(oParam.priority);
 					sData += '&status=' + ns1blankspace.util.fs(oParam.status);
-					sData += '&type=' + ns1blankspace.util.fs(iType);
+					sData += '&actiontype=' + ns1blankspace.util.fs(iType);
 					sData += '&date=' + ns1blankspace.util.fs(oParam.date);
 					sData += '&enddate=' + ns1blankspace.util.fs(oParam.endDate);
 					sData += '&actionby=' + ns1blankspace.util.fs(oParam.actionBy);
@@ -1791,9 +1791,9 @@ ns1blankspace.action =
 	{
 		users: function (oParam, oResponse)
 		{
-			var bIncludeDisabled = ns1blankspace.util.getParam(oParam, 'includeDisabled', {default: false})
+			var bIncludeDisabled = ns1blankspace.util.getParam(oParam, 'includeDisabled', {default: false});
 
-			if (oResponse == undefined)
+			if (oResponse == undefined && ns1blankspace.action.data.users == undefined)
 			{
 				var oSearch = new AdvancedSearch();
 				oSearch.method = 'SETUP_USER_SEARCH';
@@ -1809,7 +1809,10 @@ ns1blankspace.action =
 			}
 			else
 			{
-				ns1blankspace.action.data.users = oResponse.data.rows;
+				if (ns1blankspace.action.data.users == undefined && oResponse != undefined)
+				{
+					ns1blankspace.action.data.users = oResponse.data.rows;
+				}
 
 				var aHTML = [];
 
@@ -1854,6 +1857,62 @@ ns1blankspace.action =
 						user: iUser,
 						username: $(this).html()
 					});
+				});
+			}
+		},
+
+		actionTypes: function (oParam, oResponse)
+		{
+			var bOnlyShowInCalendar = ns1blankspace.util.getParam(oParam, 'onlyShowInCalendar', {default: false})
+
+			if (oResponse == undefined && ns1blankspace.action.data.actionTypes == undefined)
+			{
+				var oSearch = new AdvancedSearch();
+				oSearch.method = 'SETUP_ACTION_TYPE_SEARCH';
+				oSearch.rows = 9999;
+				oSearch.addField('title,showincalendar,backgroundColour,textcolour');
+
+				if (bOnlyShowInCalendar)
+				{
+					oSearch.addFilter('showincalendar', 'EQUAL_TO', 'Y');
+				}
+
+				oSearch.getResults(function(data) {ns1blankspace.action.calendar.actionTypes(oParam, data)});
+			}
+			else
+			{
+				if (ns1blankspace.action.data.actionTypes == undefined && oResponse != undefined)
+				{
+					ns1blankspace.action.data.actionTypes = oResponse.data.rows;
+				}
+				
+				var sSearchText = $('#ns1blankspaceActionCalendarActionType').val();
+				var aHTML = [];
+
+				var actionTypes = _.filter(ns1blankspace.action.data.actionTypes, function (actionType)
+				{
+					return _.includes(actionType.title, sSearchText)
+				});
+					
+				aHTML.push('<table style="width: 100%;" cellspacing=4>');
+
+				$(actionTypes).each(function()
+				{
+					aHTML.push('<tr>' +
+									'<td id="ns1blankspaceActionCalendarActionType-' + this.id + '" data-id="' + this.id + '" class="ns1blankspaceRowSelect">' +
+									this.title +
+									'</td></tr>');
+				});		
+									
+				aHTML.push('</table>');
+					
+				$('#ns1blankspaceActionCalendarActionTypeResults').html(aHTML.join(''));
+
+				$('#ns1blankspaceActionCalendarActionTypeResults td.ns1blankspaceRowSelect').click(function(event)
+				{
+					$('#ns1blankspaceActionCalendarActionType').val($(this).html());
+					$('#ns1blankspaceActionCalendarActionType').attr('data-id', $(this).attr('data-id'));
+					$('#ns1blankspaceActionCalendarActionTypeResults').html('');
 				});
 			}
 		},
@@ -2311,7 +2370,7 @@ ns1blankspace.action =
 
 				var oSearch = new AdvancedSearch();
 				oSearch.method = 'ACTION_SEARCH';
-				oSearch.addField('subject,description,actionby,contactperson,contactpersontext,contactbusiness,contactbusinesstext,date');
+				oSearch.addField('subject,description,actionby,contactperson,contactpersontext,contactbusiness,contactbusinesstext,date,actiontype,actiontypetext');
 				oSearch.addFilter('id', 'EQUAL_TO', iActionID);
 				oSearch.getResults(function(data) {ns1blankspace.action.dialog.show(oParam, data)});
 			}
@@ -2321,108 +2380,112 @@ ns1blankspace.action =
 
 				var aHTML = [];
 				
-				aHTML.push('<table id="ns1blankspaceActionDialogEdit" class="ns1blankspaceViewControlContainer" style="margin-bottom:0px; width:300px; font-size:0.875em;">');
+				aHTML.push('<table id="ns1blankspaceActionDialogEdit" class="ns1blankspaceViewControlContainer" style="margin-bottom:0px; width:500px; font-size:0.875em;">' +
+									'<tr><td style="width:50%;">');
 				
-				aHTML.push('<tr class="ns1blankspaceCaption">' +
-								'<td class="ns1blankspaceCaption">' +
-								'Subject</td></tr>' +
-								'<tr><td class="ns1blankspaceText">' +
-								'<input id="ns1blankspaceActionCalendarSubject" class="ns1blankspaceText">' +
-								'</td></tr>');
-				
-				aHTML.push('<tr><td class="ns1blankspaceText">' +
+					aHTML.push('<table>');
+
+					aHTML.push('<tr class="ns1blankspaceCaption">' +
+									'<td class="ns1blankspaceCaption">' +
+									'Subject</td></tr>' +
+									'<tr><td class="ns1blankspaceText">' +
+									'<input id="ns1blankspaceActionCalendarSubject" class="ns1blankspaceText">' +
+									'</td></tr>');
+
+					aHTML.push('<tr class="ns1blankspaceCaption">' +
+									'<td class="ns1blankspaceCaption">' +
+									'Business' +
+									'</td></tr>' +
+									'<tr class="ns1blankspace">' +
+									'<td class="ns1blankspaceText">' +
+									'<input id="ns1blankspaceActionCalendarBusiness" class="ns1blankspaceSelect"' +
+										' data-method="CONTACT_BUSINESS_SEARCH"' +
+										' data-columns="tradename">' +
+									'</td></tr>');	
+						
+					aHTML.push('<tr class="ns1blankspaceCaption">' +
+									'<td class="ns1blankspaceCaption">' +
+									'Person' +
+									'</td></tr>' +
+									'<tr class="ns1blankspace">' +
+									'<td class="ns1blankspaceText">' +
+									'<input id="ns1blankspaceActionCalendarPerson" class="ns1blankspaceSelect"' +
+										' data-method="CONTACT_PERSON_SEARCH"' +
+										' data-columns="firstname-space-surname"' +
+										' data-parent="ns1blankspaceActionCalendarBusiness"' +
+										' data-parent-search-id="contactbusiness"' +
+										' data-parent-search-text="tradename">' +
+									'</td></tr>');
+
+					aHTML.push('</table>');
+
+				aHTML.push('</td><td>');
+
+					aHTML.push('<table>');
+
+					aHTML.push('<tr class="ns1blankspaceCaption">' +
+									'<td class="ns1blankspaceCaption">' +
+									'Start</td></tr>' +
+									'<tr><td class="ns1blankspaceText">' +
+									'<input id="ns1blankspaceActionCalendarStart" class="ns1blankspaceDate">');
+
+					aHTML.push('<tr class="ns1blankspaceCaption">' +
+									'<td class="ns1blankspaceCaption">' +
+									'End</td></tr>' +
+									'<tr><td class="ns1blankspaceText">' +
+									'<input id="ns1blankspaceActionCalendarEnd" class="ns1blankspaceDate">');
+
+					aHTML.push('<tr class="ns1blankspaceCaption">' +
+									'<td class="ns1blankspaceCaption">' +
+									'Type' +
+									'</td></tr>' +
+									'<tr class="ns1blankspace">' +
+									'<td class="ns1blankspaceSelect">' +
+									'<input id="ns1blankspaceActionCalendarActionType" class="ns1blankspaceText"' + //Select
+											' data-method="SETUP_ACTION_TYPE_SEARCH"' +
+											' data-cache="true">' +
+									'<div id="ns1blankspaceActionCalendarActionTypeResults"></div>' +
+									'</td></tr>');
+
+					aHTML.push('</table>');
+
+				aHTML.push('</td></tr><tr><td colspan=2>');
+
+				aHTML.push('<table>');	
+
+					aHTML.push('<tr><td class="ns1blankspaceText">' +
 									'<textarea rows="5" cols="35" id="ns1blankspaceActionCalendarDescription"' +
 									' class="ns1blankspaceTextMultiSmall" style="height:100px;"></textarea>' +
 									'</td></tr>');
-
-				aHTML.push('<tr class="ns1blankspaceCaption">' +
-								'<td class="ns1blankspaceCaption">' +
-								'Type' +
-								'</td></tr>' +
-								'<tr class="ns1blankspace">' +
-								'<td class="ns1blankspaceText">' +
-								'<input id="ns1blankspaceActionCalendarActionType" class="_ns1blankspaceSelect"' +
-									' data-method="SETUP_ACTION_TYPE_SEARCH"' +
-									' data-columns="tradename">' +
-								'</td></tr>');	
-
-				aHTML.push('<tr class="ns1blankspaceCaption">' +
-								'<td class="ns1blankspaceCaption">' +
-								'Business' +
-								'</td></tr>' +
-								'<tr class="ns1blankspace">' +
-								'<td class="ns1blankspaceText">' +
-								'<input id="ns1blankspaceActionCalendarBusiness" class="ns1blankspaceSelect"' +
-									' data-method="CONTACT_BUSINESS_SEARCH"' +
-									' data-columns="tradename">' +
-								'</td></tr>');	
-					
-				aHTML.push('<tr class="ns1blankspaceCaption">' +
-								'<td class="ns1blankspaceCaption">' +
-								'Person' +
-								'</td></tr>' +
-								'<tr class="ns1blankspace">' +
-								'<td class="ns1blankspaceText">' +
-								'<input id="ns1blankspaceActionCalendarPerson" class="ns1blankspaceSelect"' +
-									' data-method="CONTACT_PERSON_SEARCH"' +
-									' data-columns="firstname-space-surname"' +
-									' data-parent="ns1blankspaceActionCalendarBusiness"' +
-									' data-parent-search-id="contactbusiness"' +
-									' data-parent-search-text="tradename">' +
-								'</td></tr>');
-
-				aHTML.push('<tr class="ns1blankspaceCaption">' +
-								'<td class="ns1blankspaceCaption">' +
-								'Start</td></tr>' +
-								'<tr><td class="ns1blankspaceText">' +
-								'<input id="ns1blankspaceActionCalendarStart" class="ns1blankspaceDate">');
-
-				aHTML.push('<tr class="ns1blankspaceCaption">' +
-								'<td class="ns1blankspaceCaption">' +
-								'End</td></tr>' +
-								'<tr><td class="ns1blankspaceText">' +
-								'<input id="ns1blankspaceActionCalendarEnd" class="ns1blankspaceDate">');
-
-				//aHTML.push('<tr><td class="ns1blankspace">' +
-				//					'<input type="checkbox" id="ns1blankspaceActionCalendarHighPriority"/>&nbsp;High Priority?<td></tr>');
-
-				aHTML.push('<tr><td>');
-
-				//aHTML.push('</table>');	
-			
-				//aHTML.push('<table class="ns1blankspaceSearchMedium" style="background-color:#E8E8E8;"><tr>');
 				
+				aHTML.push('<tr><td style="text-align:left; padding:4px;">');
+
 				if (iActionID != -1)
-				{	
-					aHTML.push('<tr><td style="text-align:left; padding:4px;">' +
-									'<span id="ns1blankspaceActionCalendarMore" class="ns1blankspaceAction">More</span>' +
-									'<span id="ns1blankspaceActionCalendarCancel" class="ns1blankspaceAction" style="margin-right:6px; float:right;">Cancel</span>' +
-									'<span id="ns1blankspaceActionCalendarSave" class="ns1blankspaceAction" style="margin-right:3px; float:right;">Save</span>' +
-									
-									'<td></tr>');
+				{
+					aHTML.push('<span id="ns1blankspaceActionCalendarMore" class="ns1blankspaceAction">More</span>');
 				}
+					
+				aHTML.push('<span id="ns1blankspaceActionCalendarCancel" class="ns1blankspaceAction" style="margin-right:6px; float:right;">Cancel</span>');
+				aHTML.push('<span id="ns1blankspaceActionCalendarSave" class="ns1blankspaceAction" style="margin-right:3px; float:right;">Save</span>' +
+								'<td></tr>');
 
-				aHTML.push('</table>');						
+				aHTML.push('</table>');	
 
-			
+				aHTML.push('</td></tr></table>');					
+	
 				var oElement = $('#ns1blankspaceMain')
 				
 				$('#ns1blankspaceMultiUseDialog').html('');
 				$('#ns1blankspaceMultiUseDialog').show();
-				$('#ns1blankspaceMultiUseDialog').offset({ top: $(oElement).offset().top - 2 , left: $(oElement).offset().left - 140 });
+				$('#ns1blankspaceMultiUseDialog').offset({ top: $(oElement).offset().top - 18 , left: $(oElement).offset().left - 140 });
 				$('#ns1blankspaceMultiUseDialog').html(aHTML.join(''));
 
-
-				/*//Action Type
-				$('#ns1blankspaceSpaceSearchResults').html(aHTML.join(''));
 			
-				$('#ns1blankspaceControlSpaceSearch').focus();
-
-				$('#ns1blankspaceControlSpaceSearch').keyup(function(event)
+				$('#ns1blankspaceActionCalendarActionType').keyup(function(event)
 				{
 					if (ns1blankspace.timer.delayCurrent != 0) {clearTimeout(ns1blankspace.timer.delayCurrent)};
-			        ns1blankspace.timer.delayCurrent = setTimeout("ns1blankspace.control.spaces.process('ns1blankspaceControlSpaceSearch')", ns1blankspace.option.typingWait);
-				});*/
+			        ns1blankspace.timer.delayCurrent = setTimeout("ns1blankspace.action.calendar.actionTypes()", ns1blankspace.option.typingWait);
+				});
 
 
 				ns1blankspace.util.initDatePicker(
@@ -2471,6 +2534,7 @@ ns1blankspace.action =
 						contactPersonText: $('#ns1blankspaceActionCalendarPerson').val(),
 						contactBusiness: $('#ns1blankspaceActionCalendarBusiness').attr('data-id'),
 						contactBusinessText: $('#ns1blankspaceActionCalendarBusiness').val(),
+						actionType: $('#ns1blankspaceActionCalendarActionType').attr('data-id'), 
 						calEvent: oCalEvent
 					});
 					
@@ -2491,6 +2555,8 @@ ns1blankspace.action =
 						$('#ns1blankspaceActionCalendarPerson').val(oRow.contactpersontext.formatXHTML());
 						$('#ns1blankspaceActionCalendarStart').val(dStartDate);
 						$('#ns1blankspaceActionCalendarEnd').val(dEndDate);
+						$('#ns1blankspaceActionCalendarActionType').attr('data-id', oRow.actiontype);
+						$('#ns1blankspaceActionCalendarActionType').val(oRow.actiontypetext.formatXHTML());
 					}	
 				}
 				else
@@ -2521,6 +2587,7 @@ ns1blankspace.action =
 				if (oParam.actionBy != undefined) {iActionBy = oParam.actionBy}
 				if (oParam.calEvent != undefined) {oCalEvent = oParam.calEvent};
 				if (oParam.contactBusinessText != undefined) {sContactBusinessText = oParam.contactBusinessText};
+				if (oParam.actionType != undefined) {iType = oParam.actionType};
 			}	
 				
 			if (oResponse == undefined)
@@ -2532,7 +2599,7 @@ ns1blankspace.action =
 				oData.description = oParam.description;
 				oData.priority = oParam.priority;
 				oData.status = oParam.status;
-				oData.type = iType;
+				oData.actiontype = iType;
 				oData.date = oParam.date;
 				oData.actionby = iActionBy;
 				oData.contactbusiness = oParam.contactBusiness;
