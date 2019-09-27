@@ -107,7 +107,7 @@ ns1blankspace.admin.schema =
 					$('#ns1blankspaceControlMethods').click(function(event)
 					{
 						ns1blankspace.show({selector: '#ns1blankspaceMainMethods'});
-						ns1blankspace.admin.schema.methods.show();
+						ns1blankspace.admin.schema.methods.init();
 					});
 
 					$('#ns1blankspaceControlProperties').click(function(event)
@@ -454,7 +454,10 @@ ns1blankspace.admin.schema.methods =
 
 	init: 	function (oParam, oResponse)
 				{
-					ns1blankspace.admin.monitoring.methods.show(oParam);
+					ns1blankspace.admin.schema.properties.summaryByMethod(
+					{
+						onComplete: ns1blankspace.admin.schema.methods.show
+					});
 				},
 
 	count: 	function (oParam, oResponse)
@@ -549,6 +552,7 @@ ns1blankspace.admin.schema.methods =
 							aHTML.push('<table id="ns1blankspaceAdminSchemaMethods" class="ns1blankspace">' +
 										'<tr class="ns1blankspaceHeaderCaption">' +
 										'<td class="ns1blankspaceHeaderCaption">Title</td>' +
+										'<td class="ns1blankspaceHeaderCaption" style="text-align:center;">Properties</td>' +
 										'<td class="ns1blankspaceHeaderCaption">Endpoint</td>' +
 										'</tr>');
 
@@ -642,12 +646,23 @@ ns1blankspace.admin.schema.methods =
 				{
 					var aHTML = [];
 
+					oRow._method = _.find(ns1blankspace.admin.schema.properties.data.summaryByMethod, function (oProperty) {return oProperty.method == oRow.id});
+					oRow.properties = 0;
+
+					if (oRow._method != undefined)
+					{
+						oRow.properties = oRow._method.properties;
+					}
+
 					ns1blankspace.admin.schema.methods.data.details.push(oRow);
 
 					aHTML.push('<tr id="ns1blankspaceAdminSchemaMethods_container-' + oRow["id"] + '">');
 					
 					aHTML.push('<td id="ns1blankspaceAdminSchemaMethods_title-' + oRow["id"] + '" class="ns1blankspaceRow ns1blankspaceRowSelect">' +
 										oRow["title"] + '</td>');
+
+					aHTML.push('<td id="ns1blankspaceAdminSchemaMethods_properties-' + oRow["id"] + '" style="text-align:center;" class="ns1blankspaceRow">' +
+										(oRow["properties"]=='0'?'<div class="ns1blankspaceSubNote">-</div>':oRow["properties"]) + '</td>');
 
 					aHTML.push('<td id="ns1blankspaceAdminSchemaMethods_endpoint-' + oRow["id"] + '" class="ns1blankspaceRow">' +
 									oRow["endpointtext"] + '</td>');
@@ -719,7 +734,7 @@ ns1blankspace.admin.schema.methods =
 
 ns1blankspace.admin.schema.properties =
 {
-	data: 	{searchText: undefined},
+	data: 	{searchText: undefined, getFromSearch: {}, getFromDocs: {}},
 
 	init: 	function (oParam, oResponse)
 				{
@@ -742,6 +757,113 @@ ns1blankspace.admin.schema.properties =
 						$('#ns1blankspaceSummaryProperties').html(oResponse.summary.count);
 					}	
 				},	
+
+	summaryByMethod: function (oParam, oResponse)
+				{
+					if (oResponse == undefined)
+					{
+						var oSearch = new AdvancedSearch();
+						oSearch.method = 'CORE_METHOD_PROPERTY_SEARCH';
+						oSearch.addField('method,count(id) properties');
+						oSearch.rows = 9999;
+						oSearch.getResults(function(data) {ns1blankspace.admin.schema.properties.summaryByMethod(oParam, data)})	
+					}
+					else
+					{
+						ns1blankspace.admin.schema.properties.data.summaryByMethod = oResponse.data.rows;
+						ns1blankspace.util.onComplete(oParam);
+					}	
+				},
+
+	getFromSearch: function (oParam, oResponse)
+				{
+					if (oResponse == undefined)
+					{
+						var oSearch = new AdvancedSearch();
+						oSearch.method = 'ACTION_SEARCH';
+						oSearch.addField('*');
+						oSearch.returnParameters = 'Y';
+						oSearch.getResults(function(data) {ns1blankspace.admin.schema.properties.getFromSearch(oParam, data)})	
+					}
+					else
+					{
+						ns1blankspace.admin.schema.properties.data.getFromSearch['ACTION_SEARCH'] = oResponse.data.parameters;
+						ns1blankspace.util.onComplete(oParam);
+					}	
+				},
+
+	getFromDocs: function (oParam, oResponse)
+				{
+					if (oResponse == undefined)
+					{
+						var oData =
+						{
+							url: 'https://docs.mydigitalstructure.cloud/ACTION_SEARCH',
+							type: 'GET'
+						}
+
+						$.ajax(
+						{
+							type: 'POST',
+							url: '/rpc/core/?method=CORE_URL_GET',
+							data: oData,
+							dataType: 'json',
+							cache: false,
+							global: false,
+							success: function(data) 
+							{
+								ns1blankspace.admin.schema.properties.getFromDocs(oParam, data)
+							}
+						});	
+					}
+					else
+					{
+						ns1blankspace.admin.schema.properties.data.getFromDocs['_last'] = oResponse.response;
+
+						ns1blankspace.admin.schema.properties.data.getFromDocs['_last'] = 
+							'<table class="onDemandMethodReferenceHeader"' +
+							ns1blankspace.admin.schema.properties.data.getFromDocs['_last'].split('<table class="onDemandMethodReferenceHeader"')[1];
+
+						$('#ns1blankspaceMain').html($.parseHTML(ns1blankspace.admin.schema.properties.data.getFromDocs['_last']))
+
+						ns1blankspace.admin.schema.properties.data.getFromDocs[('ACTION_SEARCH').toLowerCase()] =
+							'<table>' + $('#ns1blankspaceMain table.onDemandMethodReferenceParameters:last').html() + '</table>';
+
+						$('#ns1blankspaceMain').html(ns1blankspace.admin.schema.properties.data.getFromDocs[('ACTION_SEARCH').toLowerCase()]);
+
+						var aTable = $('#ns1blankspaceMain tr');
+
+						ns1blankspace.admin.schema.properties.data.getFromDocs['_' + ('ACTION_SEARCH').toLowerCase()] = [];
+
+						var aParametersHTML = [];
+
+						$.each(aTable, function (t, oTR)
+						{
+							aParametersHTML.push($(oTR).find('td'));
+						});
+
+						var aParameters = ns1blankspace.admin.schema.properties.data.getFromDocs['_' + ('ACTION_SEARCH').toLowerCase()];
+
+						$.each(aParametersHTML, function (p, oParameter)
+						{
+							if ($(oParameter[1]).html() != 'ATTRIBUTES' &&
+									$(oParameter[1]).html() != '&nbsp;' &&
+									$(oParameter[1]).html() != 'Audit Fields') 
+							{
+								aParameters.push(
+								{
+									name: $(oParameter[1]).html(),
+									datatypetext: $(oParameter[2]).html(),
+									notes: $(oParameter[3]).html()
+								})
+							}
+						});
+
+						
+
+						ns1blankspace.util.onComplete(oParam);
+					}	
+				},			
 	
 	show:		function (oParam, oResponse)
 				{
