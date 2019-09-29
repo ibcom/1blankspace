@@ -911,6 +911,24 @@ ns1blankspace.admin.schema.properties =
 								if (sMethodName != undefined)
 								{
 									ns1blankspace.admin.schema.properties.data.getFromDocs['_' + sMethodName.toLowerCase()] = undefined;
+
+									var oSearch = new AdvancedSearch();
+									oSearch.method = 'CORE_METHOD_SEARCH';
+									oSearch.addField('id');
+									oSearch.addFilter('title', 'EQUAL_TO', sMethodName);
+									oSearch.rows = 1;
+									oSearch.getResults(function(oResponse)
+									{
+										ns1blankspace.admin.schema.properties.data.processing =
+										{
+											methodID: oResponse.data.rows[0].id,
+											methodName: sMethodName
+										}
+
+										oParam = ns1blankspace.util.setParam(oParam, 'methodID', oResponse.data.rows[0].id);
+										ns1blankspace.admin.schema.properties.refresh.getData(oParam, data)
+									});
+
 									//get methodid
 									//call GetData
 								}
