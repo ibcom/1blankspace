@@ -13,7 +13,15 @@ if (ns1blankspace.admin === undefined) {ns1blankspace.admin = {}}
 
 ns1blankspace.admin.schema = 
 {
-	data: 	{lab: (window.location.host.indexOf('lab.ibcom.biz') != -1), superUser: false},
+	data: 	{
+					lab: (window.location.host.indexOf('lab.ibcom.biz') != -1),
+					superUser: false,
+					dataTypes:
+					{
+						Numeric: 1,
+						Data: 2,
+						Text: 3
+					}},
 
 	init: 	function (oParam)
 				{
@@ -734,7 +742,7 @@ ns1blankspace.admin.schema.methods =
 
 ns1blankspace.admin.schema.properties =
 {
-	data: 	{searchText: undefined, getFromSearch: {}, getFromDocs: {}},
+	data: 	{searchText: undefined, getFromSearch: {}, getFromDocs: {}, getParameters: {}},
 
 	init: 	function (oParam, oResponse)
 				{
@@ -794,76 +802,207 @@ ns1blankspace.admin.schema.properties =
 
 	getFromDocs: function (oParam, oResponse)
 				{
+					var sMethodName = ns1blankspace.util.getParam(oParam, 'methodName').value;
+
+					if (sMethodName != undefined)
+					{
+						if (oResponse == undefined)
+						{
+							var oData =
+							{
+								url: 'https://docs.mydigitalstructure.cloud/' + sMethodName,
+								type: 'GET'
+							}
+
+							$.ajax(
+							{
+								type: 'POST',
+								url: '/rpc/core/?method=CORE_URL_GET',
+								data: oData,
+								dataType: 'json',
+								cache: false,
+								global: false,
+								success: function(data) 
+								{
+									if (data.status == 'OK')
+									{
+										ns1blankspace.admin.schema.properties.getFromDocs(oParam, data)
+									}
+									else
+									{
+										console.log('Could not access the URL; ' + 'https://docs.mydigitalstructure.cloud/' + sMethodName)
+									}
+								}
+							});	
+						}
+						else
+						{
+							ns1blankspace.admin.schema.properties.data.getFromDocs['_last'] = oResponse.response;
+
+							ns1blankspace.admin.schema.properties.data.getFromDocs['_last'] = 
+								'<table class="onDemandMethodReferenceHeader"' +
+								ns1blankspace.admin.schema.properties.data.getFromDocs['_last'].split('<table class="onDemandMethodReferenceHeader"')[1];
+
+							$('#ns1blankspaceMain').html($.parseHTML(ns1blankspace.admin.schema.properties.data.getFromDocs['_last']))
+
+							ns1blankspace.admin.schema.properties.data.getFromDocs[sMethodName.toLowerCase()] =
+								'<table>' + $('#ns1blankspaceMain table.onDemandMethodReferenceParameters:last').html() + '</table>';
+
+							$('#ns1blankspaceMain').html(ns1blankspace.admin.schema.properties.data.getFromDocs[sMethodName.toLowerCase()]);
+
+							var aTable = $('#ns1blankspaceMain tr');
+
+							ns1blankspace.admin.schema.properties.data.getFromDocs['_' + sMethodName.toLowerCase()] = [];
+
+							var aParametersHTML = [];
+
+							$.each(aTable, function (t, oTR)
+							{
+								aParametersHTML.push($(oTR).find('td'));
+							});
+
+							var aParameters = ns1blankspace.admin.schema.properties.data.getFromDocs['_' + sMethodName.toLowerCase()];
+
+							$.each(aParametersHTML, function (p, oParameter)
+							{
+								if ($(oParameter[1]).html() != 'ATTRIBUTES' &&
+										$(oParameter[1]).html() != '&nbsp;' &&
+										$(oParameter[1]).html() != 'Audit Fields') 
+								{
+									aParameters.push(
+									{
+										name: $(oParameter[1]).html(),
+										datatypetext: $(oParameter[2]).html(),
+										notes: $(oParameter[3]).html()
+									})
+								}
+							});
+
+							ns1blankspace.util.onComplete(oParam);
+						}	
+					}
+				},
+
+	getParameters: function (oParam, oResponse)
+				{
+					var sMethodName = ns1blankspace.util.getParam(oParam, 'methodName').value;
+
 					if (oResponse == undefined)
 					{
-						var oData =
-						{
-							url: 'https://docs.mydigitalstructure.cloud/ACTION_SEARCH',
-							type: 'GET'
-						}
-
-						$.ajax(
-						{
-							type: 'POST',
-							url: '/rpc/core/?method=CORE_URL_GET',
-							data: oData,
-							dataType: 'json',
-							cache: false,
-							global: false,
-							success: function(data) 
-							{
-								ns1blankspace.admin.schema.properties.getFromDocs(oParam, data)
-							}
-						});	
+						var oSearch = new AdvancedSearch();
+						oSearch.method = 'CORE_METHOD_PROPERTY_SEARCH';
+						oSearch.addField('name,title,method');
+						oSearch.addFilter('methodtext', 'EQUAL_TO', sMethodName);
+						oSearch.rows = 9999;
+						oSearch.sort('title', 'asc');
+						oSearch.getResults(function(data) {ns1blankspace.admin.schema.properties.getParameters(oParam, data)});
 					}
 					else
 					{
-						ns1blankspace.admin.schema.properties.data.getFromDocs['_last'] = oResponse.response;
-
-						ns1blankspace.admin.schema.properties.data.getFromDocs['_last'] = 
-							'<table class="onDemandMethodReferenceHeader"' +
-							ns1blankspace.admin.schema.properties.data.getFromDocs['_last'].split('<table class="onDemandMethodReferenceHeader"')[1];
-
-						$('#ns1blankspaceMain').html($.parseHTML(ns1blankspace.admin.schema.properties.data.getFromDocs['_last']))
-
-						ns1blankspace.admin.schema.properties.data.getFromDocs[('ACTION_SEARCH').toLowerCase()] =
-							'<table>' + $('#ns1blankspaceMain table.onDemandMethodReferenceParameters:last').html() + '</table>';
-
-						$('#ns1blankspaceMain').html(ns1blankspace.admin.schema.properties.data.getFromDocs[('ACTION_SEARCH').toLowerCase()]);
-
-						var aTable = $('#ns1blankspaceMain tr');
-
-						ns1blankspace.admin.schema.properties.data.getFromDocs['_' + ('ACTION_SEARCH').toLowerCase()] = [];
-
-						var aParametersHTML = [];
-
-						$.each(aTable, function (t, oTR)
-						{
-							aParametersHTML.push($(oTR).find('td'));
-						});
-
-						var aParameters = ns1blankspace.admin.schema.properties.data.getFromDocs['_' + ('ACTION_SEARCH').toLowerCase()];
-
-						$.each(aParametersHTML, function (p, oParameter)
-						{
-							if ($(oParameter[1]).html() != 'ATTRIBUTES' &&
-									$(oParameter[1]).html() != '&nbsp;' &&
-									$(oParameter[1]).html() != 'Audit Fields') 
-							{
-								aParameters.push(
-								{
-									name: $(oParameter[1]).html(),
-									datatypetext: $(oParameter[2]).html(),
-									notes: $(oParameter[3]).html()
-								})
-							}
-						});
-
-						
-
+						ns1blankspace.admin.schema.properties.data.getParameters['_' + sMethodName.toLowerCase()] = oResponse.data.rows;
 						ns1blankspace.util.onComplete(oParam);
-					}	
-				},			
+					}
+				},
+
+	refresh: {
+					init: function (oParam)
+							{
+								var sMethodName = ns1blankspace.util.getParam(oParam, 'methodName').value;
+								if (sMethodName != undefined)
+								{
+									ns1blankspace.admin.schema.properties.data.getFromDocs['_' + sMethodName.toLowerCase()] = undefined;
+									//get methodid
+									//call GetData
+								}
+							},
+
+					getData: function (oParam)
+							{
+								var sMethodName = ns1blankspace.util.getParam(oParam, 'methodName').value;
+
+								if (sMethodName != undefined)
+								{		
+									if (ns1blankspace.admin.schema.properties.data.getFromDocs['_' + sMethodName.toLowerCase()] == undefined)
+									{
+										oParam = ns1blankspace.util.setParam(oParam, 'onComplete', ns1blankspace.admin.schema.properties.refresh.init)
+										ns1blankspace.admin.schema.properties.getFromDocs(oParam);
+									}
+									else
+									{
+										if (ns1blankspace.admin.schema.properties.data.getParameters['_' + sMethodName.toLowerCase()] == undefined)
+										{
+											oParam = ns1blankspace.util.setParam(oParam, 'onComplete', ns1blankspace.admin.schema.properties.refresh.init)
+											ns1blankspace.admin.schema.properties.getParameters(oParam);
+										}
+										else
+										{
+											console.log('From docs;')
+											console.log(ns1blankspace.admin.schema.properties.data.getFromDocs['_' + sMethodName.toLowerCase()]);
+											console.log('myds Parameters;')
+											console.log(ns1blankspace.admin.schema.properties.data.getParameters['_' + sMethodName.toLowerCase()]);
+											ns1blankspace.admin.schema.properties.refresh.process(oParam)
+										}
+
+									}
+								}
+								else
+								{
+									console.log('Need to pass methodName:, else I have got nothing to do...')
+								}
+							},
+
+					process: function (oParam)
+							{
+								var sMethodName = ns1blankspace.util.getParam(oParam, 'methodName').value;
+
+								$.each(ns1blankspace.admin.schema.properties.data.getFromDocs['_' + sMethodName.toLowerCase()], function (d, documentProperty)
+								{
+									documentProperty.match = _.find(ns1blankspace.admin.schema.properties.data.getParameters['_' + sMethodName.toLowerCase()], 
+																			function (parameter) {return parameter.name == documentProperty.name})
+								});
+
+								var missingProperties = _.filter(ns1blankspace.admin.schema.properties.data.getFromDocs['_' + sMethodName.toLowerCase()], 
+															function (documentProperty) {return documentProperty.match == undefined} )
+
+								console.log('Processed docs;')
+								console.log(ns1blankspace.admin.schema.properties.data.getFromDocs['_' + sMethodName.toLowerCase()]);
+
+								console.log('Missing;');
+								console.log(missingProperties);
+
+								var oData;
+								var sDataType;
+
+								$.each(missingProperties, function (m, missingProperty)
+								{
+									sDataType = missingProperty.datatypetext.split(' (')[0];
+
+									oData =
+									{
+										adminmethod: 
+										name: missingProperty.name,
+										title: missingProperty.name,
+										notes: missingProperty.notes,
+										datatype:  ns1blankspace.admin.schema.data.dataTypes[sDataType]
+									}
+
+									console.log(oData)
+
+								/*	$.ajax(
+									{
+										type: 'POST',
+										url: '/rpc/admin/?method=ADMIN_METHOD_PROPERTY_MANAGE',
+										data: oData,
+										dataType: 'json',
+										cache: false,
+										global: false,
+										success: function(data) 
+										{}
+									});	*/
+									
+								});
+							}		
+				},				
 	
 	show:		function (oParam, oResponse)
 				{
@@ -922,7 +1061,7 @@ ns1blankspace.admin.schema.properties =
 							oSearch.addBracket(')');
 						}
 
-						oSearch.rows = 20;
+						oSearch.rows = 100;
 						oSearch.sort('title', 'asc');
 						oSearch.getResults(function(data) {ns1blankspace.admin.schema.properties.show(oParam, data)});
 					}
