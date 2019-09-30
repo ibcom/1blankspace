@@ -249,11 +249,11 @@ ns1blankspace.scripts =
 	},
 	{
 		nameSpace: '1blankspace.contactPerson',
-		source: '/site/1903/1blankspace.contactperson-3.0.5.js'
+		source: '/site/1903/1blankspace.contactperson-3.5.8.js'
 	},
 	{
 		nameSpace: '1blankspace.contactBusiness',
-		source: '/site/1903/1blankspace.contactbusiness-2.1.0.js'
+		source: '/site/1903/1blankspace.contactbusiness-3.5.8.js'
 	},
 	{
 		nameSpace: '1blankspace.opportunity',
@@ -261,7 +261,7 @@ ns1blankspace.scripts =
 	},
 	{
 		nameSpace: '1blankspace.action',
-		source: '/site/1903/1blankspace.action-3.5.7.js'
+		source: '/site/1903/1blankspace.action-3.5.8.js'
 	},
 	{
 		nameSpace: '1blankspace.messaging.conversation',
@@ -273,7 +273,7 @@ ns1blankspace.scripts =
 	},
 	{
 		nameSpace: '1blankspace.document',
-		source: '/site/1903/1blankspace.document-2.0.2.js'
+		source: '/site/1903/1blankspace.document-3.5.8.js'
 	},
 	{
 		nameSpace: '1blankspace.news',
@@ -297,7 +297,7 @@ ns1blankspace.scripts =
 	},
 	{
 		nameSpace: '1blankspace.order',
-		source: '/site/1903/1blankspace.order-2.0.5.js'
+		source: '/site/1903/1blankspace.order-3.5.8.js'
 	},
 	{
 		nameSpace: '1blankspace.financial',
@@ -309,7 +309,7 @@ ns1blankspace.scripts =
 	},
 	{
 		nameSpace: '1blankspace.financial.invoice',
-		source: '/site/1903/1blankspace.financial.invoice-2.2.0.js'
+		source: '/site/1903/1blankspace.financial.invoice-3.5.8.js'
 	},
 	{
 		nameSpace: '1blankspace.financial.expense',

@@ -83,10 +83,17 @@ ns1blankspace.admin.schema =
 					aHTML.push('<tr><td id="ns1blankspaceControlObjects" class="ns1blankspaceControl">' +
 									'Objects</td></tr>');
 
-					//if (ns1blankspace.user.super)
-					//{}					
+					aHTML.push('</table>');	
 
-					aHTML.push('</table>');		
+					if (ns1blankspace.user.super)
+					{
+						aHTML.push('<table class="ns1blankspaceControl" style="padding-top:10px;">');
+						
+						aHTML.push('<tr><td id="ns1blankspaceControlCheck" class="ns1blankspaceControl">' +
+										'Check</td></tr>');
+
+						aHTML.push('</table>');	
+					}
 					
 					$('#ns1blankspaceControl').html(aHTML.join(''));	
 					
@@ -97,6 +104,7 @@ ns1blankspace.admin.schema =
 					aHTML.push('<div id="ns1blankspaceMainMethods" class="ns1blankspaceControlMain"></div>');
 					aHTML.push('<div id="ns1blankspaceMainProperties" class="ns1blankspaceControlMain"></div>');
 					aHTML.push('<div id="ns1blankspaceMainObjects" class="ns1blankspaceControlMain"></div>');
+					aHTML.push('<div id="ns1blankspaceMainCheck" class="ns1blankspaceControlMain"></div>');
 
 					$('#ns1blankspaceMain').html(aHTML.join(''));
 					
@@ -128,6 +136,12 @@ ns1blankspace.admin.schema =
 					{
 						ns1blankspace.show({selector: '#ns1blankspaceMainObjects'});
 						ns1blankspace.admin.schema.objects.show();
+					});
+
+					$('#ns1blankspaceControlCheck').click(function(event)
+					{
+						ns1blankspace.show({selector: '#ns1blankspaceMainCheck'});
+						ns1blankspace.admin.schema.methods.check.init();
 					});
 
 					ns1blankspace.show({selector: '#ns1blankspaceMainSummary'});
@@ -740,6 +754,65 @@ ns1blankspace.admin.schema.methods =
 				}						
 }
 
+ns1blankspace.admin.schema.methods.check =
+{
+	init: function (oParam)
+	{
+		ns1blankspace.admin.schema.properties.summaryByMethod(
+		{
+			onComplete: ns1blankspace.admin.schema.methods.check.process
+		});
+	},
+
+	process: function (oParam, oResponse)
+	{
+		if (oResponse == undefined)
+		{
+			var oSearch = new AdvancedSearch();
+			oSearch.method = 'CORE_METHOD_SEARCH';
+			oSearch.addField('title');
+			oSearch.sort('title', 'asc');
+			oSearch.rows = 9999;
+			oSearch.getResults(function(data) {ns1blankspace.admin.schema.methods.check.process(oParam, data)})	
+		}
+		else
+		{
+			ns1blankspace.admin.schema.properties.data.checkMethods = oResponse.data.rows;
+
+			_.each(ns1blankspace.admin.schema.properties.data.checkMethods, function (method)
+			{
+				method._method = _.find(ns1blankspace.admin.schema.properties.data.summaryByMethod, function (oProperty) {return oProperty.method == method.id});
+				method.properties = 0;
+				if (method._method != undefined)
+				{
+					method.properties = method._method.properties;
+				}
+			});
+			
+			var aMethodsNoProperties = _.filter(ns1blankspace.admin.schema.properties.data.checkMethods, function (method) {return method.properties == 0})
+
+			$('#ns1blankspaceMainCheck').html('<div class="row"><div class="col-sm-6" id="ns1blankspaceCheck1"></div><div class="col-sm-6" style="font-size:0.5em; background-color:#f5f5f5;" id="ns1blankspaceCheck2"></div>');
+
+			var aHTML = [];
+
+			_.each(aMethodsNoProperties, function (methodNoProperties)
+			{
+				aHTML.push('<div class="ns1blankspaceSubNote ns1blankspaceRowSelect ns1blankspaceCheck" data-method-name="' + methodNoProperties.title + '">' + methodNoProperties.title + '</div>');
+			});
+
+			$('#ns1blankspaceCheck1').html(aHTML.join(''));
+
+			$('.ns1blankspaceCheck').click(function(event)
+			{
+				ns1blankspace.admin.schema.properties.refresh.init(
+				{
+					methodName: $(this).attr('data-method-name')
+				});
+			});
+		}	
+	}
+}
+
 ns1blankspace.admin.schema.properties =
 {
 	data: 	{searchText: undefined, getFromSearch: {}, getFromDocs: {}, getParameters: {}},
@@ -843,14 +916,14 @@ ns1blankspace.admin.schema.properties =
 								'<table class="onDemandMethodReferenceHeader"' +
 								ns1blankspace.admin.schema.properties.data.getFromDocs['_last'].split('<table class="onDemandMethodReferenceHeader"')[1];
 
-							$('#ns1blankspaceMain').html($.parseHTML(ns1blankspace.admin.schema.properties.data.getFromDocs['_last']))
+							$('#ns1blankspaceCheck2').html($.parseHTML(ns1blankspace.admin.schema.properties.data.getFromDocs['_last']))
 
 							ns1blankspace.admin.schema.properties.data.getFromDocs[sMethodName.toLowerCase()] =
 								'<table>' + $('#ns1blankspaceMain table.onDemandMethodReferenceParameters:last').html() + '</table>';
 
-							$('#ns1blankspaceMain').html(ns1blankspace.admin.schema.properties.data.getFromDocs[sMethodName.toLowerCase()]);
+							$('#ns1blankspaceCheck2').html(ns1blankspace.admin.schema.properties.data.getFromDocs[sMethodName.toLowerCase()]);
 
-							var aTable = $('#ns1blankspaceMain tr');
+							var aTable = $('#ns1blankspaceCheck2 tr');
 
 							ns1blankspace.admin.schema.properties.data.getFromDocs['_' + sMethodName.toLowerCase()] = [];
 
@@ -865,15 +938,22 @@ ns1blankspace.admin.schema.properties =
 
 							$.each(aParametersHTML, function (p, oParameter)
 							{
-								if ($(oParameter[1]).html() != 'ATTRIBUTES' &&
-										$(oParameter[1]).html() != '&nbsp;' &&
-										$(oParameter[1]).html() != 'Audit Fields') 
+								if (_.trim($(oParameter[1]).text()) != 'ATTRIBUTES' &&
+										_.trim($(oParameter[1]).text()) != '&nbsp;' &&
+										_.trim($(oParameter[1]).text()) != 'Audit Fields' &&
+										_.trim($(oParameter[1]).text()) != 'AVAILABLE FIELDS' &&
+										_.trim($(oParameter[1]).text()) != '' &&
+										_.trim($(oParameter[1]).text()) != 'Structure Fields' &&
+										_.trim($(oParameter[1]).text()) != 'PARAMETERS' &&
+										_.trim($(oParameter[1]).text()) != 'Standard System Parameters' &&
+										_.trim($(oParameter[1]).text()) != 'Either:' &&
+										_.trim($(oParameter[1]).text()) != 'Or:') 
 								{
 									aParameters.push(
 									{
-										name: $(oParameter[1]).html(),
-										datatypetext: $(oParameter[2]).html(),
-										notes: $(oParameter[3]).html()
+										name: _.trim($(oParameter[1]).text()),
+										datatypetext: _.trim($(oParameter[2]).text()),
+										notes: _.trim($(oParameter[3]).text()).replace(/&nbsp;/gi, '')
 									})
 								}
 							});
@@ -911,6 +991,7 @@ ns1blankspace.admin.schema.properties =
 								if (sMethodName != undefined)
 								{
 									ns1blankspace.admin.schema.properties.data.getFromDocs['_' + sMethodName.toLowerCase()] = undefined;
+									ns1blankspace.admin.schema.properties.data.getParameters['_' + sMethodName.toLowerCase()] = undefined;
 
 									var oSearch = new AdvancedSearch();
 									oSearch.method = 'CORE_METHOD_SEARCH';
@@ -926,11 +1007,8 @@ ns1blankspace.admin.schema.properties =
 										}
 
 										oParam = ns1blankspace.util.setParam(oParam, 'methodID', oResponse.data.rows[0].id);
-										ns1blankspace.admin.schema.properties.refresh.getData(oParam, data)
+										ns1blankspace.admin.schema.properties.refresh.getData(oParam)
 									});
-
-									//get methodid
-									//call GetData
 								}
 							},
 
@@ -942,22 +1020,22 @@ ns1blankspace.admin.schema.properties =
 								{		
 									if (ns1blankspace.admin.schema.properties.data.getFromDocs['_' + sMethodName.toLowerCase()] == undefined)
 									{
-										oParam = ns1blankspace.util.setParam(oParam, 'onComplete', ns1blankspace.admin.schema.properties.refresh.init)
+										oParam = ns1blankspace.util.setParam(oParam, 'onComplete', ns1blankspace.admin.schema.properties.refresh.getData)
 										ns1blankspace.admin.schema.properties.getFromDocs(oParam);
 									}
 									else
 									{
 										if (ns1blankspace.admin.schema.properties.data.getParameters['_' + sMethodName.toLowerCase()] == undefined)
 										{
-											oParam = ns1blankspace.util.setParam(oParam, 'onComplete', ns1blankspace.admin.schema.properties.refresh.init)
+											oParam = ns1blankspace.util.setParam(oParam, 'onComplete', ns1blankspace.admin.schema.properties.refresh.getData)
 											ns1blankspace.admin.schema.properties.getParameters(oParam);
 										}
 										else
 										{
-											console.log('From docs;')
-											console.log(ns1blankspace.admin.schema.properties.data.getFromDocs['_' + sMethodName.toLowerCase()]);
-											console.log('myds Parameters;')
-											console.log(ns1blankspace.admin.schema.properties.data.getParameters['_' + sMethodName.toLowerCase()]);
+											//console.log('From docs;')
+											//console.log(ns1blankspace.admin.schema.properties.data.getFromDocs['_' + sMethodName.toLowerCase()]);
+											//console.log('myds Parameters;')
+											//console.log(ns1blankspace.admin.schema.properties.data.getParameters['_' + sMethodName.toLowerCase()]);
 											ns1blankspace.admin.schema.properties.refresh.process(oParam)
 										}
 
@@ -972,6 +1050,7 @@ ns1blankspace.admin.schema.properties =
 					process: function (oParam)
 							{
 								var sMethodName = ns1blankspace.util.getParam(oParam, 'methodName').value;
+								var bLog = ns1blankspace.util.getParam(oParam, 'log', {default: false}).value;
 
 								$.each(ns1blankspace.admin.schema.properties.data.getFromDocs['_' + sMethodName.toLowerCase()], function (d, documentProperty)
 								{
@@ -982,41 +1061,54 @@ ns1blankspace.admin.schema.properties =
 								var missingProperties = _.filter(ns1blankspace.admin.schema.properties.data.getFromDocs['_' + sMethodName.toLowerCase()], 
 															function (documentProperty) {return documentProperty.match == undefined} )
 
-								console.log('Processed docs;')
-								console.log(ns1blankspace.admin.schema.properties.data.getFromDocs['_' + sMethodName.toLowerCase()]);
+								//console.log('Processed docs;')
+								//console.log(ns1blankspace.admin.schema.properties.data.getFromDocs['_' + sMethodName.toLowerCase()]);
 
 								console.log('Missing;');
 								console.log(missingProperties);
 
 								var oData;
+								var aDataType;
 								var sDataType;
-
+								var sDataTypeLength;
+								
 								$.each(missingProperties, function (m, missingProperty)
 								{
-									sDataType = missingProperty.datatypetext.split(' (')[0];
+									aDataType = missingProperty.datatypetext.split(' (');
+									sDataType = aDataType[0];
+									sDataLength = undefined;
+
+									if (sDataType == 'Text' && aDataType.length > 1)
+									{
+										sDataLength = aDataType[1].split(')')[0];
+									}
 
 									oData =
 									{
-										adminmethod: 
+										adminmethod: ns1blankspace.admin.schema.properties.data.processing.methodID,
 										name: missingProperty.name,
-										title: missingProperty.name,
+										title: _.startCase(_.kebabCase(missingProperty.name)),
 										notes: missingProperty.notes,
-										datatype:  ns1blankspace.admin.schema.data.dataTypes[sDataType]
+										datatype:  ns1blankspace.admin.schema.data.dataTypes[sDataType],
+										datalength: sDataLength
 									}
 
-									console.log(oData)
-
-								/*	$.ajax(
+									if (bLog)
 									{
-										type: 'POST',
-										url: '/rpc/admin/?method=ADMIN_METHOD_PROPERTY_MANAGE',
-										data: oData,
-										dataType: 'json',
-										cache: false,
-										global: false,
-										success: function(data) 
-										{}
-									});	*/
+										console.log(oData)
+									}
+									else
+									{
+										$.ajax(
+										{
+											type: 'POST',
+											url: '/rpc/admin/?method=ADMIN_METHOD_PROPERTY_MANAGE',
+											data: oData,
+											dataType: 'json',
+											success: function(data) 
+											{}
+										});
+									}
 									
 								});
 							}		
