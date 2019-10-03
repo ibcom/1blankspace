@@ -2349,7 +2349,8 @@ ns1blankspace.action =
 											'billingstatustext,completed,completedtime,contactbusiness,contactbusinesstext,contactperson,' +
 											'contactpersontext,date,description,duedate,duedatetime,object,objectcontext,objecttext,' +
 											'priority,prioritytext,status,statustext,subject,text,totaltimehrs,totaltimemin,' +
-											'action.actiontype.textcolour,action.actiontype.backgroundcolour');
+											'action.actiontype.textcolour,action.actiontype.backgroundcolour,' +
+											'action.contactperson.firstname,action.contactperson.surname');
 					
 						oSearch.addFilter('actionby', 'EQUAL_TO', user);
 						oSearch.addFilter('duedate', 'GREATER_THAN_OR_EQUAL_TO', start.format('DD MMM YYYY') + ' 00:00:00');
@@ -2372,7 +2373,7 @@ ns1blankspace.action =
 
 								if (row.contactpersontext != '')
 								{
-									sTitle = sTitle + ' - ' + row.contactpersontext
+									sTitle = sTitle + ' - ' + row['action.contactperson.firstname'] + ' ' + row['action.contactperson.surname']
 								}
 
 								row.start = moment(row.duedatetime, ns1blankspace.option.dateFormats).format('YYYY-MM-DD HH:mm:ss');
@@ -2517,7 +2518,8 @@ ns1blankspace.action =
 				var oSearch = new AdvancedSearch();
 				oSearch.method = 'ACTION_SEARCH';
 				oSearch.addField('subject,description,actionby,contactperson,contactpersontext,contactbusiness,contactbusinesstext,date,actiontype,actiontypetext,' +
-										'action.contactperson.mobile,action.contactperson.workphone,action.contactperson.homephone');
+										'action.contactperson.mobile,action.contactperson.workphone,action.contactperson.homephone,' +
+										'action.contactperson.firstname,action.contactperson.surname');
 				oSearch.addFilter('id', 'EQUAL_TO', iActionID);
 				oSearch.getResults(function(data) {ns1blankspace.action.dialog.show(oParam, data)});
 			}
@@ -2712,7 +2714,7 @@ ns1blankspace.action =
 						$('#ns1blankspaceActionCalendarBusiness').attr('data-id', oRow.contactbusiness);
 						$('#ns1blankspaceActionCalendarBusiness').val(oRow.contactbusinesstext.formatXHTML());
 						$('#ns1blankspaceActionCalendarPerson').attr('data-id', oRow.contactperson);
-						$('#ns1blankspaceActionCalendarPerson').val(oRow.contactpersontext.formatXHTML());
+						$('#ns1blankspaceActionCalendarPerson').val( oRow['action.contactperson.firstname'] + ' ' +  oRow['action.contactperson.surname']);
 						$('#ns1blankspaceActionCalendarStart').val(dStartDate);
 						$('#ns1blankspaceActionCalendarEnd').val(dEndDate);
 						$('#ns1blankspaceActionCalendarActionType').attr('data-id', oRow.actiontype);
@@ -2945,7 +2947,9 @@ ns1blankspace.action =
 			oSearch.addField('contactperson,actionby,actionbytext,actionreference,actiontype,actiontypetext,billingstatus,' +
 								'billingstatustext,completed,completedtime,contactbusiness,contactbusinesstext,contactperson,' +
 								'contactpersontext,date,description,duedate,duedatetime,object,objectcontext,objecttext,' +
-								'priority,prioritytext,status,statustext,subject,text,totaltimehrs,totaltimemin');
+								'priority,prioritytext,status,statustext,subject,text,totaltimehrs,totaltimemin,' +
+								'action.contactperson.firstname,action.contactperson.surname');
+
 			oSearch.addFilter('actionby', 'EQUAL_TO', ns1blankspace.user.id);
 
 			if (iStatus != undefined)
@@ -3007,7 +3011,7 @@ ns1blankspace.action =
 										sDate + '</td>');
 						
 					aHTML.push('<td id="ns1blankspaceAction_contact-' + this.contactperson + '" class="ns1blankspaceRow ns1blankspaceRowSelectContact">' +
-									this.contactpersontext + '</td>');
+									this['action.contactperson.firstname'] + ' ' + this['action.contactperson.surname'] + '</td>');
 										
 					aHTML.push('<td id="ns1blankspaceAction_options-' + this.id + '" class="ns1blankspaceRow" style="width:70px;">');
 					aHTML.push('<div id="ns1blankspaceActionComplete_' + this.id + '" class="ns1blankspaceActionComplete"></div>')

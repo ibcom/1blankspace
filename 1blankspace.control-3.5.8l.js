@@ -391,7 +391,7 @@ ns1blankspace.scripts =
 	},
 	{
 		nameSpace: '1blankspace.setup.space',
-		source: '/site/312/1blankspace.setup.space-2.0.9.js'
+		source: '/site/388/1blankspace.setup.space-3.5.8.js'
 	},
 	{
 		nameSpace: '1blankspace.setup.structure',
