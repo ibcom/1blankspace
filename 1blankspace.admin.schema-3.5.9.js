@@ -576,6 +576,7 @@ ns1blankspace.admin.schema.methods =
 										'<td class="ns1blankspaceHeaderCaption">Title</td>' +
 										'<td class="ns1blankspaceHeaderCaption" style="text-align:center;">Properties</td>' +
 										'<td class="ns1blankspaceHeaderCaption">Endpoint</td>' +
+										'<td class="ns1blankspaceHeaderCaption"></td>' +
 										'</tr>');
 
 							$(oResponse.data.rows).each(function() 
@@ -694,7 +695,18 @@ ns1blankspace.admin.schema.methods =
 
 					aHTML.push('<tr id="ns1blankspaceAdminSchemaMethods_container-' + oRow["id"] + '">');
 					
-					aHTML.push('<td id="ns1blankspaceAdminSchemaMethods_title-' + oRow["id"] + '" class="ns1blankspaceRow ns1blankspaceRowSelect"' +
+					aHTML.push('<td id="ns1blankspaceAdminSchemaMethods_title-' + oRow["id"] + '" class="ns1blankspaceRow ns1blankspaceRowSelect">' +
+										oRow["title"] + '</td>');
+
+					aHTML.push('<td id="ns1blankspaceAdminSchemaMethods_properties-' + oRow["id"] + '" style="text-align:center;" class="ns1blankspaceRow">' +
+										(oRow["properties"]=='0'?'<div class="ns1blankspaceSubNote">-</div>':oRow["properties"]) + '</td>');
+
+					aHTML.push('<td id="ns1blankspaceAdminSchemaMethods_endpoint-' + oRow["id"] + '" class="ns1blankspaceRow">' +
+									oRow["endpointtext"] + '</td>');
+
+					aHTML.push('<td style="width:70px;text-align:right;" class="ns1blankspaceRow">' + 
+									'<span id="ns1blankspaceAdminSchemaMethods_remove-' + oRow.id + '" class="ns1blankspaceMethodRemove"></span>' +
+									'<span id="ns1blankspaceAdminSchemaMethods_edit-' + oRow.id + '" class="ns1blankspaceMethodEdit"' +
 										' data-title="' + oRow["title"] + '"' +
 										' data-endpoint="' + oRow["endpoint"] + '"' +
 										' data-endpointtext="' + oRow["endpointtext"] + '"' +
@@ -706,14 +718,9 @@ ns1blankspace.admin.schema.methods =
 										' data-unrestrictedaccess="' + oRow["unrestrictedaccess"] + '"' +
 										' data-unrestrictedloggedonaccess="' + oRow["unrestrictedloggedonaccess"] + '"' +
 										' data-notes="' + window.btoa(oRow["notes"]) + '"' +
-										'>' +
-										oRow["title"] + '</td>');
-
-					aHTML.push('<td id="ns1blankspaceAdminSchemaMethods_properties-' + oRow["id"] + '" style="text-align:center;" class="ns1blankspaceRow">' +
-										(oRow["properties"]=='0'?'<div class="ns1blankspaceSubNote">-</div>':oRow["properties"]) + '</td>');
-
-					aHTML.push('<td id="ns1blankspaceAdminSchemaMethods_endpoint-' + oRow["id"] + '" class="ns1blankspaceRow">' +
-									oRow["endpointtext"] + '</td>');
+										'></span>');
+					
+					aHTML.push('</td>');
 
 					aHTML.push('</tr>');
 
@@ -725,7 +732,46 @@ ns1blankspace.admin.schema.methods =
 					$('.ns1blankspaceRowSelect:visible').click(function()
 					{
 						ns1blankspace.admin.schema.methods.details({xhtmlElementID: this.id})
-					});		
+					});
+
+					$('#' + sXHTMLContainerID + ' .ns1blankspaceItemRemove').button(
+					{
+						text: false,
+						icons:
+						{
+							primary: "ui-icon-close"
+						}
+					})
+					.click(function()
+					{
+						ns1blankspace.remove(
+						{
+							xhtmlElementID: this.id,
+							method: 'FINANCIAL_ITEM_MANAGE',
+							ifNoneMessage: 'No items.',
+							onComplete: ns1blankspace.financial.item.remove,
+							namespace: sNamespace
+						});
+					})
+					.css('width', '15px')
+					.css('height', '17px');
+
+					$('#' + sXHTMLContainerID + ' .ns1blankspaceItemEdit').button(
+					{
+						text: false,
+						icons:
+						{
+							primary: "ui-icon-pencil"
+						}
+					})
+					.click(function()
+					{
+						oParam = ns1blankspace.util.setParam(oParam, 'xhtmlElementID', this.id);
+						oParam = ns1blankspace.util.setParam(oParam, 'step', 1);
+						ns1blankspace.financial.item.edit(oParam)
+					})
+					.css('width', '15px')
+					.css('height', '17px');	
 				},
 
 	details: 	
