@@ -271,7 +271,7 @@ ns1blankspace.scripts =
 	},
 	{
 		nameSpace: '1blankspace.messaging.conversation',
-		source: '/site/388/1blankspace.messaging.conversation-3.2.5.js'
+		source: '/site/388/1blankspace.messaging.conversation-3.5.9.js'
 	},
 	{
 		nameSpace: '1blankspace.messaging.imap',
@@ -1269,8 +1269,9 @@ ns1blankspace.control =
 				{
 					var oSearch = new AdvancedSearch();
 					oSearch.method = 'SETUP_ROLE_METHOD_ACCESS_SEARCH';
-					oSearch.addField('accessmethodtext,canadd,canremove,canupdate,canuse');
+					oSearch.addField('accessmethodtext,accessmethod,canadd,canremove,canupdate,canuse');
 					oSearch.addFilter('role', 'IN_LIST', aRoles.join(','));
+					oSearch.rows = 99999;
 					oSearch.getResults(function(data) {ns1blankspace.control.init(oParam, data)})
 				}
 				else
