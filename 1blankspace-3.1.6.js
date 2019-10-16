@@ -455,8 +455,14 @@ ns1blankspace.app =
 											{
 												if (ns1blankspace.debug.methods == undefined) {ns1blankspace.debug.methods = []}
 												var sMethod = data.error.methodhelp.replace('http://docs.mydigitalstructure.com/', '');
+												sMethod = sMethod.replace('http://mydigitalstructure.com/', '');
 												ns1blankspace.debug.methods.push(sMethod);
-												var bPersist = (sMethod != 'core_debug_log_manage')
+												var bPersist = (sMethod != 'core_debug_log_manage');
+
+												if (_.includes(data.error.errornotes, 'No access to subsearch'))
+												{
+													sMethod = data.error.errornotes.replace('No access to subsearch ', '').toLowerCase();
+												}
 
 												ns1blankspace.debug.add(
 												{
@@ -471,6 +477,8 @@ ns1blankspace.app =
 												{
 													console.log('CORE_DEBUG_LOG_MANAGE access needed to be able to persist error messages.')
 												}
+
+												ns1blankspace.status.error('No Access Rights!');
 											}
 
 											else if ((data.error.errornotes).toLowerCase().indexOf('undefined') != -1)
@@ -5958,6 +5966,109 @@ ns1blankspace.util =
 				
 					return bHasAccess
 				},
+
+	addAccess: function (oParam, oResponse)
+				{
+					if (oResponse == undefined)
+					{
+						var sMethodTitle = ns1blankspace.util.getParam(oParam, 'methodTitle').value;
+
+						if (sMethodTitle != undefined)
+						{
+							var oSearch = new AdvancedSearch();
+							oSearch.method = 'SETUP_METHOD_SEARCH';
+							oSearch.addField('title,useavailable,addavailable,updateavailable,removeavailable');
+							oSearch.addFilter('title', 'EQUAL_TO', sMethodTitle)
+							oSearch.rows = 1;
+							oSearch.getResults(function(data) {ns1blankspace.util.addAccess(oParam, data)});
+						}
+					}
+					else
+					{
+						if (oResponse.data.rows.length > 0)
+						{
+							var oRow = oResponse.data.rows[0];
+
+							var oData = $.extend(oParam, {accessmethod: oRow.id});
+
+							if (oData.canadd == undefined) {oData.canadd = oRow.addavailable}
+							if (oData.canremove == undefined) {oData.canremove = oRow.removeavailable}
+							if (oData.canupdate == undefined) {oData.canupdate = oRow.updateavailable}
+							if (oData.canuse == undefined) {oData.canuse = oRow.useavailable}
+						
+							$.ajax(
+							{
+								type: 'POST',
+								url: ns1blankspace.util.endpointURI('SETUP_ROLE_METHOD_ACCESS_MANAGE'),
+								data: oData,
+								dataType: 'json',
+								success: function(data)
+								{
+									if (data.status == "OK")
+									{
+										ns1blankspace.debug.add({message: 'Access added', log: true})
+									}
+									else
+									{
+										ns1blankspace.debug.add({message: data.error.errornotes, log: true});
+									}
+								}
+							});
+						}
+					}
+				},
+
+	removeAccess: function (oParam, oResponse)
+				{
+					if (oResponse == undefined)
+					{
+						var sMethodTitle = ns1blankspace.util.getParam(oParam, 'methodTitle').value;
+
+						if (sMethodTitle != undefined)
+						{
+							var iRole = ns1blankspace.util.getParam(oParam, 'role').value;
+
+							if (iRole != undefined)
+							{
+								var oSearch = new AdvancedSearch();
+								oSearch.method = 'SETUP_ROLE_METHOD_ACCESS_SEARCH';
+								oSearch.addField('id');
+								oSearch.addFilter('role', 'EQUAL_TO', iRole)
+								oSearch.addFilter('accessmethodtext', 'EQUAL_TO', sMethodTitle)
+								oSearch.rows = 1;
+								oSearch.getResults(function(data) {ns1blankspace.util.removeAccess(oParam, data)});
+							}
+						}
+					}
+					else
+					{
+						if (oResponse.data.rows.length > 0)
+						{
+							var oRow = oResponse.data.rows[0];
+
+							var oData = {id: oRow.id, remove: 1}
+				
+							$.ajax(
+							{
+								type: 'POST',
+								url: ns1blankspace.util.endpointURI('SETUP_ROLE_METHOD_ACCESS_MANAGE'),
+								data: oData,
+								dataType: 'json',
+								success: function(data)
+								{
+									if (data.status == "OK")
+									{
+										ns1blankspace.debug.add({message: 'Access removed', log: true})
+									}
+									else
+									{
+										ns1blankspace.debug.add({message: data.error.errornotes, log: true});
+									}
+								}
+							});
+						}
+					}
+				},			
 
 	checkIfInput: function (oParam)
 				{

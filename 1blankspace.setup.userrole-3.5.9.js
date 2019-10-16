@@ -57,7 +57,6 @@ ns1blankspace.setup.userRole =
 
 						$('#ns1blankspaceControlInitialise').click(function(event)
 						{
-							//ns1blankspace.show({selector: '#ns1blankspaceMainInitialise', context: {inContext: false}});
 							ns1blankspace.setup.userRole.initialise.init();
 						});
 						
@@ -388,6 +387,11 @@ ns1blankspace.setup.userRole =
 										Date.parse(ns1blankspace.objectContextData.modifieddate).toString("dd MMM yyyy") +
 										'</td></tr>');	
 						
+						aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Role ID</td></tr>' +
+										'<tr><td id="ns1blankspaceSummaryRoleID" class="ns1blankspaceSummary">' +
+										ns1blankspace.objectContextData.id +
+										'</td></tr>');	
+
 						aHTML.push('</table>');					
 						
 						$('#ns1blankspaceSummaryColumn1').html(aHTML.join(''));
@@ -448,7 +452,7 @@ ns1blankspace.setup.userRole =
 					}	
 				},
 
-	save: 		{
+	save: 	{
 					send: 		function ()
 								{
 									ns1blankspace.status.working();
