@@ -120,20 +120,26 @@ ns1blankspace.financial.payroll =
 												'<br /><div class="ns1blankspaceSubNote">pay summaries</div></td>' +
 												'</tr>');
 
-									aHTML.push('<tr class="ns1blankspaceControl">' +
+									if (ns1blankspace.util.hasAccess({method: 'financial_expense_search'}))
+									{
+										aHTML.push('<tr class="ns1blankspaceControl">' +
 												'<td id="ns1blankspaceControl_superannuation" class="ns1blankspaceControl" style="padding-top:6px;">Superannuation' +
 												'<br /><div class="ns1blankspaceSubNote">to be paid</div></td>' +
 												'</tr>');
+									}
 
 									aHTML.push('<tr class="ns1blankspaceControl">' +
 												'<td id="ns1blankspaceControl_insurance" class="ns1blankspaceControl" style="padding-top:6px;">Insurance' +
 												'<br /><div class="ns1blankspaceSubNote">workers compensation</div></td>' +
 												'</tr>');
 
-									aHTML.push('<tr class="ns1blankspaceControl">' +
+									if (ns1blankspace.util.hasAccess({method: 'financial_item_search'}))
+									{
+										aHTML.push('<tr class="ns1blankspaceControl">' +
 												'<td id="ns1blankspaceControl_dashboard" class="ns1blankspaceControl" style="padding-top:6px;">Summary' +
 												'<br /><div class="ns1blankspaceSubNote">for analysis</div></td>' +
 												'</tr>');
+									}
 
 									aHTML.push('<tr class="ns1blankspaceControl">' +
 												'<td id="ns1blankspaceControl_leave" class="ns1blankspaceControl" style="padding-top:6px;">Leave' +
@@ -226,14 +232,14 @@ ns1blankspace.financial.payroll =
 									if (iFrequency == undefined) {iFrequency = ns1blankspace.financial.payroll.data.defaultPayFrequency}
 								
 									if (oResponse == undefined)
-									{
-										
+									{		
 										if (bNew)
 										{
 											ns1blankspace.financial.payroll["new"].show();
 										}
 										else if (bShowTotals)
 										{
+											ns1blankspace.financial.payroll.data.context = 'totals';
 											$('td.ns1blankspaceHighlight').removeClass('ns1blankspaceHighlight');
 											$('#ns1blankspaceControl_totals').addClass('ns1blankspaceHighlight');
 											ns1blankspace.show({selector: '#ns1blankspaceMainTotals', refresh: true});
@@ -248,6 +254,7 @@ ns1blankspace.financial.payroll =
 										}
 										else if (bShowPay)
 										{
+											ns1blankspace.financial.payroll.data.context = 'pays';
 											$('td.ns1blankspaceHighlight').removeClass('ns1blankspaceHighlight');
 											$('#ns1blankspaceControl-pays').addClass('ns1blankspaceHighlight');
 											ns1blankspace.show({selector: '#ns1blankspaceMainPayRun', refresh: true});
@@ -256,8 +263,6 @@ ns1blankspace.financial.payroll =
 										else
 										{
 											ns1blankspace.financial.payroll.data.context = 'pays';
-
-											//$('#ns1blankspaceMainPayRun').html(ns1blankspace.xhtml.loading);
 
 											$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions);
 											
