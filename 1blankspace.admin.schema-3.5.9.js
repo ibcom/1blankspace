@@ -705,7 +705,7 @@ ns1blankspace.admin.schema.methods =
 									oRow["endpointtext"] + '</td>');
 
 					aHTML.push('<td style="width:70px;text-align:right;" class="ns1blankspaceRow">' + 
-									'<span id="ns1blankspaceAdminSchemaMethods_remove-' + oRow.id + '" class="ns1blankspaceMethodRemove"></span>' +
+									'<span id="ns1blankspaceAdminSchemaMethods_remove-' + oRow.id + '" class="ns1blankspaceMethodRemove" style="margin-right:2px;"></span>' +
 									'<span id="ns1blankspaceAdminSchemaMethods_edit-' + oRow.id + '" class="ns1blankspaceMethodEdit"' +
 										' data-title="' + oRow["title"] + '"' +
 										' data-endpoint="' + oRow["endpoint"] + '"' +
@@ -734,7 +734,7 @@ ns1blankspace.admin.schema.methods =
 						ns1blankspace.admin.schema.methods.details({xhtmlElementID: this.id})
 					});
 
-					$('#' + sXHTMLContainerID + ' .ns1blankspaceItemRemove').button(
+					$('#ns1blankspaceAdminSchemaMethods .ns1blankspaceMethodRemove').button(
 					{
 						text: false,
 						icons:
@@ -747,16 +747,14 @@ ns1blankspace.admin.schema.methods =
 						ns1blankspace.remove(
 						{
 							xhtmlElementID: this.id,
-							method: 'FINANCIAL_ITEM_MANAGE',
-							ifNoneMessage: 'No items.',
-							onComplete: ns1blankspace.financial.item.remove,
-							namespace: sNamespace
+							method: 'ADMIN_METHOD_MANAGE',
+							ifNoneMessage: 'No methods.'
 						});
 					})
 					.css('width', '15px')
 					.css('height', '17px');
 
-					$('#' + sXHTMLContainerID + ' .ns1blankspaceItemEdit').button(
+					$('#ns1blankspaceAdminSchemaMethods .ns1blankspaceMethodEdit').button(
 					{
 						text: false,
 						icons:
@@ -766,9 +764,7 @@ ns1blankspace.admin.schema.methods =
 					})
 					.click(function()
 					{
-						oParam = ns1blankspace.util.setParam(oParam, 'xhtmlElementID', this.id);
-						oParam = ns1blankspace.util.setParam(oParam, 'step', 1);
-						ns1blankspace.financial.item.edit(oParam)
+						ns1blankspace.admin.schema.methods.edit({xhtmlElementID: this.id})
 					})
 					.css('width', '15px')
 					.css('height', '17px');	
