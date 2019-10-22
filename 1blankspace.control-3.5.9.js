@@ -265,7 +265,7 @@ ns1blankspace.scripts =
 	},
 	{
 		nameSpace: '1blankspace.messaging.conversation',
-		source: '/site/1903/1blankspace.messaging.conversation-3.2.5.js'
+		source: '/site/1903/1blankspace.messaging.conversation-3.5.9.js'
 	},
 	{
 		nameSpace: '1blankspace.messaging.imap',
@@ -401,7 +401,7 @@ ns1blankspace.scripts =
 	},
 	{
 		nameSpace: '1blankspace.setup.website',
-		source: '/site/1903/1blankspace.setup.website-3.5.7.js'
+		source: '/site/1903/1blankspace.setup.website-3.5.9.js'
 	},
 	{
 		nameSpace: '1blankspace.setup.websiteForm',
@@ -469,7 +469,7 @@ ns1blankspace.scripts =
 	},
 	{
 		nameSpace: '1blankspace.admin.schema',
-		source: '/site/1903/1blankspace.admin.schema-3.5.7.js'
+		source: '/site/1903/1blankspace.admin.schema-3.5.9.js'
 	},
 	{
 		nameSpace: '1blankspace.developer.membership',

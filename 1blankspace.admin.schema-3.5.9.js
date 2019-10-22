@@ -193,6 +193,9 @@ ns1blankspace.admin.schema =
 
 					aHTML.push('<table class="ns1blankspaceColumn2">');
 
+					aHTML.push('<tr><td style="padding-top:14px;" class="ns1blankspaceSubNote">You can also explore the schema using' +
+						' <a href="https://learn.mydigitalstructure.cloud/schema" target="_blank">learn.mydigitalstructure.cloud</a>.</td></tr>');
+
 					aHTML.push('</table>')
 
 					$('#ns1blankspaceSummaryColumn2').html(aHTML.join(''));
@@ -533,8 +536,11 @@ ns1blankspace.admin.schema.methods =
 
 						var oSearch = new AdvancedSearch();
 						oSearch.method = 'CORE_METHOD_SEARCH';
-						oSearch.addField('addavailable,advancedsearchavailable,endpoint,endpointtext,id,notes,object,objecttext,removeavailable,title,unrestrictedaccess,unrestrictedloggedonaccess,updateavailable,useavailable');
+						oSearch.addField('addavailable,advancedsearchavailable,endpoint,endpointtext,id,notes,object,objecttext,' +
+										'removeavailable,title,unrestrictedaccess,unrestrictedloggedonaccess,updateavailable,useavailable');
 					
+						//Add Status to fields when available
+
 						if (sSearchText != '')
 						{
 							oSearch.addBracket('(');
@@ -575,9 +581,14 @@ ns1blankspace.admin.schema.methods =
 										'<tr class="ns1blankspaceHeaderCaption">' +
 										'<td class="ns1blankspaceHeaderCaption">Title</td>' +
 										'<td class="ns1blankspaceHeaderCaption" style="text-align:center;">Properties</td>' +
-										'<td class="ns1blankspaceHeaderCaption">Endpoint</td>' +
-										'<td class="ns1blankspaceHeaderCaption"></td>' +
-										'</tr>');
+										'<td class="ns1blankspaceHeaderCaption">Endpoint</td>')
+
+							if (ns1blankspace.user.super)
+							{
+								aHTML.push('<td class="ns1blankspaceHeaderCaption"></td>');
+							}
+
+							aHTML.push('</tr>');
 
 							$(oResponse.data.rows).each(function() 
 							{
@@ -617,8 +628,11 @@ ns1blankspace.admin.schema.methods =
 							aHTML.push(' <span id="ns1blankspaceAdminSchemaMethodsSearchClear" class="ns1blankspaceAction">Clear</span>');
 						}
 							
-						aHTML.push('<tr><td style="padding-top:16px;">' +
-										'<span id="ns1blankspaceAdminSchemaMethodsAdd" class="ns1blankspaceAction">Add</span>');			
+						if (ns1blankspace.user.super)
+						{
+							aHTML.push('<tr><td style="padding-top:16px;">' +
+										'<span id="ns1blankspaceAdminSchemaMethodsAdd" class="ns1blankspaceAction">Add</span>');
+						}			
 							
 						aHTML.push('</td></tr>');
 
@@ -665,17 +679,19 @@ ns1blankspace.admin.schema.methods =
 						});				
 
 						$('#ns1blankspaceAdminSchemaMethodsSearchText').val(sSearchText);
-
 						
-						$('#ns1blankspaceAdminSchemaMethodsAdd').button(
+						if (ns1blankspace.user.super)
 						{
-							label: "Add"
-						})
-						.click(function()
-						{
-							ns1blankspace.admin.schema.methods.edit({xhtmlElementID: this.id})
-						})
-						.css('width', '57px');			
+							$('#ns1blankspaceAdminSchemaMethodsAdd').button(
+							{
+								label: "Add"
+							})
+							.click(function()
+							{
+								ns1blankspace.admin.schema.methods.edit({xhtmlElementID: this.id})
+							})
+							.css('width', '57px');
+						}	
 					}
 				},	
 
@@ -704,7 +720,9 @@ ns1blankspace.admin.schema.methods =
 					aHTML.push('<td id="ns1blankspaceAdminSchemaMethods_endpoint-' + oRow["id"] + '" class="ns1blankspaceRow">' +
 									oRow["endpointtext"] + '</td>');
 
-					aHTML.push('<td style="width:70px;text-align:right;" class="ns1blankspaceRow">' + 
+					if (ns1blankspace.user.super)
+					{
+						aHTML.push('<td style="width:70px;text-align:right;" class="ns1blankspaceRow">' + 
 									'<span id="ns1blankspaceAdminSchemaMethods_remove-' + oRow.id + '" class="ns1blankspaceMethodRemove" style="margin-right:2px;"></span>' +
 									'<span id="ns1blankspaceAdminSchemaMethods_edit-' + oRow.id + '" class="ns1blankspaceMethodEdit"' +
 										' data-title="' + oRow["title"] + '"' +
@@ -718,9 +736,8 @@ ns1blankspace.admin.schema.methods =
 										' data-unrestrictedaccess="' + oRow["unrestrictedaccess"] + '"' +
 										' data-unrestrictedloggedonaccess="' + oRow["unrestrictedloggedonaccess"] + '"' +
 										' data-notes="' + window.btoa(oRow["notes"]) + '"' +
-										'></span>');
-					
-					aHTML.push('</td>');
+										'></span></td>');
+					}
 
 					aHTML.push('</tr>');
 
@@ -813,10 +830,23 @@ ns1blankspace.admin.schema.methods =
 								sHTML = sHTML + '<tr><td>Notes</td><td>' + oDetail.notes + '</td></tr>';
 							}
 
+							sHTML = sHTML + '<tr><td>Documentation</td><td><a href="https://docs.mydigitalstructure.cloud/' + oDetail.title + '" target="_blank">' + 
+													'docs.mydigitalstructure.cloud/' + oDetail.title.toLowerCase() + '</a></td></tr>';
+
+							sHTML = sHTML + '<tr><td></td><td id="ns1blankspaceAdminSchemaMethodProperties-' + oDetail.title + '" class="ns1blankspaceViewLink">Properties</td></tr>';
+							
 							sHTML = sHTML + '</table>'
 							
 							$('#ns1blankspaceAdminSchemaMethods_container-' + sKey).after('<tr id="ns1blankspaceAdminSchemaMethods_container_details-' + sKey + '" style="font-size:0.875em;">' +
-								'<td colspan=2><div style="background-color: #F3F3F3; padding:8px; color:#444444; font-weight:100; font-size:0.875em;">' + sHTML + '</div></td></tr>');	
+								'<td colspan=4><div style="background-color: #F3F3F3; padding:8px; color:#444444; font-weight:100; font-size:0.875em;">' + sHTML + '</div></td></tr>');
+
+							$('#ns1blankspaceAdminSchemaMethodProperties-' + oDetail.title).click().click(function ()
+							{
+								$('.ns1blankspaceControl').removeClass('ns1blankspaceHighlight');
+								$('#ns1blankspaceControlProperties').addClass('ns1blankspaceHighlight');
+								ns1blankspace.show({selector: '#ns1blankspaceMainProperties'});
+								ns1blankspace.admin.schema.properties.show({searchText: this.id.split('-')[1]})
+							})
 						}
 					}
 				},
@@ -824,6 +854,7 @@ ns1blankspace.admin.schema.methods =
 	edit:		function (oParam, oResponse)
 				{
 					var iID = ns1blankspace.util.getParam(oParam, 'xhtmlElementID', {index: 1}).value;
+					if (iID == undefined) {iID = ''}
 		
 					var aHTML = [];
 
@@ -841,7 +872,7 @@ ns1blankspace.admin.schema.methods =
 					var aHTML = [];
 								
 					aHTML.push('<table class="ns1blankspaceColumn2a">' +
-									'<tr><td><span id="ns1blankspaceAdminSchemaMethodsEditSave" class="ns1blankspaceAction">' +
+									'<tr><td><span id="ns1blankspaceAdminSchemaMethodsEditSave" data-id="' + iID + '" class="ns1blankspaceAction">' +
 									'Save</span></td></tr>' +
 									'<tr><td><span id="ns1blankspaceAdminSchemaMethodsEditCancel" class="ns1blankspaceAction">' +
 									'Cancel</span></td></tr>' +
@@ -855,7 +886,7 @@ ns1blankspace.admin.schema.methods =
 					})
 					.click(function()
 					{
-						ns1blankspace.admin.schema.methods.save(oParam)
+						ns1blankspace.admin.schema.methods.save({id: $(this).attr('data-id')})
 					})
 					.css('width', '65px');
 
@@ -904,23 +935,144 @@ ns1blankspace.admin.schema.methods =
 									'<br /><input type="radio" id="radioStatus3" name="radioStatus" value="3"/>Proposed' +
 									'</td></tr>');
 
+					aHTML.push('<tr class="ns1blankspaceCaption">' +
+									'<td class="ns1blankspaceCaption">' +
+									'Unrestricted Access' +
+									'</td></tr>' +
+									'<tr class="ns1blankspace">' +
+									'<td class="ns1blankspaceRadio">' +
+									'<input type="radio" id="radioUnrestrictedAccessY" name="radioUnrestrictedAccess" value="Y"/>Yes' +
+									'<br /><input type="radio" id="radioUnrestrictedAccessN" name="radioUnrestrictedAccess" value="N"/>No' +
+									'</td></tr>');
+
+					aHTML.push('<tr class="ns1blankspaceCaption">' +
+									'<td class="ns1blankspaceCaption">' +
+									'Unrestricted Access (Authenticated)' +
+									'</td></tr>' +
+									'<tr class="ns1blankspace">' +
+									'<td class="ns1blankspaceRadio">' +
+									'<input type="radio" id="radioUnrestrictedLoggedOnAccessY" name="radioUnrestrictedLoggedOnAccess" value="Y"/>Yes' +
+									'<br /><input type="radio" id="radioUnrestrictedLoggedOnAccessN" name="radioUnrestrictedLoggedOnAccess" value="N"/>No' +
+									'</td></tr>');
+
+					aHTML.push('<tr class="ns1blankspaceCaption">' +
+									'<td class="ns1blankspaceCaption">' +
+									'Can Be Accessed / Used To Search' +
+									'</td></tr>' +
+									'<tr class="ns1blankspace">' +
+									'<td class="ns1blankspaceRadio">' +
+									'<input type="radio" id="radioUseAvailableY" name="radioUseAvailable" value="Y"/>Yes' +
+									'<br /><input type="radio" id="radioUseAvailableN" name="radioUseAvailable" value="N"/>No' +
+									'</td></tr>');
+
+					aHTML.push('<tr class="ns1blankspaceCaption">' +
+									'<td class="ns1blankspaceCaption">' +
+									'Can Be Used To Add' +
+									'</td></tr>' +
+									'<tr class="ns1blankspace">' +
+									'<td class="ns1blankspaceRadio">' +
+									'<input type="radio" id="radioAddAvailableY" name="radioAddAvailable" value="Y"/>Yes' +
+									'<br /><input type="radio" id="radioAddAvailableN" name="radioAddAvailable" value="N"/>No' +
+									'</td></tr>');
+
+					aHTML.push('<tr class="ns1blankspaceCaption">' +
+									'<td class="ns1blankspaceCaption">' +
+									'Can Be Used To Update' +
+									'</td></tr>' +
+									'<tr class="ns1blankspace">' +
+									'<td class="ns1blankspaceRadio">' +
+									'<input type="radio" id="radioUpdateAvailableY" name="radioUpdateAvailable" value="Y"/>Yes' +
+									'<br /><input type="radio" id="radioUpdateAvailableN" name="radioUpdateAvailable" value="N"/>No' +
+									'</td></tr>');
+
+					aHTML.push('<tr class="ns1blankspaceCaption">' +
+									'<td class="ns1blankspaceCaption">' +
+									'Can Be Used To Remove' +
+									'</td></tr>' +
+									'<tr class="ns1blankspace">' +
+									'<td class="ns1blankspaceRadio">' +
+									'<input type="radio" id="radioRemoveAvailableY" name="radioRemoveAvailable" value="Y"/>Yes' +
+									'<br /><input type="radio" id="radioRemoveAvailableN" name="radioRemoveAvailable" value="N"/>No' +
+									'</td></tr>');
+
+					aHTML.push('<tr class="ns1blankspaceCaption">' +
+									'<td class="ns1blankspaceCaption">' +
+									'Notes' +
+									'</td></tr>' +
+									'<tr class="ns1blankspaceTextMulti">' +
+									'<td class="ns1blankspaceTextMulti">' +
+									'<textarea rows="10" cols="35" id="ns1blankspaceAdminSchemaMethodsEditNotes" class="ns1blankspaceTextMulti"></textarea>' +
+									'</td></tr>');
+
 					aHTML.push('</table>');		
 
 					$('#ns1blankspaceAdminSchemaMethodsEditColumn1').html(aHTML.join(''));
 
-					if (iID !== undefined)
+					if (iID != '')
 					{
 						$('#ns1blankspaceAdminSchemaMethodsEditTitle').val(ns1blankspace.util.getData(oParam, 'data-title').value);
 						$('#ns1blankspaceAdminSchemaMethodsEditEndpoint').val(ns1blankspace.util.getData(oParam, 'data-endpointtext').value);
 						$('#ns1blankspaceAdminSchemaMethodsEditEndpoint').attr('data-id', ns1blankspace.util.getData(oParam, 'data-endpoint').value);
 						$('[name="radioStatus"][value="' + ns1blankspace.util.getData(oParam, 'data-status').value + '"]').attr('checked', true);
+
+						$('[name="radioUnrestrictedAccess"][value="' + ns1blankspace.util.getData(oParam, 'data-unrestrictedaccess').value + '"]').attr('checked', true);
+						$('[name="radioUnrestrictedLoggedOnAccess"][value="' + ns1blankspace.util.getData(oParam, 'data-unrestrictedloggedonaccess').value + '"]').attr('checked', true);
+						$('[name="radioUseAvailable"][value="' + ns1blankspace.util.getData(oParam, 'data-useavailable').value + '"]').attr('checked', true);
+						$('[name="radioAddAvailable"][value="' + ns1blankspace.util.getData(oParam, 'data-addavailable').value + '"]').attr('checked', true);
+						$('[name="radioUpdateAvailable"][value="' + ns1blankspace.util.getData(oParam, 'data-updateavailable').value + '"]').attr('checked', true);
+						$('[name="radioRemoveAvailable"][value="' + ns1blankspace.util.getData(oParam, 'data-removeavailable').value + '"]').attr('checked', true);
+
+						$('#ns1blankspaceAdminSchemaMethodsEditNotes').val(window.atob(ns1blankspace.util.getData(oParam, 'data-notes').value));	 
 					}
 					else
 					{
 						$('[name="radioStatus"][value="1"]').attr('checked', true);
 					}
-				}							
-	}
+				},
+
+	save: 	function (oParam, oResponse)
+				{
+					if (oResponse == undefined)
+					{
+						var iID = ns1blankspace.util.getParam(oParam, 'id').value;
+
+						var oData =
+						{
+							id: iID,
+							title: $('#ns1blankspaceAdminSchemaMethodsEditTitle').val(),
+							endpoint: $('#ns1blankspaceAdminSchemaMethodsEditEndpoint').attr('data-id'),
+							status: $('input[name="radioStatus"]:checked').val(),
+							unrestrictedaccess: $('[name="radioUnrestrictedAccess"]:checked').val(),
+							unrestrictedloggedonaccess: $('[name="radioUnrestrictedLoggedOnAccess"]:checked').val(),
+							useavailable: $('[name="radioUseAvailable"]:checked').val(),
+							addavailable: $('[name="radioAddAvailable"]:checked').val(),
+							updateavailable: $('[name="radioUpdateAvailable"]:checked').val(),
+							removeavailable: $('[name="radioRemoveAvailable"]:checked').val(),
+							notes: $('#ns1blankspaceAdminSchemaMethodsEditNotes').val()
+						}
+
+						$.ajax(
+						{
+							type: 'POST',
+							url: ns1blankspace.util.endpointURI('ADMIN_METHOD_MANAGE'),
+							data: oData,
+							dataType: 'json',
+							success: function(data) 
+							{
+								if (data.status == 'OK')
+								{
+									ns1blankspace.status.message('Saved');
+									ns1blankspace.admin.schema.methods.show()
+								}
+							}
+						});
+					}
+					else
+					{
+
+					}
+				}					
+}
 
 ns1blankspace.admin.schema.methods.check =
 {
@@ -1316,7 +1468,8 @@ ns1blankspace.admin.schema.properties =
 
 						var oSearch = new AdvancedSearch();
 						oSearch.method = 'CORE_METHOD_PROPERTY_SEARCH';
-						oSearch.addField('datalength,datatype,datatypetext,mandatory,method,methodtext,name,notes,searchendpoint,searchmethod,searchrelatedproperty,title');
+						oSearch.addField('datalength,datatype,datatypetext,mandatory,method,methodtext,' +
+								'name,notes,searchendpoint,searchmethod,searchrelatedproperty,title');
 					
 						if (sSearchText != '')
 						{
@@ -1360,11 +1513,16 @@ ns1blankspace.admin.schema.properties =
 
 							aHTML.push('<table id="ns1blankspaceAdminSchemaProperties" class="ns1blankspace">' +
 										'<tr class="ns1blankspaceHeaderCaption">' +
-										'<td class="ns1blankspaceHeaderCaption">Title</td>' +
 										'<td class="ns1blankspaceHeaderCaption">Name</td>' +
-										'<td class="ns1blankspaceHeaderCaption">Method</td>' +
-										'<td class="ns1blankspaceHeaderCaption">Type</td>' +
-										'</tr>');
+										'<td class="ns1blankspaceHeaderCaption">Title</td>' +
+										'<td class="ns1blankspaceHeaderCaption">Method</td>');
+
+							if (ns1blankspace.user.super)
+							{
+								aHTML.push('<td class="ns1blankspaceHeaderCaption"></td>');
+							}
+
+							aHTML.push('</tr>');
 
 							$(oResponse.data.rows).each(function() 
 							{
@@ -1403,6 +1561,12 @@ ns1blankspace.admin.schema.properties =
 						{	
 							aHTML.push(' <span id="ns1blankspaceAdminSchemaPropertiesSearchClear" class="ns1blankspaceAction">Clear</span>');
 						}
+
+						if (ns1blankspace.user.super)
+						{
+							aHTML.push('<tr><td style="padding-top:16px;">' +
+										'<span id="ns1blankspaceAdminSchemaPropertiesAdd" class="ns1blankspaceAction">Add</span>');
+						}	
 
 						aHTML.push('</td></tr>');
 
@@ -1449,6 +1613,19 @@ ns1blankspace.admin.schema.properties =
 						});				
 
 						$('#ns1blankspaceAdminSchemaPropertiesSearchText').val(sSearchText);
+
+						if (ns1blankspace.user.super)
+						{
+							$('#ns1blankspaceAdminSchemaPropertiesAdd').button(
+							{
+								label: "Add"
+							})
+							.click(function()
+							{
+								ns1blankspace.admin.schema.properties.edit({xhtmlElementID: this.id})
+							})
+							.css('width', '57px');
+						}	
 					}
 				},	
 
@@ -1466,11 +1643,27 @@ ns1blankspace.admin.schema.properties =
 					aHTML.push('<td id="ns1blankspaceAdminSchemaProperties_title-' + oRow["id"] + '" class="ns1blankspaceRow">' +
 										oRow["title"] + '</td>');
 
-					aHTML.push('<td id="ns1blankspaceAdminSchemaProperties_method-' + oRow["id"] + '" class="ns1blankspaceRow">' +
+					aHTML.push('<td id="ns1blankspaceAdminSchemaProperties_method-' + oRow["id"] + '" class="ns1blankspaceRow ns1blankspaceSubNote" style="font-size:0.75em; word-break:break-all; word-wrap:break-word;">' +
 									oRow["methodtext"] + '</td>');
 
-					aHTML.push('<td id="ns1blankspaceAdminSchemaProperties_type-' + oRow["id"] + '" class="ns1blankspaceRow">' +
-									oRow["datatypetext"] + '</td>');
+					if (ns1blankspace.user.super)
+					{
+						aHTML.push('<td style="width:70px;text-align:right;" class="ns1blankspaceRow">' + 
+									'<span id="ns1blankspaceAdminSchemaProperties_remove-' + oRow.id + '" class="ns1blankspacePropertyRemove" style="margin-right:2px;"></span>' +
+									'<span id="ns1blankspaceAdminSchemaProperties_edit-' + oRow.id + '" class="ns1blankspacePropertyEdit"' +
+										' data-name="' + oRow["name"] + '"' +
+										' data-datatype="' + oRow["datatype"] + '"' +
+										' data-datatypetext="' + oRow["datatypetext"] + '"' +
+										' data-data-length="' + oRow["datalength"] + '"' +
+										' data-method="' + oRow["method"] + '"' +
+										' data-methodtext="' + oRow["methodtext"] + '"' +
+										' data-mandatory="' + oRow["mandatory"] + '"' +
+										' data-searchmethod="' + oRow["searchmethod"] + '"' +
+										' data-searchrelatedproperty="' + oRow["searchrelatedproperty"] + '"' +
+										' data-title="' + oRow["title"] + '"' +
+										' data-notes="' + window.btoa(oRow["notes"]) + '"' +	
+										'></span></td>');
+					}
 
 					aHTML.push('</tr>');
 
@@ -1482,7 +1675,43 @@ ns1blankspace.admin.schema.properties =
 					$('.ns1blankspaceRowSelect:visible').click(function()
 					{
 						ns1blankspace.admin.schema.properties.details({xhtmlElementID: this.id})
-					});		
+					});
+
+					$('#ns1blankspaceAdminSchemaProperties .ns1blankspacePropertyRemove').button(
+					{
+						text: false,
+						icons:
+						{
+							primary: "ui-icon-close"
+						}
+					})
+					.click(function()
+					{
+						ns1blankspace.remove(
+						{
+							xhtmlElementID: this.id,
+							method: 'ADMIN_METHOD_PROPERTY_MANAGE',
+							ifNoneMessage: 'No properties.'
+						});
+					})
+					.css('width', '15px')
+					.css('height', '17px');
+
+					$('#ns1blankspaceAdminSchemaProperties .ns1blankspacePropertyEdit').button(
+					{
+						text: false,
+						icons:
+						{
+							primary: "ui-icon-pencil"
+						}
+					})
+					.click(function()
+					{
+						ns1blankspace.admin.schema.properties.edit({xhtmlElementID: this.id})
+					})
+					.css('width', '15px')
+					.css('height', '17px');	
+
 				},
 
 	details: 	
@@ -1510,8 +1739,14 @@ ns1blankspace.admin.schema.properties =
 						if (oDetail)
 						{
 							sHTML = '<table class="table table-condensed">' +
-										'<tr><td style="width:40%;">ID</td><td>' + oDetail.id + '</td></tr>' +
-											'<tr><td>Mandatory</td><td>' + oDetail.mandatory + '</td></tr>';
+										'<tr><td style="width:20%;">ID</td><td>' + oDetail.id + '</td></tr>' +
+											'<tr><td>Mandatory</td><td>' + oDetail.mandatory + '</td></tr>' +
+											'<tr><td>Data Type</td><td>' + oDetail.datatypetext + '</td></tr>';
+								
+							if (oDetail.datatypetext != 'Text')
+							{
+								sHTML = sHTML + '<tr><td>Data Length</td><td>' + oDetail.datalength + '</td></tr>';
+							}
 											
 							if (oDetail.searchendpoint != '')
 							{
@@ -1523,15 +1758,13 @@ ns1blankspace.admin.schema.properties =
 								sHTML = sHTML + '<tr><td>Search Related Property</td><td>' + oDetail.searchrelatedproperty + '</td></tr>';
 							}
 
-							if (oDetail.typetext != 'Text')
-							{
-								sHTML = sHTML + '<tr><td>Length</td><td>' + oDetail.datalength + '</td></tr>';
-							}
-
-							if (false && oDetail.notes != '')
+							if ( oDetail.notes != '')
 							{
 								sHTML = sHTML + '<tr><td>Notes</td><td>' + oDetail.notes + '</td></tr>';
 							}
+
+							sHTML = sHTML + '<tr><td>Documentation</td><td><a href="https://docs.mydigitalstructure.cloud/' + oDetail.methodtext + '" target="_blank">' + 
+													'docs.mydigitalstructure.cloud/' + oDetail.methodtext.toLowerCase() + '</a></td></tr>';
 
 							sHTML = sHTML + '</table>'
 							
@@ -1539,7 +1772,217 @@ ns1blankspace.admin.schema.properties =
 								'<td colspan=4><div style="background-color: #F3F3F3; padding:8px; color:#444444; font-weight:100; font-size:0.875em;">' + sHTML + '</div></td></tr>');	
 						}
 					}
-				}				
+				},
+
+	edit:		function (oParam, oResponse)
+				{
+					var iID = ns1blankspace.util.getParam(oParam, 'xhtmlElementID', {index: 1}).value;
+					if (iID == undefined) {iID = ''}
+		
+					var aHTML = [];
+
+					aHTML.push('<table class="ns1blankspaceContainer">');
+
+					aHTML.push('<tr class="ns1blankspaceContainer">' +
+									'<td id="ns1blankspaceAdminSchemaPropertiesEditColumn1"></td>' +
+									'<td id="ns1blankspaceAdminSchemaPropertiesEditColumn2" style="width:50px;"></td>' +
+									'</tr>');
+
+					aHTML.push('</table>');					
+					
+					$('#ns1blankspaceAdminSchemaPropertiesColumn2').html(aHTML.join(''));
+
+					var aHTML = [];
+								
+					aHTML.push('<table class="ns1blankspaceColumn2a">' +
+									'<tr><td><span id="ns1blankspaceAdminSchemaPropertiesEditSave" data-id="' + iID + '" class="ns1blankspaceAction">' +
+									'Save</span></td></tr>' +
+									'<tr><td><span id="ns1blankspaceAdminSchemaPropertiesEditCancel" class="ns1blankspaceAction">' +
+									'Cancel</span></td></tr>' +
+									'</table>');					
+					
+					$('#ns1blankspaceAdminSchemaPropertiesEditColumn2').html(aHTML.join(''));
+					
+					$('#ns1blankspaceAdminSchemaPropertiesEditSave').button(
+					{
+						text: "Save"
+					})
+					.click(function()
+					{
+						ns1blankspace.admin.schema.properties.save({id: $(this).attr('data-id')})
+					})
+					.css('width', '65px');
+
+					$('#ns1blankspaceAdminSchemaPropertiesEditCancel').button(
+					{
+						text: "Cancel"
+					})
+					.click(function()
+					{
+						ns1blankspace.admin.schema.properties.show();
+					})
+					.css('width', '65px');
+
+					var aHTML = [];
+
+					aHTML.push('<table class="ns1blankspaceColumn2" style="width:200px;">');
+
+					aHTML.push('<tr class="ns1blankspaceCaption">' +
+									'<td class="ns1blankspaceCaption">' +
+									'Name' +
+									'</td></tr>' +
+									'<tr class="ns1blankspace">' +
+									'<td class="ns1blankspaceText">' +
+									'<input id="ns1blankspaceAdminSchemaPropertiesEditName" class="ns1blankspaceText">' +
+									'</td></tr>');
+
+					aHTML.push('<tr class="ns1blankspaceCaption">' +
+									'<td class="ns1blankspaceCaption">' +
+									'Title' +
+									'</td></tr>' +
+									'<tr class="ns1blankspace">' +
+									'<td class="ns1blankspaceText">' +
+									'<input id="ns1blankspaceAdminSchemaPropertiesEditTitle" class="ns1blankspaceText">' +
+									'</td></tr>');
+
+					aHTML.push('<tr class="ns1blankspaceCaption">' +
+									'<td class="ns1blankspaceCaption">' +
+									'Method' +
+									'</td></tr>' +
+									'<tr class="ns1blankspace">' +
+									'<td class="ns1blankspaceText">' +
+									'<input id="ns1blankspaceAdminSchemaPropertiesEditMethod" class="ns1blankspaceSelect"' +
+										' data-method="CORE_METHOD_SEARCH"' +
+										' data-columns="title">' +
+									'</td></tr>');	
+
+					aHTML.push('<tr class="ns1blankspaceCaption">' +
+									'<td class="ns1blankspaceCaption">' +
+									'Data Type' +
+									'</td></tr>' +
+									'<tr class="ns1blankspace">' +
+									'<td class="ns1blankspaceRadio">' +
+									'<input type="radio" id="radioDataType1" name="radioDataType" value="1"/>Numeric' +
+									'<br /><input type="radio" id="radioDataType2" name="radioDataType" value="2"/>Date' +
+									'<br /><input type="radio" id="radioDataType3" name="radioDataType" value="3"/>Text' +
+									'</td></tr>');
+
+					aHTML.push('<tr class="ns1blankspaceCaption">' +
+									'<td class="ns1blankspaceCaption">' +
+									'Data Length' +
+									'</td></tr>' +
+									'<tr class="ns1blankspace">' +
+									'<td class="ns1blankspaceText">' +
+									'<input id="ns1blankspaceAdminSchemaPropertiesEditDataLength" class="ns1blankspaceText">' +
+									'</td></tr>');
+
+					aHTML.push('<tr class="ns1blankspaceCaption">' +
+									'<td class="ns1blankspaceCaption">' +
+									'Mandatory' +
+									'</td></tr>' +
+									'<tr class="ns1blankspace">' +
+									'<td class="ns1blankspaceRadio">' +
+									'<input type="radio" id="radioMandatoryY" name="radioMandatory" value="Y"/>Yes' +
+									'<br /><input type="radio" id="radioMandatoryN" name="radioMandatory" value="N"/>No' +
+									'</td></tr>');
+
+					aHTML.push('<tr class="ns1blankspaceCaption">' +
+									'<td class="ns1blankspaceCaption">' +
+									'Search Endpoint' +
+									'</td></tr>' +
+									'<tr class="ns1blankspace">' +
+									'<td class="ns1blankspaceText">' +
+									'<input id="ns1blankspaceAdminSchemaPropertiesEditSearchEndpoint" class="ns1blankspaceText">' +
+									'</td></tr>');
+
+					aHTML.push('<tr class="ns1blankspaceCaption">' +
+									'<td class="ns1blankspaceCaption">' +
+									'Search Method' +
+									'</td></tr>' +
+									'<tr class="ns1blankspace">' +
+									'<td class="ns1blankspaceText">' +
+									'<input id="ns1blankspaceAdminSchemaPropertiesEditSearchMethod" class="ns1blankspaceText">' +
+									'</td></tr>');
+
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
+									'<td class="ns1blankspaceCaption">' +
+									'Search Properties' +
+									'</td></tr>' +
+									'<tr class="ns1blankspace">' +
+									'<td class="ns1blankspaceText">' +
+									'<input id="ns1blankspaceAdminSchemaPropertiesEditSearchRelatedProperty" class="ns1blankspaceText">' +
+									'</td></tr>');
+
+					aHTML.push('<tr class="ns1blankspaceCaption">' +
+									'<td class="ns1blankspaceCaption">' +
+									'Notes' +
+									'</td></tr>' +
+									'<tr class="ns1blankspaceTextMulti">' +
+									'<td class="ns1blankspaceTextMulti">' +
+									'<textarea rows="10" cols="35" id="ns1blankspaceAdminSchemaPropertiesEditNotes" class="ns1blankspaceTextMulti"></textarea>' +
+									'</td></tr>');
+
+					aHTML.push('</table>');		
+
+					$('#ns1blankspaceAdminSchemaPropertiesEditColumn1').html(aHTML.join(''));
+
+					if (iID != '')
+					{
+						$('#ns1blankspaceAdminSchemaPropertiesEditName').val(ns1blankspace.util.getData(oParam, 'data-name').value);
+						$('#ns1blankspaceAdminSchemaPropertiesEditTitle').val(ns1blankspace.util.getData(oParam, 'data-title').value);
+						$('#ns1blankspaceAdminSchemaPropertiesEditMethod').val(ns1blankspace.util.getData(oParam, 'data-methodtext').value);
+						$('#ns1blankspaceAdminSchemaPropertiesEditMethod').attr('data-id', ns1blankspace.util.getData(oParam, 'data-method').value);
+						$('[name="radioDataType"][value="' + ns1blankspace.util.getData(oParam, 'data-datatype').value + '"]').attr('checked', true);
+						$('#ns1blankspaceAdminSchemaPropertiesEditDataLength').val(ns1blankspace.util.getData(oParam, 'data-data-length').value);
+						$('[name="radioMandatory"][value="' + ns1blankspace.util.getData(oParam, 'data-mandatory').value + '"]').attr('checked', true);
+						$('#ns1blankspaceAdminSchemaPropertiesEditSearchEndpoint').val(ns1blankspace.util.getData(oParam, 'data-searchendpoint').value);
+						$('#ns1blankspaceAdminSchemaPropertiesEditSearchMethod').val(ns1blankspace.util.getData(oParam, 'data-searchmethod').value);
+						$('#ns1blankspaceAdminSchemaPropertiesEditSearchRelatedProperty').val(ns1blankspace.util.getData(oParam, 'data-searchrelatedproperty').value);
+						$('#ns1blankspaceAdminSchemaPropertiesEditNotes').val(window.atob(ns1blankspace.util.getData(oParam, 'data-notes').value));	 
+					}
+				},
+
+	save: 	function (oParam, oResponse)
+				{
+					if (oResponse == undefined)
+					{
+						var iID = ns1blankspace.util.getParam(oParam, 'id').value;
+						var iDataLength = $('#ns1blankspaceAdminSchemaPropertiesEditDataLength').val();
+						if (iDataLength == '') {iDataLength = 0}
+
+						var oData =
+						{
+							id: iID,
+							name: $('#ns1blankspaceAdminSchemaPropertiesEditName').val(),
+							title: $('#ns1blankspaceAdminSchemaPropertiesEditTitle').val(),
+							adminmethod: $('#ns1blankspaceAdminSchemaPropertiesEditMethod').attr('data-id'),
+							datatype: $('input[name="radioDataType"]:checked').val(),
+							unrestrictedaccess: $('[name="radioUnrestrictedAccess"]:checked').val(),
+							datalength: iDataLength,
+							mandatory: $('[name="radioMandatory"]:checked').val(),
+							searchendpoint: $('#ns1blankspaceAdminSchemaPropertiesEditSearchEndpoint').val(),
+							searchmethod: $('#ns1blankspaceAdminSchemaPropertiesEditSearchMethod').val(),
+							searchrelatedproperty: $('#ns1blankspaceAdminSchemaPropertiesEditSearchRelatedProperty').val(),
+							notes: $('#ns1blankspaceAdminSchemaPropertiesEditNotes').val()
+						}
+
+						$.ajax(
+						{
+							type: 'POST',
+							url: ns1blankspace.util.endpointURI('ADMIN_METHOD_PROPERTY_MANAGE'),
+							data: oData,
+							dataType: 'json',
+							success: function(data) 
+							{
+								if (data.status == 'OK')
+								{
+									ns1blankspace.status.message('Saved');
+									ns1blankspace.admin.schema.properties.show()
+								}
+							}
+						});
+					}
+				}									
 }
 
 ns1blankspace.admin.schema.objects =
