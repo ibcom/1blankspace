@@ -7699,7 +7699,7 @@ ns1blankspace.financial.payroll.totals =
 											//			' (' + ns1blankspace.financial.payroll.data._param.msalEmail + ')' +
 
 											aHTML.push('<div style="font-size:0.875em; margin-bottom:12px;" class="alert alert-warning">' +
-												'<div><strong>You can submit online (see below) as you are currently signed into singletouch.com.au service.</strong></div></div>');
+												'<div><strong>You can submit online (see below) as you are currently signed into the singletouch.com.au service.</strong></div></div>');
 
 											var aActionsLite = $.grep(ns1blankspace.financial.payroll.totals.employees.report.history.data.actions,
 																		function (oActions)

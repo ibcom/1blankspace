@@ -22,6 +22,7 @@
 					{"title": "ACTION"},
 					{"title": "DOCUMENT"}
 				],
+				
 				"methods": 
 				[
 					{"title": "SETUP_FINANCIAL_SETTINGS_SEARCH"},
