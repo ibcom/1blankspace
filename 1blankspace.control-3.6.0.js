@@ -349,7 +349,7 @@ ns1blankspace.scripts =
 	},
 	{
 		nameSpace: '1blankspace.report',
-		source: '/site/1903/1blankspace.report-3.2.0.js'
+		source: '/site/1903/1blankspace.report-3.6.0.js'
 	},
 	{
 		nameSpace: '1blankspace.setup',
