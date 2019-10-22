@@ -40,7 +40,7 @@ ns1blankspace.admin.monitoring =
 								
 					aHTML.push('<table>');
 
-					aHTML.push('<tr><td><div id="ns1blankspaceViewFinancialLarge" class="ns1blankspaceViewImageLarge"></div></td></tr>');
+					aHTML.push('<tr><td><div style="background: url(/jscripts/images/1blankspace.icons.65-2.0.0.png) -130px 0px;" class="ns1blankspaceViewImageLarge"></div></td></tr>');
 
 					aHTML.push('</table>');		
 						

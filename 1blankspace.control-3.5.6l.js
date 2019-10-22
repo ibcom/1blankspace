@@ -19,7 +19,7 @@ ns1blankspace.option = $.extend(true, ns1blankspace.option,
 	passwordhash: true,
 	classicURI: '/index.asp?Site=475&p=asms%2Fmystartpage.asp',
 	loadControl: false,
-	httpsOnly: false,
+	httpsOnly: true,
 	viewShowSearch: true,
 	passwordExpiry: {site: 1533, days: 36500},
 	showBrowsing: false,
@@ -267,7 +267,7 @@ ns1blankspace.scripts =
 	},
 	{
 		nameSpace: '1blankspace.action',
-		source: '/site/388/1blankspace.action-2.1.1.js'
+		source: '/site/388/1blankspace.action-3.5.6.js'
 	},
 	{
 		nameSpace: '1blankspace.messaging.conversation',
@@ -275,7 +275,7 @@ ns1blankspace.scripts =
 	},
 	{
 		nameSpace: '1blankspace.messaging.imap',
-		source: '/site/388/1blankspace.messaging.imap-3.2.5.js'
+		source: '/site/388/1blankspace.messaging.imap-3.5.0.js'
 	},
 	{
 		nameSpace: '1blankspace.document',
@@ -311,7 +311,7 @@ ns1blankspace.scripts =
 	},
 	{
 		nameSpace: '1blankspace.financial.bankAccount',
-		source: '/site/388/1blankspace.financial.bankaccount-3.2.1.js'
+		source: '/site/388/1blankspace.financial.bankaccount-3.4.3.js'
 	},
 	{
 		nameSpace: '1blankspace.financial.invoice',
@@ -343,7 +343,7 @@ ns1blankspace.scripts =
 	},
 	{
 		nameSpace: '1blankspace.financial.payroll',
-		source: '/site/388/1blankspace.financial.payroll-3.3.7.js'
+		source: '/site/388/1blankspace.financial.payroll-3.5.5.js'
 	},
 	{
 		nameSpace: '1blankspace.financial.budget',
@@ -399,11 +399,11 @@ ns1blankspace.scripts =
 	},
 	{
 		nameSpace: '1blankspace.setup.user',
-		source: '/site/388/1blankspace.setup.user-3.1.9.js'
+		source: '/site/388/1blankspace.setup.user-3.4.6.js'
 	},
 	{
 		nameSpace: '1blankspace.setup.userRole',
-		source: '/site/388/1blankspace.setup.userRole-2.0.5.js'
+		source: '/site/388/1blankspace.setup.userRole-3.5.1.js'
 	},
 	{
 		nameSpace: '1blankspace.setup.website',
@@ -467,11 +467,15 @@ ns1blankspace.scripts =
 	},
 	{
 		nameSpace: '1blankspace.admin.space',
-		source: '/site/388/1blankspace.admin.space-2.0.7.js'
+		source: '/site/388/1blankspace.admin.space-3.5.2.js'
 	},
 	{
 		nameSpace: '1blankspace.admin.monitoring',
 		source: '/site/388/1blankspace.admin.monitoring-3.1.8.js'
+	},
+	{
+		nameSpace: '1blankspace.admin.schema',
+		source: '/site/388/1blankspace.admin.schema-3.5.2.js'
 	},
 	{
 		nameSpace: '1blankspace.developer.membership',
@@ -512,10 +516,6 @@ ns1blankspace.scripts =
 	{
 		nameSpace: '1blankspace.util.contacts',
 		source: '/site/312/1blankspace.util.contact-2.0.1.js'
-	},
-	{
-		nameSpace: '1blankspace.util.msal',
-		source: '/site/388/1blankspace.util.msal-1.0.3.js'
 	}
 ]
 
@@ -1492,6 +1492,8 @@ ns1blankspace.control =
 								'<div class="ns1blankspaceSub"><i>Explore...</i></div>' +
 								'<div class="ns1blankspaceViewControl" style="cursor:pointer;"><span id="ns1blankspaceViewControl_report" class="ns1blankspaceViewControl">' +
 								' Customised reporting with exporting, updating, emailing & SMS sending</span></div>' +
+								'<div class="ns1blankspaceViewControl" style="cursor:pointer;"><span id="ns1blankspaceViewControl_connections" class="ns1blankspaceViewControl">' +
+								' Connections</span></div>' +
 								'</td>');
 
 					//	'<div class="ns1blankspaceViewControl" style="cursor:pointer;"><span id="ns1blankspaceViewControl_contactsearch" class="ns1blankspaceViewControl">' +
@@ -1572,6 +1574,12 @@ ns1blankspace.control =
 
 					oNS.init(oParam);
 				});
+			});
+
+			$('#ns1blankspaceViewControl_connections').click(function(event)
+			{
+				$(ns1blankspace.xhtml.container).attr('data-initiator', '');
+				ns1blankspace.connect.init();
 			});
 		}
 	},

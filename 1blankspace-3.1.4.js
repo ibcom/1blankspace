@@ -788,9 +788,9 @@ ns1blankspace.app =
 							$('#ns1blankspaceViewControlBrowse').html('');
 							$('#ns1blankspaceMain').html('');
 							$('#ns1blankspaceControl').html('');
-							$('#ns1blankspaceLogonName').html('&nbsp;')
+							$('#ns1blankspaceLogonName').html('') //&nbsp;
 							$('#ns1blankspaceLogonName').unbind('click');
-							$('#ns1blankspaceSpaceText').html('&nbsp;')
+							$('#ns1blankspaceSpaceText').html('') //&nbsp;
 							$('#ns1blankspaceSpaceText').unbind('click');
 							ns1blankspace.status.message('');
 							$('#ns1blankspaceMultiUseDialog').hide();
@@ -1043,12 +1043,61 @@ ns1blankspace.app =
 
 							ns1blankspace.setupShow = ns1blankspace.user.unrestricted;
 
+							ns1blankspace.authenticationLevel = oResponse.authenticationlevel;
+							ns1blankspace.authenticationDelivery = oResponse.authenticationdelivery;
+							ns1blankspace.authenticationUsingAccessToken = oResponse.authenticationusingaccesstoken;
+
+							ns1blankspace.app.switchSpace.init(oParam);
+
 							ns1blankspace.control.init(oParam);
 						}
 					}		
 				},
 
-	postInit: 	function (oParam)
+	switchSpace: 
+				{
+					init: function(oParam, oResponse)
+					{
+						if (oResponse == undefined)
+						{
+							var oSearch = new AdvancedSearch();
+							oSearch.method = 'SETUP_USER_SEARCH';
+							oSearch.addField('username');
+							oSearch.rows = 1;
+							oSearch.addFilter('id', 'EQUAL_TO', ns1blankspace.user.id);
+							oSearch.getResults(function (data) {ns1blankspace.app.switchSpace.init(oParam, data)});
+						}
+						else
+						{
+							if (oResponse.data.rows.length == 0)
+							{
+								ns1blankspace.app.switchSpace.process(oParam)
+							}
+						}
+					},
+
+					process: function(oParam, oResponse)
+					{
+						if (oResponse == undefined)
+						{
+							var oSearch = new AdvancedSearch();
+							oSearch.method = 'CORE_SPACE_SEARCH';
+							oSearch.addField('space,spacetext,targetuser,targetusercontactbusiness,targetusercontactbusinesstext,targetusertext,unrestrictedaccess');
+							oSearch.rows = 1;
+							oSearch.addFilter('space', 'EQUAL_TO', ns1blankspace.user.space);
+							oSearch.getResults(function (data) {ns1blankspace.app.switchSpace.process(oParam, data)});
+						}
+						else
+						{
+							if (oResponse.data.rows.length != 0)
+							{
+								ns1blankspace.spaceContactBusiness = oResponse.data.rows[0].targetusercontactbusiness;
+							}
+						}
+					}
+				},
+
+	postInit: function (oParam)
 				{			
 					var aHTML = [];
 					var sSpaceText = ns1blankspace.user.spaceText;
@@ -2076,7 +2125,7 @@ ns1blankspace.app =
 
 ns1blankspace.logon = 
 {
-	show: 		function (oParam)
+	show: 	function (oParam)
 				{
 					var aHTML = [];
 					var h = -1;
@@ -2766,7 +2815,7 @@ ns1blankspace.logon.changePassword =
 						}
 						else if (oResponse.error.errornotes.toUpperCase().indexOf('PASSWORD NOT STRONG ENOUGH') > -1)
 						{
-							$('#ns1blankspaceLogonChangePasswordStatus').html('Password is not strong enough.' + ns1blankspace.option.passwordErrorMessage);
+							$('#ns1blankspaceLogonChangePasswordStatus').html('Password is not strong enough.');
 						}
 						else
 						{
