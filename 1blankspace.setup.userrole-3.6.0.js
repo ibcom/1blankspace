@@ -20,7 +20,6 @@ ns1blankspace.setup.userRole =
 
 					ns1blankspace.app.set(oParam);
 
-
 				},
 
 	home: 	function (oParam, oResponse)
@@ -555,7 +554,7 @@ ns1blankspace.setup.userRole =
 
 									$vq.add('</td>', {queue: 'access'});	
 													
-									$vq.add('<td id="ns1blankspaceAccessColumn2" class="ns1blankspaceColumn2" style="width:175px;"></td>' +
+									$vq.add('<td id="ns1blankspaceAccessColumn2" class="ns1blankspaceColumn2" style="width:275px;"></td>' +
 													'</tr>', {queue: 'access'});
 
 									$vq.add('</table>', {queue: 'access'});					
@@ -1477,7 +1476,7 @@ ns1blankspace.setup.userRole =
 																'<td class="ns1blankspaceText">' +
 																'<input id="ns1blankspaceSetupAccessDisallowedValues" class="ns1blankspaceText">' +
 																'</td></tr>');
-																		
+													
 														$vq.add('</table>');					
 														
 														$vq.render('#ns1blankspaceAccessColumn1');
@@ -1493,6 +1492,11 @@ ns1blankspace.setup.userRole =
 																		'</td></tr>');
 
 														$vq.add('<tr><td class="ns1blankspaceSubNote" style="padding-top:12px;">Leave method blank to set for all methods.</td></tr>');
+
+														$vq.add('<tr>' +
+																'<td style="padding-top:12px;" class="ns1blankspaceSubNote">' +
+																'Use [[user]], [[contactperson]] or [[contactbusiness]] to set <strong>allowedvalues</strong> and <strong>disallowed</strong> values dynamically.' +
+																'</td></tr>');
 
 														$vq.add('<tr><td id="ns1blankspaceAccessParameterAbout" class="ns1blankspaceSubNote" style="padding-top:12px;"></td></tr>');
 																		
