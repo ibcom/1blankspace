@@ -207,12 +207,15 @@ ns1blankspace.supportIssue =
 
 				$('#ns1blankspaceHomeAction').html(aHTML.join(''));
 
-				ns1blankspace.util.spaceAdmin.show(
+				if (ns1blankspace.session.preGenerallyAvailableInstance)
 				{
-					xhtmlElementID: 'ns1blankspaceSupportIssueSpaceAdmin',
-					xhtmlHeader: '<div class="ns1blankspaceHeader">SPACE ADMINISTRATOR</div>',
-					class: 'ns1blankspaceSubNote'
-				})
+					ns1blankspace.util.spaceAdmin.show(
+					{
+						xhtmlElementID: 'ns1blankspaceSupportIssueSpaceAdmin',
+						xhtmlHeader: '<div class="ns1blankspaceHeader">SPACE ADMIN</div>',
+						class: 'ns1blankspaceSubNote'
+					})
+				}
 
 				$('#ns1blankspaceSupportDebugLogShow').button(
 				{	

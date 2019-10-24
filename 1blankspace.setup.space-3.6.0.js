@@ -53,8 +53,8 @@ ns1blankspace.setup.space =
 						var oSearch = new AdvancedSearch();
 						oSearch.method = 'SETUP_SPACE_SETTINGS_SEARCH';
 						oSearch.addField('lostpassword,lostpasswordtext,minimumpasswordlength,minimumpasswordstrength,notes,' +
-											'passwordexpiredays,passwordlockifwrongcount,passwordlockduration,passwordunlockduration,' +
-											(ns1blankspace.session.preGenerallyAvailableInstance?'spaceadministratoremail,spaceadministratormobile,spaceadministratorname,spaceadministratornotes,spaceadministratorphone':''));
+											'passwordexpiredays,passwordlockifwrongcount,passwordlockduration,passwordunlockduration' +
+											(ns1blankspace.session.preGenerallyAvailableInstance?',spaceadministratoremail,spaceadministratormobile,spaceadministratorname,spaceadministratornotes,spaceadministratorphone':''));
 
 
 						oSearch.getResults(function (data)
