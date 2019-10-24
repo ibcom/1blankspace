@@ -1429,6 +1429,8 @@ ns1blankspace.financial.bankAccount =
 												var iFileSource = ns1blankspace.util.getParam(oParam, 'fileSource').value;
 												var iStatus = ns1blankspace.util.getParam(oParam, 'status').value; //3
 
+												if (oResponse == undefined) {iStep = 1}
+													
 												if (iStep == 1)
 												{
 													oParam = ns1blankspace.util.setParam(oParam, 'step', 2);
