@@ -767,7 +767,7 @@ ns1blankspace.setup.userRole =
 
 														var oSearch = new AdvancedSearch();
 														oSearch.method = 'SETUP_ROLE_METHOD_ACCESS_SEARCH';
-														oSearch.addField('access,accesstext,accessmethod,accessmethodtext,canadd,canremove,canupdate,canuse,guidmandatory');
+														oSearch.addField('access,accesstext,accessmethod,accessmethodtext,canadd,canremove,canupdate,canuse,guidmandatory,rolemethodaccess.method.notes');
 														oSearch.addFilter('role', 'EQUAL_TO', ns1blankspace.objectContext);
 														oSearch.rows = ns1blankspace.option.defaultRows;
 														oSearch.sort('accessmethodtext', 'asc');
@@ -790,7 +790,7 @@ ns1blankspace.setup.userRole =
 															aHTML.push('<table id="ns1blankspaceUserRoleAccess" class="ns1blankspaceContainer" style="font-size:0.875em;">');
 															
 															aHTML.push('<tr class="ns1blankspaceCaption">');
-															aHTML.push('<td class="ns1blankspaceHeaderCaption">Title</td>');
+															aHTML.push('<td class="ns1blankspaceHeaderCaption">Method (Functionality)</td>');
 															aHTML.push('<td class="ns1blankspaceHeaderCaption" style="text-align:center;">Access/Search</td>');
 															aHTML.push('<td class="ns1blankspaceHeaderCaption" style="text-align:center;">(GUID)</td>');
 															aHTML.push('<td class="ns1blankspaceHeaderCaption" style="text-align:center;">Add</td>');
@@ -825,10 +825,19 @@ ns1blankspace.setup.userRole =
 									row:		function (oRow)
 												{
 													var aHTML = [];
+													var sNotes = oRow['rolemethodaccess.method.notes'];
 
 													aHTML.push('<tr class="ns1blankspaceRow">');
 													aHTML.push('<td id="ns1blankspaceUserRoleAccess_method-' + oRow.id + '" class="ns1blankspaceRow">' +
-																			oRow.accessmethodtext + '</td>');
+																			'<div>' + oRow.accessmethodtext + '</div>');
+
+													if (sNotes != '')
+													{
+														aHTML.push('<div class="ns1blankspaceSub">' + sNotes + '</div>')
+													}
+
+													aHTML.push('</td>');
+
 													aHTML.push('<td id="ns1blankspaceUserRoleAccess_search-' + oRow.id + '" class="ns1blankspaceRow" style="text-align:center;">' +
 																			(oRow.canuse=='N'?'-':'Yes') + '</td>');
 													aHTML.push('<td id="ns1blankspaceUserRoleAccess_guid-' + oRow.id + '" class="ns1blankspaceRow ns1blankspaceSub" style="text-align:center;">' +
