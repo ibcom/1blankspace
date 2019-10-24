@@ -790,7 +790,7 @@ ns1blankspace.setup.userRole =
 															aHTML.push('<table id="ns1blankspaceUserRoleAccess" class="ns1blankspaceContainer" style="font-size:0.875em;">');
 															
 															aHTML.push('<tr class="ns1blankspaceCaption">');
-															aHTML.push('<td class="ns1blankspaceHeaderCaption">Method (Functionality)</td>');
+															aHTML.push('<td class="ns1blankspaceHeaderCaption">Functionality (Method)</td>');
 															aHTML.push('<td class="ns1blankspaceHeaderCaption" style="text-align:center;">Access/Search</td>');
 															aHTML.push('<td class="ns1blankspaceHeaderCaption" style="text-align:center;">(GUID)</td>');
 															aHTML.push('<td class="ns1blankspaceHeaderCaption" style="text-align:center;">Add</td>');
