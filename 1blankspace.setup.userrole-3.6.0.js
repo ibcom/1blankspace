@@ -20,7 +20,6 @@ ns1blankspace.setup.userRole =
 
 					ns1blankspace.app.set(oParam);
 
-
 				},
 
 	home: 	function (oParam, oResponse)
@@ -555,7 +554,7 @@ ns1blankspace.setup.userRole =
 
 									$vq.add('</td>', {queue: 'access'});	
 													
-									$vq.add('<td id="ns1blankspaceAccessColumn2" class="ns1blankspaceColumn2" style="width:175px;"></td>' +
+									$vq.add('<td id="ns1blankspaceAccessColumn2" class="ns1blankspaceColumn2" style="width:275px;"></td>' +
 													'</tr>', {queue: 'access'});
 
 									$vq.add('</table>', {queue: 'access'});					
@@ -768,7 +767,7 @@ ns1blankspace.setup.userRole =
 
 														var oSearch = new AdvancedSearch();
 														oSearch.method = 'SETUP_ROLE_METHOD_ACCESS_SEARCH';
-														oSearch.addField('access,accesstext,accessmethod,accessmethodtext,canadd,canremove,canupdate,canuse,guidmandatory');
+														oSearch.addField('access,accesstext,accessmethod,accessmethodtext,canadd,canremove,canupdate,canuse,guidmandatory,rolemethodaccess.method.notes');
 														oSearch.addFilter('role', 'EQUAL_TO', ns1blankspace.objectContext);
 														oSearch.rows = ns1blankspace.option.defaultRows;
 														oSearch.sort('accessmethodtext', 'asc');
@@ -791,7 +790,7 @@ ns1blankspace.setup.userRole =
 															aHTML.push('<table id="ns1blankspaceUserRoleAccess" class="ns1blankspaceContainer" style="font-size:0.875em;">');
 															
 															aHTML.push('<tr class="ns1blankspaceCaption">');
-															aHTML.push('<td class="ns1blankspaceHeaderCaption">Title</td>');
+															aHTML.push('<td class="ns1blankspaceHeaderCaption">Functionality (Method)</td>');
 															aHTML.push('<td class="ns1blankspaceHeaderCaption" style="text-align:center;">Access/Search</td>');
 															aHTML.push('<td class="ns1blankspaceHeaderCaption" style="text-align:center;">(GUID)</td>');
 															aHTML.push('<td class="ns1blankspaceHeaderCaption" style="text-align:center;">Add</td>');
@@ -826,10 +825,19 @@ ns1blankspace.setup.userRole =
 									row:		function (oRow)
 												{
 													var aHTML = [];
+													var sNotes = oRow['rolemethodaccess.method.notes'];
 
 													aHTML.push('<tr class="ns1blankspaceRow">');
 													aHTML.push('<td id="ns1blankspaceUserRoleAccess_method-' + oRow.id + '" class="ns1blankspaceRow">' +
-																			oRow.accessmethodtext + '</td>');
+																			'<div>' + oRow.accessmethodtext + '</div>');
+
+													if (sNotes != '')
+													{
+														aHTML.push('<div class="ns1blankspaceSub">' + sNotes + '</div>')
+													}
+
+													aHTML.push('</td>');
+
 													aHTML.push('<td id="ns1blankspaceUserRoleAccess_search-' + oRow.id + '" class="ns1blankspaceRow" style="text-align:center;">' +
 																			(oRow.canuse=='N'?'-':'Yes') + '</td>');
 													aHTML.push('<td id="ns1blankspaceUserRoleAccess_guid-' + oRow.id + '" class="ns1blankspaceRow ns1blankspaceSub" style="text-align:center;">' +
@@ -1477,7 +1485,7 @@ ns1blankspace.setup.userRole =
 																'<td class="ns1blankspaceText">' +
 																'<input id="ns1blankspaceSetupAccessDisallowedValues" class="ns1blankspaceText">' +
 																'</td></tr>');
-																		
+													
 														$vq.add('</table>');					
 														
 														$vq.render('#ns1blankspaceAccessColumn1');
@@ -1493,6 +1501,11 @@ ns1blankspace.setup.userRole =
 																		'</td></tr>');
 
 														$vq.add('<tr><td class="ns1blankspaceSubNote" style="padding-top:12px;">Leave method blank to set for all methods.</td></tr>');
+
+														$vq.add('<tr>' +
+																'<td style="padding-top:12px;" class="ns1blankspaceSubNote">' +
+																'Use [[user]], [[contactperson]] or [[contactbusiness]] to set <strong>allowedvalues</strong> and <strong>disallowed</strong> values dynamically.' +
+																'</td></tr>');
 
 														$vq.add('<tr><td id="ns1blankspaceAccessParameterAbout" class="ns1blankspaceSubNote" style="padding-top:12px;"></td></tr>');
 																		

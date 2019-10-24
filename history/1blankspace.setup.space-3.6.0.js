@@ -53,9 +53,8 @@ ns1blankspace.setup.space =
 						var oSearch = new AdvancedSearch();
 						oSearch.method = 'SETUP_SPACE_SETTINGS_SEARCH';
 						oSearch.addField('lostpassword,lostpasswordtext,minimumpasswordlength,minimumpasswordstrength,notes,' +
-											'passwordexpiredays,passwordlockifwrongcount,passwordlockduration,passwordunlockduration' +
+											'passwordexpiredays,passwordlockifwrongcount,passwordlockduration,passwordunlockduration,' + 
 											(ns1blankspace.session.preGenerallyAvailableInstance?'spaceadministratoremail,spaceadministratormobile,spaceadministratorname,spaceadministratornotes,spaceadministratorphone':'');
-
 
 						oSearch.getResults(function (data)
 						{
@@ -241,10 +240,7 @@ ns1blankspace.setup.space =
 							aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Forgotten Password</td></tr>' +
 										'<tr><td id="ns1blankspaceSummaryForgottenPassword" class="ns1blankspaceSummary">' +
 										ns1blankspace.objectContextData.lostpasswordtext +
-										'</td></tr>');
-
-
-							ns1blankspace.setup.space
+										'</td></tr>');							
 						}	
 						
 						aHTML.push('</table>');
@@ -699,7 +695,7 @@ ns1blankspace.setup.space =
 										{
 											aHTML.push('<input type="radio" id="ns1blankspaceInitaliseOption-roles" name="radioObject" />' +
 														'<label for="ns1blankspaceInitaliseOption-roles" style="width: 110px; margin-bottom:3px;">' +
-														'User Roles</label>');
+														'Roles</label>');
 										}	
 
 										if (oTemplate["import"].length != 0 && (iType == 3 || iType == -1))
@@ -779,7 +775,7 @@ ns1blankspace.setup.space =
 												}		
 								},
 
-					roles: 	{
+					roles: 		{
 									show:		function (oParam, oResponse)
 												{
 													$('#ns1blankspaceInitialiseColumn2').html(ns1blankspace.xhtml.loading);
@@ -800,8 +796,6 @@ ns1blankspace.setup.space =
 
 														aHTML.push('<table id="ns1blankspaceSetupSpaceInitialiseRoles" class="ns1blankspaceColumn2">');
 												
-														aHTML.push('<tr><td style="padding-bottom:12px;" class="ns1blankspaceSubNote">Import a user role template...</td></tr>');
-
 														$(aRolesRequired).each(function(i, v) 
 														{
 															aHTML.push('<tr class="ns1blankspaceRow">');
@@ -825,91 +819,25 @@ ns1blankspace.setup.space =
 															aHTML.push('</tr>');
 														});
 														
-														aHTML.push('<tr><td style="padding-top:18px;" class="ns1blankspaceSubNote">Add a new user role template stored in a file...</td></tr>');
-
-														aHTML.push('<tr><td>');
-
-														aHTML.push(ns1blankspace.attachments.upload.show(
-														{	
-															object: 29,
-															objectContext: -1,
-															label: '',
-															showUpload: false
-														}));
-
-														aHTML.push('</td></tr>');
-
 														aHTML.push('</table>');
-									
+													
 														$('#ns1blankspaceInitialiseColumn2').html(aHTML.join(''));
 
 														$('#ns1blankspaceSetupSpaceInitialiseRoles .ns1blankspaceRowAdd').button(
 														{
-															label: 'Import Role'
+															label: 'Add Role',
+															icons:
+															{
+																primary: "ui-icon-plus"
+															}
 														})
 														.click(function()
 														{
 															ns1blankspace.setup.space.initialise.roles.add({xhtmlElementID: this.id})
 														})
-														.css('font-size', '0.725em')
-														.css('height', '28px');
-
-														$('#ns1blankspaceUpload').button(
-														{
-															label: "Add"
-														})
-														.click(function()
-														{
-															if ($('#oFile0').val() == '')
-															{
-																ns1blankspace.status.error("Need to select a file.");
-															}
-															else
-															{
-																$.ajax(
-																{
-																	type: 'POST',
-																	url: ns1blankspace.util.endpointURI('CORE_IMPORT_MANAGE'),
-																	success: function(data)
-																	{
-																		if (data.status == 'OK')
-																		{	
-																			$('#objectcontext').val(data.id);	
-																			ns1blankspace.attachments.upload.submit({submit: true, functionPostUpdate: ns1blankspace.setup.space.initialise.roles.import});
-																		}
-																	}
-																});
-															}
-														});
+														.css('font-size', '0.625em')
+														.css('height', '20px');
 													}
-												},
-
-									import: 	function(oParam)
-												{
-													if (oParam.attachments.length > 0)
-													{
-														var iID = oParam.attachments[0].attachmentlink;
-
-														var oData =
-														{
-															id: iID
-														}
-													}
-
-													$.ajax(
-													{
-														type: 'POST',
-														url: ns1blankspace.util.endpointURI('CORE_FILE_READ'),
-														data: oData,
-														dataType: 'json',
-														success: function(data)
-														{
-															var oRoleTemplate = JSON.parse(data.filedata);
-															ns1blankspace.setup.space.initialise.data.template.roles =
-															ns1blankspace.setup.space.initialise.data.template.roles.concat(oRoleTemplate.template.roles)
-															ns1blankspace.setup.space.initialise.roles.show()
-														}
-													});
 												},
 
 									add: 		function(oParam, oResponse)
@@ -1027,10 +955,7 @@ ns1blankspace.setup.space =
 														}
 														else
 														{
-															$('#' + sXHTMLElementID).parent().html('This role was just imported.')
-																	.css('font-size', '0.75em')
-																	.addClass('ns1blankspaceSub');
-															
+															$('#' + sXHTMLElementID).parent().parent().fadeOut(500);
 															ns1blankspace.status.message('Role added');
 														}	
 													}	
@@ -2188,15 +2113,6 @@ ns1blankspace.setup.space =
 													'<input type="radio" id="radioDataBasedSecurityY" name="radioDataBasedSecurity" value="Y"/>Yes' +
 													'</td></tr>');
 
-									// aHTML.push('<tr><td class="ns1blankspaceCaption">' +
-									// 				'Contact Name Order' +
-									// 				'</td></tr>' +
-									// 				'<tr class="ns1blankspace">' +
-									// 				'<td class="ns1blankspaceRadio">' +
-									// 				'<input type="radio" id="radioDataBasedContactNameOrder1" name="radioDataBasedContactNameOrder" value="1"/>Surname, First Name<br />' +
-									// 				'<input type="radio" id="radioDataBasedContactNameOrder2" name="radioDataBasedContactNameOrder" value="2"/>First Name Surname' +
-									// 				'</td></tr>');
-
 									aHTML.push('<tr><td class="ns1blankspaceHeaderCaption" style="padding-top:18px;">SPACE ADMINISTRATOR</td></tr>');
 
 									aHTML.push('<tr class="ns1blankspaceCaption">' +
@@ -2245,11 +2161,10 @@ ns1blankspace.setup.space =
 													'</td></tr>');
 
 									aHTML.push('</table>');					
-											
+									
 									$('#ns1blankspaceMainAdvanced').html(aHTML.join(''));
 
 									ns1blankspace.setup.space.advanced.security();
-									//ns1blankspace.setup.space.advanced.contactNameOrder();
 								},	
 
 					security:	function (oResponse)
@@ -2274,130 +2189,6 @@ ns1blankspace.setup.space =
 										$('[name="radioDataBasedSecurity"][value="' +
 													oResponse.data + '"]').attr('checked', true);
 									}
-								},
-
-					contactNameOrder:	function (oResponse)
-								{	
-									if (oResponse == undefined)
-									{	
-										$.ajax(
-										{
-											type: 'POST',
-											url: ns1blankspace.util.endpointURI('CORE_PROFILE_SEARCH'),
-											data: 'attribute=220',
-											dataType: 'json',
-											success: function(data)
-											{
-												ns1blankspace.setup.space.advanced.contactNameOrder(data);
-											}
-										});
-									}	
-									else
-									{	
-										if (oResponse.data == '') {oResponse.data = '1'}
-										$('[name="radioDataBasedContactNameOrder"][value="' +
-													oResponse.data + '"]').attr('checked', true);
-									}
-								},			
+								}
 				}		
 }								
-
-
-ns1blankspace.setup.space.export =
-{
-	roles:
-	{
-		data: {},
-
-		init: function (oParam, oResponse)
-		{
-			var iRole = ns1blankspace.util.getParam(oParam, 'role').value
-
-			if (iRole != undefined)
-			{
-				if (oResponse == undefined)
-				{
-					var oSearch = new AdvancedSearch();
-					oSearch.method = 'SETUP_ROLE_SEARCH';
-					oSearch.addField('title,notes,modifieddate,selfsignupavailable');
-					oSearch.addFilter('id', 'EQUAL_TO', iRole);
-					oSearch.getResults(function(data) {ns1blankspace.setup.space.export.roles.init(oParam, data)});
-				}
-				else
-				{
-					if (oResponse.data.rows.length != 0)
-					{
-						ns1blankspace.setup.space.export.roles.data.role = oResponse.data.rows[0];
-						ns1blankspace.setup.space.export.roles.process(oParam);
-					}
-					else
-					{
-
-					}
-				}
-			}
-		},
-
-		process: function (oParam, oResponse)
-		{
-			if (oResponse == undefined)
-			{
-				var oSearch = new AdvancedSearch();
-				oSearch.method = 'SETUP_ROLE_METHOD_ACCESS_SEARCH';
-				oSearch.addField('accessmethod,accessmethodtext,canadd,canremove,canupdate,canuse,guidmandatory');
-				oSearch.addFilter('role', 'EQUAL_TO', ns1blankspace.setup.space.export.roles.data.role.id);
-				oSearch.rows = 99999;
-				oSearch.sort('accessmethodtext', 'asc');
-				oSearch.getResults(function(data) {ns1blankspace.setup.space.export.roles.process(oParam, data)});
-			}
-			else
-			{
-				ns1blankspace.setup.space.export.roles.data.methods = oResponse.data.rows;
-				ns1blankspace.setup.space.export.roles.data.file = [];
-				var aFile = ns1blankspace.setup.space.export.roles.data.file;
-
-				aFile.push('{');
-				aFile.push('\t"template":');
-				aFile.push('\t{');
-				aFile.push('\t\t"roles":');
-				aFile.push('\t\t[');
-				aFile.push('\t\t\t{');
-				aFile.push('\t\t\t\t"title": "' + ns1blankspace.setup.space.export.roles.data.role.title + '",');
-
-				aFile.push('\t\t\t\t"methods":');
-				aFile.push('\t\t\t\t[');
-
-				var aFileMethods = [];
-
-				$.each(ns1blankspace.setup.space.export.roles.data.methods, function (m, method)
-				{
-					aFileMethods.push('\t\t\t\t\t{"title": "' + method.accessmethodtext + '", "canuse": "' + method.canuse + '",' +
-												' "canadd": "' + method.canadd + '",' +
-												' "canupdate": "' + method.canupdate + '",' +
-												' "canremove": "' + method.canremove + '",' +
-												' "guidmandatory": "' + method.guidmandatory + '"' +
-												'}');
-				});
-
-				aFile.push(aFileMethods.join(',\r\n'));
-
-				aFile.push('\t\t\t\t]');
-				aFile.push('\t\t\t}');
-				aFile.push('\t\t]');
-				aFile.push('\t}');
-				aFile.push('}');
-
-				ns1blankspace.setup.file.export.saveToFile(
-				{
-					data: aFile.join('\r\n'),
-					filename: 'setup-role-access.json'
-				});
-			}
-		}
-	}
-}
-
-
-
-
-

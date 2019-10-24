@@ -537,10 +537,8 @@ ns1blankspace.admin.schema.methods =
 						var oSearch = new AdvancedSearch();
 						oSearch.method = 'CORE_METHOD_SEARCH';
 						oSearch.addField('addavailable,advancedsearchavailable,endpoint,endpointtext,id,notes,object,objecttext,' +
-										'removeavailable,title,unrestrictedaccess,unrestrictedloggedonaccess,updateavailable,useavailable');
+										'removeavailable,title,unrestrictedaccess,unrestrictedloggedonaccess,updateavailable,useavailable,status,statustext');
 					
-						//Add Status to fields when available
-
 						if (sSearchText != '')
 						{
 							oSearch.addBracket('(');
@@ -726,6 +724,7 @@ ns1blankspace.admin.schema.methods =
 									'<span id="ns1blankspaceAdminSchemaMethods_remove-' + oRow.id + '" class="ns1blankspaceMethodRemove" style="margin-right:2px;"></span>' +
 									'<span id="ns1blankspaceAdminSchemaMethods_edit-' + oRow.id + '" class="ns1blankspaceMethodEdit"' +
 										' data-title="' + oRow["title"] + '"' +
+										' data-status="' + oRow["status"] + '"' +
 										' data-endpoint="' + oRow["endpoint"] + '"' +
 										' data-endpointtext="' + oRow["endpointtext"] + '"' +
 										' data-endpoint="' + oRow["status"] + '"' +
@@ -813,6 +812,7 @@ ns1blankspace.admin.schema.methods =
 						{
 							sHTML = '<table class="table table-condensed">' +
 										'<tr><td style="width:40%;">ID</td><td>' + oDetail.id + '</td></tr>' +
+											'<tr><td>Status</td><td>' + oDetail.statustext + '</td></tr>' +
 											'<tr><td>Unrestricted Access</td><td>' + oDetail.unrestrictedaccess + '</td></tr>' +
 											'<tr><td>Unrestricted Access (Authenticated)</td><td>' + oDetail.unrestrictedloggedonaccess + '</div>' +
 											'<tr><td>Can Be Used To Search</td><td>' + oDetail.useavailable + '</td></tr>' +

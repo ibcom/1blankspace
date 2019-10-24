@@ -54,7 +54,7 @@ ns1blankspace.setup.space =
 						oSearch.method = 'SETUP_SPACE_SETTINGS_SEARCH';
 						oSearch.addField('lostpassword,lostpasswordtext,minimumpasswordlength,minimumpasswordstrength,notes,' +
 											'passwordexpiredays,passwordlockifwrongcount,passwordlockduration,passwordunlockduration' +
-											(ns1blankspace.session.preGenerallyAvailableInstance?'spaceadministratoremail,spaceadministratormobile,spaceadministratorname,spaceadministratornotes,spaceadministratorphone':'');
+											(ns1blankspace.session.preGenerallyAvailableInstance?',spaceadministratoremail,spaceadministratormobile,spaceadministratorname,spaceadministratornotes,spaceadministratorphone':''));
 
 
 						oSearch.getResults(function (data)
@@ -2177,7 +2177,7 @@ ns1blankspace.setup.space =
 								{		
 									var aHTML = [];
 									
-									aHTML.push('<table class="ns1blankspace">');
+									aHTML.push('<table class="ns1blankspace" style="width:310px;">');
 									
 									aHTML.push('<tr><td class="ns1blankspaceCaption">' +
 													'Enable user role based data access' +
@@ -2197,7 +2197,7 @@ ns1blankspace.setup.space =
 									// 				'<input type="radio" id="radioDataBasedContactNameOrder2" name="radioDataBasedContactNameOrder" value="2"/>First Name Surname' +
 									// 				'</td></tr>');
 
-									aHTML.push('<tr><td class="ns1blankspaceHeaderCaption" style="padding-top:18px;">SPACE ADMINISTRATOR</td></tr>');
+									aHTML.push('<tr><td class="ns1blankspaceHeaderCaption" style="padding-top:18px; width:300px;">SPACE ADMINISTRATOR</td></tr>');
 
 									aHTML.push('<tr class="ns1blankspaceCaption">' +
 													'<td class="ns1blankspaceCaption">' +
@@ -2205,7 +2205,7 @@ ns1blankspace.setup.space =
 													'</td></tr>' +
 													'<tr class="ns1blankspace">' +
 													'<td class="ns1blankspaceText">' +
-													'<input id="ns1blankspaceAdvancedSpaceAdministratorName" class="ns1blankspaceText" style="width:200px;">' +
+													'<input id="ns1blankspaceAdvancedSpaceAdministratorName" class="ns1blankspaceText" style="width:300px;">' +
 													'</td></tr>');
 
 									aHTML.push('<tr class="ns1blankspaceCaption">' +
@@ -2214,7 +2214,7 @@ ns1blankspace.setup.space =
 													'</td></tr>' +
 													'<tr class="ns1blankspace">' +
 													'<td class="ns1blankspaceText">' +
-													'<input id="ns1blankspaceAdvancedSpaceAdministratorEmail" class="ns1blankspaceText" style="width:200px;">' +
+													'<input id="ns1blankspaceAdvancedSpaceAdministratorEmail" class="ns1blankspaceText" style="width:300px;">' +
 													'</td></tr>');
 
 									aHTML.push('<tr class="ns1blankspaceCaption">' +
@@ -2223,7 +2223,7 @@ ns1blankspace.setup.space =
 													'</td></tr>' +
 													'<tr class="ns1blankspace">' +
 													'<td class="ns1blankspaceText">' +
-													'<input id="ns1blankspaceAdvancedSpaceAdministratorMobile" class="ns1blankspaceText" style="width:200px;">' +
+													'<input id="ns1blankspaceAdvancedSpaceAdministratorMobile" class="ns1blankspaceText" style="width:300px;">' +
 													'</td></tr>');
 
 									aHTML.push('<tr class="ns1blankspaceCaption">' +
@@ -2232,7 +2232,7 @@ ns1blankspace.setup.space =
 													'</td></tr>' +
 													'<tr class="ns1blankspace">' +
 													'<td class="ns1blankspaceText">' +
-													'<input id="ns1blankspaceAdvancedSpaceAdministratorPhone" class="ns1blankspaceText" style="width:200px;">' +
+													'<input id="ns1blankspaceAdvancedSpaceAdministratorPhone" class="ns1blankspaceText" style="width:300px;">' +
 													'</td></tr>');
 
 									aHTML.push('<tr class="ns1blankspaceCaption">' +
@@ -2241,15 +2241,23 @@ ns1blankspace.setup.space =
 													'</td></tr>' +
 													'<tr class="ns1blankspaceTextMulti">' +
 													'<td class="ns1blankspaceTextMulti">' +
-													'<textarea rows="4" cols="35" style=width:200px; height:140px;" id="ns1blankspaceAdvancedSpaceAdministratorNotes" class="ns1blankspaceTextMulti"></textarea>' +
+													'<textarea rows="4" cols="35" style="width:300px; height:100px;" id="ns1blankspaceAdvancedSpaceAdministratorNotes" class="ns1blankspaceTextMulti"></textarea>' +
 													'</td></tr>');
 
 									aHTML.push('</table>');					
 											
 									$('#ns1blankspaceMainAdvanced').html(aHTML.join(''));
 
+									if (ns1blankspace.objectContextData !== undefined)
+									{
+										$('#ns1blankspaceAdvancedSpaceAdministratorName').val(ns1blankspace.objectContextData.spaceadministratorname);
+										$('#ns1blankspaceAdvancedSpaceAdministratorEmail').val(ns1blankspace.objectContextData.spaceadministratoremail);
+										$('#ns1blankspaceAdvancedSpaceAdministratorMobile').val(ns1blankspace.objectContextData.spaceadministratormobile);
+										$('#ns1blankspaceAdvancedSpaceAdministratorPhone').val(ns1blankspace.objectContextData.spaceadministratorphone);
+										$('#ns1blankspaceAdvancedSpaceAdministratorNotes').val(ns1blankspace.objectContextData.spaceadministratornotes);
+									}
+
 									ns1blankspace.setup.space.advanced.security();
-									//ns1blankspace.setup.space.advanced.contactNameOrder();
 								},	
 
 					security:	function (oResponse)
