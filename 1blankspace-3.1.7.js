@@ -3782,8 +3782,6 @@ ns1blankspace.container =
 	}
 }
 
-}
-
 ns1blankspace.search =
 {
 	data: 		{},
@@ -6167,42 +6165,67 @@ ns1blankspace.util =
 					return bContinue
 				},
 
-	initDatePicker: function (oParam)
+initDatePicker: function (oParam)
 				{
 					var sSelect = ns1blankspace.util.getParam(oParam, 'select', {"default": 'input.ns1blankspaceDate'}).value;
 					var bTime = ns1blankspace.util.getParam(oParam, 'time', {"default": false}).value;
+					var bBootstrap = ns1blankspace.util.getParam(oParam, 'bootstrap', {"default": ns1blankspace.option.bootstrap}).value;
 
-					var oOptions = {dateFormat: ns1blankspace.option.dateFormat};
-
-					if (ns1blankspace.option.defaultDatePickerOptions != undefined)
+					if (bBootstrap)
 					{
-						oOptions = $.extend(true, oOptions, ns1blankspace.option.defaultDatePickerOptions)
-					}
+						var sFormat = mydigitalstructure._util.param.get(oParam, 'format').value;
 
-					if (oParam != undefined)
-					{
-						oOptions = $.extend(true, oOptions, oParam.options)
-					}
+						if (sFormat == undefined)
+						{
+							sFormat = (bTime?'D MMM YYYY LT':'D MMM YYYY')
+						}
 
-					oOptions.beforeShow = ns1blankspace.util.datePickerOpen
-					oOptions.onClose = ns1blankspace.util.datePickerClose
-					oOptions.yearRange = 'c-100:c+50';
+						var oDatepicker = $(sSelect).data("DateTimePicker");
 
-					if (bTime)
-					{
-						oOptions.stepMinute = 5;
-						oOptions.ampm = true;
-						oOptions.controlType = 'select';
-						oOptions.showTime = false;
-						oOptions.showButtonPanel = false;
-						oOptions.oneLine = true;
-						oOptions.timeFormat = 'h:mm tt';
+						if (_.isObject(oDatepicker))
+						{
+							oDatepicker.destroy();
+						}
 
-						$(sSelect).datetimepicker(oOptions);
+						$(sSelect).datetimepicker(
+						{
+							format: sFormat
+						});
 					}
 					else
 					{
-						$(sSelect).datepicker(oOptions);
+						var oOptions = {dateFormat: ns1blankspace.option.dateFormat};
+
+						if (ns1blankspace.option.defaultDatePickerOptions != undefined)
+						{
+							oOptions = $.extend(true, oOptions, ns1blankspace.option.defaultDatePickerOptions)
+						}
+
+						if (oParam != undefined)
+						{
+							oOptions = $.extend(true, oOptions, oParam.options)
+						}
+
+						oOptions.beforeShow = ns1blankspace.util.datePickerOpen
+						oOptions.onClose = ns1blankspace.util.datePickerClose
+						oOptions.yearRange = 'c-100:c+50';
+
+						if (bTime)
+						{
+							oOptions.stepMinute = 5;
+							oOptions.ampm = true;
+							oOptions.controlType = 'select';
+							oOptions.showTime = false;
+							oOptions.showButtonPanel = false;
+							oOptions.oneLine = true;
+							oOptions.timeFormat = 'h:mm tt';
+
+							$(sSelect).datetimepicker(oOptions);
+						}
+						else
+						{
+							$(sSelect).datepicker(oOptions);
+						}
 					}
 				},
 
