@@ -212,6 +212,9 @@ ns1blankspace.app =
 					{
 						if (ns1blankspace.option.bootstrap)
 						{	
+							$(document).off('show.bs.modal');
+							$(document).off('shown.bs.modal');
+
 							$(ns1blankspace.selector).append('<div id="ns1blankspaceContainer">' +
 								'<div id="ns1blankspaceHeader"></div>' +
 								
@@ -225,6 +228,7 @@ ns1blankspace.app =
 								'<div id="ns1blankspaceFooter"></div>' +
 								'<div id="ns1blankspaceMultiUseContainer" style="z-index:9999999;"></div>' +
 								'<div id="ns1blankspaceMultiUseDialog"></div>' +
+								'<div id="ns1blankspaceBootstrapDialog" class="modal fade" role="dialog"></div>' +
 								'<div id="ns1blankspaceToolTip" style="display:none;"></div>' +
 								'</div>');
 						}
@@ -291,6 +295,7 @@ ns1blankspace.app =
 						ns1blankspace.option.dateFormat = 'dd M yy';
 						ns1blankspace.option.auditFields = 'createddate,createduser,createdusertext,modifieddate,modifieduser,modifiedusertext';
 						ns1blankspace.option.retryLimit = 5;
+						ns1blankspace.option.passwordErrorMessage = '';
 									
 						ns1blankspace.timer.messaging = 0;
 						ns1blankspace.timer.delay;
@@ -2848,7 +2853,7 @@ ns1blankspace.logon.changePassword =
 						}
 						else if (oResponse.error.errornotes.toUpperCase().indexOf('PASSWORD NOT STRONG ENOUGH') > -1)
 						{
-							$('#ns1blankspaceLogonChangePasswordStatus').html('Password is not strong enough.');
+							$('#ns1blankspaceLogonChangePasswordStatus').html('Password is not strong enough.' + ns1blankspace.option.passwordErrorMessage);
 						}
 						else
 						{
@@ -3454,7 +3459,7 @@ ns1blankspace.status =
 					if (sError.length < 22)
 					{	
 						$('#ns1blankspaceViewControlActionStatus').html(
-							'<div style="margin:2px; padding: 4px; height:17px; color:white; background-color:red; width:10px; float:left; font-size:1.35em; text-align:center;">!</div>' +
+							'<div style="margin:2px; padding: 4px; height:25px; color:white; background-color:red; width:10px; float:left; font-size:1.35em; text-align:center;">!</div>' +
 							'<div style="margin:2px; margin-left: 6px; padding-left: 7px; padding-top:10px; height:14px;">' + sError + '</div>');
 					}
 					else
@@ -3674,34 +3679,109 @@ ns1blankspace.container =
 				},
 
 	confirm:	function (oParam)
-				{
-					var sHTML = ns1blankspace.util.getParam(oParam, 'html', {'default': ''}).value;
-					var sTitle = ns1blankspace.util.getParam(oParam, 'title', {'default': ''}).value;
-					var aButtons = ns1blankspace.util.getParam(oParam, 'buttons', 
-											{'default': 
-												[{text: "OK", icons: {primary: 'ui-icon-check'}, 
-												click: function() {$(this).dialog('destroy')}}]
-											}).value;
-					
-
-					$('#ns1blankspaceMultiUseDialog')
-						.html('<span style="font-size: 0.75em">' + sHTML + '</span>')
-						.css('position', 'static')
-						.dialog(
+	{
+		var sHTML = ns1blankspace.util.getParam(oParam, 'html', {'default': ''}).value;
+		var sTitle = ns1blankspace.util.getParam(oParam, 'title', {'default': ''}).value;
+		var aButtons = ns1blankspace.util.getParam(oParam, 'buttons', 
+			{
+				'default': 
+				[
+					{
+						text: "OK", 
+						close: true,
+						name: 'btnOK',
+						icons: {primary: (ns1blankspace.option.bootstrap ? 'glyphicon-ok' : 'ui-icon-check')}, 
+						click: function() 
 						{
-							resizable: false,
-							modal: true,
-							title: sTitle,
-							open: function(event, ui) 
-								  { 
-									$('.ui-dialog-titlebar-close').hide();
-									$('.ui-dialog-buttonset').children().css('font-size', '0.625em');
-									$('.ui-dialog-buttonset').css('text-align', 'center')
-									$('.ui-dialog-title').css('font-size', '0.75em');
-								  },
-							buttons: aButtons
-						});
+							if (ns1blankspace.option.bootstrap)
+							{
+								$('#ns1blankspaceBootstrapDialog').modal('hide');
+							}	
+							else
+							{
+								$(this).dialog('destroy')
+							}
+						}
+					}
+				]
+			}).value;
+		var aHTML = [];
+		var fBind = ns1blankspace.util.getParam(oParam, 'bind').value;
+		
+
+		if (!ns1blankspace.option.bootstrap)
+		{
+			$('#ns1blankspaceMultiUseDialog')
+				.html('<span style="font-size: 0.75em">' + sHTML + '</span>')
+				.css('position', 'static')
+				.dialog(
+				{
+					resizable: false,
+					modal: true,
+					title: sTitle,
+					open: function(event, ui) 
+						  { 
+							$('.ui-dialog-titlebar-close').hide();
+							$('.ui-dialog-buttonset').children().css('font-size', '0.625em');
+							$('.ui-dialog-buttonset').css('text-align', 'center')
+							$('.ui-dialog-title').css('font-size', '0.75em');
+						  },
+					buttons: aButtons
+				});
+		}
+		else
+		{
+			
+			aHTML.push('<div class="modal-dialog"><div class="modal-content">');
+			
+			// Header area
+			aHTML.push('<div class="modal-header">' +
+							'<button type="button" class="close" data-dismiss="modal">&times;</button>' +
+							'<h4 class="modal-title">' + sTitle + '</h4></div>');
+
+			// Body area
+			aHTML.push('<div class="modal-body">' + sHTML + '</div>');
+
+			// Footer area (with buttons)
+			aHTML.push('<div class="modal-footer">');
+
+			$.each(aButtons, function()
+			{
+				aHTML.push('<button type="button" class="btn btn-default"');
+				aHTML.push('<a href="#" class="btn btn-default"');
+
+				this.name = this.name || this.text.replace(/ /g, '').replace(/&/g, '');
+				if (this.name)
+				{
+					aHTML.push(' id="' + this.name + '"');
 				}
+				aHTML.push('>' + (this.text ? this.text : this.label) + '</a>') 
+			})
+
+			aHTML.push('</div></div>');
+
+			// Close Modal content area
+			aHTML.push('</div>');
+
+			if (fBind)
+			{
+				oParam.html = aHTML.join('');
+				fBind(oParam);
+			}
+			else
+			{
+				$('#ns1blankspaceBootstrapDialog')
+					.html(aHTML.join(''))
+					.modal('show');
+				$.each(aButtons, function()
+				{
+					$('#' + this.name).on('click', this.click);
+				});
+			}
+		}
+	}
+}
+
 }
 
 ns1blankspace.search =
@@ -4653,7 +4733,7 @@ ns1blankspace.search =
 									   ' class="ns1blankspaceMultiSelect">' +
 									$('#' + sXHTMLElementID).html() + 
 									'</td>' +
-									'<td width="20px" class="ns1blankspaceMultiRemove">Delete</td>' +
+									'<td width="20px" title="Remove" class="ns1blankspaceMultiRemove">Delete</td>' +
 									'</tr>');
 					}
 					
