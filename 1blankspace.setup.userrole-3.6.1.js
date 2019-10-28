@@ -17,10 +17,56 @@ ns1blankspace.setup.userRole =
 					ns1blankspace.objectContext = -1;
 					ns1blankspace.viewName = 'User Roles';
 					ns1blankspace.objectMethod = 'SETUP_ROLE';
+					ns1blankspace.viewOptionsBind = ns1blankspace.setup.userRole.bind;
 
 					ns1blankspace.app.set(oParam);
 
 				},
+
+	bind:		function ()
+				{
+					$('#ns1blankspaceControlActionOptionsRemove').click(function(event)
+					{
+						ns1blankspace.setup.userRole.remove();
+					});
+				},
+
+	remove: 	function  (oParam, oResponse)
+				{
+					if (oResponse == undefined)
+					{
+						var oSearch = new AdvancedSearch();
+						oSearch.method = 'SETUP_USER_ROLE_SEARCH';
+						oSearch.addField('id');
+						oSearch.addFilter('role', 'EQUAL_TO', ns1blankspace.objectContext)
+						oSearch.rows = 1;
+						oSearch.getResults(function(data) {ns1blankspace.setup.userRole.remove(oParam, data)});
+					}
+					else
+					{
+						if (oResponse.data.rows.length != 0)
+						{
+							ns1blankspace.status.error('You can not delete this role as it has users associated with it.')
+						}
+						else
+						{
+							var oData = {id: ns1blankspace.objectContext, remove: 1}
+
+							$.ajax(
+							{
+								type: 'POST',
+								url: ns1blankspace.util.endpointURI('SETUP_ROLE_MANAGE'),
+								data: oData,
+								dataType: 'json',
+								success: function ()
+								{
+									ns1blankspace.status.message('User role removed')
+									ns1blankspace.setup.userRole.init();
+								}
+							});	
+						}
+					}
+				},		
 
 	home: 	function (oParam, oResponse)
 				{
@@ -851,7 +897,7 @@ ns1blankspace.setup.userRole =
 
 													aHTML.push('<td style="width:30px;text-align:right;" class="ns1blankspaceRow">' + 
 																	'<span id="ns1blankspaceAdminSchemaMethodsEdit_remove-' + oRow.id + '" class="ns1blankspaceUserRoleAccessRemove" style="margin-right:2px;"></span>' +
-																	'</td>')
+																	'</td>');
 
 													aHTML.push('</tr>');
 
@@ -860,7 +906,7 @@ ns1blankspace.setup.userRole =
 
 									bind: 	function ()
 												{
-													$('#ns1blankspaceUserRoleAccess .ns1blankspaceUserRoleAccessRemove').button(
+													$('#ns1blankspaceUserRoleAccess .ns1blankspaceUserRoleAccessRemove:visible').button(
 													{
 														text: false,
 														icons:
@@ -1353,7 +1399,7 @@ ns1blankspace.setup.userRole =
 														}
 														else
 														{		
-															aHTML.push('<table id="ns1blankspaceUserRoleAccess" class="ns1blankspaceContainer" style="font-size:0.875em;">');
+															aHTML.push('<table id="ns1blankspaceUserRoleParameterAccess" class="ns1blankspaceContainer" style="font-size:0.875em;">');
 															
 															aHTML.push('<tr class="ns1blankspaceCaption">');
 															aHTML.push('<td class="ns1blankspaceHeaderCaption" style="vertical-align:bottom;">Method</td>');
@@ -1408,9 +1454,9 @@ ns1blankspace.setup.userRole =
 													return $vq.get('');
 												},
 
-									bind: 		function (oParam)
+									bind: 	function (oParam)
 												{
-													$('#ns1blankspaceUserRoleAccess .ns1blankspaceRowRemove').button(
+													$('#ns1blankspaceUserRoleParameterAccess .ns1blankspaceRowRemove:visible').button(
 													{
 														text: false,
 														icons: 
@@ -1424,7 +1470,7 @@ ns1blankspace.setup.userRole =
 														{
 															xhtmlElementID: this.id,
 															method: 'SETUP_ROLE_PARAMETER_ACCESS_MANAGE',
-															ifNoneMessage: 'No property value based access set up.'
+															ifNoneMessage: 'No property based access set up.'
 														});
 													})
 													.css('width', '15px')
@@ -1437,7 +1483,7 @@ ns1blankspace.setup.userRole =
 													});
 												},
 												
-									edit: 		function (oParam, oResponse)
+									edit: 	function (oParam, oResponse)
 												{
 													var sID; 
 									
@@ -1696,6 +1742,26 @@ ns1blankspace.setup.userRole =
 									{
 										ns1blankspace.setup.user.init({id: (this.id).split('-')[1]})
 									});
+
+									$('#ns1blankspaceUserRoleAccessUsers .ns1blankspaceRowRemove:visible').button(
+									{
+										text: false,
+										icons:
+										{
+											primary: "ui-icon-close"
+										}
+									})
+									.click(function()
+									{
+										ns1blankspace.remove(
+										{
+											xhtmlElementID: this.id,
+											method: 'SETUP_USER_ROLE_MANAGE',
+											ifNoneMessage: 'No users have been assigned to this role.'
+										});
+									})
+									.css('width', '15px')
+									.css('height', '17px');
 								}		
 				},
 

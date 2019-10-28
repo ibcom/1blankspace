@@ -920,6 +920,8 @@ ns1blankspace.setup.space =
 													var sRoleTitle;
 													var aRoleMethods;
 													var iRoleMethod = 0;
+													var iRoleProperty = 0;
+													var aRoleProperties = [];
 
 													if (oParam == undefined) {oParam = {}}
 													if (oParam.step != undefined) {iStep = oParam.step}
@@ -928,6 +930,8 @@ ns1blankspace.setup.space =
 													if (oParam.roleTitle != undefined) {sRoleTitle = oParam.roleTitle}
 													if (oParam.roleMethods != undefined) {aRoleMethods = oParam.roleMethods}
 													if (oParam.roleMethod != undefined) {iRoleMethod = oParam.roleMethod}
+													if (oParam.roleProperty != undefined) {iRoleProperty = oParam.roleProperty}
+													if (oParam.roleProperties != undefined) {aRoleProperties = oParam.roleProperties}
 
 													if (iStep == 1)
 													{
@@ -963,6 +967,13 @@ ns1blankspace.setup.space =
 														var aMethods = $.grep(ns1blankspace.setup.space.initialise.data.template.roles, function (a) { return a.title == sRoleTitle})[0].methods;
 														var aMethodTitles = [];
 
+														var aProperties = $.grep(ns1blankspace.setup.space.initialise.data.template.roles, function (a) { return a.title == sRoleTitle})[0].properties;
+
+														if (aProperties != undefined)
+														{
+															oParam = ns1blankspace.util.setParam(oParam, 'roleProperties', aProperties);
+														}
+
 														$(aMethods).each(function() 
 														{
 															aMethodTitles.push(this.title);
@@ -984,12 +995,57 @@ ns1blankspace.setup.space =
 															{
 																oParam.step = 3;
 																oParam.roleMethods = oResponse.data.rows;
+																oParam.roleProperties = aProperties;
 																ns1blankspace.setup.space.initialise.roles.add(oParam)
 															});
 														}
-													}	
+													}
 
 													if (iStep == 3)
+													{
+														if (iRoleProperty < aRoleProperties.length)
+														{
+															ns1blankspace.status.working('Adding property rule ' + (iRoleProperty + 1) + ' of ' + aRoleProperties.length);
+
+															var oData = 
+															{
+																role: iRole,
+																accessmethod: aRoleProperties[iRoleProperty].method,
+																allowedvalues: aRoleProperties[iRoleProperty].allowedvalues,
+																disallowedvalues: aRoleProperties[iRoleProperty].disallowedvalues,
+																notes: aRoleProperties[iRoleProperty].notes,
+																parameter: aRoleProperties[iRoleProperty].name,
+																type: aRoleProperties[iRoleProperty].type
+															}	
+
+															$.ajax(
+															{
+																type: 'POST',
+																url: ns1blankspace.util.endpointURI('SETUP_ROLE_PARAMETER_ACCESS_MANAGE'),
+																data: oData,
+																dataType: 'json',
+																success: function(data)
+																{
+																	if (data.status == "OK")
+																	{
+																		oParam.roleProperty = iRoleProperty + 1;
+																		ns1blankspace.setup.space.initialise.roles.add(oParam)
+																	}
+																	else
+																	{
+																		ns1blankspace.status.error(data.error.errornotes);
+																	}
+																}
+															});
+														}
+														else
+														{
+															oParam.step = 4;
+															ns1blankspace.setup.space.initialise.roles.add(oParam)
+														}	
+													}	
+
+													if (iStep == 4)
 													{
 														if (iRoleMethod < aRoleMethods.length)
 														{
@@ -1075,8 +1131,7 @@ ns1blankspace.setup.space =
 													{
 														ns1blankspace.setup.space.initialise["import"].add(oParam)
 													})
-													.css('font-size', '0.75em')
-													.css('height', '24px');
+													.css('font-size', '0.75em');
 												},
 
 									add: 		function(oParam, oResponse)
@@ -2336,13 +2391,32 @@ ns1blankspace.setup.space.export =
 					if (oResponse.data.rows.length != 0)
 					{
 						ns1blankspace.setup.space.export.roles.data.role = oResponse.data.rows[0];
-						ns1blankspace.setup.space.export.roles.process(oParam);
+						ns1blankspace.setup.space.export.roles.properties(oParam);
 					}
 					else
 					{
 
 					}
 				}
+			}
+		},
+
+		properties: function (oParam, oResponse)
+		{
+			if (oResponse == undefined)
+			{
+				var oSearch = new AdvancedSearch();
+				oSearch.method = 'SETUP_ROLE_PARAMETER_ACCESS_SEARCH';
+				oSearch.addField('accessmethod,accessmethodtext,allowedvalues,disallowedvalues,id,notes,parameter,role,roletext,type');
+				oSearch.addFilter('role', 'EQUAL_TO', ns1blankspace.setup.space.export.roles.data.role.id);
+				oSearch.rows = 99999;
+				oSearch.sort('accessmethodtext', 'asc');
+				oSearch.getResults(function(data) {ns1blankspace.setup.space.export.roles.properties(oParam, data)});
+			}
+			else
+			{
+				ns1blankspace.setup.space.export.roles.data.properties = oResponse.data.rows;
+				ns1blankspace.setup.space.export.roles.process(oParam);
 			}
 		},
 
@@ -2389,7 +2463,29 @@ ns1blankspace.setup.space.export =
 
 				aFile.push(aFileMethods.join(',\r\n'));
 
+				aFile.push('\t\t\t\t],');
+
+				aFile.push('\t\t\t\t"properties":');
+				aFile.push('\t\t\t\t[');
+
+				var aFileMethods = [];
+
+				$.each(ns1blankspace.setup.space.export.roles.data.properties, function (p, property)
+				{
+					aFileMethods.push('\t\t\t\t\t{"name": "' + property.parameter + '", ' +
+												' "methodtitle": "' + property.accessmethodtext + '", ' +
+												' "method": "' + property.accessmethod + '",' +
+												' "allowedvalues": "' + property.allowedvalues + '",' +
+												' "disallowedvalues": "' + property.disallowedvalues + '",' +
+												' "notes": "' + property.notes + '",' +
+												' "type": "' + property.type + '"' +
+												'}');
+				});
+
+				aFile.push(aFileMethods.join(',\r\n'));
+
 				aFile.push('\t\t\t\t]');
+
 				aFile.push('\t\t\t}');
 				aFile.push('\t\t]');
 				aFile.push('\t}');
@@ -2398,7 +2494,7 @@ ns1blankspace.setup.space.export =
 				ns1blankspace.setup.file.export.saveToFile(
 				{
 					data: aFile.join('\r\n'),
-					filename: 'setup-role-access.json'
+					filename: 'setup-role-access-' + _.kebabCase(ns1blankspace.setup.space.export.roles.data.role.title) + '.json'
 				});
 			}
 		}
