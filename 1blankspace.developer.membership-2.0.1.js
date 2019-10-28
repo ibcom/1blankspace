@@ -620,6 +620,10 @@ ns1blankspace.developer.membership =
 												aHTML.push('</table>');
 
 												$(ns1blankspace.xhtml.container).html(aHTML.join(''));
+												$(ns1blankspace.xhtml.container).css(
+												{
+													width: $(ns1blankspace.xhtml.container + ' table').width()
+												});
 												$(ns1blankspace.xhtml.container).show();
 												
 												$('td.ns1blankspaceRowSelect').click(function(event)
@@ -829,7 +833,7 @@ ns1blankspace.developer.membership =
 										        ns1blankspace.timer.delayCurrent = setTimeout("ns1blankspace.developer.membership.subscriptions.search('ns1blankspaceMembershipSubscriptionsRegistration')", ns1blankspace.option.typingWait);
 											});	
 												
-											$('#ns1blankspaceMembershipSubscriptionsRegistration').live('blur', function() 
+											$(document).on('blur', '#ns1blankspaceMembershipSubscriptionsRegistration', function() 
 											{
 												$(this).removeClass('ns1blankspaceMasterHighlight');
 											});

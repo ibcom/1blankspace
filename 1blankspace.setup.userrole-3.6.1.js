@@ -809,7 +809,7 @@ ns1blankspace.setup.userRole =
 														.click(function()
 														{
 															 ns1blankspace.setup.space.export.roles.init({role: ns1blankspace.objectContext});
-														})
+														});
 
 														var oSearch = new AdvancedSearch();
 														oSearch.method = 'SETUP_ROLE_METHOD_ACCESS_SEARCH';

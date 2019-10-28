@@ -261,7 +261,7 @@ ns1blankspace.scripts =
 	},
 	{
 		nameSpace: '1blankspace.action',
-		source: '/site/1903/1blankspace.action-3.5.8.js'
+		source: '/site/1903/1blankspace.action-3.6.1.js'
 	},
 	{
 		nameSpace: '1blankspace.messaging.conversation',
@@ -297,7 +297,7 @@ ns1blankspace.scripts =
 	},
 	{
 		nameSpace: '1blankspace.order',
-		source: '/site/1903/1blankspace.order-3.5.8.js'
+		source: '/site/1903/1blankspace.order-3.6.1.js'
 	},
 	{
 		nameSpace: '1blankspace.financial',
@@ -337,7 +337,7 @@ ns1blankspace.scripts =
 	},
 	{
 		nameSpace: '1blankspace.financial.payroll',
-		source: '/site/1903/1blankspace.financial.payroll-3.5.9.js'
+		source: '/site/1903/1blankspace.financial.payroll-3.6.1.js'
 	},
 	{
 		nameSpace: '1blankspace.financial.budget',
@@ -393,7 +393,7 @@ ns1blankspace.scripts =
 	},
 	{
 		nameSpace: '1blankspace.setup.user',
-		source: '/site/1903/1blankspace.setup.user-3.4.6.js'
+		source: '/site/1903/1blankspace.setup.user-3.6.1.js'
 	},
 	{
 		nameSpace: '1blankspace.setup.userRole',
@@ -421,7 +421,7 @@ ns1blankspace.scripts =
 	},
 	{
 		nameSpace: '1blankspace.setup.file',
-		source: '/site/1903/1blankspace.setup.file-3.5.9.js'
+		source: '/site/1903/1blankspace.setup.file-3.6.1.js'
 	},
 	{
 		nameSpace: '1blankspace.developer.space',
@@ -473,7 +473,7 @@ ns1blankspace.scripts =
 	},
 	{
 		nameSpace: '1blankspace.developer.membership',
-		source: '/jscripts/1blankspace.developer.membership-2.0.1.js'
+		source: '/site/1903/1blankspace.developer.membership-2.0.1.js'
 	},
 	{
 		nameSpace: '1blankspace.util.timezone',
