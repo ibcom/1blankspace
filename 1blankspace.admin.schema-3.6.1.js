@@ -899,6 +899,8 @@ ns1blankspace.admin.schema.methods =
 										' data-status="' + oRow["status"] + '"' +
 										' data-endpoint="' + oRow["endpoint"] + '"' +
 										' data-endpointtext="' + oRow["endpointtext"] + '"' +
+										' data-object="' + oRow["object"] + '"' +
+										' data-objecttext="' + oRow["objecttext"] + '"' +
 										' data-endpoint="' + oRow["status"] + '"' +
 										' data-addavailable="' + oRow["addavailable"] + '"' +
 										' data-removeavailable="' + oRow["removeavailable"] + '"' +
@@ -1169,6 +1171,17 @@ ns1blankspace.admin.schema.methods =
 
 					aHTML.push('<tr class="ns1blankspaceCaption">' +
 									'<td class="ns1blankspaceCaption">' +
+									'Linked Object' +
+									'</td></tr>' +
+									'<tr class="ns1blankspace">' +
+									'<td class="ns1blankspaceText">' +
+									'<input id="ns1blankspaceAdminSchemaMethodsEditObject" class="ns1blankspaceSelect"' +
+										' data-method="CORE_OBJECT_SEARCH"' +
+										' data-columns="title">' +
+									'</td></tr>');
+
+					aHTML.push('<tr class="ns1blankspaceCaption">' +
+									'<td class="ns1blankspaceCaption">' +
 									'Notes' +
 									'</td></tr>' +
 									'<tr class="ns1blankspaceTextMulti">' +
@@ -1183,8 +1196,13 @@ ns1blankspace.admin.schema.methods =
 					if (iID != '')
 					{
 						$('#ns1blankspaceAdminSchemaMethodsEditTitle').val(ns1blankspace.util.getData(oParam, 'data-title').value);
+
 						$('#ns1blankspaceAdminSchemaMethodsEditEndpoint').val(ns1blankspace.util.getData(oParam, 'data-endpointtext').value);
 						$('#ns1blankspaceAdminSchemaMethodsEditEndpoint').attr('data-id', ns1blankspace.util.getData(oParam, 'data-endpoint').value);
+
+						$('#ns1blankspaceAdminSchemaMethodsEditObject').val(ns1blankspace.util.getData(oParam, 'data-objecttext').value);
+						$('#ns1blankspaceAdminSchemaMethodsEditObject').attr('data-id', ns1blankspace.util.getData(oParam, 'data-object').value);
+
 						$('[name="radioStatus"][value="' + ns1blankspace.util.getData(oParam, 'data-status').value + '"]').attr('checked', true);
 
 						$('[name="radioUnrestrictedAccess"][value="' + ns1blankspace.util.getData(oParam, 'data-unrestrictedaccess').value + '"]').attr('checked', true);
@@ -1213,6 +1231,7 @@ ns1blankspace.admin.schema.methods =
 							id: iID,
 							title: $('#ns1blankspaceAdminSchemaMethodsEditTitle').val(),
 							endpoint: $('#ns1blankspaceAdminSchemaMethodsEditEndpoint').attr('data-id'),
+							object: $('#ns1blankspaceAdminSchemaMethodsEditObject').attr('data-id'),
 							status: $('input[name="radioStatus"]:checked').val(),
 							unrestrictedaccess: $('[name="radioUnrestrictedAccess"]:checked').val(),
 							unrestrictedloggedonaccess: $('[name="radioUnrestrictedLoggedOnAccess"]:checked').val(),
