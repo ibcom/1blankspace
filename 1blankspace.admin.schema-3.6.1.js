@@ -254,7 +254,7 @@ ns1blankspace.admin.schema.endpoints =
 						aHTML.push('<table class="ns1blankspaceContainer">' +
 										'<tr class="ns1blankspaceContainer">' +
 										'<td id="ns1blankspaceAdminSchemaEndpointsColumn1"></td>' +
-										'<td id="ns1blankspaceAdminSchemaEndpointsColumn2" style="width:115px;"></td>' +
+										'<td id="ns1blankspaceAdminSchemaEndpointsColumn2" style="width:300px;"></td>' +
 										'</tr>' +
 										'</table>');				
 						
@@ -285,7 +285,7 @@ ns1blankspace.admin.schema.endpoints =
 							oSearch.addBracket(')');
 						}
 
-						oSearch.rows = 999;
+						oSearch.rows = 100;
 						oSearch.sort('title', 'asc');
 						oSearch.getResults(function(data) {ns1blankspace.admin.schema.endpoints.show(oParam, data)});
 					}
@@ -406,8 +406,9 @@ ns1blankspace.admin.schema.endpoints =
 
 					aHTML.push('<tr id="ns1blankspaceAdminSchemaEndpoints_container-' + oRow["id"] + '">');
 					
-					aHTML.push('<td id="ns1blankspaceAdminSchemaEndpoints_title-' + oRow["id"] + '" class="ns1blankspaceRow ns1blankspaceRowSelect">' +
-										oRow["title"] + '</td>');
+					aHTML.push('<td class="ns1blankspaceRow">' +
+										'<div class="ns1blankspaceRowSelect" id="ns1blankspaceAdminSchemaEndpoints_title-' + oRow["id"] + '" style="font-size:1em;">' + oRow["title"] + '</div>' + 
+										(oRow.notes!=''?'<div class="ns1blankspaceSubNote">' + oRow.notes + '</div>':'') + '</td>');
 
 				
 					aHTML.push('<td id="ns1blankspaceAdminSchemaEndpoints_type-' + oRow["id"] + '" class="ns1blankspaceRow">' +
@@ -418,7 +419,14 @@ ns1blankspace.admin.schema.endpoints =
 
 					if (ns1blankspace.user.super)
 					{
-						//edit
+						aHTML.push('<td style="width:70px;text-align:right;" class="ns1blankspaceRow">' + 
+									'<span id="ns1blankspaceAdminSchemaEndpoints_remove-' + oRow.id + '" class="ns1blankspaceEndpointRemove" style="margin-right:2px;"></span>' +
+									'<span id="ns1blankspaceAdminSchemaEndpoints_edit-' + oRow.id + '" class="ns1blankspaceEndpointEdit"' +
+										' data-title="' + oRow["title"] + '"' +
+										' data-type="' + oRow["type"] + '"' +
+										' data-category="' + oRow["category"] + '"' +
+										' data-notes="' + window.btoa(oRow["notes"]) + '"' +
+										'></span></td>');
 					}
 
 					aHTML.push('</tr>');
@@ -431,7 +439,22 @@ ns1blankspace.admin.schema.endpoints =
 					$('.ns1blankspaceRowSelect:visible').click(function()
 					{
 						ns1blankspace.admin.schema.endpoints.details({xhtmlElementID: this.id})
-					});	
+					});
+
+					$('#ns1blankspaceAdminSchemaEndpoints .ns1blankspaceEndpointEdit').button(
+					{
+						text: false,
+						icons:
+						{
+							primary: "ui-icon-pencil"
+						}
+					})
+					.click(function()
+					{
+						ns1blankspace.admin.schema.endpoints.edit({xhtmlElementID: this.id})
+					})
+					.css('width', '15px')
+					.css('height', '17px');	
 				},
 
 	details: 	
@@ -464,10 +487,159 @@ ns1blankspace.admin.schema.endpoints =
 							{
 								sHTML = sHTML + '<div class="ns1blankspaceSummaryCaption">Notes</div><div>' + oDetail.notes + '</div>';
 							}
-							
+
+							sHTML = sHTML + '<div style="margin-top:14px;" id="ns1blankspaceAdminSchemaEndpointMethods-' + oDetail.title + '" class="ns1blankspaceViewLink">Methods</div>';
+	
 							$('#ns1blankspaceAdminSchemaEndpoints_container-' + sKey).after('<tr id="ns1blankspaceAdminSchemaEndpoints_container_details-' + sKey + '">' +
 								'<td colspan=3><div style="background-color: #F3F3F3; padding:8px; color:#444444; font-weight:100; font-size:0.875em;">' + sHTML + '</div></td></tr>');	
+						
+							$('#ns1blankspaceAdminSchemaEndpointMethods-' + oDetail.title).click().click(function ()
+							{
+								$('.ns1blankspaceControl').removeClass('ns1blankspaceHighlight');
+								$('#ns1blankspaceControlMethods').addClass('ns1blankspaceHighlight');
+								ns1blankspace.show({selector: '#ns1blankspaceMainMethods'});
+								ns1blankspace.admin.schema.methods.show({searchText: this.id.split('-')[1]})
+							});
 						}
+					}
+				},
+
+	edit:		function (oParam, oResponse)
+				{
+					var iID = ns1blankspace.util.getParam(oParam, 'xhtmlElementID', {index: 1}).value;
+					if (iID == undefined) {iID = ''}
+		
+					var aHTML = [];
+
+					aHTML.push('<table class="ns1blankspaceContainer">');
+
+					aHTML.push('<tr class="ns1blankspaceContainer">' +
+									'<td id="ns1blankspaceAdminSchemaEndpointsEditColumn1"></td>' +
+									'<td id="ns1blankspaceAdminSchemaEndpointsEditColumn2" style="width:50px;"></td>' +
+									'</tr>');
+
+					aHTML.push('</table>');					
+					
+					$('#ns1blankspaceAdminSchemaEndpointsColumn2').html(aHTML.join(''));
+
+					var aHTML = [];
+								
+					aHTML.push('<table class="ns1blankspaceColumn2a">' +
+									'<tr><td><span id="ns1blankspaceAdminSchemaEndpointsEditSave" data-id="' + iID + '" class="ns1blankspaceAction">' +
+									'Save</span></td></tr>' +
+									'<tr><td><span id="ns1blankspaceAdminSchemaEndpointsEditCancel" class="ns1blankspaceAction">' +
+									'Cancel</span></td></tr>' +
+									'</table>');					
+					
+					$('#ns1blankspaceAdminSchemaEndpointsEditColumn2').html(aHTML.join(''));
+					
+					$('#ns1blankspaceAdminSchemaEndpointsEditSave').button(
+					{
+						text: "Save"
+					})
+					.click(function()
+					{
+						ns1blankspace.admin.schema.endpoints.save({id: $(this).attr('data-id')})
+					})
+					.css('width', '65px');
+
+					$('#ns1blankspaceAdminSchemaEndpointsEditCancel').button(
+					{
+						text: "Cancel"
+					})
+					.click(function()
+					{
+						ns1blankspace.admin.schema.endpoints.show();
+					})
+					.css('width', '65px');
+
+					var aHTML = [];
+
+					aHTML.push('<table class="ns1blankspaceColumn2" style="width:200px;">');
+
+					aHTML.push('<tr class="ns1blankspaceCaption">' +
+									'<td class="ns1blankspaceCaption">' +
+									'Title' +
+									'</td></tr>' +
+									'<tr class="ns1blankspace">' +
+									'<td class="ns1blankspaceText">' +
+									'<input id="ns1blankspaceAdminSchemaEndpointsEditTitle" class="ns1blankspaceText">' +
+									'</td></tr>');
+
+					aHTML.push('<tr class="ns1blankspaceCaption">' +
+									'<td class="ns1blankspaceCaption">' +
+									'Category' +
+									'</td></tr>' +
+									'<tr class="ns1blankspace">' +
+									'<td class="ns1blankspaceRadio">' +
+									'<input type="radio" id="radioCategory1" name="radioCategory" value="1"/>Organisational' +
+									'<br /><input type="radio" id="radioCategory2" name="radioCategory" value="2"/>Set up' +
+									'<br /><input type="radio" id="radioCategory3" name="radioCategory" value="3"/>System' +
+									'<br /><input type="radio" id="radioCategory3" name="radioCategory" value="4"/>Hidden' +
+									'</td></tr>');
+
+					aHTML.push('<tr class="ns1blankspaceCaption">' +
+									'<td class="ns1blankspaceCaption">' +
+									'Type' +
+									'</td></tr>' +
+									'<tr class="ns1blankspace">' +
+									'<td class="ns1blankspaceRadio">' +
+									'<input type="radio" id="radioType1" name="radioType" value="1"/>Common' +
+									'<br /><input type="radio" id="radioType2" name="radioType" value="2"/>Dedicated' +
+									'</td></tr>');
+
+					aHTML.push('<tr class="ns1blankspaceCaption">' +
+									'<td class="ns1blankspaceCaption">' +
+									'Notes' +
+									'</td></tr>' +
+									'<tr class="ns1blankspaceTextMulti">' +
+									'<td class="ns1blankspaceTextMulti">' +
+									'<textarea rows="10" cols="35" id="ns1blankspaceAdminSchemaEndpointsEditNotes" class="ns1blankspaceTextMulti"></textarea>' +
+									'</td></tr>');
+
+					aHTML.push('</table>');		
+
+					$('#ns1blankspaceAdminSchemaEndpointsEditColumn1').html(aHTML.join(''));
+
+					if (iID != '')
+					{
+						$('#ns1blankspaceAdminSchemaEndpointsEditTitle').val(ns1blankspace.util.getData(oParam, 'data-title').value);
+						$('[name="radioCategory"][value="' + ns1blankspace.util.getData(oParam, 'data-category').value + '"]').attr('checked', true);
+						$('[name="radioType"][value="' + ns1blankspace.util.getData(oParam, 'data-type').value + '"]').attr('checked', true);
+						$('#ns1blankspaceAdminSchemaEndpointsEditNotes').val(window.atob(ns1blankspace.util.getData(oParam, 'data-notes').value));	 
+					}
+				},
+
+	save: 	function (oParam, oResponse)
+				{
+					if (oResponse == undefined)
+					{
+						var iID = ns1blankspace.util.getParam(oParam, 'id').value;
+
+						var oData =
+						{
+							id: iID,
+							title: $('#ns1blankspaceAdminSchemaEndpointsEditTitle').val(),
+							category: $('input[name="radioCategory"]:checked').val(),
+							type: $('input[name="radioType"]:checked').val(),
+							notes: $('#ns1blankspaceAdminSchemaEndpointsEditNotes').val()
+						}
+
+						$.ajax(
+						{
+							type: 'POST',
+							url: ns1blankspace.util.endpointURI('ADMIN_ENDPOINT_MANAGE'),
+							data: oData,
+							dataType: 'json',
+							success: function(data) 
+							{
+								if (data.status == 'OK')
+								{
+									ns1blankspace.status.message('Saved');
+									ns1blankspace.admin.schema.endpoints.show()
+								}
+							}
+						});
 					}
 				}				
 }
@@ -603,7 +775,7 @@ ns1blankspace.admin.schema.methods =
 							xhtml: aHTML.join(''),
 							showMore: (oResponse.morerows == "true"),
 							more: oResponse.moreid,
-							rows: 100,
+							rows: 20,
 							functionShowRow: ns1blankspace.admin.schema.methods.row,
 							functionOpen: undefined,
 							functionOnNewPage: ns1blankspace.admin.schema.methods.bind
@@ -708,8 +880,9 @@ ns1blankspace.admin.schema.methods =
 
 					aHTML.push('<tr id="ns1blankspaceAdminSchemaMethods_container-' + oRow["id"] + '">');
 					
-					aHTML.push('<td id="ns1blankspaceAdminSchemaMethods_title-' + oRow["id"] + '" class="ns1blankspaceRow ns1blankspaceRowSelect">' +
-										oRow["title"] + '</td>');
+					aHTML.push('<td class="ns1blankspaceRow">' +
+										'<div id="ns1blankspaceAdminSchemaMethods_title-' + oRow["id"] + '" class="ns1blankspaceRowSelect" style="font-size:1em;">' + oRow["title"] + '</div>' + 
+										(oRow.notes!=''?'<div class="ns1blankspaceSubNote">' + oRow.notes + '</div>':'') + '</td>');
 
 					aHTML.push('<td id="ns1blankspaceAdminSchemaMethods_properties-' + oRow["id"] + '" style="text-align:center;" class="ns1blankspaceRow">' +
 										(oRow["properties"]=='0'?'<div class="ns1blankspaceSubNote">-</div>':oRow["properties"]) + '</td>');
@@ -769,7 +942,7 @@ ns1blankspace.admin.schema.methods =
 					.css('width', '15px')
 					.css('height', '17px');
 
-					$('#ns1blankspaceAdminSchemaMethods .ns1blankspaceMethodEdit').button(
+					$('#ns1blankspaceAdminSchemaMethods .ns1blankspaceMethodEdit:visible').button(
 					{
 						text: false,
 						icons:
@@ -845,7 +1018,7 @@ ns1blankspace.admin.schema.methods =
 								$('#ns1blankspaceControlProperties').addClass('ns1blankspaceHighlight');
 								ns1blankspace.show({selector: '#ns1blankspaceMainProperties'});
 								ns1blankspace.admin.schema.properties.show({searchText: this.id.split('-')[1]})
-							})
+							});
 						}
 					}
 				},
