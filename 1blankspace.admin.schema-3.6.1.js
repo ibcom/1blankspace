@@ -409,7 +409,6 @@ ns1blankspace.admin.schema.endpoints =
 					aHTML.push('<td class="ns1blankspaceRow">' +
 										'<div class="ns1blankspaceRowSelect" id="ns1blankspaceAdminSchemaEndpoints_title-' + oRow["id"] + '" style="font-size:1em;">' + oRow["title"] + '</div>' + 
 										(oRow.notes!=''?'<div class="ns1blankspaceSubNote">' + oRow.notes + '</div>':'') + '</td>');
-
 				
 					aHTML.push('<td id="ns1blankspaceAdminSchemaEndpoints_type-' + oRow["id"] + '" class="ns1blankspaceRow">' +
 									oRow["typetext"] + '</td>');
@@ -1258,10 +1257,6 @@ ns1blankspace.admin.schema.methods =
 							}
 						});
 					}
-					else
-					{
-
-					}
 				}					
 }
 
@@ -1705,7 +1700,6 @@ ns1blankspace.admin.schema.properties =
 							aHTML.push('<table id="ns1blankspaceAdminSchemaProperties" class="ns1blankspace">' +
 										'<tr class="ns1blankspaceHeaderCaption">' +
 										'<td class="ns1blankspaceHeaderCaption">Name</td>' +
-										'<td class="ns1blankspaceHeaderCaption">Title</td>' +
 										'<td class="ns1blankspaceHeaderCaption">Method</td>');
 
 							if (ns1blankspace.user.super)
@@ -1827,15 +1821,11 @@ ns1blankspace.admin.schema.properties =
 					ns1blankspace.admin.schema.properties.data.details.push(oRow);
 
 					aHTML.push('<tr id="ns1blankspaceAdminSchemaProperties_container-' + oRow["id"] + '">');
-					
-					aHTML.push('<td id="ns1blankspaceAdminSchemaProperties_name-' + oRow["id"] + '" class="ns1blankspaceRow ns1blankspaceRowSelect">' +
-										oRow["name"].toLowerCase() + '</td>');
-
-					aHTML.push('<td id="ns1blankspaceAdminSchemaProperties_title-' + oRow["id"] + '" class="ns1blankspaceRow">' +
-										oRow["title"] + '</td>');
-
-					aHTML.push('<td id="ns1blankspaceAdminSchemaProperties_method-' + oRow["id"] + '" class="ns1blankspaceRow ns1blankspaceSubNote" style="font-size:0.75em; word-break:break-all; word-wrap:break-word;">' +
-									oRow["methodtext"] + '</td>');
+				
+					aHTML.push('<td class="ns1blankspaceRow" style="word-break:break-all; word-wrap:break-word;">' +
+										'<div class="ns1blankspaceRowSelect" id="ns1blankspaceAdminSchemaProperties_name-' + oRow["id"] + '" style="font-size:1em;">' + oRow["name"].toLowerCase() + '</div>' +
+										'<div class="ns1blankspaceSubNote" word-break:break-all; word-wrap:break-word;"><em>' + oRow["methodtext"] + '</em></div>' +
+										(oRow.notes!=''?'<div class="ns1blankspaceSubNote">' + oRow.notes + '</div>':'') + '</td>');
 
 					if (ns1blankspace.user.super)
 					{
@@ -1931,6 +1921,7 @@ ns1blankspace.admin.schema.properties =
 						{
 							sHTML = '<table class="table table-condensed">' +
 										'<tr><td style="width:20%;">ID</td><td>' + oDetail.id + '</td></tr>' +
+											'<tr><td>Title</td><td>' + oDetail.title + '</td></tr>' +
 											'<tr><td>Mandatory</td><td>' + oDetail.mandatory + '</td></tr>' +
 											'<tr><td>Data Type</td><td>' + oDetail.datatypetext + '</td></tr>';
 								

@@ -255,7 +255,7 @@ ns1blankspace.scripts =
 	},
 	{
 		nameSpace: '1blankspace.contactPerson',
-		source: '/site/388/1blankspace.contactperson-3.5.9.js'
+		source: '/site/388/1blankspace.contactperson-3.6.1.js'
 	},
 	{
 		nameSpace: '1blankspace.contactBusiness',
