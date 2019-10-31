@@ -867,6 +867,7 @@ ns1blankspace.structureData =
 		{
 			var iObjectContext = ns1blankspace.objectContext;
 			var iValue = ns1blankspace.util.getParam(oParam, 'value').value;
+			var bCompleted = ns1blankspace.util.getParam(oParam, 'completed', {'default': false}).value;
 			ns1blankspace.structureData.data.category = ns1blankspace.util.getParam(oParam, 'category').value;
 
 			if (oParam != undefined)
@@ -878,7 +879,7 @@ ns1blankspace.structureData =
 				
 			if (oResponse == undefined)
 			{	
-				if (iValue == undefined)
+				if (iValue == undefined || bCompleted)
 				{	
 					var aHTML = [];
 
@@ -1005,7 +1006,7 @@ ns1blankspace.structureData =
 					.css('width', '15px')
 					.css('height', '17px');
 
-					if (iValue != undefined)
+					if (iValue != undefined && !bCompleted)
 					{
 						$('#ns1blankspaceStructureDataCategory_options_edit-' + iValue).click();
 					}	
@@ -1146,7 +1147,8 @@ ns1blankspace.structureData =
 						ns1blankspace.structureData.elements.show(
 						{
 							category: ns1blankspace.structureData.data.category,
-							value: oResponse.id
+							value: oResponse.id,
+							completed: (sID != undefined)
 						});
 					}
 				});
