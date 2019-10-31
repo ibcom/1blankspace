@@ -419,7 +419,7 @@ ns1blankspace.scripts =
 	},
 	{
 		nameSpace: '1blankspace.structureData',
-		source: '/site/312/1blankspace.structuredata-2.0.1.js'
+		source: '/site/388/1blankspace.structuredata-3.6.1.js'
 	},
 	{
 		nameSpace: '1blankspace.supportIssue',
