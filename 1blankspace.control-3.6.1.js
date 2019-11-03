@@ -301,11 +301,11 @@ ns1blankspace.scripts =
 	},
 	{
 		nameSpace: '1blankspace.financial',
-		source: '/site/1903/1blankspace.financial-3.2.3.js'
+		source: '/site/1903/1blankspace.financial-3.5.9.js'
 	},
 	{
 		nameSpace: '1blankspace.financial.bankAccount',
-		source: '/site/1903/1blankspace.financial.bankaccount-3.6.0.js'
+		source: '/site/1903/1blankspace.financial.bankaccount-3.6.1.js'
 	},
 	{
 		nameSpace: '1blankspace.financial.invoice',
@@ -401,7 +401,7 @@ ns1blankspace.scripts =
 	},
 	{
 		nameSpace: '1blankspace.setup.website',
-		source: '/site/1903/1blankspace.setup.website-3.5.9.js'
+		source: '/site/1903/1blankspace.setup.website-3.6.1.js'
 	},
 	{
 		nameSpace: '1blankspace.setup.websiteForm',
