@@ -80,7 +80,7 @@ ns1blankspace.option = $.extend(true, ns1blankspace.option,
 ns1blankspace.option.yodlee =
 {
 	user: 37059,
-	proxyURL: 'https://yodlee.lab.ibcom.biz'
+	proxyURL: 'https://yodlee.mydigitalstructure-lab.cloud'
 }
 
 ns1blankspace.option.stripe =
