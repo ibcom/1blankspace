@@ -8035,9 +8035,9 @@ ns1blankspace.financial.bankAccount =
 													var iTransactionID = oData.id;
 													var iObject = (iType==2?6:3);
 
-													if (aXHTMLElementID[2] == 1) {iObject = 3};
-													if (aXHTMLElementID[2] == 2) {iObject = 6};
-													if (aXHTMLElementID[2] == 3) {iObject = 122};
+													if (aXHTMLElementID[3] == 1) {iObject = 3};
+													if (aXHTMLElementID[3] == 2) {iObject = 6};
+													if (aXHTMLElementID[3] == 3) {iObject = 122};
 
 													ns1blankspace.status.working();
 

@@ -75,6 +75,9 @@ ns1blankspace.admin.schema =
 					aHTML.push('<tr><td id="ns1blankspaceControlProperties" class="ns1blankspaceControl">' +
 									'Properties</td></tr>');
 
+					aHTML.push('<tr><td id="ns1blankspaceControlLinks" class="ns1blankspaceControl">' +
+									'Links</td></tr>');
+
 					aHTML.push('</table>');		
 						
 					aHTML.push('<table class="ns1blankspaceControl" style="padding-top:10px;">');
@@ -102,6 +105,7 @@ ns1blankspace.admin.schema =
 					aHTML.push('<div id="ns1blankspaceMainEndpoints" class="ns1blankspaceControlMain"></div>');
 					aHTML.push('<div id="ns1blankspaceMainMethods" class="ns1blankspaceControlMain"></div>');
 					aHTML.push('<div id="ns1blankspaceMainProperties" class="ns1blankspaceControlMain"></div>');
+					aHTML.push('<div id="ns1blankspaceMainLinks" class="ns1blankspaceControlMain"></div>');
 					aHTML.push('<div id="ns1blankspaceMainObjects" class="ns1blankspaceControlMain"></div>');
 					aHTML.push('<div id="ns1blankspaceMainCheck" class="ns1blankspaceControlMain"></div>');
 
@@ -129,6 +133,12 @@ ns1blankspace.admin.schema =
 					{
 						ns1blankspace.show({selector: '#ns1blankspaceMainProperties'});
 						ns1blankspace.admin.schema.properties.show();
+					});
+
+					$('#ns1blankspaceControlLinks').click(function(event)
+					{
+						ns1blankspace.show({selector: '#ns1blankspaceMainLinks'});
+						ns1blankspace.admin.schema.links.show();
 					});
 
 					$('#ns1blankspaceControlObjects').click(function(event)
@@ -706,8 +716,8 @@ ns1blankspace.admin.schema.methods =
 
 						var oSearch = new AdvancedSearch();
 						oSearch.method = 'CORE_METHOD_SEARCH';
-						oSearch.addField('addavailable,advancedsearchavailable,endpoint,endpointtext,id,notes,object,objecttext,' +
-										'removeavailable,title,unrestrictedaccess,unrestrictedloggedonaccess,updateavailable,useavailable,status,statustext');
+						oSearch.addField('addavailable,advancedsearchavailable,endpoint,endpointtext,endpointother,endpointothertext,notes,object,objecttext,' +
+										'removeavailable,title,name,unrestrictedaccess,unrestrictedloggedonaccess,updateavailable,useavailable,status,statustext');
 					
 						if (sSearchText != '')
 						{
@@ -748,8 +758,8 @@ ns1blankspace.admin.schema.methods =
 							aHTML.push('<table id="ns1blankspaceAdminSchemaMethods" class="ns1blankspace">' +
 										'<tr class="ns1blankspaceHeaderCaption">' +
 										'<td class="ns1blankspaceHeaderCaption">Title</td>' +
-										'<td class="ns1blankspaceHeaderCaption" style="text-align:center;">Properties</td>' +
-										'<td class="ns1blankspaceHeaderCaption">Endpoint</td>')
+										'<td class="ns1blankspaceHeaderCaption" style="text-align:center;">Name</td>' +
+										'<td class="ns1blankspaceHeaderCaption" style="text-align:center;">Properties</td>')
 
 							if (ns1blankspace.user.super)
 							{
@@ -883,11 +893,11 @@ ns1blankspace.admin.schema.methods =
 										'<div id="ns1blankspaceAdminSchemaMethods_title-' + oRow["id"] + '" class="ns1blankspaceRowSelect" style="font-size:1em;">' + oRow["title"] + '</div>' + 
 										(oRow.notes!=''?'<div class="ns1blankspaceSubNote">' + oRow.notes + '</div>':'') + '</td>');
 
+					aHTML.push('<td id="ns1blankspaceAdminSchemaMethods_name-' + oRow["id"] + '" class="ns1blankspaceRow ns1blankspaceSub" style="text-align:center;">' +
+									(oRow["name"]==''?'-':oRow["name"]) + '</td>');
+
 					aHTML.push('<td id="ns1blankspaceAdminSchemaMethods_properties-' + oRow["id"] + '" style="text-align:center;" class="ns1blankspaceRow">' +
 										(oRow["properties"]=='0'?'<div class="ns1blankspaceSubNote">-</div>':oRow["properties"]) + '</td>');
-
-					aHTML.push('<td id="ns1blankspaceAdminSchemaMethods_endpoint-' + oRow["id"] + '" class="ns1blankspaceRow">' +
-									oRow["endpointtext"] + '</td>');
 
 					if (ns1blankspace.user.super)
 					{
@@ -895,9 +905,12 @@ ns1blankspace.admin.schema.methods =
 									'<span id="ns1blankspaceAdminSchemaMethods_remove-' + oRow.id + '" class="ns1blankspaceMethodRemove" style="margin-right:2px;"></span>' +
 									'<span id="ns1blankspaceAdminSchemaMethods_edit-' + oRow.id + '" class="ns1blankspaceMethodEdit"' +
 										' data-title="' + oRow["title"] + '"' +
+										' data-name="' + oRow["name"] + '"' +
 										' data-status="' + oRow["status"] + '"' +
 										' data-endpoint="' + oRow["endpoint"] + '"' +
 										' data-endpointtext="' + oRow["endpointtext"] + '"' +
+										' data-endpointother="' + oRow["endpointother"] + '"' +
+										' data-endpointothertext="' + oRow["endpointothertext"] + '"' +
 										' data-object="' + oRow["object"] + '"' +
 										' data-objecttext="' + oRow["objecttext"] + '"' +
 										' data-endpoint="' + oRow["status"] + '"' +
@@ -985,6 +998,7 @@ ns1blankspace.admin.schema.methods =
 						{
 							sHTML = '<table class="table table-condensed">' +
 										'<tr><td style="width:40%;">ID</td><td>' + oDetail.id + '</td></tr>' +
+											'<tr><td>Endpoint</td><td>' + oDetail.endpointtext + '</td></tr>' +
 											'<tr><td>Status</td><td>' + oDetail.statustext + '</td></tr>' +
 											'<tr><td>Unrestricted Access</td><td>' + oDetail.unrestrictedaccess + '</td></tr>' +
 											'<tr><td>Unrestricted Access (Authenticated)</td><td>' + oDetail.unrestrictedloggedonaccess + '</div>' +
@@ -992,6 +1006,11 @@ ns1blankspace.admin.schema.methods =
 											'<tr><td>Can Be Used To Add</td><td>' + oDetail.addavailable + '</td></tr>' +
 											'<tr><td>Can Be Used To Update</td><td>' + oDetail.updateavailable + '</td></tr>' +
 											'<tr><td>Can Be Used To Remove</td><td>' + oDetail.removeavailable + '</td></tr>';
+
+							if (oDetail.endpointothertext != '')
+							{
+								sHTML = sHTML + '<tr><td>Other Endpoint</td><td>' + oDetail.endpointothertext + '</td></tr>';
+							}
 
 							if (oDetail.objecttext != '')
 							{
@@ -1007,6 +1026,8 @@ ns1blankspace.admin.schema.methods =
 													'docs.mydigitalstructure.cloud/' + oDetail.title.toLowerCase() + '</a></td></tr>';
 
 							sHTML = sHTML + '<tr><td></td><td id="ns1blankspaceAdminSchemaMethodProperties-' + oDetail.title + '" class="ns1blankspaceViewLink">Properties</td></tr>';
+
+							sHTML = sHTML + '<tr><td></td><td id="ns1blankspaceAdminSchemaMethodLinks-' + oDetail.title + '" class="ns1blankspaceViewLink">Links</td></tr>';
 							
 							sHTML = sHTML + '</table>'
 							
@@ -1019,6 +1040,14 @@ ns1blankspace.admin.schema.methods =
 								$('#ns1blankspaceControlProperties').addClass('ns1blankspaceHighlight');
 								ns1blankspace.show({selector: '#ns1blankspaceMainProperties'});
 								ns1blankspace.admin.schema.properties.show({searchText: this.id.split('-')[1]})
+							});
+
+							$('#ns1blankspaceAdminSchemaMethodLinks-' + oDetail.title).click().click(function ()
+							{
+								$('.ns1blankspaceControl').removeClass('ns1blankspaceHighlight');
+								$('#ns1blankspaceControlLinks').addClass('ns1blankspaceHighlight');
+								ns1blankspace.show({selector: '#ns1blankspaceMainLinks'});
+								ns1blankspace.admin.schema.links.show({searchText: this.id.split('-')[1]})
 							});
 						}
 					}
@@ -1088,11 +1117,31 @@ ns1blankspace.admin.schema.methods =
 
 					aHTML.push('<tr class="ns1blankspaceCaption">' +
 									'<td class="ns1blankspaceCaption">' +
+									'Name' +
+									'</td></tr>' +
+									'<tr class="ns1blankspace">' +
+									'<td class="ns1blankspaceText">' +
+									'<input id="ns1blankspaceAdminSchemaMethodsEditName" class="ns1blankspaceText">' +
+									'</td></tr>');
+
+					aHTML.push('<tr class="ns1blankspaceCaption">' +
+									'<td class="ns1blankspaceCaption">' +
 									'Endpoint' +
 									'</td></tr>' +
 									'<tr class="ns1blankspace">' +
 									'<td class="ns1blankspaceText">' +
 									'<input id="ns1blankspaceAdminSchemaMethodsEditEndpoint" class="ns1blankspaceSelect"' +
+										' data-method="CORE_ENDPOINT_SEARCH"' +
+										' data-columns="title">' +
+									'</td></tr>');
+
+					aHTML.push('<tr class="ns1blankspaceCaption">' +
+									'<td class="ns1blankspaceCaption">' +
+									'Other Endpoint' +
+									'</td></tr>' +
+									'<tr class="ns1blankspace">' +
+									'<td class="ns1blankspaceText">' +
+									'<input id="ns1blankspaceAdminSchemaMethodsEditEndpointOther" class="ns1blankspaceSelect"' +
 										' data-method="CORE_ENDPOINT_SEARCH"' +
 										' data-columns="title">' +
 									'</td></tr>');	
@@ -1195,9 +1244,13 @@ ns1blankspace.admin.schema.methods =
 					if (iID != '')
 					{
 						$('#ns1blankspaceAdminSchemaMethodsEditTitle').val(ns1blankspace.util.getData(oParam, 'data-title').value);
+						$('#ns1blankspaceAdminSchemaMethodsEditName').val(ns1blankspace.util.getData(oParam, 'data-name').value);
 
 						$('#ns1blankspaceAdminSchemaMethodsEditEndpoint').val(ns1blankspace.util.getData(oParam, 'data-endpointtext').value);
 						$('#ns1blankspaceAdminSchemaMethodsEditEndpoint').attr('data-id', ns1blankspace.util.getData(oParam, 'data-endpoint').value);
+
+						$('#ns1blankspaceAdminSchemaMethodsEditEndpointOther').val(ns1blankspace.util.getData(oParam, 'data-endpointothertext').value);
+						$('#ns1blankspaceAdminSchemaMethodsEditEndpointOther').attr('data-id', ns1blankspace.util.getData(oParam, 'data-endpointother').value);
 
 						$('#ns1blankspaceAdminSchemaMethodsEditObject').val(ns1blankspace.util.getData(oParam, 'data-objecttext').value);
 						$('#ns1blankspaceAdminSchemaMethodsEditObject').attr('data-id', ns1blankspace.util.getData(oParam, 'data-object').value);
@@ -1229,7 +1282,9 @@ ns1blankspace.admin.schema.methods =
 						{
 							id: iID,
 							title: $('#ns1blankspaceAdminSchemaMethodsEditTitle').val(),
+							name: $('#ns1blankspaceAdminSchemaMethodsEditName').val(),
 							endpoint: $('#ns1blankspaceAdminSchemaMethodsEditEndpoint').attr('data-id'),
+							endpointother: $('#ns1blankspaceAdminSchemaMethodsEditEndpointOther').attr('data-id'),
 							object: $('#ns1blankspaceAdminSchemaMethodsEditObject').attr('data-id'),
 							status: $('input[name="radioStatus"]:checked').val(),
 							unrestrictedaccess: $('[name="radioUnrestrictedAccess"]:checked').val(),
@@ -2440,4 +2495,482 @@ ns1blankspace.admin.schema.objects =
 						}
 					}
 				}				
+}
+
+ns1blankspace.admin.schema.links =
+{
+	data: 	{searchText: undefined},
+
+	init: 	function (oParam, oResponse)
+				{
+					ns1blankspace.admin.schema.links.show(oParam);
+				},
+
+	count: 	function (oParam, oResponse)
+				{
+					if (oResponse == undefined)
+					{
+						var oSearch = new AdvancedSearch();
+						oSearch.method = 'CORE_METHOD_LINK_SEARCH';
+						oSearch.addField('id');
+						oSearch.addSummaryField('count(id) count');
+						oSearch.rows = 1;
+						oSearch.getResults(function(data) {ns1blankspace.admin.schema.links.count(oParam, data)})	
+					}
+					else
+					{
+						$('#ns1blankspaceSummaryLinks').html(oResponse.summary.count);
+					}	
+				},	
+	
+	show:		function (oParam, oResponse)
+				{
+					var oSearchText = ns1blankspace.util.getParam(oParam, 'searchText');
+					var sSearchText;
+
+					if (oSearchText.exists)
+					{
+						sSearchText = oSearchText.value;
+						ns1blankspace.admin.schema.links.data.searchText = sSearchText;
+					}
+					else
+					{	
+						sSearchText = ns1blankspace.admin.schema.links.data.searchText;
+					}	
+
+					if (oResponse == undefined)
+					{	
+						var aHTML = [];
+	
+						aHTML.push('<table class="ns1blankspaceContainer">' +
+										'<tr class="ns1blankspaceContainer">' +
+										'<td id="ns1blankspaceAdminSchemaLinksColumn1"></td>' +
+										'<td id="ns1blankspaceAdminSchemaLinksColumn2" style="width:300px;"></td>' +
+										'</tr>' +
+										'</table>');				
+						
+						$('#ns1blankspaceMainLinks').html(aHTML.join(''));
+
+						$('#ns1blankspaceAdminSchemaLinksColumn1').html(ns1blankspace.xhtml.loading);
+
+						ns1blankspace.admin.schema.links.data.details = [];
+
+						var oSearch = new AdvancedSearch();
+						oSearch.method = 'CORE_METHOD_LINK_SEARCH';
+						oSearch.addField('adminmethod,adminmethodtext,adminparentmethod,adminparentmethodtext,notes');
+					
+						if (sSearchText != '')
+						{
+							oSearch.addBracket('(');
+
+							oSearch.addFilter('adminmethodtext', 'TEXT_IS_LIKE', sSearchText);
+							oSearch.addOperator('or');
+							oSearch.addFilter('adminparentmethodtext', 'TEXT_IS_LIKE', sSearchText);
+							oSearch.addBracket(')');
+						}
+
+						oSearch.rows = 20;
+						oSearch.sort('adminparentmethodtext', 'asc');
+						oSearch.getResults(function(data) {ns1blankspace.admin.schema.links.show(oParam, data)});
+					}
+					else
+					{
+						var aHTML = [];
+						
+						if (oResponse.data.rows.length == 0)
+						{
+							aHTML.push('<table id="ns1blankspaceAdminSchemaLinkss">' +
+											'<tr><td class="ns1blankspaceSub">No links.</td></tr></table>');
+
+							$('#ns1blankspaceAdminSchemaLinksColumn1').html(aHTML.join(''));
+						}
+						else
+						{
+							var aHTML = [];
+
+							aHTML.push('<table id="ns1blankspaceAdminSchemaLinks" class="ns1blankspace">' +
+										'<tr class="ns1blankspaceHeaderCaption">' +
+										'<td class="ns1blankspaceHeaderCaption">Parent Method</td>' +
+										'<td class="ns1blankspaceHeaderCaption">Method</td>')
+
+							if (ns1blankspace.user.super)
+							{
+								aHTML.push('<td class="ns1blankspaceHeaderCaption"></td>');
+							}
+
+							aHTML.push('</tr>');
+
+							$(oResponse.data.rows).each(function() 
+							{
+								aHTML.push(ns1blankspace.admin.schema.links.row(this));
+							});
+							
+							aHTML.push('</table>');
+						}
+
+						ns1blankspace.render.page.show(
+						{
+							type: 'JSON',
+							xhtmlElementID: 'ns1blankspaceAdminSchemaLinksColumn1',
+							xhtmlContext: 'AdminSchemaLinks',
+							xhtml: aHTML.join(''),
+							showMore: (oResponse.morerows == "true"),
+							more: oResponse.moreid,
+							rows: 20,
+							functionShowRow: ns1blankspace.admin.schema.links.row,
+							functionOpen: undefined,
+							functionOnNewPage: ns1blankspace.admin.schema.links.bind
+						});
+
+						var aHTML = [];
+
+						aHTML.push('<table class="ns1blankspaceColumn2">');
+
+						aHTML.push('<tr><td class="ns1blankspaceText" style="padding-top:14px;">' +
+												'<input id="ns1blankspaceAdminSchemaLinksSearchText" class="ns1blankspaceText" style="width:130px;">' +
+												'</td></tr>');
+																			
+						aHTML.push('<tr><td style="padding-top:0px;">' +
+										'<span id="ns1blankspaceAdminSchemaLinksSearch" class="ns1blankspaceAction">Search</span>');
+
+						if (sSearchText != undefined)
+						{	
+							aHTML.push(' <span id="ns1blankspaceAdminSchemaLinksSearchClear" class="ns1blankspaceAction">Clear</span>');
+						}
+							
+						if (ns1blankspace.user.super)
+						{
+							aHTML.push('<tr><td style="padding-top:16px;">' +
+										'<span id="ns1blankspaceAdminSchemaLinksAdd" class="ns1blankspaceAction">Add</span>');
+						}			
+							
+						aHTML.push('</td></tr>');
+
+						aHTML.push('</table>');
+
+						if ($('#ns1blankspaceAdminSchemaLinksColumn2 table').length == 0)
+						{
+							$('#ns1blankspaceAdminSchemaLinksColumn2').html(aHTML.join(''));
+						}
+						else
+						{
+							$('#ns1blankspaceAdminSchemaLinksColumn2 table').before(aHTML.join(''));
+						}
+
+						$('#ns1blankspaceAdminSchemaLinksSearch').button(
+						{
+							label: 'Search'
+						})
+						.click(function() 
+						{
+							oParam = ns1blankspace.util.setParam(oParam, 'searchText', $('#ns1blankspaceAdminSchemaLinksSearchText').val());
+							ns1blankspace.admin.schema.links.show(oParam);
+						})
+						.css('width', '65px');
+
+						$('#ns1blankspaceAdminSchemaLinksSearchClear').button(
+						{
+							label: 'Clear'
+						})
+						.click(function() 
+						{
+							oParam = ns1blankspace.util.setParam(oParam, 'searchText', '');
+							ns1blankspace.admin.schema.links.show(oParam);
+						})
+						.css('width', '65px');
+
+						$('#ns1blankspaceAdminSchemaLinksSearchText').keyup(function(e)
+						{
+							if (e.which === 13)
+					    	{
+					    		oParam = ns1blankspace.util.setParam(oParam, 'searchText', $('#ns1blankspaceAdminSchemaLinksSearchText').val())
+					    		ns1blankspace.admin.schema.links.show(oParam);
+					    	}
+						});				
+
+						$('#ns1blankspaceAdminSchemaLinksSearchText').val(sSearchText);
+						
+						if (ns1blankspace.user.super)
+						{
+							$('#ns1blankspaceAdminSchemaLinksAdd').button(
+							{
+								label: "Add"
+							})
+							.click(function()
+							{
+								ns1blankspace.admin.schema.links.edit({xhtmlElementID: this.id})
+							})
+							.css('width', '57px');
+						}	
+					}
+				},	
+
+	row: 		function (oRow)	
+				{
+					var aHTML = [];
+
+					ns1blankspace.admin.schema.links.data.details.push(oRow);
+
+					aHTML.push('<tr id="ns1blankspaceAdminSchemaLinks_container-' + oRow["id"] + '">');
+					
+					aHTML.push('<td class="ns1blankspaceRow">' +
+										'<div id="ns1blankspaceAdminSchemaLinks_parentmethod-' + oRow["id"] + '" class="ns1blankspaceRowSelect" style="font-size:1em;">' + oRow["adminparentmethodtext"] + '</div>' + 
+										'</td>');
+
+					aHTML.push('<td class="ns1blankspaceRow"><div id="ns1blankspaceAdminSchemaLinks_method-' + oRow["id"] + '">' +
+									oRow["adminmethodtext"] + '</div>' +
+									(oRow.notes!=''?'<div class="ns1blankspaceSubNote">' + oRow.notes + '</div>':'') + '</td>');
+
+					if (ns1blankspace.user.super)
+					{
+						aHTML.push('<td style="width:70px;text-align:right;" class="ns1blankspaceRow">' + 
+									'<span id="ns1blankspaceAdminSchemaLinks_remove-' + oRow.id + '" class="ns1blankspaceLinkRemove" style="margin-right:2px;"></span>' +
+									'<span id="ns1blankspaceAdminSchemaLinks_edit-' + oRow.id + '" class="ns1blankspaceLinkEdit"' +
+										' data-adminmethod="' + oRow["adminmethod"] + '"' +
+										' data-adminmethodtext="' + oRow["adminmethodtext"] + '"' +
+										' data-adminparentmethod="' + oRow["adminparentmethod"] + '"' +
+										' data-adminparentmethodtext="' + oRow["adminparentmethodtext"] + '"' +
+										' data-notes="' + window.btoa(oRow["notes"]) + '"' +
+										'></span></td>');
+					}
+
+					aHTML.push('</tr>');
+
+					return aHTML.join('');
+				},
+
+	bind: 	function ()
+				{
+					$('.ns1blankspaceRowSelect:visible').click(function()
+					{
+						ns1blankspace.admin.schema.links.details({xhtmlElementID: this.id})
+					});
+
+					$('#ns1blankspaceAdminSchemaLinks .ns1blankspaceLinkRemove').button(
+					{
+						text: false,
+						icons:
+						{
+							primary: "ui-icon-close"
+						}
+					})
+					.click(function()
+					{
+						ns1blankspace.remove(
+						{
+							xhtmlElementID: this.id,
+							method: 'ADMIN_METHOD_LINK_MANAGE',
+							ifNoneMessage: 'No links.'
+						});
+					})
+					.css('width', '15px')
+					.css('height', '17px');
+
+					$('#ns1blankspaceAdminSchemaLinks .ns1blankspaceLinkEdit:visible').button(
+					{
+						text: false,
+						icons:
+						{
+							primary: "ui-icon-pencil"
+						}
+					})
+					.click(function()
+					{
+						ns1blankspace.admin.schema.links.edit({xhtmlElementID: this.id})
+					})
+					.css('width', '15px')
+					.css('height', '17px');	
+				},
+
+	details: 	
+				function (oParam)
+				{
+					var sXHTMLElementID;
+					var sKey;
+
+					if (ns1blankspace.util.param(oParam, 'xhtmlElementID').exists)
+					{
+						sXHTMLElementID = ns1blankspace.util.param(oParam, 'xhtmlElementID').value
+						sKey = ns1blankspace.util.param(oParam, 'xhtmlElementID', '-').values[1];
+					}
+
+					if ($('#ns1blankspaceAdminSchemaLinks_container_details-' + sKey).length != 0)
+					{
+						$('#ns1blankspaceAdminSchemaLinks_container_details-' + sKey).remove();
+					}
+					else
+					{
+						var sHTML = 'No details';
+
+						var oDetail = $.grep(ns1blankspace.admin.schema.links.data.details, function (a) {return a.id == sKey;})[0];
+
+						if (oDetail)
+						{
+							sHTML = '<table class="table table-condensed">' +
+										'<tr><td style="width:40%;">ID</td><td>' + oDetail.id + '</td></tr>';
+
+							if (oDetail.notes != '')
+							{
+								sHTML = sHTML + '<tr><td>Notes</td><td>' + oDetail.notes + '</td></tr>';
+							}
+
+							sHTML = sHTML + '<tr><td id="ns1blankspaceAdminSchemaLinkParentMethod-' + oDetail.adminparentmethodtext + '" class="ns1blankspaceViewLink">'
+														+ oDetail.adminparentmethodtext + '</td><td></td></tr>';
+
+							sHTML = sHTML + '<tr><td id="ns1blankspaceAdminSchemaLinkParentMethod-' + oDetail.adminmethodtext + '" class="ns1blankspaceViewLink">'
+														+ oDetail.adminmethodtext + '</td><td></td></tr>';
+							
+							sHTML = sHTML + '</table>'
+							
+							$('#ns1blankspaceAdminSchemaLinks_container-' + sKey).after('<tr id="ns1blankspaceAdminSchemaLinks_container_details-' + sKey + '" style="font-size:0.875em;">' +
+								'<td colspan=4><div style="background-color: #F3F3F3; padding:8px; color:#444444; font-weight:100; font-size:0.875em;">' + sHTML + '</div></td></tr>');
+
+							$('#ns1blankspaceAdminSchemaLinkParentMethod-' + oDetail.adminparentmethodtext).click().click(function ()
+							{
+								$('.ns1blankspaceControl').removeClass('ns1blankspaceHighlight');
+								$('#ns1blankspaceControlMethods').addClass('ns1blankspaceHighlight');
+								ns1blankspace.show({selector: '#ns1blankspaceMainMethods'});
+								ns1blankspace.admin.schema.methods.show({searchText: this.id.split('-')[1]})
+							});
+
+							$('#ns1blankspaceAdminSchemaLinkParentMethod-' + oDetail.adminmethodtext).click().click(function ()
+							{
+								$('.ns1blankspaceControl').removeClass('ns1blankspaceHighlight');
+								$('#ns1blankspaceControlMethods').addClass('ns1blankspaceHighlight');
+								ns1blankspace.show({selector: '#ns1blankspaceMainMethods'});
+								ns1blankspace.admin.schema.methods.show({searchText: this.id.split('-')[1]})
+							});
+						}
+					}
+				},
+
+	edit:		function (oParam, oResponse)
+				{
+					var iID = ns1blankspace.util.getParam(oParam, 'xhtmlElementID', {index: 1}).value;
+					if (iID == undefined) {iID = ''}
+		
+					var aHTML = [];
+
+					aHTML.push('<table class="ns1blankspaceContainer">');
+
+					aHTML.push('<tr class="ns1blankspaceContainer">' +
+									'<td id="ns1blankspaceAdminSchemaLinksEditColumn1"></td>' +
+									'<td id="ns1blankspaceAdminSchemaLinksEditColumn2" style="width:50px;"></td>' +
+									'</tr>');
+
+					aHTML.push('</table>');					
+					
+					$('#ns1blankspaceAdminSchemaLinksColumn2').html(aHTML.join(''));
+
+					var aHTML = [];
+								
+					aHTML.push('<table class="ns1blankspaceColumn2a">' +
+									'<tr><td><span id="ns1blankspaceAdminSchemaLinksEditSave" data-id="' + iID + '" class="ns1blankspaceAction">' +
+									'Save</span></td></tr>' +
+									'<tr><td><span id="ns1blankspaceAdminSchemaLinksEditCancel" class="ns1blankspaceAction">' +
+									'Cancel</span></td></tr>' +
+									'</table>');					
+					
+					$('#ns1blankspaceAdminSchemaLinksEditColumn2').html(aHTML.join(''));
+					
+					$('#ns1blankspaceAdminSchemaLinksEditSave').button(
+					{
+						text: "Save"
+					})
+					.click(function()
+					{
+						ns1blankspace.admin.schema.links.save({id: $(this).attr('data-id')})
+					})
+					.css('width', '65px');
+
+					$('#ns1blankspaceAdminSchemaLinksEditCancel').button(
+					{
+						text: "Cancel"
+					})
+					.click(function()
+					{
+						ns1blankspace.admin.schema.links.show();
+					})
+					.css('width', '65px');
+
+					var aHTML = [];
+
+					aHTML.push('<table class="ns1blankspaceColumn2" style="width:200px;">');
+
+					aHTML.push('<tr class="ns1blankspaceCaption">' +
+									'<td class="ns1blankspaceCaption">' +
+									'Parent Method' +
+									'</td></tr>' +
+									'<tr class="ns1blankspace">' +
+									'<td class="ns1blankspaceText">' +
+									'<input id="ns1blankspaceAdminSchemaLinksEditParentMethod" class="ns1blankspaceSelect"' +
+										' data-method="CORE_METHOD_SEARCH"' +
+										' data-columns="title">' +
+									'</td></tr>');
+
+					aHTML.push('<tr class="ns1blankspaceCaption">' +
+									'<td class="ns1blankspaceCaption">' +
+									'Method' +
+									'</td></tr>' +
+									'<tr class="ns1blankspace">' +
+									'<td class="ns1blankspaceText">' +
+									'<input id="ns1blankspaceAdminSchemaLinksEditMethod" class="ns1blankspaceSelect"' +
+										' data-method="CORE_METHOD_SEARCH"' +
+										' data-columns="title">' +
+									'</td></tr>');
+
+					aHTML.push('<tr class="ns1blankspaceCaption">' +
+									'<td class="ns1blankspaceCaption">' +
+									'Notes' +
+									'</td></tr>' +
+									'<tr class="ns1blankspaceTextMulti">' +
+									'<td class="ns1blankspaceTextMulti">' +
+									'<textarea rows="10" cols="35" id="ns1blankspaceAdminSchemaLinksEditNotes" class="ns1blankspaceTextMulti"></textarea>' +
+									'</td></tr>');
+
+					aHTML.push('</table>');		
+
+					$('#ns1blankspaceAdminSchemaLinksEditColumn1').html(aHTML.join(''));
+
+					if (iID != '')
+					{
+						$('#ns1blankspaceAdminSchemaLinksEditParentMethod').val(ns1blankspace.util.getData(oParam, 'data-adminparentmethodtext').value);
+						$('#ns1blankspaceAdminSchemaLinksEditParentMethod').attr('data-id', ns1blankspace.util.getData(oParam, 'data-adminparentmethod').value);
+						$('#ns1blankspaceAdminSchemaLinksEditMethod').val(ns1blankspace.util.getData(oParam, 'data-adminmethodtext').value);
+						$('#ns1blankspaceAdminSchemaLinksEditMethod').attr('data-id', ns1blankspace.util.getData(oParam, 'data-adminmethod').value);
+						$('#ns1blankspaceAdminSchemaLinksEditNotes').val(window.atob(ns1blankspace.util.getData(oParam, 'data-notes').value));	 
+					}
+				},
+
+	save: 	function (oParam, oResponse)
+				{
+					if (oResponse == undefined)
+					{
+						var iID = ns1blankspace.util.getParam(oParam, 'id').value;
+
+						var oData =
+						{
+							id: iID,
+							adminparentmethod: $('#ns1blankspaceAdminSchemaLinksEditParentMethod').attr('data-id'),
+							adminmethod: $('#ns1blankspaceAdminSchemaLinksEditMethod').attr('data-id'),
+							notes: $('#ns1blankspaceAdminSchemaLinksEditNotes').val()
+						}
+
+						$.ajax(
+						{
+							type: 'POST',
+							url: ns1blankspace.util.endpointURI('ADMIN_METHOD_LINK_MANAGE'),
+							data: oData,
+							dataType: 'json',
+							success: function(data) 
+							{
+								if (data.status == 'OK')
+								{
+									ns1blankspace.status.message('Saved');
+									ns1blankspace.admin.schema.links.show()
+								}
+							}
+						});
+					}
+				}					
 }
