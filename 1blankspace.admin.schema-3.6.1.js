@@ -21,7 +21,7 @@ ns1blankspace.admin.schema =
 						Numeric: 1,
 						Data: 2,
 						Text: 3
-					}},
+				}},
 
 	init: 	function (oParam)
 				{

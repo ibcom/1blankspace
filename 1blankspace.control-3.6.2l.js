@@ -187,6 +187,9 @@ ns1blankspace.xhtml.viewContainer =
 				   '<li><a href="#" id="ns1blankspaceHomeOptionsConnections">' +
 				   	'<div>Connections</div><div class="ns1blankspaceSubNote">Other webapps, websites..</div></a>' +
 				   '</li>' +
+				   '<li><a href="#" id="ns1blankspaceHomeOptionsFavourites">' +
+				   	'<div>Favourites</div><div class="ns1blankspaceSubNote">Favourites & tags</div></a>' +
+				   '</li>' +
 				   '<li><a href="#" id="ns1blankspaceHomeOptionsSearch">' +
 				   	'<div>Search & reporting</div><div class="ns1blankspaceSubNote">Export, update, email & SMS..</div></a>' +
 				   '</li>' +
@@ -247,7 +250,7 @@ ns1blankspace.scripts =
 	},
 	{
 		nameSpace: '1blankspace.home',
-		source: '/site/388/1blankspace.home-3.5.7.js'
+		source: '/site/388/1blankspace.home-3.6.2.js'
 	},
 	{
 		nameSpace: '1blankspace.format',
@@ -516,6 +519,10 @@ ns1blankspace.scripts =
 	{
 		nameSpace: '1blankspace.util.contacts',
 		source: '/site/312/1blankspace.util.contact-2.0.1.js'
+	},
+	{
+		nameSpace: '1blankspace.util.favourite',
+		source: '/site/388/1blankspace.favourite-3.6.2.js'
 	}
 ]
 
