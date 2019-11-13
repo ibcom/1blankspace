@@ -188,7 +188,7 @@ ns1blankspace.xhtml.viewContainer =
 				   	'<div>Connections</div><div class="ns1blankspaceSubNote">Other webapps, websites..</div></a>' +
 				   '</li>' +
 				   '<li><a href="#" id="ns1blankspaceHomeOptionsFavourites">' +
-				   	'<div>Favourites</div><div class="ns1blankspaceSubNote">Favourites & tags</div></a>' +
+				   	'<div>Tags</div><div class="ns1blankspaceSubNote">& favourites</div></a>' +
 				   '</li>' +
 				   '<li><a href="#" id="ns1blankspaceHomeOptionsSearch">' +
 				   	'<div>Search & reporting</div><div class="ns1blankspaceSubNote">Export, update, email & SMS..</div></a>' +
@@ -478,7 +478,7 @@ ns1blankspace.scripts =
 	},
 	{
 		nameSpace: '1blankspace.admin.schema',
-		source: '/site/388/1blankspace.admin.schema-3.6.1.js'
+		source: '/site/388/1blankspace.admin.schema-3.6.2.js'
 	},
 	{
 		nameSpace: '1blankspace.developer.membership',
@@ -1502,10 +1502,9 @@ ns1blankspace.control =
 								' Customised reporting with exporting, updating, emailing & SMS sending</span></div>' +
 								'<div class="ns1blankspaceViewControl" style="cursor:pointer;"><span id="ns1blankspaceViewControl_connections" class="ns1blankspaceViewControl">' +
 								' Connections</span></div>' +
+								'<div class="ns1blankspaceViewControl" style="cursor:pointer;"><span id="ns1blankspaceViewControl_favourites" class="ns1blankspaceViewControl">' +
+								' Tags & Favourites</span></div>' +
 								'</td>');
-
-					//	'<div class="ns1blankspaceViewControl" style="cursor:pointer;"><span id="ns1blankspaceViewControl_contactsearch" class="ns1blankspaceViewControl">' +
-					//			' Search Contacts</span></div>' +
 
 					aHTML.push('</tr>');
 				}	
@@ -1588,6 +1587,12 @@ ns1blankspace.control =
 			{
 				$(ns1blankspace.xhtml.container).attr('data-initiator', '');
 				ns1blankspace.connect.init();
+			});
+
+			$('#ns1blankspaceViewControl_favourites').click(function(event)
+			{
+				$(ns1blankspace.xhtml.container).attr('data-initiator', '');
+				ns1blankspace.favourite.init();
 			});
 		}
 	},
