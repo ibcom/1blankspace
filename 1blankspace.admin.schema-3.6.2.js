@@ -2557,20 +2557,22 @@ ns1blankspace.admin.schema.links =
 
 						var oSearch = new AdvancedSearch();
 						oSearch.method = 'CORE_METHOD_LINK_SEARCH';
-						oSearch.addField('adminmethod,adminmethodtext,adminparentmethod,adminparentmethodtext,notes');
+						oSearch.addField('adminmethod,adminmethodtext,adminparentmethod,adminparentmethodtext,notes,name');
 					
 						if (sSearchText != '')
 						{
 							oSearch.addBracket('(');
-
 							oSearch.addFilter('adminmethodtext', 'TEXT_IS_LIKE', sSearchText);
 							oSearch.addOperator('or');
 							oSearch.addFilter('adminparentmethodtext', 'TEXT_IS_LIKE', sSearchText);
+							oSearch.addOperator('or');
+							oSearch.addFilter('name', 'TEXT_IS_LIKE', sSearchText);
 							oSearch.addBracket(')');
 						}
 
 						oSearch.rows = 20;
 						oSearch.sort('adminparentmethodtext', 'asc');
+						oSearch.sort('name', 'asc');
 						oSearch.getResults(function(data) {ns1blankspace.admin.schema.links.show(oParam, data)});
 					}
 					else
@@ -2590,8 +2592,9 @@ ns1blankspace.admin.schema.links =
 
 							aHTML.push('<table id="ns1blankspaceAdminSchemaLinks" class="ns1blankspace">' +
 										'<tr class="ns1blankspaceHeaderCaption">' +
+										'<td class="ns1blankspaceHeaderCaption">Name</td>' +
 										'<td class="ns1blankspaceHeaderCaption">Parent Method</td>' +
-										'<td class="ns1blankspaceHeaderCaption">Method</td>')
+										'<td class="ns1blankspaceHeaderCaption">Method</td>');
 
 							if (ns1blankspace.user.super)
 							{
@@ -2714,12 +2717,14 @@ ns1blankspace.admin.schema.links =
 					aHTML.push('<tr id="ns1blankspaceAdminSchemaLinks_container-' + oRow["id"] + '">');
 					
 					aHTML.push('<td class="ns1blankspaceRow">' +
-										'<div id="ns1blankspaceAdminSchemaLinks_parentmethod-' + oRow["id"] + '" class="ns1blankspaceRowSelect" style="font-size:1em;">' + oRow["adminparentmethodtext"] + '</div>' + 
+										'<div class="ns1blankspaceRowSelect" id="ns1blankspaceAdminSchemaLinks_name-' + oRow["id"] + '" style="font-size:1em;">' + oRow["name"] + '</div>' +
+										(oRow.notes!=''?'<div class="ns1blankspaceSubNote">' + oRow.notes + '</div>':'') + '</td>')
+
+					aHTML.push('<td class="ns1blankspaceRow ns1blankspaceSubNote" id="ns1blankspaceAdminSchemaLinks_parentmethod-' + oRow["id"] + '">' + oRow["adminparentmethodtext"] +
 										'</td>');
 
-					aHTML.push('<td class="ns1blankspaceRow"><div id="ns1blankspaceAdminSchemaLinks_method-' + oRow["id"] + '">' +
-									oRow["adminmethodtext"] + '</div>' +
-									(oRow.notes!=''?'<div class="ns1blankspaceSubNote">' + oRow.notes + '</div>':'') + '</td>');
+					aHTML.push('<td class="ns1blankspaceRow ns1blankspaceSubNote" id="ns1blankspaceAdminSchemaLinks_method-' + oRow["id"] + '">' +
+									oRow["adminmethodtext"] + '</td>');
 
 					if (ns1blankspace.user.super)
 					{
@@ -2730,6 +2735,7 @@ ns1blankspace.admin.schema.links =
 										' data-adminmethodtext="' + oRow["adminmethodtext"] + '"' +
 										' data-adminparentmethod="' + oRow["adminparentmethod"] + '"' +
 										' data-adminparentmethodtext="' + oRow["adminparentmethodtext"] + '"' +
+										' data-name="' + oRow["name"] + '"' +
 										' data-notes="' + window.btoa(oRow["notes"]) + '"' +
 										'></span></td>');
 					}
@@ -2814,11 +2820,14 @@ ns1blankspace.admin.schema.links =
 								sHTML = sHTML + '<tr><td>Notes</td><td>' + oDetail.notes + '</td></tr>';
 							}
 
-							sHTML = sHTML + '<tr><td id="ns1blankspaceAdminSchemaLinkParentMethod-' + oDetail.adminparentmethodtext + '" class="ns1blankspaceViewLink">'
-														+ oDetail.adminparentmethodtext + '</td><td></td></tr>';
+							sHTML = sHTML + '<tr><td>Documentation</td><td><a href="https://docs.mydigitalstructure.cloud/' + oDetail.adminparentmethodtext + '" target="_blank">' + 
+													'docs.mydigitalstructure.cloud/' + oDetail.adminparentmethodtext.toLowerCase() + '</a></td></tr>';
 
-							sHTML = sHTML + '<tr><td id="ns1blankspaceAdminSchemaLinkParentMethod-' + oDetail.adminmethodtext + '" class="ns1blankspaceViewLink">'
-														+ oDetail.adminmethodtext + '</td><td></td></tr>';
+							sHTML = sHTML + '<tr><td>Parent Method</td><td id="ns1blankspaceAdminSchemaLinkParentMethod-' + oDetail.adminparentmethodtext + '" class="ns1blankspaceViewLink">'
+														+ oDetail.adminparentmethodtext + '</td></tr>';
+
+							sHTML = sHTML + '<tr><td>Method</td><td id="ns1blankspaceAdminSchemaLinkParentMethod-' + oDetail.adminmethodtext + '" class="ns1blankspaceViewLink">'
+														+ oDetail.adminmethodtext + '</td></tr>';
 							
 							sHTML = sHTML + '</table>'
 							
@@ -2899,6 +2908,15 @@ ns1blankspace.admin.schema.links =
 
 					aHTML.push('<tr class="ns1blankspaceCaption">' +
 									'<td class="ns1blankspaceCaption">' +
+									'Name' +
+									'</td></tr>' +
+									'<tr class="ns1blankspace">' +
+									'<td class="ns1blankspaceText">' +
+									'<input id="ns1blankspaceAdminSchemaLinksEditName" class="ns1blankspaceText">' +
+									'</td></tr>');
+
+					aHTML.push('<tr class="ns1blankspaceCaption">' +
+									'<td class="ns1blankspaceCaption">' +
 									'Parent Method' +
 									'</td></tr>' +
 									'<tr class="ns1blankspace">' +
@@ -2938,8 +2956,9 @@ ns1blankspace.admin.schema.links =
 						$('#ns1blankspaceAdminSchemaLinksEditParentMethod').attr('data-id', ns1blankspace.util.getData(oParam, 'data-adminparentmethod').value);
 						$('#ns1blankspaceAdminSchemaLinksEditMethod').val(ns1blankspace.util.getData(oParam, 'data-adminmethodtext').value);
 						$('#ns1blankspaceAdminSchemaLinksEditMethod').attr('data-id', ns1blankspace.util.getData(oParam, 'data-adminmethod').value);
-						$('#ns1blankspaceAdminSchemaLinksEditNotes').val(window.atob(ns1blankspace.util.getData(oParam, 'data-notes').value));	 
-					}
+						$('#ns1blankspaceAdminSchemaLinksEditNotes').val(window.atob(ns1blankspace.util.getData(oParam, 'data-notes').value));
+						$('#ns1blankspaceAdminSchemaLinksEditName').val(ns1blankspace.util.getData(oParam, 'data-name').value);	 
+					}	 
 				},
 
 	save: 	function (oParam, oResponse)
@@ -2953,6 +2972,7 @@ ns1blankspace.admin.schema.links =
 							id: iID,
 							adminparentmethod: $('#ns1blankspaceAdminSchemaLinksEditParentMethod').attr('data-id'),
 							adminmethod: $('#ns1blankspaceAdminSchemaLinksEditMethod').attr('data-id'),
+							name: $('#ns1blankspaceAdminSchemaLinksEditName').val(),
 							notes: $('#ns1blankspaceAdminSchemaLinksEditNotes').val()
 						}
 

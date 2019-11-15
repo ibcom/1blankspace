@@ -452,7 +452,7 @@ $.extend(true, ns1blankspace.setup,
 					}
 				},
 
-	edit: 		{
+	edit: 	{
 					start:		function (sElementID)
 								{
 									var aSearch = sElementID.split('-');

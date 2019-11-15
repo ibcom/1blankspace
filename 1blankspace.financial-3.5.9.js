@@ -29,6 +29,9 @@ ns1blankspace.financial.init = function (oParam)
 						}
 
 						$('#ns1blankspaceViewControlNew').button({disabled: true});
+						$('#ns1blankspaceViewControlAction').button({disabled: true});
+						$('#ns1blankspaceViewControlActionOptions').button({disabled: true});
+						
 					}
 
 ns1blankspace.financial.search = {send: function () {}};
@@ -551,61 +554,61 @@ ns1blankspace.financial.home = function (oParam)
 						
 						$('#ns1blankspaceControlSummary').click(function(event)
 						{
-							ns1blankspace.show({selector: '#ns1blankspaceMainSummary'});
+							ns1blankspace.show({selector: '#ns1blankspaceMainSummary', refresh: true});
 							ns1blankspace.financial.summary();
 						});
 						
 						$('#ns1blankspaceControlBankAccount').click(function(event)
 						{
-							ns1blankspace.show({selector: '#ns1blankspaceMainBankAccount'});
+							ns1blankspace.show({selector: '#ns1blankspaceMainBankAccount', refresh: true});
 							ns1blankspace.financial.bankAccounts.show();
 						});	
 						
 						$('#ns1blankspaceControlDebtors').click(function(event)
 						{
-							ns1blankspace.show({selector: '#ns1blankspaceMainDebtors'});
+							ns1blankspace.show({selector: '#ns1blankspaceMainDebtors', refresh: true});
 							ns1blankspace.financial.debtors.show();
 						});	
 							
 						$('#ns1blankspaceControlCreditors').click(function(event)
 						{
-							ns1blankspace.show({selector: '#ns1blankspaceMainCreditors'});
+							ns1blankspace.show({selector: '#ns1blankspaceMainCreditors', refresh: true});
 							ns1blankspace.financial.creditors.show();
 						});	
 						
 						$('#ns1blankspaceControlPL').click(function(event)
 						{
-							ns1blankspace.show({selector: '#ns1blankspaceMainPL'});
+							ns1blankspace.show({selector: '#ns1blankspaceMainPL', refresh: true});
 							ns1blankspace.financial.profitLoss.show({showAll: false});
 						});	
 						
 						$('#ns1blankspaceControlBS').click(function(event)
 						{
-							ns1blankspace.show({selector: '#ns1blankspaceMainBS'});
+							ns1blankspace.show({selector: '#ns1blankspaceMainBS', refresh: true});
 							ns1blankspace.financial.balanceSheet.show({showAll: false});
 						});
 
 						$('#ns1blankspaceControlTax').click(function(event)
 						{
-							ns1blankspace.show({selector: '#ns1blankspaceMainTax'});
+							ns1blankspace.show({selector: '#ns1blankspaceMainTax', refresh: true});
 							ns1blankspace.financial.taxSummary.show();
 						});	
 						
 						$('#ns1blankspaceControlAccounts').click(function(event)
 						{
-							ns1blankspace.show({selector: '#ns1blankspaceMainAccounts'});
+							ns1blankspace.show({selector: '#ns1blankspaceMainAccounts', refresh: true});
 							ns1blankspace.financial.accounts.show();
 						});	
 						
 						$('#ns1blankspaceControlUnallocated').click(function(event)
 						{
-							ns1blankspace.show({selector: '#ns1blankspaceMainUnallocated'});
+							ns1blankspace.show({selector: '#ns1blankspaceMainUnallocated', refresh: true});
 							ns1blankspace.financial.unallocated.show();
 						});	
 
 						$('#ns1blankspaceControlInvoicing').click(function(event)
 						{
-							ns1blankspace.show({selector: '#ns1blankspaceMainInvoicing'});
+							ns1blankspace.show({selector: '#ns1blankspaceMainInvoicing', refresh: true});
 							ns1blankspace.financial.invoicing.show();
 						});
 
@@ -617,7 +620,7 @@ ns1blankspace.financial.home = function (oParam)
 
 						$('#ns1blankspaceControlNotes').click(function(event)
 						{
-							ns1blankspace.show({selector: '#ns1blankspaceMainNotes'});
+							ns1blankspace.show({selector: '#ns1blankspaceMainNotes', refresh: true});
 							ns1blankspace.financial.notes.init();
 						});	
 
@@ -625,7 +628,7 @@ ns1blankspace.financial.home = function (oParam)
 						{
 							$('#ns1blankspaceControlCompliance').click(function(event)
 							{
-								ns1blankspace.show({selector: '#ns1blankspaceMainCompliance'});
+								ns1blankspace.show({selector: '#ns1blankspaceMainCompliance', refresh: true});
 								ns1blankspace.financial.compliance.init();
 							});
 						}	
@@ -7067,7 +7070,7 @@ ns1blankspace.financial.notes =
 			oSearch.addField('content');
 			oSearch.sort('id', 'asc');
 			oSearch.addFilter('title', 'EQUAL_TO', 'FINANCIAL NOTES (' + ns1blankspace.user.commonName + ')');
-			oSearch.addFilter('internal', 'EQUAL_TO', 'N')
+			oSearch.addFilter('private', 'EQUAL_TO', 'Y')
 			oSearch.rows = 1;
 			
 			oSearch.getResults(function(oResponse)
@@ -7132,8 +7135,12 @@ ns1blankspace.financial.notes =
 			
 		aHTML.push('<table class="ns1blankspaceColumn2">');
 
-		aHTML.push('<tr><td style="padding-top:0px; padding-bottom:5px;"><span id="ns1blankspaceFinancialNotesSave" class="ns1blankspaceAction">' +
+		aHTML.push('<tr><td style="padding-top:0px;"><span id="ns1blankspaceFinancialNotesSave" class="ns1blankspaceAction">' +
 								'Save</span></td></tr>');
+
+		aHTML.push('<tr><td style="padding-top:16px;" class="ns1blankspaceSubNote">' +
+							'Only you can see these notes.' +
+							'</td></tr>');
 
 		aHTML.push('</table>');	
 
@@ -7163,7 +7170,7 @@ ns1blankspace.financial.notes =
 
 		if (oDocument == undefined)
 		{
-			oData.internal = 'N';
+			oData.private = 'Y';
 			oData.title = 'FINANCIAL NOTES (' + ns1blankspace.user.commonName + ')';
 		}
 

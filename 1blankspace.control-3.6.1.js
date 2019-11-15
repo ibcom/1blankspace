@@ -79,7 +79,7 @@ ns1blankspace.option = $.extend(true, ns1blankspace.option,
 ns1blankspace.option.yodlee =
 {
 	user: 37059,
-	proxyURL: 'https://yodlee.lab.ibcom.biz'
+	proxyURL: 'https://yodlee.mydigitalstructure-lab.cloud'
 }
 
 ns1blankspace.option.stripe =
@@ -301,11 +301,11 @@ ns1blankspace.scripts =
 	},
 	{
 		nameSpace: '1blankspace.financial',
-		source: '/site/1903/1blankspace.financial-3.2.3.js'
+		source: '/site/1903/1blankspace.financial-3.5.9.js'
 	},
 	{
 		nameSpace: '1blankspace.financial.bankAccount',
-		source: '/site/1903/1blankspace.financial.bankaccount-3.6.0.js'
+		source: '/site/1903/1blankspace.financial.bankaccount-3.6.1.js'
 	},
 	{
 		nameSpace: '1blankspace.financial.invoice',
@@ -401,7 +401,7 @@ ns1blankspace.scripts =
 	},
 	{
 		nameSpace: '1blankspace.setup.website',
-		source: '/site/1903/1blankspace.setup.website-3.5.9.js'
+		source: '/site/1903/1blankspace.setup.website-3.6.1.js'
 	},
 	{
 		nameSpace: '1blankspace.setup.websiteForm',

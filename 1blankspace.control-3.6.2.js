@@ -33,7 +33,7 @@ ns1blankspace.option = $.extend(true, ns1blankspace.option,
 	taxOfficeURL: 'https://bp.ato.gov.au',
 	bulkInvoicing: true,
 	postInit: undefined,
-	initialiseSpaceTemplate: '/site/1903/1blankspace.setup.space-2.0.1.json',
+	initialiseSpaceTemplate: '/site/1903/1blankspace.setup.space-2.0.2.json',
 	searchWatermark: 'search',
 	showLogonOptions: false,
 	showLogonOptionsOnHover: false,
@@ -181,6 +181,9 @@ ns1blankspace.xhtml.viewContainer =
 				   '<li><a href="#" id="ns1blankspaceHomeOptionsConnections">' +
 				   	'<div>Connections</div><div class="ns1blankspaceSubNote">Other webapps, websites..</div></a>' +
 				   '</li>' +
+				   '<li><a href="#" id="ns1blankspaceHomeOptionsFavourites">' +
+				   	'<div>Tags</div><div class="ns1blankspaceSubNote">& favourites</div></a>' +
+				   '</li>' +
 				   '<li><a href="#" id="ns1blankspaceHomeOptionsSearch">' +
 				   	'<div>Search & reporting</div><div class="ns1blankspaceSubNote">Export, update, email & SMS..</div></a>' +
 				   '</li>' +
@@ -241,7 +244,7 @@ ns1blankspace.scripts =
 	},
 	{
 		nameSpace: '1blankspace.home',
-		source: '/site/1903/1blankspace.home-3.5.7.js'
+		source: '/site/1903/1blankspace.home-3.6.2.js'
 	},
 	{
 		nameSpace: '1blankspace.format',
@@ -249,7 +252,7 @@ ns1blankspace.scripts =
 	},
 	{
 		nameSpace: '1blankspace.contactPerson',
-		source: '/site/1903/1blankspace.contactperson-3.5.9.js'
+		source: '/site/1903/1blankspace.contactperson-3.6.1.js'
 	},
 	{
 		nameSpace: '1blankspace.contactBusiness',
@@ -261,7 +264,7 @@ ns1blankspace.scripts =
 	},
 	{
 		nameSpace: '1blankspace.action',
-		source: '/site/1903/1blankspace.action-3.5.8.js'
+		source: '/site/1903/1blankspace.action-3.6.1.js'
 	},
 	{
 		nameSpace: '1blankspace.messaging.conversation',
@@ -297,11 +300,11 @@ ns1blankspace.scripts =
 	},
 	{
 		nameSpace: '1blankspace.order',
-		source: '/site/1903/1blankspace.order-3.5.8.js'
+		source: '/site/1903/1blankspace.order-3.6.1.js'
 	},
 	{
 		nameSpace: '1blankspace.financial',
-		source: '/site/1903/1blankspace.financial-3.2.3.js'
+		source: '/site/1903/1blankspace.financial-3.5.9.js'
 	},
 	{
 		nameSpace: '1blankspace.financial.bankAccount',
@@ -337,7 +340,7 @@ ns1blankspace.scripts =
 	},
 	{
 		nameSpace: '1blankspace.financial.payroll',
-		source: '/site/1903/1blankspace.financial.payroll-3.5.9.js'
+		source: '/site/1903/1blankspace.financial.payroll-3.6.2.js'
 	},
 	{
 		nameSpace: '1blankspace.financial.budget',
@@ -385,7 +388,7 @@ ns1blankspace.scripts =
 	},
 	{
 		nameSpace: '1blankspace.setup.space',
-		source: '/site/1903/1blankspace.setup.space-3.6.0.js'
+		source: '/site/1903/1blankspace.setup.space-3.6.1.js'
 	},
 	{
 		nameSpace: '1blankspace.setup.structure',
@@ -393,15 +396,15 @@ ns1blankspace.scripts =
 	},
 	{
 		nameSpace: '1blankspace.setup.user',
-		source: '/site/1903/1blankspace.setup.user-3.4.6.js'
+		source: '/site/1903/1blankspace.setup.user-3.6.1.js'
 	},
 	{
 		nameSpace: '1blankspace.setup.userRole',
-		source: '/site/1903/1blankspace.setup.userRole-3.6.0.js'
+		source: '/site/1903/1blankspace.setup.userRole-3.6.1.js'
 	},
 	{
 		nameSpace: '1blankspace.setup.website',
-		source: '/site/1903/1blankspace.setup.website-3.5.9.js'
+		source: '/site/1903/1blankspace.setup.website-3.6.1.js'
 	},
 	{
 		nameSpace: '1blankspace.setup.websiteForm',
@@ -413,7 +416,7 @@ ns1blankspace.scripts =
 	},
 	{
 		nameSpace: '1blankspace.structureData',
-		source: '/site/1903/1blankspace.structuredata-2.0.1.js'
+		source: '/site/1903/1blankspace.structuredata-3.6.1.js'
 	},
 	{
 		nameSpace: '1blankspace.supportIssue',
@@ -421,7 +424,7 @@ ns1blankspace.scripts =
 	},
 	{
 		nameSpace: '1blankspace.setup.file',
-		source: '/site/1903/1blankspace.setup.file-3.5.9.js'
+		source: '/site/1903/1blankspace.setup.file-3.6.1.js'
 	},
 	{
 		nameSpace: '1blankspace.developer.space',
@@ -469,11 +472,11 @@ ns1blankspace.scripts =
 	},
 	{
 		nameSpace: '1blankspace.admin.schema',
-		source: '/site/1903/1blankspace.admin.schema-3.5.9.js'
+		source: '/site/1903/1blankspace.admin.schema-3.6.2.js'
 	},
 	{
 		nameSpace: '1blankspace.developer.membership',
-		source: '/jscripts/1blankspace.developer.membership-2.0.1.js'
+		source: '/site/1903/1blankspace.developer.membership-2.0.1.js'
 	},
 	{
 		nameSpace: '1blankspace.util.timezone',
@@ -510,6 +513,10 @@ ns1blankspace.scripts =
 	{
 		nameSpace: '1blankspace.util.contacts',
 		source: '/site/1903/1blankspace.util.contact-2.0.1.js'
+	},
+	{
+		nameSpace: '1blankspace.util.favourite',
+		source: '/site/1903/1blankspace.favourite-3.6.2.js'
 	}
 ]
 
@@ -1488,10 +1495,9 @@ ns1blankspace.control =
 								' Customised reporting with exporting, updating, emailing & SMS sending</span></div>' +
 								'<div class="ns1blankspaceViewControl" style="cursor:pointer;"><span id="ns1blankspaceViewControl_connections" class="ns1blankspaceViewControl">' +
 								' Connections</span></div>' +
+								'<div class="ns1blankspaceViewControl" style="cursor:pointer;"><span id="ns1blankspaceViewControl_favourites" class="ns1blankspaceViewControl">' +
+								' Tags & Favourites</span></div>' +
 								'</td>');
-
-					//	'<div class="ns1blankspaceViewControl" style="cursor:pointer;"><span id="ns1blankspaceViewControl_contactsearch" class="ns1blankspaceViewControl">' +
-					//			' Search Contacts</span></div>' +
 
 					aHTML.push('</tr>');
 				}	
