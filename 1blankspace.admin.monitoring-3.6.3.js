@@ -75,10 +75,13 @@ ns1blankspace.admin.monitoring =
 						aHTML.push('<table class="ns1blankspaceControl">');
 						
 						aHTML.push('<tr><td class="ns1blankspaceSub" style="font-size:0.875em; border-bottom-style:solid; border-width: 0px; border-color: #D0D0D0;">' +
-										'STATE CHANNEL</td></tr>');
+										'INFRASTRUCTURE</td></tr>');
 
 						aHTML.push('<tr><td id="ns1blankspaceControlStateChannelStatus" class="ns1blankspaceControl">' +
-										'Status</td></tr>');
+										'State Channel</td></tr>');
+
+						aHTML.push('<tr><td id="ns1blankspaceControlInstances" class="ns1blankspaceControl">' +
+										'Instances</td></tr>');
 
 						aHTML.push('</table>');
 					}	
@@ -94,6 +97,7 @@ ns1blankspace.admin.monitoring =
 					aHTML.push('<div id="ns1blankspaceMainNews" class="ns1blankspaceControlMain"></div>');
 
 					aHTML.push('<div id="ns1blankspaceMainStateChannel" class="ns1blankspaceControlMain"></div>');
+					aHTML.push('<div id="ns1blankspaceMainInstances" class="ns1blankspaceControlMain"></div>');
 
 					$('#ns1blankspaceMain').html(aHTML.join(''));
 					
@@ -101,12 +105,6 @@ ns1blankspace.admin.monitoring =
 					{
 						ns1blankspace.show({selector: '#ns1blankspaceMainSummary'});
 						ns1blankspace.admin.monitoring.summary();
-					});
-
-					$('#ns1blankspaceControlStateChannelStatus').click(function(event)
-					{
-						ns1blankspace.show({selector: '#ns1blankspaceMainStateChannel'});
-						ns1blankspace.admin.monitoring.stateChannel.status();
 					});
 
 					$('#ns1blankspaceControlServiceFaults').click(function(event)
@@ -131,6 +129,12 @@ ns1blankspace.admin.monitoring =
 					{
 						ns1blankspace.show({selector: '#ns1blankspaceMainNews'});
 						ns1blankspace.admin.monitoring.news.show();
+					});
+
+					$('#ns1blankspaceControlInstances').click(function(event)
+					{
+						ns1blankspace.show({selector: '#ns1blankspaceMainInstances'});
+						ns1blankspace.admin.monitoring.instances.services.show();
 					});
 
 					ns1blankspace.show({selector: '#ns1blankspaceMainSummary'});
@@ -1630,30 +1634,301 @@ ns1blankspace.admin.monitoring.debug =
 	}
 }
 
-ns1blankspace.admin.monitoring.instance =
+ns1blankspace.admin.monitoring.instances =
 {
 	data: {},
 
-	information: function (oParam, oResponse)
+	information:
 	{
-		if (oResponse == undefined)
+		get: function (oParam, oResponse)
 		{
-			$.ajax(
+			if (oResponse == undefined)
 			{
-				type: 'POST',
-				url: ns1blankspace.util.endpointURI('ADMIN_INSTANCE_INFORMATION_SEARCH'),
-				dataType: 'json',
-				success: function(data)
+				$.ajax(
 				{
-					ns1blankspace.admin.monitoring.instance.information(oParam, data);
+					type: 'POST',
+					url: ns1blankspace.util.endpointURI('ADMIN_INSTANCE_INFORMATION_SEARCH'),
+					dataType: 'json',
+					success: function(data)
+					{
+						ns1blankspace.admin.monitoring.instances.information.get(oParam, data);
+					}
+				});
+			}
+			else
+			{
+				ns1blankspace.admin.monitoring.instances.data._information = oResponse.contents
+
+				try
+				{
+					ns1blankspace.admin.monitoring.instances.data.information = JSON.parse(oResponse.contents)
 				}
-			});
-		}
-		else
+				catch(error)
+				{
+					ns1blankspace.status.error(error);
+				}
+
+				ns1blankspace.util.onComplete(oParam)			
+			}
+		},
+
+		show: function (oParam)
 		{
-			ns1blankspace.admin.monitoring.instance.data = oResponse.contents
+			var sXHTMLElementID = ns1blankspace.util.getParam(oParam, 'xhtmlElementID').value;
+
+			if (sXHTMLElementID != undefined)
+			{
+				$('#' + sXHTMLElementID).html(ns1blankspace.admin.monitoring.instances.data.information.codereleasedate)
+			}
 		}
+	},
+
+	services:
+	{
+		data: {},
+
+		get: function (oParam, oResponse)
+		{
+			if (oResponse == undefined)
+			{
+				var oSearch = new AdvancedSearch();
+				oSearch.method = 'SETUP_ADMIN_SERVER_SEARCH';
+				oSearch.addField('notes,space,spacetext,title,type,typetext');
+				
+				oSearch.rows = 9999;
+				oSearch.getResults(function(data) {ns1blankspace.admin.monitoring.instances.services.get(oParam, data)})		
+			}
+			else
+			{
+				ns1blankspace.admin.monitoring.instances.data.services = oResponse.data.rows
+			}
+		},
+
+		show:	function (oParam, oResponse)
+		{
+			var oSearchText = ns1blankspace.util.getParam(oParam, 'searchText');
+			var sSearchText;
+
+			if (oSearchText.exists)
+			{
+				sSearchText = oSearchText.value;
+				ns1blankspace.admin.monitoring.instances.data.searchText = sSearchText;
+			}
+			else
+			{	
+				sSearchText = ns1blankspace.admin.monitoring.instances.data.searchText;
+			}	
+
+			if (oResponse == undefined)
+			{	
+				var aHTML = [];
+
+				aHTML.push('<table class="ns1blankspaceContainer">' +
+								'<tr class="ns1blankspaceContainer">' +
+								'<td id="ns1blankspaceAdminMonitoringInstancesColumn1"></td>' +
+								'<td id="ns1blankspaceAdminMonitoringInstancesColumn2" style="width:115px;"></td>' +
+								'</tr>' +
+								'</table>');				
+				
+				$('#ns1blankspaceMainInstances').html(aHTML.join(''));
+
+				$('#ns1blankspaceAdminMonitoringInstancesColumn1').html(ns1blankspace.xhtml.loading);
+
+				ns1blankspace.admin.monitoring.instances.services.data.details = [];
+
+				var oSearch = new AdvancedSearch();
+				oSearch.method = 'SETUP_ADMIN_SERVER_SEARCH';
+				oSearch.addField('notes,space,spacetext,title,type,typetext,guid,modifieddate');
+
+				if (sSearchText != undefined)
+				{
+					oSearch.addBracket('(');
+					oSearch.addFilter('title', 'TEXT_IS_LIKE', sSearchText);
+					oSearch.addOperator('or');
+					oSearch.addFilter('notes', 'TEXT_IS_LIKE', sSearchText);
+					oSearch.addOperator('or');
+					oSearch.addFilter('guid', 'TEXT_IS_LIKE', sSearchText);
+					oSearch.addBracket(')');
+				}
+
+				oSearch.rows = 9999;
+				oSearch.sort('title', 'asc');
+				oSearch.getResults(function(data) {ns1blankspace.admin.monitoring.instances.services.show(oParam, data)});
+			}
+			else
+			{
+				var aHTML = [];
+				
+				if (oResponse.data.rows.length == 0)
+				{
+					aHTML.push('<table id="ns1blankspaceAdminMonitoringInstances">' +
+									'<tr><td class="ns1blankspaceSub">No debug logs.</td></tr></table>');
+
+					$('#ns1blankspaceAdminMonitoringInstancesColumn1').html(aHTML.join(''));
+				}
+				else
+				{
+					var aHTML = [];
+
+					aHTML.push('<table id="ns1blankspaceAdminMonitoringInstances" class="ns1blankspace" style="font-size:0.875em;">' +
+								'<tr class="ns1blankspaceHeaderCaption">' +
+								'<td class="ns1blankspaceHeaderCaption" style="width:65px;">Name</td>' +
+								'<td class="ns1blankspaceHeaderCaption">Type</td>' +
+								'<td class="ns1blankspaceHeaderCaption">Last Updated</td>' +
+								'</tr>');
+
+					$(oResponse.data.rows).each(function() 
+					{
+						aHTML.push(ns1blankspace.admin.monitoring.instances.services.row(this));
+					});
+					
+					aHTML.push('</table>');
+				}
+
+				ns1blankspace.render.page.show(
+				{
+					type: 'JSON',
+					xhtmlElementID: 'ns1blankspaceAdminMonitoringInstancesColumn1',
+					xhtmlContext: 'AdminMonitoringInstances',
+					xhtml: aHTML.join(''),
+					showMore: (oResponse.morerows == "true"),
+					more: oResponse.moreid,
+					rows: 100,
+					functionShowRow: ns1blankspace.admin.monitoring.instances.services.row,
+					functionOpen: undefined,
+					functionOnNewPage: ns1blankspace.admin.monitoring.instances.services.bind
+				});
+
+				var aHTML = [];
+
+				aHTML.push('<table class="ns1blankspaceColumn2">');
+
+				aHTML.push('<tr><td class="ns1blankspaceText" style="padding-top:14px;">' +
+										'<input id="ns1blankspaceAdminMonitoringInstancesSearchText" class="ns1blankspaceText" style="width:130px;">' +
+										'</td></tr>');
+																	
+				aHTML.push('<tr><td style="padding-top:0px;">' +
+								'<span id="ns1blankspaceAdminMonitoringInstancesSearch" class="ns1blankspaceAction">Search</span>' +
+								'');
+
+				if (sSearchText != undefined)
+				{	
+					aHTML.push('' +
+								' <span id="ns1blankspaceAdminMonitoringInstancesSearchClear" class="ns1blankspaceAction">Clear</span>' +
+								'</td></tr>');
+				}
+
+				aHTML.push('</table>');
+
+				if ($('#ns1blankspaceAdminMonitoringInstancesColumn2 table').length == 0)
+				{
+					$('#ns1blankspaceAdminMonitoringInstancesColumn2').html(aHTML.join(''));
+				}
+				else
+				{
+					$('#ns1blankspaceAdminMonitoringInstancesColumn2 table').before(aHTML.join(''));
+				}
+
+				$('#ns1blankspaceAdminMonitoringInstancesSearch').button(
+				{
+					label: 'Search'
+				})
+				.click(function() 
+				{
+					oParam = ns1blankspace.util.setParam(oParam, 'searchText', $('#ns1blankspaceAdminMonitoringInstancesSearchText').val());
+					ns1blankspace.admin.monitoring.instances.search.show(oParam);
+				})
+				.css('width', '65px');
+
+				$('#ns1blankspaceAdminMonitoringInstancesSearchClear').button(
+				{
+					label: 'Clear'
+				})
+				.click(function() 
+				{
+					oParam = ns1blankspace.util.setParam(oParam, 'searchText', '');
+					ns1blankspace.admin.monitoring.instances.services.show(oParam);
+				})
+				.css('width', '57px');
+
+				$('#ns1blankspaceAdminMonitoringInstancesSearchText').keyup(function(e)
+				{
+					if (e.which === 13)
+			    	{
+			    		oParam = ns1blankspace.util.setParam(oParam, 'searchText', $('#ns1blankspaceAdminMonitoringInstancesSearchText').val())
+			    		ns1blankspace.admin.monitoring.instances.services.show(oParam);
+			    	}
+				});				
+
+				$('#ns1blankspaceAdminMonitoringInstancesSearchText').val(sSearchText);
+			}
+		},	
+
+		row: function (oRow)	
+		{
+			var aHTML = [];
+
+			ns1blankspace.admin.monitoring.instances.services.data.details.push(oRow);
+
+			aHTML.push('<tr id="ns1blankspaceAdminMonitoringInstances_container-' + oRow["id"] + '">');
+
+			aHTML.push('<td style="width:120px;" id="ns1blankspaceAdminMonitoringInstances_title-' + oRow["id"] + '" class="ns1blankspaceRow ns1blankspaceRowSelect">' +
+								oRow["title"] + '</td>');
+
+			aHTML.push('<td id="ns1blankspaceAdminMonitoringInstances_typetext-' + oRow["id"] + '" class="ns1blankspaceRow">' +
+								oRow["typetext"] + '</td>');
+
+			aHTML.push('<td id="ns1blankspaceAdminMonitoringInstances_modifieddate-' + oRow["id"] + '" class="ns1blankspaceRow">' +
+								oRow["modifieddate"] + '</td>');
+
+			aHTML.push('</tr>');
+
+			return aHTML.join('');
+		},
+
+		bind: function ()
+		{
+			$('#ns1blankspaceAdminMonitoringInstances .ns1blankspaceRowSelect').click(function()
+			{
+				ns1blankspace.admin.monitoring.instances.services.details({xhtmlElementID: this.id})
+			});		
+		},
+
+		details: function (oParam)
+		{
+			var sXHTMLElementID;
+			var sKey;
+
+			if (ns1blankspace.util.param(oParam, 'xhtmlElementID').exists)
+			{
+				sXHTMLElementID = ns1blankspace.util.param(oParam, 'xhtmlElementID').value
+				sKey = ns1blankspace.util.param(oParam, 'xhtmlElementID', '-').values[1];
+			}
+
+			if ($('#ns1blankspaceAdminMonitoringInstances_container_details-' + sKey).length != 0)
+			{
+				$('#ns1blankspaceAdminMonitoringInstances_container_details-' + sKey).remove();
+			}
+			else
+			{
+				var sHTML = 'No details';
+
+				var oDetail = $.grep(ns1blankspace.admin.monitoring.instances.services.data.details, function (a) {return a.id == sKey;})[0];
+
+				if (oDetail)
+				{
+					sHTML = '<div class="ns1blankspaceSummaryCaption">Space:</div><div>' + oDetail.spacetext + '</div>' +
+								'<div class="ns1blankspaceSummaryCaption">GUID:</div><div>' + oDetail.guid + '</div>' +
+								'<div class="ns1blankspaceSummaryCaption">Notes:</div><div>' + oDetail.notes + '</div>';
+					
+					$('#ns1blankspaceAdminMonitoringInstances_container-' + sKey).after('<tr id="ns1blankspaceAdminMonitoringInstances_container_details-' + sKey + '">' +
+						'<td colspan=4><div style="background-color: #F3F3F3; padding:8px; color:#444444; font-weight:100; font-size:0.75em;">' + sHTML + '</div></td></tr>');	
+				}
+			}
+		}	
 	}
 }
 
+//https://superuser.com/questions/226828/how-to-monitor-a-folder-and-trigger-a-command-line-action-when-a-file-is-created
+//https://gallery.technet.microsoft.com/scriptcenter/18c5d6b8-565e-4ab9-8e1f-7daefcc10545
 

@@ -468,7 +468,7 @@ ns1blankspace.scripts =
 	},
 	{
 		nameSpace: '1blankspace.admin.monitoring',
-		source: '/site/1903/1blankspace.admin.monitoring-3.1.8.js'
+		source: '/site/1903/1blankspace.admin.monitoring-3.6.3.js'
 	},
 	{
 		nameSpace: '1blankspace.admin.schema',
