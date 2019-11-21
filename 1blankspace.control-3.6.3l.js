@@ -370,7 +370,7 @@ ns1blankspace.scripts =
 	},
 	{
 		nameSpace: '1blankspace.setup.financial',
-		source: '/site/388/1blankspace.setup.financial-3.5.9.js'
+		source: '/site/388/1blankspace.setup.financial-3.6.3.js'
 	},
 	{
 		nameSpace: '1blankspace.setup.action',
