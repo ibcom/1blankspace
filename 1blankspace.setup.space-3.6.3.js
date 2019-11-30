@@ -118,13 +118,13 @@ ns1blankspace.setup.space =
 						aHTML.push('<table class="ns1blankspaceControl">');
 							
 						aHTML.push('<tr class="ns1blankspaceControl">' +
-										'<td id="ns1blankspaceControlStorage" class="ns1blankspaceControl">Storage<br />Accounts' +
+										'<td id="ns1blankspaceControlStorage" class="ns1blankspaceControl">Storage Accounts' +
 										'<br /><span class="ns1blankspaceSub" style="font-size:0.75em;">AWS S3</span></td>' +
 										'</tr>');
 
 						aHTML.push('<tr class="ns1blankspaceControl">' +
-										'<td id="ns1blankspaceControlMessaging" class="ns1blankspaceControl">Messaging<br />Accounts' +
-										'<br /><span class="ns1blankspaceSub" style="font-size:0.75em;">SMS Provider</span></td>' +
+										'<td id="ns1blankspaceControlSMS" class="ns1blankspaceControl">SMS Accounts' +
+										'<br /><span class="ns1blankspaceSub" style="font-size:0.75em;">SMSGlobal</span></td>' +
 										'</tr>');
 
 						aHTML.push('</table>');	
@@ -153,7 +153,7 @@ ns1blankspace.setup.space =
 						aHTML.push('<div id="ns1blankspaceMainDetails" class="ns1blankspaceControlMain"></div>');
 						aHTML.push('<div id="ns1blankspaceMainInitialise" class="ns1blankspaceControlMain"></div>');
 						aHTML.push('<div id="ns1blankspaceMainStorage" class="ns1blankspaceControlMain"></div>');
-						aHTML.push('<div id="ns1blankspaceMainMessaging" class="ns1blankspaceControlMain"></div>');
+						aHTML.push('<div id="ns1blankspaceMainSMS" class="ns1blankspaceControlMain"></div>');
 						aHTML.push('<div id="ns1blankspaceMainAccess" class="ns1blankspaceControlMain"></div>');
 						aHTML.push('<div id="ns1blankspaceMainAdvanced" class="ns1blankspaceControlMain"></div>');
 						
@@ -189,10 +189,10 @@ ns1blankspace.setup.space =
 							ns1blankspace.setup.space.storage.show();
 						});
 
-						$('#ns1blankspaceControlMessaging').click(function(event)
+						$('#ns1blankspaceControlSMS').click(function(event)
 						{
-							ns1blankspace.show({selector: '#ns1blankspaceMainMessaging'});
-							ns1blankspace.setup.space.messaging.show();
+							ns1blankspace.show({selector: '#ns1blankspaceMainSMS'});
+							ns1blankspace.setup.space.sms.show();
 						});
 
 						$('#ns1blankspaceControlAccess').click(function(event)
@@ -2513,20 +2513,44 @@ ns1blankspace.setup.space.export =
 	}
 }
 
-ns1blankspace.setup.space.storage =	
+ns1blankspace.setup.space.sms =	
 {
+	data:
+	{
+		providers:
+		{
+			1: 'SMSGlobal'
+		}
+	},
+
+	providers: function (oParam, oResponse)
+	{
+		if (oResponse == undefined)
+		{	
+			var oSearch = new AdvancedSearch();
+			oSearch.method = 'SETUP_MESSAGING_SMS_PROVIDER_SEARCH';
+			oSearch.addField('title');
+			oSearch.rows = 99999;
+			oSearch.sort('accessid', 'asc');
+			oSearch.getResults(function(data)
+			{
+				ns1blankspace.setup.space.sms.providers(oParam, data)
+			});
+		}
+	},
+
 	show:	function (oParam, oResponse)
 	{	
 		if (oResponse == undefined)
 		{	
 			var oSearch = new AdvancedSearch();
-			oSearch.method = 'SETUP_AWS_ACCOUNT_SEARCH';
-			oSearch.addField('accessid,modifieddate,notes');
-			oSearch.rows = 100;
-			oSearch.sort('accessid', 'asc');
+			oSearch.method = 'SETUP_MESSAGING_SMS_ACCOUNT_SEARCH';
+			oSearch.addField('accountname,id,notes,provider,providertext,title,createddate');
+			oSearch.rows = 99999;
+			oSearch.sort('accountname', 'asc');
 			oSearch.getResults(function(data)
 			{
-				ns1blankspace.setup.space.storage.show(oParam, data)
+				ns1blankspace.setup.space.sms.show(oParam, data)
 			});
 		}
 		else
@@ -2535,63 +2559,54 @@ ns1blankspace.setup.space.storage =
 				
 			aHTML.push('<table class="ns1blankspaceContainer">' +
 							'<tr class="ns1blankspaceContainer">' +
-							'<td id="ns1blankspaceSpaceStorageColumn1" class="ns1blankspaceColumn1Flexible"></td>' +
-							'<td id="ns1blankspaceSpaceStorageColumn2" class="ns1blankspaceColumn2" style="width:200px;"></td>' +
+							'<td id="ns1blankspaceSpaceSMSColumn1" class="ns1blankspaceColumn1Flexible"></td>' +
+							'<td id="ns1blankspaceSpaceSMSColumn2" class="ns1blankspaceColumn2" style="width:200px;"></td>' +
 							'</tr>' + 
 							'</table>');
 
-			$('#ns1blankspaceMainStorage').html(aHTML.join(''));
+			$('#ns1blankspaceMainSMS').html(aHTML.join(''));
 			
 			var aHTML = [];
 				
 			aHTML.push('<table class="ns1blankspaceColumn2">');
 			
 			aHTML.push('<tr><td class="ns1blankspaceAction">' +
-						'<span id="ns1blankspaceSpaceStorageAdd">Add</span>' +
+						'<span id="ns1blankspaceSpaceSMSAdd">Add</span>' +
 						'</td></tr>');
 						
-			aHTML.push('<tr><td style="padding-top:20px;">' +
-						'<a href="https://aws.amazon.com/s3/" target="_blank">What is AWS S3?</a>' +
-						'</td></tr>');	
-
 			aHTML.push('<tr><td style="padding-top:16px;" class="ns1blankspaceSubNote">' +
-						'You can optionally save your files to your own AWS S3 Bucket.' +
-						'<br /><br />If you create a bucket with <i>1blankspace-attachments</i>' +
-						' in its name and add it here; all files you attach will be saved to it.' +
+						'You can use the shared SMSGlobal service to send your SMS messages as per the <a href="https://docs.mydigitalstructure.cloud/pricing" target="_blank">standard pricing</a>, ' +
+						'or you can set up your own account with <a href="https://www.smsglobal.com" target="_blank">SMSGlobal</a> and add it your space.' +
 						'</td></tr>');	
-
-			aHTML.push('<tr><td style="padding-top:16px;" class="ns1blankspaceSubNote">' +
-						'The AWS user associated with the <i>Access ID</i> will need a security policy allowing access to the S3 bucket,' +
-						' <a href="http://docs.mydigitalstructure.com/gettingstarted_export_aws_s3" target="_blank">more..</a>' + 
-						'</td></tr>');
 
 			aHTML.push('</table>');					
 			
-			$('#ns1blankspaceSpaceStorageColumn2').html(aHTML.join(''));
+			$('#ns1blankspaceSpaceSMSColumn2').html(aHTML.join(''));
 		
-			$('#ns1blankspaceSpaceStorageAdd').button(
+			$('#ns1blankspaceSpaceSMSAdd').button(
 			{
 				label: "Add"
 			})
 			.click(function()
 			{
-				 ns1blankspace.setup.space.storage.add(oParam);
+				 ns1blankspace.setup.space.sms.add(oParam);
 			})
 				
 			var aHTML = [];
 
 			if (oResponse.data.rows.length == 0)
 			{
-				aHTML.push('<table><tr><td class="ns1blankspaceNothing">No storage set up.</td></tr></table>');
+				aHTML.push('<table><tr><td class="ns1blankspaceNothing">No SMS accounts set up.  This space is using the shared account.</td></tr></table>');
 
-				$('#ns1blankspaceSpaceStorageColumn1').html(aHTML.join(''));
+				$('#ns1blankspaceSpaceSMSColumn1').html(aHTML.join(''));
 			}
 			else
 			{
-				aHTML.push('<table id="ns1blankspaceSetupSpaceStorage">');
+				aHTML.push('<table id="ns1blankspaceSetupSpaceSMS">');
 				aHTML.push('<tr class="ns1blankspaceCaption">');
-				aHTML.push('<td class="ns1blankspaceHeaderCaption">Access ID</td>');
-				aHTML.push('<td class="ns1blankspaceHeaderCaption">Added</td>');
+				aHTML.push('<td class="ns1blankspaceHeaderCaption">Provider</td>');
+				aHTML.push('<td class="ns1blankspaceHeaderCaption">Account Name</td>');
+				aHTML.push('<td class="ns1blankspaceHeaderCaption">In Use Since</td>');
 				aHTML.push('<td class="ns1blankspaceHeaderCaption">&nbsp;</td>');
 				aHTML.push('</tr>');
 
@@ -2599,15 +2614,18 @@ ns1blankspace.setup.space.storage =
 				{
 					aHTML.push('<tr class="ns1blankspaceRow">');
 									
-					aHTML.push('<td id="ns1blankspaceSpaceStorage_accessid-' + this.id + '" class="ns1blankspaceRow ns1blankspaceRowSelect">' +
-											this.accessid + '</td>');
+					aHTML.push('<td id="ns1blankspaceSpaceSMS_provider-' + this.id + '" class="ns1blankspaceRow ns1blankspaceRowSelect">' +
+											this.providertext.split('(')[0] + '</td>');
 
-					aHTML.push('<td id="ns1blankspaceSpaceStorage_added-' + this.modifieddate + '" class="ns1blankspaceRow">' +
-											this.modifieddate + '</td>');
+					aHTML.push('<td id="ns1blankspaceSpaceSMS_accountname-' + this.id + '" class="ns1blankspaceRow">' +
+											this.accountname + '</td>');
+
+					aHTML.push('<td id="ns1blankspaceSpaceSMS_createddate-' + this.id + '" class="ns1blankspaceRow ns1blankspaceSub">' +
+											this.createddate + '</td>');
 											
 					aHTML.push('<td style="width:30px;text-align:right;" class="ns1blankspaceRow">');
 						
-					aHTML.push('<span id="ns1blankspaceSpaceStorage_options_remove-' + this.id + '" class="ns1blankspaceRowRemove"></span>');
+					aHTML.push('<span id="ns1blankspaceSpaceSMS_options_remove-' + this.id + '" class="ns1blankspaceRowRemove"></span>');
 							
 					aHTML.push('</td>');
 									
@@ -2616,9 +2634,9 @@ ns1blankspace.setup.space.storage =
 				
 				aHTML.push('</table>');
 
-				$('#ns1blankspaceSpaceStorageColumn1').html(aHTML.join(''));
+				$('#ns1blankspaceSpaceSMSColumn1').html(aHTML.join(''));
 						
-				$('#ns1blankspaceSetupSpaceStorage span.ns1blankspaceRowRemove').button(
+				$('#ns1blankspaceSetupSpaceSMS span.ns1blankspaceRowRemove').button(
 				{
 					text: false,
 					icons:
@@ -2631,279 +2649,181 @@ ns1blankspace.setup.space.storage =
 					ns1blankspace.remove(
 					{
 						xhtmlElementID: this.id,
-						method: 'SETUP_AWS_ACCOUNT_MANAGE',
+						method: 'SETUP_MESSAGING_SMS_ACCOUNT_MANAGE',
 						parentLevel: 2,
-						ifNoneMessage: 'No storage set up.'
+						ifNoneMessage: 'No SMS accounts set up.  This space is using the shared account.'
 					});
 				})
 				.css('width', '15px')
 				.css('height', '17px');
 				
-				$('#ns1blankspaceSetupSpaceStorage .ns1blankspaceRowSelect')
+				$('#ns1blankspaceSetupSpaceSMS .ns1blankspaceRowSelect')
 				.click(function()
 				{
-					ns1blankspace.setup.space.storage.add({xhtmlElementID: this.id})
+					ns1blankspace.setup.space.sms.add({xhtmlElementID: this.id})
 				});
 			}
 		}
 	},
 
-	add:		function (oParam, oResponse)
-				{
-					var sID; 
+	add: function (oParam, oResponse)
+	{
+		var sID; 
+		
+		if (oResponse == undefined)
+		{
+			var sXHTMLElementID;
+
+			if (oParam != undefined)
+			{
+				if (oParam.xhtmlElementID != undefined) {sXHTMLElementID = oParam.xhtmlElementID}
+			}
+			
+			if (sXHTMLElementID != undefined)
+			{
+				var aXHTMLElementID = sXHTMLElementID.split('-');
+				var sID = aXHTMLElementID[1];
+			}	
+		
+			var aHTML = [];
+
+			aHTML.push('<table class="ns1blankspace">');
 					
-					if (oResponse == undefined)
-					{
-						var sXHTMLElementID;
+			aHTML.push('<tr class="ns1blankspaceCaption">' +
+							'<td class="ns1blankspaceCaption">' +
+							'Provider' +
+							'</td></tr>' +
+							'<tr class="ns1blankspace">' +
+							'<td class="ns1blankspaceRadio">' +
+							'<input type="radio" id="radioProvider3" name="radioProvider" value="3"/>SMSGlobal' +
+							'</td></tr>');
 
-						if (oParam != undefined)
-						{
-							if (oParam.xhtmlElementID != undefined) {sXHTMLElementID = oParam.xhtmlElementID}
-						}
-						
-						if (sXHTMLElementID != undefined)
-						{
-							var aXHTMLElementID = sXHTMLElementID.split('-');
-							var sID = aXHTMLElementID[1];
-						}	
-					
-						var aHTML = [];
+			aHTML.push('<tr><td class="ns1blankspaceCaption">' +
+							'Account Name' +
+							'</td></tr>' +
+							'<tr class="ns1blankspaceText">' +
+							'<td class="ns1blankspaceText">' +
+							'<input id="ns1blankspaceSetupSpaceSMSAccountName" class="ns1blankspaceText">' +
+							'</td></tr>');
 
-						aHTML.push('<table class="ns1blankspace">');
-								
-						aHTML.push('<tr><td class="ns1blankspaceCaption">' +
-										'Access ID' +
-										'</td></tr>' +
-										'<tr class="ns1blankspaceText">' +
-										'<td class="ns1blankspaceText">' +
-										'<input id="ns1blankspaceSetupSpaceStorageAccessID" class="ns1blankspaceText">' +
-										'</td></tr>');
+			aHTML.push('<tr><td class="ns1blankspaceCaption">' +
+							'Account Password' +
+							'</td></tr>' +
+							'<tr class="ns1blankspaceText">' +
+							'<td class="ns1blankspaceText">' +
+							'<input id="ns1blankspaceSetupSpaceSMSAccountPassword" class="ns1blankspaceText" type="password">' +
+							'</td></tr>');
 
-						aHTML.push('<tr><td class="ns1blankspaceCaption">' +
-										'Access Key (Secret/Password)' +
-										'</td></tr>' +
-										'<tr class="ns1blankspaceText">' +
-										'<td class="ns1blankspaceText">' +
-										'<input id="ns1blankspaceSetupSpaceStorageAccessKey" class="ns1blankspaceText" type="password">' +
-										'</td></tr>');
-
-						aHTML.push('<tr><td class="ns1blankspaceCaption">' +
-										'Bucket Name' +
-										'</td></tr>' +
-										'<tr class="ns1blankspaceText">' +
-										'<td class="ns1blankspaceText">' +
-										'<input id="ns1blankspaceSetupSpaceStorageBucketTitle" class="ns1blankspaceText">' +
-										'</td></tr>');
-
-						aHTML.push('<tr class="ns1blankspaceCaption">' +
-										'<td class="ns1blankspaceCaption">' +
-										'Notes' +
-										'</td></tr>' +
-										'<tr class="ns1blankspaceTextMulti">' +
-										'<td class="ns1blankspaceTextMulti">' +
-										'<textarea rows="4" cols="35" style="width:100%; height:140px;" id="ns1blankspaceSetupSpaceStorageNotes" class="ns1blankspaceTextMulti"></textarea>' +
-										'</td></tr>');
-										
-						aHTML.push('</table>');	
-
-						if (sID != undefined)
-						{
-							aHTML.push('<table class="ns1blankspace">');
-									
-							aHTML.push('<tr><td class="ns1blankspaceCaption">' +
-											'Copy all attachments to this AWS Bucket' +
-											'</td></tr>' +
-											'<tr><td class="ns1blankspaceSubNote">' +
-											'This will copy all attachment files that have not already been copied to an AWS bucket.' +
-											'<br />After clicking Copy it will confirm the number of attachments and you can then continue or cancel.' +
-											'</td></tr>' +
-											'<tr class="ns1blankspaceText">' +
-											'<td class="ns1blankspaceText" style="padding-top:6px;" id="ns1blankspaceSetupSpaceStorageBucketAttachmentCopyContainer">' +
-											'<div id="ns1blankspaceSetupSpaceStorageBucketAttachmentCopy" class="ns1blankspaceAction"></div>' +
-											'</td></tr>');
-
-							aHTML.push('<tr><td class="ns1blankspaceCaption ns1blankspaceAttachmentIndex" style="padding-top:12px;">' +
-											'Download an index of attachments copied to this AWS Bucket' +
-											'</td></tr>' +
-											'<tr><td class="ns1blankspaceSubNote ns1blankspaceAttachmentIndex">' +
-											'This will down a CSV file of all the attachment files that have been copied to an AWS bucket.' +
-											'</td></tr>' +
-											'<tr class="ns1blankspaceText">' +
-											'<td class="ns1blankspaceText ns1blankspaceAttachmentIndex" style="padding-top:6px;" id="ns1blankspaceSetupSpaceStorageBucketAttachmentIndexContainer">' +
-											'<div id="ns1blankspaceSetupSpaceStorageBucketAttachmentIndex" class="ns1blankspaceAction"></div>' +
-											'</td></tr>');
-
-							aHTML.push('</table>');	
-						}	
-						
-						$('#ns1blankspaceSpaceStorageColumn1').html(aHTML.join(''));
-
-						$('#ns1blankspaceSetupSpaceStorageBucketAttachmentCopy').button(
-						{
-							label: 'Copy to AWS',
-						})
-						.click(function()
-						{
-							if (_.isFunction(ns1blankspace.setup.space.storage.prepareCopy))
-							{
-								ns1blankspace.setup.space.storage.prepareCopy(oParam)
-							}
-							else
-							{
-								ns1blankspace.setup.space.storage.copy(oParam)
-							}
-						})
-						.css('width', '140px');
-
-						$('#ns1blankspaceSetupSpaceStorageBucketAttachmentIndex').button(
-						{
-							label: 'Download Index',
-						})
-						.click(function()
-						{
-							ns1blankspace.setup.space.storage.index.process(oParam);
-						})
-						.css('width', '140px');
-
-						$('#ns1blankspaceSetupSpaceStorageAccessID').focus();
-						
-						var aHTML = [];
-
-						aHTML.push('<table class="ns1blankspaceColumn2">');
-								
-						aHTML.push('<tr><td>' +
-										'<span class="ns1blankspaceAction" style="width:80px;" id="ns1blankspaceSpaceStorageSave">Save</span>' +
-										'</td></tr>');
-					
-						aHTML.push('<tr><td>' +
-										'<span class="ns1blankspaceAction" style="width:80px;" id="ns1blankspaceSpaceStorageCancel">Cancel</span>' +
-										'</td></tr>');
-										
-						aHTML.push('</table>');	
-
-						$('#ns1blankspaceSpaceStorageColumn2').html(aHTML.join(''));
-						
-						$('#ns1blankspaceSpaceStorageSave').button(
-						{
-							text: "Save"
-						})
-						.click(function() 
-						{
-							var oData =
-							{
-								accessid: $('#ns1blankspaceSetupSpaceStorageAccessID').val(),
-								id: sID,
-								notes: $('#ns1blankspaceSetupSpaceStorageNotes').val()
-							}
-
-							if ($('#ns1blankspaceSetupSpaceStorageAccessKey').val() != '')
-							{
-								oData.accesskey = $('#ns1blankspaceSetupSpaceStorageAccessKey').val()
-							}	
+			aHTML.push('<tr class="ns1blankspaceCaption">' +
+							'<td class="ns1blankspaceCaption">' +
+							'Notes' +
+							'</td></tr>' +
+							'<tr class="ns1blankspaceTextMulti">' +
+							'<td class="ns1blankspaceTextMulti">' +
+							'<textarea rows="4" cols="35" style="width:100%; height:140px;" id="ns1blankspaceSetupSpaceSMSNotes" class="ns1blankspaceTextMulti"></textarea>' +
+							'</td></tr>');
 							
-							ns1blankspace.status.working();
+			aHTML.push('</table>');	
 
-							$.ajax(
-							{
-								type: 'POST',
-								url: ns1blankspace.util.endpointURI('SETUP_AWS_ACCOUNT_MANAGE'),
-								data: oData,
-								dataType: 'json',
-								success: function(data)
-								{
-									if (data.status == 'OK')
-									{	
-										if ($('#ns1blankspaceSetupSpaceStorageBucketTitle').val() != '')
-										{	
-											var sAccount = data.id;
+			$('#ns1blankspaceSpaceSMSColumn1').html(aHTML.join(''));
 
-											var oData =
-											{
-												id: $('#ns1blankspaceSetupSpaceStorageBucketTitle').attr('data-id'),
-												account: sAccount,
-												title: $('#ns1blankspaceSetupSpaceStorageBucketTitle').val(),
-												notes: $('#ns1blankspaceSetupSpaceStorageNotes').val()	
-											}
+			$('#ns1blankspaceSetupSpaceSMSAccountName').focus();
+			
+			var aHTML = [];
 
-											$.ajax(
-											{
-												type: 'POST',
-												url: ns1blankspace.util.endpointURI('SETUP_AWS_S3_BUCKET_MANAGE'),
-												data: oData,
-												dataType: 'json',
-												success: function(data)
-												{
-													if (data.status == 'OK')
-													{	
-														ns1blankspace.status.message('Saved.')
-														ns1blankspace.show({selector: '#ns1blankspaceMainStorage', refresh: true});
-														ns1blankspace.setup.space.storage.show();
-													}
-													else
-													{
-														ns1blankspace.status.error(data.error.errornotes);
-													}	
-												}
-											});
-										}
-										else
-										{
-											ns1blankspace.status.message('Saved.')
-											ns1blankspace.show({selector: '#ns1blankspaceMainStorage', refresh: true});
-											ns1blankspace.setup.space.storage.show();
-										}	
-									}
-									else
-									{
-										ns1blankspace.status.error(data.error.errornotes);
-									}	
-								}
-							});
-						});
-						
-						$('#ns1blankspaceSpaceStorageCancel').button(
-						{
-							text: "Cancel"
-						})
-						.click(function() 
-						{
-							ns1blankspace.show({selector: '#ns1blankspaceMainStorage'});
-							ns1blankspace.setup.space.storage.show();
-						});
-						
-						if (sID != undefined)
-						{
-							var oSearch = new AdvancedSearch();
-							oSearch.method = 'SETUP_AWS_ACCOUNT_SEARCH';
-							oSearch.addField('accessid,modifieddate,notes');
-							oSearch.addFilter('id', 'EQUAL_TO', sID)
-							oSearch.rf = 'json';
-							oSearch.getResults(function(data)
-							{
-								ns1blankspace.setup.space.storage.add(oParam, data)
-							});
-						}
-					}
-					else
+			aHTML.push('<table class="ns1blankspaceColumn2">');
+					
+			aHTML.push('<tr><td>' +
+							'<span class="ns1blankspaceAction" style="width:80px;" id="ns1blankspaceSpaceSMSSave">Save</span>' +
+							'</td></tr>');
+		
+			aHTML.push('<tr><td>' +
+							'<span class="ns1blankspaceAction" style="width:80px;" id="ns1blankspaceSpaceSMSCancel">Cancel</span>' +
+							'</td></tr>');
+							
+			aHTML.push('</table>');	
+
+			$('#ns1blankspaceSpaceSMSColumn2').html(aHTML.join(''));
+			
+			$('#ns1blankspaceSpaceSMSSave').button(
+			{
+				text: "Save"
+			})
+			.click(function() 
+			{
+				var oData =
+				{
+					accountname: $('#ns1blankspaceSetupSpaceSMSAccountName').val(),
+					id: sID,
+					notes: $('#ns1blankspaceSetupSpaceSMSNotes').val(),
+					provider: $('input[name="radioProvider"]:checked').val()
+				}
+
+				if ($('#ns1blankspaceSetupSpaceSMSAccountPassword').val() != '')
+				{
+					oData.accountpassword = $('#ns1blankspaceSetupSpaceSMSAccountPassword').val()
+				}	
+				
+				ns1blankspace.status.working();
+
+				$.ajax(
+				{
+					type: 'POST',
+					url: ns1blankspace.util.endpointURI('SETUP_MESSAGING_SMS_ACCOUNT_MANAGE'),
+					data: oData,
+					dataType: 'json',
+					success: function(data)
 					{
-						if (oResponse.data.rows.length != 0)
-						{
-							var oObjectContext = oResponse.data.rows[0];
-							$('#ns1blankspaceSetupSpaceStorageAccessID').val(oObjectContext.accessid);
-							$('#ns1blankspaceSetupSpaceStorageNotes').val(oObjectContext.notes);
-
-							var oSearch = new AdvancedSearch();
-							oSearch.method = 'SETUP_AWS_S3_BUCKET_SEARCH';
-							oSearch.addField('title,modifieddate');
-							oSearch.addFilter('account', 'EQUAL_TO', oObjectContext.id)
-							oSearch.getResults(function(oResponse)
-							{
-								if (oResponse.data.rows.length != 0)
-								{	
-									$('#ns1blankspaceSetupSpaceStorageBucketTitle').val(oResponse.data.rows[0].title)
-									$('#ns1blankspaceSetupSpaceStorageBucketTitle').attr('data-id', oResponse.data.rows[0].id)
-								}	
-							});
+						if (data.status == 'OK')
+						{	
+							ns1blankspace.status.message('Saved.')
+							ns1blankspace.show({selector: '#ns1blankspaceMainSMS', refresh: true});
+							ns1blankspace.setup.space.sms.show();
 						}
-					}		
-				},
+						else
+						{
+							ns1blankspace.status.error(data.error.errornotes);
+						}	
+					}
+				});
+			});
+			
+			$('#ns1blankspaceSpaceSMSCancel').button(
+			{
+				text: "Cancel"
+			})
+			.click(function() 
+			{
+				ns1blankspace.show({selector: '#ns1blankspaceMainSMS'});
+				ns1blankspace.setup.space.sms.show();
+			});
+			
+			if (sID != undefined)
+			{
+				var oSearch = new AdvancedSearch();
+				oSearch.method = 'SETUP_MESSAGING_SMS_ACCOUNT_SEARCH';
+				oSearch.addField('accountname,id,notes,provider,providertext,title,createddate');
+				oSearch.addFilter('id', 'EQUAL_TO', sID)
+				oSearch.rf = 'json';
+				oSearch.getResults(function(data)
+				{
+					ns1blankspace.setup.space.sms.add(oParam, data)
+				});
+			}
+			else
+			{
+				$('[name="radioProvider"][value="3"]').attr('checked', true);
+			}
+		}
+		else
+		{
+			if (oResponse.data.rows.length != 0)
+			{
+				var oObjectContext = oResponse.data.rows[0];
+				$('#ns1blankspaceSetupSpaceSMSAccountName').val(oObjectContext.accountname);
+				$('#ns1blankspaceSetupSpaceSMSNotes').val(oObjectContext.notes);
+				$('[name="radioProvider"][value="' + oObjectContext.provider + '"]').attr('checked', true);
+			}
+		}		
+	}
+}

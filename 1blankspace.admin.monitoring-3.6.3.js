@@ -77,11 +77,11 @@ ns1blankspace.admin.monitoring =
 						aHTML.push('<tr><td class="ns1blankspaceSub" style="font-size:0.875em; border-bottom-style:solid; border-width: 0px; border-color: #D0D0D0;">' +
 										'INFRASTRUCTURE</td></tr>');
 
-						aHTML.push('<tr><td id="ns1blankspaceControlStateChannelStatus" class="ns1blankspaceControl">' +
-										'State Channel</td></tr>');
-
 						aHTML.push('<tr><td id="ns1blankspaceControlInstances" class="ns1blankspaceControl">' +
 										'Instances</td></tr>');
+
+						aHTML.push('<tr><td id="ns1blankspaceControlStateChannelStatus" class="ns1blankspaceControl">' +
+										'State Channel</td></tr>');
 
 						aHTML.push('</table>');
 					}	
@@ -1693,7 +1693,7 @@ ns1blankspace.admin.monitoring.instances =
 			{
 				var oSearch = new AdvancedSearch();
 				oSearch.method = 'SETUP_ADMIN_SERVER_SEARCH';
-				oSearch.addField('notes,space,spacetext,title,type,typetext');
+				oSearch.addField('notes,space,spacetext,title,type,typetext,category,categorytext,reference,serviceinstanceid,lastrevieweddate,lastchangedate');
 				
 				oSearch.rows = 9999;
 				oSearch.getResults(function(data) {ns1blankspace.admin.monitoring.instances.services.get(oParam, data)})		
@@ -1738,7 +1738,7 @@ ns1blankspace.admin.monitoring.instances =
 
 				var oSearch = new AdvancedSearch();
 				oSearch.method = 'SETUP_ADMIN_SERVER_SEARCH';
-				oSearch.addField('notes,space,spacetext,title,type,typetext,guid,modifieddate');
+				oSearch.addField('notes,space,spacetext,title,type,typetext,guid,modifieddate,managed,category,categorytext,reference,serviceinstanceid,lastreviewdate,lastchangedate');
 
 				if (sSearchText != undefined)
 				{
@@ -1774,7 +1774,8 @@ ns1blankspace.admin.monitoring.instances =
 								'<tr class="ns1blankspaceHeaderCaption">' +
 								'<td class="ns1blankspaceHeaderCaption" style="width:65px;">Name</td>' +
 								'<td class="ns1blankspaceHeaderCaption">Type</td>' +
-								'<td class="ns1blankspaceHeaderCaption">Last Updated</td>' +
+								'<td class="ns1blankspaceHeaderCaption">Last Review</td>' +
+								'<td class="ns1blankspaceHeaderCaption">Last Change</td>' +
 								'</tr>');
 
 					$(oResponse.data.rows).each(function() 
@@ -1878,8 +1879,11 @@ ns1blankspace.admin.monitoring.instances =
 			aHTML.push('<td id="ns1blankspaceAdminMonitoringInstances_typetext-' + oRow["id"] + '" class="ns1blankspaceRow">' +
 								oRow["typetext"] + '</td>');
 
-			aHTML.push('<td id="ns1blankspaceAdminMonitoringInstances_modifieddate-' + oRow["id"] + '" class="ns1blankspaceRow">' +
-								oRow["modifieddate"] + '</td>');
+			aHTML.push('<td id="ns1blankspaceAdminMonitoringInstances_lastreviewdate-' + oRow["id"] + '" class="ns1blankspaceRow">' +
+								oRow["lastreviewdate"] + '</td>');
+
+			aHTML.push('<td id="ns1blankspaceAdminMonitoringInstances_lastchangedate-' + oRow["id"] + '" class="ns1blankspaceRow">' +
+								oRow["lastchangedate"] + '</td>');
 
 			aHTML.push('</tr>');
 
@@ -1917,12 +1921,16 @@ ns1blankspace.admin.monitoring.instances =
 
 				if (oDetail)
 				{
-					sHTML = '<div class="ns1blankspaceSummaryCaption">Space:</div><div>' + oDetail.spacetext + '</div>' +
-								'<div class="ns1blankspaceSummaryCaption">GUID:</div><div>' + oDetail.guid + '</div>' +
+					sHTML = '<div class="ns1blankspaceSummaryCaption">GUID:</div><div>' + oDetail.guid + '</div>' +
+								'<div class="ns1blankspaceSummaryCaption">Managed:</div><div>' + oDetail.managed + '</div>' +
+								'<div class="ns1blankspaceSummaryCaption">Category:</div><div>' + oDetail.categorytext + '</div>' +
+								'<div class="ns1blankspaceSummaryCaption">Reference:</div><div>' + oDetail.reference + '</div>' +
+								'<div class="ns1blankspaceSummaryCaption">Service Instance ID (AWS):</div><div>' + oDetail.serviceinstanceid + '</div>' +
+								'<div class="ns1blankspaceSummaryCaption">Last Updated:</div><div>' + oDetail.modifieddate + '</div>' +
 								'<div class="ns1blankspaceSummaryCaption">Notes:</div><div>' + oDetail.notes + '</div>';
 					
 					$('#ns1blankspaceAdminMonitoringInstances_container-' + sKey).after('<tr id="ns1blankspaceAdminMonitoringInstances_container_details-' + sKey + '">' +
-						'<td colspan=4><div style="background-color: #F3F3F3; padding:8px; color:#444444; font-weight:100; font-size:0.75em;">' + sHTML + '</div></td></tr>');	
+						'<td colspan=4><div style="background-color: #F3F3F3; padding:8px; color:#444444; font-weight:100; font-size:0.875em;">' + sHTML + '</div></td></tr>');	
 				}
 			}
 		}	
