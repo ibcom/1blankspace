@@ -4742,7 +4742,7 @@ ns1blankspace.search =
 									   ' class="ns1blankspaceMultiSelect">' +
 									$('#' + sXHTMLElementID).html() + 
 									'</td>' +
-									'<td width="20px" title="Remove" class="ns1blankspaceMultiRemove">Delete</td>' +
+									'<td width="20px" title="Remove" class="ns1blankspaceMultiRemove"></td>' +
 									'</tr>');
 					}
 					
