@@ -2613,7 +2613,7 @@ ns1blankspace.admin.monitoring.instances =
 								'<div class="ns1blankspaceSummaryCaption">Source Reference:</div><div>' + oDetail.sourcereference + '</div>' +
 								'<div class="ns1blankspaceSummaryCaption">Notes:</div><div>' + oDetail.notes + '</div>';
 			
-					sHTML = sHTML + '<div class="ns1blankspaceSummaryCaption">Files:</div><div id="ns1blankspaceInstancesLogAttachmentContainer" style="background-color:white; padding:12px;"></div>';
+					sHTML = sHTML + '<div class="ns1blankspaceSummaryCaption">Attachments:</div><div id="ns1blankspaceInstancesLogAttachmentContainer" style="background-color:white; padding:12px;"></div>';
 
 					$('#ns1blankspaceAdminMonitoringInstancesLog_container-' + sKey).after('<tr id="ns1blankspaceAdminMonitoringInstancesLog_container_details-' + sKey + '">' +
 						'<td colspan=6><div style="background-color: #F3F3F3; padding:8px; color:#444444; font-weight:100; font-size:0.875em;">' + sHTML + '</div></td></tr>');
