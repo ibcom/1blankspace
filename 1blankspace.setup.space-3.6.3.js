@@ -254,9 +254,6 @@ ns1blankspace.setup.space =
 										'<tr><td id="ns1blankspaceSummaryForgottenPassword" class="ns1blankspaceSummary">' +
 										ns1blankspace.objectContextData.lostpasswordtext +
 										'</td></tr>');
-
-
-							ns1blankspace.setup.space
 						}	
 						
 						aHTML.push('</table>');
@@ -270,10 +267,24 @@ ns1blankspace.setup.space =
 						aHTML.push('<tr><td style="font-size:0.875em;">' +
 										'<a href="http://mydigitalstructure.com/gettingstarted_authentication" target="_blank">' +
 										'Getting started with authentication</a></td></tr>');
+
+						aHTML.push('<tr><td style="padding-top:12px;"><span id="ns1blankspaceAdminMonitoring" class="ns1blankspaceAction">' +
+												'</span></td></tr>');
 						
 						aHTML.push('</table>');								
 						
 						$('#ns1blankspaceSummaryColumn2').html(aHTML.join(''));
+
+						$('#ns1blankspaceAdminMonitoring').button(
+						{
+							text: true,
+							label: 'Monitoring',
+						})
+						.click(function()
+						{
+							ns1blankspace.admin.monitoring.init()
+						})
+						.css('width', '100px');
 
 						var oSearch = new AdvancedSearch();
 						oSearch.method = 'SETUP_USER_SEARCH';
