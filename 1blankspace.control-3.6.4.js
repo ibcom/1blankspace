@@ -472,7 +472,7 @@ ns1blankspace.scripts =
 	},
 	{
 		nameSpace: '1blankspace.admin.schema',
-		source: '/site/1903/1blankspace.admin.schema-3.6.2.js'
+		source: '/site/1903/1blankspace.admin.schema-3.6.4.js'
 	},
 	{
 		nameSpace: '1blankspace.developer.membership',

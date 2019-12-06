@@ -2416,10 +2416,6 @@ ns1blankspace.setup.space.export =
 						ns1blankspace.setup.space.export.roles.data.role = oResponse.data.rows[0];
 						ns1blankspace.setup.space.export.roles.properties(oParam);
 					}
-					else
-					{
-
-					}
 				}
 			}
 		},
@@ -2484,7 +2480,7 @@ ns1blankspace.setup.space.export =
 												'}');
 				});
 
-				aFile.push(aFileMethods.join(',\r\n'));
+				aFile.push(aFileMethods.join(',\n'));
 
 				aFile.push('\t\t\t\t],');
 
@@ -2505,7 +2501,7 @@ ns1blankspace.setup.space.export =
 												'}');
 				});
 
-				aFile.push(aFileMethods.join(',\r\n'));
+				aFile.push(aFileMethods.join(',\n'));
 
 				aFile.push('\t\t\t\t]');
 
@@ -2516,7 +2512,7 @@ ns1blankspace.setup.space.export =
 
 				ns1blankspace.setup.file.export.saveToFile(
 				{
-					data: aFile.join('\r\n'),
+					data: aFile.join('\n'),
 					filename: 'setup-role-access-' + _.kebabCase(ns1blankspace.setup.space.export.roles.data.role.title) + '.json'
 				});
 			}
