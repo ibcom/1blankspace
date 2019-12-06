@@ -816,9 +816,12 @@ ns1blankspace.admin.schema.methods =
 										'<span style="width:60px;" id="ns1blankspaceAdminSchemaMethodsExport" class="ns1blankspaceAction">Export</span>' +
 										'</td></tr>');
 
-						aHTML.push('<tr><td style="padding-top:16px;">' +
+						if (ns1blankspace.user.super)
+						{
+							aHTML.push('<tr><td style="padding-top:16px;">' +
 										'<span style="width:60px;" id="ns1blankspaceAdminSchemaMethodsImport" class="ns1blankspaceAction">Import</span>' +
 										'</td></tr>');
+						}
 							
 						aHTML.push('</td></tr>');
 

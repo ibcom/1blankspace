@@ -388,7 +388,7 @@ ns1blankspace.scripts =
 	},
 	{
 		nameSpace: '1blankspace.setup.space',
-		source: '/site/1903/1blankspace.setup.space-3.6.3.js'
+		source: '/site/1903/1blankspace.setup.space-3.6.4.js'
 	},
 	{
 		nameSpace: '1blankspace.setup.structure',
@@ -468,7 +468,7 @@ ns1blankspace.scripts =
 	},
 	{
 		nameSpace: '1blankspace.admin.monitoring',
-		source: '/site/1903/1blankspace.admin.monitoring-3.6.3.js'
+		source: '/site/1903/1blankspace.admin.monitoring-3.6.4.js'
 	},
 	{
 		nameSpace: '1blankspace.admin.schema',
