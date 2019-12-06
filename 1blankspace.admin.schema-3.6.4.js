@@ -3038,8 +3038,8 @@ ns1blankspace.admin.schema.export =
 				oSearch.method = 'CORE_METHOD_SEARCH';
 				oSearch.addField('addavailable,endpoint,endpointtext,endpointother,endpointothertext,notes,object,objecttext,' +
 										'removeavailable,title,name,unrestrictedaccess,unrestrictedloggedonaccess,updateavailable,useavailable,status,statustext');
-				//oSearch.addFilter('advancedsearchavailable', 'EQUAL_TO', 'Y')
 				oSearch.rows = 99999;		
+				oSearch.sort('title', 'asc');
 				oSearch.getResults(function(data) {ns1blankspace.admin.schema.export.methods.init(oParam, data)});
 			}
 			else
@@ -3191,7 +3191,8 @@ ns1blankspace.admin.schema.import =
 				oSearch.method = 'CORE_METHOD_SEARCH';
 				oSearch.addField('addavailable,endpoint,endpointtext,endpointother,endpointothertext,notes,object,objecttext,' +
 										'removeavailable,title,name,unrestrictedaccess,unrestrictedloggedonaccess,updateavailable,useavailable,status,statustext');
-				oSearch.rows = 99999;		
+				oSearch.rows = 99999;
+				oSearch.sort('title', 'asc');	
 				oSearch.getResults(function(data) {ns1blankspace.admin.schema.import.methods.existing(oParam, data)});
 			}
 			else
