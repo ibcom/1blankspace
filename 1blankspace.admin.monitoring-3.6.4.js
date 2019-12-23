@@ -2888,7 +2888,7 @@ ns1blankspace.admin.monitoring.billing =
 
 						var oSearch = new AdvancedSearch();
 						oSearch.method = 'SETUP_ADMIN_BILLING_TRANSACTION_SEARCH';
-						oSearch.addField('accounttext,description,objecttext,units,usertext,createddate');
+						oSearch.addField('accounttext,description,objecttext,units,usertext,createddate,space,spacetext');
 
 						if (sSearchText != undefined)
 						{
@@ -2898,6 +2898,12 @@ ns1blankspace.admin.monitoring.billing =
 							oSearch.addFilter('description', 'TEXT_IS_LIKE', sSearchText);
 							oSearch.addOperator('or');
 							oSearch.addFilter('guid', 'TEXT_IS_LIKE', sSearchText);
+
+							if (ns1blankspace.user.super)
+							{
+								oSearch.addOperator('or');
+								oSearch.addFilter('spacetext', 'TEXT_IS_LIKE', sSearchText);
+							}
 							
 							if (sSearchText != '')
 							{	
@@ -2912,7 +2918,10 @@ ns1blankspace.admin.monitoring.billing =
 							oSearch.addBracket(')');
 						}
 
-						oSearch.addCustomOption('allspaces', (ns1blankspace.user.super?'Y':'N'));
+						if (ns1blankspace.user.super)
+						{
+							oSearch.addCustomOption('allspaces', 'Y');
+						}
 
 						oSearch.rows = 100;
 						oSearch.sort('createddate', 'desc');
@@ -2938,8 +2947,8 @@ ns1blankspace.admin.monitoring.billing =
 										'<td class="ns1blankspaceHeaderCaption" style="width:65px;">Date</td>' +
 										'<td class="ns1blankspaceHeaderCaption">User</td>' +
 										'<td class="ns1blankspaceHeaderCaption">Account</td>' +
-										'<td class="ns1blankspaceHeaderCaption">Units</td>' +
-										'<td class="ns1blankspaceHeaderCaption">Status</td>' +
+										'<td class="ns1blankspaceHeaderCaption" style="text-align:center;">Units</td>' +
+										'<td class="ns1blankspaceHeaderCaption">Send To & Status</td>' +
 										'</tr>');
 
 							$(oResponse.data.rows).each(function() 
@@ -3041,12 +3050,19 @@ ns1blankspace.admin.monitoring.billing =
 										oRow["createddate"] + '</td>');
 
 					aHTML.push('<td id="ns1blankspaceAdminMonitoringBilling_user-' + oRow["id"] + '" class="ns1blankspaceRow">' +
-										oRow["usertext"] + '</td>');
+										'<div>' + oRow["usertext"] + '</div>');
+
+					if (ns1blankspace.user.super)
+					{
+						aHTML.push('<div class="ns1blankspaceSubNote">' + oRow["spacetext"] + '</div>');
+					}
+
+					aHTML.push('</td>');
 
 					aHTML.push('<td id="ns1blankspaceAdminMonitoringBilling_account-' + oRow["id"] + '" class="ns1blankspaceRow">' +
 										oRow["accounttext"] + '</td>');
 
-						aHTML.push('<td id="ns1blankspaceAdminMonitoringBilling_units-' + oRow["id"] + '" class="ns1blankspaceRow">' +
+						aHTML.push('<td id="ns1blankspaceAdminMonitoringBilling_units-' + oRow["id"] + '" class="ns1blankspaceRow" style="text-align:center;">' +
 										oRow["units"] + '</td>');
 
 					aHTML.push('<td id="ns1blankspaceAdminMonitoringBilling_description-' + oRow["id"] + '" class="ns1blankspaceRow">' +
