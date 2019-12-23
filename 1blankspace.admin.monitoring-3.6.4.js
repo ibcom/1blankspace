@@ -2065,17 +2065,18 @@ ns1blankspace.admin.monitoring.instances =
 								'<div class="ns1blankspaceSummaryCaption">Last Updated:</div><div>' + oDetail.modifieddate + '</div>' +
 								'<div class="ns1blankspaceSummaryCaption">Notes:</div><div>' + oDetail.notes + '</div>';
 					
-					sHTML = sHTML + '<div style="margin-top:14px;" id="ns1blankspaceAdminMonitoringInstancesLog-' + oDetail.title + '" class="ns1blankspaceViewLink">Log</div>';
+					sHTML = sHTML + '<div style="margin-top:14px;" id="ns1blankspaceAdminMonitoringInstancesLog-' + oDetail.id + '"' +
+											' data-title="' + oDetail.title + '" class="ns1blankspaceViewLink">Log</div>';
 
 					$('#ns1blankspaceAdminMonitoringInstances_container-' + sKey).after('<tr id="ns1blankspaceAdminMonitoringInstances_container_details-' + sKey + '">' +
 						'<td colspan=6><div style="background-color: #F3F3F3; padding:8px; color:#444444; font-weight:100; font-size:0.875em;">' + sHTML + '</div></td></tr>');	
 				
-						$('#ns1blankspaceAdminMonitoringInstancesLog-' + oDetail.title).click().click(function ()
+					$('#ns1blankspaceAdminMonitoringInstancesLog-' + oDetail.id).click().click(function ()
 					{
 						$('.ns1blankspaceControl').removeClass('ns1blankspaceHighlight');
 						$('#ns1blankspaceControlInstancesLog').addClass('ns1blankspaceHighlight');
 						ns1blankspace.show({selector: '#ns1blankspaceMainInstancesLog'});
-						ns1blankspace.admin.monitoring.instances.log.show({searchText: this.id.split('-')[1]})
+						ns1blankspace.admin.monitoring.instances.log.show({searchText: $(this).attr('data-title')})
 					});
 				}
 			}
@@ -2838,10 +2839,11 @@ ns1blankspace.admin.monitoring.billing =
 					if (oResponse == undefined)
 					{
 						var oSearch = new AdvancedSearch();
-						oSearch.method = 'ADMIN_BILLING_TRANSACTION_SEARCH';
+						oSearch.method = 'SETUP_ADMIN_BILLING_TRANSACTION_SEARCH';
 						oSearch.addField('id');
 						oSearch.addFilter('createddate', 'GREATER_THAN_OR_EQUAL_TO', 'hour', '-24', '');
 						oSearch.addSummaryField('count(id) count');
+						oSearch.addCustomOption('allspaces', (ns1blankspace.user.super?'Y':'N'));
 						oSearch.rows = 1;
 						oSearch.getResults(function(data) {ns1blankspace.admin.monitoring.billing.count.sms(oParam, data)})	
 					}
@@ -2885,15 +2887,15 @@ ns1blankspace.admin.monitoring.billing =
 						ns1blankspace.admin.monitoring.billing.data.details = [];
 
 						var oSearch = new AdvancedSearch();
-						oSearch.method = 'ADMIN_BILLING_TRANSACTION_SEARCH';
-						oSearch.addField('xxx');
+						oSearch.method = 'SETUP_ADMIN_BILLING_TRANSACTION_SEARCH';
+						oSearch.addField('accounttext,description,objecttext,units,usertext,createddate');
 
 						if (sSearchText != undefined)
 						{
 							oSearch.addBracket('(');
-							oSearch.addFilter('xxx', 'TEXT_IS_LIKE', sSearchText);
+							oSearch.addFilter('usertext', 'TEXT_IS_LIKE', sSearchText);
 							oSearch.addOperator('or');
-							oSearch.addFilter('notes', 'TEXT_IS_LIKE', sSearchText);
+							oSearch.addFilter('description', 'TEXT_IS_LIKE', sSearchText);
 							oSearch.addOperator('or');
 							oSearch.addFilter('guid', 'TEXT_IS_LIKE', sSearchText);
 							
@@ -2909,6 +2911,8 @@ ns1blankspace.admin.monitoring.billing =
 
 							oSearch.addBracket(')');
 						}
+
+						oSearch.addCustomOption('allspaces', (ns1blankspace.user.super?'Y':'N'));
 
 						oSearch.rows = 100;
 						oSearch.sort('createddate', 'desc');
@@ -2931,10 +2935,11 @@ ns1blankspace.admin.monitoring.billing =
 
 							aHTML.push('<table id="ns1blankspaceAdminMonitoringBilling" class="ns1blankspace" style="font-size:0.875em;">' +
 										'<tr class="ns1blankspaceHeaderCaption">' +
-										'<td class="ns1blankspaceHeaderCaption" style="width:65px;">XXX</td>' +
-										'<td class="ns1blankspaceHeaderCaption">Notes</td>' +
-										'<td class="ns1blankspaceHeaderCaption">XXX</td>' +
-										'<td class="ns1blankspaceHeaderCaption">XXX</td>' +
+										'<td class="ns1blankspaceHeaderCaption" style="width:65px;">Date</td>' +
+										'<td class="ns1blankspaceHeaderCaption">User</td>' +
+										'<td class="ns1blankspaceHeaderCaption">Account</td>' +
+										'<td class="ns1blankspaceHeaderCaption">Units</td>' +
+										'<td class="ns1blankspaceHeaderCaption">Status</td>' +
 										'</tr>');
 
 							$(oResponse.data.rows).each(function() 
@@ -3035,14 +3040,17 @@ ns1blankspace.admin.monitoring.billing =
 					aHTML.push('<td style="width:120px;" id="ns1blankspaceAdminMonitoringBilling_createddate-' + oRow["id"] + '" class="ns1blankspaceRow ns1blankspaceRowSelect">' +
 										oRow["createddate"] + '</td>');
 
+					aHTML.push('<td id="ns1blankspaceAdminMonitoringBilling_user-' + oRow["id"] + '" class="ns1blankspaceRow">' +
+										oRow["usertext"] + '</td>');
+
+					aHTML.push('<td id="ns1blankspaceAdminMonitoringBilling_account-' + oRow["id"] + '" class="ns1blankspaceRow">' +
+										oRow["accounttext"] + '</td>');
+
+						aHTML.push('<td id="ns1blankspaceAdminMonitoringBilling_units-' + oRow["id"] + '" class="ns1blankspaceRow">' +
+										oRow["units"] + '</td>');
+
 					aHTML.push('<td id="ns1blankspaceAdminMonitoringBilling_description-' + oRow["id"] + '" class="ns1blankspaceRow">' +
-										oRow["notes"] + '</td>');
-
-						aHTML.push('<td id="ns1blankspaceAdminMonitoringBilling_xxx-' + oRow["id"] + '" class="ns1blankspaceRow">' +
-										oRow["xxx"] + '</td>');
-
-					aHTML.push('<td id="ns1blankspaceAdminMonitoringBilling_xxx-' + oRow["id"] + '" class="ns1blankspaceRow">' +
-										oRow["xxx"] + '</td>');
+										oRow["description"] + '</td>');
 
 					aHTML.push('</tr>');
 
