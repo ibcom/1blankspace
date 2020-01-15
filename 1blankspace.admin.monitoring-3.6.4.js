@@ -63,7 +63,7 @@ ns1blankspace.admin.monitoring =
 									'Debug Log</td></tr>');
 
 					aHTML.push('<tr><td id="ns1blankspaceControlBilling" class="ns1blankspaceControl">' +
-									'Billing</td></tr>');
+									'SMS</td></tr>');
 				
 					if (ns1blankspace.user.super)
 					{

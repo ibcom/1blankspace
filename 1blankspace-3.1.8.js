@@ -3149,12 +3149,12 @@ ns1blankspace.history.view =
 									ns1blankspace.history.currentIndex = ns1blankspace.history.viewList.length - 1;
 									
 									var sData = 'value=' + ns1blankspace.util.fs(ns1blankspace.history.viewList.slice(-2).join('|').toString()) +
-													'&advanced=4';
+													'&attribute=4&custom=Y';
 									
 									$.ajax(
 									{
 										type: 'POST',
-										url: ns1blankspace.util.endpointURI('CORE_PROFILE_MANAGE'),
+										url: '/rpc/core/?method=CORE_PROFILE_MANAGE',
 										data: sData,
 										dataType: 'json'
 									});
@@ -3199,21 +3199,24 @@ ns1blankspace.history.view =
 								$.ajax(
 								{
 									type: 'GET',
-									url: ns1blankspace.util.endpointURI('CORE_PROFILE_SEARCH'),
-									data: 'advanced=4&rf=TEXT',
-									dataType: 'text',
+									url: '/rpc/core/?method=CORE_PROFILE_SEARCH',
+									data: 'attribute=4&custom=Y',
+									dataType: 'json',
 									async: false,
-									success: function(data) {
-										data = data.replace('OK|RETURNED|', '')
-										if (data === '')
+									success: function(oResponse)
+									{
+										if (oResponse.status == 'OK')
 										{
-											ns1blankspace.history.viewList.push('ns1blankspace.home.show()');
-										}	
-										else
-										{
-											ns1blankspace.history.viewList = data.split('|');
-											ns1blankspace.history.currentIndex = ns1blankspace.history.viewList.length - 1
-										}	
+											if (oResponse.data == '')
+											{
+												ns1blankspace.history.viewList.push('ns1blankspace.home.show()');
+											}	
+											else
+											{
+												ns1blankspace.history.viewList = oResponse.data.split('|');
+												ns1blankspace.history.currentIndex = ns1blankspace.history.viewList.length - 1
+											}
+										}
 									}
 								})
 							}		
