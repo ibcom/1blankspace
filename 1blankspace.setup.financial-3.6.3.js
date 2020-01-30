@@ -6,6 +6,8 @@
 
 ns1blankspace.setup.financial = 
 {
+	data: 	{},
+
 	init: 	function (oParam)
 				{
 					var bShowHome = true
@@ -267,25 +269,115 @@ ns1blankspace.setup.financial =
 						data: 'all=1&includefinancialaccounttext=1',
 						dataType: 'json',
 						success: function(data)
-									{
-										ns1blankspace.objectContextData = data;
-										//ns1blankspace.setup.financial.summary();
-										ns1blankspace.setup.financial.search.general(oParam)
-									}
+						{
+							ns1blankspace.setup.financial._settings = ns1blankspace.util.sortByKeys(data);
+							delete ns1blankspace.setup.financial._settings.instance;
+							delete ns1blankspace.setup.financial._settings.status;
+							delete ns1blankspace.setup.financial._settings.xhtmlcontext;
+
+							ns1blankspace.setup.financial.search.general(oParam)
+						}
 					});
 				},
+
+	check: 	function (oParam)
+				{
+					ns1blankspace.setup.financial.data.checkSettings = 
+					{
+						notExist: [],
+						different: [],
+						matched: []
+					}
+
+					_.each(ns1blankspace.setup.financial._settings, function (value, field)
+					{
+						if (ns1blankspace.setup.financial.settings[field] == undefined)
+						{
+							ns1blankspace.setup.financial.data.checkSettings.notExist.push(
+							{
+								field: field,
+								existingvalue: value,
+								newvalue: ns1blankspace.setup.financial.settings[field]
+							})
+						}
+						else if (ns1blankspace.setup.financial.settings[field] != value)
+						{
+							ns1blankspace.setup.financial.data.checkSettings.different.push(
+							{
+								field: field,
+								existingvalue: value,
+								newvalue: ns1blankspace.setup.financial.settings[field]
+							})
+						}
+						else
+						{
+							ns1blankspace.setup.financial.data.checkSettings.matched.push(
+							{
+								field: field,
+								existingvalue: value,
+								newvalue: ns1blankspace.setup.financial.settings[field]
+							});
+						}					
+					});
+
+					console.log('# DIFFERENT:')
+					_.each(ns1blankspace.setup.financial.data.checkSettings.different, function (setting)
+					{
+						console.log(setting)
+					});
+
+					console.log('# NOT EXIST:')
+					_.each(ns1blankspace.setup.financial.data.checkSettings.notExist, function (setting)
+					{
+						console.log(setting)
+					});
+
+					console.log('# MATCHED:')
+					_.each(ns1blankspace.setup.financial.data.checkSettings.matched, function (setting)
+					{
+						console.log(setting)
+					});
+				},		
 
 	search: 	{
 					general: function (oParam, oResponse)
 					{
 						if (oResponse == undefined)
 						{
-							//Need rpc: SETUP_FINANCIAL_SETTINGS_SEARCH
-							ns1blankspace.setup.financial.search.tax(oParam)
+							var oSearch = new AdvancedSearch();
+							oSearch.method = 'SETUP_FINANCIAL_SETTINGS_SEARCH';
+							oSearch.addField('notes,accrual,allowmanualcreditnoteassignment,collectbankdetailsall,collectbankdetailsbusiness,creditorsbalanceddate,debtorsbalanceddate,' +
+													'defaultexpensestatus,defaultexpensestatustext,defaultinvoicesentvalue,defaultproject,defaultprojecttext,endoffinancialyear,' +
+													'expensepayeemandatory,lockifincompletedtaxreport,lockinvoiceonsending,lockifreconciled,messagingaccount,messagingaccounttext,' +
+													'overdueaccountalert,overdueaccountalertdays,segmentbyarea,timebillingrate,financialaccountcash,financialaccountcashtext,' +
+													'financialaccountcreditors,financialaccountcreditorstext,financialaccountcurrentearnings,financialaccountcurrentearningstext,' +
+													'financialaccountdebtors,financialaccountdebtorstext,financialaccountfinancialservicescommission,financialaccountfinancialservicescommissiontext,' +
+													'financialaccountproductincome,financialaccountproductincometext,financialaccountproductinventory,financialaccountproductinventorytext,' +
+													'financialaccountproductpurchases,financialaccountproductpurchasestext,financialaccountretainedearnings,financialaccountretainedearningstext,' +
+													'financialaccountsalescommission,financialaccountsalescommissiontext,financialaccountwriteoff,financialaccountwriteofftext,' +
+													'lockeddatecreditors,lockeddatedebtors,lockeddatejournals,payrollcreateexpenses,payrollexpensepaymentmethod,' +
+													'payrollexpensepaymentmethodtext,payrollfinancialaccountallowance,payrollfinancialaccountallowancetext,payrollfinancialaccountsalary,' +
+													'payrollfinancialaccountsalarytext,payrollfinancialaccountsuperannuation,payrollfinancialaccountsuperannuationtext,' +
+													'payrollfinancialaccounttax,payrollfinancialaccounttaxtext,payrollonbreakhours,payrolloncosthourlyrate,payrollpayperiod,' +
+													'payrollpayperiodtext,payrollproject,payrollprojecttext,payrollsetsalaryexpensestopaid,payrollsuperannuationcontactbusiness,' +
+													'payrollsuperannuationcontactbusinesstext,payrollsuperannuationmonthlythreshold,calculationmethod,calculationmethodamount,' +
+													'calculationmethodemployee,calculationmethodemployeetext,calculationmethodinstalmentamount,calculationmethodinstalmentrate,' +
+													'calculationmethodtext,checkercontactperson,checkercontactpersontext,contactbusiness,contactbusinesstext,deferred,' +
+													'financialaccountcredits,financialaccountcreditstext,financialaccountemployee,financialaccountemployeetext,' +
+													'financialaccountinstalment,financialaccountinstalmenttext,financialaccountpayable,financialaccountpayabletext,frequency,frequencytext,' +
+													'frequencyemployee,frequencyemployeetext,frequencyinstalments,frequencyinstalmentstext,segmenttaxbyarea,taxreportschedulingagentdays,' + 
+													'taxreportschedulingreportdays,taxreportschedulingtaxofficedays');
+							oSearch.rows = 1;
+							oSearch.getResults(function(data) {ns1blankspace.setup.financial.search.general(oParam, data)});
 						}
 						else
 						{
-							ns1blankspace.objectContextData = $.extend(true, ns1blankspace.objectContextData, oResponse.data.rows);
+							if (oResponse.data.rows.length > 0)
+							{
+								ns1blankspace.objectContextData = oResponse.data.rows[0];
+								ns1blankspace.setup.financial.settings = oResponse.data.rows[0];
+							}
+
 							ns1blankspace.setup.financial.search.tax(oParam);
 						}
 					},
@@ -295,7 +387,7 @@ ns1blankspace.setup.financial =
 						if (oResponse == undefined)
 						{
 							var oSearch = new AdvancedSearch();
-							oSearch.method = 'SETUP_FINANCIAL_TAX_SETTINGS_SEARCH';
+							oSearch.method = 'SETUP_FINANCIAL_SETTINGS_SEARCH';
 							oSearch.addField('calculationmethod,calculationmethodamount,calculationmethodemployee,calculationmethodemployeetext,' +
 													'calculationmethodinstalmentamount,calculationmethodinstalmentrate,calculationmethodtext,checkercontactperson,' +
 													'checkercontactpersontext,contactbusiness,contactbusinesstext,deferred,financialaccountcredits,financialaccountcreditstext,' +
@@ -312,8 +404,12 @@ ns1blankspace.setup.financial =
 								$.each(oResponse.data.rows[0], function (key, value)
 								{
 									ns1blankspace.objectContextData['taxreport' + key] = value;
+									ns1blankspace.setup.financial.settings['taxreport' + key] = value;
 								});
 							}
+
+							ns1blankspace.objectContextData = ns1blankspace.util.sortByKeys(ns1blankspace.objectContextData);
+							ns1blankspace.setup.financial.settings = ns1blankspace.util.sortByKeys(ns1blankspace.setup.financial.settings);
 
 							ns1blankspace.setup.financial.summary();
 						}
@@ -432,8 +528,8 @@ ns1blankspace.setup.financial =
 										'</td></tr>' +
 										'<tr class="ns1blankspace">' +
 										'<td class="ns1blankspaceRadio">' +
-										'<input type="radio" id="radioAccountingMethod1" name="radioAccountingMethod" value="1"/>Cash' +
-										'<br /><input type="radio" id="radioAccountingMethod2" name="radioAccountingMethod" value="2"/>Accrual' +
+										'<input type="radio" id="radioAccrualN" name="radioAccrual" value="N"/>Cash' +
+										'<br /><input type="radio" id="radioAccrualY" name="radioAccrual" value="Y"/>Accrual' +
 										'</td></tr>');			
 
 						aHTML.push('<tr class="ns1blankspaceCaption">' +
@@ -464,6 +560,26 @@ ns1blankspace.setup.financial =
 										'<td class="ns1blankspaceRadio">' +
 										'<input type="radio" id="radioDefaultInvoiceSentValueY" name="radioDefaultInvoiceSentValue" value="Y"/>Mark as sent' +
 										'<br /><input type="radio" id="radioDefaultInvoiceSentValue2" name="radioDefaultInvoiceSentValue" value="N"/>Leave as unsent' +
+										'</td></tr>');
+
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
+										'Default Email Account' +
+										'</td></tr>' +
+										'<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceSelect">' +
+										'<input id="ns1blankspaceGeneralMessagingAccount" class="ns1blankspaceSelect"' +
+											' data-method="SETUP_MESSAGING_ACCOUNT_SEARCH"' +
+											' data-columns="email" data-methodFilter="type-EQUAL_TO-5|email-TEXT_IS_NOT_EMPTY">' +
+										'</td></tr>');
+
+						aHTML.push('<tr class="ns1blankspaceCaption">' +
+										'<td class="ns1blankspaceCaption">' +
+										'Set up Notes' +
+										'</td></tr>' +
+										'<tr class="ns1blankspace">' +
+										'<td class="ns1blankspaceTextMulti">' +
+										'<textarea style="height: 100px;" rows="10" cols="80" id="ns1blankspaceGeneralNotes" class="ns1blankspaceTextMultiLarge"></textarea>' +
 										'</td></tr>');
 
 						aHTML.push('</table>');			
@@ -512,13 +628,16 @@ ns1blankspace.setup.financial =
 
 						if (ns1blankspace.objectContextData != undefined)
 						{
-							$('[name="radioAccountingMethod"][value="' + ns1blankspace.objectContextData.accountingmethod + '"]').attr('checked', true);	
+							$('[name="radioAccrual"][value="' + ns1blankspace.objectContextData.accrual + '"]').attr('checked', true);	
 							$('[name="radioTaxationMethod"][value="' + ns1blankspace.objectContextData.taxreportcalculationmethod + '"]').attr('checked', true);
 							$('#ns1blankspaceGeneralAccountingYear').val(ns1blankspace.objectContextData.endoffinancialyear);
 							$('[name="radioDefaultInvoiceSentValue"][value="' + ns1blankspace.objectContextData.defaultinvoicesentvalue + '"]').attr('checked', true);
 							$('#ns1blankspaceGeneralLockedDateDebtors').val(ns1blankspace.objectContextData.lockeddatedebtors);
 							$('#ns1blankspaceGeneralLockedDateCreditors').val(ns1blankspace.objectContextData.lockeddatecreditors);
 							$('#ns1blankspaceGeneralLockedDateJournals').val(ns1blankspace.objectContextData.lockeddatejournals);
+							$('#ns1blankspaceGeneralNotes').val(ns1blankspace.objectContextData.notes);
+							$('#ns1blankspaceGeneralMessagingAccount').val(ns1blankspace.objectContextData.messagingaccounttext);
+							$('#ns1blankspaceGeneralMessagingAccount').attr('data-id', ns1blankspace.objectContextData.messagingaccount);
 						}
 					}	
 				},
@@ -2018,10 +2137,10 @@ ns1blankspace.setup.financial =
 						{
 							$('#ns1blankspaceFinancialAccountCash').val(ns1blankspace.objectContextData.financialaccountcashtext);
 							$('#ns1blankspaceFinancialAccountCash').attr("data-id", ns1blankspace.objectContextData.financialaccountcash);
-							$('#ns1blankspaceFinancialAccountCreditors').val(ns1blankspace.objectContextData.financialaccountcreditortext);
-							$('#ns1blankspaceFinancialAccountCreditors').attr("data-id", ns1blankspace.objectContextData.financialaccountcreditor);
-							$('#ns1blankspaceFinancialAccountDebtors').val(ns1blankspace.objectContextData.financialaccountdebtortext);
-							$('#ns1blankspaceFinancialAccountDebtors').attr("data-id", ns1blankspace.objectContextData.financialaccountdebtor);
+							$('#ns1blankspaceFinancialAccountCreditors').val(ns1blankspace.objectContextData.financialaccountcreditorstext);
+							$('#ns1blankspaceFinancialAccountCreditors').attr("data-id", ns1blankspace.objectContextData.financialaccountcreditors);
+							$('#ns1blankspaceFinancialAccountDebtors').val(ns1blankspace.objectContextData.financialaccountdebtorstext);
+							$('#ns1blankspaceFinancialAccountDebtors').attr("data-id", ns1blankspace.objectContextData.financialaccountdebtors);
 							$('#ns1blankspaceFinancialAccountCurrentProfit').val(ns1blankspace.objectContextData.financialaccountcurrentearningstext);
 							$('#ns1blankspaceFinancialAccountCurrentProfit').attr("data-id", ns1blankspace.objectContextData.financialaccountcurrentearnings);
 							$('#ns1blankspaceFinancialAccountRetainedProfit').val(ns1blankspace.objectContextData.financialaccountretainedearningstext);
@@ -2545,7 +2664,7 @@ ns1blankspace.setup.financial =
 										'<input id="ns1blankspaceTaxExpenseDescription" class="ns1blankspaceText">' +
 										'</td></tr>' +
 										'</tr>');
-																																							
+																																			
 						aHTML.push('</table>');					
 						
 						$('#ns1blankspaceTaxColumn1').html(aHTML.join(''));
@@ -2555,7 +2674,7 @@ ns1blankspace.setup.financial =
 							$('[name="radioTaxLock"][value="' + ns1blankspace.objectContextData.lockifincompletedtaxreport + '"]').attr('checked', true);
 							$('[name="radioTaxReportingFrequency"][value="' + ns1blankspace.objectContextData.taxreportfrequency + '"]').attr('checked', true);
 							$('[name="radioTaxPayrollReportingFrequency"][value="' + ns1blankspace.objectContextData.taxreportfrequencyemployee + '"]').attr('checked', true);
-							$('[name="radioTaxDefault"][value="' + ns1blankspace.objectContextData.classicincludestax + '"]').attr('checked', true);
+							//$('[name="radioTaxDefault"][value="' + ns1blankspace.objectContextData.classicincludestax + '"]').attr('checked', true);
 							$('#ns1blankspaceTaxExpenseDescription').val(ns1blankspace.financial.data.settings.taxexpensedescription);
 						}
 					}	
@@ -2661,8 +2780,18 @@ ns1blankspace.setup.financial =
 															'<td class="ns1blankspaceRadio">' +
 															'<input type="radio" id="radioPayrollFinancialsPaymentsN" name="radioPayrollFinancialsPayments" value="N"/>No' +
 															'<br /><input type="radio" id="radioPayrollFinancialsPaymentsY" name="radioPayrollFinancialsPayments" value="Y"/>Yes' +
-															'</td></tr>');											
-																	
+															'</td></tr>');
+
+											aHTML.push('<tr class="ns1blankspaceCaption">' +
+															'<td class="ns1blankspaceCaption">' +
+															'Payroll Superannuation Monthly Threshold<br /><span class="ns1blankspaceSub" style="font-size:0.75em; vertical-align:middle; padding-left:3px;">Gross salary amount that superannuation becomes mandatory, based on regulations.</span>' +
+															'</td></tr>' +
+															'<tr class="ns1blankspace">' +
+															'<td class="ns1blankspaceText">' +
+															'<input id="ns1blankspacePayrollSuperannuationMonthlyThreshold" class="ns1blankspaceText">' +
+															'</td></tr>' +
+															'</tr>');	
+					
 											aHTML.push('</table>');					
 											
 											$('#ns1blankspacePayrollColumn1').html(aHTML.join(''));
@@ -2673,6 +2802,7 @@ ns1blankspace.setup.financial =
 												$('[name="radioPayrollFinancialsExpenseOnly"][value="' + ns1blankspace.objectContextData.payrollfinancialsexpenseonly + '"]').attr('checked', true);
 												$('#ns1blankspacePayrollSuperannuationBusiness').attr('data-id', ns1blankspace.objectContextData.payrollsuperannuationcontactbusiness);
 												$('[name="radioPayrollFinancialsPayments"][value="' + ns1blankspace.objectContextData.payrollfinancialspayments + '"]').attr('checked', true);
+												$('#ns1blankspacePayrollSuperannuationMonthlyThreshold').val(ns1blankspace.objectContextData.payrollsuperannuationmonthlythreshold);
 												
 												if (ns1blankspace.objectContextData.payrollsuperannuationcontactbusiness != '')
 												{
@@ -3046,35 +3176,43 @@ ns1blankspace.setup.financial =
 					send:		function ()
 								{
 									var sData = '_=1';
-									
+		
 									ns1blankspace.status.working();
+
+									if (ns1blankspace.objectContextData != undefined)
+									{
+										sData += '&id=' + ns1blankspace.objectContextData.id
+									}
 
 									if ($('#ns1blankspaceMainFinancialAccountDefault').html() != '')
 									{
 										sData += '&financialaccountcash=' + ns1blankspace.util.fs($('#ns1blankspaceFinancialAccountCash').attr('data-id'));
-										sData += '&financialaccountcreditor=' + ns1blankspace.util.fs($('#ns1blankspaceFinancialAccountCreditors').attr('data-id'));
-										sData += '&financialaccountdebtor=' + ns1blankspace.util.fs($('#ns1blankspaceFinancialAccountDebtors').attr('data-id'));
+										sData += '&financialaccountcreditors=' + ns1blankspace.util.fs($('#ns1blankspaceFinancialAccountCreditors').attr('data-id'));
+										sData += '&financialaccountdebtors=' + ns1blankspace.util.fs($('#ns1blankspaceFinancialAccountDebtors').attr('data-id'));
 										sData += '&financialaccountcurrentearnings=' + ns1blankspace.util.fs($('#ns1blankspaceFinancialAccountCurrentProfit').attr('data-id'));
 										sData += '&financialaccountretainedearnings=' + ns1blankspace.util.fs($('#ns1blankspaceFinancialAccountRetainedProfit').attr('data-id'));
-										sData += '&taxreportfinancialaccountpayable=' + ns1blankspace.util.fs($('#ns1blankspaceFinancialAccountTaxLiabilities').attr('data-id'));
-										sData += '&taxreportfinancialaccountcredits=' + ns1blankspace.util.fs($('#ns1blankspaceFinancialAccountTaxCredits').attr('data-id'));
-										sData += '&payrollfinancialaccounttax=' + ns1blankspace.util.fs($('#ns1blankspaceFinancialAccountTaxPayroll').attr('data-id'));
-										sData += '&taxreportfinancialaccountemployee=' + ns1blankspace.util.fs($('#ns1blankspaceFinancialAccountTaxPayroll').attr('data-id'));
+										sData += '&financialaccountpayable=' + ns1blankspace.util.fs($('#ns1blankspaceFinancialAccountTaxLiabilities').attr('data-id'));
+										sData += '&financialaccountcredits=' + ns1blankspace.util.fs($('#ns1blankspaceFinancialAccountTaxCredits').attr('data-id'));
+										sData += '&financialaccountemployee=' + ns1blankspace.util.fs($('#ns1blankspaceFinancialAccountTaxPayroll').attr('data-id'));
 										sData += '&financialaccountproductincome=' + ns1blankspace.util.fs($('#ns1blankspaceFinancialAccountProductSales').attr('data-id'));
+										sData += '&payrollfinancialaccounttax=' + ns1blankspace.util.fs($('#ns1blankspaceFinancialAccountTaxPayroll').attr('data-id'));
 									};
 
 									if ($('#ns1blankspaceMainGeneral').html() != '')
 									{
-										sData += '&accountingmethod=' + ns1blankspace.util.fs($('input[name="radioAccountingMethod"]:checked').val());
-										sData += '&taxreportcalculationmethod=' + ns1blankspace.util.fs($('input[name="radioTaxationMethod"]:checked').val());
-										sData += '&endoffinancialyear=' + ns1blankspace.util.fs($('input[name="inputns1blankspaceGeneralAccountingYear"]:checked').val());
+										sData += '&accrual=' + ns1blankspace.util.fs($('input[name="radioAccrual"]:checked').val());
+										sData += '&calculationmethod=' + ns1blankspace.util.fs($('input[name="radioTaxationMethod"]:checked').val());
+										sData += '&endoffinancialyear=' + ns1blankspace.util.fs($('#ns1blankspaceGeneralAccountingYear').val());
 										sData += '&defaultinvoicesentvalue=' + ns1blankspace.util.fs($('input[name="radioDefaultInvoiceSentValue"]:checked').val());
 
 										sData += '&lockeddatedebtors=' + ns1blankspace.util.fs($('#ns1blankspaceGeneralLockedDateDebtors').val());
 										sData += '&lockeddatecreditors=' + ns1blankspace.util.fs($('#ns1blankspaceGeneralLockedDateCreditors').val());
 										sData += '&lockeddatejournals=' + ns1blankspace.util.fs($('#ns1blankspaceGeneralLockedDateJournals').val());
 
-										if ($('#ns1blankspaceGeneralLockedDateDebtors').val() != ns1blankspace.objectContextData.lockeddatedebtors)
+										sData += '&notes=' + ns1blankspace.util.fs($('#ns1blankspaceGeneralNotes').val());
+										sData += '&messagingaccount=' + ns1blankspace.util.fs($('#ns1blankspaceGeneralMessagingAccount').attr('data-id'));
+
+									/*	if ($('#ns1blankspaceGeneralLockedDateDebtors').val() != ns1blankspace.objectContextData.lockeddatedebtors)
 										{
 											ns1blankspace.setup.financial.save.profile({attribute: 233, value: $('#ns1blankspaceGeneralLockedDateDebtors').val()})
 										}
@@ -3087,17 +3225,17 @@ ns1blankspace.setup.financial =
 										if ($('#ns1blankspaceGeneralLockedDateJournals').val() != ns1blankspace.objectContextData.lockeddatejournals)
 										{
 											ns1blankspace.setup.financial.save.profile({attribute: 265, value: $('#ns1blankspaceGeneralLockedDateJournals').val()})
-										}
+										}*/
 									};
 									
 									if ($('#ns1blankspaceMainTax').html() != '')
 									{
 										sData += '&lockifincompletedtaxreport=' + ns1blankspace.util.fs($('input[name="radioTaxLock"]:checked').val());
-										sData += '&taxreportfrequency=' + ns1blankspace.util.fs($('input[name="radioTaxReportingFrequency"]:checked').val());
-										sData += '&taxreportfrequencyemployee=' + ns1blankspace.util.fs($('input[name="radioTaxPayrollReportingFrequency"]:checked').val());
-										sData += '&classicincludestax=' + ns1blankspace.util.fs($('input[name="radioTaxDefault"]:checked').val());
+										sData += '&frequency=' + ns1blankspace.util.fs($('input[name="radioTaxReportingFrequency"]:checked').val());
+										sData += '&frequencyemployee=' + ns1blankspace.util.fs($('input[name="radioTaxPayrollReportingFrequency"]:checked').val());
+										//sData += '&classicincludestax=' + ns1blankspace.util.fs($('input[name="radioTaxDefault"]:checked').val());
 
-										ns1blankspace.setup.financial.save.profile({attribute: 528, value: $('#ns1blankspaceTaxExpenseDescription').val()});
+										//how set? ns1blankspace.setup.financial.save.profile({attribute: 528, value: $('#ns1blankspaceTaxExpenseDescription').val()});
 										ns1blankspace.financial.data.settings.taxexpensedescription = $('#ns1blankspaceTaxExpenseDescription').val();
 									};
 									
@@ -3105,16 +3243,18 @@ ns1blankspace.setup.financial =
 									{
 										sData += '&payrollpayperiod=' + ns1blankspace.util.fs($('input[name="radioPeriodDefault"]:checked').val());
 										sData += '&payrollsuperannuationcontactbusiness=' + ns1blankspace.util.fs($('#ns1blankspacePayrollSuperannuationBusiness').attr('data-id'));
-										sData += '&payrollfinancialsexpenseonly=' + ns1blankspace.util.fs($('input[name="radioPayrollFinancialsExpenseOnly"]:checked').val());
+										sData += '&payrollsuperannuationmonthlythreshold=' + ns1blankspace.util.fs($('#ns1blankspacePayrollSuperannuationMonthlyThreshold').val());
+
+										//? payrollcreateexpeenses? sData += '&payrollfinancialsexpenseonly=' + ns1blankspace.util.fs($('input[name="radioPayrollFinancialsExpenseOnly"]:checked').val());
 										
-										ns1blankspace.setup.financial.save.profile({attribute: 526, value: $('input[name="radioPayrollFinancialsExpenseOnly"]:checked').val()});
-										ns1blankspace.setup.financial.save.profile({attribute: 283, value: $('input[name="radioPayrollFinancialsPayments"]:checked').val()});
+										//ns1blankspace.setup.financial.save.profile({attribute: 526, value: $('input[name="radioPayrollFinancialsExpenseOnly"]:checked').val()});
+										//ns1blankspace.setup.financial.save.profile({attribute: 283, value: $('input[name="radioPayrollFinancialsPayments"]:checked').val()});
 									};
 
 									$.ajax(
 									{
 										type: 'POST',
-										url: ns1blankspace.util.endpointURI('SETUP_FINANCIAL_SETTINGS_MANAGE'),
+										url: '/rpc/setup/?method=SETUP_FINANCIAL_SETTINGS_MANAGE',
 										data: sData,
 										dataType: 'json',
 										success: function()

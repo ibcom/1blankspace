@@ -1605,7 +1605,7 @@ ns1blankspace.setup.user =
 										{
 											var oSearch = new AdvancedSearch();
 											oSearch.method = 'SETUP_EXTERNAL_USER_ACCESS_SEARCH';
-											oSearch.addField('userlogon,spacetext,usercontactpersontext,unrestrictedaccess,user,targetuser,targetusertext,createddate'); // authenticationlevelminimum
+											oSearch.addField('userlogon,spacetext,usercontactpersontext,unrestrictedaccess,user,targetuser,targetusertext,createddate,authenticationlevelminimum');
 											oSearch.rows = 50;
 											oSearch.sort('userlogon', 'asc');
 											oSearch.getResults(function(data) {ns1blankspace.setup.user.external.show(oParam, data)});
@@ -1616,7 +1616,7 @@ ns1blankspace.setup.user =
 											
 											aHTML.push('<table id="ns1blankspaceSetupUserExternal" class="interfaceMain">' +
 														'<tr>' +
-														'<td id="ns1blankspaceSetupUserExternalColumn1" style="width:150px;border-right-style:solid;border-width:2px;border-color:#B8B8B8;padding-right:15px;"></td>' +
+														'<td id="ns1blankspaceSetupUserExternalColumn1" style="width:300px;border-right-style:solid;border-width:2px;border-color:#B8B8B8;padding-right:15px;"></td>' +
 														'<td id="ns1blankspaceSetupUserExternalColumn2" class="ns1blankspaceColumn1Large" style="padding-left:15px;"></td>' +
 														'<td id="ns1blankspaceSetupUserExternalColumn3" style="width: 100px;" class="ns1blankspaceColumn2Action"></td>' +
 														'</tr>' +
@@ -1677,8 +1677,17 @@ ns1blankspace.setup.user =
 													aHTML.push('<br /><span class="ns1blankspaceSub" id="ns1blankspaceSetupUserExternal_space-' + this.id + '">' +
 									 										this.spacetext + '</span>');
 
+													this._usercontactpersontext = _.split(this.usercontactpersontext, ', ');
+													this. usercontactpersontext = this._usercontactpersontext[0] + ' ' + this._usercontactpersontext[1];
+
 													aHTML.push('<br /><span class="ns1blankspaceSub" id="ns1blankspaceSetupUserExternal_usercontactname-' + this.id + '">' +
 									 										this.usercontactpersontext + '</span>');
+
+													if (this.authenticationlevelminimum == 3)
+													{
+														aHTML.push('<br /><span class="ns1blankspaceSub">' +
+									 										'<span class="glyphicon glyphicon-phone" aria-hidden="true" style="font-size: 1.2em;"></span> 2FA Required</span>');
+													}
 
 									 				aHTML.push('</td>');						
 
@@ -1867,7 +1876,9 @@ ns1blankspace.setup.user =
 												
 												$('#ns1blankspaceExternalCreated').html(' (granted ' + ns1blankspace.util.formatDate($('#ns1blankspaceUserExternal_title-' + aXHTMLElementID[1]).attr("data-created"), {format:'DD MMM YYYY HH:mm'}) + ')')
 
-												$('[name="radioExternalAccessAuthenticationLevel"][value="' + $('#ns1blankspaceUserExternal_title-' + aXHTMLElementID[1]).attr("data-authenticationlevelminimum") + '"]').attr('checked', true);
+												var iExternalAccessAuthenticationLevel = $('#ns1blankspaceUserExternal_title-' + aXHTMLElementID[1]).attr("data-authenticationlevelminimum");
+												if (iExternalAccessAuthenticationLevel == 1) {iExternalAccessAuthenticationLevel = 2}
+												$('[name="radioExternalAccessAuthenticationLevel"][value="' + iExternalAccessAuthenticationLevel + '"]').attr('checked', true);
 
 												oParam.user = $('#ns1blankspaceUserExternal_title-' + aXHTMLElementID[1]).attr("data-user");
 												oParam.step = 3;
