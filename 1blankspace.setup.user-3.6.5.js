@@ -695,9 +695,12 @@ ns1blankspace.setup.user =
 										'</td></tr>' +
 										'<tr class="ns1blankspace">' +
 										'<td class="ns1blankspaceRadio">' +
-										'<input type="radio" id="radioAuthenticationLevel1" name="radioAuthenticationLevel" value="1"/>Standard<br />' +
-										'<input type="radio" id="radioAuthenticationLevel2" name="radioAuthenticationLevel" value="2"/>With Token<br />' +
-										'<input type="radio" id="radioAuthenticationLevel3" name="radioAuthenticationLevel" value="3"/>With 2nd Factor Token' +
+										'<input type="radio" id="radioAuthenticationLevel1" name="radioAuthenticationLevel" value="1"/>Standard ' +
+													'<span class="ns1blankspaceSubNote">(Only if trusted client, ie other service)</span><br />' +
+										'<input type="radio" id="radioAuthenticationLevel2" name="radioAuthenticationLevel" value="2"/>With Logon Key ' +
+												'<span class="ns1blankspaceSubNote">(Only if can\'t do 2nd Factor)</span><br />' +
+										'<input type="radio" id="radioAuthenticationLevel3" name="radioAuthenticationLevel" value="3"/>With 2nd Factor Token ' +
+													'<span class="ns1blankspaceSubNote">(Best)</span>' +
 										'</td></tr>');
 
 						aHTML.push('<tr class="ns1blankspaceCaption">' +
@@ -714,7 +717,7 @@ ns1blankspace.setup.user =
 							if (ns1blankspace.option.logonTOTP.enabled)
 							{
 								aHTML.push('<br /><input type="radio" id="radioAuthenticationDelivery3" name="radioAuthenticationDelivery" value="3"/>TOTP Client' +
-											' <a href="https://docs.mydigitalstructure.com/gettingstarted_authentication_totp" target="_blank"><span class="ns1blankspaceSub">...</span></a>');
+											' <a href="https://docs.mydigitalstructure.com/gettingstarted_authentication_totp" target="_blank"><span class="ns1blankspaceSubNote">(What is this?)</span></a>');
 							}	
 						}
 
@@ -731,7 +734,7 @@ ns1blankspace.setup.user =
 										'<input type="radio" id="radioAuthenticationAccessToken1" name="radioAuthenticationAccessToken" value="1"/>Disabled' +
 										'<br /><input type="radio" id="radioAuthenticationAccessToken2" name="radioAuthenticationAccessToken" value="2"/>Can be used as 2nd factor token' +
 										'<br /><input type="radio" id="radioAuthenticationAccessToken3" name="radioAuthenticationAccessToken" value="3"/>Can be used to authenticate' +
-										' <a href="https://docs.mydigitalstructure.com/gettingstarted_authentication" target="_blank"><span class="ns1blankspaceSub">...</span></a>' +
+										' <a href="https://docs.mydigitalstructure.com/gettingstarted_authentication" target="_blank"><span class="ns1blankspaceSubNote">(What is this?)</span></a>' +
 										'</td></tr>');
 						}
 
@@ -791,17 +794,20 @@ ns1blankspace.setup.user =
 										'<input id="ns1blankspaceDetailsTimezoneOffset" class="ns1blankspaceText">' +
 										'</td></tr>');
 
-						if (ns1blankspace.objectContextData.authenticationdelivery == 3) //TOTP
-						{
-							aHTML.push('<tr class="ns1blankspaceUserGenerateTOTP">' +
-											'<td class="ns1blankspaceCaption" style="padding-top:12px;">' +
-											'TOTP Client Set up' +
-											'</td></tr>' +
-											'<tr class="ns1blankspaceUserGenerateTOTP"><td>' +
-												'<span class="ns1blankspaceAction" id="ns1blankspaceUserDetailsGenerateTOTP"></span>' +
+						if (ns1blankspace.objectContext != -1)
+						{	
+							if (ns1blankspace.objectContextData.authenticationdelivery == 3) //TOTP
+							{
+								aHTML.push('<tr class="ns1blankspaceUserGenerateTOTP">' +
+												'<td class="ns1blankspaceCaption" style="padding-top:12px;">' +
+												'TOTP Client Set up' +
 												'</td></tr>' +
-											'<tr><td id="ns1blankspaceUserDetailsGenerateTOTPContainer">' +
-												'</td></tr>')
+												'<tr class="ns1blankspaceUserGenerateTOTP"><td>' +
+													'<span class="ns1blankspaceAction" id="ns1blankspaceUserDetailsGenerateTOTP"></span>' +
+													'</td></tr>' +
+												'<tr><td id="ns1blankspaceUserDetailsGenerateTOTPContainer">' +
+													'</td></tr>')
+							}
 						}
 
 						aHTML.push('<tr><td id="ns1blankspaceSetupUserNotes" style="padding-top:10px;"></td></tr>')
@@ -825,6 +831,8 @@ ns1blankspace.setup.user =
 							$('[name="radioDisabled"][value="N"]').attr('checked', true);
 							$('[name="radioAuthenticationLevel"][value="2"]').attr('checked', true);
 							$('[name="radioAuthenticationDelivery"][value="1"]').attr('checked', true);
+							$('[name="radioAuthenticationAccessToken"][value="1"]').attr('checked', true);
+
 						}
 
 						$('#ns1blankspaceUserDetailsGenerateTOTP').button(
@@ -1393,6 +1401,7 @@ ns1blankspace.setup.user =
 										sData += '&contactperson=' + iContactPerson;
 										sData += '&unrestrictedaccess=N';
 										sData += '&newsalerts=N';
+										//sData += '&disabled=N';
 									}
 									
 									if ($('#ns1blankspaceMainDetails').html() != '')
