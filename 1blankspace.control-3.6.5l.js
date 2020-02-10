@@ -282,7 +282,7 @@ ns1blankspace.scripts =
 	},
 	{
 		nameSpace: '1blankspace.document',
-		source: '/site/388/1blankspace.document-3.6.1.js'
+		source: '/site/388/1blankspace.document-3.6.5.js'
 	},
 	{
 		nameSpace: '1blankspace.news',
