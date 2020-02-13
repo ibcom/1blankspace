@@ -304,7 +304,7 @@ ns1blankspace.scripts =
 	},
 	{
 		nameSpace: '1blankspace.financial',
-		source: '/site/1903/1blankspace.financial-3.5.9.js'
+		source: '/site/1903/1blankspace.financial-3.6.0.js'
 	},
 	{
 		nameSpace: '1blankspace.financial.bankAccount',
@@ -324,7 +324,7 @@ ns1blankspace.scripts =
 	},
 	{
 		nameSpace: '1blankspace.financial.payment',
-		source: '/site/1903/1blankspace.financial.payment-3.6.0.js'
+		source: '/site/1903/1blankspace.financial.payment-3.6.5.js'
 	},
 	{
 		nameSpace: '1blankspace.financial.credit',
@@ -332,11 +332,11 @@ ns1blankspace.scripts =
 	},
 	{
 		nameSpace: '1blankspace.financial.journal',
-		source: '/site/1903/1blankspace.financial.journal-3.6.0.js'
+		source: '/site/1903/1blankspace.financial.journal-3.6.5.js'
 	},
 	{
 		nameSpace: '1blankspace.financial.tax',
-		source: '/site/1903/1blankspace.financial.tax-3.1.1.js'
+		source: '/site/1903/1blankspace.financial.tax-3.6.5.js'
 	},
 	{
 		nameSpace: '1blankspace.financial.payroll',
