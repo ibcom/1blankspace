@@ -6552,6 +6552,26 @@ ns1blankspace.financial.bankAccount =
 																oParam = ns1blankspace.util.setParam(oParam, 'bankAccount', ns1blankspace.objectContext);
 																oParam = ns1blankspace.util.setParam(oParam, 'postSave', ns1blankspace.financial.bankAccount.reconcile.items.edit);
 
+																var oDate = moment(oParam.date, ns1blankspace.option.dateFormats)
+																var oLockedDate;
+
+																if (iType == 1)
+																{
+																	oLockedDate = moment(ns1blankspace.financial.data.settings.lockeddatecreditors, ns1blankspace.option.dateFormats)
+																}
+
+																if (iType == 2)
+																{
+																	oLockedDate = moment(ns1blankspace.financial.data.settings.lockeddatedebtors, ns1blankspace.option.dateFormats)
+																}
+
+																if (oDate.isBefore(oLockedDate))
+																{
+																	oParam.date = oLockedDate.add(1, 'days').format('DD MMM YYYY')
+																}
+
+																oParam = ns1blankspace.util.setParam(oParam, 'sent', 'Y');
+
 																ns1blankspace.financial.save.send(oParam);
 															}
 															else
@@ -7252,6 +7272,7 @@ ns1blankspace.financial.bankAccount =
 																oParam = ns1blankspace.util.setParam(oParam, 'bankAccount', ns1blankspace.objectContext);
 																oParam = ns1blankspace.util.setParam(oParam, 'taxType', $('input[name="radioItemTaxCode"]:checked').val());
 																oParam = ns1blankspace.util.setParam(oParam, 'postSave', ns1blankspace.financial.bankAccount.reconcile.items.edit);
+																oParam = ns1blankspace.util.setParam(oParam, 'sent', 'Y');
 
 																if ($('#ns1blankspaceReconcileItemsEditRemember:checked').length != 0)
 																{
@@ -7284,7 +7305,7 @@ ns1blankspace.financial.bankAccount =
 														}
 														else
 														{
-															if (oParam.xhtmlElementID != undefined)
+															if (oParam.objectContext != undefined)
 															{
 																if (iSource == 1)
 																{

@@ -1169,7 +1169,7 @@ ns1blankspace.financial.journal =
 											});
 										});
 
-										$('[name="radioTaxCode"]').click(function()
+										$(document).on('click', '[name="radioTaxCode"]', function (e)
 										{
 											ns1blankspace.financial.util.tax.calculate(
 											{

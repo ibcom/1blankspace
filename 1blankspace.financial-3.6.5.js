@@ -6042,6 +6042,7 @@ ns1blankspace.financial.save =
 					var bShowStatus = true;
 					var sDateField;
 					var iBankTransactionID = ns1blankspace.util.getParam(oParam, 'bankTransactionID').value;
+					var sSent;
 
 					if (oParam != undefined)
 					{
@@ -6054,7 +6055,8 @@ ns1blankspace.financial.save =
 						if (oParam.method != undefined) {sMethod = oParam.method}
 						if (oParam.id != undefined) {iID = oParam.id}
 						if (oParam.bankAccount != undefined) {iBankAccount = oParam.bankAccount}
-						if (oParam.showStatus != undefined) {bShowStatus = oParam.showStatus} 
+						if (oParam.showStatus != undefined) {bShowStatus = oParam.showStatus}
+						if (oParam.sent != undefined) {sSent = oParam.sent} 
 					}
 
 					if (bShowStatus) {ns1blankspace.status.working();}
@@ -6101,6 +6103,11 @@ ns1blankspace.financial.save =
 					if (iBankTransactionID != undefined)
 					{
 						sData += '&sourcebanktransaction=' + ns1blankspace.util.fs(iBankTransactionID);
+					}
+
+					if (sSent != undefined)
+					{
+						sData += '&sent=' + ns1blankspace.util.fs(sSent);
 					}
 
 					$.ajax(
