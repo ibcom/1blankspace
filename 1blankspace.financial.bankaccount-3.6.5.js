@@ -7260,24 +7260,45 @@ ns1blankspace.financial.bankAccount =
 
 																$('#ns1blankspaceBankAccountReconcileColumnItemEdit').html('');
 
+																var oDate = moment(oParam.date, ns1blankspace.option.dateFormats)
+																var oLockedDate;
+
+																if (iType == 1)
+																{
+																	oLockedDate = moment(ns1blankspace.financial.data.settings.lockeddatecreditors, ns1blankspace.option.dateFormats)
+																}
+
+																if (iType == 2)
+																{
+																	oLockedDate = moment(ns1blankspace.financial.data.settings.lockeddatedebtors, ns1blankspace.option.dateFormats)
+																}
+
+																if (oDate.isBefore(oLockedDate))
+																{
+																	oParam.date = oLockedDate.add(1, 'days').format('DD MMM YYYY')
+																}
+
 																ns1blankspace.financial.save.send(oParam);
 															})
 															.css('font-size', '0.875em');
 														}
 														else
 														{
-															if (iSource == 1)
+															if (oParam.xhtmlElementID != undefined)
 															{
-																oParam.xhtmlElementID = '-' + (oParam.objectContext);
-																oParam.editAction = 3;
-																ns1blankspace.financial.bankAccount.reconcile.items.edit(oParam);
+																if (iSource == 1)
+																{
+																	oParam.xhtmlElementID = '-' + (oParam.objectContext);
+																	oParam.editAction = 3;
+																	ns1blankspace.financial.bankAccount.reconcile.items.edit(oParam);
+																}
+																else
+																{	
+																	oParam.xhtmlElementID = '-' + (oParam.objectContext);
+																	oParam.editAction = 5;
+																	ns1blankspace.financial.bankAccount.reconcile.items.edit(oParam);
+																}
 															}
-															else
-															{	
-																oParam.xhtmlElementID = '-' + (oParam.objectContext);
-																oParam.editAction = 5;
-																ns1blankspace.financial.bankAccount.reconcile.items.edit(oParam);
-															}	
 														}
 													}
 
