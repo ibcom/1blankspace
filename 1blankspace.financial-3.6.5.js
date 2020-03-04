@@ -1026,9 +1026,9 @@ ns1blankspace.financial.debtors =
 										'<input id="ns1blankspaceDebtorsEndDate" data-1blankspace="ignore" class="ns1blankspaceDate ns1blankspaceWatermark" style="padding-left:3px; width:113px; font-size:0.725em; text-align:center;" value="As at">' +
 										'</td></tr>');
 
-						aHTML.push('<tr><td style="padding-bottom:12px;"><span id="ns1blankspaceFinancialDebtorsRefresh" class="ns1blankspaceAction">' +
+					
+	aHTML.push('<tr><td style="padding-bottom:12px;"><span id="ns1blankspaceFinancialDebtorsRefresh" class="ns1blankspaceAction">' +
 										'Refresh</span></td></tr>');
-
 						aHTML.push('<tr><td style="padding-top:2px; padding-bottom:0px; font-size:0.75em;" class="ns1blankspaceSub">' +
 										'Debtors total</td></tr>');
 
