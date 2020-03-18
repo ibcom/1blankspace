@@ -384,6 +384,8 @@ ns1blankspace.setup.structure =
 						
 						$('#ns1blankspaceMainSummary').html(aHTML.join(''));
 
+						var aHTML = [];
+						
 						aHTML.push('<table class="ns1blankspace">');
 						
 						aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Structure ID</td></tr>' +

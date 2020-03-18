@@ -766,7 +766,7 @@ ns1blankspace.setup.userRole =
 												}			
 								},							
 						
-					methods: 	{
+					methods: {
 									show: 		function (oParam, oResponse)
 												{
 													if (oResponse == undefined)
