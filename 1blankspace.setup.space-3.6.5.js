@@ -1324,9 +1324,55 @@ ns1blankspace.setup.space =
 															oParam.step = 3;
 															ns1blankspace.setup.space.initialise.structures.add(oParam)
 														}	
-													}	
+													}
 
 													if (iStep == 3)
+													{
+														if (iStructureGroup < oStructure.groupings.length)
+														{
+															ns1blankspace.status.working('Adding grouping ' + (iStructureGroup + 1) + ' of ' + oStructure.groupings.length);
+
+															var oData = 
+															{
+																structure: iStructure,
+																title: oStructure.groupings[iStructureGroup].title,
+																description: oStructure.groupings[iStructureGroup].description,
+																groupingfactor: oStructure.groupings[iStructureGroup].groupingfactor,
+																minimumpoints: oStructure.groupings[iStructureGroup].minimumpoints,
+																maximumpoints: oStructure.groupings[iStructureGroup].maximumpoints,
+																textcolour: oStructure.groupings[iStructureGroup].textcolour,
+																backgroundcolour: oStructure.groupings[iStructureGroup].backgroundcolour,
+															}	
+
+															$.ajax(
+															{
+																type: 'POST',
+																url: ns1blankspace.util.endpointURI('SETUP_STRUCTURE_DATA_GROUP_MANAGE'),
+																data: oData,
+																dataType: 'json',
+																success: function(data)
+																{
+																	if (data.status == "OK")
+																	{
+																		oParam.structureGroup = iStructureGroup + 1;
+																		ns1blankspace.setup.space.initialise.structures.add(oParam)
+																	}
+																	else
+																	{
+																		ns1blankspace.status.error(data.error.errornotes);
+																	}
+																}
+															});
+														}
+														else
+														{
+															oParam.step = 4;
+															ns1blankspace.setup.space.initialise.structures.add(oParam)
+														}	
+													}	
+	
+
+													if (iStep == 4)
 													{ 
 														if (iStructureElement < oStructure.elements.length)
 														{
@@ -3114,6 +3160,8 @@ ns1blankspace.setup.space.export =
 		{
 			var iStructure = ns1blankspace.util.getParam(oParam, 'structure').value
 
+			ns1blankspace.status.message('Exporting...');
+
 			if (iStructure != undefined)
 			{
 				if (oResponse == undefined)
@@ -3220,6 +3268,31 @@ ns1blankspace.setup.space.export =
 				aFile.push(aFileItems.join(',\n'));
 
 				aFile.push('\t\t\t\t],');
+
+				aFile.push('\t\t\t\t"groupings":');
+				aFile.push('\t\t\t\t[');
+
+				var aFileItems = [];
+
+				$.each(ns1blankspace.setup.space.export.structures.data.groupings, function (g, group)
+				{
+					aFileItems.push('\t\t\t\t\t{"title": "' + group.title + '", ' +
+												' "description": "' + group.description + '",' +
+												' "groupingfactor": "' + group.groupingfactor + '",' +
+												' "type": "' + group.type + '",' +
+												' "typetext": "' + group.typetext + '",' +
+												' "minimumpoints": "' + group.minimumpoints + '",' +
+												' "maximumpoints": "' + group.maximumpoints + '",' +
+												' "textcolour": "' + group.textcolour + '",' +
+												' "backgroundcolour": "' + group.backgroundcolour + '",' +
+												' "documenttext": "' + group.documenttext + '"' +
+												'}');
+				});
+
+				aFile.push(aFileItems.join(',\n'));
+
+				aFile.push('\t\t\t\t],');
+
 
 				aFile.push('\t\t\t\t"elements":');
 				aFile.push('\t\t\t\t[');

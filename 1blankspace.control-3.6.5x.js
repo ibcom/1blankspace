@@ -388,11 +388,11 @@ ns1blankspace.scripts =
 	},
 	{
 		nameSpace: '1blankspace.setup.space',
-		source: '/site/1903/1blankspace.setup.space-3.6.4.js'
+		source: '/site/1903/1blankspace.setup.space-3.6.5.js'
 	},
 	{
 		nameSpace: '1blankspace.setup.structure',
-		source: '/site/1903/1blankspace.setup.structure-2.0.5.js'
+		source: '/site/1903/1blankspace.setup.structure-3.6.5.js'
 	},
 	{
 		nameSpace: '1blankspace.setup.user',

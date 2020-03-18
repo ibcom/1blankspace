@@ -46,10 +46,23 @@ ns1blankspace.setup.structure =
 									
 						aHTML.push('<table>' +
 							'<tr><td><div id="ns1blankspaceViewSetupLarge" class="ns1blankspaceViewImageLarge"></div></td></tr>' +
-							'</table>');		
+							'</table>');
 
-						$('#ns1blankspaceControl').html(aHTML.join(''));	
-						
+						aHTML.push('<table class="ns1blankspaceControl">');
+
+						aHTML.push('<tr><td id="ns1blankspaceControlInitialise" class="ns1blankspaceControl"><div>Templates</div>' +
+							'<div class="ns1blankspaceSubNote">import a structure</div>' +
+							'</td></tr>');
+
+						aHTML.push('</table>');
+
+						$('#ns1blankspaceControl').html(aHTML.join(''));
+
+						$('#ns1blankspaceControlInitialise').click(function(event)
+						{
+							ns1blankspace.setup.space.initialise.init({type: 4, xhtmlElementID: 'ns1blankspaceMain'})
+						});
+		
 						$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions);
 						
 						var oSearch = new AdvancedSearch();
@@ -937,7 +950,7 @@ ns1blankspace.setup.structure =
 											
 											if (oActions.add)
 											{
-												aHTML.push('<tr><td id="ns1blankspaceSetupStructureCategoryAdd" class="ns1blankspaceAction">' +
+												aHTML.push('<tr><td class="ns1blankspaceAction">' +
 															'<span id="ns1blankspaceSetupStructureCategoryAdd">Add</span>' +
 															'</td></tr>');
 											}
