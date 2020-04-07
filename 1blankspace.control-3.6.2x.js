@@ -304,11 +304,11 @@ ns1blankspace.scripts =
 	},
 	{
 		nameSpace: '1blankspace.financial',
-		source: '/site/1903/1blankspace.financial-3.6.5.js'
+		source: '/site/1734/1blankspace.financial-3.5.9x.js'
 	},
 	{
 		nameSpace: '1blankspace.financial.bankAccount',
-		source: '/site/1903/1blankspace.financial.bankaccount-3.6.5.js'
+		source: '/site/1903/1blankspace.financial.bankaccount-3.6.1.js'
 	},
 	{
 		nameSpace: '1blankspace.financial.invoice',
@@ -340,7 +340,7 @@ ns1blankspace.scripts =
 	},
 	{
 		nameSpace: '1blankspace.financial.payroll',
-		source: '/site/1903/1blankspace.financial.payroll-3.6.4.js'
+		source: '/site/1903/1blankspace.financial.payroll-3.6.2.js'
 	},
 	{
 		nameSpace: '1blankspace.financial.budget',
@@ -388,7 +388,7 @@ ns1blankspace.scripts =
 	},
 	{
 		nameSpace: '1blankspace.setup.space',
-		source: '/site/1903/1blankspace.setup.space-3.6.4.js'
+		source: '/site/1903/1blankspace.setup.space-3.6.1.js'
 	},
 	{
 		nameSpace: '1blankspace.setup.structure',
@@ -440,7 +440,7 @@ ns1blankspace.scripts =
 	},
 	{
 		nameSpace: '1blankspace.connect',
-		source: '/site/1903/1blankspace.connect-3.6.5.js'
+		source: '/site/1903/1blankspace.connect-2.0.4.js'
 	},
 	{
 		nameSpace: '1blankspace.util.whenDone',
@@ -468,11 +468,11 @@ ns1blankspace.scripts =
 	},
 	{
 		nameSpace: '1blankspace.admin.monitoring',
-		source: '/site/1903/1blankspace.admin.monitoring-3.6.4.js'
+		source: '/site/1903/1blankspace.admin.monitoring-3.1.8.js'
 	},
 	{
 		nameSpace: '1blankspace.admin.schema',
-		source: '/site/1903/1blankspace.admin.schema-3.6.4.js'
+		source: '/site/1903/1blankspace.admin.schema-3.6.2.js'
 	},
 	{
 		nameSpace: '1blankspace.developer.membership',
@@ -2416,7 +2416,6 @@ ns1blankspace.control =
 								url: ns1blankspace.util.endpointURI('CORE_SPACE_MANAGE'),
 								data: 'switchback=1',
 								dataType: 'json',
-								global: false,
 								success: function(data)
 								{
 									if (data.status == 'OK')
@@ -2429,17 +2428,6 @@ ns1blankspace.control =
 										ns1blankspace.extend.structure = undefined;
 										$('#ns1blankspaceSpaceText').html(ns1blankspace.spaceText);
 										ns1blankspace.app.refresh();
-									}
-									else 
-									{
-										if (oResponse.error.errorcode == 4 && _.includes(oResponse.error.errornotes, 'Your AuthenticationLevel of'))
-										{
-											ns1blankspace.status.error('You need to have second factor authentication enabled to switch into this space.')
-										}
-										else
-										{
-											ns1blankspace.status.error(oResponse.error.errornotes)
-										}
 									}
 								}
 							});	

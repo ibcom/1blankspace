@@ -730,7 +730,14 @@ ns1blankspace.setup.space =
 											aHTML.push('<input type="radio" id="ns1blankspaceInitaliseOption-import" name="radioObject" />' +
 														'<label for="ns1blankspaceInitaliseOption-import" style="width: 110px; margin-bottom:3px;">' +
 														'Data</label>');
-										}	
+										}
+
+										if (oTemplate.structures != 0 && (iType == 4 || iType == -1))
+										{
+											aHTML.push('<input type="radio" id="ns1blankspaceInitaliseOption-structures" name="radioObject" />' +
+														'<label for="ns1blankspaceInitaliseOption-structures" style="width: 110px; margin-bottom:3px;">' +
+														'Structures</label>');
+										}		
 
 										aHTML.push('</div>');
 
@@ -1115,6 +1122,315 @@ ns1blankspace.setup.space =
 													}	
 												}				
 								},
+
+						structures: 	
+								{
+									data: 	{categories: []},
+
+									show:		function (oParam, oResponse)
+												{
+													$('#ns1blankspaceInitialiseColumn2').html(ns1blankspace.xhtml.loading);
+
+													ns1blankspace.setup.space.initialise.structures.data.categories = [];
+
+													var aHTML = [];
+
+													aHTML.push('<table id="ns1blankspaceSetupSpaceInitialiseStructuresContainer" class="ns1blankspaceColumn2">');
+											
+													aHTML.push('<tr><td id="ns1blankspaceSetupSpaceInitialiseStructures">');
+
+													aHTML.push(ns1blankspace.attachments.upload.show(
+													{	
+														object: 29,
+														objectContext: -1,
+														label: '',
+														showUpload: false
+													}));
+
+													aHTML.push('</td></tr>');
+
+													aHTML.push('</table>');
+								
+													$('#ns1blankspaceInitialiseColumn2').html(aHTML.join(''));
+
+													$('#ns1blankspaceUpload').button(
+													{
+														label: "Import Structure"
+													})
+													.click(function()
+													{
+														if ($('#oFile0').val() == '')
+														{
+															ns1blankspace.status.error("Need to select a file.");
+														}
+														else
+														{
+															$.ajax(
+															{
+																type: 'POST',
+																url: ns1blankspace.util.endpointURI('CORE_IMPORT_MANAGE'),
+																success: function(data)
+																{
+																	if (data.status == 'OK')
+																	{	
+																		$('#objectcontext').val(data.id);	
+																		ns1blankspace.attachments.upload.submit({submit: true, functionPostUpdate: ns1blankspace.setup.space.initialise.structures.import});
+																	}
+																}
+															});
+														}
+													});
+												},
+
+									import: 	function(oParam)
+												{
+													if (oParam.attachments.length > 0)
+													{
+														var iID = oParam.attachments[0].attachmentlink;
+
+														var oData =
+														{
+															id: iID
+														}
+													}
+
+													$.ajax(
+													{
+														type: 'POST',
+														url: ns1blankspace.util.endpointURI('CORE_FILE_READ'),
+														data: oData,
+														dataType: 'json',
+														success: function(data)
+														{
+															var oRoleTemplate = JSON.parse(data.filedata);
+															ns1blankspace.setup.space.initialise.data.template.structures = oRoleTemplate.template.structures
+															ns1blankspace.setup.space.initialise.structures.add()
+														}
+													});
+												},
+
+									add: 		function(oParam, oResponse)
+												{
+													var iStep = 1;
+													var sXHTMLElementID;
+													var iStructure;
+													var sStructureTitle;
+													var aStructureCategories;
+													var aStructureGroups;
+													var aStructureElements;
+													var iStructureCategory = 0;
+													var iStructureElement = 0;
+													var iStructureGroup = 0;
+
+													if (oParam == undefined) {oParam = {}}
+													if (oParam.step != undefined) {iStep = oParam.step}
+													if (oParam.xhtmlElementID != undefined) {sXHTMLElementID = oParam.xhtmlElementID}
+													if (oParam.structure != undefined) {iStructure = oParam.structure}
+													if (oParam.structureTitle != undefined) {sStructureTitle = oParam.structureTitle}
+													if (oParam.structureCategories != undefined) {aStructureCategories = oParam.structureCategories}
+													if (oParam.structureGroups != undefined) {aStructureGroups = oParam.structureGroups}
+													if (oParam.structureElements != undefined) {aStructureElements = oParam.structureElements}
+													if (oParam.structureCategory != undefined) {iStructureCategory = oParam.structureCategory}
+													if (oParam.structureGroup != undefined) {iStructureGroup = oParam.structureGroup}
+													if (oParam.structureElement != undefined) {iStructureElement = oParam.structureElement}
+
+													var oStructure = ns1blankspace.setup.space.initialise.data.template.structures[0];
+
+													if (iStep == 1)
+													{
+														ns1blankspace.status.working();
+
+														$('#ns1blankspaceSetupSpaceInitialiseStructures').html('<div class="ns1blankspaceSub">Importing Structure...</div>');
+
+														if (ns1blankspace.setup.space.initialise.data.template.structures.length != 0)
+														{
+															if (oStructure.categories == undefined)
+															{
+																oStructure.categories = [];
+															}
+
+															if (oStructure.groups == undefined)
+															{
+																oStructure.groups = [];
+															}
+
+															var sTitle = oStructure.title;
+
+															var oData =
+															{
+																title: oStructure.title
+															}
+															
+															$.ajax(
+															{
+																type: 'POST',
+																url: ns1blankspace.util.endpointURI('SETUP_STRUCTURE_MANAGE'),
+																data: oData,
+																dataType: 'json',
+																success: function (data)
+																{
+																	if (data.status == 'OK')
+																	{
+																		oParam.step = 2;
+																		oParam.structure = data.id;
+																		oParam.structureTitle = sTitle;
+																		ns1blankspace.setup.space.initialise.structures.add(oParam);
+																	}
+																	else
+																	{}
+																}
+															});
+														}
+													}
+
+													if (iStep == 2)
+													{
+														if (iStructureCategory < oStructure.categories.length)
+														{
+															ns1blankspace.status.working('Adding category ' + (iStructureCategory + 1) + ' of ' + oStructure.categories.length);
+
+															var oData = 
+															{
+																structure: iStructure,
+																title: oStructure.categories[iStructureCategory].title,
+																description: oStructure.categories[iStructureCategory].description,
+																displayorder: oStructure.categories[iStructureCategory].displayorder,
+																type: oStructure.categories[iStructureCategory].type
+															}	
+
+															$.ajax(
+															{
+																type: 'POST',
+																url: ns1blankspace.util.endpointURI('SETUP_STRUCTURE_CATEGORY_MANAGE'),
+																data: oData,
+																dataType: 'json',
+																success: function(data)
+																{
+																	if (data.status == "OK")
+																	{
+																		oParam.structureCategory = iStructureCategory + 1;
+																		ns1blankspace.setup.space.initialise.structures.data.categories.push($.extend(true, oData, {id: data.id}))
+																		ns1blankspace.setup.space.initialise.structures.add(oParam)
+																	}
+																	else
+																	{
+																		ns1blankspace.status.error(data.error.errornotes);
+																	}
+																}
+															});
+														}
+														else
+														{
+															oParam.step = 3;
+															ns1blankspace.setup.space.initialise.structures.add(oParam)
+														}	
+													}
+
+													if (iStep == 3)
+													{
+														if (iStructureGroup < oStructure.groupings.length)
+														{
+															ns1blankspace.status.working('Adding grouping ' + (iStructureGroup + 1) + ' of ' + oStructure.groupings.length);
+
+															var oData = 
+															{
+																structure: iStructure,
+																title: oStructure.groupings[iStructureGroup].title,
+																description: oStructure.groupings[iStructureGroup].description,
+																groupingfactor: oStructure.groupings[iStructureGroup].groupingfactor,
+																minimumpoints: oStructure.groupings[iStructureGroup].minimumpoints,
+																maximumpoints: oStructure.groupings[iStructureGroup].maximumpoints,
+																textcolour: oStructure.groupings[iStructureGroup].textcolour,
+																backgroundcolour: oStructure.groupings[iStructureGroup].backgroundcolour,
+															}	
+
+															$.ajax(
+															{
+																type: 'POST',
+																url: ns1blankspace.util.endpointURI('SETUP_STRUCTURE_DATA_GROUP_MANAGE'),
+																data: oData,
+																dataType: 'json',
+																success: function(data)
+																{
+																	if (data.status == "OK")
+																	{
+																		oParam.structureGroup = iStructureGroup + 1;
+																		ns1blankspace.setup.space.initialise.structures.add(oParam)
+																	}
+																	else
+																	{
+																		ns1blankspace.status.error(data.error.errornotes);
+																	}
+																}
+															});
+														}
+														else
+														{
+															oParam.step = 4;
+															ns1blankspace.setup.space.initialise.structures.add(oParam)
+														}	
+													}	
+	
+
+													if (iStep == 4)
+													{ 
+														if (iStructureElement < oStructure.elements.length)
+														{
+															ns1blankspace.status.working('Adding element ' + (iStructureElement + 1) + ' of ' + oStructure.elements.length);
+															
+															var oCategory = $.grep(ns1blankspace.setup.space.initialise.structures.data.categories, 
+																	function (oCategory) {return oCategory.title == oStructure.elements[iStructureElement].categorytext});
+
+															if (oCategory.length != 0)
+															{
+																var oData = 
+																{
+																	structure: iStructure,
+																	category: oCategory[0].id,
+																	backgroundcolour: oStructure.elements[iStructureElement].backgroundcolour,
+																	caption: oStructure.elements[iStructureElement].caption,
+																	datatype: oStructure.elements[iStructureElement].datatype,
+																	description: oStructure.elements[iStructureElement].description,
+																	displayorder: oStructure.elements[iStructureElement].displayorder,
+																	hint: oStructure.elements[iStructureElement].hint,
+																	notes: oStructure.elements[iStructureElement].notes,
+																	notestype: oStructure.elements[iStructureElement].notestype,
+																	reference: oStructure.elements[iStructureElement].reference,
+																	textcolour: oStructure.elements[iStructureElement].textcolour,
+																	title: oStructure.elements[iStructureElement].title,
+																	alias: oStructure.elements[iStructureElement].alias
+																}	
+
+																$.ajax(
+																{
+																	type: 'POST',
+																	url: ns1blankspace.util.endpointURI('SETUP_STRUCTURE_ELEMENT_MANAGE'),
+																	data: oData,
+																	dataType: 'json',
+																	success: function(data)
+																	{
+																		if (data.status == "OK")
+																		{
+																			oParam.structureElement = iStructureElement + 1;
+																			ns1blankspace.setup.space.initialise.structures.add(oParam)
+																		}
+																		else
+																		{
+																			ns1blankspace.status.error(data.error.errornotes);
+																		}
+																	}
+																});
+															}
+														}
+														else
+														{
+															ns1blankspace.status.clear();
+															$('#ns1blankspaceSetupSpaceInitialiseStructures').html('<div class="ns1blankspaceSub">Structure imported.</div>');
+														}	
+													}	
+												}					
+									},
+
 
 					"import": 	{
 									show:		function (oParam)
@@ -2844,6 +3160,8 @@ ns1blankspace.setup.space.export =
 		{
 			var iStructure = ns1blankspace.util.getParam(oParam, 'structure').value
 
+			ns1blankspace.status.message('Exporting...');
+
 			if (iStructure != undefined)
 			{
 				if (oResponse == undefined)
@@ -2852,7 +3170,7 @@ ns1blankspace.setup.space.export =
 					oSearch.method = 'SETUP_STRUCTURE_SEARCH';
 					oSearch.addField('reference,title,status,statustext');
 					oSearch.addFilter('id', 'EQUAL_TO', iStructure);
-					oSearch.getResults(function(data) {ns1blankspace.setup.space.export.structure.init(oParam, data)});
+					oSearch.getResults(function(data) {ns1blankspace.setup.space.export.structures.init(oParam, data)});
 				}
 				else
 				{
@@ -2910,13 +3228,13 @@ ns1blankspace.setup.space.export =
 			{
 				var oSearch = new AdvancedSearch();
 				oSearch.method = 'SETUP_STRUCTURE_ELEMENT_SEARCH';
-				oSearch.addField('backgroundcolour,caption,category,categorytext,datatype,datatypetext,' +
+				oSearch.addField('backgroundcolour,caption,categorytext,datatype,datatypetext,' +
 											'description,displayorder,hint,id,notes,notestype,notestypetext,' +
 											'reference,structure,structuretext,textcolour,title,alias');
 				oSearch.addFilter('structure', 'EQUAL_TO', ns1blankspace.setup.space.export.structures.data.structure.id);
 				oSearch.rows = 99999;
 				oSearch.sort('description', 'asc');
-				oSearch.getResults(function(data) {ns1blankspace.setup.space.export.structures.data.structure.process(oParam, data)});
+				oSearch.getResults(function(data) {ns1blankspace.setup.space.export.structures.process(oParam, data)});
 			}
 			else
 			{
@@ -2935,11 +3253,11 @@ ns1blankspace.setup.space.export =
 				aFile.push('\t\t\t\t"categories":');
 				aFile.push('\t\t\t\t[');
 
-				var aFile = [];
+				var aFileItems = [];
 
 				$.each(ns1blankspace.setup.space.export.structures.data.categories, function (c, category)
 				{
-					aFile.push('\t\t\t\t\t{"title": "' + category.title + '", ' +
+					aFileItems.push('\t\t\t\t\t{"title": "' + category.title + '", ' +
 												' "description": "' + category.description + '",' +
 												' "displayorder": "' + category.displayorder + '",' +
 												' "type": "' + category.type + '",' +
@@ -2947,23 +3265,48 @@ ns1blankspace.setup.space.export =
 												'}');
 				});
 
-				aFile.push(aFileMethods.join(',\n'));
+				aFile.push(aFileItems.join(',\n'));
 
 				aFile.push('\t\t\t\t],');
+
+				aFile.push('\t\t\t\t"groupings":');
+				aFile.push('\t\t\t\t[');
+
+				var aFileItems = [];
+
+				$.each(ns1blankspace.setup.space.export.structures.data.groupings, function (g, group)
+				{
+					aFileItems.push('\t\t\t\t\t{"title": "' + group.title + '", ' +
+												' "description": "' + group.description + '",' +
+												' "groupingfactor": "' + group.groupingfactor + '",' +
+												' "type": "' + group.type + '",' +
+												' "typetext": "' + group.typetext + '",' +
+												' "minimumpoints": "' + group.minimumpoints + '",' +
+												' "maximumpoints": "' + group.maximumpoints + '",' +
+												' "textcolour": "' + group.textcolour + '",' +
+												' "backgroundcolour": "' + group.backgroundcolour + '",' +
+												' "documenttext": "' + group.documenttext + '"' +
+												'}');
+				});
+
+				aFile.push(aFileItems.join(',\n'));
+
+				aFile.push('\t\t\t\t],');
+
 
 				aFile.push('\t\t\t\t"elements":');
 				aFile.push('\t\t\t\t[');
 
-				var aFile = [];
+				var aFileItems = [];
 
 				$.each(ns1blankspace.setup.space.export.structures.data.elements, function (e, element)
 				{
-					aFileMethods.push('\t\t\t\t\t{"title": "' + element.title + '", ' +
+					aFileItems.push('\t\t\t\t\t{"title": "' + element.title + '", ' +
 												' "alias": "' + element.alias + '", ' +
 												' "caption": "' + element.caption + '",' +
 												' "reference": "' + element.reference + '",' +
 												' "description": "' + element.description + '",' +
-												' "category": "' + element.category + '",' +
+												' "categorytext": "' + element.categorytext + '",' +
 												' "backgroundcolour": "' + element.backgroundcolour + '",' +
 												' "textcolour": "' + element.textcolour + '",' +
 												' "displayorder": "' + element.displayorder + '",' +
@@ -2976,7 +3319,7 @@ ns1blankspace.setup.space.export =
 												'}');
 				});
 
-				aFile.push(aFile.join(',\n'));
+				aFile.push(aFileItems.join(',\n'));
 
 				aFile.push('\t\t\t\t]');
 

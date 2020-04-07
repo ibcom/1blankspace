@@ -115,44 +115,22 @@ ns1blankspace.financial.initData = function (oParam, oResponse)
 							{
 								if (oResponse == undefined)
 								{
-									var oSearch = new AdvancedSearch();
-									oSearch.method = 'SETUP_FINANCIAL_SETTINGS_SEARCH';
-									oSearch.addField('notes,accrual,allowmanualcreditnoteassignment,collectbankdetailsall,collectbankdetailsbusiness,creditorsbalanceddate,debtorsbalanceddate,' +
-															'defaultexpensestatus,defaultexpensestatustext,defaultinvoicesentvalue,defaultproject,defaultprojecttext,endoffinancialyear,' +
-															'expensepayeemandatory,lockifincompletedtaxreport,lockinvoiceonsending,lockifreconciled,messagingaccount,messagingaccounttext,' +
-															'overdueaccountalert,overdueaccountalertdays,segmentbyarea,timebillingrate,financialaccountcash,financialaccountcashtext,' +
-															'financialaccountcreditors,financialaccountcreditorstext,financialaccountcurrentearnings,financialaccountcurrentearningstext,' +
-															'financialaccountdebtors,financialaccountdebtorstext,financialaccountfinancialservicescommission,financialaccountfinancialservicescommissiontext,' +
-															'financialaccountproductincome,financialaccountproductincometext,financialaccountproductinventory,financialaccountproductinventorytext,' +
-															'financialaccountproductpurchases,financialaccountproductpurchasestext,financialaccountretainedearnings,financialaccountretainedearningstext,' +
-															'financialaccountsalescommission,financialaccountsalescommissiontext,financialaccountwriteoff,financialaccountwriteofftext,' +
-															'lockeddatecreditors,lockeddatedebtors,lockeddatejournals,payrollcreateexpenses,payrollexpensepaymentmethod,' +
-															'payrollexpensepaymentmethodtext,payrollfinancialaccountallowance,payrollfinancialaccountallowancetext,payrollfinancialaccountsalary,' +
-															'payrollfinancialaccountsalarytext,payrollfinancialaccountsuperannuation,payrollfinancialaccountsuperannuationtext,' +
-															'payrollfinancialaccounttax,payrollfinancialaccounttaxtext,payrollonbreakhours,payrolloncosthourlyrate,payrollpayperiod,' +
-															'payrollpayperiodtext,payrollproject,payrollprojecttext,payrollsetsalaryexpensestopaid,payrollsuperannuationcontactbusiness,' +
-															'payrollsuperannuationcontactbusinesstext,payrollsuperannuationmonthlythreshold,calculationmethod,calculationmethodamount,' +
-															'calculationmethodemployee,calculationmethodemployeetext,calculationmethodinstalmentamount,calculationmethodinstalmentrate,' +
-															'calculationmethodtext,checkercontactperson,checkercontactpersontext,contactbusiness,contactbusinesstext,deferred,' +
-															'financialaccountcredits,financialaccountcreditstext,financialaccountemployee,financialaccountemployeetext,' +
-															'financialaccountinstalment,financialaccountinstalmenttext,financialaccountpayable,financialaccountpayabletext,frequency,frequencytext,' +
-															'frequencyemployee,frequencyemployeetext,frequencyinstalments,frequencyinstalmentstext,segmenttaxbyarea,taxreportschedulingagentdays,' + 
-															'taxreportschedulingreportdays,taxreportschedulingtaxofficedays');
-									oSearch.rows = 1;
-									oSearch.getResults(function(data) {ns1blankspace.financial.initData(oParam, data)});
+									$(ns1blankspace.xhtml.container).hide(ns1blankspace.option.hideSpeedOptions);
+									ns1blankspace.status.working('initalising financials')
+									$('#ns1blankspaceMain').html('');
+									$('#ns1blankspaceControl').html('');
+
+									$.ajax(
+									{
+										type: 'GET',
+										url: '/ondemand/setup/setup.asp?method=SETUP_FINANCIAL_SETTINGS_MANAGE&setdefault=1',
+										dataType: 'json',
+										global: false,
+										success: function(data) {ns1blankspace.financial.initData(oParam, data)}
+									});
 								}
 								else
 								{
-									if (oResponse.data.rows.length > 0)
-									{
-										ns1blankspace.financial.data.settings = ns1blankspace.util.sortByKeys(oResponse.data.rows[0]);
-									}
-
-									ns1blankspace.financial.data.settings.financialaccountcreditor = ns1blankspace.financial.data.settings.financialaccountcreditors;
-									ns1blankspace.financial.data.settings.financialaccountcreditortext = ns1blankspace.financial.data.settings.financialaccountcreditorstext;
-									ns1blankspace.financial.data.settings.financialaccountdebitor = ns1blankspace.financial.data.settings.financialaccountdebtors;
-									ns1blankspace.financial.data.settings.financialaccountdebitortext = ns1blankspace.financial.data.settings.financialaccountdebtorstext;
-
 									ns1blankspace.financial.initStatus = 1;
 									ns1blankspace.financial.initData($.extend(true, oParam, {step: 1}))
 								}
@@ -185,31 +163,26 @@ ns1blankspace.financial.initData = function (oParam, oResponse)
 							
 							if (iStep == 2)
 							{
-								//Alias taxreport for backwards compatibility with /ondemand
 								if (oResponse == undefined)
 								{
-									var oSearch = new AdvancedSearch();
-									oSearch.method = 'SETUP_FINANCIAL_SETTINGS_SEARCH';
-									oSearch.addField('calculationmethod,calculationmethodamount,calculationmethodemployee,calculationmethodemployeetext,' +
-															'calculationmethodinstalmentamount,calculationmethodinstalmentrate,calculationmethodtext,checkercontactperson,' +
-															'checkercontactpersontext,contactbusiness,contactbusinesstext,deferred,financialaccountcredits,financialaccountcreditstext,' +
-															'financialaccountemployee,financialaccountemployeetext,financialaccountinstalment,financialaccountinstalmenttext,financialaccountpayable,' +
-															'financialaccountpayabletext,frequency,frequencytext,frequencyemployee,frequencyemployeetext,frequencyinstalments,' +
-															'frequencyinstalmentstext,notes');
-									oSearch.rows = 1;
-									oSearch.getResults(function(data) {ns1blankspace.financial.initData(oParam, data)});
+									if (ns1blankspace.financial.settings == undefined || bRefresh)
+									{
+										$.ajax(
+										{
+											type: 'GET',
+											url: '/ondemand/setup/?method=SETUP_FINANCIAL_SETTINGS_SEARCH&all=1&includefinancialaccounttext=1',
+											dataType: 'json',
+											success: function(data) {ns1blankspace.financial.initData(oParam, data)}
+										});
+									}
+									else
+									{
+										ns1blankspace.financial.initData($.extend(true, oParam, {step: 3}));
+									}
 								}
 								else
 								{
-									if (oResponse.data.rows.length > 0)
-									{
-										$.each(oResponse.data.rows[0], function (key, value)
-										{
-											ns1blankspace.financial.data.settings['taxreport' + key] = value;
-										});
-									}
-
-									ns1blankspace.financial.data.settings = ns1blankspace.util.sortByKeys(ns1blankspace.financial.data.settings);
+									ns1blankspace.financial.data.settings = oResponse;
 									ns1blankspace.financial.initData($.extend(true, oParam, {step: 3}));
 								}
 							}
@@ -1023,12 +996,9 @@ ns1blankspace.financial.debtors =
 						aHTML.push('</div></td></tr>');
 
 						aHTML.push('<tr><td class="ns1blankspaceDate" style="padding-bottom:4px;">' +
-										'<input id="ns1blankspaceDebtorsEndDate" data-1blankspace="ignore" class="ns1blankspaceDate ns1blankspaceWatermark" style="padding-left:3px; width:113px; font-size:0.725em; text-align:center;" value="As at">' +
+										'<input id="ns1blankspaceDebtorsEndDate" data-1blankspace="ignore" class="ns1blankspaceDate ns1blankspaceWatermark" style="padding-left:3px; width:113px; font-size:0.725em;" value="As at">' +
 										'</td></tr>');
 
-					
-	aHTML.push('<tr><td style="padding-bottom:12px;"><span id="ns1blankspaceFinancialDebtorsRefresh" class="ns1blankspaceAction">' +
-										'Refresh</span></td></tr>');
 						aHTML.push('<tr><td style="padding-top:2px; padding-bottom:0px; font-size:0.75em;" class="ns1blankspaceSub">' +
 										'Debtors total</td></tr>');
 
@@ -1071,17 +1041,6 @@ ns1blankspace.financial.debtors =
 							oParam = ns1blankspace.util.setParam(oParam, 'endDate', $('#ns1blankspaceDebtorsEndDate').val());
 							ns1blankspace.financial.debtors.show(oParam)
 						});
-
-						$('#ns1blankspaceFinancialDebtorsRefresh').button(
-						{
-							label: 'Refresh'
-						})
-						.click(function()
-						{	
-							oParam = ns1blankspace.util.setParam(oParam, 'endDate', $('#ns1blankspaceDebtorsEndDate').val());
-							ns1blankspace.financial.debtors.show(oParam)
-						})
-						.css('width', '115px');
 
 						$('#ns1blankspaceFinancialDebtorsPreview').button(
 						{
@@ -1849,11 +1808,8 @@ ns1blankspace.financial.creditors =
 						aHTML.push('<table class="ns1blankspaceColumn2">');
 							
 						aHTML.push('<tr><td class="ns1blankspaceDate" style="padding-bottom:8px;">' +
-										'<input id="ns1blankspaceCreditorsEndDate" data-1blankspace="ignore" class="ns1blankspaceDate ns1blankspaceWatermark" style="padding-left:3px; width:113px; font-size:0.725em; text-align:center;" value="As at">' +
+										'<input id="ns1blankspaceCreditorsEndDate" data-1blankspace="ignore" class="ns1blankspaceDate ns1blankspaceWatermark" style="padding-left:3px; width:113px; font-size:0.725em;" value="As at">' +
 										'</td></tr>');
-
-						aHTML.push('<tr><td style="padding-bottom:12px;"><span id="ns1blankspaceFinancialCreditorsRefresh" class="ns1blankspaceAction">' +
-										'Refresh</span></td></tr>');
 								
 						aHTML.push('<tr><td style="padding-top:2px;"><span class="ns1blankspaceAction" id="ns1blankspaceCreditorsCreatePDF"  style="width:95px;">' +
 										'Create PDF</span></td></tr>');
@@ -1875,17 +1831,6 @@ ns1blankspace.financial.creditors =
 							oParam = ns1blankspace.util.setParam(oParam, 'endDate', $('#ns1blankspaceCreditorsEndDate').val());
 							ns1blankspace.financial.creditors.show(oParam)
 						});
-
-						$('#ns1blankspaceFinancialCreditorsRefresh').button(
-						{
-							label: 'Refresh'
-						})
-						.click(function()
-						{	
-							oParam = ns1blankspace.util.setParam(oParam, 'endDate', $('#ns1blankspaceCreditorsEndDate').val());
-							ns1blankspace.financial.creditors.show(oParam)
-						})
-						.css('width', '115px');
 
 						$('#ns1blankspaceCreditorsCreatePDF').button(
 						{
@@ -5265,8 +5210,6 @@ ns1blankspace.financial.transactions =
 						{
 							aHTML.push('<table class="ns1blankspace">');
 
-							aHTML.push('<tr class="ns1blankspaceHeaderCaption">');
-
 							if (iFinancialAccount == undefined)
 							{
 								aHTML.push('<td class="ns1blankspaceHeaderCaption" style="width:180px;">Account</td>');
@@ -5275,7 +5218,7 @@ ns1blankspace.financial.transactions =
 							aHTML.push('<td class="ns1blankspaceHeaderCaption" style="width:110px; text-align:left;">Date</td>' +
 											'<td class="ns1blankspaceHeaderCaption">Description</td>' +
 											'<td class="ns1blankspaceHeaderCaption" style="width:100px; text-align:right;">Amount</td>' +
-											'</tr>');
+											'</tr>');				
 
 							$.each(oResponse.data.rows, function()
 							{
@@ -6070,7 +6013,6 @@ ns1blankspace.financial.save =
 					var bShowStatus = true;
 					var sDateField;
 					var iBankTransactionID = ns1blankspace.util.getParam(oParam, 'bankTransactionID').value;
-					var sSent;
 
 					if (oParam != undefined)
 					{
@@ -6083,8 +6025,7 @@ ns1blankspace.financial.save =
 						if (oParam.method != undefined) {sMethod = oParam.method}
 						if (oParam.id != undefined) {iID = oParam.id}
 						if (oParam.bankAccount != undefined) {iBankAccount = oParam.bankAccount}
-						if (oParam.showStatus != undefined) {bShowStatus = oParam.showStatus}
-						if (oParam.sent != undefined) {sSent = oParam.sent} 
+						if (oParam.showStatus != undefined) {bShowStatus = oParam.showStatus} 
 					}
 
 					if (bShowStatus) {ns1blankspace.status.working();}
@@ -6131,11 +6072,6 @@ ns1blankspace.financial.save =
 					if (iBankTransactionID != undefined)
 					{
 						sData += '&sourcebanktransaction=' + ns1blankspace.util.fs(iBankTransactionID);
-					}
-
-					if (sSent != undefined)
-					{
-						sData += '&sent=' + ns1blankspace.util.fs(sSent);
 					}
 
 					$.ajax(
