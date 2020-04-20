@@ -2869,7 +2869,12 @@ ns1blankspace.attachments =
 	{
 		var aHTML = [];
 		var bShowUser = ns1blankspace.util.getParam(oParam, 'showUser', {"default": false}).value;
-			
+					
+		$.each(oRow, function(key, value)
+		{
+			oRow[_.last(_.split(key, '.'))] = value;
+		});
+								
 		aHTML.push('<tr class="ns1blankspaceAttachments">');
 		
 		if (oRow.sourcetype == 1)
@@ -2879,7 +2884,7 @@ ns1blankspace.attachments =
 		}
 		else
 		{
-			var sURL = oRow.url;
+			var sURL = oRow.url ;
 			if (sURL.indexOf('http') == -1) {sURL = 'http://' + sURL}
 
 			aHTML.push('<td id="ns1blankspaceAttachment_url-' + oRow.id + '" class="ns1blankspaceRow">' +

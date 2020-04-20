@@ -272,11 +272,11 @@ ns1blankspace.scripts =
 	},
 	{
 		nameSpace: '1blankspace.messaging.imap',
-		source: '/site/1903/1blankspace.messaging.imap-3.5.0.js'
+		source: '/site/1903/1blankspace.messaging.imap-3.6.5.js'
 	},
 	{
 		nameSpace: '1blankspace.document',
-		source: '/site/1903/1blankspace.document-2.0.2.js'
+		source: '/site/1903/1blankspace.document-3.6.5.js'
 	},
 	{
 		nameSpace: '1blankspace.news',
@@ -296,7 +296,7 @@ ns1blankspace.scripts =
 	},
 	{
 		nameSpace: '1blankspace.product',
-		source: '/site/1903/1blankspace.product-2.0.4.js'
+		source: '/site/1903/1blankspace.product-3.6.5.js'
 	},
 	{
 		nameSpace: '1blankspace.order',
@@ -312,7 +312,7 @@ ns1blankspace.scripts =
 	},
 	{
 		nameSpace: '1blankspace.financial.invoice',
-		source: '/site/1903/1blankspace.financial.invoice-3.5.8.js'
+		source: '/site/1903/1blankspace.financial.invoice-3.6.5.js'
 	},
 	{
 		nameSpace: '1blankspace.financial.expense',
@@ -352,7 +352,7 @@ ns1blankspace.scripts =
 	},
 	{
 		nameSpace: '1blankspace.report',
-		source: '/site/1903/1blankspace.report-3.6.0.js'
+		source: '/site/1903/1blankspace.report-3.6.5.js'
 	},
 	{
 		nameSpace: '1blankspace.setup',
@@ -364,7 +364,7 @@ ns1blankspace.scripts =
 	},
 	{
 		nameSpace: '1blankspace.setup.financial',
-		source: '/site/1903/1blankspace.setup.financial-3.5.9.js'
+		source: '/site/1903/1blankspace.setup.financial-3.6.3.js'
 	},
 	{
 		nameSpace: '1blankspace.setup.action',
@@ -388,15 +388,15 @@ ns1blankspace.scripts =
 	},
 	{
 		nameSpace: '1blankspace.setup.space',
-		source: '/site/1903/1blankspace.setup.space-3.6.4.js'
+		source: '/site/1903/1blankspace.setup.space-3.6.5.js'
 	},
 	{
 		nameSpace: '1blankspace.setup.structure',
-		source: '/site/1903/1blankspace.setup.structure-2.0.5.js'
+		source: '/site/1903/1blankspace.setup.structure-3.6.5.js'
 	},
 	{
 		nameSpace: '1blankspace.setup.user',
-		source: '/site/1903/1blankspace.setup.user-3.6.1.js'
+		source: '/site/1903/1blankspace.setup.user-3.6.5.js'
 	},
 	{
 		nameSpace: '1blankspace.setup.userRole',
