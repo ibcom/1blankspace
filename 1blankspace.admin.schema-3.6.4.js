@@ -1270,6 +1270,17 @@ ns1blankspace.admin.schema.methods =
 
 					$('#ns1blankspaceAdminSchemaMethodsEditColumn1').html(aHTML.join(''));
 
+					$('#ns1blankspaceAdminSchemaMethodsEditName').focusin(function (event)
+					{
+						if ($(this).val() == '')
+						{
+							if ($('#ns1blankspaceAdminSchemaMethodsEditTitle').val().toLowerCase().indexOf('_search') != -1)
+							{
+								$(this).val($('#ns1blankspaceAdminSchemaMethodsEditTitle').val().toLowerCase().replace('_search', ''))
+							}
+						}
+					})
+
 					if (iID != '')
 					{
 						$('#ns1blankspaceAdminSchemaMethodsEditTitle').val(ns1blankspace.util.getData(oParam, 'data-title').value);
