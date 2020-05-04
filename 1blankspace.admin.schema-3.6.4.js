@@ -2027,7 +2027,7 @@ ns1blankspace.admin.schema.properties =
 											
 							if (oDetail.searchendpoint != '')
 							{
-								sHTML = sHTML + '<tr><td>Search Endpoint</td><td>' + oDetail.searchendpoint + '</td></tr>';
+								sHTML = sHTML + '<tr><td>Search Method</td><td>' + oDetail.searchendpoint + '</td></tr>';
 							}
 
 							if (oDetail.searchrelatedproperty != '')
