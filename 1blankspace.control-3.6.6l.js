@@ -55,7 +55,8 @@ ns1blankspace.option = $.extend(true, ns1blankspace.option,
 	defaultDatePickerOptions:
 	{
 		changeMonth: true,
-		changeYear: true
+		changeYear: true,
+		position: 'bottom'
 	},
 	attachmentsAsURLs: true,
 	employeeInsuranceURL: 
@@ -310,7 +311,7 @@ ns1blankspace.scripts =
 	},
 	{
 		nameSpace: '1blankspace.financial',
-		source: '/site/388/1blankspace.financial-3.6.5.js'
+		source: '/site/388/1blankspace.financial-3.6.6.js'
 	},
 	{
 		nameSpace: '1blankspace.financial.bankAccount',
