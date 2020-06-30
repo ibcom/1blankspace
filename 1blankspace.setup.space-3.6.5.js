@@ -1289,6 +1289,11 @@ ns1blankspace.setup.space =
 														{
 															ns1blankspace.status.working('Adding category ' + (iStructureCategory + 1) + ' of ' + oStructure.categories.length);
 
+															if (oStructure.categories[iStructureCategory].description == '')
+															{
+																oStructure.categories[iStructureCategory].description = 'Default'
+															}
+
 															var oData = 
 															{
 																structure: iStructure,
