@@ -1771,18 +1771,20 @@ ns1blankspace.setup.user =
 															'<input type="radio" id="radioExternalAccessUnrestrictedN" name="radioExternalAccessUnrestricted" value="N"/>Restricted by role' +
 															'</td></tr>');
 
+											aHTML.push('<tr><td style="padding-top:10px;" id="ns1blankspaceExternalRoles"></td></tr>');
+
 											aHTML.push('<tr class="ns1blankspaceCaption">' +
 															'<td class="ns1blankspaceCaption">' +
-															'2nd Factor Authentication Required' +
+															'Minimum Authentication Level' +
 															'</td></tr>' +
 															'<tr class="ns1blankspace">' +
 															'<td class="ns1blankspaceRadio">' +
-															'<input type="radio" id="radioExternalAccessAuthenticationLevel2" name="radioExternalAccessAuthenticationLevel" value="2"/>No<br />' +
-															'<input type="radio" id="radioExternalAccessAuthenticationLevel3" name="radioExternalAccessAuthenticationLevel" value="3"/>Yes' +
+															'<input type="radio" id="radioExternalAccessAuthenticationLevel1" name="radioExternalAccessAuthenticationLevel" value="1"/>Standard<br />' +
+															'<input type="radio" id="radioExternalAccessAuthenticationLevel2" name="radioExternalAccessAuthenticationLevel" value="2"/>With Logon Key<br />' +
+															'<input type="radio" id="radioExternalAccessAuthenticationLevel3" name="radioExternalAccessAuthenticationLevel" value="3"/>With 2nd Factor Token' +
 															'</td></tr>');
 										
-											aHTML.push('<tr><td style="padding-top:10px;" id="ns1blankspaceExternalRoles"></td></tr>');
-
+											
 											aHTML.push('</table>');					
 											
 											$('#ns1blankspaceSetupUserExternalColumn2').html(aHTML.join(''));
@@ -1886,7 +1888,6 @@ ns1blankspace.setup.user =
 												$('#ns1blankspaceExternalCreated').html(' (granted ' + ns1blankspace.util.formatDate($('#ns1blankspaceUserExternal_title-' + aXHTMLElementID[1]).attr("data-created"), {format:'DD MMM YYYY HH:mm'}) + ')')
 
 												var iExternalAccessAuthenticationLevel = $('#ns1blankspaceUserExternal_title-' + aXHTMLElementID[1]).attr("data-authenticationlevelminimum");
-												if (iExternalAccessAuthenticationLevel == 1) {iExternalAccessAuthenticationLevel = 2}
 												$('[name="radioExternalAccessAuthenticationLevel"][value="' + iExternalAccessAuthenticationLevel + '"]').attr('checked', true);
 
 												oParam.user = $('#ns1blankspaceUserExternal_title-' + aXHTMLElementID[1]).attr("data-user");
