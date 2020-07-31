@@ -888,14 +888,14 @@ ns1blankspace.setup.user =
 											{	
 												aHTML.push('<tr class="ns1blankspaceCaption">' +
 													'<td class="ns1blankspaceCaption" style="padding-top:12px;">' +
-													'<div class="ns1blankspaceCaption">Data</div>' +
-													'<div class="ns1blankspaceSubNote" style="padding-left:2px;">Access to data is based on a contacts relationship manager</div>' +
+													'<div class="ns1blankspaceCaption">Relational</div>' +
+													'<div class="ns1blankspaceSubNote" style="padding-left:2px;">Access to data is based on a users relationships via their linked contact\'s relationships.</div>' +
 													'</td></tr>' +
 													'<tr class="ns1blankspace">' +
 													'<td class="ns1blankspaceRadio">' +
-													'<input type="radio" id="radioRelationshipManagerBasedAccessLevel1" name="radioRelationshipManagerBasedAccessLevel" value="1"/>Disabled<br />' +
-													'<input type="radio" id="radioRelationshipManagerBasedAccessLevel2" name="radioRelationshipManagerBasedAccessLevel" value="2"/>Standard<br />' +
-													'<input type="radio" id="radioRelationshipManagerBasedAccessLevel3" name="radioRelationshipManagerBasedAccessLevel" value="3"/>Tight' +
+													'<div style="margin-top:10px;"><input type="radio" id="radioRelationshipManagerBasedAccessLevel1" name="radioRelationshipManagerBasedAccessLevel" value="1"/>Disabled</div><div style="margin-bottom:10px; margin-top:-6px;"><span class="ns1blankspaceSubNote">Access to all data based on functional access.</div>' +
+													'<div><input type="radio" id="radioRelationshipManagerBasedAccessLevel2" name="radioRelationshipManagerBasedAccessLevel" value="2"/>Standard</div><div style="margin-bottom:10px; margin-top:-6px;"><span class="ns1blankspaceSubNote">Can only see data if has relationship with contact that data is linked to, and contacts that are users.</span></div>' +
+													'<div><input type="radio" id="radioRelationshipManagerBasedAccessLevel3" name="radioRelationshipManagerBasedAccessLevel" value="3"/>Tight</div><div style="margin-bottom:10px; margin-top:-6px;"><span class="ns1blankspaceSubNote">Can only see data if has relationship with contact that data is linked to.</span></div>' +
 													'</td></tr>');
 											}	
 										
