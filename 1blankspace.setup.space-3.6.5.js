@@ -3155,190 +3155,188 @@ ns1blankspace.setup.space.sms =
 	}
 }
 
-ns1blankspace.setup.space.export =
+ns1blankspace.setup.space.export.structures =
 {
-	structures:
+	data: {},
+
+	init: function (oParam, oResponse)
 	{
-		data: {},
+		var iStructure = ns1blankspace.util.getParam(oParam, 'structure').value
 
-		init: function (oParam, oResponse)
+		ns1blankspace.status.message('Exporting...');
+
+		if (iStructure != undefined)
 		{
-			var iStructure = ns1blankspace.util.getParam(oParam, 'structure').value
-
-			ns1blankspace.status.message('Exporting...');
-
-			if (iStructure != undefined)
+			if (oResponse == undefined)
 			{
-				if (oResponse == undefined)
+				var oSearch = new AdvancedSearch();
+				oSearch.method = 'SETUP_STRUCTURE_SEARCH';
+				oSearch.addField('reference,title,status,statustext');
+				oSearch.addFilter('id', 'EQUAL_TO', iStructure);
+				oSearch.getResults(function(data) {ns1blankspace.setup.space.export.structures.init(oParam, data)});
+			}
+			else
+			{
+				if (oResponse.data.rows.length != 0)
 				{
-					var oSearch = new AdvancedSearch();
-					oSearch.method = 'SETUP_STRUCTURE_SEARCH';
-					oSearch.addField('reference,title,status,statustext');
-					oSearch.addFilter('id', 'EQUAL_TO', iStructure);
-					oSearch.getResults(function(data) {ns1blankspace.setup.space.export.structures.init(oParam, data)});
-				}
-				else
-				{
-					if (oResponse.data.rows.length != 0)
-					{
-						ns1blankspace.setup.space.export.structures.data.structure = oResponse.data.rows[0];
-						ns1blankspace.setup.space.export.structures.groupings(oParam);
-					}
+					ns1blankspace.setup.space.export.structures.data.structure = oResponse.data.rows[0];
+					ns1blankspace.setup.space.export.structures.groupings(oParam);
 				}
 			}
-		},
+		}
+	},
 
-		groupings: function (oParam, oResponse)
+	groupings: function (oParam, oResponse)
+	{
+		if (oResponse == undefined)
 		{
-			if (oResponse == undefined)
-			{
-				var oSearch = new AdvancedSearch();
-				oSearch.method = 'SETUP_STRUCTURE_DATA_GROUP_SEARCH';
-				oSearch.addField('backgroundcolour,description,document,documenttext,groupingfactor,' +
-											'maximumpoints,minimumpoints,structure,structuretext,textcolour,title,type,typetext');
-				oSearch.addFilter('structure', 'EQUAL_TO', ns1blankspace.setup.space.export.structures.data.structure.id);
-				oSearch.rows = 99999;
-				oSearch.sort('description', 'asc');
-				oSearch.getResults(function(data) {ns1blankspace.setup.space.export.structures.groupings(oParam, data)});
-			}
-			else
-			{
-				ns1blankspace.setup.space.export.structures.data.groupings = oResponse.data.rows;
-				ns1blankspace.setup.space.export.structures.categories(oParam);
-			}
-		},
-
-		categories: function (oParam, oResponse)
+			var oSearch = new AdvancedSearch();
+			oSearch.method = 'SETUP_STRUCTURE_DATA_GROUP_SEARCH';
+			oSearch.addField('backgroundcolour,description,document,documenttext,groupingfactor,' +
+										'maximumpoints,minimumpoints,structure,structuretext,textcolour,title,type,typetext');
+			oSearch.addFilter('structure', 'EQUAL_TO', ns1blankspace.setup.space.export.structures.data.structure.id);
+			oSearch.rows = 99999;
+			oSearch.sort('description', 'asc');
+			oSearch.getResults(function(data) {ns1blankspace.setup.space.export.structures.groupings(oParam, data)});
+		}
+		else
 		{
-			if (oResponse == undefined)
-			{
-				var oSearch = new AdvancedSearch();
-				oSearch.method = 'SETUP_STRUCTURE_CATEGORY_SEARCH';
-				oSearch.addField('description,displayorder,id,structure,structuretext,title,type,typetext');
-				oSearch.addFilter('structure', 'EQUAL_TO', ns1blankspace.setup.space.export.structures.data.structure.id);
-				oSearch.rows = 99999;
-				oSearch.sort('description', 'asc');
-				oSearch.getResults(function(data) {ns1blankspace.setup.space.export.structures.categories(oParam, data)});
-			}
-			else
-			{
-				ns1blankspace.setup.space.export.structures.data.categories = oResponse.data.rows;
-				ns1blankspace.setup.space.export.structures.process(oParam);
-			}
-		},
+			ns1blankspace.setup.space.export.structures.data.groupings = oResponse.data.rows;
+			ns1blankspace.setup.space.export.structures.categories(oParam);
+		}
+	},
 
-		process: function (oParam, oResponse)
+	categories: function (oParam, oResponse)
+	{
+		if (oResponse == undefined)
 		{
-			if (oResponse == undefined)
+			var oSearch = new AdvancedSearch();
+			oSearch.method = 'SETUP_STRUCTURE_CATEGORY_SEARCH';
+			oSearch.addField('description,displayorder,id,structure,structuretext,title,type,typetext');
+			oSearch.addFilter('structure', 'EQUAL_TO', ns1blankspace.setup.space.export.structures.data.structure.id);
+			oSearch.rows = 99999;
+			oSearch.sort('description', 'asc');
+			oSearch.getResults(function(data) {ns1blankspace.setup.space.export.structures.categories(oParam, data)});
+		}
+		else
+		{
+			ns1blankspace.setup.space.export.structures.data.categories = oResponse.data.rows;
+			ns1blankspace.setup.space.export.structures.process(oParam);
+		}
+	},
+
+	process: function (oParam, oResponse)
+	{
+		if (oResponse == undefined)
+		{
+			var oSearch = new AdvancedSearch();
+			oSearch.method = 'SETUP_STRUCTURE_ELEMENT_SEARCH';
+			oSearch.addField('backgroundcolour,caption,categorytext,datatype,datatypetext,' +
+										'description,displayorder,hint,id,notes,notestype,notestypetext,' +
+										'reference,structure,structuretext,textcolour,title,alias');
+			oSearch.addFilter('structure', 'EQUAL_TO', ns1blankspace.setup.space.export.structures.data.structure.id);
+			oSearch.rows = 99999;
+			oSearch.sort('description', 'asc');
+			oSearch.getResults(function(data) {ns1blankspace.setup.space.export.structures.process(oParam, data)});
+		}
+		else
+		{
+			ns1blankspace.setup.space.export.structures.data.elements = oResponse.data.rows;
+			ns1blankspace.setup.space.export.structures.data.file = [];
+			var aFile = ns1blankspace.setup.space.export.structures.data.file;
+
+			aFile.push('{');
+			aFile.push('\t"template":');
+			aFile.push('\t{');
+			aFile.push('\t\t"structures":');
+			aFile.push('\t\t[');
+			aFile.push('\t\t\t{');
+			aFile.push('\t\t\t\t"title": "' + ns1blankspace.setup.space.export.structures.data.structure.title + '",');
+
+			aFile.push('\t\t\t\t"categories":');
+			aFile.push('\t\t\t\t[');
+
+			var aFileItems = [];
+
+			$.each(ns1blankspace.setup.space.export.structures.data.categories, function (c, category)
 			{
-				var oSearch = new AdvancedSearch();
-				oSearch.method = 'SETUP_STRUCTURE_ELEMENT_SEARCH';
-				oSearch.addField('backgroundcolour,caption,categorytext,datatype,datatypetext,' +
-											'description,displayorder,hint,id,notes,notestype,notestypetext,' +
-											'reference,structure,structuretext,textcolour,title,alias');
-				oSearch.addFilter('structure', 'EQUAL_TO', ns1blankspace.setup.space.export.structures.data.structure.id);
-				oSearch.rows = 99999;
-				oSearch.sort('description', 'asc');
-				oSearch.getResults(function(data) {ns1blankspace.setup.space.export.structures.process(oParam, data)});
-			}
-			else
+				aFileItems.push('\t\t\t\t\t{"title": "' + category.title + '", ' +
+											' "description": "' + category.description + '",' +
+											' "displayorder": "' + category.displayorder + '",' +
+											' "type": "' + category.type + '",' +
+											' "typetext": "' + category.typetext + '"' +
+											'}');
+			});
+
+			aFile.push(aFileItems.join(',\n'));
+
+			aFile.push('\t\t\t\t],');
+
+			aFile.push('\t\t\t\t"groupings":');
+			aFile.push('\t\t\t\t[');
+
+			var aFileItems = [];
+
+			$.each(ns1blankspace.setup.space.export.structures.data.groupings, function (g, group)
 			{
-				ns1blankspace.setup.space.export.structures.data.elements = oResponse.data.rows;
-				ns1blankspace.setup.space.export.structures.data.file = [];
-				var aFile = ns1blankspace.setup.space.export.structures.data.file;
+				aFileItems.push('\t\t\t\t\t{"title": "' + group.title + '", ' +
+											' "description": "' + group.description + '",' +
+											' "groupingfactor": "' + group.groupingfactor + '",' +
+											' "type": "' + group.type + '",' +
+											' "typetext": "' + group.typetext + '",' +
+											' "minimumpoints": "' + group.minimumpoints + '",' +
+											' "maximumpoints": "' + group.maximumpoints + '",' +
+											' "textcolour": "' + group.textcolour + '",' +
+											' "backgroundcolour": "' + group.backgroundcolour + '",' +
+											' "documenttext": "' + group.documenttext + '"' +
+											'}');
+			});
 
-				aFile.push('{');
-				aFile.push('\t"template":');
-				aFile.push('\t{');
-				aFile.push('\t\t"structures":');
-				aFile.push('\t\t[');
-				aFile.push('\t\t\t{');
-				aFile.push('\t\t\t\t"title": "' + ns1blankspace.setup.space.export.structures.data.structure.title + '",');
+			aFile.push(aFileItems.join(',\n'));
 
-				aFile.push('\t\t\t\t"categories":');
-				aFile.push('\t\t\t\t[');
-
-				var aFileItems = [];
-
-				$.each(ns1blankspace.setup.space.export.structures.data.categories, function (c, category)
-				{
-					aFileItems.push('\t\t\t\t\t{"title": "' + category.title + '", ' +
-												' "description": "' + category.description + '",' +
-												' "displayorder": "' + category.displayorder + '",' +
-												' "type": "' + category.type + '",' +
-												' "typetext": "' + category.typetext + '"' +
-												'}');
-				});
-
-				aFile.push(aFileItems.join(',\n'));
-
-				aFile.push('\t\t\t\t],');
-
-				aFile.push('\t\t\t\t"groupings":');
-				aFile.push('\t\t\t\t[');
-
-				var aFileItems = [];
-
-				$.each(ns1blankspace.setup.space.export.structures.data.groupings, function (g, group)
-				{
-					aFileItems.push('\t\t\t\t\t{"title": "' + group.title + '", ' +
-												' "description": "' + group.description + '",' +
-												' "groupingfactor": "' + group.groupingfactor + '",' +
-												' "type": "' + group.type + '",' +
-												' "typetext": "' + group.typetext + '",' +
-												' "minimumpoints": "' + group.minimumpoints + '",' +
-												' "maximumpoints": "' + group.maximumpoints + '",' +
-												' "textcolour": "' + group.textcolour + '",' +
-												' "backgroundcolour": "' + group.backgroundcolour + '",' +
-												' "documenttext": "' + group.documenttext + '"' +
-												'}');
-				});
-
-				aFile.push(aFileItems.join(',\n'));
-
-				aFile.push('\t\t\t\t],');
+			aFile.push('\t\t\t\t],');
 
 
-				aFile.push('\t\t\t\t"elements":');
-				aFile.push('\t\t\t\t[');
+			aFile.push('\t\t\t\t"elements":');
+			aFile.push('\t\t\t\t[');
 
-				var aFileItems = [];
+			var aFileItems = [];
 
-				$.each(ns1blankspace.setup.space.export.structures.data.elements, function (e, element)
-				{
-					aFileItems.push('\t\t\t\t\t{"title": "' + element.title + '", ' +
-												' "alias": "' + element.alias + '", ' +
-												' "caption": "' + element.caption + '",' +
-												' "reference": "' + element.reference + '",' +
-												' "description": "' + element.description + '",' +
-												' "categorytext": "' + element.categorytext + '",' +
-												' "backgroundcolour": "' + element.backgroundcolour + '",' +
-												' "textcolour": "' + element.textcolour + '",' +
-												' "displayorder": "' + element.displayorder + '",' +
-												' "hint": "' + element.hint + '",' +
-												' "notes": "' + element.notes + '",' +
-												' "notestype": "' + element.notestype + '",' +
-												' "notestypetext": "' + element.notestypetext + '",' +
-												' "datatype": "' + element.datatype + '",' +
-												' "datatypetext": "' + element.datatypetext + '"' +
-												'}');
-				});
+			$.each(ns1blankspace.setup.space.export.structures.data.elements, function (e, element)
+			{
+				aFileItems.push('\t\t\t\t\t{"title": "' + element.title + '", ' +
+											' "alias": "' + element.alias + '", ' +
+											' "caption": "' + element.caption + '",' +
+											' "reference": "' + element.reference + '",' +
+											' "description": "' + element.description + '",' +
+											' "categorytext": "' + element.categorytext + '",' +
+											' "backgroundcolour": "' + element.backgroundcolour + '",' +
+											' "textcolour": "' + element.textcolour + '",' +
+											' "displayorder": "' + element.displayorder + '",' +
+											' "hint": "' + element.hint + '",' +
+											' "notes": "' + element.notes + '",' +
+											' "notestype": "' + element.notestype + '",' +
+											' "notestypetext": "' + element.notestypetext + '",' +
+											' "datatype": "' + element.datatype + '",' +
+											' "datatypetext": "' + element.datatypetext + '"' +
+											'}');
+			});
 
-				aFile.push(aFileItems.join(',\n'));
+			aFile.push(aFileItems.join(',\n'));
 
-				aFile.push('\t\t\t\t]');
+			aFile.push('\t\t\t\t]');
 
-				aFile.push('\t\t\t}');
-				aFile.push('\t\t]');
-				aFile.push('\t}');
-				aFile.push('}');
+			aFile.push('\t\t\t}');
+			aFile.push('\t\t]');
+			aFile.push('\t}');
+			aFile.push('}');
 
-				ns1blankspace.setup.file.export.saveToFile(
-				{
-					data: aFile.join('\n'),
-					filename: 'setup-structure-' + _.kebabCase(ns1blankspace.setup.space.export.structures.data.structure.title) + '.json'
-				});
-			}
+			ns1blankspace.setup.file.export.saveToFile(
+			{
+				data: aFile.join('\n'),
+				filename: 'setup-structure-' + _.kebabCase(ns1blankspace.setup.space.export.structures.data.structure.title) + '.json'
+			});
 		}
 	}
 }
+
