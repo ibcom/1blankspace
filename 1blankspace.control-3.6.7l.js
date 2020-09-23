@@ -407,7 +407,7 @@ ns1blankspace.scripts =
 	},
 	{
 		nameSpace: '1blankspace.setup.userRole',
-		source: '/site/388/1blankspace.setup.userRole-3.6.1.js'
+		source: '/site/388/1blankspace.setup.userRole-3.6.7.js'
 	},
 	{
 		nameSpace: '1blankspace.setup.website',
