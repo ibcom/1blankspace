@@ -7890,7 +7890,7 @@ ns1blankspace.extend =
 								oSearch.method = 'SETUP_STRUCTURE_ELEMENT_SEARCH';		
 								oSearch.addField('structure,backgroundcolour,caption,category,categorytext,datatype,datatypetext,' +
 													'description,displayorder,hint,id,notes,notestype,notestypetext,' +
-													'reference,structure,structuretext,textcolour,title,alias');
+													'reference,structure,structuretext,textcolour,title,alias,object');
 								oSearch.rows = 1000;
 								oSearch.addFilter('category', 'IN_LIST', aCategories.join(','))
 								oSearch.sort('category', 'asc');
