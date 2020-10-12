@@ -177,8 +177,8 @@ ns1blankspace.financial.initData = function (oParam, oResponse)
 
 									ns1blankspace.financial.data.settings.financialaccountcreditor = ns1blankspace.financial.data.settings.financialaccountcreditors;
 									ns1blankspace.financial.data.settings.financialaccountcreditortext = ns1blankspace.financial.data.settings.financialaccountcreditorstext;
-									ns1blankspace.financial.data.settings.financialaccountdebitor = ns1blankspace.financial.data.settings.financialaccountdebtors;
-									ns1blankspace.financial.data.settings.financialaccountdebitortext = ns1blankspace.financial.data.settings.financialaccountdebtorstext;
+									ns1blankspace.financial.data.settings.financialaccountdebtor = ns1blankspace.financial.data.settings.financialaccountdebtors;
+									ns1blankspace.financial.data.settings.financialaccountdebtortext = ns1blankspace.financial.data.settings.financialaccountdebtorstext;
 
 									ns1blankspace.financial.initStatus = 1;
 									ns1blankspace.financial.initData($.extend(true, oParam, {step: 1}))

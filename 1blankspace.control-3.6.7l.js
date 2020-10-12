@@ -395,7 +395,7 @@ ns1blankspace.scripts =
 	},
 	{
 		nameSpace: '1blankspace.setup.space',
-		source: '/site/388/1blankspace.setup.space-3.6.5.js'
+		source: '/site/388/1blankspace.setup.space-3.6.7.js'
 	},
 	{
 		nameSpace: '1blankspace.setup.structure',
@@ -407,11 +407,11 @@ ns1blankspace.scripts =
 	},
 	{
 		nameSpace: '1blankspace.setup.userRole',
-		source: '/site/388/1blankspace.setup.userRole-3.6.1.js'
+		source: '/site/388/1blankspace.setup.userRole-3.6.7.js'
 	},
 	{
 		nameSpace: '1blankspace.setup.website',
-		source: '/site/388/1blankspace.setup.website-3.6.1.js'
+		source: '/site/388/1blankspace.setup.website-3.6.7.js'
 	},
 	{
 		nameSpace: '1blankspace.setup.websiteForm',

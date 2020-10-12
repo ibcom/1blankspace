@@ -54,7 +54,8 @@ ns1blankspace.setup.space =
 						oSearch.method = 'SETUP_SPACE_SETTINGS_SEARCH';
 						oSearch.addField('lostpassword,lostpasswordtext,minimumpasswordlength,minimumpasswordstrength,notes,' +
 											'passwordexpiredays,passwordlockifwrongcount,passwordlockduration,passwordunlockduration' +
-											(ns1blankspace.session.preGenerallyAvailableInstance?',spaceadministratoremail,spaceadministratormobile,spaceadministratorname,spaceadministratornotes,spaceadministratorphone':''));
+											',spaceadministratoremail,spaceadministratormobile,spaceadministratorname,spaceadministratornotes,spaceadministratorphone,' +
+											'sitesmsmobile,searchcontactformat,searchcontactformattext');
 
 
 						oSearch.getResults(function (data)
@@ -253,6 +254,11 @@ ns1blankspace.setup.space =
 							aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Forgotten Password</td></tr>' +
 										'<tr><td id="ns1blankspaceSummaryForgottenPassword" class="ns1blankspaceSummary">' +
 										ns1blankspace.objectContextData.lostpasswordtext +
+										'</td></tr>');
+
+							aHTML.push('<tr><td class="ns1blankspaceSummaryCaption">Contact Format</td></tr>' +
+										'<tr><td id="ns1blankspaceSummarySearchContactFormat" class="ns1blankspaceSummary">' +
+										ns1blankspace.objectContextData.searchcontactformattext +
 										'</td></tr>');
 						}	
 						
@@ -474,7 +480,11 @@ ns1blankspace.setup.space =
 										oData.spaceadministratoremail = $('#ns1blankspaceAdvancedSpaceAdministratorEmail').val()
 										oData.spaceadministratormobile = $('#ns1blankspaceAdvancedSpaceAdministratorMobile').val()
 										oData.spaceadministratorphone = $('#ns1blankspaceAdvancedSpaceAdministratorPhone').val()
-										oData.spaceadministratornotes = $('#ns1blankspaceAdvancedSpaceAdministratorNotes').val()
+										oData.spaceadministratornotes = $('#ns1blankspaceAdvancedSpaceAdministratorNotes').val();
+
+										oData.sitesmsmobile = $('#ns1blankspaceAdvancedSiteSMSMobile').val();
+
+										oData.searchcontactformat = $('input[name="radioContactNameOrder"]:checked').val();
 									}
 
 									if (ns1blankspace.objectContext !== undefined && ns1blankspace.objectContext !== -1) {oData.id = ns1blankspace.objectContext}
@@ -2587,14 +2597,23 @@ ns1blankspace.setup.space =
 													'<input type="radio" id="radioDataBasedSecurityY" name="radioDataBasedSecurity" value="Y"/>Yes' +
 													'</td></tr>');
 
-									// aHTML.push('<tr><td class="ns1blankspaceCaption">' +
-									// 				'Contact Name Order' +
-									// 				'</td></tr>' +
-									// 				'<tr class="ns1blankspace">' +
-									// 				'<td class="ns1blankspaceRadio">' +
-									// 				'<input type="radio" id="radioDataBasedContactNameOrder1" name="radioDataBasedContactNameOrder" value="1"/>Surname, First Name<br />' +
-									// 				'<input type="radio" id="radioDataBasedContactNameOrder2" name="radioDataBasedContactNameOrder" value="2"/>First Name Surname' +
-									// 				'</td></tr>');
+									aHTML.push('<tr><td class="ns1blankspaceCaption">' +
+													'Contact Name Order' +
+													'</td></tr>' +
+													'<tr class="ns1blankspace">' +
+													'<td class="ns1blankspaceRadio">' +
+													'<input type="radio" id="radioContactNameOrder1" name="radioContactNameOrder" value="1"/>[Surname], [First Name]<br />' +
+													'<input type="radio" id="radioContactNameOrder2" name="radioContactNameOrder" value="2"/>[First Name] [Surname]' +
+													'</td></tr>');
+
+									aHTML.push('<tr class="ns1blankspaceCaption">' +
+													'<td class="ns1blankspaceCaption">' +
+													'Mobile Number For Alerts From Site' +
+													'</td></tr>' +
+													'<tr class="ns1blankspace">' +
+													'<td class="ns1blankspaceText">' +
+													'<input id="ns1blankspaceAdvancedSiteSMSMobile" class="ns1blankspaceText" style="width:300px;">' +
+													'</td></tr>');
 
 									aHTML.push('<tr><td class="ns1blankspaceHeaderCaption" style="padding-top:18px; width:300px;">SPACE ADMINISTRATOR</td></tr>');
 
@@ -2654,6 +2673,10 @@ ns1blankspace.setup.space =
 										$('#ns1blankspaceAdvancedSpaceAdministratorMobile').val(ns1blankspace.objectContextData.spaceadministratormobile);
 										$('#ns1blankspaceAdvancedSpaceAdministratorPhone').val(ns1blankspace.objectContextData.spaceadministratorphone);
 										$('#ns1blankspaceAdvancedSpaceAdministratorNotes').val(ns1blankspace.objectContextData.spaceadministratornotes);
+										$('#ns1blankspaceAdvancedSiteSMSMobile').val(ns1blankspace.objectContextData.sitesmsmobile);
+										
+										$('[name="radioContactNameOrder"][value="' +
+													ns1blankspace.objectContextData.searchcontactformat + '"]').attr('checked', true);
 									}
 
 									ns1blankspace.setup.space.advanced.security();
@@ -2681,31 +2704,7 @@ ns1blankspace.setup.space =
 										$('[name="radioDataBasedSecurity"][value="' +
 													oResponse.data + '"]').attr('checked', true);
 									}
-								},
-
-					contactNameOrder:	function (oResponse)
-								{	
-									if (oResponse == undefined)
-									{	
-										$.ajax(
-										{
-											type: 'POST',
-											url: ns1blankspace.util.endpointURI('CORE_PROFILE_SEARCH'),
-											data: 'attribute=220',
-											dataType: 'json',
-											success: function(data)
-											{
-												ns1blankspace.setup.space.advanced.contactNameOrder(data);
-											}
-										});
-									}	
-									else
-									{	
-										if (oResponse.data == '') {oResponse.data = '1'}
-										$('[name="radioDataBasedContactNameOrder"][value="' +
-													oResponse.data + '"]').attr('checked', true);
-									}
-								},			
+								}
 				}		
 }								
 
