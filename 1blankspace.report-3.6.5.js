@@ -2935,8 +2935,8 @@ ns1blankspace.report =
 						}
 						else if (this.type === 'Check')
 						{
-							ns1blankspace.report.data[this.name] = ($('#ns1blankspaceReport_input_custom_' + this.name.replace(/\./g, '_')).attr('checked') === 'checked'
-																	|| $('#ns1blankspaceReport_input_custom_' + this.name.replace(/\./g, '_')).attr('checked') === true);
+							ns1blankspace.report.data[this.name] = ($('#ns1blankspaceReport_input_custom_' + this.name.replace(/\./g, '_')).prop('checked') === 'checked'
+																	|| $('#ns1blankspaceReport_input_custom_' + this.name.replace(/\./g, '_')).prop('checked') === true);
 						}
 					}
 					else
