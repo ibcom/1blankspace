@@ -1149,21 +1149,21 @@ ns1blankspace.setup.financial =
 						
 						aHTML.push('<table class="ns1blankspaceColumn2">');
 									
-						aHTML.push('<tr class="ns1blankspaceCaption" data-provider="10">' +
+						aHTML.push('<tr class="ns1blankspaceCaption" data-provider="8">' +
 										'<td class="ns1blankspaceCaption">' +
 										'Title' +
 										'</td></tr>' +
-										'<tr class="ns1blankspace" data-provider="10e">' +
+										'<tr class="ns1blankspace" data-provider="8">' +
 										'<td class="ns1blankspaceText">' +
 										'<input id="ns1blankspacePaymentAccountTitle" class="ns1blankspaceText">' +
 										'</td></tr>');	
 
-						aHTML.push('<tr data-provider="10"><td class="ns1blankspaceCaption">' +
+						aHTML.push('<tr data-provider="8"><td class="ns1blankspaceCaption">' +
 										'Type' +
 										'</td></tr>' +
-										'<tr class="ns1blankspace" data-provider="10">' +
+										'<tr class="ns1blankspace" data-provider="8">' +
 										'<td class="ns1blankspaceRadio">' +
-										'<input type="radio" id="radioPaymentAccountProvider10" name="radioPaymentAccountProvider" value="10"/>Stripe' +
+										'<input type="radio" id="radioPaymentAccountProvider8" name="radioPaymentAccountProvider" value="8"/>Stripe' +
 										'<br /><input type="radio" id="radioPaymentAccountProvider1" name="radioPaymentAccountProvider" value="1"/>eWay' +
 										'<br /><input type="radio" id="radioPaymentAccountProvider7" name="radioPaymentAccountProvider" value="7"/>PayPal' +
 										'<br /><input type="radio" id="radioPaymentAccountProvider3" name="radioPaymentAccountProvider" value="3"/>ABA Direct Entry File' +
@@ -1171,10 +1171,10 @@ ns1blankspace.setup.financial =
 										'<br /><input type="radio" id="radioPaymentAccountProvider5" name="radioPaymentAccountProvider" value="5"/>EziDebit' +
 										'</td></tr>');
 
-						aHTML.push('<tr data-provider="10"><td class="ns1blankspaceCaption">' +
+						aHTML.push('<tr data-provider="8"><td class="ns1blankspaceCaption">' +
 										'Status' +
 										'</td></tr>' +
-										'<tr class="ns1blankspace" data-provider="10">' +
+										'<tr class="ns1blankspace" data-provider="8">' +
 										'<td class="ns1blankspaceRadio">' +
 										'<input type="radio" id="radioPaymentAccountStatus1" name="radioPaymentAccountStatus" value="1"/>Testing' +
 										'<br /><input type="radio" id="radioPaymentAccountStatus1" name="radioPaymentAccountStatus" value="2"/>Active' +
@@ -1190,10 +1190,10 @@ ns1blankspace.setup.financial =
 										'<br /><input type="radio" id="radioPaymentAccountMakePaymentN" name="radioPaymentAccountMakePayment" value="N"/>No' +
 										'</td></tr>');
 
-						aHTML.push('<tr data-provider="10"><td class="ns1blankspaceCaption">' +
+						aHTML.push('<tr data-provider="8"><td class="ns1blankspaceCaption">' +
 										'Use to collect payments' +
 										'</td></tr>' +
-										'<tr class="ns1blankspace" data-provider="10">' +
+										'<tr class="ns1blankspace" data-provider="8">' +
 										'<td class="ns1blankspaceRadio">' +
 										'<input type="radio" id="radioPaymentAccountTakePaymentY" name="radioPaymentAccountTakePayment" value="Y"/>Yes' +
 										'<br /><input type="radio" id="radioPaymentAccountTakePaymentN" name="radioPaymentAccountTakePayment" value="N"/>No' +
@@ -1241,20 +1241,20 @@ ns1blankspace.setup.financial =
 										'<input id="ns1blankspacePaymentAccountAPILogon" class="ns1blankspaceText">' +
 										'</td></tr>');
 
-						aHTML.push('<tr class="ns1blankspaceCaption" data-provider="10">' +
+						aHTML.push('<tr class="ns1blankspaceCaption" data-provider="8">' +
 										'<td class="ns1blankspaceCaption">' +
 										'API Password / Secret Key' +
 										'</td></tr>' +
-										'<tr class="ns1blankspace" data-provider="10">' +
+										'<tr class="ns1blankspace" data-provider="8">' +
 										'<td class="ns1blankspaceText">' +
 										'<input type="password" id="ns1blankspacePaymentAccountAPIPassword" class="ns1blankspaceText">' +
 										'</td></tr>');
 
-						aHTML.push('<tr class="ns1blankspaceCaption" data-provider="10">' +
+						aHTML.push('<tr class="ns1blankspaceCaption" data-provider="8">' +
 										'<td class="ns1blankspaceCaption">' +
 										'API Key / Public Key' +
 										'</td></tr>' +
-										'<tr class="ns1blankspace" data-provider="10">' +
+										'<tr class="ns1blankspace" data-provider="8">' +
 										'<td class="ns1blankspaceText">' +
 										'<input id="ns1blankspacePaymentAccountAPIKey" class="ns1blankspaceText">' +
 										'</td></tr>');
@@ -1281,10 +1281,10 @@ ns1blankspace.setup.financial =
 
 						$('[name="radioPaymentAccountProvider"]').click(function()
 						{
-							if ($('input[name="radioPaymentAccountProvider"]:checked').val() == 10)
+							if ($('input[name="radioPaymentAccountProvider"]:checked').val() == 8)
 							{
 								$('#ns1blankspacePaymentAccountEditColumn1 tr').hide();
-								$('#ns1blankspacePaymentAccountEditColumn1 tr[data-provider*="10"]').show()
+								$('#ns1blankspacePaymentAccountEditColumn1 tr[data-provider*="8"]').show()
 							}
 							else
 							{
