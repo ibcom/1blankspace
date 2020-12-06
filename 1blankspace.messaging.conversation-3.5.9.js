@@ -1559,7 +1559,6 @@ ns1blankspace.messaging.conversation =
 				$('#ns1blankspaceCommentsColumn1-' + sKey + '_message')
 							.contents().find("body")
 							.css('font-size', '0.75em')
-							.css('word-wrap', 'break-word')
 							.html(ns1blankspace.util.cleanURL({text: ($('#ns1blankspaceMessagingConversationPosts_message-' + sKey).html()).formatXHTML()}));
 
 				$('#ns1blankspaceCommentsColumn1-' + sKey + '_message').height($('#ns1blankspaceCommentsColumn1-' + sKey + '_message', top.document).contents().find('html').height() * 1.04);
