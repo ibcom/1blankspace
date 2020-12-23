@@ -1098,7 +1098,10 @@ ns1blankspace.setup.space =
 																canuse: aRoleMethods[iRoleMethod].useavailable,
 																canadd: aRoleMethods[iRoleMethod].addavailable,
 																canupdate: aRoleMethods[iRoleMethod].updateavailable,
-																canremove: aRoleMethods[iRoleMethod].removeavailable
+																canremove: aRoleMethods[iRoleMethod].removeavailable,
+																guidmandatory: aRoleMethods[iRoleMethod].guidmandatory,
+																allowedparameters: aRoleMethods[iRoleMethod].allowedparameters,
+																disallowedparameters: aRoleMethods[iRoleMethod].disallowedparameters
 															}	
 
 															$.ajax(
@@ -2764,7 +2767,7 @@ ns1blankspace.setup.space.export =
 			{
 				var oSearch = new AdvancedSearch();
 				oSearch.method = 'SETUP_ROLE_METHOD_ACCESS_SEARCH';
-				oSearch.addField('accessmethod,accessmethodtext,canadd,canremove,canupdate,canuse,guidmandatory');
+				oSearch.addField('accessmethod,accessmethodtext,canadd,canremove,canupdate,canuse,guidmandatory,allowedparameters,disallowedparameters');
 				oSearch.addFilter('role', 'EQUAL_TO', ns1blankspace.setup.space.export.roles.data.role.id);
 				oSearch.rows = 99999;
 				oSearch.sort('accessmethodtext', 'asc');
@@ -2796,6 +2799,8 @@ ns1blankspace.setup.space.export =
 												' "canupdate": "' + method.canupdate + '",' +
 												' "canremove": "' + method.canremove + '",' +
 												' "guidmandatory": "' + method.guidmandatory + '"' +
+												' "allowedproperties": "' + method.allowedparameters + '"' +
+												' "disallowedproperties": "' + method.disallowedparameters + '"' +
 												'}');
 				});
 

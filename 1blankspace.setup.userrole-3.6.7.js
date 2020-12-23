@@ -813,7 +813,7 @@ ns1blankspace.setup.userRole =
 
 														var oSearch = new AdvancedSearch();
 														oSearch.method = 'SETUP_ROLE_METHOD_ACCESS_SEARCH';
-														oSearch.addField('access,accesstext,accessmethod,accessmethodtext,canadd,canremove,canupdate,canuse,guidmandatory,rolemethodaccess.method.notes');
+														oSearch.addField('access,accesstext,accessmethod,accessmethodtext,canadd,canremove,canupdate,canuse,guidmandatory,rolemethodaccess.method.notes,allowedparameters,disallowedparameters');
 														oSearch.addFilter('role', 'EQUAL_TO', ns1blankspace.objectContext);
 														oSearch.rows = 100;
 														oSearch.sort('accessmethodtext', 'asc');
@@ -880,6 +880,18 @@ ns1blankspace.setup.userRole =
 													if (sNotes != '')
 													{
 														aHTML.push('<div class="ns1blankspaceSub">' + sNotes + '</div>')
+													}
+
+													if (oRow.allowedparameters != '')
+													{
+														aHTML.push('<div class="ns1blankspaceSub" style="font-weight:bold; margin-top:4px;">Allowed;</div>');
+														aHTML.push('<div class="ns1blankspaceSub">' + oRow.allowedparameters + '</div>');
+													}
+
+													if (oRow.disallowedparameters != '')
+													{
+														aHTML.push('<div class="ns1blankspaceSub" style="font-weight:bold; margin-top:4px;">Disallowed;</div>');
+														aHTML.push('<div class="ns1blankspaceSub">' + oRow.disallowedparameters + '</div>');
 													}
 
 													aHTML.push('</td>');
@@ -1185,16 +1197,15 @@ ns1blankspace.setup.userRole =
 															aHTML.push('<tr><td class="ns1blankspaceCaption">' +
 																			'GUID is required?' +
 																			'</td></tr>' +
+																			'<tr><td class="ns1blankspaceSubNote" style="padding-top:0px;">' +
+																			'Every object instance (ie an invoice) has a unique global ID (GUID). ' +
+																			'If you want to only allow access to object date where the GUID is known then select Yes. ' +
+																			'eg you want to share an invoice with a user, but only if they know the GUID.' +
+																			'</td></tr>' + 
 																			'<tr class="ns1blankspace">' +
 																			'<td class="ns1blankspaceRadio">' +
 																			'<input type="radio" id="radioNeedGUIDY" name="radioNeedGUID" value="Y"/>Yes' +
 																			'<br /><input type="radio" id="radioNeedGUIDN" name="radioNeedGUID" value="N"/>No' +
-																			'</td></tr>');
-
-															aHTML.push('<tr><td class="ns1blankspaceSubNote">' +
-																			'Every object instance (ie an invoice) has a unique global ID (GUID). ' +
-																			'If you want to only allow access to object date where the GUID is known then select Yes. ' +
-																			'eg you want to share an invoice with a user, but only if they know the GUID.' +
 																			'</td></tr>');
 														}
 
@@ -1243,6 +1254,35 @@ ns1blankspace.setup.userRole =
 																				'Can not set any access to this functionality.</td></tr>');
 
 														}
+														else
+														{
+
+															aHTML.push('<tr class="ns1blankspaceCaption">' +
+																			'<td class="ns1blankspaceCaption">' +
+																			'Allowed Properties' +
+																			'</td></tr>' +
+																			'<tr><td class="ns1blankspaceSubNote" style="padding-top:0px;">' +
+																			'A comma separated list of properties that can be accessed. If not set then all properties are accessible.' +
+																			' If set then you can not set disallowed properties.' +
+																			'</td></tr>' + 
+																			'<tr class="ns1blankspace">' +
+																			'<td class="ns1blankspaceMultiText">' +
+																			'<textarea rows="10" cols="35" id="ns1blankspaceUserAccessMethodAllowedProperties" class="ns1blankspaceTextMultiSmall"></textarea>' +
+																			'</td></tr>');
+
+															aHTML.push('<tr class="ns1blankspaceCaption">' +
+																			'<td class="ns1blankspaceCaption">' +
+																			'Disallowed Properties' +
+																			'</td></tr>' +
+																			'<tr><td class="ns1blankspaceSubNote" style="padding-top:0px;">' +
+																			'A comma separated list of properties that can not be accessed.  If not set then there are no restrictions.' +
+																			' If set then you can not set allowed properties.' +
+																			'</td></tr>' + 
+																			'<tr class="ns1blankspace">' +
+																			'<td class="ns1blankspaceMultiText">' +
+																			'<textarea rows="10" cols="35" id="ns1blankspaceUserAccessMethodDisallowedProperties" class="ns1blankspaceTextMultiSmall"></textarea>' +
+																			'</td></tr>');
+														}
 
 														aHTML.push('</table>');					
 														
@@ -1280,6 +1320,8 @@ ns1blankspace.setup.userRole =
 															sData += '&canupdate=' + (ns1blankspace.util.fs($('input[name="radioCanUpdate"]:checked').val()) != '' ? ns1blankspace.util.fs($('input[name="radioCanUpdate"]:checked').val()) : 'N');
 															sData += '&canuse=' + (ns1blankspace.util.fs($('input[name="radioCanUse"]:checked').val()) != '' ? ns1blankspace.util.fs($('input[name="radioCanUse"]:checked').val()) : 'N');
 															sData += '&guidmandatory=' + (ns1blankspace.util.fs($('input[name="radioNeedGUID"]:checked').val()) != '' ? ns1blankspace.util.fs($('input[name="radioNeedGUID"]:checked').val()) : 'N');
+															sData += '&allowedparameters=' + ns1blankspace.util.fs($('#ns1blankspaceUserAccessMethodAllowedProperties').val());
+															sData += '&disallowedparameters=' + ns1blankspace.util.fs($('#ns1blankspaceUserAccessMethodDisallowedProperties').val())
 
 															$.ajax(
 															{
@@ -1320,6 +1362,9 @@ ns1blankspace.setup.userRole =
 															$('[name="radioCanUpdate"][value="' + oObjectContext.canupdate + '"]').attr('checked', true);
 															$('[name="radioCanUse"][value="' + oObjectContext.canuse + '"]').attr('checked', true);
 															$('[name="radioNeedGUID"][value="' + oObjectContext.guidmandatory + '"]').attr('checked', true);
+															$('#ns1blankspaceUserAccessMethodAllowedProperties').val(oObjectContext.allowedparameters);
+															$('#ns1blankspaceUserAccessMethodDisallowedProperties').val(oObjectContext.disallowedparameters);
+
 														}
 														else
 														{
