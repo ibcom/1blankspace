@@ -2296,7 +2296,7 @@ ns1blankspace.messaging.conversation =
 										sObjectPrefix + '.attachment.url,' +
 										sObjectPrefix + '.attachment.id');
 				oSearch.addFilter('id', 'EQUAL_TO', iObjectContext)
-				oSearch.rows = ns1blankspace.option.defaultRows;
+				oSearch.rows = 999;
 				
 				if (iAttachmentType != undefined)
 				{
