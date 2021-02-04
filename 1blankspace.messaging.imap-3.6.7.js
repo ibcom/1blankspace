@@ -2224,7 +2224,11 @@ ns1blankspace.messaging.imap =
 					oData.object = $('#ns1blankspaceMessageSaveObjectContext').attr('data-object');
 					oData.objectcontext = $('#ns1blankspaceMessageSaveObjectContext').attr('data-id');
 					if (oData.object == '12') {oData.contactbusiness = oData.objectContext}		
-					if (oData.object == '32') {oData.contactperson = oData.objectContext}
+					if (oData.object == '32')
+					{
+						oData.contactperson = oData.objectContext;
+						//also set the oData.contactbusiness = 
+					}
 				}
 				
 				if ($('#ns1blankspaceMessageSavePerson').prop('checked'))
