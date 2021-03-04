@@ -1776,17 +1776,16 @@ ns1blankspace.setup.user =
 															'</td></tr>');
 
 											aHTML.push('<tr class="ns1blankspaceCaption">' +
-															'<td class="ns1blankspaceCaption">' +
+															'<td class="ns1blankspaceCaption" style="padding-top:10px;">' +
 															'Type' +
 															'</td></tr>' +
 															'<tr class="ns1blankspace">' +
 															'<td class="ns1blankspaceRadio">' +
 															'<input type="radio" id="radioType2" name="radioType" value="2"/>Switch In<br />' +
 															'<input type="radio" id="radioType3" name="radioType" value="3"/>Support<br />' +
-															'<input type="radio" id="radioType5" name="radioType" value="5"/>Pre-Authorisation' +
 															'</td></tr>');
 
-											aHTML.push('<tr><td class="ns1blankspaceCaption">Access <span class="ns1blankspaceNothing" style="font-weight:300;" id="ns1blankspaceExternalCreated"></span></td></tr>' +
+											aHTML.push('<tr><td class="ns1blankspaceCaption" style="padding-top:10px;">Access <span class="ns1blankspaceNothing" style="font-weight:300;" id="ns1blankspaceExternalCreated"></span></td></tr>' +
 															'<tr><td class="ns1blankspaceRadio">' +
 															'<input type="radio" id="radioExternalAccessUnrestrictedY" name="radioExternalAccessUnrestricted" value="Y"/>Access&nbsp;to&nbsp;everything<br />' +
 															'<input type="radio" id="radioExternalAccessUnrestrictedN" name="radioExternalAccessUnrestricted" value="N"/>Restricted by role' +
